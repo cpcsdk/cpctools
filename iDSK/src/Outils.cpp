@@ -126,6 +126,7 @@ char * GetTaille( int t )
 //
 char * GetNomAmsdos(char * AmsName )
 {
+    AmsName = basename(AmsName);
     static char NomAmsdos[ 16 ];
 		int i;
 
