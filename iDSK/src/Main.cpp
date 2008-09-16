@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
 	>> Option('h',"hex",AmsdosFileList)
 
 	>> std::hex 	>> Option('e',"exec",exeAdress)
-			>> Option('l',"load",loadAdress)
+			>> Option('c',"load",loadAdress)
 	>> std::dec	>> Option('t',"type",AmsdosType)
 
 	>> OptionPresent('g',"get",ModeGetFile)
