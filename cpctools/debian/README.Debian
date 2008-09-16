@@ -1,6 +1,5 @@
-cpctools-1.1 for Debian
+cpctools for Debian
 -----------------------
+In order to work, you may need to compile and install by yourself some libraries. Theses libraries are present in the source code of the project http://code.google.com/p/cpcsdk/source/browse/trunk
 
-<possible notes regarding this package - if none, delete this file>
-
- -- Romain GIOT <giot.romain@gmail.com>  Thu, 10 Apr 2008 22:04:19 +0200
+ -- Romain GIOT <giot.romain@gmail.com>  Thu, 16 Sept 2008 22:04:19 +0200
