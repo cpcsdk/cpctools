@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="StSoundLibrary" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="Debug/libStSoundLibrary.a" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="Debug" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-pg" />
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="Release/libStSoundLibrary.a" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="Release" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-W" />
+				</Compiler>
+			</Target>
+			<Target title="Win32 Debug">
+				<Option output="Win32Debug/libStSoundLibrary.a" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="Win32Debug" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-g" />
+					<Add option="-DWIN32" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_MBCS" />
+					<Add option="-D_LIB" />
+				</Compiler>
+			</Target>
+			<Target title="Win32 Release">
+				<Option output="Win32Release/libStSoundLibrary.a" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="Win32Release" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-W" />
+					<Add option="-fexceptions" />
+					<Add option="-O2" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_MBCS" />
+					<Add option="-D_LIB" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Unit filename="StSoundLibrary.h" />
+		<Unit filename="Ym2149Ex.cpp" />
+		<Unit filename="Ym2149Ex.h" />
+		<Unit filename="YmMusic.cpp" />
+		<Unit filename="YmMusic.h" />
+		<Unit filename="YmTypes.h" />
+		<Unit filename="YmUserInterface.cpp" />
+		<Unit filename="Ymload.cpp" />
+		<Unit filename="Ymload.h" />
+		<Unit filename="digidrum.cpp" />
+		<Unit filename="digidrum.h" />
+		<Unit filename="LZH/LzhLib.cpp" />
+		<Unit filename="LZH/LZH.H" />
+		<Unit filename="../revision.txt" />
+		<Extensions>
+			<code_completion />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,267 @@
+2005-12-18  Russell Marks  <russell.marks@ntlworld.com>
+
+	* Version 0.5.
+
+	* sound.c (sound_start_fade): remembered why fadetime was declared
+	as static - it was a different variable. As such, version 0.4 got
+	released with a zero fade-out time. :-( Fixed again by renaming
+	sound.c's fadetime to sfadetime, which should hopefully avoid
+	future confusion...
+
+2005-07-14  Russell Marks  <russell.marks@ntlworld.com>
+
+	* Version 0.4.
+
+	* sound.c: `fadetime' was declared as static when it shouldn't
+	have been. Thanks to Daniel Baumann for pointing this out.
+
+2004-05-15  Russell Marks  <russell.marks@ntlworld.com>
+
+	* main.c (action_callback): fixed unhelpful interactive
+	stop-after-setting behaviour when started with stop-after set to
+	something not a multiple of 30 seconds; now the first interactive
+	change will set it to the nearest multiple in the specified
+	direction. Thanks to Bartlomiej Ochman for this.
+
+2004-05-01  Russell Marks  <russell.marks@ntlworld.com>
+
+	* main.c: added `-t' option, to play only a given track (actually
+	slightly different, see the man page). Thanks to Bartlomiej Ochman
+	for this.
+	
+2004-03-26  Russell Marks  <russell.marks@ntlworld.com>
+
+	* Added 16-bit support. Now defaults to this when possible. New
+	option `-e' forces 8-bit playback (even that is improved, due to
+	the 16-bit mixing now done). Thanks to Stuart Brady for inspiring
+	this change.
+
+2003-11-30  Russell Marks  <russell.marks@ntlworld.com>
+
+	* aylet.1: fixed typo.
+
+2003-11-27  Russell Marks  <russell.marks@ntlworld.com>
+
+	* ui.c (ui_frame): fixed minor bug when checking value of KEY_DC
+	at compile time. Unlikely to affect anything in practice.
+
+2002-09-14  Russell Marks  <russell.marks@ntlworld.com>
+
+	* Version 0.3.
+
+	* main.c (out): added partial port-bitmask to allow for certain
+	less-than-ideal .ay conversions. (This is only done when the low
+	byte is FDh, and even then doesn't disable CPC autodetect, so it
+	shouldn't break CPC tunes.) Thanks to Vít Hotárek for reporting
+	the files that (previously) didn't work.
+
+2002-06-24  Russell Marks  <russell.marks@ntlworld.com>
+
+	* z80.c (z80loop): fixed silly typo which meant that L and L'
+	weren't set correctly when starting up the Z80. (Though curiously,
+	this bug didn't seem to break any .ay files.) Thanks to Patrik Rak
+	for spotting this.
+
+2002-05-25  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_frame): previously, when a track stopped and
+	happened to do so leaving high/low level `silence' (e.g. a few AY
+	tracks, and all beeper tracks after the recent beeper-fade
+	removal), if this change happened during a fade the fading level
+	would screw up the silence detection and give (with default
+	settings) up to ten seconds of extra `silence'. Fixed that by
+	detecting silence before fade filter is applied, and overriding
+	the not-silent result if the track has been completely faded out.
+
+2002-05-05  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_frame): removed beeper fading, which wasn't
+	actually necessary and was causing problems with some tracks, most
+	noticeably in Trantor. The rest position is still central for
+	AY-only and CPC tracks, though, so the change shouldn't affect
+	those.
+
+	* uigtk.c (DO_TBL_RIGHT): long file details (e.g. track name) no
+	longer expand the window to fit, but are clipped. You can still
+	manually resize the window to see the rest of the text, if you
+	like.
+
+2002-03-16  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_ay_overlay): now emulates tone counters at all
+	times, rather than just doing it when producing a tone and
+	attempting to compensate later. I'm not sure if this makes any
+	practical difference, but it's a more accurate emulation.
+
+2002-02-26  Russell Marks  <russell.marks@ntlworld.com>
+
+	* aylet.1: added explanation of what ACB/ABC actually mean, rather
+	than just pulling the terminology out of thin air. :-)
+
+2001-12-21  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_ay_init): finally added decent AY levels. Thanks
+	to Matthew Westcott for the measurements these were based on. The
+	change from the previous values isn't all that big to be honest,
+	but we should at least get a faithful `blip' now. :-)
+
+2001-12-11  Russell Marks  <russell.marks@ntlworld.com>
+
+	* Version 0.2.
+
+	* sound.c (sound_ay_init): the calculated AY volume levels used
+	previously were wrong, even though they were based on the levels
+	claimed by official documentation. (!) The new precalculated
+	levels should be a lot more accurate, but don't yet reproduce a
+	curious `blip' in the AY DACs. (I may use values as measured from
+	a speccy in future, in order to do this.)
+
+2001-11-13  Russell Marks  <russell.marks@ntlworld.com>
+
+	* drv-oss.c: the OSS driver has now moved here.
+
+	* drv-obsd.c: OpenBSD sound driver. Thanks to Chris Cox for this,
+	and separating out the OSS code.
+
+2001-11-11  Russell Marks  <russell.marks@ntlworld.com>
+
+	* main.c (out): whoops, no *additional* t-states for OUT... this
+	explains why some beeper tunes with very tight loops over OUT
+	instructions (e.g. Heavy on the Magick) were slow before.
+	(out): ok, we need to disable CPC detection when *any* speccy port
+	is written to.
+
+	* sound.c (sound_ay_overlay): fixed a strange clicking problem;
+	this was probably most noticeable in Defenders of the Earth,
+	especially the drum solo bit, but there were several other cases.
+	I've been struggling with this one for maybe a week now (bleah),
+	but I think I've finally got it. :-)
+	(sound_ay_overlay): ok, that fix wasn't quite right; changed
+	tone_tick workings so it should work properly now.
+
+2001-11-09  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_ay_overlay): fix for high-frequency noise.
+
+2001-11-04  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_ay_overlay): rewrote envelope emulation, the
+	old one couldn't be made to cope with high-speed envelopes (as
+	used in some demos, e.g. Binary Love track 2). Also fixes
+	accidental (?) zero-period envelope use with FFh volume (e.g.
+	Afterburner).
+
+2001-11-03  Russell Marks  <russell.marks@ntlworld.com>
+
+	* Changed field label from "Title" to "Misc" throughout. Some
+	files use it for Title, some Copyright, some both. So "Misc" is
+	about the only reasonable label.
+
+	* main.c (out): added support for CPC tunes. Unfortunately these
+	have to be auto-detected (!) so it starts off emulating the usual
+	cut-down speccy, then switches to a cut-down CPC if those ports
+	are used, slowing down the AY and speeding up the Z80. Also, if
+	the (speccy) beeper is used (which could theoretically clash with
+	the CPC stuff) and it's not in the CPC mode, the CPC ports are
+	disabled for the current track.
+
+2001-10-25  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c: beeper tones were *also* upside-down, not just AY -
+	fixed.
+
+	* aylet.1: again, it's 44.1kHz, not 44 (see below).
+
+	* main.c (usage_help): oops... `-s' outputs a stereo sample by
+	default, not mono. Also, it's 44.1kHz not 44.
+
+2001-10-21  Russell Marks  <russell.marks@ntlworld.com>
+
+	* Version 0.1.
+
+	* sound.c (sound_frame): correctly detect silences at a non-zero
+	level - some .ay files have tracks which end like this, most
+	likely due to the original author's misunderstanding/ignoring an
+	AY chip oddity (the whole `turning the channel tone and noise off
+	in the mixer doesn't disable it, you have to zero the volume'
+	thing). Understandable, really, it's not an *audible* problem...
+
+2001-10-17  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c: tweaked beeper/AY volume balance. I decided not to make
+	the beeper the same volume as all 3 AY channels together, it was
+	just annoyingly loud like that. But I did try to give beeper and
+	AY tunes more comparable levels, so the beeper is a bit louder
+	now. Agent X 2 still sounds odd, but I think I may just have to
+	add an option for the proper balance at some point, because it'd
+	be a crazy default for a player given how loud the beeper really
+	is.
+	(sound_ay_overlay): fixed behaviour when neither tone nor noise is
+	selected on a channel, meaning that e.g. Chase HQ's samples work.
+	(sound_ay_overlay): AY tones were upside-down :-), fixed.
+
+2001-10-16  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c: added `-N' option for narrower AY channel stereo
+	positioning.
+	(sound_beeper): fix for slight spikes on ordinary beeper tones.
+
+2001-10-15  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c: improved ACB stereo, and made it the default. (Use `-m'
+	to force mono playback.) Also added a pseudo-stereo option for the
+	beeper sound; not enabled by default (use `-S') as it can make
+	things sound a bit shaky and rough in some cases.
+
+	* main.c: default stopafter reduced from 5 minutes to 3. I think
+	this is probably a decent default, even if it is too short for
+	some things (e.g. Agent X 2).
+
+	* sound.c (sound_ay_overlay): removed tone/noise counter
+	wraparound (inherited from z81), which wasn't necessary and
+	screwed up (e.g.) Marauder and Cybernoid 2.
+
+2001-10-14  Russell Marks  <russell.marks@ntlworld.com>
+
+	* main.c: added `-s', a play-to-stdout option.
+	(do_interrupt): fixed bug in non-UI mode, where it could have been
+	left on a non-existent file.
+	(do_list): added `-l', to list the contents of files rather than
+	playing them.
+
+	* ui.c (ui_frame): fixed backspace/del, which I'd managed to
+	break.
+
+2001-10-13  Russell Marks  <russell.marks@ntlworld.com>
+
+	* main.c (do_interrupt): now returns to first file/track (rather
+	than sticking on the last one) as well as stopping when it's got
+	no more to play.
+
+	* ui.c: added non-UI `UI'. :-) It's a bit like using mpg123. If
+	you press ^C (well, send SIGINT) in the first half-second of a
+	track the program exits, otherwise it starts the next track.
+
+	* main.c (action_callback): prev/next track now cross files.
+
+	* uigtk.c: a GTK+ UI. Probably matches the curses one a bit too
+	closely, making things like tweaking stopafter/fadetime rather
+	clunky, but I think it'll do for now.
+
+2001-10-10  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_ay_overlay): whoops, get that frequency right -
+	not on a ZX81 any more... :-)
+
+	* main.c (mainloop): now supports prev/next file. Pretty hairy,
+	but it's working. The playlist comes from the command-line at the
+	moment; that behaviour's probably going to stick, but I might add
+	an alternative way of specifying a playlist eventually.
+
+2001-10-09  Russell Marks  <russell.marks@ntlworld.com>
+
+	* sound.c (sound_ay_reset): fixed, previously didn't always reset
+	due to possible non-zero tstates when calling.
+
+	* First essentially working version, based on nc100em and z81.
+	(z81's sound emulation being based on the one I wrote for Fuse.)

@@ -1,0 +1,19 @@
+/* XPM */
+static char *button3[] = {
+/* width height ncolors chars_per_pixel */
+"10 10 2 1",
+/* colors */
+"  c black",
+". c None",
+/* pixels */
+"   ....   ",
+"   ....   ",
+"   ....   ",
+"   ....   ",
+"   ....   ",
+"   ....   ",
+"   ....   ",
+"   ....   ",
+"   ....   ",
+".........."
+};

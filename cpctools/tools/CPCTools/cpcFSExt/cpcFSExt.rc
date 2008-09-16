@@ -1,0 +1,289 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// French (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "1 TYPELIB ""cpcFSExt.tlb""\r\n"
+    "#include ""XDialog\\XFolderDialog.rc""\r\n"
+    "#include ""XDialog\\XFileDialog.rc""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "cpcFSExt Module\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "cpcFSExt\0"
+            VALUE "LegalCopyright", "Copyright 2005\0"
+            VALUE "OriginalFilename", "cpcFSExt.DLL\0"
+            VALUE "ProductName", "cpcFSExt Module\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "OLESelfRegister", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+IDR_CPCFSSHELLEXT       REGISTRY DISCARDABLE    "cpcFSShellExt.rgs"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_EDIT_HEADER DIALOG DISCARDABLE  0, 0, 124, 90
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Binary Header"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,69,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,67,69,50,14
+    EDITTEXT        IDC_START_EDIT,63,7,51,14,ES_AUTOHSCROLL
+    RTEXT           "Start address",IDC_STATIC,7,9,50,8
+    EDITTEXT        IDC_SIZE_EDIT,63,22,51,14,ES_AUTOHSCROLL | WS_DISABLED
+    RTEXT           "Size",IDC_STATIC,7,23,50,8,WS_DISABLED
+    EDITTEXT        IDC_EXEC_EDIT,63,37,51,14,ES_AUTOHSCROLL
+    RTEXT           "Exec address",IDC_STATIC,7,39,50,8
+    CONTROL         "Display Hexa",IDC_HEXA_CHK,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,35,55,57,10
+END
+
+IDD_CATALOGUE DIALOG DISCARDABLE  0, 0, 300, 238
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "DSK Catalogue"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_CATALOGUE,"SysListView32",WS_BORDER | 
+                    WS_TABSTOP,7,7,286,144
+    CTEXT           "Static",IDC_CATALOGUE_STAT,7,156,286,8
+    DEFPUSHBUTTON   "OK",IDOK,125,217,50,14
+    GROUPBOX        "Disc Info",IDC_DISCINFO,7,167,286,49
+    LTEXT           "Static",IDC_DISC_INFO1,13,179,179,35
+    LTEXT           "Static",IDC_DISC_INFO2,198,179,83,35
+END
+
+IDD_CPCBOOSTER_TRANSFERT DIALOG DISCARDABLE  0, 0, 186, 67
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "CPCBooster Transfert"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,42,45,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,97,45,50,14
+    CTEXT           "",IDC_CPCBOOSTER_TEXT,7,7,172,16
+    EDITTEXT        IDC_COM_PORT_NUMBER,97,27,50,14,ES_AUTOHSCROLL
+    RTEXT           "Com Port",IDC_STATIC,42,30,50,8
+END
+
+IDD_TRANSFERT_A DIALOG DISCARDABLE  0, 0, 186, 138
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Floppy Parameters"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_FORMAT_CBN,69,97,103,167,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,42,114,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,97,114,50,14
+    LTEXT           "Disc Format",IDC_STATIC,15,97,50,12,SS_CENTERIMAGE
+    CTEXT           "Static",IDC_TRANSFERT_TXT,7,7,172,14,SS_CENTERIMAGE
+    CONTROL         "Advanced mode",IDC_EXTENDED_CHK,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_TABSTOP,14,84,63,10
+    GROUPBOX        "Transfert properties",IDC_STATIC,7,58,172,54
+    EDITTEXT        IDC_START_TRACK,69,68,40,14,ES_AUTOHSCROLL
+    LTEXT           "Start track",IDC_STATIC,15,70,50,12
+    EDITTEXT        IDC_END_TRACK,132,68,40,14,ES_AUTOHSCROLL
+    LTEXT           "to",IDC_STATIC,118,70,11,12
+    GROUPBOX        "Floppy properties",IDC_STATIC,7,24,172,33
+    CONTROL         "Side A",IDC_SIDEA,"Button",BS_AUTORADIOBUTTON | 
+                    BS_LEFTTEXT,15,34,63,10
+    CONTROL         "Side B",IDC_SIDEB,"Button",BS_AUTORADIOBUTTON | 
+                    BS_LEFTTEXT,103,34,63,10
+    CONTROL         "Double Sided",IDC_DOUBLE_SIDE_CHK,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_TABSTOP,15,45,63,10
+    CONTROL         "Interlace transfert",IDC_INTERLACED_CHK,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_TABSTOP,103,84,68,10
+END
+
+IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 233, 178
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Progress"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "",IDC_PROGRESS_TXT,7,7,219,15,SS_CENTERIMAGE
+    GROUPBOX        "Details",IDC_STATIC,7,23,219,128
+    LTEXT           "",IDC_LONG_PROGRESS_TXT,13,32,207,113
+    PUSHBUTTON      "Abort",IDC_ABORT,91,154,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_EDIT_HEADER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 117
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_CATALOGUE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 293
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 231
+    END
+
+    IDD_CPCBOOSTER_TRANSFERT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 60
+    END
+
+    IDD_TRANSFERT_A, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 131
+    END
+
+    IDD_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 226
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 171
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_TRANSFERT_A DLGINIT
+BEGIN
+    IDC_FORMAT_CBN, 0x403, 5, 0
+0x6144, 0x6174, "\000" 
+    IDC_FORMAT_CBN, 0x403, 7, 0
+0x6144, 0x6174, 0x3234, "\000" 
+    IDC_FORMAT_CBN, 0x403, 7, 0
+0x7953, 0x7473, 0x6d65, "\000" 
+    IDC_FORMAT_CBN, 0x403, 9, 0
+0x7953, 0x7473, 0x6d65, 0x3234, "\000" 
+    IDC_FORMAT_CBN, 0x403, 10, 0
+0x6150, 0x6172, 0x6f64, 0x3873, 0x0030, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PROJNAME            "cpcFSExt"
+END
+
+#endif    // French (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+1 TYPELIB "cpcFSExt.tlb"
+#include "XDialog\XFolderDialog.rc"
+#include "XDialog\XFileDialog.rc"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

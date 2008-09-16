@@ -1,0 +1,29 @@
+  Installing: On a Linux or Unix system, you should just be able to use the
+standard
+
+  ./configure 
+  make 
+  make install 
+
+sequence. Something similar should work on Cygwin or Mingw32 systems.
+
+  This will install libdsk and its three tools (dsktrans, dskform, dskid). To
+install manual pages, you will also need to do a "make install-man".
+
+  Options for "./configure": 
+
+You can use "--disable-floppy" to leave out the code that attempts to access 
+the host computer's native floppy drivers. 
+
+You can use "--without-zlib" or "--without-bzlib" to remove support for 
+on-the-fly .gz and .bz2 decompression.
+
+You can use "--with-jni" to include Java Native Interface bindings. In this
+case, after you've built LibDsk, you have to add /usr/local/lib/libdsk.jar 
+to your CLASSPATH.
+
+  The library will also compile with Borland C++ 5.0, which probably means
+that it will compile with the free version 5.5 as well. It should also compile
+with Visual C++ 1 or Visual C++ 6. Since these systems don't support autoconf, 
+you'll need to use the provided workspaces and ready-made config.h files.
+

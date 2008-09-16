@@ -1,0 +1,118 @@
+//Microsoft App Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+SERVER                  ICON    DISCARDABLE     "../rpcserv/LDSERVER.ICO"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+SERVERMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Server"
+    BEGIN
+        MENUITEM "&Exit",                       IDM_EXIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About...",                   IDM_ABOUT
+    END
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+ABOUT DIALOG 25, 23, 244, 158
+STYLE DS_MODALFRAME | WS_POPUP
+FONT 8, "Helv"
+{
+ CONTROL "LibDSK mailslot server", IDC_TITLE, "STATIC", SS_CENTER | WS_CHILD | WS_VISIBLE | WS_GROUP, 84, 6, 75, 8
+ CONTROL "OK", IDOK, "BUTTON", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_GROUP | WS_TABSTOP, 196, 140, 35, 14
+ CONTROL "SERVER", IDC_TITLE, "STATIC", SS_ICON | WS_CHILD | WS_VISIBLE, 20,30,18,20
+ CONTROL "This program is free software; you can redistribute it and/or modify it under the terms of the GNU Library General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.", IDC_TITLE, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 41, 40, 187, 44
+ CONTROL "", IDC_BOTTOMFRAME, "Static", SS_BLACKFRAME, 15, 20, 217, 116
+ CONTROL "", IDC_TOPFRAME, "Static", SS_BLACKFRAME, 5, 5, 235, 10
+ CONTROL "Copyright 2003 John Elliott <jce@seasip.demon.co.uk>", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 41, 28, 183, 9
+ CONTROL "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more details.", -1, "static", SS_LEFT | WS_CHILD | WS_VISIBLE, 40, 84, 180, 39
+}
+
+#ifdef APSTUDIO_INVOKED
+//////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+/////////////////////////////////////////////////////////////////////////////////////
+#endif    // APSTUDIO_INVOKED
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_BADLENGTH           "Invalid length value string.  Reenter or cancel."
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+SHADE                   BITMAP  DISCARDABLE     "../rpcserv/SHADE.BMP"
+
+#ifndef APSTUDIO_INVOKED
+////////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,215 @@
+/***************************************************************************
+ *                                                                         *
+ *    LIBDSK: General floppy and diskimage access library                  *
+ *    Copyright (C) 2005  John Elliott <jce@seasip.demon.co.uk>            *
+ *                                                                         *
+ *    This library is free software; you can redistribute it and/or        *
+ *    modify it under the terms of the GNU Library General Public          *
+ *    License as published by the Free Software Foundation; either         *
+ *    version 2 of the License, or (at your option) any later version.     *
+ *                                                                         *
+ *    This library is distributed in the hope that it will be useful,      *
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of       *
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    *
+ *    Library General Public License for more details.                     *
+ *                                                                         *
+ *    You should have received a copy of the GNU Library General Public    *
+ *    License along with this library; if not, write to the Free           *
+ *    Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,      *
+ *    MA 02111-1307, USA                                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+// This file will be processed by the MIDL tool to
+// produce the type library (atlibdsk.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+
+typedef enum 
+{	
+	ALT, 	
+	OUTBACK,
+	OUTOUT	
+} Sidedness;
+
+
+typedef enum
+{
+	RateHD,	/* Data rate for 1.4Mb 3.5"  in 3.5"  drive */
+	RateDD,	/* Data rate for 360k  5.25" in 1.2Mb drive */
+	RateSD,	/* Data rate for 720k  3.5"  in 3.5"  drive */
+	RateED		/* Data rate for 2.8Mb 3.5"  in 3.5"  drive */
+} DataRate;
+
+
+	[
+		object,
+		uuid(343FE9B1-6FFE-4708-9A83-227D7203193C),
+		dual,
+		helpstring("IGeometry Interface"),
+		pointer_default(unique)
+	]
+	interface IGeometry : IDispatch
+	{
+		[propget, id(1), helpstring("property sidedness")] HRESULT sidedness([out, retval] Sidedness *pVal);
+		[propput, id(1), helpstring("property sidedness")] HRESULT sidedness([in] Sidedness newVal);
+		[propget, id(2), helpstring("property cylinders")] HRESULT cylinders([out, retval] long *pVal);
+		[propput, id(2), helpstring("property cylinders")] HRESULT cylinders([in] long newVal);
+		[propget, id(3), helpstring("property heads")] HRESULT heads([out, retval] short *pVal);
+		[propput, id(3), helpstring("property heads")] HRESULT heads([in] short newVal);
+		[propget, id(4), helpstring("property sectors")] HRESULT sectors([out, retval] short *pVal);
+		[propput, id(4), helpstring("property sectors")] HRESULT sectors([in] short newVal);
+		[propget, id(5), helpstring("property secbase")] HRESULT secbase([out, retval] short *pVal);
+		[propput, id(5), helpstring("property secbase")] HRESULT secbase([in] short newVal);
+		[propget, id(6), helpstring("property datarate")] HRESULT datarate([out, retval] DataRate *pVal);
+		[propput, id(6), helpstring("property datarate")] HRESULT datarate([in] DataRate newVal);
+		[propget, id(7), helpstring("property secsize")] HRESULT secsize([out, retval] long *pVal);
+		[propput, id(7), helpstring("property secsize")] HRESULT secsize([in] long newVal);
+		[propget, id(8), helpstring("property rwgap")] HRESULT rwgap([out, retval] short *pVal);
+		[propput, id(8), helpstring("property rwgap")] HRESULT rwgap([in] short newVal);
+		[propget, id(9), helpstring("property fmtgap")] HRESULT fmtgap([out, retval] short *pVal);
+		[propput, id(9), helpstring("property fmtgap")] HRESULT fmtgap([in] short newVal);
+		[propget, id(10), helpstring("property fm")] HRESULT fm([out, retval] short *pVal);
+		[propput, id(10), helpstring("property fm")] HRESULT fm([in] short newVal);
+		[propget, id(11), helpstring("property nomulti")] HRESULT nomulti([out, retval] short *pVal);
+		[propput, id(11), helpstring("property nomulti")] HRESULT nomulti([in] short newVal);
+		[propget, id(12), helpstring("property noskip")] HRESULT noskip([out, retval] short *pVal);
+		[propput, id(12), helpstring("property noskip")] HRESULT noskip([in] short newVal);
+		[id(13), helpstring("method ls2ps")] HRESULT ls2ps([in] long lsect, [out] long *cyl, [out] short *head, [out] short *sector);
+		[id(14), helpstring("method lt2pt")] HRESULT lt2pt([in] long ltrack, [out] long *cyl, [out] short *head);
+		[id(15), helpstring("method ps2ls")] HRESULT ps2ls([in] long cyl, [in] short head, [in] short sector, [out,retval] long *lsect);
+		[id(16), helpstring("method pt2lt")] HRESULT pt2lt([in] long cyl, [in] short head, [out,retval] long *lsect);
+		[id(17), helpstring("method stdformat")] HRESULT stdformat([in] int formatid, [out] BSTR *name, [out] BSTR *description);
+	};
+	[
+		object,
+		uuid(2F7EE90E-646D-4AB0-8BA5-CC13DDD43C39),
+		dual,
+		helpstring("IDisk Interface"),
+		pointer_default(unique)
+	]
+	interface IDisk : IDispatch
+	{
+		[id(1), helpstring("method get_geometry")] HRESULT get_geometry([out,retval] IGeometry **g);
+		[id(2), helpstring("method close")] HRESULT close();
+		[id(3), helpstring("method drive_status")] HRESULT drive_status([in] IGeometry *g, [in] short head, [out,retval] short *status);
+		[id(4), helpstring("method pread")] HRESULT pread([in] IGeometry *g, [in] long cylinder, [in] short head, [in] short sector, [out,retval] VARIANT *buf);
+		[id(5), helpstring("method lread")] HRESULT lread([in] IGeometry *g, [in] long lsect, [out,retval] VARIANT *buf);
+		[id(6), helpstring("method xread")] HRESULT xread([in] IGeometry *g, [in] long cylinder, [in] short head, 
+			[in] long cyl_expected, [in] short head_expected, [in] short sector, [in] long sector_len, [in,out] short *deleted, [out,retval] VARIANT *buf);
+		[id(7), helpstring("method pwrite")] HRESULT pwrite([in] IGeometry *g, [in] VARIANT *buf, [in] long cylinder, [in] short head, [in] short sector);
+		[id(8), helpstring("method lwrite")] HRESULT lwrite([in] IGeometry *g, [in] VARIANT *buf, [in] long lsect);
+		[id(9), helpstring("method xwrite")] HRESULT xwrite([in] IGeometry *g, [in] VARIANT *buf, [in] long cylinder, [in] short head, 
+									[in] long cyl_expected, [in] short head_expected, [in] short sector, [in] long sector_len, [in] short deleted);
+		[id(10), helpstring("method pcheck")] HRESULT pcheck([in] IGeometry *g, [in] VARIANT *buf, [in] long cylinder, [in] short head, [in] short sector);
+		[id(11), helpstring("method lcheck")] HRESULT lcheck([in] IGeometry *g, [in] VARIANT *buf, [in] long lsect);
+		[id(12), helpstring("method xcheck")] HRESULT xcheck([in] IGeometry *g, [in] VARIANT *buf, [in] long cylinder, [in] short head, 
+									[in] long cyl_expected, [in] short head_expected, [in] short sector, [in] long sector_len);
+		[id(13), helpstring("method pformat")] HRESULT pformat([in] IGeometry *geom, [in] long cylinder, [in] short head, [in] VARIANT *format, [in] short filler);
+		[id(14), helpstring("method lformat")] HRESULT lformat([in] IGeometry *geom, [in] long track, [in] VARIANT *format, [in] short filler);
+		[id(15), helpstring("method apform")] HRESULT apform([in] IGeometry *geom, [in] long cylinder, [in] short head, [in] short filler);
+		[id(16), helpstring("method alform")] HRESULT alform([in] IGeometry *geom, [in] long track, [in] short filler);
+		[id(17), helpstring("method ptread")] HRESULT ptread([in] IGeometry *g, [in] long cylinder, [in] short head, [out,retval] VARIANT *buf);
+		[id(18), helpstring("method ltread")] HRESULT ltread([in] IGeometry *g, [in] long ltrack, [out,retval] VARIANT *buf);
+		[id(19), helpstring("method xtread")] HRESULT xtread([in] IGeometry *g, [in] long cylinder, [in] short head, 
+			[in] long cyl_expected, [in] short head_expected, [out,retval] VARIANT *buf);
+		[id(20), helpstring("method psecid")] HRESULT psecid([in] IGeometry *g, [in] long cylinder, [in] short head, [out] VARIANT *buffer);
+		[id(21), helpstring("method lsecid")] HRESULT lsecid([in] IGeometry *g, [in] long track, [out] VARIANT *buffer);
+		[id(22), helpstring("method lseek")] HRESULT lseek([in] IGeometry *geom, [in] long track);
+		[id(23), helpstring("method pseek")] HRESULT pseek([in] IGeometry *geom, [in] long cylinder, [in] short sector);
+		[propget, id(24), helpstring("property comment")] HRESULT comment([out, retval] BSTR *pVal);
+		[propput, id(24), helpstring("property comment")] HRESULT comment([in] BSTR newVal);
+		[propget, id(25), helpstring("property option")] HRESULT option([in] BSTR name, [out, retval] long *pVal);
+		[propput, id(25), helpstring("property option")] HRESULT option([in] BSTR name, [in] long newVal);
+		[id(26), helpstring("method option_enum")] HRESULT option_enum([in] long idx, [out] BSTR *name, [out,retval] BOOL *valid);
+		[propget, id(27), helpstring("property retries")] HRESULT retries([out, retval] short *pVal);
+		[propput, id(27), helpstring("property retries")] HRESULT retries([in] short newVal);
+		[propget, id(28), helpstring("property drvname")] HRESULT drvname([out, retval] BSTR *pVal);
+		[propget, id(29), helpstring("property drvdesc")] HRESULT drvdesc([out, retval] BSTR *pVal);
+		[propget, id(30), helpstring("property compname")] HRESULT compname([out, retval] BSTR *pVal);
+		[propget, id(31), helpstring("property compdesc")] HRESULT compdesc([out, retval] BSTR *pVal);
+		[propget, id(32), helpstring("property dirty")] HRESULT dirty([out, retval] short *pVal);
+		[id(33), helpstring("method ptrkid")] HRESULT ptrkid([in] IGeometry *g, [in] long cylinder, [in] short head, [out] short *count, [out] VARIANT *buffer);
+		[id(34), helpstring("method ltrkid")] HRESULT ltrkid([in] IGeometry *g, [in] long track, [out] short *count, [out] VARIANT *buffer);
+	};
+	[
+		object,
+		uuid(3DED12BB-ABA5-48C3-989A-9D6AA8ED542D),
+		dual,
+		helpstring("IReporter Interface"),
+		pointer_default(unique)
+	]
+	interface IReporter : IDispatch
+	{
+		[id(1), helpstring("method report")] HRESULT report([in,string] BSTR message);
+		[id(2), helpstring("method endreport")] HRESULT endreport();
+	};
+	[
+		object,
+		uuid(84FC5CD6-91AB-42B3-BCEC-F99BCC20EDF0),
+		dual,
+		helpstring("ILibrary Interface"),
+		pointer_default(unique)
+	]
+	interface ILibrary : IDispatch
+	{
+		[id(1), helpstring("Open existing drive/image")] HRESULT open([in] BSTR filename, [in, optional] BSTR driver, [in, optional] BSTR compress, [out,retval] IDisk **ppDisk);
+		[id(2), helpstring("Create new disk image")] HRESULT create([in] BSTR filename, [in] BSTR driver, [in,optional] BSTR compress, [out,retval] IDisk **ppDisk);
+		[id(3), helpstring("method stdformat")] HRESULT stdformat([in] int formatid, [out] BSTR *name, [out] BSTR *description, [out, retval] IGeometry **geom);
+		[id(4), helpstring("method get_psh")] HRESULT get_psh([in] long sectorsize, [out,retval] short *shift);
+		[propget, id(7), helpstring("property stdformat_count")] HRESULT stdformat_count([out, retval] long *pVal);
+		[id(8),  helpstring("method dosgeom")] HRESULT dosgeom([in] VARIANT *buffer, [out] IGeometry **geom);
+		[id(9),  helpstring("method cpm86geom")] HRESULT cpm86geom([in] VARIANT *buffer, [out] IGeometry **geom);
+		[id(10), helpstring("method pcwgeom")] HRESULT pcwgeom([in] VARIANT *buffer, [out] IGeometry **geom);
+		[id(11), helpstring("method aprigeom")] HRESULT aprigeom([in] VARIANT *buffer, [out] IGeometry **geom);
+		[id(12), helpstring("method type_enum")] HRESULT type_enum([in] long idx, [out] BSTR *name, [out,retval] BOOL *valid);
+		[id(13), helpstring("method comp_enum")] HRESULT comp_enum([in] long idx, [out] BSTR *name, [out,retval] BOOL *valid);
+		[propget, id(14), helpstring("property reporter")] HRESULT reporter([out, retval] IDispatch* *pVal);
+		[propput, id(14), helpstring("property reporter")] HRESULT reporter([in] IDispatch* newVal);
+	};
+
+[
+	uuid(F81955B8-9ECB-4B29-8ACA-B793E2A9DD8E),
+	version(1.0),	// First version of this interface
+	helpstring("LibDsk 1.2.1  Drive / Disk image access library")
+]
+library LIBDSK
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(6AAA65C3-2CEA-4F6B-AB2B-FBDE9D2D484E),
+		helpstring("LibDsk library functions")
+	]
+	coclass Library
+	{
+		[default] interface ILibrary;
+	};
+	[
+		uuid(6A6B3263-176B-4D21-81A9-8F5EEF739FA9),
+		helpstring("LibDsk disk image/drive")
+	]
+	coclass Disk
+	{
+		[default] interface IDisk;
+	};
+	[
+		uuid(1AFF2A50-EEE7-4233-83EB-EC1C9EBAFA74),
+		helpstring("LibDsk drive geometry")
+	]
+	coclass Geometry
+	{
+		[default] interface IGeometry;
+	};
+	[
+		uuid(F011746E-3431-4C26-858A-D04D1454637C),
+		helpstring("LibDsk Reporter callback")
+	]
+	coclass Reporter
+	{
+		[default] interface IReporter;
+	};
+};

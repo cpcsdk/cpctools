@@ -1,0 +1,105 @@
+.\" -*- nroff -*-
+.\"
+.\" apriboot.1: apriboot man page
+.\" Copyright (c) 2006-7 John Elliott
+.\"
+.\" This library is free software; you can redistribute it and/or modify it
+.\" under the terms of the GNU Library General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or (at
+.\" your option) any later version.
+.\"
+.\" This library is distributed in the hope that it will be useful, but
+.\" WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Library General Public License
+.\" along with this library; if not, write to the Free Software Foundation,
+.\" Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+.\"
+.\" Author contact information:
+.\" John Elliott: email: jce@seasip.demon.co.uk
+.\"
+.TH apriboot 1 "23 January 2008" "Version 1.2.1" "Emulators"
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH NAME
+apriboot - rewrite disc boot sector, converting between Apricot and PCDOS
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH SYNOPSIS
+.PD 0
+.B apriboot
+.RI [ "-format FORMAT" ]
+.RI [ "-type TYPE" ]
+.RI [ "-side SIDE" ]
+.RI [ "-comp COMP" ]
+.RI [ "-retry COUNT" ]
+.RI [ "-pcdos" ]
+.RI [ "-apricot" ]
+.I DISKIMAGE
+.RI [ DSKIMAGE ... ]
+.P
+.PD 1
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH DESCRIPTION
+Apriboot rewrites the boot sector of the selected disc (or image), 
+converting it between standard PCDOS format and the format used by 
+the Apricot PC / Xi / F-series computers.
+
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH OPTIONS
+.TP
+.B -type TYPE
+Determines which driver is to be used.
+.TP
+.B -retry COUNT
+Set the number of times to attempt to read the disc in case of error.
+
+.TP
+.B -comp COMP
+Select the compression method used on the source disc image file (has no
+effect when reading a floppy disc).
+.TP
+.B -side SIDE
+Determines which side (0 or 1) of the disc (image) is to be identified.
+
+.TP
+.B -format FORMAT
+Selects a fixed format. Should not be necessary.
+
+.TP
+.B -apricot
+Forces the program to convert to Apricot format; if the boot sector is
+already in Apricot format, does nothing.
+
+.TP
+.B -pcdos
+Forces the program to convert to PCDOS format; if the boot sector is
+already in PCDOS format, does nothing. If neither 
+.B -pcdos 
+nor
+.B -apricot
+is supplied, the boot sector will be set to the opposite of whatever
+is currently in use.
+
+.\"
+.\"------------------------------------------------------------------
+.\"
+.\".SH BUGS
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH SEE ALSO
+dsktrans(1)
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH AUTHOR
+John Elliott <jce@seasip.demon.co.uk>.

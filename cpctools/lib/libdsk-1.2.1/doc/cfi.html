@@ -1,0 +1,57 @@
+<html>
+<head>
+	<title>FDCOPY file format</title>
+</head>
+<body>
+<H1>FDCOPY file format</H1>
+
+<p>FDCOPY.COM is a program supplied on Amstrad's website to convert 
+DOS-formatted floppies to/from disc image files. When using image files,
+there are two formats it can use - compressed and uncompressed.
+
+<h2>Uncompressed file format</h2>
+<p>This is simply a dump of all the bytes on the disc, identical to that
+which would be produced by "dd if=/dev/fd0 of=filename". 
+
+<h2>Compressed file format</h2>
+<p>FDCOPY detects the compressed form by checking if the filename ends in
+.CFI; it can also be forced to use compression with the undocumented /CI 
+option. There is no 'magic number' to detect if an image file is compressed.
+
+<p>In the compressed format, the disc image is stored as a sequence of tracks.
+The image file doesn't contain a track count anywhere; FDCOPY depends on the
+first track containing a DOS boot spec to work out how many tracks there are.
+LIBDSK contents itself with just checking for EOF after processing each track.
+
+<h3>Track header word</h3>
+<p>Each track starts with a 2-byte little-endian word, which gives the 
+number of disc bytes in this track (not including the length word itself):
+<pre>
+	DEFW	length		;Track header
+	DEFS	length		;Track data, &lt;length&gt; bytes
+</pre>
+
+<h3>Track data blocks</h3>
+<p>The header is followed by one or more data blocks. A block can either
+be compressed or uncompressed. 
+<p>A compressed block is 3 bytes long, and is formed:
+<pre>
+	DEFW	repeats | 08000h	; Number of repetitions of the byte 
+					; Bit 15 set to indicate compressed
+	DEFB	byte			; The byte to repeat
+</pre>
+<p>An uncompressed block is formed:
+<pre>
+	DEFW	length			; Number of bytes in this block
+					; at most 7FFFh, but FDCOPY doesn't
+					; create blocks with more than 2400h
+					; bytes in them.
+	DEFS	length			; The bytes.
+</pre>
+
+<p>FDCOPY creates a compressed block for a run of 5 or more identical bytes.
+<p>There is no end-of-track marker; the end of the track can only be detected
+by comparing the track length word with the number of bytes decoded.
+
+
+

@@ -1,0 +1,59 @@
+--- AntTweakBar library changes ---
+
+* Version 1.11 (2007/12/10)
+  - Now DirectX10 is also supported in addition to OpenGL and DirectX9. Inititialization of AntTweakBar with DX10: TwInit(TW_DIRECT3D10, d3d10Device).
+  - A new example that uses DirectX10 has been added: see TwSimpleDX10 in the examples directory.
+  - Recap for string variables added to the doc. See http://www.antisphere.com/Wiki/tools:anttweakbar:varstring
+  - An example that illustrates the use of the different types of string variables has been added. See TwString in the examples directory.
+  - Add some code for mutli-thread savety (thanks to Daniel 'DrUiD' B. for the tip).
+  - Cleanup of the Help bar. Now only variables having help are displayed in the Help bar.
+  - Function TwHandleErrors documented.
+  - Separators don't require a name anymore.
+  - Var command 'order' becomes 'colororder', and its values become 'rgba' and 'argb' (order=ogl and order=dx still exist but are deprecated).
+  - A small icon added for variables of type bool.
+  - Function TwCopyCDStringToLibrary added.
+  - The keyword 'GLOBAL' has been added for TwDefine commands that don't apply to a specific tweak bar (suggested by Koshmaar).
+  - TwEventWin32 becomes TwEventWin (a #define has been added to keep compatibility previous applications).
+  - TwWindowSize(0,0) now releases graphics ressources allocated by AntTweakBar (may be usefull for Direct3D applications, before switching to fullscreen for instance).
+  - A wrong assert removed from TwMgr.cpp (thanks to Chris W. for reporting it).
+  - Some slight cosmetic changes (again).
+
+* Version 1.10 (2007/08/31)
+  - Variable values can now also be entered and edited via keyboard input (implementation based on modifications made by Laury M., thank you Laury).
+  - Variables of type string are now handled: 3 types of string added TW_TYPE_CSSTRING, TW_TYPE_CDSTRING and TW_STDSTRING.
+  - Text selection and copy/paste added.
+  - Position of bar icons is modifiable (cf. TwBar commands iconPos, iconAlign and iconMargin).
+  - Separators can be added in a bar (TwAddSeparator).
+  - OpenGL: states related to 3D textures and multitexturing are now saved and restored by TwDraw (thanks to Dylan D. for pointing this out).
+  - Selected element of a listbox now highlighted.
+  - ReadOnly and ReadWrite behavior of buttons revisited.
+  - Documentation improved (more examples for TwType, new functions documented,...).
+  - Some slight cosmetic changes.
+
+* Version 1.05 (2007/03/01)
+  - Listbox and rotoslider buttons added.
+  - Icon resources (AntTweakBar.rc) no more required for static linkage (thanks to Joe C. for pointing this out).
+  - Fix a rotoslider precision problem when mouse button is released.
+
+* Version 1.04 (2006/12/16)
+  - OpenGL: Vertex buffer object state and Vertex/fragment program and object states are now reset and restored by TwDraw (thanks to Dylan D. and Siva K. for pointing this out).
+  - Fix problem that occurs when an initialized variable of type float/double is displayed.
+
+* Version 1.03 (2006/10/28)
+  - Medium font antialiased.
+  - Now also compiles on 64 bits x86 platform; use Makefile.x86_64 (thanks to Herling G. for providing it).
+  - Slight changes to avoid visual 8 secure crt warnings.
+  - Correct behaviour if min/max values are not defined.
+  - Modif to avoid looping to max value when reaching zero with unsigned types.
+  - Min/max/step commands for type TW_TYPE_CHAR now read ascii codes (not characters).
+  - Add FPU precision control (because DirectX changes it).
+  - Fix problem that occurs when the lib is initialized/uninitialized more than once (thanks Lukasz P. for reporting it).
+  - Distribution follows Savannah's recommendations.
+
+* Version 1.02 (2006/09/27)
+  - Library sources released.
+
+* Version 1.01 (2006/09/14)
+  - First official release.
+
+  

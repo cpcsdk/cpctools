@@ -1,0 +1,93 @@
+* Changes between versions				-*- outline -*-
+
+This file (NEWS) documents the significant changes between all
+versions of aylet, with the newest changes first.
+
+
+* Changes in aylet 0.5
+
+Fixed a stupid bug where the fadeout time defaulted to zero, so by
+default all tracks lasting longer than 3 minutes were cut off
+abruptly.
+
+
+* Changes in aylet 0.4
+
+Added 16-bit support. Now defaults to this when possible. New option
+`-e' forces 8-bit playback (even that is improved, due to the 16-bit
+mixing now done). Thanks to Stuart Brady for inspiring this change.
+
+Added `-t' option, to play only a given track (actually slightly
+different, see the man page). Thanks to Bartlomiej Ochman for this.
+
+Fixed unhelpful interactive stop-after-setting behaviour when started
+with stop-after set to something not a multiple of 30 seconds; now the
+first interactive change will set it to the nearest multiple in the
+specified direction. Thanks to Bartlomiej Ochman for this too.
+
+Fixed a compilation error with newer versions of gcc (the code was
+wrong before, but wasn't complained about). Thanks to Daniel Baumann
+for pointing this one out.
+
+
+* Changes in aylet 0.3
+
+Finally uses accurate AY levels. Thanks to Matthew Westcott for the
+measurements these were based on.
+
+Removed beeper fading, which wasn't actually necessary and was causing
+problems with some tracks, most noticeably in Trantor. The rest
+position is still central for AY-only and CPC tracks, though, so the
+change shouldn't affect those.
+
+Added partial port-bitmask to allow for certain less-than-ideal .ay
+conversions. Thanks to Vít Hotárek for helping find this one.
+
+Fixed silly typo which meant that L and L' weren't set correctly when
+starting up the Z80. (Though curiously, this bug didn't seem to break
+any .ay files.) Thanks to Patrik Rak for spotting this.
+
+Previously, when a track stopped and happened to do so leaving
+high/low level `silence' (e.g. a few AY tracks and, given the
+beeper-fade removal, all beeper tracks), if this change happened
+during a fade the fading level would screw up the silence detection
+and give (with default settings) up to ten seconds of extra `silence'.
+Now fixed.
+
+In xaylet, long file details (e.g. track name) no longer expand the
+window to fit, but are clipped. You can still manually resize the
+window to see the rest of the text, if you like.
+
+
+* Changes in aylet 0.2
+
+OUT instructions previously took too long, making some beeper tunes
+(e.g. Heavy on the Magick) sound terribly slow - fixed.
+
+New AY volume levels, which should more closely reflect actual AY
+output.
+
+Added support for CPC files.
+
+A native sound driver for OpenBSD. Thanks to Chris Cox for this.
+
+Fixed most clicking problems. There are still a few, but it's doing
+much better than before.
+
+Rewrote envelope emulation, the old one couldn't be made to cope with
+high-speed envelopes (as used in some demos). Also fixes
+presumably-accidental zero-period envelope use with `negative' volume
+(e.g. Afterburner).
+
+Fixed high-frequency noise.
+
+Beeper tones inverted, so they're now the right way up. :-)
+
+Changed field label from "Title" to "Misc" throughout. Some files use
+it for Title, some Copyright, some both. So "Misc" is about the only
+reasonable label.
+
+
+* Changes in aylet 0.1
+
+Everything. :-)

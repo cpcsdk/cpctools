@@ -1,0 +1,19 @@
+Source: cpctools-1.1
+Section: dev 
+Priority: extra
+Maintainer: Romain GIOT <giot.romain@gmail.com>
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.2
+
+Package: cpctools-1.1
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Cross Dev Tools for developping Amstrad CPC ASM applications
+ cpctools contains a lot of cross-dev applications.
+ These application help you to create proggys for your Amtrad CPC.
+ Most of these tools were written by Ramlaid <ramlaid@cpcscene.com>.
+
+Package: cpctools-1.1-doc
+Architecture: all
+Description: Documentation for cpctools-1.1
+ <insert long description, indented with spaces>

@@ -1,0 +1,75 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "SmallYmPlayer"=.\SmallYmPlayer\SmallYmPlayer.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/StSoundGPL/SmallYmPlayer", AWAAAAAA
+    .\smallymplayer
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name StSoundLibrary
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "StSoundLibrary"=.\StSoundLibrary\StSoundLibrary.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/StSoundGPL/StSoundLibrary", IWAAAAAA
+    .\stsoundlibrary
+    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Ym2Wav"=.\Ym2Wav\Ym2Wav.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+    begin source code control
+    "$/StSoundGPL/Ym2Wav", FWAAAAAA
+    .\ym2wav
+    end source code control
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name StSoundLibrary
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+    begin source code control
+    "$/StSoundGPL", YVAAAAAA
+    .
+    end source code control
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

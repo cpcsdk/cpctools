@@ -1,0 +1,80 @@
+TO BE DONE in LibDSK 1.3.x:
+
+- Partition support.
+	It looks as if the way to do it is to have a filter driver.
+	Something like 
+		dsk_err_t dsk_part_open(DSK_PDRIVER *guest,
+					DSK_PDRIVER host, 
+					DSK_GEOMETRY *dg,
+					int npartition);
+
+	This requires:
+		- Reference-counting on the host. Either fail dsk_close()
+		 if its refcount is > 1, or let it succeed silently.
+	
+	Once dsk_part_open() is in place, we can also allow partitions to
+	be passed as filenames:
+
+		partition:n,filename
+
+	which will have a dsk_open that:
+
+		* passes filename to inner dsk_open
+		* do a dsk_getgeom
+		* pass the resulting parameters to dsk_part_open
+
+	Also: False partition (ie, add a partition table to an image)
+
+		dsk_err_t dsk_false_partition(DSK_PDRIVER *guest,
+					DSK_PDRIVER host,
+					DSK_GEOMETRY *dg,
+					unsigned char type);
+
+		with matching open-by-filename:
+
+		falsepart:n,filename
+
+	The alternative to a filter driver is dsk_option_set with a variable
+	of PARTITION, but that has certain problems (eg: you can't have
+	multiple partitions open at one time)
+
+	[nb: What sort of partition table do the likes of +3e use, because
+	 that's going to give all sorts more fun]
+
+
+* Weak-sector support is new and may be buggy.
+* Write more functions for dsktool.
+* The INT25/INT26 driver doesn't seem to work in a DJGPP compile; it fails
+ with error 0x701F.
+* The INT25/INT26 driver keeps spitting out diagnostic messages.
+
+* dskid doesn't work on a DFS .DSK file. Why? Because get_id doesn't fail?
+* Support for DMK file format.
+* Java support for the Reporter classes is buggy [seems to work now 11-5-2003]
+* Plugin architecture:
+	dsk_register_driver
+	dsk_register_compression
+	dsk_register_remote
+* Support for TD0 file format.
+
+* Support remoting libdsk...
+	>> May need to write a PCW backend that dances on the controller
+	  rather than using decorum and the XBIOS.
+	>> May need to write a Win16 version of serslave.
+	>> May need to write a Win16 RPC client.
+
+* Support a reverse-cpmfs backend (that lets a directory appear as a disc 
+ image).
+	>> File in directory called .libdsk.ini that gives LibDsk geometry
+	  and CP/M directory info
+	>> File in directory called .libdsk.boot containing boot sector.
+
+	>> Full of debug code
+	>> Default format is pcw720, not pcw180
+	>> Needs to be compilable on other OSes
+	>> Doesn't truncate files.
+
+* The load-all-into-memory strategy in Apridisk won't work on DOS16. Does
+ this matter, bearing in mind that the real Apridisk exists on DOS16?
+
+* CopyQM: Compare to real BBC Master 512 disks 2-4.

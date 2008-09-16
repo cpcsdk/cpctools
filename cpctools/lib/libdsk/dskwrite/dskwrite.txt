@@ -1,0 +1,62 @@
+DSKWRITE v1.00                                      John Elliott, 10 March 2002
+===============================================================================
+
+  DSKWRITE writes files in the CPCEMU .DSK format out to a floppy disc. 
+
+Licencing
+=========
+
+  DSKWRITE is public domain software. You can do whatever you like with it.
+
+Features
+========
+* Runs on PCWs and Spectrum +3s (under CP/M) and on PCs (under DOS).
+* Supports files in the non-extended .DSK format.
+* Supports .DQK files (files that have been compressed with SQ or NSWP). 
+* Discs are formatted as they are written.
+
+Why?
+====
+  DSKWRITE is designed to distribute copies of Creative Technology's 
+MicroDesign, which was made public domain software in 2001 (see, for
+example, <http://groups.google.com/groups?selm=1008359853.26849.0.nnrp-13.c2de7091%40news.demon.co.uk>)
+
+  Since MicroDesign program discs are in a special format, they can't be 
+distributed in the normal way as a collection of files. Instead, they have
+to be distributed in a disc image format with a program that can turn these
+back into real discs. 
+  Many such programs already exist (TeleDisk, CopyQM, FDCOPY, etc.) but none
+of them works on the PCW. The only DSK writer I know of for the PCW (DU55)
+doesn't support the MD3 copy-protected format. Hence DSKWRITE.
+
+Example of use
+==============
+  A MicroDesign program disc could be distributed as a zipfile containing 
+MD3PROG.DQK (compressed DSK) and DSKWRITE.COM. The person doing the unzipping
+could either:
+
+1. Transfer both files to a PCW and use DSKWRITE there. This would be the 
+  only course of action if the PCW has a 3" A: drive.
+2. Use DSKWRITE on the PC to produce a 3.5" disc. This would only work if
+  the PCW had a 3.5" A: drive and the PC was running DOS (including Windows
+  95/98). 
+3. Uncompress the DQK file and use a different tool such as CPDWRITE or 
+  DSKTRANS to convert it to a disc.
+4. Uncompress the DQK file and use it in JOYCE.
+
+Source
+======
+  DSKWRITE.Z80 contains source for the CP/M version. 
+  DSKWRITE.ASM contains source for the DOS version. 
+  To get the single .COM file, you need to use FBMAKE: 
+  <http://www.seasip.demon.co.uk/Cpm/software/fatbnsea.com>
+
+  It should be possible to build a CP/M-86 version from the DOS source by
+replacing the FDOS function with 
+
+	INT	0E0h
+	RET
+
+.
+ standard MV - CPC format.
+$Warning: All the data on 

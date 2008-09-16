@@ -1,0 +1,6720 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding latin1
+\fontscheme times
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+LibDsk v1.2.1 
+\layout Author
+
+John Elliott
+\layout Abstract
+
+LibDsk is a library intended to give transparent access to floppy drives
+ and to the 
+\begin_inset Quotes eld
+\end_inset 
+
+disc image files
+\begin_inset Quotes erd
+\end_inset 
+
+ used by emulators to represent floppy drives.
+\layout Abstract
+
+This library is free software, released under the GNU Library GPL.
+ See COPYING for details.
+\layout Standard
+\pagebreak_top \pagebreak_bottom 
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
+\layout Section
+
+Introduction
+\layout Subsection
+
+About this document
+\layout Standard
+
+This document only covers LibDsk -- the library -- itself.
+ For information on the example utilities supplied with LibDsk (apriboot,
+ dskform, dsktrans, dskid, dskdump, dskscan, dskutil and md3serial) see
+ their respective manual pages.
+\layout Subsection
+
+About LibDsk
+\layout Standard
+
+LibDsk is a library for accessing floppy drives and disc images transparently.
+ It currently supports the following disc image formats:
+\layout Itemize
+
+Raw 
+\begin_inset Quotes eld
+\end_inset 
+
+dd if=foo of=bar
+\begin_inset Quotes erd
+\end_inset 
+
+ images;
+\layout Itemize
+
+Raw images in logical filesystem order;
+\layout Itemize
+
+CPCEMU-format .DSK images (normal and extended); 
+\layout Itemize
+
+MYZ80-format hard drive images; 
+\layout Itemize
+
+CFI-format disc images, as produced by FDCOPY.COM under DOS and used to distribut
+e some Amstrad system discs; 
+\layout Itemize
+
+ApriDisk-format disc images, used by the utility of the same name under
+ DOS.
+\layout Itemize
+
+NanoWasp-format disc images, used by the eponymous emulator.
+\layout Itemize
+
+Disc images created by the Sydex imaging programs Teledisk and CopyQM (read
+ only in both cases).
+\layout Itemize
+
+The floppy drive under Linux; 
+\layout Itemize
+
+The floppy drive under Windows.
+ Windows support is a complicated subject - see section 
+\begin_inset LatexCommand \ref{ldwindows}
+
+\end_inset 
+
+ below.
+\layout Itemize
+
+The floppy drive (and hard drive partitions) under DOS.
+\layout Standard
+
+LibDsk also supports compressed disc images in the following formats: 
+\layout Itemize
+
+Squeeze (Huffman coded) 
+\layout Itemize
+
+GZip (Deflate ) 
+\layout Itemize
+
+BZip2 (Burrows-Wheeler; support is read-only)
+\layout Subsection
+
+What's new? 
+\layout Standard
+
+For full details, see the file ChangeLog.
+\layout Itemize
+
+Should now compile out of the box on FreeBSD.
+\layout Itemize
+
+A bugfix to the rcpmfs driver should allow it to simulate a CP/M 2 filesystem
+ as well as CP/M 3.
+\layout Itemize
+
+Added two new drivers: 
+\begin_inset Quotes eld
+\end_inset 
+
+teledisk
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+logical
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Itemize
+
+Changes by Ramlaid <www.ramlaid.com> to the DSK and NTWDM drivers to improve
+ compatibility, and another fix to stop file handles leaking.
+\layout Itemize
+
+Added a new driver: 
+\begin_inset Quotes eld
+\end_inset 
+
+int25
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ This allows the DOS version to run on Apricot PCs (which do not have an
+ IBM-compatible BIOS) and to access hard drive partitions.
+\layout Itemize
+
+Bugfix in the Linux floppy driver, which could cause 
+\begin_inset Quotes eld
+\end_inset 
+
+No data
+\begin_inset Quotes erd
+\end_inset 
+
+ errors logging in certain disc formats.
+\layout Itemize
+
+Bugfix in the rcpmfs driver: Files saved to user 1 no longer go to user
+ 0.
+\layout Itemize
+
+Enhanced the ApriDisk driver to handle disc images that start with a 'creator'
+ block.
+\layout Itemize
+
+Enhanced the rcpmfs driver to deal with truncation of existing files.
+\layout Itemize
+
+Added initial support for 'multiple/weak' sectors in the 'dsk' driver.
+ LibDsk can read such sectors, but not write them (they get written as normal
+ sectors).
+\layout Itemize
+
+Bug fix: Don't leak file handles in the 'dsk' driver.
+\layout Itemize
+
+The internal RPC system has been expanded to allow operation over a serial
+ line.
+ 
+\layout Itemize
+
+The Win32 (VC++ 6) version now includes an ATL project to present LibDsk
+ as a COM object.
+\layout Itemize
+
+'ntwdm' driver added by Simon Owen.
+\layout Itemize
+
+dsk_dirty() function added by Philip Kendall.
+\layout Itemize
+
+LibDsk now reads a 'libdskrc' file (section 
+\begin_inset LatexCommand \ref{sub:libdskrc-format}
+
+\end_inset 
+
+) at startup; this can contain additional format definitions.
+\layout Itemize
+
+An experimental read-only driver to handle CopyQM disc images (written by
+ Per Ola Ingvarsson, who also documented the file format - section 
+\begin_inset LatexCommand \ref{sec:copyqm}
+
+\end_inset 
+
+).
+\layout Itemize
+
+Experimental support for an 'rcpmfs' driver (section 
+\begin_inset LatexCommand \ref{sec:rcpmfs}
+
+\end_inset 
+
+) which presents directories as CP/M disk images.
+\layout Itemize
+
+DSK files now store density and recording mode.
+\layout Itemize
+
+LibDsk can now retry failed reads/writes/formats.
+\layout Itemize
+
+Extra functions have been added to support disc images that contain comments.
+\layout Itemize
+
+Extra functions have been added for display of messages from LibDsk.
+\layout Itemize
+
+A driver has been added for the disc image files used by the ApriDisk utility.
+\layout Itemize
+
+The parameter order of the example utilities has been made less rigid.
+\layout Subsection
+
+Terms and definitions
+\layout Standard
+
+In this document, I use the word 
+\noun on 
+cylinder
+\noun toggle 
+ to refer to a position on a floppy disc, and 
+\noun on 
+track
+\noun toggle 
+ to refer to the data within a cylinder on one side of the disc.
+ For a single-sided disc, these are the same; for a double-sided disc, there
+ are twice as many tracks as cylinders.
+ 
+\layout Section
+
+
+\begin_inset LatexCommand \label{formats}
+
+\end_inset 
+
+Supported file formats
+\layout Standard
+
+The following disc image file formats are supported by LibDsk.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+dsk
+\begin_inset Quotes erd
+\end_inset 
+
+ : Disc image in the DSK format used by CPCEMU.
+ The format of a .DSK file is described in the CPCEMU documentation.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+edsk
+\begin_inset Quotes erd
+\end_inset 
+
+ : Disc image in the extended CPCEMU DSK format.
+ 
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+raw
+\begin_inset Quotes erd
+\end_inset 
+
+ : Raw disc image - as produced by 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+dd if=/dev/fd0 of=image
+\family default 
+
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ On systems other than Linux, DOS or Windows, this is also used to access
+ the host system's floppy drive.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+logical
+\begin_inset Quotes erd
+\end_inset 
+
+ : Raw disc image in logical filesystem order.
+ Previous versions of LibDsk could generate such images (for example, by
+ using the now-deprecated
+\family typewriter 
+ -logical
+\family default 
+ option to dsktrans) but couldn't then write them back or use them in emulators.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+floppy
+\begin_inset Quotes erd
+\end_inset 
+
+ : Host system's floppy drive (under Linux, DOS or Windows).
+ 
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+int25
+\begin_inset Quotes erd
+\end_inset 
+
+ : Hard drive partition under DOS.
+ Also used for the floppy drive on Apricot PCs.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+ntwdm
+\begin_inset Quotes erd
+\end_inset 
+
+ : Enhanced floppy support under Windows 2000 and XP, using an additional
+ kernel-mode driver.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+myz80
+\begin_inset Quotes erd
+\end_inset 
+
+ : MYZ80 hard drive image, which is 
+\emph on 
+nearly
+\emph toggle 
+ the same as 
+\begin_inset Quotes eld
+\end_inset 
+
+raw
+\begin_inset Quotes erd
+\end_inset 
+
+ but has a 256 byte header.
+ 
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+cfi
+\begin_inset Quotes erd
+\end_inset 
+
+ : Compressed floppy image, as produced by FDCOPY.COM under DOS.
+ Its format is described in cfi.html.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+qm
+\begin_inset Quotes erd
+\end_inset 
+
+ : Disc images created by Sydex's CopyQM.
+ This is a read-only driver.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+teledisk
+\begin_inset Quotes erd
+\end_inset 
+
+ : Disc images created by Sydex's TeleDisk.
+ This is a read-only driver.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+nanowasp
+\begin_inset Quotes erd
+\end_inset 
+
+ : Disc image in the 400k Microbee format used by the NanoWasp emulator.
+ This is similar to 
+\begin_inset Quotes eld
+\end_inset 
+
+raw
+\begin_inset Quotes erd
+\end_inset 
+
+, but the tracks are stored in a different order.
+ LibDsk also applies a sector skew so that the sectors are read/written
+ in the logical order.
+ Strictly speaking, it should not do this (when libdsk is used with cpmtools,
+ cpmtools is the one that does the skewing) but cpmtools cannot handle the
+ skewing scheme used by the Microbee format.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+apridisk
+\begin_inset Quotes erd
+\end_inset 
+
+: Disc image in the format used by the ApriDisk utility.
+ The format is described in apridisk.html.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+rcpmfs
+\begin_inset Quotes erd
+\end_inset 
+
+: Reverse CP/M filesystem.
+ A directory is made to appear as a CP/M disk.
+ This is an experimental system and should be approached with caution.
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+remote
+\begin_inset Quotes erd
+\end_inset 
+
+: Remote LibDsk server, most likely at the other end of a serial line.
+\layout Section
+
+Architecture 
+\layout Standard
+
+LibDsk is composed of a fixed core (files named 
+\family typewriter 
+dsk*.c
+\family default 
+) and a number of drivers (files named 
+\family typewriter 
+drv*.c
+\family default 
+).
+ When you open an image or a drive (using 
+\family typewriter 
+dsk_open()
+\family default 
+ or 
+\family typewriter 
+dsk_creat()
+\family default 
+ ) then a driver is chosen.
+ This driver is then used until it's closed (
+\family typewriter 
+dsk_close()
+\family default 
+).
+ 
+\layout Standard
+
+Each driver is identified by a name.
+ To get a list of available drivers, use 
+\family typewriter 
+dsk_type_enum()
+\family default 
+.
+ To get the driver that is being used by an open DSK image, use 
+\family typewriter 
+dsk_drvname()
+\family default 
+ or 
+\family typewriter 
+dsk_drvdesc()
+\family default 
+.
+\layout Subsection
+
+Logical and physical sectors
+\layout Standard
+
+LibDsk has two models of disc geometry.
+ One is as a linear array of 
+\begin_inset Quotes eld
+\end_inset 
+
+logical
+\begin_inset Quotes erd
+\end_inset 
+
+ sectors - for example, a 720k floppy appears as 1440 512-byte sectors numbered
+ 0 to 1439.
+ The other locates each sector using a (Cylinder, Head, Sector) triple -
+ so on the 720k floppy described earlier, sectors would run from (0,0,1)
+ to (79,1,9).
+ 
+\layout Standard
+
+Internally, all LibDsk drivers are written to use the Cylinder/Head/Sector
+ model.
+ For those calls which take parameters in logical sectors, LibDsk uses the
+ information in a 
+\family typewriter 
+DSK_GEOMETRY
+\family default 
+ structure to convert to C/H/S.
+ 
+\family typewriter 
+DSK_GEOMETRY
+\family default 
+ also contains information such as the sector size and data rate used to
+ access a given disc.
+ 
+\layout Standard
+
+Those functions which deal with whole tracks (such as the command to format
+ a track) use logical tracks and (cylinder,head) pairs instead.
+ To initialise a 
+\family typewriter 
+DSK_GEOMETRY
+\family default 
+ structure, either: 
+\layout Itemize
+
+call 
+\family typewriter 
+dsk_getgeom()
+\family default 
+ to try and detect it from the disc; or 
+\layout Itemize
+
+call 
+\family typewriter 
+dg_stdformat()
+\family default 
+ to select one of the 
+\begin_inset Quotes eld
+\end_inset 
+
+standard
+\begin_inset Quotes erd
+\end_inset 
+
+ formats that LibDsk knows about; or 
+\layout Itemize
+
+call 
+\family typewriter 
+dg_dosgeom()
+\family default 
+ / 
+\family typewriter 
+dg_cpm86geom()
+\family default 
+ / 
+\family typewriter 
+dg_pcwgeom() 
+\family default 
+/
+\family typewriter 
+ dg_aprigeom()
+\family default 
+ to initialise it from a copy of a DOS / CP/M86 / PCW / Apricot boot sector;
+ or 
+\layout Itemize
+
+Set all the members manually.
+\layout Subsubsection
+
+
+\begin_inset LatexCommand \label{sec: dskgeom}
+
+\end_inset 
+
+DSK_GEOMETRY in detail
+\layout LyX-Code
+
+typedef struct
+\layout LyX-Code
+
+{
+\layout Description
+
+
+\family typewriter 
+dsk_sides_t\SpecialChar ~
+dg_sidedness;
+\family default 
+ /* This describes the logical sequence of tracks on the disc - the order
+ in which their host system reads them.
+ This will only be used if 
+\family typewriter 
+dg_heads
+\family default 
+ is greater than 1 (otherwise all the methods are equivalent) and you are
+ using functions that take logical sectors or tracks as parameters.
+ It will be one of: 
+\begin_deeper 
+\layout Description
+
+
+\family typewriter 
+SIDES_ALT
+\family default 
+ The tracks are ordered Cylinder 0 Head 0; C0H1; C1H0; C1H1; C2H0; C2H1
+ etc.
+ This layout is used by most PC-hosted operating systems, including DOS
+ and Linux.
+ Amstrad's 8-bit operating systems also use this ordering.
+\layout Description
+
+
+\family typewriter 
+SIDES_OUTBACK
+\family default 
+ The tracks go out to the edge on Head 0, and then back in on Head 1 (so
+ Cylinder 0 Head 0 is the first track, while Cylinder 0 Head 1 is the last).
+ This layout is used by Freek Heite's 144FEAT driver (for CP/M-86 on the
+ PC) but I have not seen it elsewhere.
+\layout Description
+
+
+\family typewriter 
+SIDES_OUTOUT
+\family default 
+ The tracks go out to the edge on Head 0, then out again on Head 1 (so the
+ order goes C(last)H0, C0H1, C1H1, ..., C(last)H1).
+ This ordering is used by Acorn-format discs.
+\layout Standard
+
+*/
+\end_deeper 
+\layout Description
+
+
+\family typewriter 
+dsk_pcyl_t\SpecialChar ~
+dg_cylinders;
+\family default 
+ /* The number of cylinders this disc has.
+ Usually 40 or 80.
+ */
+\layout Description
+
+
+\family typewriter 
+dsk_phead_t\SpecialChar ~
+dg_heads;
+\family default 
+ /* The number of heads (sides) the disc has.
+ Usually 1 or 2.
+ */
+\layout Description
+
+
+\family typewriter 
+dsk_psect_t\SpecialChar ~
+dg_sectors;
+\family default 
+ /* The number of sectors per track.
+ */
+\layout Description
+
+
+\family typewriter 
+dsk_psect_t\SpecialChar ~
+dg_secbase;
+\family default 
+ /* The first physical sector number.
+ Most systems start numbering their sectors at 1; Acorn systems start at
+ 0, and Amstrad CPCs start at 65 or 193.
+ */
+\layout Description
+
+
+\family typewriter 
+size_t\SpecialChar ~
+dg_secsize;
+\family default 
+ /* Sector size in bytes.
+ Note that several drivers rely on this being a power of 2.
+ */
+\layout Description
+
+
+\family typewriter 
+dsk_rate_t\SpecialChar ~
+dg_datarate;
+\family default 
+ /* Data rate.
+ This will be one of:
+\begin_deeper 
+\layout Description
+
+
+\family typewriter 
+RATE_HD 
+\family default 
+High-density disc (1.4Mb or 1.2Mb)
+\layout Description
+
+
+\family typewriter 
+RATE_DD 
+\family default 
+Double-density disc in 1.2Mb drive (ie, 360k disc in 1.2Mb drive)
+\layout Description
+
+
+\family typewriter 
+RATE_SD
+\family default 
+ Double-density disc in 1.4Mb or 720k drive
+\layout Description
+
+
+\family typewriter 
+RATE_ED
+\family default 
+ Extra-density disc (2.8Mb) */
+\end_deeper 
+\layout Description
+
+
+\family typewriter 
+dsk_gap_t\SpecialChar ~
+dg_rwgap;
+\family default 
+ /* Read/write gap length */
+\layout Description
+
+
+\family typewriter 
+dsk_gap_t\SpecialChar ~
+dg_fmtgap; 
+\family default 
+/* Format gap length */
+\layout Description
+
+
+\family typewriter 
+int\SpecialChar ~
+dg_fm;
+\family default 
+ /* Set to nonzero to use FM (single density) recording mode.
+ Not all PC floppy controllers support this mode; the National Semiconductor
+ PC87306 and the Future Domain TMC series SCSI controllers can at least
+ read FM discs.
+ The BBC Micro used FM recording for its 100k and 200k DFS formats.
+ The Windows / DOS floppy drivers do not support FM recording.
+ */
+\layout Description
+
+
+\family typewriter 
+int\SpecialChar ~
+dg_nomulti; 
+\family default 
+/* Set to nonzero to disable multitrack mode.
+ This only affects attempts to read normal data from tracks containing deleted
+ data (or vice versa).
+ */
+\layout Description
+
+
+\family typewriter 
+int\SpecialChar ~
+dg_noskip;
+\family default 
+ /* Set to nonzero to disable skipping deleted data when searching for non-delet
+ed data (or vice versa).
+ */
+\layout LyX-Code
+
+} DSK_GEOMETRY;
+\layout Section
+
+LibDsk Function Reference 
+\layout Subsection
+
+dsk_open: Open an existing disc image
+\layout LyX-Code
+
+dsk_err_t dsk_open(DSK_PDRIVER *self, const char *filename, const char *type,
+ const char *compress)
+\layout Standard
+
+Enter with: 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ is the address of a DSK_PDRIVER variable (treat it as a handle to a drive
+ / disc file).
+ On return, the variable will be non-null (if the operation succeeded) or
+ null (if the operation failed).
+  
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+filename
+\begin_inset Quotes erd
+\end_inset 
+
+ is the name of the disc image file.
+ On DOS and Windows, 
+\begin_inset Quotes eld
+\end_inset 
+
+A:
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+B:
+\begin_inset Quotes erd
+\end_inset 
+
+ refer to the two floppy drives.
+ On Apricot MS-DOS, 
+\begin_inset Quotes eld
+\end_inset 
+
+0:
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+1:
+\begin_inset Quotes erd
+\end_inset 
+
+ refer to the floppy drives.
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+type
+\begin_inset Quotes erd
+\end_inset 
+
+ is NULL to detect the disc image format automatically, or the name of a
+ LibDsk driver to force that driver to be used.
+ See 
+\family typewriter 
+dsk_type_enum()
+\family default 
+ below.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+compress
+\begin_inset Quotes erd
+\end_inset 
+
+ is NULL to auto-detect compressed files, or the name of a LibDsk compression
+ scheme.
+ See 
+\family typewriter 
+dsk_comp_enum()
+\family default 
+.
+ 
+\layout Standard
+
+Returns: A 
+\family typewriter 
+dsk_err_t,
+\family default 
+ which will be 0 (
+\family typewriter 
+DSK_ERR_OK
+\family default 
+) if successful, or a negative integer if failed.
+ See 
+\family typewriter 
+dsk_strerror()
+\family default 
+.
+ The error 
+\family typewriter 
+DSK_ERR_NOTME
+\family default 
+ means either that no driver was able to open the disc / disc image (if
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+type
+\begin_inset Quotes erd
+\end_inset 
+
+ was NULL) or that the requested driver could not open the file (if 
+\begin_inset Quotes eld
+\end_inset 
+
+type
+\begin_inset Quotes erd
+\end_inset 
+
+ was not NULL).
+\layout Standard
+
+Standard LibDsk drivers are listed in section 
+\begin_inset LatexCommand \ref{formats}
+
+\end_inset 
+
+.
+\layout Standard
+
+Compression schemes are: 
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+sq
+\begin_inset Quotes erd
+\end_inset 
+
+ : Huffman (squeezed).
+ The reason for the inclusion of this system is to support .DQK images (see
+ appendix 
+\begin_inset LatexCommand \ref{sec: dqk}
+
+\end_inset 
+
+).
+ 
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+gz
+\begin_inset Quotes erd
+\end_inset 
+
+ : GZip (deflate).
+ This will only be present if libdsk was built with zlib support.
+ 
+\layout Description
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+bz2
+\begin_inset Quotes erd
+\end_inset 
+
+ : BZip2 (Burrows-Wheeler compression).
+ This support is currently read-only, and will only be present if LibDsk
+ was built with bzlib support.
+\layout Subsection
+
+dsk_creat: Create a new disc image
+\layout LyX-Code
+
+dsk_err_t dsk_creat(DSK_PDRIVER *self, const char *filename, const char
+ *type)
+\layout Standard
+
+In the case of floppy drives, this acts exactly as 
+\family typewriter 
+dsk_open()
+\family default 
+.
+ For image files, the file will be deleted and recreated.
+ Parameters and results are as for 
+\family typewriter 
+dsk_open()
+\family default 
+, except that 
+\begin_inset Quotes eld
+\end_inset 
+
+type
+\begin_inset Quotes erd
+\end_inset 
+
+ cannot be NULL (it must specify the type of disc image to be created) and
+ if 
+\begin_inset Quotes eld
+\end_inset 
+
+compress
+\begin_inset Quotes erd
+\end_inset 
+
+ is NULL, it means that the file being created should not be compressed.
+\layout Subsection
+
+dsk_close: Close a drive or disc image
+\layout LyX-Code
+
+dsk_err_t dsk_close(DSK_PDRIVER *self)
+\layout Standard
+
+Pass the address of an opaque pointer returned from 
+\family typewriter 
+dsk_open() 
+\family default 
+/ 
+\family typewriter 
+dsk_creat()
+\family default 
+.
+ On return, the drive will have been closed and the pointer set to NULL.
+\layout Subsection
+
+dsk_dirty: Read the dirty flag
+\layout LyX-Code
+
+int dsk_dirty(DSK_PDRIVER self)
+\layout Standard
+
+This function returns non-zero if the disc has been modified since it was
+ inserted into the drive, and zero if it has not been modified.
+ 
+\layout Subsection
+
+dsk_pread, dsk_lread : Read a sector
+\layout LyX-Code
+
+dsk_err_t dsk_pread(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head, dsk_psect_t sector) 
+\layout LyX-Code
+
+dsk_err_t dsk_lread(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_lsect_t sector)
+\layout Standard
+
+These functions read a single sector from the disc.
+ There are two of them, depending on whether you are using logical or physical
+ sector addresses.
+\layout Standard
+
+Enter with: 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ is a handle to an open drive / image file.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+geom
+\begin_inset Quotes erd
+\end_inset 
+
+ points to the geometry for the drive.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+buf
+\begin_inset Quotes erd
+\end_inset 
+
+ is the buffer into which data will be loaded.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+cylinder
+\begin_inset Quotes erd
+\end_inset 
+
+, 
+\begin_inset Quotes eld
+\end_inset 
+
+head
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+sector
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_pread
+\family default 
+) or 
+\begin_inset Quotes eld
+\end_inset 
+
+sector
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_lread
+\family default 
+) give the location of the sector.
+ 
+\layout Standard
+
+Returns: 
+\layout Itemize
+
+If successful, DSK_ERR_OK.
+ Otherwise, a negative DSK_ERR_* value.
+ 
+\layout Itemize
+
+If the driver cannot read sectors, DSK_ERR_NOTIMPL will be returned.
+\layout Subsection
+
+dsk_pwrite, dsk_lwrite: Write a sector
+\layout LyX-Code
+
+dsk_err_t dsk_pwrite(DSK_PDRIVER self, const DSK_GEOMETRY *geom, const void
+ *buf, dsk_pcyl_t cylinder, dsk_phead_t head, dsk_psect_t sector) 
+\layout LyX-Code
+
+dsk_err_t dsk_lwrite(DSK_PDRIVER self, const DSK_GEOMETRY *geom, const void
+ *buf, dsk_lsect_t sector)
+\layout Standard
+
+As dsk_pread / dsk_lread, but write their buffers to disc rather than reading
+ them from disc.
+ If the driver cannot write sectors, DSK_ERR_NOTIMPL will be returned.
+\layout Subsection
+
+dsk_pcheck, dsk_lcheck: Verify sectors on disc against memory
+\layout LyX-Code
+
+dsk_err_t dsk_pcheck(DSK_PDRIVER self, const DSK_GEOMETRY *geom, const void
+ *buf, dsk_pcyl_t cylinder, dsk_phead_t head, dsk_psect_t sector) 
+\layout LyX-Code
+
+dsk_err_t dsk_lcheck(DSK_PDRIVER self, const DSK_GEOMETRY *geom, const void
+ *buf, dsk_lsect_t sector)
+\layout Standard
+
+As 
+\family typewriter 
+dsk_pread
+\family default 
+ / 
+\family typewriter 
+dsk_lread
+\family default 
+, but rather than reading their buffers from disc, they compare the contents
+ of their buffers with the data already on the disc.
+ If the data match, the functions return DSK_ERR_OK.
+ If there is a mismatch, they return DSK_ERR_MISMATCH.
+ In case of error, other DSK_ERR_* values are returned.
+ If the driver cannot read sectors, DSK_ERR_NOTIMPL will be returned.
+\layout Subsection
+
+dsk_pformat, dsk_lformat: Format a disc track
+\layout LyX-Code
+
+dsk_err_t dsk_pformat(DSK_PDRIVER self, DSK_GEOMETRY *geom, dsk_pcyl_t cylinder,
+ dsk_phead_t head, const DSK_FORMAT *format, unsigned char filler) 
+\layout LyX-Code
+
+dsk_err_t dsk_lformat(DSK_PDRIVER self, DSK_GEOMETRY *geom, dsk_ltrack_t
+ track, const DSK_FORMAT *format, unsigned char filler)
+\layout Standard
+
+Enter with: 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ is a handle to an open drive / image file.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+geom
+\begin_inset Quotes erd
+\end_inset 
+
+ points to the geometry for the drive.
+ The formatter may modify this if (for example) it's asked to format track
+ 41 of a 40-track drive.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+cylinder
+\begin_inset Quotes erd
+\end_inset 
+
+ / 
+\begin_inset Quotes eld
+\end_inset 
+
+head
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_pformat
+\family default 
+) or 
+\begin_inset Quotes eld
+\end_inset 
+
+track
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_lformat
+\family default 
+) give the location of the track to format.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+format
+\begin_inset Quotes erd
+\end_inset 
+
+ should be an array of (
+\family typewriter 
+geom->dg_sectors
+\family default 
+) DSK_FORMAT structures.
+ These structures must contain sector headers for the track being formatted.
+ For example, to format the first track of a 720k disc, you would pass in
+ an array of 9 such structures: { 0, 0, 1, 512 }, { 0, 0, 2, 512, } ..., {
+ 0, 0, 9, 512 } 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+filler
+\begin_inset Quotes erd
+\end_inset 
+
+ should be the filler byte to use.
+ Currently the Win32 driver ignores this parameter.
+ If the driver cannot format tracks, DSK_ERR_NOTIMPL will be returned.
+\layout Standard
+
+Note that when formatting a .DSK file that has more than one head, you must
+ format cylinder 0 for each head before formatting other cylinders.
+\layout Subsection
+
+dsk_apform, dsk_alform: Automatic format
+\layout LyX-Code
+
+dsk_err_t dsk_apform(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head, unsigned char filler) 
+\layout LyX-Code
+
+dsk_err_t dsk_alform(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_ltrack_t
+ track, unsigned char filler)
+\layout Standard
+
+These function calls behave as 
+\family typewriter 
+dsk_pformat()
+\family default 
+ and 
+\family typewriter 
+dsk_lformat() 
+\family default 
+above, except that the sector headers are automatically generated.
+ This saves time and trouble setting up sector headers on discs with standard
+ layouts such as DOS, PCW or Linux floppies.
+ If the driver cannot format tracks, DSK_ERR_NOTIMPL will be returned.
+\layout Subsection
+
+dsk_psecid, dsk_lsecid: Read a sector ID.
+\layout LyX-Code
+
+dsk_err_t dsk_psecid(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head, DSK_FORMAT *result) 
+\layout LyX-Code
+
+dsk_err_t dsk_lsecid(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_ltrack_t
+ track, DSK_FORMAT *result)
+\layout Standard
+
+Read a sector ID from the given track.
+ This can be used to probe for discs with oddly-numbered sectors (eg, numbered
+ 65-74).
+ Enter with: 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ is a handle to an open drive / image file.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+geom
+\begin_inset Quotes erd
+\end_inset 
+
+ points to the geometry for the drive.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+cylinder
+\begin_inset Quotes erd
+\end_inset 
+
+ / 
+\begin_inset Quotes eld
+\end_inset 
+
+head
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_psecid
+\family default 
+) or 
+\begin_inset Quotes eld
+\end_inset 
+
+track
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_lsecid
+\family default 
+) give the location of the track to read the sector from.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+result
+\begin_inset Quotes erd
+\end_inset 
+
+ points to an uninitialised 
+\family typewriter 
+DSK_FORMAT
+\family default 
+ structure.
+ 
+\layout Standard
+
+On return: 
+\layout Itemize
+
+If successful, the buffer at 
+\begin_inset Quotes eld
+\end_inset 
+
+result
+\begin_inset Quotes erd
+\end_inset 
+
+ will be initialised with the sector header found, and DSK_ERR_OK will be
+ returned.
+ 
+\layout Itemize
+
+If the driver cannot provide this functionality (for example, the Win32
+ driver under NT), DSK_ERR_NOTIMPL will be returned.
+\layout Standard
+
+Note that the DOS, Win16 and Win32 (under Win9x) drivers implement a limited
+ version of this call, which will work on normal DOS / CP/M86 / PCW discs
+ and CPC discs.
+ However it will not be usable for other purposes.
+\layout Subsection
+
+dsk_ptrackids, dsk_ltrackids: Identify sectors on track.
+\layout LyX-Code
+
+dsk_err_t dsk_ptrackids(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head, dsk_psect_t *count, DSK_FORMAT **result) 
+\layout LyX-Code
+
+\layout LyX-Code
+
+dsk_err_t dsk_ltrackids(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_ltrack_t
+ track, dsk_psect_t *count, DSK_FORMAT **result)
+\layout Standard
+
+These functions are intended to read all the sector IDs from a track, in
+ order, and (preferably) starting at the index hole.
+ If they succeed, 'result' will point at an array of DSK_FORMAT structures
+ describing the sectors found.
+ This array will have been allocated with dsk_malloc() and should be freed
+ with dsk_free().
+\layout Subsection
+
+dsk_rtread: Reserved.
+\layout LyX-Code
+
+dsk_err_t  dsk_rtread(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head, int reserved); 
+\layout Standard
+
+This function is reserved for future expansion.
+ The intention is to use it for diagnostic read commands (such as reading
+ the raw bits from a track).
+ Currently it returns DSK_ERR_NOTIMPL.
+\layout Subsection
+
+dsk_xread, dsk_xwrite: Low-level reading and writing
+\layout LyX-Code
+
+dsk_err_t dsk_xread(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head, dsk_pcyl_t cyl_expected, dsk_phead_t
+ head_expected, dsk_psect_t sector, size_t sector_len, int *deleted); 
+\layout LyX-Code
+
+dsk_err_t dsk_xwrite(DSK_PDRIVER self, const DSK_GEOMETRY *geom, const void
+ *buf, dsk_pcyl_t cylinder, dsk_phead_t head, dsk_pcyl_t cyl_expected, dsk_phead
+_t head_expected, dsk_psect_t sector, size_t sector_len, int deleted);
+\layout Standard
+
+dsk_xread() and dsk_xwrite() are extended versions of dsk_pread() and dsk_pwrite
+().
+ They allow the caller to read/write sectors whose sector ID differs from
+ the physical location of the sector, or to read/write deleted data..
+ The 
+\begin_inset Quotes eld
+\end_inset 
+
+cylinder
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+head
+\begin_inset Quotes erd
+\end_inset 
+
+ arguments specify where to look; the 
+\begin_inset Quotes eld
+\end_inset 
+
+cyl_expected
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+head_expected
+\begin_inset Quotes erd
+\end_inset 
+
+ are the values to search for in the sector header.
+ 
+\layout Standard
+
+These functions are only supported by the CPCEMU driver, the Linux floppy
+ driver and the NTWDM floppy driver.
+ Other drivers will return DSK_ERR_NOTIMPL.
+ Unless you are emulating a floppy controller, or you need to read discs
+ that contain deleted data or misnumbered sectors, it should not be necessary
+ to call these functions.
+\layout Subsubsection
+
+dsk_xread(), dsk_xwrite(): Deleted data 
+\layout Standard
+
+The 
+\begin_inset Quotes eld
+\end_inset 
+
+deleted
+\begin_inset Quotes erd
+\end_inset 
+
+ argument is used if you want to read or write sectors that have been marked
+ as deleted.
+ In 
+\family typewriter 
+dsk_xwrite()
+\family default 
+, this is a simple value; pass 0 to write normal data, or 1 to write deleted
+ data.
+ In 
+\family typewriter 
+dsk_xread()
+\family default 
+, pass the address of an integer containing 0 (read normal data) or 1 (read
+ deleted data).
+ On return, the integer will contain: 
+\layout Itemize
+
+If the requested data type was read: 0 
+\layout Itemize
+
+If the other data type was read: 1 
+\layout Itemize
+
+If the command failed: Value is meaningless.
+ 
+\layout Standard
+
+Passing 
+\family typewriter 
+NULL
+\family default 
+ acts the same as passing a pointer to 0.
+\layout Standard
+
+The opposite type of data will only be read if you set 
+\family typewriter 
+geom->dg_noskip
+\family default 
+ to nonzero.
+ Some examples:
+\layout Standard
+\added_space_top 0.3cm \added_space_bottom 0.3cm \align center 
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="8" columns="5">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0pt">
+<column alignment="center" valignment="top" leftline="true" width="0pt">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0pt">
+<column alignment="center" valignment="top" leftline="true" width="0pt">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0pt">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+geom->dg_noskip
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+deleted
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Data on disc
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Results
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+*deleted becomes
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-> 0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Normal
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+DSK_ERR_OK
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0
+\end_inset 
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-> 0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Deleted
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+DSK_ERR_NODATA
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+??
+\end_inset 
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-> 1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Deleted
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+DSK_ERR_NODATA
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+??
+\end_inset 
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-> 0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Normal
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+DSK_ERR_OK
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0
+\end_inset 
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-> 0
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Deleted
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+DSK_ERR_OK
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-> 1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Normal
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+DSK_ERR_OK
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+-> 1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Deleted
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+DSK_ERR_OK
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Subsection
+
+dsk_ltread, dsk_ptread, dsk_xtread 
+\layout LyX-Code
+
+dsk_err_t dsk_ltread(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_ltrack_t track) 
+\layout LyX-Code
+
+dsk_err_t dsk_ptread(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head) 
+\layout LyX-Code
+
+dsk_err_t dsk_xtread(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head, dsk_pcyl_t cyl_expected, dsk_phead_t
+ head_expected)
+\layout Standard
+
+These functions read a track from the disc, using the FDC's 
+\begin_inset Quotes eld
+\end_inset 
+
+READ TRACK
+\begin_inset Quotes erd
+\end_inset 
+
+ command.
+ There are three of them - logical, physical and extended physical.
+\layout Standard
+
+If the driver does not support this functionality, LibDsk will attempt to
+ simulate it using multiple sector reads.
+\layout Standard
+
+Enter with: 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ is a handle to an open drive / image file.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+geom
+\begin_inset Quotes erd
+\end_inset 
+
+ points to the geometry for the drive.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+buf
+\begin_inset Quotes erd
+\end_inset 
+
+ is the buffer into which data will be loaded.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+cylinder
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+head
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_ptread
+\family default 
+, 
+\family typewriter 
+dsk_xtread
+\family default 
+) or 
+\begin_inset Quotes eld
+\end_inset 
+
+track
+\begin_inset Quotes erd
+\end_inset 
+
+ (
+\family typewriter 
+dsk_ltread
+\family default 
+) give the location of the track to read.
+ 
+\layout Itemize
+
+(
+\family typewriter 
+dsk_xtread
+\family default 
+) 
+\begin_inset Quotes eld
+\end_inset 
+
+cyl_expected
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+head_expected
+\begin_inset Quotes erd
+\end_inset 
+
+ are used as the values to search for in the sector headers.
+ 
+\layout Standard
+
+Returns: 
+\layout Itemize
+
+If successful, DSK_ERR_OK.
+ Otherwise, a negative DSK_ERR_* value.
+ 
+\layout Itemize
+
+(
+\family typewriter 
+dsk_xtread()
+\family default 
+ only) If the driver does not support extended sector reads/writes, then
+ DSK_ERR_NOTIMPL will be returned.
+\layout Subsection
+
+dsk_lseek, dsk_pseek 
+\layout LyX-Code
+
+dsk_err_t dsk_lseek(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_ltrack_t
+ track)
+\layout LyX-Code
+
+dsk_err_t dsk_pseek(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head)
+\layout Standard
+
+Seek to a given cylinder.
+ Only the CPCEMU driver, the Linux floppy driver and the NTWDM floppy driver
+ support this; other drivers return DSK_ERR_NOTIMPL.
+ You should not normally need to call these functions.
+ They have been provided to support programs that emulate a uPD765A controller.
+\layout Subsection
+
+dsk_drive_status 
+\layout LyX-Code
+
+dsk_err_t dsk_drive_status(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_phead
+_t head, unsigned char *result)
+\layout Standard
+
+Get the drive's status (ready, read-only etc.).
+ The byte 
+\begin_inset Quotes eld
+\end_inset 
+
+result
+\begin_inset Quotes erd
+\end_inset 
+
+ will have one or more of the following bits set:
+\layout Description
+
+DSK_ST3_FAULT: Drive fault 
+\layout Description
+
+DSK_ST3_RO: Read-only 
+\layout Description
+
+DSK_ST3_READY: Ready 
+\layout Description
+
+DSK_ST3_TRACK0: Head is over track 0 
+\layout Description
+
+DSK_ST3_DSDRIVE: Drive is double-sided 
+\layout Description
+
+DSK_ST3_HEAD1: Current head is head 1, not head 0.
+ Usually this just depends on the value of the 
+\begin_inset Quotes eld
+\end_inset 
+
+head
+\begin_inset Quotes erd
+\end_inset 
+
+ parameter to this function.
+ 
+\layout Standard
+
+Which bits will be 
+\begin_inset Quotes eld
+\end_inset 
+
+live
+\begin_inset Quotes erd
+\end_inset 
+
+ depends on which driver is in use, but the most trustworthy will be DSK_ST3_REA
+DY and DSK_ST3_RO.
+ This function will never return DSK_ERR_NOTIMPL; if the facility is not
+ provided by the driver, a default version will be used.
+ 
+\layout Subsection
+
+dsk_dirty: Has drive been written to?
+\layout LyX-Code
+
+int dsk_dirty(DSK_PDRIVER self); 
+\layout Standard
+
+This returns zero if the disc has not been written to since it was opened,
+ nonzero if it has.
+\layout Subsection
+
+dsk_getgeom: Guess disc geometry
+\layout LyX-Code
+
+dsk_err_t dsk_getgeom(DSK_PDRIVER self, DSK_GEOMETRY *geom)
+\layout Standard
+
+This attempts to determine the geometry of a disc (number of cylinders,
+ tracks, sectors etc.) by loading the boot sector.
+ It understands DOS, Apricot, CP/M-86 and PCW boot sectors.
+ If the geometry could be guessed, then 
+\begin_inset Quotes eld
+\end_inset 
+
+geom
+\begin_inset Quotes erd
+\end_inset 
+
+ will be initialised and DSK_ERR_OK will be returned.
+ If no guess could be made, then DSK_ERR_BADFMT will be returned.
+ Other values will result if the disc could not be read.
+\layout Standard
+
+Some drivers (in particular the MYZ80 driver, and the Win32 driver under
+ NT) only support certain fixed disc geometries.
+ In this case, the geometry returned will reflect what the driver can use,
+ rather than what the boot sector says.
+\layout Subsection
+
+dg_*geom : Initialise disc geometry from boot sector
+\layout LyX-Code
+
+dsk_err_t dg_dosgeom(DSK_GEOMETRY *self, const unsigned char *bootsect)
+ 
+\layout LyX-Code
+
+dsk_err_t dg_pcwgeom(DSK_GEOMETRY *self, const unsigned char *bootsect)
+ 
+\layout LyX-Code
+
+dsk_err_t dg_cpm86geom(DSK_GEOMETRY *self, const unsigned char *bootsect)
+\layout LyX-Code
+
+dsk_err_t dg_aprigeom(DSK_GEOMETRY *self, const unsigned char *bootsect)
+\layout Standard
+
+These functions are used by 
+\family typewriter 
+dsk_getgeom()
+\family default 
+, but can also be called independently.
+ Enter them with: 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ is the structure to initialise;
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+bootsect
+\begin_inset Quotes erd
+\end_inset 
+
+ is the boot sector to initialise the structure from.
+\layout Standard
+
+Returns DSK_ERR_BADFMT if the sector does not contain a suitable disc specificat
+ion, or DSK_ERR_OK otherwise.
+\layout Description
+
+dg_dosgeom will check for a PC-DOS boot sector.
+\layout Description
+
+dg_pcwgeom will check for an Amstrad PCW boot sector.
+\layout Description
+
+dg_cpm86geom will check for a CP/M-86 boot sector.
+\layout Description
+
+dg_aprigeom will check for an Apricot DOS boot sector.
+\layout Subsection
+
+dg_stdformat : Initialise disc geometry from a standard LibDsk format.
+\layout LyX-Code
+
+dsk_err_t dg_stdformat(DSK_GEOMETRY *self, dsk_format_t formatid, dsk_cchar_t
+ *fname, dsk_cchar_t *fdesc)
+\layout Standard
+
+Initialises a DSK_GEOMETRY structure with one of the standard formats LibDsk
+ knows about.
+ Formats are:
+\layout Description
+
+FMT_180K: 180k, 9 512 byte sectors, 40 tracks, 1 side 
+\layout Description
+
+FMT_200K: 200k, 10 512 byte sectors, 40 tracks, 1 side 
+\layout Description
+
+FMT_CPCSYS: Amstrad CPC system format - as FMT_180K, but physical sectors
+ are numbered 65-73 
+\layout Description
+
+FMT_CPCDATA: Amstrad CPC data format - as FMT_180K, but physical sectors
+ are numbered 193-201 
+\layout Description
+
+FMT_720K: 720k, 9 512 byte sectors, 80 tracks, 2 sides 
+\layout Description
+
+FMT_800K: 800k, 10 512 byte sectors, 80 tracks, 2 sides 
+\layout Description
+
+FMT_1440K: 1.4M, 18 512 byte sectors, 80 tracks, 2 sides 
+\layout Description
+
+FMT_160K: 160k, 8 512 byte sectors, 40 tracks, 1 side 
+\layout Description
+
+FMT_320K: As FMT_160K, but 2 sides 
+\layout Description
+
+FMT_360K: As FMT_180K, but 2 sides 
+\layout Description
+
+FMT_720F: As FMT_720K, but the physical/logical sector mapping is 
+\begin_inset Quotes eld
+\end_inset 
+
+out-and-back
+\begin_inset Quotes erd
+\end_inset 
+
+ rather than 
+\begin_inset Quotes eld
+\end_inset 
+
+alternate sides
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ See section 
+\begin_inset LatexCommand \ref{sec: dskgeom}
+
+\end_inset 
+
+ for details.
+ 
+\layout Description
+
+FMT_1200F: As FMT_720F, but with 15 sectors 
+\layout Description
+
+FMT_1440F: As FMT_720F, but with 18 sectors 
+\layout Description
+
+FMT_ACORN160: Acorn 40 track single sided 160k (used by ADFS 'S' format)
+ 
+\layout Description
+
+FMT_ACORN320: Acorn 80 track single sided 320k (used by ADFS 'M' format)
+ 
+\layout Description
+
+FMT_ACORN640: Acorn 80 track double sided 640k (used by ADFS 'L' format)
+ 
+\layout Description
+
+FMT_ACORN800: Acorn 80 track double sided 800k (used by ADFS 'D' and 'E')
+ 
+\layout Description
+
+FMT_ACORN1600: Acorn 80 track high density 1600k (used by ADFS 'F' format)
+ 
+\layout Description
+
+FMT_BBC100 BBC micro 40 track single sided 100k (using FM encoding) 
+\layout Description
+
+FMT_BBC200 BBC micro 80 track single sided 200k (using FM encoding)
+\layout Description
+
+FMT_MBEE400 Microbee 40 track double sided 400k
+\layout Description
+
+FMT_MGT800 MGT 80 track double sided 800k (used by MGT +D and Sam Coupé).
+\layout Standard
+
+If the 
+\begin_inset Quotes eld
+\end_inset 
+
+fname
+\begin_inset Quotes erd
+\end_inset 
+
+ is not NULL, it will be pointed at a short name for the format (suitable
+ for use as a program option; see 
+\family typewriter 
+tools/dskform.c
+\family default 
+).
+ 
+\layout Standard
+
+If the 
+\begin_inset Quotes eld
+\end_inset 
+
+fdesc
+\begin_inset Quotes erd
+\end_inset 
+
+ is not NULL, it will be pointed at a description string for the format.
+ With these two, it's possible to enumerate geometries supported by the
+ library without keeping a separate list in your program - see 
+\family typewriter 
+tools/formnames.c
+\family default 
+ for example code that does this.
+\layout Standard
+
+If additional formats have been specified in the libdskrc file (section
+ 
+\begin_inset LatexCommand \ref{sub:libdskrc-format}
+
+\end_inset 
+
+), they will be returned by this function, using format numbers starting
+ at the last builtin format plus 1.
+\layout Subsection
+
+dsk_*_forcehead: Override disc head
+\layout LyX-Code
+
+dsk_err_t dsk_set_forcehead(DSK_PDRIVER self, int force) 
+\layout LyX-Code
+
+dsk_err_t dsk_get_forcehead(DSK_PDRIVER self, int *force)
+\layout Standard
+
+(This function is deprecated; it is equivalent to dsk_set_option() / dsk_get_opt
+ion() with 
+\begin_inset Quotes eld
+\end_inset 
+
+HEAD
+\begin_inset Quotes erd
+\end_inset 
+
+ as the option name).
+\layout Standard
+
+Forces the driver to ignore the head number passed to it and always use
+ either side 0 or side 1 of the disc.
+ This is used to read discs recorded on PCW / CPC / Spectrum+3 add-on 3.5"
+ drives.
+ Instead of the system software being programmed to use both sides of the
+ disc, a switch on the drive was used to set which side was being used.
+ Thus discs would end up with both sides saying they were head 0.
+\layout Standard
+
+Anyway, when using dsk_set_forcehead, pass: 
+\layout Description
+
+-1: Normal - the head passed as a parameter to other calls is used.
+ 
+\layout Description
+
+0: Always use side 0.
+ 
+\layout Description
+
+1: Always use side 1.
+\layout Subsection
+
+dsk_*_option: Set/get driver option
+\layout LyX-Code
+
+dsk_err_t dsk_set_option(DSK_PDRIVER self, const char *name, int value)
+\layout LyX-Code
+
+dsk_err_t dsk_get_option(DSK_PDRIVER self, const char *name, int *value)
+\layout Standard
+
+Sets or gets a driver-specific numeric option.
+\layout Standard
+
+The 
+\begin_inset Quotes eld
+\end_inset 
+
+name
+\begin_inset Quotes erd
+\end_inset 
+
+ field is the option name.
+ If the selected driver does not support the appropriate option, then the
+ error DSK_ERR_BADOPT will be returned.
+ If the option is valid but the value requested is not, DSK_ERR_BADVAL will
+ be returned.
+\layout Standard
+
+The following driver options are supported by the Linux and NTWDM floppy
+ drivers:
+\layout Description
+
+HEAD Force the drive always to use one or other side of the disc, ignoring
+ the disc geometry.
+ Valid values are 0 or 1 to force one or other side of the disc, -1 to allow
+ either.
+\layout Description
+
+DOUBLESTEP To support a 48tpi disc in a 96tpi drive, double all cylinder
+ numbers.
+ Valid values are 1 (enable) or 0 (disable).
+\layout Description
+
+ST0\SpecialChar ~
+/\SpecialChar ~
+ST1\SpecialChar ~
+/\SpecialChar ~
+ST2\SpecialChar ~
+/\SpecialChar ~
+ST3 These are the values of the floppy controller's 4 status
+ registers returned by the last operation.
+ They cannot be changed, only read.
+\layout Standard
+
+The 'remote' driver supports the following option (plus any options that
+ the remote driver supports):
+\layout Description
+
+REMOTE:TESTING This disables an optimisation in the remote driver, so that
+ it sends method calls to the remote server even if it has been asked not
+ to.
+ The purpose of this is to ensure that all calls to the remote driver result
+ in RPC packets being sent.
+\layout Subsection
+
+dsk_option_enum: Get list of driver options
+\layout LyX-Code
+
+dsk_err_t dsk_option_enum(DSK_PDRIVER self, int idx, char **optname)
+\layout Standard
+
+If 
+\begin_inset Quotes eld
+\end_inset 
+
+idx
+\begin_inset Quotes erd
+\end_inset 
+
+ is in the range 0 -> number of driver options, (*optname) is set to the
+ name of the appropriate driver option.
+ If not, (*optname) is set to NULL.
+\layout Subsection
+
+dsk_*_comment: Set comment for disc image
+\layout LyX-Code
+
+dsk_err_t dsk_set_comment(DSK_PDRIVER self, const char *comment) 
+\layout LyX-Code
+
+dsk_err_t dsk_get_comment(DSK_PDRIVER self, char **comment)
+\layout Standard
+
+Used to get or set the comment (if any) for the current disc.
+ Comments are only supported by the ApriDisk format; you can set a comment
+ for other file types but it will not be saved.
+ The pointer passed or returned may be NULL (meaning 
+\begin_inset Quotes eld
+\end_inset 
+
+No comment
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Subsection
+
+dsk_type_enum 
+\layout LyX-Code
+
+dsk_err_t dsk_type_enum(int index, char **drvname)
+\layout Standard
+
+If 
+\begin_inset Quotes eld
+\end_inset 
+
+index
+\begin_inset Quotes erd
+\end_inset 
+
+ is in the range 0 -> number of LibDsk drivers, (
+\family typewriter 
+*drvname
+\family default 
+) is set to the short name for that driver (eg: 
+\begin_inset Quotes eld
+\end_inset 
+
+myz80
+\begin_inset Quotes erd
+\end_inset 
+
+ or 
+\begin_inset Quotes eld
+\end_inset 
+
+raw
+\begin_inset Quotes erd
+\end_inset 
+
+).
+ If not, (*drvname) is set to 
+\family typewriter 
+NULL
+\family default 
+.
+\layout Subsection
+
+dsk_comp_enum 
+\layout LyX-Code
+
+dsk_err_t dsk_comp_enum(int index, char **compname)
+\layout Standard
+
+As 
+\family typewriter 
+dsk_type_enum()
+\family default 
+, but lists supported compression schemes.
+\layout Subsection
+
+dsk_drvname, dsk_drvdesc 
+\layout LyX-Code
+
+const char *dsk_drvname(DSK_PDRIVER self) 
+\layout LyX-Code
+
+const char *dsk_drvdesc(DSK_PDRIVER self)
+\layout Standard
+
+Returns the driver name (eg: 
+\begin_inset Quotes eld
+\end_inset 
+
+myz80
+\begin_inset Quotes erd
+\end_inset 
+
+) or description (eg 
+\begin_inset Quotes eld
+\end_inset 
+
+MYZ80 hard drive driver
+\begin_inset Quotes erd
+\end_inset 
+
+) for an open disc image.
+\layout Subsection
+
+dsk_compname, dsk_compdesc 
+\layout LyX-Code
+
+const char *dsk_compname(DSK_PDRIVER self); 
+\layout LyX-Code
+
+const char *dsk_compdesc(DSK_PDRIVER self);
+\layout Standard
+
+Returns the compression system name (eg: 
+\begin_inset Quotes eld
+\end_inset 
+
+gz
+\begin_inset Quotes erd
+\end_inset 
+
+; NULL if the disc image isn't compressed) or description (eg: 
+\begin_inset Quotes eld
+\end_inset 
+
+GZip compressed
+\begin_inset Quotes erd
+\end_inset 
+
+) for an open disc image.
+\layout Subsection
+
+dg_ps2ls, dg_ls2ps, dg_pt2lt, dg_lt2pt 
+\layout Standard
+
+Convert between logical sectors and physical cylinder/head/sector addresses.
+ Normally these functions are called internally and you don't need to use
+ them.
+\layout LyX-Code
+
+dsk_err_t dg_ps2ls(const DSK_GEOMETRY *self, dsk_pcyl_t cyl, dsk_phead_t
+ head, dsk_psect_t sec, dsk_lsect_t *logical)
+\layout Standard
+
+Converts physical C/H/S to logical sector.
+\layout LyX-Code
+
+dsk_err_t dg_ls2ps(const DSK_GEOMETRY *self, dsk_lsect_t logical, dsk_pcyl_t
+ *cyl, dsk_phead_t *head, dsk_psect_t *sec)
+\layout Standard
+
+Converts logical sector to physical C/H/S.
+\layout LyX-Code
+
+dsk_err_t dg_pt2lt(const DSK_GEOMETRY *self, dsk_pcyl_t cyl, dsk_phead_t
+ head, dsk_ltrack_t *logical)
+\layout Standard
+
+Converts physical C/H to logical track.
+\layout LyX-Code
+
+dsk_err_t dg_lt2pt(const DSK_GEOMETRY *self, dsk_ltrack_t logical, dsk_pcyl_t
+ *cyl, dsk_phead_t *head)
+\layout Standard
+
+Converts logical track to physical C/H.
+\layout Subsection
+
+dsk_strerror: Convert error code to string
+\layout LyX-Code
+
+char *dsk_strerror(dsk_err_t err)
+\layout Standard
+
+Converts an error code returned by one of the other LibDsk functions into
+ a printable string.
+\layout Subsection
+
+dsk_reportfunc_set / dsk_reportfunc_get
+\layout LyX-Code
+
+void dsk_reportfunc_set(DSK_REPORTFUNC report, DSK_REPORTEND repend);
+\layout LyX-Code
+
+void dsk_reportfunc_get(DSK_REPORTFUNC *report, DSK_REPORTEND *repend);
+\layout Standard
+
+Used to set callbacks from LibDsk to your own code, for LibDsk to display
+ messages during processing that may take time.
+ The code could be used to set the text on the status line of your program
+ window, for example.
+\layout LyX-Code
+
+typedef void (*DSK_REPORTFUNC)(const char *message); 
+\layout LyX-Code
+
+typedef void (*DSK_REPORTEND)(void);
+\layout Standard
+
+The first function you provide will be called when LibDsk wants to display
+ a message (such as 
+\begin_inset Quotes eld
+\end_inset 
+
+Decompressing...
+\begin_inset Quotes erd
+\end_inset 
+
+).
+ The second will be called when the processing has finished.
+\layout Subsection
+
+dsk_set_retry / dsk_get_retry
+\layout LyX-Code
+
+dsk_err_t dsk_set_retry(DSK_PDRIVER self, unsigned int count);
+\layout LyX-Code
+
+dsk_err_t dsk_get_retry(DSK_PDRIVER self, unsigned int *count);
+\layout Standard
+
+Sets the number of times that a failed read, write, check or format operation
+ will be attempted.
+ 1 means 
+\begin_inset Quotes eld
+\end_inset 
+
+only try once, do not retry
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ 
+\layout Subsection
+
+dsk_get_psh 
+\layout LyX-Code
+
+unsigned char dsk_get_psh(size_t sector_size)
+\layout Standard
+
+Converts a sector size into the sector shift used by the uPD765A controller
+ (eg: 128 -> 0, 256 -> 1, 512 -> 2 etc.) You should not need to use this.
+ The reverse operation is: sectorsize = (128 << psh).
+\layout Subsection
+
+Structure: DSK_FORMAT
+\layout Standard
+
+This structure is used to represent a sector header.
+ It has four members:
+\layout Description
+
+fmt_cylinder: Cylinder number.
+ 
+\layout Description
+
+fmt_head: Head number.
+ 
+\layout Description
+
+fmt_sector: Sector number.
+ 
+\layout Description
+
+fmt_secsize: Sector size in bytes.
+\layout Subsection
+
+LibDsk errors 
+\layout Description
+
+DSK_ERR_OK: No error.
+\layout Description
+
+DSK_ERR_BADPTR: A null or otherwise invalid pointer was passed to a LibDsk
+ routine.
+ 
+\layout Description
+
+DSK_ERR_DIVZERO: Division by zero: For example, a DSK_GEOMETRY is set to
+ have zero sectors.
+ 
+\layout Description
+
+DSK_ERR_BADPARM: Bad parameter (eg: if a DSK_GEOMETRY is set up with 
+\family typewriter 
+dg_cylinders
+\family default 
+ = 40, trying to convert a sector in cylinder 65 to a logical sector will
+ give this error).
+ 
+\layout Description
+
+DSK_ERR_NODRVR: Requested driver not found in 
+\family typewriter 
+dsk_open()
+\family default 
+ / 
+\family typewriter 
+dsk_creat()
+\family default 
+.
+ 
+\layout Description
+
+DSK_ERR_NOTME: Disc image could not be opened by requested driver.
+\layout Description
+
+DSK_ERR_SYSERR: System call failed.
+ errno holds the reason.
+ 
+\layout Description
+
+DSK_ERR_NOMEM: 
+\family typewriter 
+malloc()
+\family default 
+ failed to allocate memory.
+ 
+\layout Description
+
+DSK_ERR_NOTIMPL: Function is not implemented (eg, this driver doesn't support
+ 
+\family typewriter 
+dsk_xread()
+\family default 
+).
+ 
+\layout Description
+
+DSK_ERR_MISMATCH: In 
+\family typewriter 
+dsk_lcheck() 
+\family default 
+/ 
+\family typewriter 
+dsk_pcheck()
+\family default 
+, sectors didn't match.
+ 
+\layout Description
+
+DSK_ERR_NOTRDY: Drive is not ready.
+ 
+\layout Description
+
+DSK_ERR_RDONLY: Disc is read-only.
+ 
+\layout Description
+
+DSK_ERR_SEEKFAIL: Seek fail.
+ 
+\layout Description
+
+DSK_ERR_DATAERR: Data error.
+ 
+\layout Description
+
+DSK_ERR_NODATA: Sector ID found, but not sector data.
+ 
+\layout Description
+
+DSK_ERR_NOADDR: Sector not found at all.
+ 
+\layout Description
+
+DSK_ERR_BADFMT: Not a valid format.
+ 
+\layout Description
+
+DSK_ERR_CHANGED: Disc has been changed unexpectedly.
+ 
+\layout Description
+
+DSK_ERR_ECHECK: Equipment check.
+ 
+\layout Description
+
+DSK_ERR_OVERRUN: Overrun.
+ 
+\layout Description
+
+DSK_ERR_ACCESS: Access denied.
+ 
+\layout Description
+
+DSK_ERR_CTRLR: Controller failed.
+ 
+\layout Description
+
+DSK_ERR_COMPRESS: Compressed file is corrupt.
+ 
+\layout Description
+
+DSK_ERR_RPC: Error in remote procedure call.
+\layout Description
+
+DSK_ERR_BADOPT: Driver does not support the requested option.
+\layout Description
+
+DSK_ERR_BADVAL: Driver does support the requested option, but the passed
+ value is out of range.
+\layout Description
+
+DSK_ERR_UNKNOWN: Unknown error
+\layout Subsection
+
+Miscellaneous 
+\layout Standard
+
+LIBDSK_VERSION is a macro, defined as a string containing the library version
+ - eg 
+\begin_inset Quotes eld
+\end_inset 
+
+1.0.0
+\begin_inset Quotes erd
+\end_inset 
+
+
+\layout Section
+
+Initialisation files
+\layout Standard
+
+In addition to its built-in library of formats, LibDsk can also load formats
+ from one or two external files - a systemwide file (libdskrc) and a user-specif
+ic file (.libdskrc).
+ The rules for how these files are found differ from platform to platform.
+\layout Subsection
+
+
+\begin_inset LatexCommand \label{sub:libdskrc-format}
+
+\end_inset 
+
+libdskrc format
+\layout Standard
+
+The file format is similar to a Windows .INI file.
+ Each format is described in a section, which starts with the format name
+ in square brackets (format names may not start with a hyphen).
+ After the format name, there are a number of lines of the form variable=value.
+\layout Standard
+
+Anything after a semicolon or hash character is treated as a comment and
+ ignored.
+ Blank lines are also ignored.
+ 
+\layout Standard
+
+For each geometry, the entries listed below can be present.
+ If not all the values are present, LibDsk will use default values from
+ its "pcw180" format.
+ As you can see, they correspond to members of the DSK_GEOMETRY structure.
+\layout Description
+
+description=DESC The description of the format as shown by (for example)
+ dskform --help.
+ 
+\layout Description
+
+sides=TREATMENT How a double-sided disk is handled.
+ This can either be 
+\emph on 
+alt 
+\emph default 
+(sides alternate -- used by most PC-hosted operating systems), 
+\emph on 
+outback
+\emph default 
+ (use side 0 tracks 0-79, then side 1 tracks 79-0 -- used by 144FEAT CP/M
+ disks), or 
+\emph on 
+outout
+\emph default 
+ (use side 0 tracks 0-79, then side 1 tracks 0-79 -- used by some Acorn
+ formats).
+ If the disk is single-sided, this parameter can be omitted.
+\layout Description
+
+cylinders=COUNT Sets the number of cylinders (usually 40 or 80).
+ 
+\layout Description
+
+heads=COUNT Sets the number of heads (usually 1 or 2 for single- or double-
+ sided).
+\layout Description
+
+sectors=COUNT Sets the number of sectors per track.
+ 
+\layout Description
+
+secbase=NUMBER Sets the first sector number on a track.
+ Usually 1; some Acorn formats use 0.
+ 
+\layout Description
+
+secsize=COUNT Sets the size of a sector in bytes.
+ This should be a power of 2.
+\layout Description
+
+datarate=VALUE Sets the rate at which the disk should be accessed.
+ This is one of 
+\emph on 
+HD, DD, SD or ED.
+\layout Description
+
+rwgap=VALUE Sets the read/write gap.
+\layout Description
+
+fmtgap=VALUE Sets the format gap.
+\layout Description
+
+fm=Y\SpecialChar ~
+or\SpecialChar ~
+N Sets the recording mode - Y for FM, N for MFM.
+\layout Description
+
+multitrack=Y\SpecialChar ~
+or\SpecialChar ~
+N Sets multitrack mode.
+\layout Description
+
+skipdeleted=Y\SpecialChar ~
+or\SpecialChar ~
+N Sets whether to skip deleted data.
+\layout Subsubsection
+
+libdskrc example
+\layout LyX-Code
+
+; This is FMT_800K as a libdskrc entry
+\layout LyX-Code
+
+[xcf2dd] 
+\layout LyX-Code
+
+Description = 800k XCF2DD format 
+\layout LyX-Code
+
+Sides = Alt 
+\layout LyX-Code
+
+Cylinders = 80    
+\layout LyX-Code
+
+Heads = 2 
+\layout LyX-Code
+
+Sectors = 10 
+\layout LyX-Code
+
+SecBase = 1 
+\layout LyX-Code
+
+SecSize = 512 
+\layout LyX-Code
+
+DataRate = SD 
+\layout LyX-Code
+
+RWGap = 12 
+\layout LyX-Code
+
+FmtGap = 23
+\layout LyX-Code
+
+\layout LyX-Code
+
+[xcf2]
+\layout LyX-Code
+
+Description = 200k XCF2 format
+\layout LyX-Code
+
+Cylinders = 40
+\layout Standard
+
+...
+ etc.
+\layout Subsection
+
+Locating libdskrc
+\layout Subsubsection
+
+
+\noun on 
+Unix
+\layout Standard
+
+The systemwide file is located at ${datadir}/LibDsk/libdskrc.
+ The ${datadir} is usually /usr/local/share; you can change it with the
+ --datadir or --prefix arguments to the configure script.
+ 
+\layout Standard
+
+The user-specific file is $(HOME)/.libdskrc.
+ 
+\layout Subsubsection
+
+Win32
+\layout Standard
+
+The systemwide file is in the path specified at
+\layout LyX-Code
+
+HKEY_LOCAL_MACHINE
+\backslash 
+Software
+\backslash 
+jce@seasip
+\backslash 
+LibDsk
+\backslash 
+ShareDir
+\layout Standard
+
+If this registry key is not found, LibDsk finds the path of the program
+ that called it (using GetModuleFileName()), and then uses 
+\begin_inset Quotes eld
+\end_inset 
+
+/...program path.../share/libdskrc
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Standard
+
+The user-specific file is in the path specified at
+\layout LyX-Code
+
+HKEY_CURRENT_USER
+\backslash 
+Software
+\backslash 
+jce@seasip
+\backslash 
+LibDsk
+\backslash 
+HomeDir
+\layout Standard
+
+If this registry key is not present, the user's 
+\begin_inset Quotes eld
+\end_inset 
+
+My Documents
+\begin_inset Quotes erd
+\end_inset 
+
+ directory is used.
+ Either way, the file is called .libdskrc.
+\layout Subsubsection
+
+Win16
+\layout Standard
+
+The systemwide file is found from the location of the calling program using
+ GetModuleFileName().
+ There is no user-specific file.
+\layout Subsubsection
+
+DOS
+\layout Standard
+
+The systemwide file is only searched for if the LIBDSK environment variable
+ is set; if it is set, it is assumed to be the name of the directory containing
+ libdskrc.
+ There is no user-specific file.
+\layout Section
+
+
+\begin_inset LatexCommand \label{sec:rcpmfs}
+
+\end_inset 
+
+Reverse CP/M-FS (rcpmfs) backend
+\layout Standard
+
+The rcpmfs backend is designed to present a host directory as a read/write
+ CP/M disk image.
+ This has a number of uses:
+\layout Itemize
+
+You could construct a CP/M disk image using dsktrans 
+\emph on 
+directory filename
+\emph default 
+ .
+\layout Itemize
+
+Conversely, you could extract the files from a CP/M disk image using dsktrans
+ 
+\emph on 
+filename directory
+\emph default 
+.
+\layout Itemize
+
+It is possible for a CP/M emulator running a genuine copy of CP/M to use
+ LibDsk to access files on the host system, without altering the BDOS or
+ installing additional drivers.
+ 
+\layout Standard
+
+rcpmfs does not work with systems that only support 
+\begin_inset Quotes eld
+\end_inset 
+
+8.3
+\begin_inset Quotes erd
+\end_inset 
+
+ format filenames; it also needs a system call that can set the size of
+ a file (such as truncate() under 
+\noun on 
+Unix
+\noun default 
+).
+ It therefore remains unimplemented in the DOS and Win16 versions of the
+ library.
+ 
+\layout Subsection
+
+In Use
+\layout Standard
+
+To use an rcpmfs directory in LibDsk, pass a directory name instead of a
+ filename.
+ Files in the directory which match CP/M naming conventions (8.3 filenames)
+ will appear in the emulated disk image; if there are more files than will
+ fit in the emulated disk, LibDsk will stop when it reaches one that doesn't
+ fit.
+ Under Windows, the 'short filename' is used, so files with names not matching
+ CP/M conventions may also be mapped with names like README~1.HTM.
+ 
+\layout Standard
+
+CP/M has 16 user areas (some variants support 32; rcpmfs does not), and
+ files with the same name can exist in each area.
+ rcpmfs represents nonzero user areas by prepending 
+\begin_inset Quotes eld
+\end_inset 
+
+nn..
+\begin_inset Quotes erd
+\end_inset 
+
+ to the filename; so if a CP/M program created a file called EXAMPLE.DAT
+ in user 4, this would be saved as 
+\begin_inset Quotes eld
+\end_inset 
+
+04..example.dat
+\begin_inset Quotes erd
+\end_inset 
+
+ in the underlying directory.
+ The double dot ensures that the resulting filename is not a valid CP/M
+ name, and therefore won't conflict with any file in user 0.
+\layout Standard
+
+rcpmfs can behave as a CP/M 2 or CP/M 3 filesystem.
+ If the latter, it constructs a disc label (based on the name of the directory)
+ and turns on date/time stamping.
+ Update and access stamps are used, because they map nicely to the utime()
+ system call.
+\layout Subsection
+
+rcpmfs initialisation file
+\layout Standard
+
+For a directory to be usable by rcpmfs, it should contain a file called
+ .libdsk.ini describing the format to use.
+ This file is in INI format, similar to libdskrc (section 
+\begin_inset LatexCommand \ref{sub:libdskrc-format}
+
+\end_inset 
+
+).
+ It must contain only one section: [RCPMFS].
+ Within that section, the following variables may be present:
+\layout Description
+
+BlockSize Size of a CP/M data block.
+ Must be a power of 2, and at least 1024.
+ If there are more than 255 blocks in the CP/M filesystem, this must be
+ at least 2048.
+\layout Description
+
+DirBlocks Number of blocks containing the CP/M directory.
+\layout Description
+
+TotalBlocks Total number of data and directory blocks.
+\layout Description
+
+SysTracks Number of system tracks.
+ These will be stored in a file called .libdsk.boot.
+ 
+\layout Description
+
+Version CP/M version that will be accessing the filesystem - either 2 or
+ 3.
+ Setting it to 2 should disable time stamps and disk labels.
+\layout Description
+
+Format Name of one of the LibDsk built-in or user-supplied formats, giving
+ the geometry that the simulated disk will have.
+ Alternatively, you can specify the format manually, using the same variable
+ names as in libdskrc.
+\layout Standard
+
+If there is no .libdsk.ini file present, LibDsk will assume BlockSize=1024,
+ DirBlocks=2, TotalBlocks=175,SysTracks=1, Version=3, Format=pcw180.
+\layout Subsection
+
+Bugs
+\layout Standard
+
+rcpmfs is new and untried code.
+ The following are known bugs or missing features:
+\layout Itemize
+
+So far, rcpmfs has only been tested under the dsktrans pattern of usage
+ (which writes the directory and then the file space), and with fairly simple
+ operations in a CP/M emulator.
+ It is not known how well it holds up under heavy use as a live CP/M filesystem.
+\layout Itemize
+
+The CP/M attributes F1-F4, passwords and permissions are not mapped.
+ The SYS and ARC attributes are only mapped in the Win32 version.
+\layout Itemize
+
+Formatting (or reformatting) an rcpmfs directory writes out a new .libdsk.ini
+ containing the geometry used to do the format.
+ However, since DSK_GEOMETRY doesn't contain the CP/M filesystem parameters
+ (block size, block count, etc.) these will be the ones previously used in
+ that directory, and quite possibly completely wrong.
+ It's a much better idea to 'format' the directory using means other than
+ LibDsk.
+\layout Section
+
+
+\begin_inset LatexCommand \label{sec:copyqm}
+
+\end_inset 
+
+The CopyQM file format
+\layout Subsection
+
+Introduction
+\layout Standard
+
+This section describes the file format of files created by CopyQM.
+ A lot of the information has been extracted by looking at hex-dumps of
+ the files, so there might be some errors in the description.
+ 
+\layout Subsection
+
+Header
+\layout Standard
+
+The CopyQM files consist of a header, an optional comment (if indicated
+ by the header) followed by the tracks of the image encoded with a run length
+ encoding scheme.
+ The header is 133 bytes long, see table.
+ It always starts with {0x43, 0x51, 0x14 }, which can be used for auto-detection
+ of the image.
+ All numbers have little-endian byte ordering.
+ When all bytes in the header are added together in a byte, the result should
+ be zero.
+\layout Standard
+
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="22" columns="3">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Offset
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Size
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Comment
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x00
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Always 0x43 ('C')
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x01
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Always 0x51 ('Q')
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x02
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Always 0x14
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x03
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Sector size
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x0b
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Total number of sectors.
+ (DOS)
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x10
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Number of sectors per track
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x12
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2?
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Number of heads
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x1c
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+60?
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Description (e.g.
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+0K Double-Sided
+\begin_inset Quotes erd
+\end_inset 
+
+)
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x58
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Type of image.
+ 0=blind, 1=DOS, 2=HFS
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x59
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Density.
+ 0=DD, 1=HD, 2=ED
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x5a
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Number of tracks used on image
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x5b
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Total number of tracks for image
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x5c
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+CRC for the used, unpacked tracks
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x60
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+11
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Volume label (DOS/HFS)
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x6b
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Creation time
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x6d
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Creation date
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x6f
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Length of image comment
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x71
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Number of first sector - 1
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x74
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Interleave.
+ (0 for older versions of CopyQM)
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x75
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Skew.
+ Normally 0.
+ Negative number for alt.
+ sides
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+0x84
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+1
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Header checksum byte
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Subsection
+
+CRC
+\layout Standard
+
+The CRC is calculated for the unpacked data for all tracks that are used
+ in the image.
+ The CRC value is initialized with 0 and then updated using the CRC 32 polynomia
+l 0x104C11DB7, bit reverse algorithm.
+ Due to a feature in CopyQM (8 bit register as an index into a 1024 byte
+ table) all bytes must have their top two bits removed before added to the
+ CRC.
+\layout Subsection
+
+Image comment
+\layout Standard
+
+The image comment follows the header.
+ It has a variable size found in the header.
+ The image comment can contain 
+\backslash 
+0-bytes.
+\layout Subsection
+
+Image data
+\layout Standard
+
+The image data is run length encoded.
+ Each run is preceded by a 16-bit length.
+ If the length is negative, the byte after the length is repeated 
+\series bold 
+-length
+\series default 
+ times.
+ If the length is positive, it is followed by 
+\series bold 
+length 
+\series default 
+bytes of unencoded data.
+ It seems like a new run of repeating or differing data is always started
+ at each new track.
+ Older versions of CopyQM always alternates between runs of differing data
+ and repeating data, even if the length of one of them is zero.
+\layout Section
+
+
+\begin_inset LatexCommand \label{ldwindows}
+
+\end_inset 
+
+LibDsk under Windows
+\layout Standard
+
+This section mainly deals with the subject of direct floppy drive access.
+ Other aspects of LibDsk remain relatively consistent across Windows versions.
+\layout Standard
+
+As with so many other aspects of Windows, direct access to the floppy drive
+ is a case of 
+\begin_inset Quotes eld
+\end_inset 
+
+write once - debug everywhere
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset Foot
+collapsed true
+
+\layout Standard
+
+Originally said by Microsoft with respect to Java.
+ Pot.
+ Kettle.
+ Black.
+\end_inset 
+
+.
+ Not only does support vary across different systems, it varies depending
+ on whether LibDsk was compiled with a 16-bit compiler or a 32-bit one.
+ This table shows the different possibilities and the resulting behaviour:
+\layout Standard
+
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="5" columns="3">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0pt">
+<column alignment="center" valignment="top" leftline="true" width="0pt">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0pt">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Windows Version
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Win16 Subsystem
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Win32 Subsystem
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+3.x
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Fairly good
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+n/a
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+4.x (95, 98 and ME)
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Good but less stable
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Limited
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+NT, 2000, XP
+\end_inset 
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Very limited
+\end_inset 
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+2000, XP + ntwdm driver
+\end_inset 
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Good
+\end_inset 
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Subsection
+
+Windows 3.x
+\layout Standard
+
+Only the 16-bit build of LibDsk will run.
+ The floppy support in Win16 is pretty much the same as in DOS; there is
+ support for discs with arbitrary numbers of tracks and sectors, and arbitrary
+ sector sizes.
+ This means that LibDsk can, for example, read Acorn ADFS floppies.
+ 
+\layout Subsection
+
+Windows 4.x (95, 98 and ME)
+\layout Standard
+
+Both the 16-bit and 32-bit versions of LibDsk will run.
+ The 16-bit version is more capable, but less stable; it can read Acorn
+ ADFS floppies, which the 32-bit version cannot.
+ Unfortunately, 32-bit programs can't link to the 16-bit version of LibDsk
+\begin_inset Foot
+collapsed true
+
+\layout Standard
+
+And no, the Generic Thunk isn't good enough.
+ I've tried it.
+\end_inset 
+
+, but there is a workaround (described below) involving the use of LDSERVER.
+\layout Subsection
+
+Windows NT (NT 3.x, NT 4.x, 2000, XP) without ntwdm driver
+\layout Standard
+
+The floppy drive can only read/write formats which are supported by the
+ floppy driver.
+ This is the case using either version of LibDsk.
+\layout Subsection
+
+Windows 2000 and XP with ntwdm driver
+\layout Standard
+
+Simon Owen's enhancement to the Windows 2000 floppy driver can be downloaded
+ from <http://simonowen.com/fdrawcmd/>.
+ Once it is installed, LibDsk (using its 'ntwdm' driver rather than 'floppy')
+ has pretty much carte blanche regarding floppy formats, and can access
+ discs in many formats including Acorn ADFS.
+\layout Subsection
+
+General comments on programming floppy access for Windows
+\layout Standard
+
+LibDsk has four independent drivers for accessing floppies under Windows.
+ They are:
+\layout Subsubsection
+
+The Win16 driver.
+ 
+\layout Standard
+
+This uses INT 0x13 to do the reads and writes, just as in MSDOS.
+ Again as in MSDOS, there is a diskette parameter table pointed to by INT
+ 0x1E.
+ This table seems not to be documented, which is perhaps why the Win16 subsystem
+ in Windows 2000/XP doesn't implement it.
+ You can, fortunately, tell if this is the case; if the first two bytes
+ are both 0xC4, then what you have is a Windows 2000 trap rather than a
+ diskette parameter table.
+ 
+\layout Subsubsection
+
+The Win32c driver.
+\layout Standard
+
+This driver uses VWIN32 services to make INT 0x13-style calls under Windows9x.
+ However, there is no VWIN32 call to change the diskette parameter table,
+ which is why the Win16 driver can do things the Win32 drivers can't.
+ It isn't possible to get round this by thunking to a 16-bit DLL either;
+ the INT 0x1E vector is zero for 16-bit DLLs in 32-bit processes.
+\layout Subsubsection
+
+The Win32 driver.
+\layout Standard
+
+Windows NT gets close (but not close enough) to the UNIX idea that everything
+ is a file.
+ So while in theory it would be enough to use the normal 
+\begin_inset Quotes eld
+\end_inset 
+
+raw
+\begin_inset Quotes erd
+\end_inset 
+
+ driver on 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+
+\backslash 
+
+\backslash 
+.
+\backslash 
+A:
+\family default 
+
+\begin_inset Quotes eld
+\end_inset 
+
+ , in practice there are a number of nasty subtleties relating to such things
+ as memory alignment and file locking.
+\layout Subsubsection
+
+The ntwdm driver.
+\layout Standard
+
+This driver is a wrapper around fdrawcmd.sys, which allows commands to be
+ issued to the floppy controller.
+ 
+\layout Subsubsection
+
+Other floppy APIs
+\layout Standard
+
+Sydex produce a replacement floppy driver for 32-bit versions of Windows
+ (SydexFDD) which is not supported by LibDsk.
+ 
+\layout Subsection
+
+
+\begin_inset LatexCommand \label{ldserver}
+
+\end_inset 
+
+LDSERVER
+\layout Standard
+
+LDSERVER is a program that makes the 16-bit LibDsk DLL available to 32-bit
+ programs.
+ It does this by creating a mailslot (
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+
+\backslash 
+
+\backslash 
+.
+\backslash 
+mailslot
+\backslash 
+LibDsk16
+\family default 
+
+\begin_inset Quotes erd
+\end_inset 
+
+) and listening for messages.
+ Each message corresponds to a LibDsk call.
+\layout Standard
+
+The 32-bit LibDsk library checks for this mailslot and, if it finds it,
+ uses it in preference to its own floppy support.
+\layout Subsubsection
+
+Compiling LDSERVER
+\layout Standard
+
+A compiled version of LDSERVER is not supplied.
+ You will need to build it yourself from the files in the rpcserv directory;
+ projects are provided for Microsoft Visual C++ 1.5 and Borland C++ 5.0.
+\layout Standard
+
+LDSERVER calls functions in NETAPI.DLL.
+ If your compiler doesn't include an import library for this DLL, you will
+ have to generate it using the IMPLIB tool - eg:
+\layout LyX-Code
+
+IMPLIB NETAPI.LIB NETAPI.DLL
+\layout Standard
+
+or the equivalent utility for your compiler.
+\layout Subsubsection
+
+Using LDSERVER
+\layout Standard
+
+Just run LDSERVER.EXE, and then use a 32-bit LibDsk program.
+ The server window shows a reference count (0 if it is idle, nonzero if
+ LibDsk programs are using it) and the status should change to 
+\begin_inset Quotes eld
+\end_inset 
+
+Active
+\begin_inset Quotes erd
+\end_inset 
+
+ when it is performing disc access.
+\layout Standard
+
+LDSERVER does not shut down automatically.
+ 
+\layout Subsubsection
+
+Important Security Warning
+\layout Standard
+
+LDSERVER is a 16-bit program, written using APIs intended for use on a local
+ area network.
+ These APIs have no security support.
+ It will happily obey commands sent from anywhere on your network.
+ If your computer is connected to the Internet, it will obey commands sent
+ to it over the Internet.
+ A malicious attacker could use LDSERVER to overwrite important system files
+ or read confidential documents.
+\layout Standard
+
+If you have a firewall, then make sure that the NetBIOS ports 137, 138 and
+ 139 are blocked.
+ If you don't have a firewall, 
+\series bold 
+\emph on 
+do not run LDSERVER while your computer is connected to the Internet!
+\layout Subsection
+
+LibDsk and COM
+\layout Standard
+
+If you are building the 32-bit version of LibDsk with Visual C++ 6.0, you
+ can also build the accompanying 'atlibdsk' project, which builds a version
+ of LibDsk that exports its API through COM.
+ This allows relatively easy use of LibDsk from languages that support COM
+ binding, such as Visual BASIC or .NET languages.
+\layout Subsubsection
+
+General points
+\layout Standard
+
+Where LibDsk functions return a dsk_err_t, ATLIBDSK returns a COM HRESULT.
+ This will be S_OK for success, a general COM error (such as E_POINTER or
+ E_INVALIDARG), or a FACILITY_ITF error (0x8004xxxx).
+ The low word of a FACILITY_ITF error is the LibDsk error code, converted
+ to a positive number (eg: 0x8004000C is FACILITY_ITF error 12, so the LibDsk
+ error is -12, DSK_ERR_SEEKFAIL).
+\layout Standard
+
+Sector buffers to be read/written must be passed as variants containing
+ arrays of bytes.
+ 
+\layout Standard
+
+The arrays of DSK_FORMAT structures passed to dsk_lform() and dsk_pform()
+ are replaced by variants containing arrays of bytes - four bytes per sector
+ to format.
+ The last byte is the physical sector shift (0 for 128, 1 for 256 etc.)
+\layout Standard
+
+ATLIBDSK exports four object classes: 
+\layout Subsubsection
+
+Library
+\layout Standard
+
+This contains LibDsk functions not associated with a particular disk image.
+ Its methods are:
+\layout Standard
+
+
+\begin_inset  Tabular
+<lyxtabular version="3" rows="13" columns="3">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="0">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Method
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Equivalent LibDsk call
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Comments
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+open 
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dsk_open
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Instantiates a new Disk object.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+create
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dsk_creat
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Instantiates a new Disk object.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+get_psh
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dsk_get_psh
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dosgeom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dg_dosgeom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Instantiates a new Geometry object.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+cpm86geom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dg_cpm86geom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Instantiates a new Geometry object.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+pcwgeom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dg_pcwgeom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Instantiates a new Geometry object.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+aprigeom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dg_aprigeom
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Instantiates a new Geometry object.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+stdformat
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dg_stdformat
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Instantiates a new Geometry object.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+stdformat_count
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Returns the number of formats supported by stdformat
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+type_enum
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dsk_type_enum
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Returns TRUE if the passed index is valid, else FALSE.
+\end_inset 
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+comp_enum
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dsk_comp_enum
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+Returns TRUE if the passed index is valid, else FALSE.
+\end_inset 
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+reporter
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+dsk_reportfunc_{set,get}
+\end_inset 
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\layout Standard
+
+This is a property of type IReporter
+\end_inset 
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset 
+
+
+\layout Subsubsection
+
+Geometry
+\layout Standard
+
+This corresponds to the DSK_GEOMETRY structure.
+ The following properties correspond to the structure members:
+\layout Itemize
+
+sidedness
+\layout Itemize
+
+cylinders
+\layout Itemize
+
+heads
+\layout Itemize
+
+sectors
+\layout Itemize
+
+secbase
+\layout Itemize
+
+datarate
+\layout Itemize
+
+secsize
+\layout Itemize
+
+rwgap
+\layout Itemize
+
+fmtgap
+\layout Itemize
+
+fm
+\layout Itemize
+
+nomulti
+\layout Itemize
+
+noskip
+\layout Standard
+
+There are also five functions.
+ Four are for logical/physical sector conversions:
+\layout Itemize
+
+ls2ps
+\layout Itemize
+
+lt2pt
+\layout Itemize
+
+ps2ls
+\layout Itemize
+
+pt2lt
+\layout Standard
+
+and the last is stdformat(), which wraps dg_stdformat().
+\layout Subsubsection
+
+Disk
+\layout Standard
+
+The Disk object corresponds to a LibDsk DSK_PDRIVER value.
+ You should not create one yourself (method calls will fail with E_POINTER)
+ but call the 'create' or 'open' methods of the Library object.
+\layout Standard
+
+Functions included are:
+\layout Itemize
+
+get_geometry
+\layout Itemize
+
+close
+\layout Itemize
+
+drive_status
+\layout Itemize
+
+pread
+\layout Itemize
+
+lread
+\layout Itemize
+
+xread
+\layout Itemize
+
+pwrite
+\layout Itemize
+
+lwrite
+\layout Itemize
+
+xwrite
+\layout Itemize
+
+pcheck
+\layout Itemize
+
+lcheck
+\layout Itemize
+
+xcheck
+\layout Itemize
+
+pformat
+\layout Itemize
+
+lformat
+\layout Itemize
+
+apform
+\layout Itemize
+
+alform
+\layout Itemize
+
+ptread
+\layout Itemize
+
+ltread
+\layout Itemize
+
+xtread
+\layout Itemize
+
+psecid 
+\layout Itemize
+
+lsecid
+\layout Itemize
+
+lseek
+\layout Itemize
+
+pseek
+\layout Itemize
+
+option_enum
+\layout Standard
+
+all of which are pretty similar to their LibDsk namesakes.
+ There are also the following properties:
+\layout Itemize
+
+comment 
+\layout Itemize
+
+option 
+\layout Itemize
+
+retries 
+\layout Itemize
+
+drvname 
+\layout Itemize
+
+drvdesc 
+\layout Itemize
+
+compname 
+\layout Itemize
+
+compdesc 
+\layout Subsubsection
+
+IReporter
+\layout Standard
+
+IReporter is used for the LibDsk message callback.
+ It is an interface that should be implemented by an object in your program.
+ Set the library's "reporter" property to your object; then its report()
+ and endreport() methods will be called.
+\layout Section
+
+LibDsk RPC system
+\layout Standard
+
+The LibDsk RPC system is designed to make disc drives on remote computers
+ transparently available to LibDsk applications.
+ It operates on a client/server basis; LibDsk contains a driver (called
+ 'remote') that can act as a client, and it can be used to implement a server.
+\layout Standard
+
+The on-the-wire protocol is described in protocol.txt in the documentation
+ directory.
+\layout Subsection
+
+The 'serial' driver
+\layout Standard
+
+This is designed for using LibDsk over a serial connection - say from a
+ 3.5
+\begin_inset Quotes erd
+\end_inset 
+
+ computer to a 5.25
+\begin_inset Quotes erd
+\end_inset 
+
+ computer.
+ The filename specification to use at the client end is:
+\layout LyX-Code
+
+serial:
+\emph on 
+port
+\emph default 
+,
+\emph on 
+baud
+\emph default 
+,
+\emph on 
+remotename
+\emph default 
+{,
+\emph on 
+remotetype
+\emph default 
+{,
+\emph on 
+remotecompress
+\emph default 
+}}
+\layout Standard
+
+for example:
+\layout LyX-Code
+
+serial:/dev/ttyS0,9600+crtscts,A:
+\layout Standard
+
+The various parts of this filename specification are:
+\layout Description
+
+port The local serial port to use.
+\begin_deeper 
+\layout Itemize
+
+Under Linux, this is the name of a serial port (eg /dev/ttyS0).
+\layout Itemize
+
+Under Windows, this is likewise the name of a serial port (eg COM1:).
+\layout Itemize
+
+Under DOS, you need to have a FOSSIL serial port driver loaded; LibDsk was
+ tested using ADF <http://ftp.iis.com.br/pub/simtelnet/msdos/fossil/adf_150.zip>
+ (or do a web search for adf_150.zip).
+ The port is then the number assigned by the FOSSIL driver (normally 0).
+ Note also that ADF uses a single fixed baud rate, so you should make sure
+ that the rate on the command line matches the rate that was used when ADF
+ was loaded.
+\end_deeper 
+\layout Description
+
+baud The speed and handshaking options.
+ LibDsk does not allow the number of bits, the parity or the count of stop
+ bits to be changed; it insists on 8-bit communications with 1 stop bit
+ and no parity.
+ The speed is a number (300, 600, 1200 etc.) and the handshake option is
+ 
+\begin_inset Quotes eld
+\end_inset 
+
++crtscts
+\begin_inset Quotes erd
+\end_inset 
+
+ (to use RTS/CTS handshaking) or 
+\begin_inset Quotes eld
+\end_inset 
+
+-crtscts
+\begin_inset Quotes erd
+\end_inset 
+
+ (not to).
+ If neither handshake option is present, 
+\begin_inset Quotes eld
+\end_inset 
+
++crtscts
+\begin_inset Quotes erd
+\end_inset 
+
+ is assumed.
+\layout Description
+
+remotename The name of the file or drive on the remote computer.
+\layout Description
+
+remotetype The type of the file/drive (
+\begin_inset Quotes eld
+\end_inset 
+
+dsk
+\begin_inset Quotes erd
+\end_inset 
+
+, 
+\begin_inset Quotes eld
+\end_inset 
+
+floppy
+\begin_inset Quotes erd
+\end_inset 
+
+ etc.).
+ 
+\layout Description
+
+remotecompress The compression to use on the remote computer.
+ 
+\layout Subsubsection
+
+Servers for the serial driver
+\layout Standard
+
+One of the sample utilities supplied with LibDsk is called serslave (serslave.exe
+ under DOS / Windows).
+ This is a server using the same serial protocol as above.
+ 
+\layout Standard
+
+Launch serslave with the command:
+\layout LyX-Code
+
+serslave 
+\shape italic 
+port,baud
+\shape default 
+ 
+\layout Standard
+
+for example:
+\layout LyX-Code
+
+serslave COM1:,9600+crtscts
+\layout Standard
+
+or in DOS (again, a FOSSIL driver is required):
+\layout LyX-Code
+
+serslave 0,19200
+\layout Standard
+
+I have written a similar server for CP/M systems, called AUXD.
+ This is a separate download from the LibDsk web page.
+\layout Subsection
+
+The 'fork' driver
+\layout Standard
+
+The 'fork' driver is used (on any system which supports the fork() system
+ call) to send LibDsk requests to a local program using pipes.
+ This driver was written for testing purposes, but may come in handy as
+ a poor man's plugin system.
+ The filename specification is: 
+\layout LyX-Code
+
+fork:
+\emph on 
+program
+\emph default 
+,
+\emph on 
+remotename
+\emph default 
+{,
+\emph on 
+remotetype
+\emph default 
+{,
+\emph on 
+remotecompress
+\emph default 
+}}
+\layout Standard
+
+for example:
+\layout LyX-Code
+
+fork:./dskslave,a.dqk,dsk,sq
+\layout Standard
+
+The various parts of this filename specification are:
+\layout Description
+
+program The name of the program to use; execlp() is used to launch it, so
+ if no path is given the user's PATH will be searched.
+ The program must take LibDsk calls from its standard input and send results
+ to its standard output.
+\layout Description
+
+remotename The name of the file or drive.
+\layout Description
+
+remotetype The type of the file/drive (
+\begin_inset Quotes eld
+\end_inset 
+
+dsk
+\begin_inset Quotes erd
+\end_inset 
+
+, 
+\begin_inset Quotes eld
+\end_inset 
+
+floppy
+\begin_inset Quotes erd
+\end_inset 
+
+ etc.).
+ 
+\layout Description
+
+remotecompress The compression to use.
+ 
+\layout Standard
+
+An example of a server for this protocol is the example 'forkslave' program;
+ this is a very simple wrapper around dsk_rpc_server() which reads RPC packets
+ from its standard input and writes them to its standard output.
+\layout Section
+
+Writing new drivers
+\layout Standard
+
+The interface between LibDsk and its drivers is defined by the DRV_CLASS
+ structure.
+ To add a new driver, you create a new DRV_CLASS structure and add it to
+ various files.
+\layout Subsection
+
+The driver header 
+\layout Standard
+
+Firstly, create a header for this driver, basing it on (for example) 
+\family typewriter 
+lib/drvposix.h
+\family default 
+.
+ The first thing in the header (after the LGPL banner) is: 
+\layout LyX-Code
+
+typedef struct 
+\layout LyX-Code
+
+{ 
+\layout LyX-Code
+
+    DSK_DRIVER px_super; 
+\layout LyX-Code
+
+    FILE *px_fp; 
+\layout LyX-Code
+
+    int px_readonly;
+\layout LyX-Code
+
+    long px_filesize;
+\layout LyX-Code
+
+} POSIX_DSK_DRIVER;
+\layout Standard
+
+This is where you define any variables that your driver needs to store for
+ each disc image.
+ In the case of the 
+\begin_inset Quotes eld
+\end_inset 
+
+raw
+\begin_inset Quotes erd
+\end_inset 
+
+ driver, this consists of a FILE pointer to access the underlying disc file,
+ a 
+\begin_inset Quotes eld
+\end_inset 
+
+readonly
+\begin_inset Quotes erd
+\end_inset 
+
+ flag, and the current size of the drive image file.
+ The first member of this structure must be of type DSK_DRIVER.
+\layout Standard
+
+The rest of this header consists of function prototypes, which I will come
+ back to later.
+\layout Subsection
+
+The driver source file
+\layout Standard
+
+Secondly, create a .c file for your driver.
+ Again, it's probably easiest to base this on lib/drvposix.c.
+ At the start of this file, create a DRV_CLASS structure, such as:
+\layout LyX-Code
+
+DRV_CLASS dc_posix = 
+\layout LyX-Code
+
+{ 
+\layout LyX-Code
+
+    sizeof(POSIX_DSK_DRIVER), 
+\layout LyX-Code
+
+    "raw", 
+\layout LyX-Code
+
+    "Raw file driver", 
+\layout LyX-Code
+
+    posix_open, 
+\layout LyX-Code
+
+    posix_creat, 
+\layout LyX-Code
+
+    posix_close 
+\layout LyX-Code
+
+}; 
+\layout Standard
+
+The first three entries in this structure are: 
+\layout Itemize
+
+The size of your driver's instance data; 
+\layout Itemize
+
+The driver's name (as passed to 
+\family typewriter 
+dsk_open()
+\family default 
+ / 
+\family typewriter 
+dsk_creat()
+\family default 
+ ) 
+\layout Itemize
+
+The driver's description string.
+ 
+\layout Standard
+
+The remainder of the structure is composed of function pointers; the types
+ of these are given in drv.h.
+ At the very least, you will need to provide the first three pointers (*_open,
+ *_creat and *_close); to make the driver vaguely useful, you will also
+ need to implement some of the others.
+\layout Standard
+
+Once you have created this structure, edit: 
+\layout Itemize
+
+drivers.h.
+ Add a declaration for your DRV_CLASS structure, such as 
+\layout LyX-Code
+
+extern DRV_CLASS dc_myformat; 
+\layout Itemize
+
+drivers.inc.
+ Insert a reference to your structure (eg: 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+&dc_myformat,
+\family default 
+
+\begin_inset Quotes erd
+\end_inset 
+
+) in the list.
+ Note that order is important; the comments in drivers.inc describe how to
+ decide where things go.
+\layout Standard
+
+Edit 
+\begin_inset Quotes eld
+\end_inset 
+
+lib/Makefile.am
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ Near the top of this file is a list of drivers and their header files;
+ just add your .c and .h to this list.
+\layout Standard
+
+If your driver depends on certain system headers (as all the floppy drivers
+ do) then you will need to add checks for these to 
+\begin_inset Quotes eld
+\end_inset 
+
+configure.in
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+lib/drvi.h
+\begin_inset Quotes erd
+\end_inset 
+
+; then run 
+\begin_inset Quotes eld
+\end_inset 
+
+autoconf
+\begin_inset Quotes erd
+\end_inset 
+
+ to rebuild the configure script.
+\layout Standard
+
+The function pointers in the DRV_CLASS structure are described in drv.h.
+ The first parameter to all of them (
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+) is declared as a pointer to DSK_DRIVER.
+ In fact, it is a pointer to the first member of your instance data structure.
+ Just cast the pointer to the correct type:
+\layout LyX-Code
+
+/* Sanity check: Is this meant for our driver? */ 
+\layout LyX-Code
+
+if (self->dr_class != &dc_posix) return DSK_ERR_BADPTR; 
+\layout LyX-Code
+
+pxself = (POSIX_DSK_DRIVER *)self;
+\layout Standard
+
+and you're in business.
+\layout Subsection
+
+Driver functions
+\layout Subsubsection
+
+dc_open
+\layout LyX-Code
+
+dsk_err_t (*dc_open )(DSK_PDRIVER self, const char *filename)
+\layout Standard
+
+Attempt to open a disc image.
+ Entered with: 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ points to the instance data for this disc image (see above); it will have
+ been initialised to zeroes using memset().
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+filename
+\begin_inset Quotes erd
+\end_inset 
+
+ is the name of the image to open.
+ 
+\layout Standard
+
+Return: 
+\layout Description
+
+DSK_ERR_OK: The driver has successfully opened the image.
+ 
+\layout Description
+
+DSK_ERR_NOTME: The driver cannot handle this image.
+ Other drivers should be allowed to try to use it.
+ 
+\layout Description
+
+other: The driver cannot handle this image.
+ No other drivers should be tried (eg: the image was recognised by this
+ driver, but is corrupt).
+\layout Standard
+
+If the file has a comment, record it here using dsk_set_comment().
+\layout Subsubsection
+
+dc_creat
+\layout LyX-Code
+
+dsk_err_t (*dc_creat)(DSK_PDRIVER self, const char *filename)
+\layout Standard
+
+Attempt to create a new disc image.
+ For the 
+\begin_inset Quotes eld
+\end_inset 
+
+floppy
+\begin_inset Quotes erd
+\end_inset 
+
+ drivers, behaves exactly as dc_open.
+ Parameters and results are the same as for dc_open, except that DSK_ERR_NOTME
+ is treated like any other error.
+\layout Subsubsection
+
+dc_close
+\layout LyX-Code
+
+dsk_err_t (*dc_close)(DSK_PDRIVER self)
+\layout Standard
+
+Close the disc image.
+ This will be the last call your driver will receive for a given disc image
+ file, and it should free any resources it is using.
+ Whether it returns DSK_ERR_OK or an error, this disc image will not be
+ used again.
+\layout Subsubsection
+
+dc_read 
+\layout LyX-Code
+
+dsk_err_t (*dc_read)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head, dsk_psect_t sector)
+\layout Standard
+
+Read a sector.
+ Note that sector addresses passed to drivers are _always_ in C/H/S format.
+ This function has the same parameters and return values as dsk_pread().
+\layout Subsubsection
+
+dc_write 
+\layout LyX-Code
+
+dsk_err_t (*dc_write)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, const
+ void *buf, dsk_pcyl_t cylinder, dsk_phead_t head, dsk_psect_t sector)
+\layout Standard
+
+Write a sector.
+ This function has the same parameters and return values as dsk_pwrite().
+ If your driver is read-only, leave this function pointer NULL.
+\layout Subsubsection
+
+dc_format 
+\layout LyX-Code
+
+dsk_err_t (*dc_format)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head, const DSK_FORMAT *format, unsigned char filler)
+\layout Standard
+
+Format a track.
+ This function has the same parameters and return values as dsk_pformat().
+ If your driver cannot format tracks, leave this function pointer NULL.
+\layout Subsubsection
+
+dc_getgeom
+\layout LyX-Code
+
+dsk_err_t (*dc_getgeom)(DSK_PDRIVER self, DSK_GEOMETRY *geom)
+\layout Standard
+
+Get the disc geometry.
+ Leave this function pointer as NULL unless either:
+\layout Enumerate
+
+Your disc image does not allow a caller to use an arbitrary disc geometry.
+ The two drivers which currently do this are the Win32 one, because Windows
+ NT decides on the geometry itself and doesn't let programs change it; and
+ the MYZ80 one, which has a single fixed geometry.
+\layout Enumerate
+
+Your disc image file contains enough information to populate a DSK_GEOMETRY
+ completely.
+ rcpmfs does this.
+ 
+\layout Enumerate
+
+You want to do an extended geometry probe including a call to the default
+ one.
+ The internal function dsk_defgetgeom() has been provided for this; it's
+ the same as dsk_getgeom() but always uses the standard probe.
+\layout Standard
+
+Returns DSK_ERR_OK if successful; DSK_ERR_NOTME or DSK_ERR_NOTIMPL to fall
+ back to the standard LibDsk geometry probe; other values to indicate failure.
+\layout Subsubsection
+
+dc_secid 
+\layout LyX-Code
+
+dsk_err_t (*dc_secid)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head, DSK_FORMAT *result)
+\layout Standard
+
+Read the ID of a random sector on a certain track/head, and put it in 
+\begin_inset Quotes eld
+\end_inset 
+
+result
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ This function is primarily used to test for discs in CPC format (which
+ have oddly-numbered physical sectors); if the disc image can't support
+ this (eg: the 
+\begin_inset Quotes eld
+\end_inset 
+
+raw
+\begin_inset Quotes erd
+\end_inset 
+
+ or Win32 drivers) then leave the function pointer NULL.
+\layout Subsubsection
+
+dc_xseek 
+\layout LyX-Code
+
+dsk_err_t (*dc_xseek)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head);
+\layout Standard
+
+Seek to a given cylinder / head.
+ For disc images, just return DSK_ERR_OK if the cylinder/head are in range,
+ or DSK_ERR_SEEKFAIL otherwise.
+ For a floppy driver, only implement this function if your FDC can perform
+ a seek by itself.
+\layout Subsubsection
+
+dc_xread, dc_xwrite 
+\layout LyX-Code
+
+dsk_err_t (*dc_xread)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head, dsk_pcyl_t cyl_expected, dsk_phead_t
+ head_expected, dsk_psect_t sector, size_t bytes_to_write, int *deleted);
+ 
+\layout LyX-Code
+
+dsk_err_t (*dc_xwrite)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, const
+ void *buf, dsk_pcyl_t cylinder, dsk_phead_t head, dsk_pcyl_t cyl_expected,
+ dsk_phead_t head_expected, dsk_psect_t sector, size_t bytes_to_read, int
+ *deleted);
+\layout Standard
+
+Read / write sector whose ID may not match its position on disc, or which
+ is marked as deleted.
+ Only implement this if your disc image emulates sector IDs or your floppy
+ driver exposes this level of functionality.
+ Currently it is only implemented in the Linux and CPCEMU drivers.
+\layout Subsubsection
+
+dc_status 
+\layout LyX-Code
+
+dsk_err_t (*dc_status)(DSK_PDRIVER self, const DSK_GEOMETRY &geom, dsk_phead_t
+ head, unsigned char *result); 
+\layout Standard
+
+Return the drive status (see dsk_drive_status() for the bits to return).
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+*result
+\begin_inset Quotes erd
+\end_inset 
+
+ will contain the value calculated by the default implementation; for most
+ image file drivers, all you have to do is set the read-only bit if appropriate.
+\layout Subsubsection
+
+dc_tread 
+\layout LyX-Code
+
+dsk_err_t (*dc_tread)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head);
+\layout Standard
+
+Read a track.
+ You need only implement this if your floppy driver exposes the relevant
+ functionality; if you don't, the library will use multiple calls to dc_read()
+ instead.
+ This function has the same parameters and return values as dsk_ptread().
+\layout Subsubsection
+
+dc_xtread
+\layout LyX-Code
+
+dsk_err_t (*dc_xread)(DSK_PDRIVER self, const DSK_GEOMETRY *geom, void *buf,
+ dsk_pcyl_t cylinder, dsk_phead_t head, dsk_pcyl_t cyl_expected, dsk_phead_t
+ head_expected);
+\layout Standard
+
+Read a track, with extended sector matching (sector headers on disc differ
+ from physical location).
+ This function has the same parameters and return values as dsk_xtread().
+ As with dc_tread(), you need only implement this function if your floppy
+ driver has a special READ TRACK command.
+\layout Subsubsection
+
+dc_option_enum
+\layout LyX-Code
+
+dsk_err_t (*dc_option_enum)(DSK_DRIVER *self, int idx, char **optname);
+\layout Standard
+
+List numerical options which your driver supports.
+ If your driver does not support any, you need not implement this.
+\layout Subsubsection
+
+dc_option_set, dc_option_get
+\layout LyX-Code
+
+dsk_err_t (*dc_option_set)(DSK_DRIVER *self, const char *optname, int value);
+ 
+\layout LyX-Code
+
+dsk_err_t (*dc_option_get)(DSK_DRIVER *self, const char *optname, int *value);
+\layout Standard
+
+Get or set the value of a numerical option.
+ Again, if your driver has no settable options, this need not be implemented.
+\layout Subsubsection
+
+dc_trackids
+\layout LyX-Code
+
+dsk_err_t (*dc_trackids)(DSK_DRIVER *self,  const DSK_GEOMETRY *geom, dsk_pcyl_t
+ cylinder, dsk_phead_t head, dsk_psect_t *count, DSK_FORMAT **result);
+\layout Standard
+
+Read the IDs of all sectors on the specified track, preferably in the correct
+ order and starting at the index hole.
+ If you leave this function pointer as NULL, LibDsk will use a default implement
+ation.
+\layout Subsubsection
+
+dc_rtread
+\layout LyX-Code
+
+dsk_err_t (*dc_rtread)(DSK_DRIVER *self, const DSK_GEOMETRY *geom, void
+ *buf, dsk_pcyl_t cylinder,  dsk_phead_t head, int reserved);
+\layout Standard
+
+For future expansion.
+ Leave this function pointer as NULL.
+\layout Section
+
+Adding new compression methods
+\layout Standard
+
+Adding a new compression method is very similar to adding a driver, though
+ you only have to implement four functions.
+\layout Standard
+
+To add a new driver, you create a new COMPRESS_CLASS structure and add it
+ to various files.
+\layout Subsection
+
+Driver header 
+\layout Standard
+
+This is done as for disc drivers.
+ If you don't need any extra variables (for example, gzip and bzip2 compression
+ don't) then you don't have to declare a new structure type - see lib/compgz.h
+ for an example.
+\layout Subsection
+
+Driver implementation 
+\layout Standard
+
+Secondly, create a .c file for your driver.
+ It's probably easiest to base this on lib/compgz.c.
+ At the start of this file, create a COMPRESS_CLASS structure, such as:
+\layout LyX-Code
+
+COMPRESS_CLASS cc_gz = 
+\layout LyX-Code
+
+{ 
+\layout LyX-Code
+
+    sizeof(COMPRESS_DATA), 
+\layout LyX-Code
+
+    "gz", 
+\layout LyX-Code
+
+    "Gzip (deflate compression)", 
+\layout LyX-Code
+
+    gz_open, /* open */ 
+\layout LyX-Code
+
+    gz_creat, /* create new */ 
+\layout LyX-Code
+
+    gz_commit, /* commit */ 
+\layout LyX-Code
+
+    gz_abort /* abort */ 
+\layout LyX-Code
+
+};
+\layout Standard
+
+The first three entries in this structure are: 
+\layout Itemize
+
+The size of your driver's instance data.
+ The GZip driver has no instance data and so just uses COMPRESS_DATA.
+ If it had extra data these would be in a struct called GZ_COMPRESS_DATA,
+ so the size here would be sizeof(GZ_COMPRESS_DATA).
+ 
+\layout Itemize
+
+The driver's name (as passed to dsk_open() / dsk_creat() ) 
+\layout Itemize
+
+The driver's description string.
+ 
+\layout Standard
+
+The remainder of the structure is composed of function pointers.
+ The types of these are given in drv.h.
+ You must implement all four.
+\layout Standard
+
+Once you have created this structure, edit: 
+\layout Itemize
+
+comp.h.
+ Include your header.
+ 
+\layout Itemize
+
+compress.inc.
+ Insert a reference to your structure (eg: 
+\begin_inset Quotes eld
+\end_inset 
+
+&cc_myzip,
+\begin_inset Quotes erd
+\end_inset 
+
+) in the list.
+ Note that order is important.
+\layout Standard
+
+Edit 
+\begin_inset Quotes eld
+\end_inset 
+
+lib/Makefile.am
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ At the bottom of this file is a list of drivers and their header files;
+ just add your .c and .h to this list.
+\layout Standard
+
+If your driver depends on certain system headers (eg, the gzip one depends
+ on zlib.h) then you will need to add checks for these to 
+\begin_inset Quotes eld
+\end_inset 
+
+configure.in
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+lib/compi.h
+\begin_inset Quotes erd
+\end_inset 
+
+; then run 
+\begin_inset Quotes eld
+\end_inset 
+
+autoconf
+\begin_inset Quotes erd
+\end_inset 
+
+ to rebuild the configure script.
+\layout Standard
+
+The function pointers in the COMPRESS_CLASS structure are described in lib/compr
+ess.h.
+ The first parameter to all of them (
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+) is declared as a pointer to COMPRESS_DATA.
+ In fact, it is a pointer to the first member of your instance data structure.
+ Just cast the pointer to the correct type:
+\layout LyX-Code
+
+/* Sanity check: Is this meant for our driver? */ 
+\layout LyX-Code
+
+if (self->cd_class != &cc_sq) return DSK_ERR_BADPTR; 
+\layout LyX-Code
+
+sqself = (SQ_COMPRESS_DATA *)self;
+\layout Standard
+
+and you're in business.
+\layout Subsection
+
+Compression functions
+\layout Subsubsection
+
+cc_open 
+\layout LyX-Code
+
+dsk_err_t (*cc_open )(COMPRESS_DATA *self)
+\layout Standard
+
+Attempt to decompress a compressed file.
+ 
+\layout Itemize
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+self
+\begin_inset Quotes erd
+\end_inset 
+
+ points to the instance data for this disc image.
+ 
+\layout Itemize
+
+self->cd_cfilename is the filename of the file to decompress.
+\layout Standard
+
+Return: 
+\layout Description
+
+DSK_ERR_OK: The file has been decompressed.
+ 
+\layout Description
+
+DSK_ERR_NOTME: The file is not compressed using this driver's method.
+ 
+\layout Description
+
+other: The file does belong to this driver, but it is corrupt or some other
+ error occurred.
+\layout Standard
+
+Two helper functions may be useful when you are writing cc_open:
+\layout LyX-Code
+
+dsk_err_t comp_fopen(COMPRESS_DATA *self, FILE **pfp);
+\layout Standard
+
+Open the the file whose name is given at 
+\family typewriter 
+self->cd_cfilename
+\family default 
+.
+ If successful, 
+\family typewriter 
+*pfp 
+\family default 
+will be the opened stream.
+ If not, it will be NULL.
+ If the file can only be opened read-only, sets 
+\family typewriter 
+self->cd_readonly
+\family default 
+ to 1.
+\layout LyX-Code
+
+dsk_err_t comp_mktemp(COMPRESS_DATA *self, FILE **pfp);
+\layout Standard
+
+Create a temporary file and store its name at 
+\family typewriter 
+self->cd_ufilename
+\family default 
+.
+ You should use this to create the file that you decompress into.
+\layout Subsubsection
+
+cc_creat
+\layout LyX-Code
+
+dsk_err_t (*cc_creat)(COMPRESS_DATA *cd)
+\layout Standard
+
+Warn the compression engine that a disc image file is being created, and
+ when closed it will be compressed.
+ The filename is stored at 
+\family typewriter 
+self->cd_cfilename
+\family default 
+.
+ Normally this just returns DSK_ERR_OK.
+\layout Subsubsection
+
+cc_commit
+\layout LyX-Code
+
+dsk_err_t (*cc_commit)(COMPRESS_DATA *cd)
+\layout Standard
+
+Compress an uncompressed file.
+ 
+\family typewriter 
+self->cd_ufilename
+\family default 
+ is the name of the file to compress.
+ 
+\family typewriter 
+self->cd_cfilename
+\family default 
+ is the name of the output file.
+\layout Subsubsection
+
+cc_abort 
+\layout LyX-Code
+
+dsk_err_t (*cc_abort)(COMPRESS_DATA *cd)
+\layout Standard
+
+This is used if a file was decompressed and it's now being closed without
+ having been changed.
+ There is therefore no need to compress it again.
+ This normally just returns DSK_ERR_OK.
+\layout Section
+
+Adding new remote transports.
+\layout Standard
+
+Adding a new remote transport is also very similar to adding a driver.
+\layout Standard
+
+To add a new driver, you create a new REMOTE_CLASS structure and add it
+ to various files.
+\layout Subsection
+
+Driver header 
+\layout Standard
+
+This is done as for disc drivers.
+ Create a structure based on REMOTE_DATA to hold your class's data -- see
+ lib/rpctios.h and lib/rpcfork.h for examples.
+\layout Subsection
+
+Driver implementation 
+\layout Standard
+
+Create a .c file for your driver.
+ It's probably easiest to base this on lib/rpcfork.c.
+ At the start of this file, create a REMOTE_CLASS structure, such as:
+\layout LyX-Code
+
+REMOTE_CLASS rpc_fork = 
+\layout LyX-Code
+
+{ 
+\layout LyX-Code
+
+    sizeof(FORK_REMOTE_DATA), 
+\layout LyX-Code
+
+    "fork", 
+\layout LyX-Code
+
+    "UNIX client using fork", 
+\layout LyX-Code
+
+    fork_open, /* open */ 
+\layout LyX-Code
+
+    fork_close, /* close */ 
+\layout LyX-Code
+
+    fork_call, /* perform RPC */ 
+\layout LyX-Code
+
+\layout LyX-Code
+
+};
+\layout Standard
+
+The first three entries in this structure are: 
+\layout Itemize
+
+The size of your driver's instance data -- sizeof(your_REMOTE_DATA) structure.
+\layout Itemize
+
+The driver's name.
+ If the filename passed to LibDsk begins with this name followed by a colon,
+ then it's assumed to be using your driver.
+ 
+\layout Itemize
+
+The driver's description string.
+ 
+\layout Standard
+
+The remainder of the structure is composed of function pointers.
+ The types of these are given in lib/remote.h.
+ You must implement all three.
+\layout Standard
+
+Once you have created this structure, edit: 
+\layout Itemize
+
+lib/remall.h.
+ Include your header.
+ 
+\layout Itemize
+
+lib/remote.inc.
+ Insert a reference to your structure (eg: 
+\begin_inset Quotes eld
+\end_inset 
+
+&rpc_fork,
+\begin_inset Quotes erd
+\end_inset 
+
+) in the list.
+ The drivers will be tested in the order in which they appear in the file.
+\layout Standard
+
+Edit 
+\begin_inset Quotes eld
+\end_inset 
+
+lib/Makefile.am
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ At the bottom of this file is a list of drivers and their header files;
+ just add your .c and .h to this list.
+\layout Standard
+
+If your driver depends on certain system headers (eg, the termios one depends
+ on termios.h) then you will need to add checks for these to 
+\begin_inset Quotes eld
+\end_inset 
+
+configure.in
+\begin_inset Quotes erd
+\end_inset 
+
+ and 
+\begin_inset Quotes eld
+\end_inset 
+
+lib/drvi.h
+\begin_inset Quotes erd
+\end_inset 
+
+; then run 
+\begin_inset Quotes eld
+\end_inset 
+
+autoconf
+\begin_inset Quotes erd
+\end_inset 
+
+ to rebuild the configure script.
+\layout Standard
+
+The function pointers in the REMOTE_CLASS structure are described in lib/compres
+s.h.
+ The first parameter to all of them (
+\begin_inset Quotes eld
+\end_inset 
+
+pDriver
+\begin_inset Quotes erd
+\end_inset 
+
+) is declared as DSK_PDRIVER; you can extract a pointer to your instance
+ data using the dr_remote member like this:
+\layout LyX-Code
+
+/* Sanity checks */ 
+\layout LyX-Code
+
+self = (FORK_REMOTE_DATA *)pDriver->dr_remote;
+\layout LyX-Code
+
+if (self == NULL || self->super.rd_class != &rpc_fork) 
+\layout LyX-Code
+
+        return DSK_ERR_BADPTR; 
+\layout LyX-Code
+
+\layout Subsection
+
+Remote communication functions
+\layout Subsubsection
+
+rc_open 
+\layout LyX-Code
+
+dsk_err_t (*rc_open )(DSK_PDRIVER pDriver, const char *name, char *nameout)
+\layout Standard
+
+Connect to a remote server.
+ 
+\layout Itemize
+
+pDriver points to a DSK_DRIVER containing the pointer to your instance data.
+\layout Itemize
+
+name is the filename as passed to LibDsk, starting with 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\emph on 
+driver
+\emph default 
+:
+\begin_inset Quotes erd
+\end_inset 
+
+ and containing any connection parameters needed.
+ 
+\layout Itemize
+
+nameout is an output buffer with enough space to hold a string of the same
+ length as the input filename.
+ If you are returning DSK_ERR_OK, it must be set to the input filename minus
+ any options this driver has used.
+ For example, the 
+\begin_inset Quotes eld
+\end_inset 
+
+serial
+\begin_inset Quotes erd
+\end_inset 
+
+ driver, given a filename like 
+\begin_inset Quotes eld
+\end_inset 
+
+serial:/dev/ttyS1,2400-crtscts,example.ufi,raw
+\begin_inset Quotes erd
+\end_inset 
+
+ would extract its own options and return 
+\begin_inset Quotes eld
+\end_inset 
+
+example.ufi,raw
+\begin_inset Quotes erd
+\end_inset 
+
+ here.
+ 
+\layout Standard
+
+Return: 
+\layout Description
+
+DSK_ERR_OK: Connection established.
+\layout Description
+
+DSK_ERR_NOTME: The filename passed is not recognised by this driver.
+ 
+\layout Description
+
+other: An error such as out-of-memory occurred.
+\layout Subsubsection
+
+rc_close
+\layout LyX-Code
+
+dsk_err_t (*rc_close)(DSK_PDRIVER pDriver)
+\layout Standard
+
+Close the connection to the remote server.
+\layout Subsubsection
+
+rc_call
+\layout LyX-Code
+
+dsk_err_t (*rc_call)(DSK_PDRIVER pDriver, unsigned char *input, int inp_len,
+ unsigned char *output, int *out_len)
+\layout Standard
+
+Perform a remote procedure call to the server.
+ 
+\layout Description
+
+input is the packet LibDsk wants to send.
+\layout Description
+
+inp_len is the number of bytes in the packet.
+\layout Description
+
+output is a buffer for the result packet.
+\layout Description
+
+*out_len (on entry) is the size of the result buffer.
+\layout Description
+
+*out_len (on return) is the number of bytes that were populated in the result
+ buffer.
+\layout Standard
+
+In general, this call will wrap the input in whatever framing bytes are
+ necessary (usually including the packet length, since packets do not contain
+ their own length), send the packet over the wire, wait for a response,
+ and unpack the response into 'output'.
+ Return DSK_ERR_TIMEOUT if the connection timed out (the 'serial' driver
+ waits 30 seconds) and DSK_ERR_ABORT if the user deliberately broke the
+ connection.
+\layout Section
+\start_of_appendix 
+
+\begin_inset LatexCommand \label{sec: dqk}
+
+\end_inset 
+
+DQK Files 
+\layout Standard
+
+A DQK file is a .DSK file compressed using Richard Greenlaw's Squeeze file
+ format (originally from CP/M as SQ.COM, and later built in to NSWP.COM; versions
+ also exist for DOS and UNIX).
+ SQ was used in preference to more efficient compressors such as gzip because
+ it can be readily decoded on 8-bit and 16-bit computers.
+\layout Standard
+
+The original reason for DQK files was software distribution.
+ A disc image of a 180k disc won't fit on a 180k disc, owing to various
+ overheads.
+ However, the compressed DQK version may fit onto such a disc, and leave
+ room for a tool to write the DQK back out as well.
+ 
+\layout Standard
+
+Such a tool has been included in the 
+\begin_inset Quotes eld
+\end_inset 
+
+dskwrite
+\begin_inset Quotes erd
+\end_inset 
+
+ directory in this distribution.
+ It contains the following files:
+\layout Itemize
+
+dskwrite.com: Program to write .DSK or .DQK files out to a real disc.
+ The .COM file works on PCs, Amstrad PCWs and Sinclair Spectrum +3s.
+ 
+\layout Itemize
+
+dskwrite.txt: Documentation for dskwrite.
+ 
+\layout Itemize
+
+dskwrite.z80: Z80 source for the CP/M version.
+ 
+\layout Itemize
+
+dskwrite.asm: 8086 source for the DOS version.
+ 
+\layout Itemize
+
+dskwrsea.com: The dskwrite distribution file - a self-extracting archive.
+ It will self-extract under CP/M or DOS.
+\layout Standard
+
+Note that the files in the 
+\begin_inset Quotes eld
+\end_inset 
+
+dskwrite
+\begin_inset Quotes erd
+\end_inset 
+
+ directory are not GPLed or LGPLed.
+ They are public domain.
+ You may do whatsoever you please with them.
+\layout Standard
+
+LibDsk has been given .DQK support (use the 
+\begin_inset Quotes eld
+\end_inset 
+
+dsk
+\begin_inset Quotes erd
+\end_inset 
+
+ driver with 
+\begin_inset Quotes eld
+\end_inset 
+
+sq
+\begin_inset Quotes erd
+\end_inset 
+
+ compression) so that .DQK files don't have to be created and compressed
+ in a two-state process.
+ 
+\layout Section
+
+LibDsk with cpmtools
+\layout Standard
+
+cpmtools v1.9 and later <http://www.moria.de/~michael/cpmtools/> can be configured
+ to use LibDsk for all disc access, thus allowing CP/M discs and emulator
+ disc images to be read and written.
+ 
+\layout Standard
+
+The myz80 and nanowasp drivers use a fixed disk format; here are diskdefs
+ entries which can be used to read them (these are for the old diskdefs
+ format with one line per entry):
+\layout LyX-Code
+
+myz80    1024 64 128 4096 1024 1 0 3 
+\layout LyX-Code
+
+microbee  512 80  10 2048 128  1 2 2.2
+\layout Section
+
+DSK / EDSK recording mode extension
+\layout Standard
+
+This extension was proposed by me on the comp.sys.sinclair and comp.sys.amstrad.8bit
+ newsgroups on 10 January 2004.
+ It was subsequently released in ANNE 2.1.4 and added to the formal EDSK format
+ definition at <
+\begin_inset LatexCommand \url[http://andercheran.aiind.upv.es/~amstrad/docs/extdsk.html]{http://andercheran.aiind.upv.es/~amstrad/docs/extdsk.html}
+
+\end_inset 
+
+>.
+\layout Standard
+
+DSK/EDSK originate on the Amstrad CPC, which ordinarily writes all its diskettes
+ in MFM recording mode and at the Double Density rate.
+ However, ANNE emulates the PcW16, which also supports the High Density
+ rate; and the system software depends on DD discs not being readable at
+ the HD rate.
+\layout Standard
+
+The extension gives meanings to two unused bytes of the DSK/EDSK 
+\begin_inset Quotes eld
+\end_inset 
+
+Track-Info
+\begin_inset Quotes erd
+\end_inset 
+
+ block:
+\layout Paragraph*
+
+Byte 12h: Data rate.
+ 
+\layout Description
+
+0 Unknown 
+\layout Description
+
+1 Single or Double Density (180k, 720k, etc.) 
+\layout Description
+
+2 High Density (1.2M, 1.4M, etc.) 
+\layout Description
+
+3 Extended Density (2.8M)
+\layout Paragraph*
+
+Byte 13h: Recording mode.
+ 
+\layout Description
+
+0 Unknown 
+\layout Description
+
+1 FM
+\layout Description
+
+2 MFM
+\layout Standard
+
+Existing files should have zeroes in these bytes; hence the use of 0 for
+ Unknown.
+ LibDsk will guess the values in if the ones in the file are zero.
+\the_end

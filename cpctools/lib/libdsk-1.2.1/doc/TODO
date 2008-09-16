@@ -1,0 +1,12 @@
+/* Here are some things I hope to do with libdsk one day:
+
+1. When building the Windows EXEs, use the DOS EXEs as stubs. 
+2. Get linux_status() to work properly (currently it is disabled).
+3. MSDOS floppy driver that accesses the hardware directly, rather than
+  through the BIOS. 
+4. If (4) is possible, do the same thing for Win16.
+5. Port my CP/M disc utilities to libdsk.
+6. Amstrad CP/M floppy driver. This requires finding a Unix -> Z80 cross
+ C compiler that can compile libdsk; Hi-Tech C 3.09 isn't up to the job.
+7. Support for dynamically-loadable drivers or compression systems. 
+*/ 

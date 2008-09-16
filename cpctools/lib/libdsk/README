@@ -1,0 +1,13 @@
+
+All documentation is in the "doc" subdirectory.
+
+The following directories contain projects for various IDEs:
+
+dos16ppd:	16-bit DOS target, using Pacific C
+dos32gcc:	32-bit DOS target, using DJGPP 
+win16bc5:	16-bit Windows target, using Borland C++ 5.00
+win16vc1:	16-bit Windows target, using Visual C++ 1.52
+win32bc5:	32-bit Windows target, using Borland C++ 5.00
+win32vc6:	32-bit Windows target, using Visual C++ 6.00
+
+ 

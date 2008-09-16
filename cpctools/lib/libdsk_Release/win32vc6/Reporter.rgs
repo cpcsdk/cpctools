@@ -1,0 +1,26 @@
+HKCR
+{
+	LibDsk.Reporter.1 = s 'LibDsk Reporter callback'
+	{
+		CLSID = s '{F011746E-3431-4C26-858A-D04D1454637C}'
+	}
+	LibDsk.Reporter = s 'LibDsk Reporter callback'
+	{
+		CLSID = s '{F011746E-3431-4C26-858A-D04D1454637C}'
+		CurVer = s 'LibDsk.Reporter.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {F011746E-3431-4C26-858A-D04D1454637C} = s 'Reporter callback'
+		{
+			ProgID = s 'LibDsk.Reporter.1'
+			VersionIndependentProgID = s 'LibDsk.Reporter'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{F81955B8-9ECB-4B29-8ACA-B793E2A9DD8E}'
+		}
+	}
+}

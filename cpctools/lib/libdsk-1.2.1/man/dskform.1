@@ -1,0 +1,184 @@
+.\" -*- nroff -*-
+.\"
+.\" dskform.1: dskform man page
+.\" Copyright (c) 2002 Darren Salt
+.\" Copyright (c) 2005 John Elliott
+.\"
+.\" This library is free software; you can redistribute it and/or modify it
+.\" under the terms of the GNU Library General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or (at
+.\" your option) any later version.
+.\"
+.\" This library is distributed in the hope that it will be useful, but
+.\" WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Library General Public License
+.\" along with this library; if not, write to the Free Software Foundation,
+.\" Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+.\"
+.\" Author contact information:
+.\" John Elliott: email: jce@seasip.demon.co.uk
+.\"
+.TH dskform 1 "23 January 2008" "Version 1.2.1" "Emulators"
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH NAME
+dskform - floppy or image file formatter for emulated machines
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH SYNOPSIS
+.PD 0
+.B dskform
+.RI [ "-format FORMAT" ]
+.RI [ "-type TYPE" ]
+.RI [ "-side SIDE" ]
+.RI [ "-comp COMP" ]
+.RI [ "-retry COUNT" ]
+.I DISKIMAGE
+.P
+.PD 1
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH DESCRIPTION
+Dskform is a formatter which formats floppy discs or disc images for use with
+emulated machines such as the ZX Spectrum +3, Amstrad CPC, and various Acorn
+machines. It does
+.B not
+create a filesystem on the disc or image.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH OPTIONS
+.TP
+.B -format FORMAT
+Specifies a disc format to use. See the section DISK FORMATS for more
+information.
+
+.TP
+.B -type TYPE
+Determines which driver is to be used to format the disc or image.
+.RS
+.TP 8
+.B auto
+Select according to the disc image file. This is the default.
+.TP
+.B dsk
+Use the DSK (CPCEmu format) image driver.
+.TP
+.B edsk
+Use the extended version of the DSK format.
+.TP
+.B floppy
+Use the floppy driver.
+.TP
+.B myz80
+Use the hard disk (MYZ80 format) image driver.
+(This format cannot be autodetected.)
+.TP
+.B cfi
+Use the CFI (DOS fdcopy format) image driver.
+(This format cannot be autodetected.)
+.TP
+.B apridisk
+Use the ApriDisk image driver (used for archiving Apricot floppies).
+(This format cannot be autodetected.)
+.TP
+.B raw
+Use the raw driver.
+.RE
+.TP
+.B -comp COMP
+Compress the disc image that is being generated (has no
+effect when formatting a real floppy disc).
+.RS
+.TP 8
+.B sq
+Huffman compressed (SQ / USQ).
+.TP
+.B gz
+Gzipped (gzip / gunzip).
+.RE
+
+.TP
+.B -retry COUNT
+Set the number of times to attempt a format operation in case of error.
+
+.TP
+.B -side SIDE
+Determines which side (0 or 1) of the disc is to be formatted.
+
+.\"
+.\" -----------------------------------------------------------------
+.\"
+.SH DISK FORMATS
+.TP 20
+.I pcw180
+PCW or IBM; 180K. This is the default format.
+.TP
+.I cpcsys
+CPC or +3 System
+.TP
+.I cpcdata
+CPC or +3 Data
+.TP
+.I pcw720
+PCW or IBM 720K
+.TP
+.I pcw1440
+PCW16 or IBM 1440K
+.TP
+.I ibm160 ibm320
+IBM 160K or 320K (CP/M-86 or DOSPlus)
+.TP
+.I ibm360
+IBM 360K (DOSPlus)
+.TP
+.I ibm720 ibm1200 ibm1440
+IBM 720K, 1200K or 1440K (144FEAT)
+.TP
+.I acorn160 acorn320
+Acorn ADFS 'S' or 'M'
+.TP
+.I acorn640
+Acorn ADFS 'L'
+.TP
+.I acorn800
+Acorn ADFS 'D' and 'E'/'E+'
+.TP
+.I acorn1600
+Acorn ADFS 'F'/'F+'
+.TP
+.I pcw800
+PCW 800K (XCF2DD)
+.TP
+.I pcw200
+PCW 200K (XCF2)
+.TP
+.I bbc100
+BBC Micro DFS (single sided, 40 tracks)
+.TP
+.I bbc200
+BBC Micro DFS (single sided, 80 tracks)
+
+.\"
+.\"------------------------------------------------------------------
+.\"
+.\".SH BUGS
+.\"
+.\"------------------------------------------------------------------
+.\"
+.\".SH SEE ALSO
+.\"
+.\"------------------------------------------------------------------
+.\"
+.\" `AUTHOR' here is deliberate...
+.\"
+.SH AUTHOR
+John Elliott <jce@seasip.demon.co.uk>.
+.PP
+Darren Salt wrote the man pages.

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="StSoundGPL workspace">
+		<Project filename="SmallYmPlayer/SmallYmPlayer.cbp" active="1">
+			<Depends filename="StSoundLibrary/StSoundLibrary.cbp" />
+		</Project>
+		<Project filename="StSoundLibrary/StSoundLibrary.cbp" />
+		<Project filename="Ym2Wav/Ym2Wav.cbp">
+			<Depends filename="StSoundLibrary/StSoundLibrary.cbp" />
+		</Project>
+		<Project filename="SDLYmPlayer/SDLYmPlayer.cbp">
+			<Depends filename="StSoundLibrary/StSoundLibrary.cbp" />
+		</Project>
+	</Workspace>
+</CodeBlocks_workspace_file>

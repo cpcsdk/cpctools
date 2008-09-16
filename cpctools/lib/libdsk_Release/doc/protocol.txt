@@ -1,0 +1,218 @@
+LibDsk Remote Protocol
+======================
+
+  The LibDsk remote system is designed to make disc drives on remote computers 
+transparently available to LibDsk applications. 
+
+  Each function call becomes two transmissions: The client sends a packet to
+the server, which performs the necessary action and sends a packet back. 
+
+Packet Format
+=============
+
+  The actual packets transmitted will almost certainly have additional 
+header and/or trailer bytes. This section describes the format as LibDsk 
+sees it.
+
+  All numbers are sent in network byte format (big-endian). Some fields are
+16-bit integers (INT16) and some are 32-bit (INT32).
+
+  Memory buffers (BUFFER) are encoded as an int16 length followed by the 
+contents of the buffer. The same applies to strings (STRING); the length 
+includes the terminating zero. Null pointers are encoded as buffers with 
+length=0.
+
+  DSK_GEOMETRY and DSK_FORMAT are encoded as GEOMETRY (12 INT16s) and 
+FORMAT (4 INT16s) respectively, corresponding to the fields in order.
+
+  DSK_PDRIVER is replaced by an INT32 handle. The server returns this handle
+from its implementation of the 'open' and 'create' functions; the client 
+passes it to other functions.
+
+  Transmitted packets always begin with an INT16 function number. The 
+definitions of these numbers are in lib/rpcfuncs.h. Numbers have been 
+allocated for all the LibDsk functions I could think of, but only the 
+ones below have been defined as RPC packet types.
+
+  Returned packets always begin with an INT16 LibDsk error code (dsk_err_t). 
+If the requested function was not recognised by the server, then the error
+will be DSK_ERR_UNKRPC and no more bytes will follow. Any other error code
+(including DSK_ERR_OK) will be followed by the appropriate result packet 
+for the function in question; though some of the values may be meaningless
+if the operation failed.
+
+  The functions are listed below. All except one (DSK_R_PROPERTIES) 
+correspond 1:1 to LibDsk functions.
+
+Number	Name		Parameters		Results after error code
+===========================================================================
+101	RPC_DSK_OPEN	STRING filename		INT32 handle
+			STRING driver
+			STRING compression
+
+102	RPC_DSK_CREAT	STRING filename		INT32 handle
+			STRING driver
+			STRING compression
+
+103	RPC_DSK_CLOSE	INT32 handle		none
+
+104	RPC_DSK_DRIVE_STATUS
+			INT32 handle		INT16 status
+			GEOMETRY geometry
+			INT32 head
+
+105	RPC_DSK_PREAD	INT32 handle		BUFFER sector
+			GEOMETRY geometry
+			INT32 cylinder
+			INT32 head
+			INT32 sector
+
+107	RPC_DSK_XREAD	INT32 handle		BUFFER sector
+			GEOMETRY geometry	INT32 deleted
+			INT32 cylinder
+			INT32 head
+			INT32 cylinder_expected
+			INT32 head_expected
+			INT32 sector
+			INT32 sector_size
+			INT32 deleted
+
+108	RPC_DSK_PWRITE	INT32 handle		none
+			GEOMETRY geometry
+			BUFFER data
+			INT32 cylinder
+			INT32 head
+			INT32 sector
+
+110	RPC_DSK_XWRITE	INT32 handle		none
+			GEOMETRY geometry
+			BUFFER data
+			INT32 cylinder
+			INT32 head
+			INT32 cylinder_expected
+			INT32 head_expected
+			INT32 sector
+			INT32 sector_size
+			INT32 sector
+			INT32 deleted
+
+114	RPC_DSK_PFORMAT	INT32 handle		GEOMETRY geometry
+			GEOMETRY geometry
+			INT32 cylinder
+			INT32 head
+			FORMAT fmt0  }
+			FORMAT fmt1  } count of these blocks is given by
+			...          } geometry.dg_sectors.
+			FORMAT fmtn  }
+
+116	RPC_DSK_XTREAD	INT32 handle		BUFFER data
+			GEOMETRY geometry
+			INT32 cylinder
+			INT32 head
+			INT32 cylinder_expected
+			INT32 head_expected
+
+121	RPC_DSK_GETGEOM	INT32 handle		GEOMETRY geometry
+
+122	RPC_DSK_PSECID	INT32 handle		FORMAT sectorid
+			GEOMETRY geometry
+			INT32 cylinder
+			INT32 head
+
+124	RPC_DSK_PSEEK	INT32 handle		none
+			GEOMETRY geometry
+			INT32 cylinder
+			INT32 head
+	
+132	RPC_DSK_OPTION_ENUM
+			INT32 handle		STRING option
+			INT32 idx	
+
+133	RPC_DSK_OPTION_SET
+			INT32 handle
+			STRING option
+			INT32 value
+
+134	RPC_DSK_OPTION_GET
+			INT32 handle		INT32 value
+			STRING option
+
+139	RPC_DSK_PROPERTIES
+			INT32 handle		INT16 count
+						INT16 function1
+						INT16 function2
+						...
+						INT16 function<count>
+						STRING drivername
+
+140	RPC_DSK_GETCOMMENT
+			IN32 handle		STRING comment
+
+141	RPC_DSK_SETCOMMENT
+			IN32 handle		none
+			STRING comment
+
+
+===========================================================================
+
+  RPC_DSK_PROPERTIES is the odd one out. The client may choose to call it,
+usually immediately after RPC_DSK_OPEN or RPC_DSK_CREAT. It returns the
+numerical IDs of implemented functions on the remote server. 
+
+  LibDsk uses the result of RPC_DSK_PROPERTIES for performance enhancement.
+If the remote system does not implement RPC_DSK_XWRITE, for example, then
+LibDsk can record this fact and fall back on RPC_DSK_PWRITE without 
+having to send over 512 bytes of RPC_DSK_XWRITE packet and await a response
+every time it wants to write a sector.
+
+  Since RPC_DSK_PROPERTIES is only advisory, a server should be prepared to 
+handle function IDs that it did not return in RPC_DSK_PROPERTIES; usually
+by returning a result packet containing DSK_ERR_NOTIMPL.
+
+Serial Communications
+=====================
+  When this protocol is used over RS232, the following data format is used on 
+the wire:
+
+Client-to-server packet:
+
+SOH	(one byte)
+len	(2 bytes, big-endian: number of 'data' bytes that follow)
+data	(packet as defined above)
+crc	(2 bytes, big-endian; CRC16 of all bytes in 'data'). 
+
+  After sending these bytes, the client will wait for a byte fron the 
+server that is either ACK or NAK. If it is NAK, the packet is resent; if it
+is ACK, the client then waits for the response packet.
+
+Server-to-client packet:
+
+STX	(one byte)
+len	(2 bytes, big-endian)
+data	(Result packet as defined above)
+crc	(2 bytes, big-endian; CRC16 of all bytes in 'data').
+
+  Again, once the client has received this packet, it will verify the 
+checksum and send ACK or NAK. If it sent NAK, the server will resend the 
+packet and wait for another ACK/NAK.
+
+
+Piped Communications
+====================
+  The 'fork' driver sends LibDsk packets over anonymous pipes to a child 
+process. The protocol is as follows:
+
+* LibDsk launches the child process. The child will be sent packets on its
+standard input, and should return them on its standard output.
+
+* Once the child has launched successfully, it must send 2 bytes (comprising
+a big-endian LibDsk error code) to its standard output. If the error was 
+nonzero (ie, anything other than DSK_ERR_OK) the child must then terminate.
+
+* A packet is are now sent from the client to the child process, consisting of
+ a 2-byte big-endian length followed by the packet data. There is no CRC and
+ no handshaking characters.
+
+* Similarly, the result packet is preceded by a 2-byte length.
+
+

@@ -1,0 +1,6 @@
+cpctools-1.1 (1.1) unstable; urgency=low
+
+  * Initial Release.
+  * First try to put Ramlaid's great tools available for anyone on Debian.
+
+ -- Romain GIOT <giot.romain@gmail.com>  Thu, 10 Apr 2008 22:04:19 +0200

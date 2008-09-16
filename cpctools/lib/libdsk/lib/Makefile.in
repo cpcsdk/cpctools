@@ -1,0 +1,508 @@
+# Makefile.in generated automatically by automake 1.4-p6 from Makefile.am
+
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+SHELL = @SHELL@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DESTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+build_alias = @build_alias@
+build_triplet = @build@
+host_alias = @host_alias@
+host_triplet = @host@
+target_alias = @target_alias@
+target_triplet = @target@
+AS = @AS@
+CC = @CC@
+CLASSPATH = @CLASSPATH@
+CPP = @CPP@
+DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
+HAVE_LIB = @HAVE_LIB@
+JAVACFLAGS = @JAVACFLAGS@
+JAVAFLAGS = @JAVAFLAGS@
+JAVAPREFIX = @JAVAPREFIX@
+LIB = @LIB@
+LIBDSKJAR = @LIBDSKJAR@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+LTLIB = @LTLIB@
+MAKEINFO = @MAKEINFO@
+OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
+PACKAGE = @PACKAGE@
+RANLIB = @RANLIB@
+STRIP = @STRIP@
+TOOLCLASSES = @TOOLCLASSES@
+VERSION = @VERSION@
+_ACJNI_JAVAC = @_ACJNI_JAVAC@
+uudecode = @uudecode@
+
+INCLUDES = -I$(top_srcdir)/include
+JAVAC = @JAVAC@
+JAVAH = @JAVAH@
+JAVA = @JAVA@
+JAVADOC = @JAVADOC@
+JAR = @JAR@
+CLASSCPRE = uk.co.demon.seasip.libdsk
+CLASSDPRE = uk/co/demon/seasip/libdsk
+HEADERPRE = uk_co_demon_seasip_libdsk
+
+lib_LTLIBRARIES = libdsk.la
+noinst_PROGRAMS = @LIBDSKJAR@
+EXTRA_PROGRAMS = 
+EXTRA_DIST = $(CLASSDPRE)/Drive.java 	   $(CLASSDPRE)/DskException.java 	   $(CLASSDPRE)/FormatData.java 	   $(CLASSDPRE)/FormatType.java 	   $(CLASSDPRE)/Geometry.java 	   $(CLASSDPRE)/Reporter.java 	   $(CLASSDPRE)/LibDsk.java
+
+#
+# Binary compatibility. See libtool.info for full details, but:
+# If the source has changed at all, increment the middle number
+# If interfaces have been added, removed or changed, increment the
+# first number and set the middle one to 0.
+# If interfaces have been added increment the right-hand number.
+# If interfaces have been removed set the right-hand number to 0.
+# 
+#
+libdsk_la_LDFLAGS = -version-info 5:1:2
+libdsk_la_SOURCES = dskread.c  dskwrite.c dskcheck.c dskstat.c 		   dsklphys.c dskfmt.c   dskopen.c  dskpars.c 		   dskerror.c dskseek.c  dsksecid.c dskgeom.c 		   dsktread.c dsksgeom.c dskjni.c   dskreprt.c 		   dskcmt.c dskretry.c dskdirty.c dsktrkid.c dskrtrd.c 		   comp.h compi.h compress.h compress.inc compress.c 		   compsq.c compsq.h 		   compgz.c compgz.h 		   compbz2.c compbz2.h 		   crctable.c crctable.h 		   crc16.c    crc16.h 		   rpccli.c  rpcfuncs.h  rpcmap.c  	           rpcpack.c  rpcserv.c 		   remote.c   remote.h  remote.inc remall.h 		   rpctios.c  rpctios.h 		   rpcfork.c  rpcfork.h 		   rpcfossl.c rpcfossl.h 		   rpcwin32.c rpcwin32.h 		   drv.h drvi.h drivers.h drivers.inc 		   drvlinux.h drvlinux.c 		   drvntwdm.h drvntwdm.c 		   drvwin32.h drvwin32.c w95defs.h 		   drvwin16.h drvwin16.c w16defs.h 		   drvint25.h drvint25.c 		   drvdos16.h drvdos16.c 		   drvdos32.h drvdos32.c 		   drvcpcem.h drvcpcem.c 		   drvposix.h drvposix.c 		   drvnwasp.h drvnwasp.c 		   drvadisk.h drvadisk.c 		   drvrcpm.h  drvrcpm.c 		   drvmyz80.h drvmyz80.c 		   drvcfi.h   drvcfi.c 		   drvqm.h    drvqm.c 
+
+
+JARCLASSES = $(CLASSDPRE)/Drive.class 	   $(CLASSDPRE)/DskException.class 	   $(CLASSDPRE)/FormatData.class 	   $(CLASSDPRE)/FormatType.class 	   $(CLASSDPRE)/Geometry.class 	   $(CLASSDPRE)/Reporter.class 	   $(CLASSDPRE)/LibDsk.class
+
+JARHEADERS = $(HEADERPRE)_Drive.h 	   $(HEADERPRE)_Geometry.h 	   $(HEADERPRE)_FormatType.h 	   $(HEADERPRE)_LibDsk.h
+
+CLEANFILES = $(JARCLASSES) $(JARHEADERS)
+mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+CONFIG_HEADER = ../config.h
+CONFIG_CLEAN_FILES = 
+LTLIBRARIES =  $(lib_LTLIBRARIES)
+
+
+DEFS = @DEFS@ -I. -I$(srcdir) -I..
+CPPFLAGS = @CPPFLAGS@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+libdsk_la_LIBADD = 
+libdsk_la_OBJECTS =  dskread.lo dskwrite.lo dskcheck.lo dskstat.lo \
+dsklphys.lo dskfmt.lo dskopen.lo dskpars.lo dskerror.lo dskseek.lo \
+dsksecid.lo dskgeom.lo dsktread.lo dsksgeom.lo dskjni.lo dskreprt.lo \
+dskcmt.lo dskretry.lo dskdirty.lo dsktrkid.lo dskrtrd.lo compress.lo \
+compsq.lo compgz.lo compbz2.lo crctable.lo crc16.lo rpccli.lo rpcmap.lo \
+rpcpack.lo rpcserv.lo remote.lo rpctios.lo rpcfork.lo rpcfossl.lo \
+rpcwin32.lo drvlinux.lo drvntwdm.lo drvwin32.lo drvwin16.lo drvint25.lo \
+drvdos16.lo drvdos32.lo drvcpcem.lo drvposix.lo drvnwasp.lo drvadisk.lo \
+drvrcpm.lo drvmyz80.lo drvcfi.lo drvqm.lo
+noinst_PROGRAMS =  @LIBDSKJAR@
+PROGRAMS =  $(noinst_PROGRAMS)
+
+CFLAGS = @CFLAGS@
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DIST_COMMON =  Makefile.am Makefile.in
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = gtar
+GZIP_ENV = --best
+SOURCES = $(libdsk_la_SOURCES)
+OBJECTS = $(libdsk_la_OBJECTS)
+
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .S .c .lo .o .obj .s
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --foreign --include-deps lib/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+mostlyclean-libLTLIBRARIES:
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+
+distclean-libLTLIBRARIES:
+
+maintainer-clean-libLTLIBRARIES:
+
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo "$(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
+
+.c.o:
+	$(COMPILE) -c $<
+
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
+	$(COMPILE) -c $<
+
+mostlyclean-compile:
+	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
+
+clean-compile:
+
+distclean-compile:
+	-rm -f *.tab.c
+
+maintainer-clean-compile:
+
+.c.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+
+libdsk.la: $(libdsk_la_OBJECTS) $(libdsk_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libdsk_la_LDFLAGS) $(libdsk_la_OBJECTS) $(libdsk_la_LIBADD) $(LIBS)
+
+mostlyclean-noinstPROGRAMS:
+
+clean-noinstPROGRAMS:
+	-test -z "$(noinst_PROGRAMS)" || rm -f $(noinst_PROGRAMS)
+
+distclean-noinstPROGRAMS:
+
+maintainer-clean-noinstPROGRAMS:
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = lib
+
+distdir: $(DISTFILES)
+	$(mkinstalldirs) $(distdir)/$(CLASSDPRE)
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+compbz2.lo compbz2.o : compbz2.c compi.h ../config.h ../include/libdsk.h \
+	compress.h compbz2.h
+compgz.lo compgz.o : compgz.c compi.h ../config.h ../include/libdsk.h \
+	compress.h compgz.h
+compress.lo compress.o : compress.c drvi.h ../config.h \
+	../include/libdsk.h drv.h compi.h compress.h comp.h compsq.h \
+	compgz.h compbz2.h compress.inc
+compsq.lo compsq.o : compsq.c compi.h ../config.h ../include/libdsk.h \
+	compress.h compsq.h
+crc16.lo crc16.o : crc16.c crc16.h
+crctable.lo crctable.o : crctable.c
+drvadisk.lo drvadisk.o : drvadisk.c ../include/libdsk.h drvi.h \
+	../config.h drv.h drvadisk.h
+drvapri.lo drvapri.o : drvapri.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h drvapri.h
+drvcfi.lo drvcfi.o : drvcfi.c ../include/libdsk.h drvi.h ../config.h \
+	drv.h drvcfi.h
+drvcpcem.lo drvcpcem.o : drvcpcem.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvcpcem.h
+drvdos16.lo drvdos16.o : drvdos16.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvdos16.h
+drvdos32.lo drvdos32.o : drvdos32.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvdos32.h
+drvint25.lo drvint25.o : drvint25.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvint25.h
+drvlinux.lo drvlinux.o : drvlinux.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvlinux.h
+drvmyz80.lo drvmyz80.o : drvmyz80.c ../include/libdsk.h drvi.h \
+	../config.h drv.h drvmyz80.h
+drvntwdm.lo drvntwdm.o : drvntwdm.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvntwdm.h
+drvnwasp.lo drvnwasp.o : drvnwasp.c ../include/libdsk.h drvi.h \
+	../config.h drv.h drvnwasp.h
+drvposix.lo drvposix.o : drvposix.c ../include/libdsk.h drvi.h \
+	../config.h drv.h drvposix.h
+drvqm.lo drvqm.o : drvqm.c ../include/libdsk.h drvi.h ../config.h drv.h \
+	drvqm.h crctable.h
+drvrcpm.lo drvrcpm.o : drvrcpm.c ../include/libdsk.h drvi.h ../config.h \
+	drv.h drvrcpm.h
+drvwin16.lo drvwin16.o : drvwin16.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvwin16.h
+drvwin32.lo drvwin32.o : drvwin32.c drvi.h ../config.h \
+	../include/libdsk.h drv.h drvwin32.h rpcfuncs.h
+dskcheck.lo dskcheck.o : dskcheck.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskcmt.lo dskcmt.o : dskcmt.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h
+dskdirty.lo dskdirty.o : dskdirty.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskerror.lo dskerror.o : dskerror.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskfmt.lo dskfmt.o : dskfmt.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h compi.h compress.h
+dskgeom.lo dskgeom.o : dskgeom.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h
+dskjni.lo dskjni.o : dskjni.c ../config.h
+dsklphys.lo dsklphys.o : dsklphys.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskopen.lo dskopen.o : dskopen.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h drivers.h compress.h drivers.inc
+dskpars.lo dskpars.o : dskpars.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h
+dskread.lo dskread.o : dskread.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h
+dskreprt.lo dskreprt.o : dskreprt.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskretry.lo dskretry.o : dskretry.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskrtrd.lo dskrtrd.o : dskrtrd.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h
+dsksecid.lo dsksecid.o : dsksecid.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskseek.lo dskseek.o : dskseek.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h
+dsksgeom.lo dsksgeom.o : dsksgeom.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskstat.lo dskstat.o : dskstat.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h compi.h compress.h
+dsktread.lo dsktread.o : dsktread.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dsktrkid.lo dsktrkid.o : dsktrkid.c drvi.h ../config.h \
+	../include/libdsk.h drv.h
+dskwrite.lo dskwrite.o : dskwrite.c drvi.h ../config.h \
+	../include/libdsk.h drv.h compi.h compress.h
+remote.lo remote.o : remote.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h rpcfuncs.h remote.h remall.h rpctios.h rpcwin32.h \
+	rpcfossl.h rpcfork.h remote.inc
+rpccli.lo rpccli.o : rpccli.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h rpcfuncs.h remote.h
+rpcfork.lo rpcfork.o : rpcfork.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h remote.h rpcfork.h
+rpcfossl.lo rpcfossl.o : rpcfossl.c drvi.h ../config.h \
+	../include/libdsk.h drv.h remote.h rpcfossl.h crc16.h
+rpcmap.lo rpcmap.o : rpcmap.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h
+rpcpack.lo rpcpack.o : rpcpack.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h rpcfuncs.h
+rpcserv.lo rpcserv.o : rpcserv.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h rpcfuncs.h
+rpctios.lo rpctios.o : rpctios.c drvi.h ../config.h ../include/libdsk.h \
+	drv.h remote.h rpctios.h crc16.h
+rpcwin32.lo rpcwin32.o : rpcwin32.c drvi.h ../config.h \
+	../include/libdsk.h drv.h remote.h rpcwin32.h crc16.h
+
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am: install-libLTLIBRARIES install-exec-local
+install-exec: install-exec-am
+
+install-data-am:
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am: uninstall-libLTLIBRARIES
+uninstall: uninstall-am
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(libdir)
+
+
+mostlyclean-generic:
+
+clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-noinstPROGRAMS \
+		mostlyclean-tags mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+clean-am:  clean-libLTLIBRARIES clean-compile clean-libtool \
+		clean-noinstPROGRAMS clean-tags clean-generic \
+		mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-libLTLIBRARIES distclean-compile \
+		distclean-libtool distclean-noinstPROGRAMS \
+		distclean-tags distclean-generic clean-am
+	-rm -f libtool
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-libLTLIBRARIES \
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-noinstPROGRAMS maintainer-clean-tags \
+		maintainer-clean-generic distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
+clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
+uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
+distclean-compile clean-compile maintainer-clean-compile \
+mostlyclean-libtool distclean-libtool clean-libtool \
+maintainer-clean-libtool mostlyclean-noinstPROGRAMS \
+distclean-noinstPROGRAMS clean-noinstPROGRAMS \
+maintainer-clean-noinstPROGRAMS tags mostlyclean-tags distclean-tags \
+clean-tags maintainer-clean-tags distdir info-am info dvi-am dvi check \
+check-am installcheck-am installcheck install-exec-local \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+
+
+libdsk.jar:	$(JARCLASSES)
+	$(JAR) c0f $@ uk/*
+	$(JAVADOC) -d $(top_srcdir)/doc/jni $(CLASSCPRE)
+
+$(CLASSDPRE)/%.class:   $(srcdir)/$(CLASSDPRE)/%.java
+	here=`pwd` && cd $(srcdir) && $(JAVAC) -d $$here $<
+
+%.class:        $(srcdir)/%.java
+	here=`pwd` && cd $(srcdir) && $(JAVAC) -d $$here $<
+
+$(HEADERPRE)_%.h:         $(CLASSDPRE)/%.class
+	$(JAVAH) -jni $(CLASSCPRE).`basename $< .class`
+	touch $@
+
+$(srcdir)/dskjni.c:	$(JARHEADERS)
+
+install-exec-local:
+	$(mkinstalldirs) $(libdir)
+	if test x@LIBDSKJAR@ = x; then true; else $(INSTALL_DATA) @LIBDSKJAR@ $(DESTDIR)/$(libdir); fi
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

@@ -1,0 +1,574 @@
+org &6000
+
+ld h,(ix + 3)
+
+; Undocumented opcodes
+
+inc ixh
+dec ixh
+ld ixh,5
+
+inc ixl
+dec ixl
+ld ixl,9
+
+ld b,ixh
+ld b,ixl
+ld c,ixh
+ld c,ixl
+ld d,ixh
+ld d,ixl
+ld e,ixh
+ld e,ixl
+
+ld ixh,b
+ld ixh,c
+ld ixh,d
+ld ixh,e
+
+ld ixh,a
+
+ld ixl,b
+ld ixl,c
+ld ixl,d
+ld ixl,e
+
+ld ixl,ixh
+ld ixh,ixl
+ld ixl,ixl
+
+ld ixl,a
+
+ld a,ixh
+ld a,ixl
+
+add a,ixh
+add a, ixl
+
+adc a,ixh
+adc a,ixl
+
+sub ixh
+sub ixl
+
+sbc a,ixh
+sbc a,ixl
+
+and ixh
+and ixl
+
+xor ixh
+xor ixl
+
+or ixh
+or ixl
+
+cp ixh
+cp ixl
+
+rlc (ix+5),b
+rlc (ix+5),c
+rlc (ix+5),d
+rlc (ix+5),e
+rlc (ix+5),h
+rlc (ix+5),l
+
+rlc (ix+7),a
+
+rrc (ix+5),b
+rrc (ix+5),c
+rrc (ix+5),d
+rrc (ix+5),e
+rrc (ix+5),h
+rrc (ix+5),l
+
+rrc (ix+7),a
+
+rl (ix+5),b
+rl (ix+5),c
+rl (ix+5),d
+rl (ix+5),e
+rl (ix+5),h
+rl (ix+5),l
+
+rl (ix+7),a
+
+rr (ix+5),b
+rr (ix+5),c
+rr (ix+5),d
+rr (ix+5),e
+rr (ix+5),h
+rr (ix+5),l
+
+rr (ix+7),a
+
+sla (ix+5),b
+sla (ix+5),c
+sla (ix+5),d
+sla (ix+5),e
+sla (ix+5),h
+sla (ix+5),l
+
+sla (ix+7),a
+
+sra (ix+5),b
+sra (ix+5),c
+sra (ix+5),d
+sra (ix+5),e
+sra (ix+5),h
+sra (ix+5),l
+
+sra (ix+7),a
+
+sll (ix+5),b
+sll (ix+5),c
+sll (ix+5),d
+sll (ix+5),e
+sll (ix+5),h
+sll (ix+5),l
+
+sll (ix+7),a
+
+srl (ix+5),b
+srl (ix+5),c
+srl (ix+5),d
+srl (ix+5),e
+srl (ix+5),h
+srl (ix+5),l
+
+srl (ix+7),a
+
+res 0,(ix+13),b
+res 0,(ix+13),c
+res 0,(ix+13),d
+res 0,(ix+13),e
+res 0,(ix+13),h
+res 0,(ix+13),l
+
+res 0,(ix+13),a
+
+res 1,(ix+13),b
+res 1,(ix+13),c
+res 1,(ix+13),d
+res 1,(ix+13),e
+res 1,(ix+13),h
+res 1,(ix+13),l
+
+res 1,(ix+13),a
+
+res 2,(ix+13),b
+res 2,(ix+13),c
+res 2,(ix+13),d
+res 2,(ix+13),e
+res 2,(ix+13),h
+res 2,(ix+13),l
+
+res 2,(ix+13),a
+
+res 3,(ix+13),b
+res 3,(ix+13),c
+res 3,(ix+13),d
+res 3,(ix+13),e
+res 3,(ix+13),h
+res 3,(ix+13),l
+
+res 3,(ix+13),a
+
+res 4,(ix+13),b
+res 4,(ix+13),c
+res 4,(ix+13),d
+res 4,(ix+13),e
+res 4,(ix+13),h
+res 4,(ix+13),l
+
+res 4,(ix+13),a
+
+res 5,(ix+13),b
+res 5,(ix+13),c
+res 5,(ix+13),d
+res 5,(ix+13),e
+res 5,(ix+13),h
+res 5,(ix+13),l
+
+res 5,(ix+13),a
+
+res 6,(ix+13),b
+res 6,(ix+13),c
+res 6,(ix+13),d
+res 6,(ix+13),e
+res 6,(ix+13),h
+res 6,(ix+13),l
+
+res 6,(ix+13),a
+
+res 7,(ix+13),b
+res 7,(ix+13),c
+res 7,(ix+13),d
+res 7,(ix+13),e
+res 7,(ix+13),h
+res 7,(ix+13),l
+
+res 7,(ix+13),a
+
+set 0,(ix+13),b
+set 0,(ix+13),c
+set 0,(ix+13),d
+set 0,(ix+13),e
+set 0,(ix+13),h
+set 0,(ix+13),l
+
+set 0,(ix+13),a
+
+set 1,(ix+13),b
+set 1,(ix+13),c
+set 1,(ix+13),d
+set 1,(ix+13),e
+set 1,(ix+13),h
+set 1,(ix+13),l
+
+set 1,(ix+13),a
+
+set 2,(ix+13),b
+set 2,(ix+13),c
+set 2,(ix+13),d
+set 2,(ix+13),e
+set 2,(ix+13),h
+set 2,(ix+13),l
+
+set 2,(ix+13),a
+
+set 3,(ix+13),b
+set 3,(ix+13),c
+set 3,(ix+13),d
+set 3,(ix+13),e
+set 3,(ix+13),h
+set 3,(ix+13),l
+
+set 3,(ix+13),a
+
+set 4,(ix+13),b
+set 4,(ix+13),c
+set 4,(ix+13),d
+set 4,(ix+13),e
+set 4,(ix+13),h
+set 4,(ix+13),l
+
+set 4,(ix+13),a
+
+set 5,(ix+13),b
+set 5,(ix+13),c
+set 5,(ix+13),d
+set 5,(ix+13),e
+set 5,(ix+13),h
+set 5,(ix+13),l
+
+set 5,(ix+13),a
+
+set 6,(ix+13),b
+set 6,(ix+13),c
+set 6,(ix+13),d
+set 6,(ix+13),e
+set 6,(ix+13),h
+set 6,(ix+13),l
+
+set 6,(ix+13),a
+
+set 7,(ix+13),b
+set 7,(ix+13),c
+set 7,(ix+13),d
+set 7,(ix+13),e
+set 7,(ix+13),h
+set 7,(ix+13),l
+
+set 7,(ix+13),a
+
+in f,(c)
+
+out (c),0
+
+inc iyh
+dec iyh
+ld iyh,5
+
+inc iyl
+dec iyl
+ld iyl,9
+
+ld b,iyh
+ld b,iyl
+ld c,iyh
+ld c,iyl
+ld d,iyh
+ld d,iyl
+ld e,iyh
+ld e,iyl
+
+ld iyh,b
+ld iyh,c
+ld iyh,d
+ld iyh,e
+
+ld iyh,a
+
+ld iyl,b
+ld iyl,c
+ld iyl,d
+ld iyl,e
+
+ld iyl,iyh
+ld iyh,iyl
+ld iyl,iyl
+
+ld iyl,a
+
+ld a,iyh
+ld a,iyl
+
+add a,iyh
+add a, iyl
+
+adc a,iyh
+adc a,iyl
+
+sub iyh
+sub iyl
+
+sbc a,iyh
+sbc a,iyl
+
+and iyh
+and iyl
+
+xor iyh
+xor iyl
+
+or iyh
+or iyl
+
+cp iyh
+cp iyl
+
+rlc (iy+5),b
+rlc (iy+5),c
+rlc (iy+5),d
+rlc (iy+5),e
+rlc (iy+5),h
+rlc (iy+5),l
+
+rlc (iy+7),a
+
+rrc (iy+5),b
+rrc (iy+5),c
+rrc (iy+5),d
+rrc (iy+5),e
+rrc (iy+5),h
+rrc (iy+5),l
+
+rrc (iy+7),a
+
+rl (iy+5),b
+rl (iy+5),c
+rl (iy+5),d
+rl (iy+5),e
+rl (iy+5),h
+rl (iy+5),l
+
+rl (iy+7),a
+
+rr (iy+5),b
+rr (iy+5),c
+rr (iy+5),d
+rr (iy+5),e
+rr (iy+5),h
+rr (iy+5),l
+
+rr (iy+7),a
+
+sla (iy+5),b
+sla (iy+5),c
+sla (iy+5),d
+sla (iy+5),e
+sla (iy+5),h
+sla (iy+5),l
+
+sla (iy+7),a
+
+sra (iy+5),b
+sra (iy+5),c
+sra (iy+5),d
+sra (iy+5),e
+sra (iy+5),h
+sra (iy+5),l
+
+sra (iy+7),a
+
+sll (iy+5),b
+sll (iy+5),c
+sll (iy+5),d
+sll (iy+5),e
+sll (iy+5),h
+sll (iy+5),l
+
+sll (iy+7),a
+
+srl (iy+5),b
+srl (iy+5),c
+srl (iy+5),d
+srl (iy+5),e
+srl (iy+5),h
+srl (iy+5),l
+
+srl (iy+7),a
+
+res 0,(iy+13),b
+res 0,(iy+13),c
+res 0,(iy+13),d
+res 0,(iy+13),e
+res 0,(iy+13),h
+res 0,(iy+13),l
+
+res 0,(iy+13),a
+
+res 1,(iy+13),b
+res 1,(iy+13),c
+res 1,(iy+13),d
+res 1,(iy+13),e
+res 1,(iy+13),h
+res 1,(iy+13),l
+
+res 1,(iy+13),a
+
+res 2,(iy+13),b
+res 2,(iy+13),c
+res 2,(iy+13),d
+res 2,(iy+13),e
+res 2,(iy+13),h
+res 2,(iy+13),l
+
+res 2,(iy+13),a
+
+res 3,(iy+13),b
+res 3,(iy+13),c
+res 3,(iy+13),d
+res 3,(iy+13),e
+res 3,(iy+13),h
+res 3,(iy+13),l
+
+res 3,(iy+13),a
+
+res 4,(iy+13),b
+res 4,(iy+13),c
+res 4,(iy+13),d
+res 4,(iy+13),e
+res 4,(iy+13),h
+res 4,(iy+13),l
+
+res 4,(iy+13),a
+
+res 5,(iy+13),b
+res 5,(iy+13),c
+res 5,(iy+13),d
+res 5,(iy+13),e
+res 5,(iy+13),h
+res 5,(iy+13),l
+
+res 5,(iy+13),a
+
+res 6,(iy+13),b
+res 6,(iy+13),c
+res 6,(iy+13),d
+res 6,(iy+13),e
+res 6,(iy+13),h
+res 6,(iy+13),l
+
+res 6,(iy+13),a
+
+res 7,(iy+13),b
+res 7,(iy+13),c
+res 7,(iy+13),d
+res 7,(iy+13),e
+res 7,(iy+13),h
+res 7,(iy+13),l
+
+res 7,(iy+13),a
+
+set 0,(iy+13),b
+set 0,(iy+13),c
+set 0,(iy+13),d
+set 0,(iy+13),e
+set 0,(iy+13),h
+set 0,(iy+13),l
+
+set 0,(iy+13),a
+
+set 1,(iy+13),b
+set 1,(iy+13),c
+set 1,(iy+13),d
+set 1,(iy+13),e
+set 1,(iy+13),h
+set 1,(iy+13),l
+
+set 1,(iy+13),a
+
+set 2,(iy+13),b
+set 2,(iy+13),c
+set 2,(iy+13),d
+set 2,(iy+13),e
+set 2,(iy+13),h
+set 2,(iy+13),l
+
+set 2,(iy+13),a
+
+set 3,(iy+13),b
+set 3,(iy+13),c
+set 3,(iy+13),d
+set 3,(iy+13),e
+set 3,(iy+13),h
+set 3,(iy+13),l
+
+set 3,(iy+13),a
+
+set 4,(iy+13),b
+set 4,(iy+13),c
+set 4,(iy+13),d
+set 4,(iy+13),e
+set 4,(iy+13),h
+set 4,(iy+13),l
+
+set 4,(iy+13),a
+
+set 5,(iy+13),b
+set 5,(iy+13),c
+set 5,(iy+13),d
+set 5,(iy+13),e
+set 5,(iy+13),h
+set 5,(iy+13),l
+
+set 5,(iy+13),a
+
+set 6,(iy+13),b
+set 6,(iy+13),c
+set 6,(iy+13),d
+set 6,(iy+13),e
+set 6,(iy+13),h
+set 6,(iy+13),l
+
+set 6,(iy+13),a
+
+set 7,(iy+13),b
+set 7,(iy+13),c
+set 7,(iy+13),d
+set 7,(iy+13),e
+set 7,(iy+13),h
+set 7,(iy+13),l
+
+set 7,(iy+13),a
+
+; Opcodes which should trigger an error
+
+ld ixh,iyl
+ld ixh,iyh
+ld (ix+5),ixh
+
+ld a,b
+

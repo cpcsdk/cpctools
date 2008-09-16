@@ -1,0 +1,59 @@
+HKCR
+{
+	CpcFSExt.cpcFSShellExt.1 = s 'cpcFSShellExt Class'
+	{
+		CLSID = s '{C5537025-2E46-4733-957C-303C8D7BF58B}'
+	}
+	CpcFSExt.cpcFSShellExt = s 'cpcFSShellExt Class'
+	{
+		CLSID = s '{C5537025-2E46-4733-957C-303C8D7BF58B}'
+		CurVer = s 'CpcFSExt.cpcFSShellExt.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {C5537025-2E46-4733-957C-303C8D7BF58B} = s 'cpcFSShellExt Class'
+		{
+			ProgID = s 'CpcFSExt.cpcFSShellExt.1'
+			VersionIndependentProgID = s 'CpcFSExt.cpcFSShellExt'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1FC179BF-027C-4839-B97A-28DC784521FB}'
+		}
+	}
+	NoRemove *
+	{
+		NoRemove shellex
+		{
+			NoRemove ContextMenuHandlers
+			{
+				ForceRemove cpcFSExt = s '{C5537025-2E46-4733-957C-303C8D7BF58B}'
+			}
+		}
+	}
+	NoRemove Directory
+	{
+		NoRemove shellex
+		{
+			NoRemove ContextMenuHandlers
+			{
+				ForceRemove cpcFSExt = s '{C5537025-2E46-4733-957C-303C8D7BF58B}'
+			}
+		}
+	}
+	NoRemove Directory
+	{
+		NoRemove Background
+		{
+			NoRemove ShellEx
+			{
+				NoRemove ContextMenuHandlers
+				{
+					ForceRemove cpcFSExt = s '{C5537025-2E46-4733-957C-303C8D7BF58B}'
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,260 @@
+.\" -*- nroff -*-
+.\"
+.\" dskutil.1: dskutil man page
+.\" Copyright (c) 2005-6 John Elliott
+.\"
+.\" This library is free software; you can redistribute it and/or modify it
+.\" under the terms of the GNU Library General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or (at
+.\" your option) any later version.
+.\"
+.\" This library is distributed in the hope that it will be useful, but
+.\" WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Library General Public License
+.\" along with this library; if not, write to the Free Software Foundation,
+.\" Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+.\"
+.\" Author contact information:
+.\" John Elliott: email: jce@seasip.demon.co.uk
+.\"
+.TH dskutil 1 "23 January 2008" "Version 1.2.1" "Emulators"
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH NAME
+dskutil - Simple sector edtor for discs and disc images.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH SYNOPSIS
+.PD 0
+.B dskutil
+.RI [ "-type TYPE" ]
+.RI [ "-side SIDE" ]
+.RI [ "-comp COMP" ]
+.RI [ "-dstep" ]
+.RI [ "-retry COUNT" ]
+.RI [ "-format FMT" ]
+.I DISKIMAGE
+.P
+.PD 1
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH DESCRIPTION
+dskutil is an interactive command-driven sector editor, patterned after 
+the venerable CP/M sector editor DU90. This explains some of its 
+idiosyncracies, such as the fact that commands deal in logical track
+numbers but physical sector numbers.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH OPTIONS
+.TP
+.B -type TYPE
+Determines which LibDsk driver is to be used to access the disc.
+.RS
+.TP 8
+.B auto
+Select according to the disc image file. This is the default.
+.TP
+.B dsk
+Use the DSK (CPCEmu format) image driver.
+.TP
+.B edsk
+Use the extended version of the DSK format.
+.TP
+.B floppy
+Use the floppy driver.
+.TP
+.B myz80
+Use the hard disk (MYZ80 format) image driver.
+(This format cannot be autodetected.)
+.TP
+.B cfi
+Use the CFI (DOS fdcopy format) image driver.
+(This format cannot be autodetected.)
+.TP
+.B apridisk
+Use the ApriDisk image driver (from the utility of the same name).
+(This format cannot be autodetected.)
+.TP
+.B raw
+Use the raw driver.
+.RE
+
+.TP
+.B -comp COMP
+Select the compression method used on the disc image file (has no
+effect when reading a floppy disc).
+.RS
+.TP 8
+.B auto
+Detect from the first few bytes of the file. This is the default.
+.TP
+.B sq
+Huffman coded (SQ / USQ).
+.TP
+.B gz
+Gzipped (gzip / gunzip).
+.TP
+.B bz2
+Burrows-Wheeler compressed (bzip2 / bunzip2).
+.RE
+
+.TP
+.B -side SIDE
+Determines which side (0 or 1) of the source disc is to be scanned. If this 
+option is not present both sides will be scanned.
+
+.TP
+.B -dstep
+Double-step the source drive (used to read 360k discs in 1.2Mb drives). Only
+supported by the Linux floppy driver.
+
+.TP
+.B -retry COUNT
+Set the number of times to attempt a read/write/format in case of error.
+
+.TP
+.B -format FMT
+Do not autodetect the disc format; use the named format. The format need only
+be an approximation to the actual format used by the disc.
+
+.TP
+.B -first CYL 
+Start scanning at the specified cylinder. 
+
+.TP
+.B -last CYL 
+Scan up to and including the specified cylinder.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH COMMANDS
+.LP
+The following single-letter commands are used. Operands in brackets 
+such as 
+.RI [filename] 
+are optional. Numeric inputs are shown as
+.RI nn
+for decimal, and 
+.RI xx
+for hex. In either case, prefixing the number with "#" selects the alternate
+number system.
+.LP
+Multiple commands on a line are allowed, separated by semicolons.
+
+.IP "+[x]"
+Increase the current sector number by 
+.I [x]
+and read the resulting sector, incrementing the track if necessary.
+.IP "-[x]"
+Decrease the current sector number by 
+.I [x]
+and read the resulting sector, decrementing the track if necessary.
+.IP "#"
+Display the disc geometry for the current drive/disc image.
+.IP "$[variable[=value]]"
+View and amend the geometry. "$" by itself shows all possible variables with
+their current values; "$variable" shows the value of one variable; and 
+"$variable=value" sets a new value. Note that changing the size of the sector
+with "$secsize=nn" will cause the current sector buffer and clip buffer 
+to be cleared.
+.IP "=ascii"
+Search for an ASCII string, starting at the current sector. Hex codes can 
+be included in the ASCII by surrounding them with angle brackets - for example,
+to search for the word "Hello" at the start of a line, you could use 
+"=<0A>Hello". The search string is case-sensitive.
+.IP "<"
+Save the currently-loaded sector to a clip buffer.
+.IP ">" 
+Restore the contents of the clip buffer to the current sector buffer.
+.IP "?"
+Display a command summary.
+.IP "A[from,to]"
+Dump the contents of the sector buffer as ASCII. If 
+.I from
+and
+.I to
+are included, then only values between those offsets will be shown.
+.IP "CHoffset,value,value,value..."
+Change bytes in the current sector buffer. The offset and values are in hex.
+.IP "CAoffset,ascii"
+Replace bytes in the current sector buffer with an ASCII string. As with 
+the "=" command, the ASCII can contain embedded hex bytes in angle brackets.
+.IP "CHfrom-to,value,value,value..."
+The same as CH above, but fills the range from 
+.I from
+to
+.I to
+with the byte sequence, repeating or truncating it as necessary.
+.IP "CAfrom-to,ascii"
+The same as CHfrom-to, except that the byte sequence is specified as ASCII.
+.IP "D[from,to]"
+Dump the contents of the sector buffer as ASCII and hex.
+.IP "Gxx"
+Go to logical sector number
+.I xx
+.
+.IP "H[from,to]"
+Dump the contents of the sector buffer as hex.
+.IP "Kfilename"
+Save all "yanked" sectors (see Y below) to the specified file. This also 
+clears them from memory.
+.IP "Lfilename[,type[,compression]]"
+Open a new drive or disc image. If this has a different sector size from the 
+current sector size, the sector buffer and clip buffer will be cleared.
+.IP "N[geometry]"
+Change geometry. N by itself re-runs the automatic probe; N with the name of
+a geometry selects one of the formats known to LibDsk.
+.IP "R"
+(Re)read the current sector.
+.IP "Snn"
+Set the current sector number, and read.
+.IP "Tnn"
+Set the current track number. Does not read.
+.IP "V"
+Compare the contents of the sector buffer with the current sector on disc.
+.IP "W" 
+Write the sector buffer to disc.
+.IP "X"
+Leave dskutil.
+.IP "Y"
+Append the current sector to a "yank" buffer. It can then be saved with
+the K command.
+.IP "Z[nn]"
+Sleep for 
+.I nn 
+seconds; if
+.I nn
+is not present, sleeps for one second.
+.IP /nn
+This must be the last command on a line. It repeats the preceding line 
+.I nn
+times.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH BUGS
+.LP 
+On platforms with no sleep(3) function, the Z command works by busy-waiting.
+.LP
+Commands are always input using fgets(3), even when the host system 
+provides a more sophisticated input method such as readline(3).
+.LP
+While the current feature set is a fairly good match for DU90 (less
+the features specific to the CP/M filesystem) it doesn't cover all the 
+features of LibDsk.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.\".SH SEE ALSO
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH AUTHOR
+John Elliott <jce@seasip.demon.co.uk>.

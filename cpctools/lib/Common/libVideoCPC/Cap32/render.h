@@ -1,0 +1,325 @@
+//
+// Render function used by CRTC & GateArray
+//
+
+#pragma once
+#define _RENDER_H_
+#include "cap32type.h"
+#include "video.h"
+#include <string.h>
+#include <SDL_video.h>
+#include <string>
+#include <vector>
+
+class Renderer
+{
+private:
+	// Render function
+	class RenderFunction
+	{
+	protected:
+		//! Array of number of byte to render each time
+		byte			*_renderWidth;
+		//! Address of prerenderered data
+		byte			*_renderData;
+
+		//! SDL back surface
+		SDL_Surface		*_backSurface;
+
+		//! Screen Position (pointer to SDL surface)
+		unsigned int	*_scrPos;
+
+		//! Real palette index 
+		//! (include index to antialiasing color for displaying)
+		unsigned int	_palette[19];
+
+	public:
+		RenderFunction() : _scrPos(NULL) {}
+
+		inline void SetBackSurface(SDL_Surface *surface)		{ _backSurface = surface;		}
+		inline SDL_Surface * GetBackSurface() const				{ return _backSurface;			}
+
+		inline unsigned int GetScreenPosition() const
+		{
+			return _scrPos - (dword *)_backSurface->pixels;
+		}
+		inline void SetScreenPosition(unsigned int v)
+		{
+			_scrPos = (dword *)_backSurface->pixels + v;
+		}
+
+		virtual void Render() = 0;
+		virtual void PlotPixel(int x, int y, const SDL_Color &colour) = 0;
+
+		inline byte* GetRenderWidth() const						{ return _renderWidth;			}
+		inline void SetRenderWidth(byte* v)						{ _renderWidth = v;				}
+		inline byte* GetRenderData() const						{ return _renderData;			}
+		inline void SetRenderData(byte* v)						{ _renderData = v;				}
+
+		void SetPalette(unsigned int pen, const SDL_Color &colour);
+		void SetAntiAliasingColour(const SDL_Color &colour);
+
+	};
+	class Render32BppFunction : public RenderFunction
+	{
+	public:
+		virtual void Render();
+		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+	};
+	class Render24BppFunction : public RenderFunction
+	{
+	public:
+		virtual void Render();
+		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+	};
+	class Render16BppFunction : public RenderFunction
+	{
+	public:
+		virtual void Render();
+		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+	};
+	class Render8BppFunction : public RenderFunction
+	{
+	public:
+		virtual void Render();
+		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+	};
+
+	// Pre render function
+	class PreRenderFunction
+	{
+	protected:
+		//! Prerender buffer pointer
+		dword			*_renderPos;
+		//! Current mode map (conversion from CPC memory to SDL memory)
+		dword			*_modeMap;
+		//! CPC memory
+		byte			*_memory;
+		//! Current CPC mode
+		unsigned int	_mode;
+	public:
+		inline PreRenderFunction() : _renderPos(NULL), _modeMap(NULL), _memory(NULL), _mode(0) {}
+
+		inline unsigned int GetMode() const	{ return _mode;				}
+		inline void SetMode(unsigned int m)	{ _mode = m; UpdateMode();	}
+		
+		inline dword* GetRenderPos() const	{ return _renderPos;		}
+		inline void SetRenderPos(dword* v)	{ _renderPos = v;			}
+
+		inline void SetMemory(byte *memory)	{ _memory = memory;			}
+		inline byte* GetMemory() const		{ return _memory;			}
+
+		virtual void PreRender(unsigned int memAddr) = 0;
+	protected:
+		virtual void UpdateMode() = 0;
+	};
+	class PreRenderStandardFunction : public PreRenderFunction
+	{
+	private:
+		static dword M0Map[0x200];
+		static dword M1Map[0x200];
+		static dword M2Map[0x200];
+		static dword M3Map[0x200];
+	protected:
+		virtual void UpdateMode();
+	};
+	class PreRenderHalfFunction : public PreRenderFunction
+	{
+	private:
+		static dword M0hMap[0x100];
+		static dword M1hMap[0x100];
+		static dword M2hMap[0x100];
+		static dword M3hMap[0x100];
+	protected:
+		virtual void UpdateMode();
+	};
+	class PreRenderSyncFunction : public PreRenderStandardFunction
+	{
+	public:
+		virtual void PreRender(unsigned int memAddr);
+	};
+	class PreRenderBorderFunction : public PreRenderStandardFunction
+	{
+	public:
+		virtual void PreRender(unsigned int memAddr);
+	};
+	class PreRenderNormalFunction : public PreRenderStandardFunction
+	{
+	public:
+		virtual void PreRender(unsigned int memAddr);
+	};
+	class PreRenderSyncHalfFunction : public PreRenderHalfFunction
+	{
+	public:
+		virtual void PreRender(unsigned int memAddr);
+	};
+	class PreRenderBorderHalfFunction : public PreRenderHalfFunction
+	{
+	public:
+		virtual void PreRender(unsigned int memAddr);
+	};
+	class PreRenderNormalHalfFunction : public PreRenderHalfFunction
+	{
+	public:
+		virtual void PreRender(unsigned int memAddr);
+	};
+
+	//! Text display class
+	class TextDisplay
+	{
+	public:
+		int		PosX;
+		int		PosY;
+		string	Text;
+		bool	Shadow;
+	public:
+		TextDisplay(int x, int y, const string &text, bool shw) : PosX(x), PosY(y), Text(text), Shadow(shw) {}
+	};
+
+private:
+	static double		ColoursRGB[32][3];
+	static double		ColoursGreen[32];
+	static byte			Font[768];
+
+private:
+	//! Current CRTC flag config used to switch preRenderer
+	dword				_currentFlagConfig;
+	//! Render buffer to be fill by preRenderer
+	byte				_renderBuffer[800];
+	//!	Start address for preRenderer
+	dword				*_renderStart;
+	
+	//! Current horizontal position (char * 256)
+	//! Used to handle monitor displaying
+	int					_horizontalPosition;
+	//! Position to char index number of shift
+	byte				_pos2CharShift;
+	//! Current horizontal char index
+	byte				_horizontalCurrentChar;
+	//! Number maximum of char displayed in horizontal
+	byte				_horizontalCharMax;
+	//! Horizontal pixel width array
+	byte				_horizontalPixelWidth[49];
+
+	//! Display half ?
+	bool				_renderHalf;
+
+	//! Render to SDL surface function
+	RenderFunction		*_renderFunc;
+	//! Current preRender function
+	PreRenderFunction	*_preRenderFunc;
+	//! Sync preRender function
+	PreRenderFunction	*_preRenderSyncFunc;
+	//! Border preRender function
+	PreRenderFunction	*_preRenderBorderFunc;
+	//! Memory preRender function
+	PreRenderFunction	*_preRenderNormalFunc;
+
+	//! Current CPC Palette
+	unsigned int		_palette[20];
+
+	// SDL surface properties
+
+	//! SDL palette
+	SDL_Color			_colours[32];
+	//! Video plugin used for rendering
+	VideoPlugin			*_videoPlugin;
+	
+	//! Current screen line offset (in DWord)
+	unsigned int		_scrLineOffset;
+	//! Current screen base rendering
+	unsigned int		_scrBase;
+	//! Current screen position
+	unsigned int		_scrPos;
+
+	//! Video fullscreen width
+	unsigned int		_scrFullScreenWidth;
+	//! Video fullscreen height
+	unsigned int		_scrFullScreenHeight;
+	//! Video fullscreen bit per pixel
+	unsigned int		_scrFullScreenBPP;
+	//! Full screen mode
+	bool				_scrFullScreen;
+	//! Video plugin index
+	VideoPlugin::VideoType	_videoPluginType;
+	//! Use OpenGL filter for video
+	bool				_videoPluginOpenGLFilter;
+						
+	//! Color monitor mode
+	bool				_colorMonitor;
+	//! Monitor intensity
+	unsigned int		_monitorIntensity;
+	//! Enable monitor remanency
+	bool				_monitorRemanency;
+
+	//! Display text array
+	vector<TextDisplay>	_textArray;
+public:
+
+	//! Constructor
+	Renderer();
+	//! Destructor
+	~Renderer();
+
+	inline VideoPlugin* GetVideoPlugin() const { return _videoPlugin; }
+
+	void SetMemory(byte *memory);
+	void SetVideoMode(VideoPlugin::VideoType type, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
+	void SetOpenGLFilter(bool val);
+	void SetMonitor(bool color, unsigned int intensity, bool remanency);
+
+	//! Set monitor intensity
+	inline void SetMonitorIntensity(unsigned int intensity)	{ _monitorIntensity = intensity; InitPalette(); }
+	//! Get monitor intensity
+	inline unsigned int GetMonitorIntensity() const			{ return _monitorIntensity ;					}
+	//! Set monitor color mode
+	void SetMonitorColorTube(bool color)					{ _colorMonitor = color; InitPalette();			}
+	//! Return true if monitor is color
+	bool IsMonitorColorTube() const							{ return _colorMonitor;							}
+
+
+	bool SetFullScreen(bool fs);
+	bool ToggleFullScreen();
+
+	void SetCaption(const char *title, const char *icon);
+
+	bool Init();
+	void Shutdown();
+
+	bool BeginDisplay(int screenLine);
+	void EndDisplay(bool frameCompleted);
+
+	void Reset();
+
+	// Renderer emulation
+	
+	//! Set CPC Mode (update ModeMap pointer)
+	void SetMode(unsigned int mode);
+	//! Set CPC Ink
+	void SetPalette(unsigned int pen, unsigned int colour);
+	//! Set CPC antialiasing color
+	void SetAntiAliasingColour(unsigned int col0, unsigned int col1);
+	
+	//! Render CPC memory
+	void Render(unsigned int memAddr, dword flags);
+	//! HSync reach
+	void HSyncCycle(int horzPos, unsigned int flag_drawing);
+	//! Update CPC horizontal position
+	int UpdateHorzPos();
+
+	// Pixel rendering
+	//! Plot a pixel in video
+	void PlotPixel(int x, int y, int r, int g, int b);
+
+	//! Add text with locate coord
+	void AddTextLocate(int x, int y, const string &text, bool shadow = true);
+	//! Add text with pixel coord
+	void AddText(int x, int y, const string &text, bool shadow = true);
+private:
+	//! Print with pixel position
+	void Print(int x, int y, const string &text, bool shadow = true);
+	
+	void SetPreRender(dword flags);
+
+	void InitPalette();
+};

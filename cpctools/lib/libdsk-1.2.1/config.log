@@ -1,0 +1,320 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:757: checking host system type
+configure:778: checking target system type
+configure:796: checking build system type
+configure:833: checking for a BSD compatible install
+configure:886: checking whether build environment is sane
+configure:943: checking whether make sets ${MAKE}
+configure:989: checking for working aclocal-1.4
+configure:1002: checking for working autoconf
+configure:1015: checking for working automake-1.4
+configure:1028: checking for working autoheader
+configure:1041: checking for working makeinfo
+configure:1123: checking for gcc
+configure:1236: checking whether the C compiler (gcc  ) works
+configure:1252: gcc -o conftest    conftest.c  1>&5
+configure:1278: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:1283: checking whether we are using GNU C
+configure:1292: gcc -E conftest.c
+configure:1311: checking whether gcc accepts -g
+configure:1354: checking for a BSD compatible install
+configure:1407: checking whether make sets ${MAKE}
+configure:1445: checking for Cygwin environment
+configure:1461: gcc -c -g -O2  conftest.c 1>&5
+configure: In function 'main':
+configure:1457: error: '__CYGWIN32__' undeclared (first use in this function)
+configure:1457: error: (Each undeclared identifier is reported only once
+configure:1457: error: for each function it appears in.)
+configure: failed program was:
+#line 1450 "configure"
+#include "confdefs.h"
+
+int main() {
+
+#ifndef __CYGWIN__
+#define __CYGWIN__ __CYGWIN32__
+#endif
+return __CYGWIN__;
+; return 0; }
+configure:1478: checking for mingw32 environment
+configure:1490: gcc -c -g -O2  conftest.c 1>&5
+configure: In function 'main':
+configure:1486: error: '__MINGW32__' undeclared (first use in this function)
+configure:1486: error: (Each undeclared identifier is reported only once
+configure:1486: error: for each function it appears in.)
+configure: failed program was:
+#line 1483 "configure"
+#include "confdefs.h"
+
+int main() {
+return __MINGW32__;
+; return 0; }
+configure:1507: checking how to run the C preprocessor
+configure:1528: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:1667: checking for ld used by GCC
+configure:1735: checking if the linker (/usr/bin/ld) is GNU ld
+GNU ld (GNU Binutils for Ubuntu) 2.18.0.20080103
+configure:1752: checking for /usr/bin/ld option to reload object files
+configure:1764: checking for BSD-compatible nm
+configure:1802: checking for a sed that does not truncate output
+configure:1886: checking whether ln -s works
+configure:1907: checking how to recognise dependent libraries
+configure:2093: checking for object suffix
+configure:2099: gcc -c -g -O2  conftest.c 1>&5
+configure:2119: checking for executable suffix
+configure:2129: gcc -o conftest -g -O2   conftest.c  1>&5
+configure:2160: checking command to parse /usr/bin/nm -B output
+configure:2243: gcc -c -g -O2  conftest.c 1>&5
+configure:2246: /usr/bin/nm -B conftest.o | sed -n -e 's/^.*[ ]\([ABCDGISTW][ABCDGISTW]*\)[ ][ ]*\(\)\([_A-Za-z][_A-Za-z0-9]*\)$/  /p' > conftest.nm
+configure:2297: gcc -o conftest -g -O2   conftest.c conftstm.o 1>&5
+configure:2346: checking for dlfcn.h
+configure:2356: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:2525: checking for ranlib
+configure:2592: checking for strip
+configure:2694: gcc -c -g -O2  conftest.c 1>&5
+configure:2849: checking for objdir
+configure:2876: checking for gcc option to produce PIC
+configure:3024: checking if gcc PIC flag -fPIC works
+configure:3038: gcc -c -g -O2 -fPIC -DPIC  conftest.c 1>&5
+configure:3090: checking if gcc static flag -static works
+configure:3105: gcc -o conftest -g -O2   -static conftest.c  1>&5
+configure:3132: checking if gcc supports -c -o file.o
+configure:3151: gcc -c -g -O2 -o out/conftest2.o  conftest.c 1>&5
+configure:3180: checking if gcc supports -c -o file.lo
+configure:3198: gcc -c -g -O2 -c -o conftest.lo  conftest.c 1>&5
+configure:3248: checking if gcc supports -fno-rtti -fno-exceptions
+configure:3261: gcc -c -g -O2 -fno-rtti -fno-exceptions -c conftest.c  conftest.c 1>&5
+cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
+cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
+configure:3288: checking whether the linker (/usr/bin/ld) supports shared libraries
+configure:3987: checking how to hardcode library paths into programs
+configure:4015: checking whether stripping libraries is possible
+configure:4029: checking dynamic linker characteristics
+configure:4447: checking if libtool supports shared libraries
+configure:4451: checking whether to build shared libraries
+configure:4474: checking whether to build static libraries
+configure:5010: checking whether -lc should be explicitly linked in
+configure:5017: gcc -c -g -O2  conftest.c 1>&5
+configure:5030: gcc -shared conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2>&1 | grep  -lc  >/dev/null 2>&1
+configure:5620: checking for ANSI C header files
+configure:5633: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5700: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+configure: In function 'main':
+configure:5695: warning: implicit declaration of function 'exit'
+configure:5695: warning: incompatible implicit declaration of built-in function 'exit'
+configure:5727: checking for errno.h
+configure:5737: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5727: checking for limits.h
+configure:5737: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5727: checking for sys/ioctl.h
+configure:5737: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5727: checking for stat.h
+configure:5737: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5733:18: error: stat.h: No such file or directory
+configure: failed program was:
+#line 5732 "configure"
+#include "confdefs.h"
+#include <stat.h>
+configure:5727: checking for sys/stat.h
+configure:5737: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5727: checking for sys/types.h
+configure:5737: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5767: checking for unistd.h
+configure:5777: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5767: checking for termios.h
+configure:5777: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5807: checking for dirent.h
+configure:5817: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5807: checking for fcntl.h
+configure:5817: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5807: checking for utime.h
+configure:5817: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5807: checking for pwd.h
+configure:5817: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5807: checking for time.h
+configure:5817: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5807: checking for dir.h
+configure:5817: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5813:17: error: dir.h: No such file or directory
+configure: failed program was:
+#line 5812 "configure"
+#include "confdefs.h"
+#include <dir.h>
+configure:5807: checking for direct.h
+configure:5817: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5813:20: error: direct.h: No such file or directory
+configure: failed program was:
+#line 5812 "configure"
+#include "confdefs.h"
+#include <direct.h>
+configure:5847: checking for linux/fd.h
+configure:5857: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5847: checking for linux/fdreg.h
+configure:5857: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5847: checking for windows.h
+configure:5857: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5853:21: error: windows.h: No such file or directory
+configure: failed program was:
+#line 5852 "configure"
+#include "confdefs.h"
+#include <windows.h>
+configure:5847: checking for winioctl.h
+configure:5857: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5853:22: error: winioctl.h: No such file or directory
+configure: failed program was:
+#line 5852 "configure"
+#include "confdefs.h"
+#include <winioctl.h>
+configure:5847: checking for shlobj.h
+configure:5857: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:5853:20: error: shlobj.h: No such file or directory
+configure: failed program was:
+#line 5852 "configure"
+#include "confdefs.h"
+#include <shlobj.h>
+configure:5887: checking for strcmpi
+configure:5915: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+/tmp/cca9JavW.o: In function `main':
+/home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/configure:5909: undefined reference to `strcmpi'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 5892 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strcmpi(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char strcmpi();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strcmpi) || defined (__stub___strcmpi)
+choke me
+#else
+strcmpi();
+#endif
+
+; return 0; }
+configure:5887: checking for stricmp
+configure:5915: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+/tmp/ccEEDbKi.o: In function `main':
+/home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/configure:5909: undefined reference to `stricmp'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 5892 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char stricmp(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char stricmp();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_stricmp) || defined (__stub___stricmp)
+choke me
+#else
+stricmp();
+#endif
+
+; return 0; }
+configure:5887: checking for strcasecmp
+configure:5915: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+configure:5899: warning: conflicting types for built-in function 'strcasecmp'
+configure:5942: checking for mkstemp
+configure:5970: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+configure:5997: checking for fork
+configure:6025: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+configure:6009: warning: conflicting types for built-in function 'fork'
+configure:6052: checking for GetTempFileName
+configure:6080: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+/tmp/ccoiyxPs.o: In function `main':
+/home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/configure:6074: undefined reference to `GetTempFileName'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 6057 "configure"
+#include "confdefs.h"
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char GetTempFileName(); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char GetTempFileName();
+
+int main() {
+
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_GetTempFileName) || defined (__stub___GetTempFileName)
+choke me
+#else
+GetTempFileName();
+#endif
+
+; return 0; }
+configure:6107: checking for sleep
+configure:6135: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c  1>&5
+configure:6165: checking for zlib.h
+configure:6175: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:6202: checking for zlibVersion in -lz
+configure:6221: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c -lz   1>&5
+configure:6254: checking for bzlib.h
+configure:6264: gcc -E  conftest.c >/dev/null 2>conftest.out
+configure:6260:19: error: bzlib.h: No such file or directory
+configure: failed program was:
+#line 6259 "configure"
+#include "confdefs.h"
+#include <bzlib.h>
+configure:6291: checking for BZ2_bzlibVersion in -lbz2
+configure:6310: gcc -o conftest -Wall -DNOTWINDLL -g -O2   conftest.c -lbz2  -lz  1>&5
+/usr/bin/ld: cannot find -lbz2
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 6299 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char BZ2_bzlibVersion();
+
+int main() {
+BZ2_bzlibVersion()
+; return 0; }
+configure:7117: checking for working const
+configure:7171: gcc -c -Wall -DNOTWINDLL -g -O2  conftest.c 1>&5
+configure: In function 'main':
+configure:7145: warning: unused variable 's'
+configure:7165: warning: unused variable 'foo'
+configure:7133: warning: unused variable 'zero'
+configure:7127: warning: unused variable 'x'
+configure:7147: warning: 't' is used uninitialized in this function
+configure:7162: warning: 'b' is used uninitialized in this function
+configure:7192: checking for size_t
+configure:7227: checking for executable suffix
+configure:7258: checking for object suffix
+configure:7286: checking whether gcc needs -traditional
+configure:7332: checking whether sys/types.h defines makedev
+configure:7344: gcc -o conftest -Wall -DNOTWINDLL -g -O2  -DAUTOSHARE=${prefix}/share/LibDsk  conftest.c -lz  1>&5
+configure:7438: checking for 8-bit clean memcmp
+configure:7456: gcc -o conftest -Wall -DNOTWINDLL -g -O2  -DAUTOSHARE=${prefix}/share/LibDsk  conftest.c -lz  1>&5
+configure:7449: warning: return type defaults to 'int'
+configure: In function 'main':
+configure:7451: warning: implicit declaration of function 'exit'
+configure:7451: warning: incompatible implicit declaration of built-in function 'exit'
+configure:7451: warning: implicit declaration of function 'memcmp'
+configure:7476: checking for strerror
+configure:7504: gcc -o conftest -Wall -DNOTWINDLL -g -O2  -DAUTOSHARE=${prefix}/share/LibDsk  conftest.c -lz  1>&5

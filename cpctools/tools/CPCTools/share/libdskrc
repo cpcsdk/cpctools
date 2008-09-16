@@ -1,0 +1,36 @@
+; This is CPC System 42 tracks format spec
+[cpcsys42]
+Description = CPC System 42 tracks
+Sidesness = Alt
+Cylinders = 42
+Heads = 1
+Sectors = 9
+SecBase = 65
+SecSize = 512
+DataRate = SD
+RWGap = 42
+FmtGap = 82
+; This is CPC Data 42 tracks format spec
+[cpcdata42]
+Description = CPC Data 42 tracks
+Sidesness = Alt
+Cylinders = 42
+Heads = 1
+Sectors = 9
+SecBase = 193
+SecSize = 512
+DataRate = SD
+RWGap = 42
+FmtGap = 82
+; This is CPC Parados 80 tracks format spec
+[parados80]
+Description = Parados format 396k
+Sidesness = Alt
+Cylinders = 80
+Heads = 1
+Sectors = 10
+SecBase = 145
+SecSize = 512
+DataRate = SD
+RWGap = 42
+FmtGap = 78

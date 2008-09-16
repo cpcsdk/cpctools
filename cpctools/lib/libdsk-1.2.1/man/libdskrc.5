@@ -1,0 +1,173 @@
+.\" -*- nroff -*-
+.\"
+.\" libdskrc.5: libdskrc man page
+.\" Copyright (c) 2005 Darren Salt
+.\"
+.\" This library is free software; you can redistribute it and/or modify it
+.\" under the terms of the GNU Library General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or (at
+.\" your option) any later version.
+.\"
+.\" This library is distributed in the hope that it will be useful, but
+.\" WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Library
+.\" General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Library General Public License
+.\" along with this library; if not, write to the Free Software Foundation,
+.\" Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+.\"
+.\" Author contact information:
+.\" John Elliott: email: jce@seasip.demon.co.uk
+.\"
+.TH libdskrc 5 "20 January 2006" "Version 1.2.1" "Emulators"
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH NAME
+libdskrc - Custom format definitions for LibDSK programs
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH DESCRIPTION
+.PD 0
+.LP
+The 
+.I libdskrc
+file contains definitions of disk 
+geometries, which can be used by the LibDsk utilities 
+.I dsktrans(1)
+, 
+.I dskid(1)
+and 
+.I dskform(1)
+. 
+.LP 
+The file consists of one or more sections, each describing one disk
+layout. Each section begins with the format name in square brackets, and 
+continues until the next section begins. Within each section are one or more 
+entries of the form
+
+.LP
+.I variable 
+= 
+.I value
+
+.LP 
+Anything after a semicolon or hash  
+character is treated as a comment and ignored. Blank lines are 
+also ignored.
+ 
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH PARAMETERS
+
+.LP 
+For each geometry, the entries listed below can be present. If not 
+all the values are present, LibDsk will use default values from its
+"pcw180" format (40 tracks, 9 sectors, single-sided, MFM).
+
+.TP
+.B description = DESC
+The description of the format as shown by (for example) dskform --help.
+
+.TP
+.B sides = TREATMENT
+How a double-sided disk is handled. This can either be 
+.B alt 
+(sides alternate -- used by most PC-hosted operating systems), 
+.B outback 
+(use side 0 tracks 0-79, then side 1 tracks 79-0 -- used by 144FEAT 
+CP/M disks), or 
+.B outout
+(use side 0 tracks 0-79, then side 1 tracks 0-79 -- used by some Acorn 
+formats). If the disk is single-sided, this parameter can be omitted.
+
+.TP 
+.B cylinders = COUNT
+Sets the number of cylinders (usually 40 or 80). 
+
+.TP 
+.B heads = COUNT
+Sets the number of heads (usually 1 or 2 for single- or double-sided). 
+
+.TP
+.B sectors = COUNT
+Sets the number of sectors per track.
+
+.TP
+.B secbase = NUMBER 
+Sets the first sector number on a track. Usually 1; some Acorn formats use 0.
+
+.TP
+.B secsize = COUNT
+Sets the size of a sector in bytes. This should be a power of 2.
+
+.TP 
+.B datarate = VALUE
+Sets the rate at which the disk should be accessed. This is one of 
+.B HD
+(1.4Mb or 1.2Mb), 
+DD (360k or 720k disc in 1.2Mb drive),
+.B SD
+(360k or 720k disc in 1.4Mb, 720k or 360k drive),
+.B ED
+(2.8Mb).
+
+.TP 
+.B rwgap = VALUE
+Set the read/write gap.
+
+.TP 
+.B fmtgap = VALUE
+Set the format gap.
+
+.TP 
+.B fm = Y or N 
+Set the recording mode. 
+.B Y 
+for FM, 
+.B N 
+for MFM. 
+
+.TP 
+.B multitrack = Y or N 
+Set multitrack mode; this only affects attempts to read normal data from
+tracks containing deleted data (or vice versa). \fBY\fR for yes, \fBN\fR for 
+no.
+
+.TP 
+.B skipdeleted = Y or N 
+Skip deleted data when searching for non-deleted data (or vice versa).
+\fBY\fR for yes, \fBN\fR for no.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH FILES
+.TP
+\fI$HOME/.libdskrc\fR
+User-specified format list.
+
+.TP
+\fI/usr/local/share/LibDsk/libdskrc\fR
+System-wide format list.
+.\"
+.\"------------------------------------------------------------------
+.\"
+.\".SH BUGS
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH SEE ALSO
+.LP
+.I dsktrans(1)
+,
+.I dskform(1)
+,
+.I dskid(1)
+.\"
+.\"------------------------------------------------------------------
+.\"
+.SH AUTHOR
+John Elliott <jce@seasip.demon.co.uk>.

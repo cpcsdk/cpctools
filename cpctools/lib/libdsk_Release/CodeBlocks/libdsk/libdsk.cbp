@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="libdsk" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="libdskd.a" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Debug/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-pg" />
+					<Add option="-g" />
+					<Add directory="../../include" />
+					<Add directory="../libdsk" />
+				</Compiler>
+				<Linker>
+					<Add option="-pg" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="libdsk.a" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="obj/Release/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add directory="../../include" />
+					<Add directory="../libdsk" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="config.h" />
+		<Unit filename="../../include/libdsk.h" />
+		<Unit filename="../../lib/Makefile" />
+		<Unit filename="../../lib/Makefile.am" />
+		<Unit filename="../../lib/Makefile.in" />
+		<Unit filename="../../lib/comp.h" />
+		<Unit filename="../../lib/compbz2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/compbz2.h" />
+		<Unit filename="../../lib/compgz.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/compgz.h" />
+		<Unit filename="../../lib/compi.h" />
+		<Unit filename="../../lib/compress.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/compress.h" />
+		<Unit filename="../../lib/compress.inc" />
+		<Unit filename="../../lib/compsq.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/compsq.h" />
+		<Unit filename="../../lib/crc16.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/crc16.h" />
+		<Unit filename="../../lib/crctable.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/crctable.h" />
+		<Unit filename="../../lib/drivers.h" />
+		<Unit filename="../../lib/drivers.inc" />
+		<Unit filename="../../lib/drv.h" />
+		<Unit filename="../../lib/drvadisk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvadisk.h" />
+		<Unit filename="../../lib/drvcfi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvcfi.h" />
+		<Unit filename="../../lib/drvcpcem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvcpcem.h" />
+		<Unit filename="../../lib/drvdos16.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvdos16.h" />
+		<Unit filename="../../lib/drvdos32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvdos32.h" />
+		<Unit filename="../../lib/drvi.h" />
+		<Unit filename="../../lib/drvint25.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvint25.h" />
+		<Unit filename="../../lib/drvlinux.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvlinux.h" />
+		<Unit filename="../../lib/drvmyz80.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvmyz80.h" />
+		<Unit filename="../../lib/drvntwdm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvntwdm.h" />
+		<Unit filename="../../lib/drvnwasp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvnwasp.h" />
+		<Unit filename="../../lib/drvposix.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvposix.h" />
+		<Unit filename="../../lib/drvqm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvqm.h" />
+		<Unit filename="../../lib/drvrcpm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvrcpm.h" />
+		<Unit filename="../../lib/drvwin16.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvwin16.h" />
+		<Unit filename="../../lib/drvwin32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/drvwin32.h" />
+		<Unit filename="../../lib/dskcheck.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskcmt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskdirty.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskerror.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskfmt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskgeom.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskjni.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dsklphys.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskopen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskpars.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskreprt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskretry.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskrtrd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dsksecid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskseek.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dsksgeom.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskstat.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dsktread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dsktrkid.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/dskwrite.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/remall.h" />
+		<Unit filename="../../lib/remote.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/remote.h" />
+		<Unit filename="../../lib/remote.inc" />
+		<Unit filename="../../lib/rpccli.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpcfork.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpcfork.h" />
+		<Unit filename="../../lib/rpcfossl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpcfossl.h" />
+		<Unit filename="../../lib/rpcfuncs.h" />
+		<Unit filename="../../lib/rpcmap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpcpack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpcserv.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpctios.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpctios.h" />
+		<Unit filename="../../lib/rpcwin32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../lib/rpcwin32.h" />
+		<Unit filename="../../lib/w16defs.h" />
+		<Unit filename="../../lib/w95defs.h" />
+		<Extensions>
+			<code_completion />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

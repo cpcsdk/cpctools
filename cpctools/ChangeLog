@@ -1,0 +1,5 @@
+2008-05-20  Krusty/Benediction  <krusty@cpcscene.com>
+
+	* libtools: correct various bugs related to the use of deprecated C++
+	objects.
+

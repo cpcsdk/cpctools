@@ -1,0 +1,68 @@
+aylet 0.5 - a player for Spectrum `.ay' music files.
+Copyright (C) 2001-2005 Russell Marks.
+Z80 emulation copyright (C) 1994 Ian Collier.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+Roadmap
+-------
+
+The COPYING file contains a copy of the GPL described above.
+
+NEWS and ChangeLog describe differences between versions.
+
+
+Description
+-----------
+
+aylet plays music files in the `.ay' format. These files are
+essentially wrappers around bits of Z80 code which play music on the
+Sinclair ZX Spectrum 128's sound hardware - either the beeper, or
+(eponymously) the AY-3-8912 sound chip. Files using the Amstrad CPC
+ports are also supported.
+
+`aylet' has a curses-based interface, and `xaylet' has an X-based one.
+
+One source of `.ay' files playable with aylet/xaylet is "Project AY"
+on the World of Spectrum website:
+
+  http://www.worldofspectrum.org/
+
+
+Installation
+------------
+
+You'll need an ANSI C compiler. `gcc' is fine - so should most other
+compilers be, these days.
+
+If you're running Linux, the Makefile should be ok; if not, you might
+want to check it. After doing that (or not :-)), you should do `make'
+(or `make aylet' if you don't have GTK+ installed), then (as root)
+`make install'.
+
+Once it's installed, don't forget to read the man page for further
+documentation.
+
+
+Contacting me
+-------------
+
+You can email me at rus@svgalib.org.
+
+
+Share and enjoy! 
+
+-Rus.

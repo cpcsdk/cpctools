@@ -1,0 +1,38 @@
+TO BE DONE in LibDSK 1.1.x:
+
+* Weak-sector support is new and may be buggy.
+* Write more functions for dsktool.
+* The INT25/INT26 driver doesn't seem to work in a DJGPP compile; it fails
+ with error 0x701F.
+* The INT25/INT26 driver keeps spitting out diagnostic messages.
+
+* dskid doesn't work on a DFS .DSK file. Why? Because get_id doesn't fail?
+* Support for DMK file format.
+* Java support for the Reporter classes is buggy [seems to work now 11-5-2003]
+* Plugin architecture:
+	dsk_register_driver
+	dsk_register_compression
+	dsk_register_remote
+* Support for TD0 file format.
+
+* Support remoting libdsk...
+	>> May need to write a PCW backend that dances on the controller
+	  rather than using decorum and the XBIOS.
+	>> May need to write a Win16 version of serslave.
+	>> May need to write a Win16 RPC client.
+
+* Support a reverse-cpmfs backend (that lets a directory appear as a disc 
+ image).
+	>> File in directory called .libdsk.ini that gives LibDsk geometry
+	  and CP/M directory info
+	>> File in directory called .libdsk.boot containing boot sector.
+
+	>> Full of debug code
+	>> Default format is pcw720, not pcw180
+	>> Needs to be compilable on other OSes
+	>> Doesn't truncate files.
+
+* The load-all-into-memory strategy in Apridisk won't work on DOS16. Does
+ this matter, bearing in mind that the real Apridisk exists on DOS16?
+
+* CopyQM: Compare to real BBC Master 512 disks 2-4.

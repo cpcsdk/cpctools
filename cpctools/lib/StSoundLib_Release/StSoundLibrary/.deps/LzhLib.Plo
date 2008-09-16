@@ -1,0 +1,26 @@
+LzhLib.lo LzhLib.o: LZH/LzhLib.cpp /usr/include/memory.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
+  /usr/include/gnu/stubs-32.h /usr/include/string.h \
+  /usr/lib/gcc/i486-linux-gnu/4.2.3/include/stddef.h \
+  /usr/include/xlocale.h LZH/LZH.H
+
+/usr/include/memory.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-32.h:
+
+/usr/include/string.h:
+
+/usr/lib/gcc/i486-linux-gnu/4.2.3/include/stddef.h:
+
+/usr/include/xlocale.h:
+
+LZH/LZH.H:

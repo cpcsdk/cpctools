@@ -1,0 +1,17 @@
+Provide some way of using fadestart/fadelen info from those files that
+provide it. (Does currently read the info, but it's ignored.)
+
+
+Really want runtime modification/loading/saving of playlist in at
+least the GTK+ version. It's a bit of a pain though, so it might be a
+while in coming.
+
+
+The silent-time-count isn't reset for new tracks. Rarely noticeable,
+but if you jump from one currently-silent track to another which
+remains silent, it'll skip the new track after less time than usual.
+
+
+The button bitmaps in xaylet are hardcoded to use black. This is bound
+to cause problems with dark GTK+ themes. Should see if there's some
+way I can get them to use the button-text colour.

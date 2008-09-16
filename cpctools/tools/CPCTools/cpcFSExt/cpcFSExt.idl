@@ -1,0 +1,56 @@
+// cpcFSExt.idl : IDL source for cpcFSExt.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (cpcFSExt.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+	[
+		object,
+		uuid(F4DAB83F-B319-4258-97A2-CB51344A6CA8),
+		dual,
+		helpstring("IcpcFSShellExt Interface"),
+		pointer_default(unique)
+	]
+	interface IcpcFSShellExt : IDispatch
+	{
+	};
+	[
+		object,
+		uuid(E4293FE3-DD4C-4FCD-AE37-CF9306E29859),
+		dual,
+		helpstring("IcpcFSDragDropExt Interface"),
+		pointer_default(unique)
+	]
+	interface IcpcFSDragDropExt : IDispatch
+	{
+	};
+
+[
+	uuid(77879F8F-7A6F-47C6-9C23-4CD6588CD0D5),
+	version(1.0),
+	helpstring("cpcFSExt 1.0 Type Library")
+]
+library CPCFSEXTLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(C5537025-2E46-4733-957C-303C8D7BF58B),
+		helpstring("cpcFSShellExt Class")
+	]
+	coclass cpcFSShellExt
+	{
+		[default] interface IcpcFSShellExt;
+	};
+	[
+		uuid(3B5B8A67-3DCA-4532-9F09-58027CADA691),
+		helpstring("cpcFSDragDropExt Class")
+	]
+	coclass cpcFSDragDropExt
+	{
+		[default] interface IcpcFSDragDropExt;
+	};
+};
