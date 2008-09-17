@@ -270,7 +270,7 @@ void help(void)
   cout << "-b : list a Basic file                 iDSK floppy.dsk -b myprog.bas" << endl;
   cout << "-d : list a Dams file                  iDSK floppy.dsk -d myprog.dms" << endl;
   cout << "-h : list a binary file as Hexadecimal iDSK floppy.dsk -h myprog.bin" << endl;
-  cout << "-i : Import file                       iDSK floppy.dsk -i myprog.bas" << end;
+  cout << "-i : Import file                       iDSK floppy.dsk -i myprog.bas" << endl
       <<  " -t : fileType (0=ASCII/1=BINARY)           ... -t 1" << endl; 
   cout << " -e : hex Execute address of file           ... -e C000 -t 1" << endl;
   cout << " -c : hex loading address of file           ... -e C000 -c 4000 -t 1" << endl;
