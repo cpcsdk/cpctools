@@ -40,9 +40,9 @@ pkgincludedir = $(includedir)/libdsk
 
 top_builddir = ..
 
-ACLOCAL = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing aclocal-1.4
+ACLOCAL = aclocal-1.4
 AUTOCONF = autoconf
-AUTOMAKE = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing automake-1.4
+AUTOMAKE = automake-1.4
 AUTOHEADER = autoheader
 
 INSTALL = /usr/bin/install -c
@@ -67,7 +67,7 @@ AS = @AS@
 CC = gcc
 CPP = gcc -E
 DLLTOOL = @DLLTOOL@
-ECHO = /bin/echo
+ECHO = echo
 EXEEXT = 
 HAVE_LIB = @HAVE_LIB@
 JAR = true
@@ -82,7 +82,7 @@ LIBDSKJAR =
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIB = @LTLIB@
-MAKEINFO = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing makeinfo
+MAKEINFO = makeinfo
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
 PACKAGE = libdsk
@@ -211,7 +211,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(dsktrans_SOURCES) $(dskform_SOURCES) $(dskid_SOURCES) $(dskdump_SOURCES) $(dskscan_SOURCES) $(dskutil_SOURCES) $(md3serial_SOURCES) $(apriboot_SOURCES) $(check1_SOURCES) $(check2_SOURCES) $(check3_SOURCES) $(forkslave_SOURCES) $(dsktest_SOURCES) $(serslave_SOURCES)
 OBJECTS = $(dsktrans_OBJECTS) $(dskform_OBJECTS) $(dskid_OBJECTS) $(dskdump_OBJECTS) $(dskscan_OBJECTS) $(dskutil_OBJECTS) $(md3serial_OBJECTS) $(apriboot_OBJECTS) $(check1_OBJECTS) $(check2_OBJECTS) $(check3_OBJECTS) $(forkslave_OBJECTS) $(dsktest_OBJECTS) $(serslave_OBJECTS)
@@ -388,7 +388,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	  awk '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+	  || (cd $(srcdir) && etags -o $$here/TAGS $(ETAGS_ARGS) $$tags  $$unique $(LISP))
 
 mostlyclean-tags:
 
@@ -414,28 +414,6 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-apriboot.o: apriboot.c ../include/libdsk.h utilopts.h formname.h \
-	apriboot.h
-bootsec.o: bootsec.c apriboot.h
-crc16.o: crc16.c crc16.h
-diskio.o: diskio.c apriboot.h ../include/libdsk.h
-dskdump.o: dskdump.c ../include/libdsk.h utilopts.h formname.h
-dskform.o: dskform.c ../config.h ../include/libdsk.h utilopts.h \
-	formname.h
-dskid.o: dskid.c ../include/libdsk.h utilopts.h
-dskscan.o: dskscan.c ../include/libdsk.h utilopts.h formname.h
-dskslave.o: dskslave.c ../include/libdsk.h
-dsktest.o: dsktest.c ../include/libdsk.h utilopts.h
-dsktrans.o: dsktrans.c ../include/libdsk.h utilopts.h formname.h \
-	apriboot.h
-dskutil.o: dskutil.c ../config.h ../include/libdsk.h utilopts.h \
-	formname.h
-forkslave.o: forkslave.c ../include/libdsk.h
-formname.o: formname.c ../config.h ../include/libdsk.h utilopts.h
-md3serial.o: md3serial.c ../include/libdsk.h utilopts.h
-serslave.o: serslave.c ../config.h ../include/libdsk.h crc16.h
-utilopts.o: utilopts.c ../config.h utilopts.h ../include/libdsk.h
-
 info-am:
 info: info-am
 dvi-am:

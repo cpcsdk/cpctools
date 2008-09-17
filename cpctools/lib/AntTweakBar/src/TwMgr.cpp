@@ -17,6 +17,8 @@
 #include "TwBar.h"
 #include "TwFonts.h"
 #include "TwOpenGL.h"
+#include <cstdlib>
+#include <cstring>
 #ifdef ANT_WINDOWS
 #	include "TwDirect3D9.h"
 #	include "TwDirect3D10.h"

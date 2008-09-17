@@ -9,6 +9,7 @@
 #include "CDataLink.h"
 #include <iostream>
 #include <fstream>
+#include <cstring>
 
 #include "CError.h"
 

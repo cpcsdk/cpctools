@@ -7,6 +7,7 @@
 #include "CError.h"
 #include <fstream>
 #include <set>
+#include <cstring>
 
 using namespace std;
 

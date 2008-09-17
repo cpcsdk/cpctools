@@ -13,6 +13,7 @@
 #include "TwPrecomp.h"
 #include "TwMgr.h"
 #include "TwFonts.h"
+#include <cstring>
 
 
 //	---------------------------------------------------------------------------

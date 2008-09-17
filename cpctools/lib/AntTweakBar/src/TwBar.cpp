@@ -16,6 +16,8 @@
 #include "TwMgr.h"
 #include "TwBar.h"
 #include "TwColors.h"
+#include <cstdlib>
+#include <cstring>
   
 using namespace std;
 

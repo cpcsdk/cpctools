@@ -1,3 +1,8 @@
+2008-09-17  CloudStrife/Shinra  <cloudstrife@cpcscene.com>
+	- Now works with gcc-4.3 (correction of some implicit inclusion, after
+	an header depandency cleanup in gcc-4.3, a lot of implicit inclusion
+	doesn't)
+
 2008-05-20  Krusty/Benediction  <krusty@cpcscene.com>
 
 	* libtools: correct various bugs related to the use of deprecated C++

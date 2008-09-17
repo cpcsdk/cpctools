@@ -36,6 +36,7 @@
 #include <math.h>
 #include <malloc.h>
 #include <algorithm>
+#include <cctype>
 
 #ifndef min
 #define min(a,b) (a<b ? a : b)
@@ -732,7 +733,7 @@ void OpenGLPlugin::Close()
 void OpenGLPlugin::SetOption(const string &optionName, bool val)
 {
 	string optName = optionName;
-	transform(optName.begin(), optName.end(), optName.begin(), tolower);
+	transform(optName.begin(), optName.end(), optName.begin(), (int(*)(int))std::tolower);
 
 	if (optName == "openglfilter")
 		_openGLFilter = val;

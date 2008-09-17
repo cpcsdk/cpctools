@@ -40,9 +40,9 @@ pkgincludedir = $(includedir)/libdsk
 
 top_builddir = ..
 
-ACLOCAL = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing aclocal-1.4
+ACLOCAL = aclocal-1.4
 AUTOCONF = autoconf
-AUTOMAKE = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing automake-1.4
+AUTOMAKE = automake-1.4
 AUTOHEADER = autoheader
 
 INSTALL = /usr/bin/install -c
@@ -68,7 +68,7 @@ CC = gcc
 CLASSPATH = 
 CPP = gcc -E
 DLLTOOL = @DLLTOOL@
-ECHO = /bin/echo
+ECHO = echo
 EXEEXT = 
 HAVE_LIB = @HAVE_LIB@
 JAVACFLAGS = 
@@ -79,7 +79,7 @@ LIBDSKJAR =
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIB = @LTLIB@
-MAKEINFO = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing makeinfo
+MAKEINFO = makeinfo
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
 PACKAGE = libdsk
@@ -156,7 +156,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 SOURCES = $(libdsk_la_SOURCES)
 OBJECTS = $(libdsk_la_OBJECTS)
@@ -271,7 +271,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	  awk '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+	  || (cd $(srcdir) && etags -o $$here/TAGS $(ETAGS_ARGS) $$tags  $$unique $(LISP))
 
 mostlyclean-tags:
 
@@ -298,114 +298,6 @@ distdir: $(DISTFILES)
 	    || cp -p $$d/$$file $(distdir)/$$file || :; \
 	  fi; \
 	done
-compbz2.lo compbz2.o : compbz2.c compi.h ../config.h ../include/libdsk.h \
-	compress.h compbz2.h
-compgz.lo compgz.o : compgz.c compi.h ../config.h ../include/libdsk.h \
-	compress.h compgz.h
-compress.lo compress.o : compress.c drvi.h ../config.h \
-	../include/libdsk.h drv.h compi.h compress.h comp.h compsq.h \
-	compgz.h compbz2.h compress.inc
-compsq.lo compsq.o : compsq.c compi.h ../config.h ../include/libdsk.h \
-	compress.h compsq.h
-crc16.lo crc16.o : crc16.c crc16.h
-crctable.lo crctable.o : crctable.c
-drvadisk.lo drvadisk.o : drvadisk.c ../include/libdsk.h drvi.h \
-	../config.h drv.h drvadisk.h
-drvapri.lo drvapri.o : drvapri.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h drvapri.h
-drvcfi.lo drvcfi.o : drvcfi.c ../include/libdsk.h drvi.h ../config.h \
-	drv.h drvcfi.h
-drvcpcem.lo drvcpcem.o : drvcpcem.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvcpcem.h
-drvdos16.lo drvdos16.o : drvdos16.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvdos16.h
-drvdos32.lo drvdos32.o : drvdos32.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvdos32.h
-drvint25.lo drvint25.o : drvint25.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvint25.h
-drvlinux.lo drvlinux.o : drvlinux.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvlinux.h
-drvlogi.lo drvlogi.o : drvlogi.c ../include/libdsk.h drvi.h ../config.h \
-	drv.h drvlogi.h
-drvmyz80.lo drvmyz80.o : drvmyz80.c ../include/libdsk.h drvi.h \
-	../config.h drv.h drvmyz80.h
-drvntwdm.lo drvntwdm.o : drvntwdm.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvntwdm.h
-drvnwasp.lo drvnwasp.o : drvnwasp.c ../include/libdsk.h drvi.h \
-	../config.h drv.h drvnwasp.h
-drvposix.lo drvposix.o : drvposix.c ../include/libdsk.h drvi.h \
-	../config.h drv.h drvposix.h
-drvqm.lo drvqm.o : drvqm.c ../include/libdsk.h drvi.h ../config.h drv.h \
-	drvqm.h crctable.h
-drvrcpm.lo drvrcpm.o : drvrcpm.c ../include/libdsk.h drvi.h ../config.h \
-	drv.h drvrcpm.h
-drvtele.lo drvtele.o : drvtele.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h drvtele.h
-drvwin16.lo drvwin16.o : drvwin16.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvwin16.h
-drvwin32.lo drvwin32.o : drvwin32.c drvi.h ../config.h \
-	../include/libdsk.h drv.h drvwin32.h rpcfuncs.h
-dskcheck.lo dskcheck.o : dskcheck.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskcmt.lo dskcmt.o : dskcmt.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h
-dskdirty.lo dskdirty.o : dskdirty.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskerror.lo dskerror.o : dskerror.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskfmt.lo dskfmt.o : dskfmt.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h compi.h compress.h
-dskgeom.lo dskgeom.o : dskgeom.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h
-dskjni.lo dskjni.o : dskjni.c ../config.h
-dsklphys.lo dsklphys.o : dsklphys.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskopen.lo dskopen.o : dskopen.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h drivers.h compress.h drivers.inc
-dskpars.lo dskpars.o : dskpars.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h
-dskread.lo dskread.o : dskread.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h
-dskreprt.lo dskreprt.o : dskreprt.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskretry.lo dskretry.o : dskretry.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskrtrd.lo dskrtrd.o : dskrtrd.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h
-dsksecid.lo dsksecid.o : dsksecid.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskseek.lo dskseek.o : dskseek.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h
-dsksgeom.lo dsksgeom.o : dsksgeom.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskstat.lo dskstat.o : dskstat.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h compi.h compress.h
-dsktread.lo dsktread.o : dsktread.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dsktrkid.lo dsktrkid.o : dsktrkid.c drvi.h ../config.h \
-	../include/libdsk.h drv.h
-dskwrite.lo dskwrite.o : dskwrite.c drvi.h ../config.h \
-	../include/libdsk.h drv.h compi.h compress.h
-remote.lo remote.o : remote.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h rpcfuncs.h remote.h remall.h rpctios.h rpcwin32.h \
-	rpcfossl.h rpcfork.h remote.inc
-rpccli.lo rpccli.o : rpccli.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h rpcfuncs.h remote.h
-rpcfork.lo rpcfork.o : rpcfork.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h remote.h rpcfork.h
-rpcfossl.lo rpcfossl.o : rpcfossl.c drvi.h ../config.h \
-	../include/libdsk.h drv.h remote.h rpcfossl.h crc16.h
-rpcmap.lo rpcmap.o : rpcmap.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h
-rpcpack.lo rpcpack.o : rpcpack.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h rpcfuncs.h
-rpcserv.lo rpcserv.o : rpcserv.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h rpcfuncs.h
-rpctios.lo rpctios.o : rpctios.c drvi.h ../config.h ../include/libdsk.h \
-	drv.h remote.h rpctios.h crc16.h
-rpcwin32.lo rpcwin32.o : rpcwin32.c drvi.h ../config.h \
-	../include/libdsk.h drv.h remote.h rpcwin32.h crc16.h
-
 info-am:
 info: info-am
 dvi-am:

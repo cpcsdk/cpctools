@@ -9,6 +9,7 @@
 #include "CCPCSnapshot.h"
 #include <stdio.h>
 #include <algorithm>
+#include <cstring>
 
 #define SNAPSHOT_ID 0x00
 #define SNAPVERS_ID 0x10

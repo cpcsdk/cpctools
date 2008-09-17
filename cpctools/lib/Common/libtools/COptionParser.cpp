@@ -6,6 +6,7 @@
 #include "COptionParser.h"
 #include "CError.h"
 #include <errno.h>
+#include <cstdlib>
 
 COptionParser::COptionParser() :
 _options(NULL),

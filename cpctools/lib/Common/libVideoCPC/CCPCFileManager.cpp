@@ -5,6 +5,7 @@
 #include "CCPCFileManager.h"
 #include "CError.h"
 #include <fstream>
+#include <cstring>
 
 //
 // Gestion d'un fichier CPC

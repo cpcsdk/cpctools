@@ -40,9 +40,9 @@ pkgincludedir = $(includedir)/libdsk
 
 top_builddir = ..
 
-ACLOCAL = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing aclocal-1.4
+ACLOCAL = aclocal-1.4
 AUTOCONF = autoconf
-AUTOMAKE = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing automake-1.4
+AUTOMAKE = automake-1.4
 AUTOHEADER = autoheader
 
 INSTALL = /usr/bin/install -c
@@ -68,7 +68,7 @@ CC = gcc
 CLASSPATH = 
 CPP = gcc -E
 DLLTOOL = @DLLTOOL@
-ECHO = /bin/echo
+ECHO = echo
 EXEEXT = 
 HAVE_LIB = @HAVE_LIB@
 JAR = true
@@ -84,7 +84,7 @@ LIBDSKJAR =
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIB = @LTLIB@
-MAKEINFO = /home/romain/dev/cpc/cpctools/lib/libdsk-1.2.1/config/missing makeinfo
+MAKEINFO = makeinfo
 OBJDUMP = @OBJDUMP@
 OBJEXT = o
 PACKAGE = libdsk
@@ -106,7 +106,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
@@ -151,7 +151,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	  awk '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+	  || (cd $(srcdir) && etags -o $$here/TAGS $(ETAGS_ARGS) $$tags  $$unique $(LISP))
 
 mostlyclean-tags:
 

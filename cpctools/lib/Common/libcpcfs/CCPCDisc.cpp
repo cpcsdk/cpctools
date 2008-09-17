@@ -16,6 +16,7 @@
 #include "CError.h"
 #include <algorithm>
 #include <set>
+#include <memory>
 
 #ifdef WIN32
 #define FILE_SEPARATOR '\\'

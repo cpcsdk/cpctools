@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 #include <iostream>
+#include <cstring>
 
 /**
  * @todo Gerer comNumber comme un entier sous windows et une chaine sous linux
