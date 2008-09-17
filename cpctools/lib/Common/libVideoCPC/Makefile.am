@@ -1,4 +1,4 @@
-AM_CXXFLAGS = -I$(srcdir)/../libtools $(SDL_CFLAGS)
+AM_CXXFLAGS = -I$(srcdir)/../libtools $(SDL_CFLAGS) -I../../AntTweakBar/include
 AM_LIBS = $(LIBS) $(SDL_LIBS)
 
 lib_LTLIBRARIES = libVideoCPC.la
