@@ -170,7 +170,7 @@ static void inquire(const char *path, int verbose, int force)
     }
     exit(1);
 }
-
+/*
 static const int geometry[][5] = {
     { 1440, 80, 2, 18,  512 },
     { 1232, 77, 2,  8, 1024 },
@@ -195,7 +195,7 @@ static int size_to_geometry(int size, int *track, int *head, int *sector, int *b
     }
     return 1;
 }
-
+*/
 static void format(const char *path, int size, int verbose, int force)
 {
     char *sg = NULL;

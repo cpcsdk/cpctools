@@ -1,0 +1,38 @@
+# Customizable datas (language, plattform related datas...)
+
+CC=gcc
+FLAGS= -Wall -ansi -pedantic
+TMPFILES = *.o
+
+OS=-DDOS # ascii fix if dos is the plattforms
+
+LG= -DFRENCH # Choose your Language
+#LG=-DENG
+
+EXE=hideur.exe # Choose the executable name
+
+CLEANCMD=del # the clean command (MS-DOS)
+
+# Datas which shouldn't be edited
+
+#DEBUG=-DDBG
+
+hideur : header.o main.o
+	$(CC) -o $(EXE) header.o main.o $(FLAGS) $(LG) $(OS) $(DEBUG)
+	@echo Ok...
+	@hideur
+
+header.o : header.c header.h messages.h debug.h aff.h
+	$(CC) -c header.c  $(LG) $(DEBUG) $(OS)
+
+main.o : main.c header.h header.c messages.h debug.h
+	$(CC) -c main.c  $(LG) $(DEBUG) $(OS)
+
+clean :
+	@$(CLEANCMD) $(TMPFILES)
+	@echo Ok...
+
+idiot :
+	@echo Agaaaa...gagaga.
+
+

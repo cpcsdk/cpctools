@@ -1,0 +1,15 @@
+Guide d'installation.
+Il vous faut un compilateur qui gère les fichiers Makefile comme GCC.
+
+1- Editez le fichier Makefile ou choissisez un modèle pour votre machine
+   ->OS : pour les utilsateurs de MS-DOS/Windows
+   ->LG : choisissez le langage
+   ->CC : votre compilateur C
+   ->CLEAN : la commande de votre système pour effacer les fichiers
+   ->etc...
+
+2- Lancez make
+
+3- Lancez make clean pour enlever les fichiers temporaires
+
+4- Voilà.

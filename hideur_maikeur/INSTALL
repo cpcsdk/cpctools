@@ -1,0 +1,15 @@
+Installation guide
+You need a compiler who supports makefiles like GNU GCC.
+
+1- Choose a makefile for your plattform or edit the general Makefile :
+   ->OS : edit it if you are under MSDOS/Windows
+   ->LG : language
+   ->CC : your favorite C compiler
+   ->CLEAN : the system command to remove files (del on dos,...)
+   ->etc...
+
+2- Launch make
+
+3- Type make clean to remove temporary object files
+
+4- That's it
