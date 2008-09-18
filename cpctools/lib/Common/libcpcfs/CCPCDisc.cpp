@@ -42,7 +42,7 @@ const CCPCDisc::CDiscFormat CCPCDisc::TDiscFormat[] =
 	CDiscFormat(1024, 64),
 	CDiscFormat(1024, 64),
 	CDiscFormat(1024, 64),
-	CDiscFormat(2048, 128)
+	CDiscFormat(2048, 128),
 };
 
 /*
@@ -1363,13 +1363,21 @@ CCPCDisc::TDisc CCPCDisc::guessGeometry(const string &i_filename, DSK_PDRIVER dr
 
 	try
 	{
-		if (isFloppy(i_filename))
+		switch(isFloppy(i_filename))
 		{
+		    case 1:
 			format = guessFloppyGeometry(driver, geometry, needAdvancedMode, interlaced, extendedGuess);
-		}
-		else
-		{
+			break;
+		    case 0:
 			format = guessDSKGeometry(i_filename, geometry, needAdvancedMode, interlaced, extendedGuess);
+			break;
+		    case 2:
+			cout << "RAW/USB disc." << endl;
+			format = guessRAWGeometry(i_filename, geometry, needAdvancedMode, interlaced, extendedGuess);
+			break;
+		    default:
+	//		format = -1;
+			break;
 		}
 
 		if (format != -1)
@@ -1396,7 +1404,9 @@ CCPCDisc::TDisc CCPCDisc::guessFloppyGeometry(DSK_PDRIVER self, DSK_GEOMETRY &ge
 	{
 		dsk_format_t dsk_format = getLibDskFormat(TDiscDesc[f]);
 		if (dsk_format == -1)
+		{
 			continue;
+		}
 
 		DSK_GEOMETRY candidateGeom;
 		DSK_FORMAT sectorId;
@@ -1405,17 +1415,23 @@ CCPCDisc::TDisc CCPCDisc::guessFloppyGeometry(DSK_PDRIVER self, DSK_GEOMETRY &ge
 		e = dg_stdformat(&candidateGeom, dsk_format, NULL, NULL);
 
 		if (e != DSK_ERR_OK)
+		{
 			continue;
+		}
 
 		// First check sector id reading
 		e = dsk_psecid(self, &candidateGeom, 0, 0, &sectorId);
 
 		if ( e != DSK_ERR_OK )
+		{
 			continue;
+		}
 
 		if (sectorId.fmt_sector < candidateGeom.dg_secbase ||
 			sectorId.fmt_sector >= (candidateGeom.dg_secbase + candidateGeom.dg_sectors))
+		{
 			continue;
+		}
 
 		// We found a right sector, if no candidate already found,
 		// we use this format as a start (even if number of track is not good !)
@@ -1607,32 +1623,105 @@ CCPCDisc::TDisc CCPCDisc::guessDSKGeometry(const string &i_filename, DSK_GEOMETR
 	return format;
 }
 
-void CCPCDisc::guessDataRateRecordingMode(DSK_PDRIVER driver, DSK_GEOMETRY &geometry)
+CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETRY &geometry, bool &needAdvancedMode, bool &interlaced, bool extendedGuess)
 {
+    interlaced = false;
+    needAdvancedMode = false;
+
+    TDisc format = Unknown;
+
+    // Init geometry
+    geometry.dg_cylinders = 80;
+    geometry.dg_heads = 1;
+    geometry.dg_sidedness = SIDES_ALT;
+    geometry.dg_sectors = 9;
+    geometry.dg_datarate = RATE_SD;
+//    geometry.dg_fmtgap = firstTrack->GAP3Size;
+//    geometry.dg_rwgap = geometry.dg_fmtgap;
+//    geometry.dg_fm = (firstTrack->RecordingMode == 1) ? 1 : 0;
+    geometry.dg_nomulti = 0;
+    geometry.dg_noskip = 0;
+    geometry.dg_secsize = 512;
+//    geometry.dg_secbase = *sectorID.begin();
+
+    // Now check in standard format if we found something similar
+    DSK_GEOMETRY closestGeom;
+    for (int f=0 ; f < maxTDisc ; f++)
+    {
+	dsk_format_t dsk_format = getLibDskFormat(TDiscDesc[f]);
+	if (dsk_format == -1)
+	    continue;
+
+	DSK_GEOMETRY candidateGeom;
 	dsk_err_t e;
 
-	geometry.dg_noskip = 1;
+	e = dg_stdformat(&candidateGeom, dsk_format, NULL, NULL);
 
-	DSK_FORMAT sector_id;
-	// Guess data rate and recording mode
-	for (geometry.dg_datarate = RATE_HD; geometry.dg_datarate <= RATE_ED; geometry.dg_datarate = (dsk_rate_t)(geometry.dg_datarate+1))
+	if (e != DSK_ERR_OK)
+	    continue;
+
+	// Check geometry value
+	// We allow that DSK can have more sectors than 'official' one
+	// In this case, additionnal sectors won't be take into account
+	if (candidateGeom.dg_secbase != geometry.dg_secbase ||
+		candidateGeom.dg_sectors > geometry.dg_sectors ||
+		candidateGeom.dg_secsize != geometry.dg_secsize)
+	    continue;
+
+	// We found a right sector, if no candidate already found,
+	// we use this format as a start (even if number of track is not good !)
+	if (format == Unknown)
 	{
-		for (geometry.dg_fm = 0; geometry.dg_fm < 2; ++geometry.dg_fm)
-		{
-			e = dsk_psecid(driver, &geometry, 0, 0, &sector_id);
-			if (!e) break;
-		}
-		if (!e) break;
+	    closestGeom = candidateGeom;
+	    format = (TDisc)f;
 	}
-	TOOLS_ASSERTMSG((e == DSK_ERR_OK), "Unable to guess data rate");
+	else
+	{
+	    if (abs((int)(candidateGeom.dg_cylinders - geometry.dg_cylinders)) < abs((int)(closestGeom.dg_cylinders - geometry.dg_cylinders)))
+	    {
+		closestGeom = candidateGeom;
+		format = (TDisc)f;
+	    }
+	}
+    }
+
+
+    return format;
 }
 
-bool CCPCDisc::isFloppy(const string &filename)
+void CCPCDisc::guessDataRateRecordingMode(DSK_PDRIVER driver, DSK_GEOMETRY &geometry)
 {
-	return (strcasecmp(filename.c_str(), "a:")==0 ||
-			strcasecmp(filename.c_str(), "b:")==0 ||
-			strcasecmp(filename.c_str(), "/dev/fd0")==0 ||
-			strcasecmp(filename.c_str(), "/dev/fd1")==0);
+    dsk_err_t e;
+
+    geometry.dg_noskip = 1;
+
+    DSK_FORMAT sector_id;
+    // Guess data rate and recording mode
+    for (geometry.dg_datarate = RATE_HD; geometry.dg_datarate <= RATE_ED; geometry.dg_datarate = (dsk_rate_t)(geometry.dg_datarate+1))
+    {
+	for (geometry.dg_fm = 0; geometry.dg_fm < 2; ++geometry.dg_fm)
+	{
+	    e = dsk_psecid(driver, &geometry, 0, 0, &sector_id);
+	    if (!e) break;
+	}
+	if (!e) break;
+    }
+    TOOLS_ASSERTMSG((e == DSK_ERR_OK), "Unable to guess data rate");
+}
+
+int CCPCDisc::isFloppy(const string &filename)
+{
+    if (strcasecmp(filename.c_str(),"/dev/sdb")==0)
+    {
+	return 2; // RAW file
+    }
+    else if (strcasecmp(filename.c_str(), "a:")==0 ||
+	    strcasecmp(filename.c_str(), "b:")==0 ||
+	    strcasecmp(filename.c_str(), "/dev/fd0")==0 ||
+	    strcasecmp(filename.c_str(), "/dev/fd1")==0)
+	return 1; // Floppy with sectors/side handling
+    else
+	return 0; // DSK file
 }
 
 bool CCPCDisc::IsDSK(const string &i_filename, int i_inside)
@@ -1644,10 +1733,10 @@ bool CCPCDisc::IsDSK(const string &i_filename, int i_inside)
 	e = dsk_open(&driver,i_filename.c_str(), NULL, NULL);
 	if (e == DSK_ERR_OK)
 	{
-		if (isFloppy(i_filename))
+		if (isFloppy(i_filename)==1)
 		{
 			e = dsk_set_forcehead(driver, i_inside);
-			TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk :" << string(dsk_strerror(e)));
+			TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk - Cant forcehead :" << string(dsk_strerror(e)));
 		}
 
 		TDisc format;
@@ -1672,12 +1761,12 @@ CCPCDisc* CCPCDisc::OpenDisc(const string &i_filename, int i_inside)
 	dsk_err_t e;
 
 	e = dsk_open(&driver,i_filename.c_str(), NULL, NULL);
-	TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk :" << string(dsk_strerror(e)));
+	TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk - Cant open :" << string(dsk_strerror(e)));
 
-	if (CCPCDisc::isFloppy(i_filename))
+	if (CCPCDisc::isFloppy(i_filename)==1)
 	{
 		e = dsk_set_forcehead(driver, i_inside);
-		TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk :" << string(dsk_strerror(e)));
+		TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk - Cant forcehead while opening :" << string(dsk_strerror(e)));
 	}
 
 	TDisc format;
@@ -1715,7 +1804,7 @@ CCPCDisc* CCPCDisc::OpenDisc(const string &i_filename, int i_inside)
 		}
     default:
 		{
-			TOOLS_ERRORMSG( "Error opening dsk : unknown geometry");
+			TOOLS_ERRORMSG( "Error opening dsk : unknown filesystem");
 		}
     }
 
@@ -1774,17 +1863,19 @@ void CCPCDisc::Create(TDisc i_type, const string &i_filename, int i_inside)
 
 	TOOLS_ASSERTMSG( (i_type >= 0 && i_type < maxTDisc) , "Error creating dsk : unknown format");
 
-	if (CCPCDisc::isFloppy(i_filename))
+	switch (CCPCDisc::isFloppy(i_filename))
 	{
+	    case 1:
 #ifdef WIN32
 		e = dsk_creat(&_driver,i_filename.c_str(), "ntwdm", NULL);
 #else
 		e = dsk_creat(&_driver,i_filename.c_str(), "floppy", NULL);
 #endif
-	}
-	else
-	{
+	    case 0:
 		e = dsk_creat(&_driver,i_filename.c_str(), "edsk", NULL);
+
+	    case 2:
+		e = dsk_creat(&_driver,i_filename.c_str(), "raw",NULL);
 	}
 	TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error creating dsk :" << string(dsk_strerror(e)));
 

@@ -328,6 +328,8 @@ protected:
 	static TDisc guessFloppyGeometry(DSK_PDRIVER self, DSK_GEOMETRY &geometry, bool &needAvancedMode, bool &interlaced, bool extendedGuess = true);
 	//! Try to detect DSK file geometry
 	static TDisc guessDSKGeometry(const string &i_filename, DSK_GEOMETRY &geometry, bool &needAvancedMode, bool &interlaced, bool extendedGuess = true);
+	//! Try to detect RAW file/USB disk geometry
+	static TDisc guessRAWGeometry(const string &i_filename, DSK_GEOMETRY &geometry, bool &needAvancedMode, bool &interlaced, bool extendedGuess = true);
 	//! Guess data rate and FM mode
 	static void guessDataRateRecordingMode(DSK_PDRIVER driver, DSK_GEOMETRY &geometry);
 
@@ -335,7 +337,7 @@ protected:
 	static dsk_format_t getLibDskFormat(const string &name);
 
 	//! Check if name is floppy
-	static bool isFloppy(const string &filename);
+	static int isFloppy(const string &filename);
 
 public:
 	//! Check if file is a DSK
