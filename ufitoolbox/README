@@ -1,0 +1,38 @@
+This is formatting disk utility for USB floppy devices.
+
+Usage: ufiformat [OPTION]... [DEVICE]
+Format a floppy disk in a USB floppy disk DEVICE.
+
+  -f, --format [SIZE]  specify format capacity SIZE in KB
+                       without -f option, the format of the current media will be used
+  -F, --force          do not perform any safety checks
+  -i, --inquire        show device information, instead of performing format
+                       without DEVICE argument, list USB floppy disk devices
+  -v, --verbose        show detailed output
+  -q, --quiet          suppress minor output
+  -h, --help           show this message
+
+NOTE: ufiformat supports only the following format capacities.
+         1440/1232/1200 (for 2hd disk)
+         720/640        (for 2dd disk)
+      The device should support the capacities also,
+      otherwise ufiformat shows an error message.
+
+      The above format capacities are predefined in the program, but
+      each usb floppy device also has a limited set of formats (defined internally)
+      that it can format media to.  The allowed format capacities are obtained by
+      querying the device, but this only returns the total format capacity
+      and not CHS (cylinder, heads and sectors), hence a mapping is
+      required in the program.
+
+This program is based around the following document:
+  "Universal Serial Bus Mass Storage Class - UFI Command Specification"
+  Revision 1.0 December 14 1998
+  http://www.usb.org/developers/devclass_docs/usbmass-ufi10.pdf
+
+Currently it is known to work under the following environment.
+  * Plamo Linux 4.0.2(kernel 2.6) + YE-DATA USB-FDU(OEM)
+  * Plamo Linux 4.0.2(kernel 2.4) + YE-DATA USB-FDU(OEM)
+  * SuSE-10 + TEAC FD-05PUB(OEM)
+  * Linux Zaurus SL-C700(kernel 2.4) + REX-CFU1 + YE-DATA USB-FDU
+    (some kernel modules and recent libext2 are needed)

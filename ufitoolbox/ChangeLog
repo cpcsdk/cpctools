@@ -1,0 +1,68 @@
+2007-Nov-10  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	Version 0.9.4
+	* add path info in a error message when /dev/sg* is unavailable
+	  suggested by <kabe@sra-tohoku.co.jp>
+	* add manpage
+	  contributed by <kabe@sra-tohoku.co.jp>
+	* store ufiformat binary to (prefix)/bin instead of sbin
+
+2006-Nov-25  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	Version 0.9.3
+	* bug fix for device detection
+	  patch contributed by Martin <martint@a1.net>
+
+2006-Mar-08  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	Version 0.9.2(beta release)
+	* show error with device path if possible
+	* small bug fix
+	* add some documents
+
+2006-Feb-19  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	Version 0.9.1
+	* show error messages properly
+
+2006-Feb-19  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	Version 0.9.0
+	* total refactoring for the release
+	* clean up of command line options
+	* add some safety check
+	* modify to work under kernel-2.4/2.6 (using procfs)
+	
+2005-Dec-15  John Floyd  <jfloyd@bigpond.net.au>
+
+	Version 0.3
+	* Small cleanups of output.  Free all sysfs lists.
+	* Added usage, -h/--help to options.
+	* Changed program name to ufiformat.
+
+2005-Dec-14  John Floyd  <jfloyd@bigpond.net.au>
+
+	Version 0.2.2
+	* Fix readcapacities to allow an non-ready drive to move into an 
+	  active state. Loop around the READCAPACITIES sg command until 
+	  ready.
+
+2005-Dec-11  John Floyd  <jfloyd@bigpond.net.au>
+
+	Version 0.2.1
+	* Test for null return on sysfs attrib query (in 
+          ufi_sysfs:get_floppy_devices).
+	* Return no devices found (in ufi_sysfs:floppy_list_print)
+
+2005-Dec-10  John Floyd  <jfloyd@bigpond.net.au>
+
+	Version 0.2
+	* Added SySFS Scan to determine ufi capable devices (ufi_sysfs.c)
+	* Added SySFS Scan to map block devices to generic scsii device.
+	* Added Read_Format_Capacities (ufi command) to determine allowed formats.
+	  (ufi_read_capacities.c)
+	* using autoconf & automake
+
+2005-Jan-14  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	* initial version
