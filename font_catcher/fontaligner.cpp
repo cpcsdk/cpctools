@@ -31,8 +31,25 @@
 using namespace std;
 using namespace Magick; 
 
+void help()
+{
+    cout << "fontaligner 0.2 - http://code.google.com/p/cpcsdk - Code by Krusty" << endl
+	<<  "fontaligner source destination" << endl
+	<<  "Puts the characters in source image in one line and write the resulting image to destination." << endl
+	<<  "Example: AB > ABCD" << endl
+	<<  "         CD" << endl
+	<<  "TODO: Character height is 39 pixels and can't be changed." << endl
+	<<  "TODO: Merge with fonctactcher and possibly gfx2crtc as there is common code for encoding pixels" << endl
+	<<  "Please report bugs!" << endl;
+}
+
 int main(int argc,char **argv)
 {
+    if(argc!=3)
+    {
+	help();
+	exit(0);
+    }
     //Initialisaitons
     int	source_x, source_y, dest_x, dest_y ;
     
