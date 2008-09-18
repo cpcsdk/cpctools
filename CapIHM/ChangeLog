@@ -1,0 +1,6 @@
+2008-04-18 Romain Giot <krusty@cpcscene.com>
+
+        * build : adapatation of the build mecanism in order to build on UNIX. 
+	At this moment, the emulator compile, run, but bug when using FDC
+	routs.
+
