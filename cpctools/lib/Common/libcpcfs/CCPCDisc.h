@@ -70,7 +70,7 @@ public:
 		Data42,
 		System,
 		System42,
-		Parados80,
+		RomdosD1,
 		maxTDisc
 	};
 

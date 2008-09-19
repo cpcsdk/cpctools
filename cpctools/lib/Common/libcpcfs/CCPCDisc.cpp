@@ -9,6 +9,7 @@
 
 #include "CCPCUnknownDisc.h"
 #include "CCPCDataDisc.h"
+#include "CCPCRomdosD1Disc.h"
 #include "CCPCSystemDisc.h"
 
 #include "CDSKFile.h"
@@ -31,7 +32,7 @@ const char* CCPCDisc::TDiscDesc[] =
 	"cpcdata42",
 	"cpcsys",
 	"cpcsys42",
-	"parados80",
+	"ibm720", // romdos D1
 	NULL
 };
 
@@ -42,7 +43,7 @@ const CCPCDisc::CDiscFormat CCPCDisc::TDiscFormat[] =
 	CDiscFormat(1024, 64),
 	CDiscFormat(1024, 64),
 	CDiscFormat(1024, 64),
-	CDiscFormat(2048, 128),
+	CDiscFormat(2048, 128)
 };
 
 /*
@@ -1175,7 +1176,7 @@ int CCPCDisc::GetFileSize(const unsigned int i_id) const
 
 int CCPCDisc::GetDiscCapacity() const
 {
-	int capacity = _geometry.dg_cylinders * _geometry.dg_secsize * _geometry.dg_sectors;
+	int capacity = _geometry.dg_cylinders * _geometry.dg_secsize * _geometry.dg_sectors * _geometry.dg_heads;
 
 	capacity -= _discFormat.GetDirectorySize();
 
@@ -1372,7 +1373,6 @@ CCPCDisc::TDisc CCPCDisc::guessGeometry(const string &i_filename, DSK_PDRIVER dr
 			format = guessDSKGeometry(i_filename, geometry, needAdvancedMode, interlaced, extendedGuess);
 			break;
 		    case 2:
-			cout << "RAW/USB disc." << endl;
 			format = guessRAWGeometry(i_filename, geometry, needAdvancedMode, interlaced, extendedGuess);
 			break;
 		    default:
@@ -1380,10 +1380,6 @@ CCPCDisc::TDisc CCPCDisc::guessGeometry(const string &i_filename, DSK_PDRIVER dr
 			break;
 		}
 
-		if (format != -1)
-		{
-			guessDataRateRecordingMode(driver, geometry);
-		}
 	}
 	catch (...)
 	{
@@ -1630,19 +1626,21 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 
     TDisc format = Unknown;
 
+    cout << "Trying to guess format ..." << endl;
+
     // Init geometry
     geometry.dg_cylinders = 80;
     geometry.dg_heads = 1;
     geometry.dg_sidedness = SIDES_ALT;
     geometry.dg_sectors = 9;
     geometry.dg_datarate = RATE_SD;
-//    geometry.dg_fmtgap = firstTrack->GAP3Size;
-//    geometry.dg_rwgap = geometry.dg_fmtgap;
-//    geometry.dg_fm = (firstTrack->RecordingMode == 1) ? 1 : 0;
+    geometry.dg_fmtgap = 0x52;
+    geometry.dg_rwgap = geometry.dg_fmtgap;
+    geometry.dg_fm = 0;
     geometry.dg_nomulti = 0;
     geometry.dg_noskip = 0;
     geometry.dg_secsize = 512;
-//    geometry.dg_secbase = *sectorID.begin();
+    geometry.dg_secbase = 1;
 
     // Now check in standard format if we found something similar
     DSK_GEOMETRY closestGeom;
@@ -1650,7 +1648,9 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
     {
 	dsk_format_t dsk_format = getLibDskFormat(TDiscDesc[f]);
 	if (dsk_format == -1)
+	{
 	    continue;
+	}
 
 	DSK_GEOMETRY candidateGeom;
 	dsk_err_t e;
@@ -1658,7 +1658,9 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 	e = dg_stdformat(&candidateGeom, dsk_format, NULL, NULL);
 
 	if (e != DSK_ERR_OK)
+	{
 	    continue;
+	}
 
 	// Check geometry value
 	// We allow that DSK can have more sectors than 'official' one
@@ -1666,7 +1668,9 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 	if (candidateGeom.dg_secbase != geometry.dg_secbase ||
 		candidateGeom.dg_sectors > geometry.dg_sectors ||
 		candidateGeom.dg_secsize != geometry.dg_secsize)
+	{
 	    continue;
+	}
 
 	// We found a right sector, if no candidate already found,
 	// we use this format as a start (even if number of track is not good !)
@@ -1685,28 +1689,7 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 	}
     }
 
-
     return format;
-}
-
-void CCPCDisc::guessDataRateRecordingMode(DSK_PDRIVER driver, DSK_GEOMETRY &geometry)
-{
-    dsk_err_t e;
-
-    geometry.dg_noskip = 1;
-
-    DSK_FORMAT sector_id;
-    // Guess data rate and recording mode
-    for (geometry.dg_datarate = RATE_HD; geometry.dg_datarate <= RATE_ED; geometry.dg_datarate = (dsk_rate_t)(geometry.dg_datarate+1))
-    {
-	for (geometry.dg_fm = 0; geometry.dg_fm < 2; ++geometry.dg_fm)
-	{
-	    e = dsk_psecid(driver, &geometry, 0, 0, &sector_id);
-	    if (!e) break;
-	}
-	if (!e) break;
-    }
-    TOOLS_ASSERTMSG((e == DSK_ERR_OK), "Unable to guess data rate");
 }
 
 int CCPCDisc::isFloppy(const string &filename)
@@ -1779,192 +1762,199 @@ CCPCDisc* CCPCDisc::OpenDisc(const string &i_filename, int i_inside)
 	TOOLS_ASSERTMSG( (format != -1) , "Error opening dsk : unknown geometry");
 
 	switch (format)
-    {
-    case Data:
-	case Data42:
+	{
+	    case RomdosD1:
 		{
-			disc = new CCPCDataDisc;
-			disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
-			disc->readDirectory();
-			break;
+		    disc = new CCPCRomdosD1Disc;
+		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
+		    disc->readDirectory();
+		    break;
 		}
-    case System:
-	case System42:
+	    case Data:
+	    case Data42:
 		{
-			disc = new CCPCSystemDisc;
-			disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
-			disc->readDirectory();
-			break;
+		    disc = new CCPCDataDisc;
+		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
+		    disc->readDirectory();
+		    break;
 		}
-	case Unknown:
+	    case System:
+	    case System42:
 		{
-			disc = new CCPCUnknownDisc;
-			disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
-			break;
+		    disc = new CCPCSystemDisc;
+		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
+		    disc->readDirectory();
+		    break;
 		}
-    default:
+	    case Unknown:
 		{
-			TOOLS_ERRORMSG( "Error opening dsk : unknown filesystem");
+		    disc = new CCPCUnknownDisc;
+		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
+		    break;
 		}
-    }
+	    default:
+		{
+		    TOOLS_ERRORMSG( "Error opening dsk : unknown filesystem");
+		}
+	}
 
 	return disc;
 }
 
 CCPCDisc* CCPCDisc::CreateDisc(const string &i_filename, const TDisc &i_type, int i_inside)
 {
-	CCPCDisc *d=NULL;
-	switch (i_type)
+    CCPCDisc *d=NULL;
+    switch (i_type)
     {
-    case Data:
+	case Data:
 	case Data42:
-		{
-			d = new CCPCDataDisc();
-			d->Create(i_type, i_filename, i_inside);
-			break;
-		}
-    case System:
+	    {
+		d = new CCPCDataDisc();
+		d->Create(i_type, i_filename, i_inside);
+		break;
+	    }
+	case System:
 	case System42:
-		{
-			d = new CCPCSystemDisc();
-			d->Create(i_type, i_filename, i_inside);
-			break;
-		}
+	    {
+		d = new CCPCSystemDisc();
+		d->Create(i_type, i_filename, i_inside);
+		break;
+	    }
 	case Unknown:
-		{
-			d = new CCPCUnknownDisc();
-			d->Create(i_type, i_filename, i_inside);
-			break;
-		}
+	    {
+		d = new CCPCUnknownDisc();
+		d->Create(i_type, i_filename, i_inside);
+		break;
+	    }
     }
-	return d;
+    return d;
 }
 
 void CCPCDisc::Open(const string &i_filename, DSK_PDRIVER driver, const DSK_GEOMETRY &geometry, const TDisc &format, bool needAdvancedMode, bool interlaced)
 {
-	_filename = i_filename;
-	_driver = driver;
-	_geometry = geometry;
-	_format = format;
-	_needAdvancedMode = needAdvancedMode;
-	_interlacedSectors = interlaced;
+    _filename = i_filename;
+    _driver = driver;
+    _geometry = geometry;
+    _format = format;
+    _needAdvancedMode = needAdvancedMode;
+    _interlacedSectors = interlaced;
 
-	_discFormat = TDiscFormat[format];
+    _discFormat = TDiscFormat[format];
 
-	int directorySize = _discFormat.NbMaxEntry * CCPCDisc::EntrySize;
-	_directoryBuffer = new unsigned char[_discFormat.GetDirectorySize()];
+    int directorySize = _discFormat.NbMaxEntry * CCPCDisc::EntrySize;
+    _directoryBuffer = new unsigned char[_discFormat.GetDirectorySize()];
 }
 
 void CCPCDisc::Create(TDisc i_type, const string &i_filename, int i_inside)
 {
-	_filename = i_filename;
+    _filename = i_filename;
 
-	dsk_err_t e;
+    dsk_err_t e;
 
-	TOOLS_ASSERTMSG( (i_type >= 0 && i_type < maxTDisc) , "Error creating dsk : unknown format");
+    TOOLS_ASSERTMSG( (i_type >= 0 && i_type < maxTDisc) , "Error creating dsk : unknown format");
 
-	switch (CCPCDisc::isFloppy(i_filename))
-	{
-	    case 1:
+    switch (CCPCDisc::isFloppy(i_filename))
+    {
+	case 1:
 #ifdef WIN32
-		e = dsk_creat(&_driver,i_filename.c_str(), "ntwdm", NULL);
+	    e = dsk_creat(&_driver,i_filename.c_str(), "ntwdm", NULL);
 #else
-		e = dsk_creat(&_driver,i_filename.c_str(), "floppy", NULL);
+	    e = dsk_creat(&_driver,i_filename.c_str(), "floppy", NULL);
 #endif
-	    case 0:
-		e = dsk_creat(&_driver,i_filename.c_str(), "edsk", NULL);
+	case 0:
+	    e = dsk_creat(&_driver,i_filename.c_str(), "edsk", NULL);
 
-	    case 2:
-		e = dsk_creat(&_driver,i_filename.c_str(), "raw",NULL);
-	}
+	case 2:
+	    e = dsk_creat(&_driver,i_filename.c_str(), "raw",NULL);
+    }
+    TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error creating dsk :" << string(dsk_strerror(e)));
+
+    if (isFloppy(i_filename))
+    {
+	e = dsk_set_option(_driver, "HEAD", i_inside);
 	TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error creating dsk :" << string(dsk_strerror(e)));
+    }
 
-	if (isFloppy(i_filename))
-	{
-		e = dsk_set_option(_driver, "HEAD", i_inside);
-		TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error creating dsk :" << string(dsk_strerror(e)));
-	}
+    dsk_format_t format;
+    format = getLibDskFormat(CCPCDisc::TDiscDesc[i_type]);
 
-	dsk_format_t format;
-	format = getLibDskFormat(CCPCDisc::TDiscDesc[i_type]);
+    if (format != -1)
+    {
+	_format = i_type;
+    }
+    else
+    {
+	format = getLibDskFormat(CCPCDisc::TDiscDesc[Data]);
 
-	if (format != -1)
-	{
-		_format = i_type;
-	}
-	else
-	{
-		format = getLibDskFormat(CCPCDisc::TDiscDesc[Data]);
+	TOOLS_ASSERTMSG( (format != -1) , "Error creating dsk :" << string(dsk_strerror(e)));
 
-		TOOLS_ASSERTMSG( (format != -1) , "Error creating dsk :" << string(dsk_strerror(e)));
+	_format = Unknown;
+    }
 
-		_format = Unknown;
-	}
-
-	e = dg_stdformat(&_geometry, format, NULL, NULL);
-	TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error creating dsk :" << string(dsk_strerror(e)));
+    e = dg_stdformat(&_geometry, format, NULL, NULL);
+    TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error creating dsk :" << string(dsk_strerror(e)));
 }
 
 void CCPCDisc::Close()
 {
-	if (_isDirectoryChanged)
-		writeDirectory();
-	dsk_close(&_driver);
+    if (_isDirectoryChanged)
+	writeDirectory();
+    dsk_close(&_driver);
 }
 
 bool CCPCDisc::IsFloppy() const
 {
-	return isFloppy(_filename);
+    return isFloppy(_filename);
 }
 
 bool CCPCDisc::NeedAdvancedMode() const
 {
-	return _needAdvancedMode;
+    return _needAdvancedMode;
 }
 bool CCPCDisc::IsInterlaced() const
 {
-	return _interlacedSectors;
+    return _interlacedSectors;
 }
 
 void CCPCDisc::Format(bool interlaced)
 {
-	dsk_err_t e = DSK_ERR_OK;
+    dsk_err_t e = DSK_ERR_OK;
 
-	DSK_FORMAT *sectors = new DSK_FORMAT[_geometry.dg_sectors];
-	int idxdec = ((_geometry.dg_sectors & 1) == 0) ? (_geometry.dg_sectors >> 1) : (_geometry.dg_sectors >> 1) + 1;
-	for (unsigned int s=0 ; s<_geometry.dg_sectors ; s++)
-	{
-		sectors[s].fmt_secsize = _geometry.dg_secsize;
-
-		int idx = interlaced ? (s >> 1) + (((s & 1) == 0) ? 0 : idxdec) : (s >> 1);
-		sectors[s].fmt_sector = _geometry.dg_secbase + idx;
-	}
-
-	for (unsigned int cyl = 0; cyl < _geometry.dg_cylinders; cyl++)
+    DSK_FORMAT *sectors = new DSK_FORMAT[_geometry.dg_sectors];
+    int idxdec = ((_geometry.dg_sectors & 1) == 0) ? (_geometry.dg_sectors >> 1) : (_geometry.dg_sectors >> 1) + 1;
+    for (unsigned int s=0 ; s<_geometry.dg_sectors ; s++)
     {
-		for (unsigned int head = 0; head < _geometry.dg_heads; head++)
-		{
-			for (unsigned int s=0 ; s<_geometry.dg_sectors ; s++)
-			{
-				sectors[s].fmt_cylinder = cyl;
-				sectors[s].fmt_head = head;
-			}
-			e = dsk_pformat(_driver, &_geometry, cyl, head, sectors, CCPCDisc::FormatByte);
-			TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error formatting dsk :" << string(dsk_strerror(e)));
-		}
+	sectors[s].fmt_secsize = _geometry.dg_secsize;
+
+	int idx = interlaced ? (s >> 1) + (((s & 1) == 0) ? 0 : idxdec) : (s >> 1);
+	sectors[s].fmt_sector = _geometry.dg_secbase + idx;
     }
-	delete[] sectors;
+
+    for (unsigned int cyl = 0; cyl < _geometry.dg_cylinders; cyl++)
+    {
+	for (unsigned int head = 0; head < _geometry.dg_heads; head++)
+	{
+	    for (unsigned int s=0 ; s<_geometry.dg_sectors ; s++)
+	    {
+		sectors[s].fmt_cylinder = cyl;
+		sectors[s].fmt_head = head;
+	    }
+	    e = dsk_pformat(_driver, &_geometry, cyl, head, sectors, CCPCDisc::FormatByte);
+	    TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error formatting dsk :" << string(dsk_strerror(e)));
+	}
+    }
+    delete[] sectors;
 }
 
 void CCPCDisc::PrintInfo(ostream &str) const
 {
-	str << "DSK\t: " << _filename << endl;
-	if (_geometry.dg_heads == 2)
-	{
-		str << "Double side" << endl;
-	}
-	str << "NbTracks\t: " << _geometry.dg_cylinders << endl;
-	str << "Sector base \t: " << _geometry.dg_secbase << endl;
-	str << "NbSectors \t:" << _geometry.dg_sectors << endl;
-	str << "Sector size \t:" << _geometry.dg_secsize << endl;
+    str << "DSK\t: " << _filename << endl;
+    if (_geometry.dg_heads == 2)
+    {
+	str << "Double side" << endl;
+    }
+    str << "NbTracks\t: " << _geometry.dg_cylinders << endl;
+    str << "Sector base \t: " << _geometry.dg_secbase << endl;
+    str << "NbSectors \t:" << _geometry.dg_sectors << endl;
+    str << "Sector size \t:" << _geometry.dg_secsize << endl;
 }

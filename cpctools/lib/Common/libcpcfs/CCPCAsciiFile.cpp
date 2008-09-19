@@ -67,9 +67,12 @@ void CCPCAsciiFile::openFile(const std::string &i_filename,bool i_createHeader)
 void CCPCAsciiFile::saveFile(const std::string &i_filename,bool i_saveHeader) const
 {
 	std::ofstream file;
-	file.open(i_filename.c_str());
-	for (unsigned int i=0;i<_size;i++)
+	if(file.open(i_filename.c_str()))
+	{
+	    for (unsigned int i=0;i<_size;i++)
 		file << _content[i];
+	    file.close();
+	}
 }
 
 unsigned int CCPCAsciiFile::getDatasSize() const

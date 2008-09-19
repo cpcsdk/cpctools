@@ -54,8 +54,8 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libcpcfs_la_LIBADD =
 am_libcpcfs_la_OBJECTS = CCPCAsciiFile.lo CCPCBinaryFile.lo \
-	CCPCDataDisc.lo CCPCDisc.lo CCPCFile.lo CCPCSystemDisc.lo \
-	CCPCUnknownDisc.lo CDSKFile.lo
+	CCPCDataDisc.lo CCPCRomdosD1Disc.lo CCPCDisc.lo CCPCFile.lo \
+	CCPCSystemDisc.lo CCPCUnknownDisc.lo CDSKFile.lo
 libcpcfs_la_OBJECTS = $(am_libcpcfs_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -198,8 +198,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CXXFLAGS = -I$(srcdir)/../libtools -I../../libdsk-1.2.1/include
 lib_LTLIBRARIES = libcpcfs.la
-libcpcfs_la_SOURCES = CCPCAsciiFile.cpp CCPCBinaryFile.cpp CCPCDataDisc.cpp CCPCDisc.cpp CCPCFile.cpp CCPCSystemDisc.cpp CCPCUnknownDisc.cpp CDSKFile.cpp CCPCAsciiFile.h CCPCBinaryFile.h CCPCDataDisc.h CCPCDisc.h CCPCFile.h CCPCSystemDisc.h CCPCUnknownDisc.h CDSKFile.h 
-include_HEADERS = CCPCBinaryFile.h CCPCDataDisc.h CCPCDisc.h CCPCFile.h CCPCSystemDisc.h CCPCUnknownDisc.h CDSKFile.h
+libcpcfs_la_SOURCES = CCPCAsciiFile.cpp CCPCBinaryFile.cpp CCPCDataDisc.cpp CCPCRomdosD1Disc.cpp CCPCDisc.cpp CCPCFile.cpp CCPCSystemDisc.cpp CCPCUnknownDisc.cpp CDSKFile.cpp CCPCAsciiFile.h CCPCBinaryFile.h CCPCDataDisc.h CCPCRomdosD1Disc.h CCPCDisc.h CCPCFile.h CCPCSystemDisc.h CCPCUnknownDisc.h CDSKFile.h 
+include_HEADERS = CCPCBinaryFile.h CCPCDataDisc.h CCPCRomdosD1Disc.h CCPCDisc.h CCPCFile.h CCPCSystemDisc.h CCPCUnknownDisc.h CDSKFile.h
 all: all-am
 
 .SUFFIXES:
@@ -274,6 +274,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CCPCDataDisc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CCPCDisc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CCPCFile.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CCPCRomdosD1Disc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CCPCSystemDisc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CCPCUnknownDisc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CDSKFile.Plo@am__quote@
