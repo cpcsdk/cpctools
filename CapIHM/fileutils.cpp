@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 // Returns a vector containing the names of the files in the specified directory
 std::vector<std::string> listDirectory(std::string sDirectory) {
@@ -26,6 +27,6 @@ std::vector<std::string> listDirectory(std::string sDirectory) {
        }
    }
    closedir(pDir);
-   sort(s.begin(), s.end()); // sort elements
+   std::sort(s.begin(), s.end()); // sort elements
    return s;
 }

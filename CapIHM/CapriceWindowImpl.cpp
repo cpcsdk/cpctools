@@ -47,7 +47,7 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 		SetTitle(wxString( wxT("Edit - ")) << 
 			OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-		emulator->GetFDC().insertA(CurrentDocPath.ToAscii());
+		emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
 	}
 
 }

@@ -237,7 +237,7 @@ caprice_SOURCES = audio.cpp emulator.cpp input.cpp ppi.cpp \
 	SDLPanel.cpp SDLPanel.h $(am__append_2)
 caprice_CPPFLAGS = $(SDL_CFLAGS) $(WX_CPPFLAGS) $(am__append_1) \
 	$(am__append_3)
-caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS)
+caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -ldsk
 all: configBis.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 

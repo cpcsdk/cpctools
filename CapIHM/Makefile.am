@@ -66,7 +66,7 @@ caprice_SOURCES = audio.cpp \
 
 
 caprice_CPPFLAGS = $(SDL_CFLAGS) $(WX_CPPFLAGS)
-caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS)
+caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -ldsk
 
 #Add aylet files if used as backend
 if AYLET
