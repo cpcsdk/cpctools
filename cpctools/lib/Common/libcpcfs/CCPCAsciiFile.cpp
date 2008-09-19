@@ -67,12 +67,16 @@ void CCPCAsciiFile::openFile(const std::string &i_filename,bool i_createHeader)
 void CCPCAsciiFile::saveFile(const std::string &i_filename,bool i_saveHeader) const
 {
 	std::ofstream file;
-	if(file.open(i_filename.c_str()))
+	file.open(i_filename.c_str());
+	
+	if(file.is_open())
 	{
 	    for (unsigned int i=0;i<_size;i++)
 		file << _content[i];
 	    file.close();
 	}
+	else
+	    cout << "Cannot write to output file !" << endl;
 }
 
 unsigned int CCPCAsciiFile::getDatasSize() const

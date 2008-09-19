@@ -1230,11 +1230,11 @@ CCPCFile* CCPCDisc::GetFile(const string &i_filename, int user) const
 
 	TOOLS_ASSERTMSG( (pos!= _directory.end()) , "Unknown filename " << i_filename);
 
-	unsigned char *file = new unsigned char[pos->second.Size*1024];
+	unsigned char *file = new unsigned char[pos->second.Size*_discFormat.BlockSize];
 	for (unsigned int i=0;i<pos->second.Size;i++)
-		ReadBlock(pos->second.Blocks[i],file+(1024*i));
+		ReadBlock(pos->second.Blocks[i],file+(_discFormat.BlockSize*i));
 
-	CCPCFile *fileOpen = CCPCFile::openFile(file,pos->second.Size*1024);
+	CCPCFile *fileOpen = CCPCFile::openFile(file,pos->second.Size*_discFormat.BlockSize);
 	delete[] file;
 	return fileOpen;
 }
