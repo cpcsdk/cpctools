@@ -1,4 +1,3 @@
 LINK = g++ ;
 LINKFLAGS = `Magick++-config --libs` ;
 Main fontcatcher : fontcatcher.cpp ;
-Main fontaligner : fontaligner.cpp ;

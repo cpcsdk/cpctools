@@ -11,6 +11,8 @@
 #include <assert.h>
 #include <cstdlib>
 
+#include "fontaligner.cpp"
+
 /**
  * @author Krusty/Benediction
  * @date 25 january 2008
@@ -118,7 +120,8 @@ int main(int argc,char **argv)
     try
     {
         //build the images
-	Image source(argv[1]) ;
+	Image toalign(argv[1]) ;
+	Image source = align(toalign);
 	Geometry size = source.size() ;
 	ofstream destination(argv[2], std::ios_base::binary);
 

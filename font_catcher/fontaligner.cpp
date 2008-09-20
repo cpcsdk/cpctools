@@ -14,16 +14,6 @@
  * @todo Cleanup the code
  */
 
-//Height of a caracter
-#define	    CHAR_HEIGHT		39
-//height of the space between spaces
-#define	    CHAR_HEIGHT_SPACE	1
-//Number of lines
-#define	    NB_CHAR_LINES	5
-
-//Width of the resulting image
-#define	    RESULT_WIDTH	100
-
 //Height of the resulting image
 #define	    RESULT_HEIGHT	CHAR_HEIGHT
 
@@ -31,36 +21,21 @@
 using namespace std;
 using namespace Magick; 
 
-void help()
+Image align(Image source, int CHAR_HEIGHT =16, int CHAR_HEIGHT_SPACE = 0)
 {
-    cout << "fontaligner 0.2 - http://code.google.com/p/cpcsdk - Code by Krusty" << endl
-	<<  "fontaligner source destination" << endl
-	<<  "Puts the characters in source image in one line and write the resulting image to destination." << endl
-	<<  "Example: AB > ABCD" << endl
-	<<  "         CD" << endl
-	<<  "TODO: Character height is 39 pixels and can't be changed." << endl
-	<<  "TODO: Merge with fonctactcher and possibly gfx2crtc as there is common code for encoding pixels" << endl
-	<<  "Please report bugs!" << endl;
-}
-
-int main(int argc,char **argv)
-{
-    if(argc!=3)
-    {
-	help();
-	exit(0);
-    }
     //Initialisaitons
     int	source_x, source_y, dest_x, dest_y ;
     
     source_y = source_x = dest_y = dest_x = 0 ;
     try{
 	//Reading of source image
-	Image source(argv[1]) ;
 	Geometry source_size = source.size() ;
 	cout << "Source\n" ;
 	cout << "------\n" ;
 	cout << "Width  :\t" << source_size.width() << "\nHeight :\t" << source_size.height() << "\n\n" ;
+
+	int NB_CHAR_LINES = source_size.height() / (CHAR_HEIGHT + CHAR_HEIGHT_SPACE);
+	int RESULT_WIDTH = NB_CHAR_LINES * source_size.width() / source_size.height();
 
 	//Size of destination image
 	Image destination(Geometry(source_size.width()*NB_CHAR_LINES, CHAR_HEIGHT), "white");
@@ -94,13 +69,12 @@ int main(int argc,char **argv)
 	    dest_x += source_size.width() ;
 	}while(source_y < source_size.height());
 
-	destination.write(argv[2]);
+	return destination;
     }
     catch( Exception &error_ )
     {
       cout << "Caught exception: " << error_.what() << endl;
-      return 1;
+      return NULL;
     }
 
-    return 0 ;
 }
