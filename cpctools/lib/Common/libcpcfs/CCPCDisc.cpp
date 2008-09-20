@@ -43,7 +43,7 @@ const CCPCDisc::CDiscFormat CCPCDisc::TDiscFormat[] =
 	CDiscFormat(1024, 64, 1, 16),
 	CDiscFormat(1024, 64, 1, 16),
 	CDiscFormat(1024, 64, 1, 16),
-	CDiscFormat(2048, 128,2, 16)
+	CDiscFormat(2048, 128,2, 8)
 };
 
 /*
@@ -209,7 +209,8 @@ int CCPCDisc::CDiscFormat::GetDirectorySize() const
 }
 int CCPCDisc::CDiscFormat::GetRecordSize() const
 {
-	return ((NbBlocksPerEntry*BlockSize) >> 7);
+//	return ((NbBlocksPerEntry*BlockSize) >> 7);
+    return 128;
 }
 
 CCPCDisc::CTrack::CTrack() :
@@ -566,7 +567,7 @@ void CCPCDisc::readDirectory()
 					break;
 				}
 
-				dirEntry.Blocks[blockID] = (unsigned char)currentEntry[b] + (_discFormat.BlockIDSize-1)*256*currentEntry[b+1];
+				dirEntry.Blocks[blockID] = currentEntry[b] + (_discFormat.BlockIDSize-1)*256*currentEntry[b+1];
 				dirEntry.Size++;
 			}
 			if (addEntry)
@@ -601,9 +602,10 @@ void CCPCDisc::writeDirectory()
 			unsigned int nbRecordMaxPerEntry = (_discFormat.BlockSize*_discFormat.NbBlocksPerEntry)/_discFormat.GetRecordSize();
 
 			memcpy(name,it->first.Name,11);
-			cout << "Writing file " << name << endl;
+//			cout << "Writing file " << name << endl;
 			name[8] = it->first.WriteProtected ? name[8]|128 : name[8];
 			name[9] = it->first.System ? name[9]|128 : name[9];
+//			cout << "Size in blocks is " << it->second.Size << endl;
 			for (int j=0;j<nbEntry;j++)
 			{
 				for (unsigned int k=0;k<CCPCDisc::EntrySize;k++)
@@ -615,10 +617,10 @@ void CCPCDisc::writeDirectory()
 				pCatBuffer[15] = (nbRecord > nbRecordMaxPerEntry) ? nbRecordMaxPerEntry : nbRecord;
 				for (unsigned int b=16;b<CCPCDisc::EntrySize;b+=_discFormat.BlockIDSize)
 				{
-					unsigned int bI = (ordreChargement*_discFormat.NbBlocksPerEntry + b - _discFormat.NbBlocksPerEntry)/_discFormat.BlockIDSize;
+					unsigned int bI = (ordreChargement*_discFormat.NbBlocksPerEntry + (b/_discFormat.BlockIDSize) - _discFormat.NbBlocksPerEntry);
 					if (bI < it->second.Size)
 					{
-					    cout << "CATALOG: " << it->second.Blocks[bI] << " at offset " << b << endl;
+//					    cout << "CATALOG: block " << b << "is number " << it->second.Blocks[bI] << " at offset " << b << endl;
 						pCatBuffer[b] = it->second.Blocks[bI] % 256;
 						if(_discFormat.BlockIDSize==2) pCatBuffer[b+1] = it->second.Blocks[bI] / 256;
 					}

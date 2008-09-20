@@ -63,8 +63,8 @@ void CCPCRomdosD1Disc::WriteBlock(const unsigned char i_idBlock, const void* i_b
 	if (track3 > 80){track3-=80;}
 	if (track4 > 80){track4-=80;}
 
-	cout << "Block " << (int)i_idBlock << " begins " << (int)side << ":" << (int)track1 << ":" << (int)sector1 << endl;
-	cout << "----- " << (int)i_idBlock << " ends   " << (int)side << ":" << (int)track4 << ":" << (int)sector4 << endl;
+	//cout << "Block " << (int)i_idBlock << " begins " << (int)side << ":" << (int)track1 << ":" << (int)sector1 << endl;
+	//cout << "----- " << (int)i_idBlock << " ends   " << (int)side << ":" << (int)track4 << ":" << (int)sector4 << endl;
 	
 	WriteSector(track1,side,sector1,i_buffer);
 	WriteSector(track2,side,sector2,(char*)i_buffer+_geometry.dg_secsize);
