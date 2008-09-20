@@ -32,18 +32,18 @@ const char* CCPCDisc::TDiscDesc[] =
 	"cpcdata42",
 	"cpcsys",
 	"cpcsys42",
-	"ibm720", // romdos D1
+	"pcw720", // romdos D1
 	NULL
 };
 
 const CCPCDisc::CDiscFormat CCPCDisc::TDiscFormat[] =
 {
-	CDiscFormat(0, 0),
-	CDiscFormat(1024, 64),
-	CDiscFormat(1024, 64),
-	CDiscFormat(1024, 64),
-	CDiscFormat(1024, 64),
-	CDiscFormat(2048, 128)
+	CDiscFormat(0,    0,  0, 0),
+	CDiscFormat(1024, 64, 1, 16),
+	CDiscFormat(1024, 64, 1, 16),
+	CDiscFormat(1024, 64, 1, 16),
+	CDiscFormat(1024, 64, 1, 16),
+	CDiscFormat(2048, 128,2, 16)
 };
 
 /*
@@ -67,7 +67,6 @@ sectorIDSize = 12+3+1+4+2+22+12+3+1+2 = 62
 const unsigned int CCPCDisc::NoBlock = (0-1);
 const unsigned int CCPCDisc::DeleteUser = 229;
 const unsigned int CCPCDisc::EntrySize = 32;
-const unsigned int CCPCDisc::NbBlockPerEntry = 16;
 const unsigned char CCPCDisc::FormatByte = 0xe5;
 const unsigned int CCPCDisc::MaxTrackSize = 6250;
 const unsigned int CCPCDisc::SectorHeaderSize = 62;
@@ -183,18 +182,24 @@ void CCPCDisc::CDiscFileEntry::CleanBlocks()
 
 CCPCDisc::CDiscFormat::CDiscFormat() :
 BlockSize(-1),
-NbMaxEntry(-1)
+NbMaxEntry(-1),
+    BlockIDSize(-1),
+    NbBlocksPerEntry(-1)
 {
 }
 
-CCPCDisc::CDiscFormat::CDiscFormat(int blockSize, int maxEntry) :
+CCPCDisc::CDiscFormat::CDiscFormat(int blockSize, int maxEntry, int blockIDSize, int blocksPerEntry) :
 BlockSize(blockSize),
-NbMaxEntry(maxEntry)
+NbMaxEntry(maxEntry),
+    BlockIDSize(blockIDSize),
+    NbBlocksPerEntry(blocksPerEntry)
 {
 }
 CCPCDisc::CDiscFormat::CDiscFormat(const CDiscFormat &disc) :
 BlockSize(disc.BlockSize),
-NbMaxEntry(disc.NbMaxEntry)
+NbMaxEntry(disc.NbMaxEntry),
+    BlockIDSize(disc.BlockIDSize),
+    NbBlocksPerEntry(disc.NbBlocksPerEntry)
 {
 }
 
@@ -204,7 +209,7 @@ int CCPCDisc::CDiscFormat::GetDirectorySize() const
 }
 int CCPCDisc::CDiscFormat::GetRecordSize() const
 {
-	return ((CCPCDisc::NbBlockPerEntry*BlockSize) >> 7);
+	return ((NbBlocksPerEntry*BlockSize) >> 7);
 }
 
 CCPCDisc::CTrack::CTrack() :
@@ -546,12 +551,12 @@ void CCPCDisc::readDirectory()
 			CDiscFileEntry &dirEntry = _directory[name];
 
 			bool addEntry = true;
-			for(unsigned int b=16;b<CCPCDisc::EntrySize;b++)
+			for(unsigned int b=16;b<CCPCDisc::EntrySize;b+=_discFormat.BlockIDSize)
 			{
-				if (currentEntry[b] == 0)
+				if ((_discFormat.BlockIDSize == 1 || currentEntry[b+1]==0) && currentEntry[b] == 0 )
 					continue;
 
-				unsigned int blockID = ordreChargement*CCPCDisc::NbBlockPerEntry+(b-16);
+				unsigned int blockID = ordreChargement*_discFormat.NbBlocksPerEntry+(b-16);
 				if (blockID > dirEntry.Blocks.size() ||
 					dirEntry.Blocks[blockID] != CCPCDisc::NoBlock)
 				{
@@ -561,7 +566,7 @@ void CCPCDisc::readDirectory()
 					break;
 				}
 
-				dirEntry.Blocks[blockID] = (unsigned char)currentEntry[b];
+				dirEntry.Blocks[blockID] = (unsigned char)currentEntry[b] + (_discFormat.BlockIDSize-1)*256*currentEntry[b+1];
 				dirEntry.Size++;
 			}
 			if (addEntry)
@@ -593,9 +598,10 @@ void CCPCDisc::writeDirectory()
 			char name[11];
 			char ordreChargement=0;
 			unsigned int nbRecord = it->second.NbRecord;
-			unsigned int nbRecordMaxPerEntry = (_discFormat.BlockSize*CCPCDisc::NbBlockPerEntry)/_discFormat.GetRecordSize();
+			unsigned int nbRecordMaxPerEntry = (_discFormat.BlockSize*_discFormat.NbBlocksPerEntry)/_discFormat.GetRecordSize();
 
 			memcpy(name,it->first.Name,11);
+			cout << "Writing file " << name << endl;
 			name[8] = it->first.WriteProtected ? name[8]|128 : name[8];
 			name[9] = it->first.System ? name[9]|128 : name[9];
 			for (int j=0;j<nbEntry;j++)
@@ -607,11 +613,16 @@ void CCPCDisc::writeDirectory()
 				memcpy(pCatBuffer+1,name,11);
 				pCatBuffer[12] = ordreChargement;
 				pCatBuffer[15] = (nbRecord > nbRecordMaxPerEntry) ? nbRecordMaxPerEntry : nbRecord;
-				for (unsigned int b=CCPCDisc::NbBlockPerEntry;b<CCPCDisc::EntrySize;b++)
+				for (unsigned int b=16;b<CCPCDisc::EntrySize;b+=_discFormat.BlockIDSize)
 				{
-					unsigned int bI = ordreChargement*CCPCDisc::NbBlockPerEntry+b-CCPCDisc::NbBlockPerEntry;
+					unsigned int bI = (ordreChargement*_discFormat.NbBlocksPerEntry + b - _discFormat.NbBlocksPerEntry)/_discFormat.BlockIDSize;
 					if (bI < it->second.Size)
-						pCatBuffer[b] = it->second.Blocks[bI];
+					{
+					    cout << "CATALOG: " << it->second.Blocks[bI] << " at offset " << b << endl;
+						pCatBuffer[b] = it->second.Blocks[bI] % 256;
+						if(_discFormat.BlockIDSize==2) pCatBuffer[b+1] = it->second.Blocks[bI] / 256;
+					}
+					    
 				}
 				pCatBuffer += CCPCDisc::EntrySize;
 				ordreChargement++;
@@ -673,7 +684,7 @@ int CCPCDisc::getNbEntry(const int fileSizeKB) const
 {
 	int fileSize = fileSizeKB * 1024;
 	int nbBlocks = (int)(ceil((float)fileSize / (float)_discFormat.BlockSize));
-	int nbEntry = (int)(ceil(float(nbBlocks) / (float)CCPCDisc::NbBlockPerEntry));
+	int nbEntry = (int)(ceil(float(nbBlocks) / (float)_discFormat.NbBlocksPerEntry));
 
 	return nbEntry;
 }
@@ -683,7 +694,7 @@ int CCPCDisc::getNbUsedEntry() const
 	int nbUsed = 0;
 	for (CCPCDirectoryMap::const_iterator i=_directory.begin();i!=_directory.end();i++)
     {
-		nbUsed+= i->second.Size*1024 / (_discFormat.BlockSize * CCPCDisc::NbBlockPerEntry);
+		nbUsed+= i->second.Size*1024 / (_discFormat.BlockSize * _discFormat.NbBlocksPerEntry);
     }
 	return nbUsed;
 }

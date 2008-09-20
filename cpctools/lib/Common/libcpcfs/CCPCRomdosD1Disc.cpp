@@ -49,10 +49,10 @@ void CCPCRomdosD1Disc::ReadBlock(const unsigned char i_idBlock, void* o_buffer) 
 
 void CCPCRomdosD1Disc::WriteBlock(const unsigned char i_idBlock, const void* i_buffer)
 {
-	unsigned char track1 = (i_idBlock*2 - (i_idBlock*2 % _geometry.dg_sectors)) / _geometry.dg_sectors;
-	unsigned char sector1 = _geometry.dg_secbase+(i_idBlock*2 % _geometry.dg_sectors);
-	unsigned char track2 = ((i_idBlock*2+1) - ((i_idBlock*2+1) % _geometry.dg_sectors)) / _geometry.dg_sectors;
-	unsigned char sector2 = _geometry.dg_secbase+((i_idBlock*2+1) % _geometry.dg_sectors);
+	unsigned char track1 = (i_idBlock*4 - (i_idBlock*4 % _geometry.dg_sectors)) / _geometry.dg_sectors;
+	unsigned char sector1 = _geometry.dg_secbase+(i_idBlock*4 % _geometry.dg_sectors);
+	unsigned char track2 = ((i_idBlock*4+1) - ((i_idBlock*4+1) % _geometry.dg_sectors)) / _geometry.dg_sectors;
+	unsigned char sector2 = _geometry.dg_secbase+((i_idBlock*4+1) % _geometry.dg_sectors);
 	unsigned char track3 = ((i_idBlock*4+2) - ((i_idBlock*4+2) % _geometry.dg_sectors)) / _geometry.dg_sectors;
 	unsigned char sector3 = _geometry.dg_secbase+((i_idBlock*4+2) % _geometry.dg_sectors);
 	unsigned char track4 = ((i_idBlock*4+3) - ((i_idBlock*4+3) % _geometry.dg_sectors)) / _geometry.dg_sectors;
@@ -62,11 +62,14 @@ void CCPCRomdosD1Disc::WriteBlock(const unsigned char i_idBlock, const void* i_b
 	if (track2 > 80){track2-=80;}
 	if (track3 > 80){track3-=80;}
 	if (track4 > 80){track4-=80;}
+
+	cout << "Block " << (int)i_idBlock << " begins " << (int)side << ":" << (int)track1 << ":" << (int)sector1 << endl;
+	cout << "----- " << (int)i_idBlock << " ends   " << (int)side << ":" << (int)track4 << ":" << (int)sector4 << endl;
 	
-	WriteSector(track1,0,sector1,i_buffer);
-	WriteSector(track2,0,sector2,(char*)i_buffer+_geometry.dg_secsize);
-	WriteSector(track3,0,sector3,(char*)i_buffer+_geometry.dg_secsize*2);
-	WriteSector(track4,0,sector4,(char*)i_buffer+_geometry.dg_secsize*3);
+	WriteSector(track1,side,sector1,i_buffer);
+	WriteSector(track2,side,sector2,(char*)i_buffer+_geometry.dg_secsize);
+	WriteSector(track3,side,sector3,(char*)i_buffer+_geometry.dg_secsize*2);
+	WriteSector(track4,side,sector4,(char*)i_buffer+_geometry.dg_secsize*3);
 	
 }
 

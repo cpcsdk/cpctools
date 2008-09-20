@@ -46,8 +46,6 @@ public:
 	static const unsigned int DeleteUser;
 	//! Size of each entry in byte
 	static const unsigned int EntrySize;
-	//! Number of block per entry in directory
-	static const unsigned int NbBlockPerEntry;
 	//! Byte used for formatting
 	static const unsigned char FormatByte;
 	//! Max track size in byte
@@ -130,11 +128,15 @@ public:
 		int BlockSize;
 		//! Number max of entry in directory
 		int NbMaxEntry;
+		//! Number of bytes needed to identify a block (1 for DATA/SYSTEM, but 2 for Romdos!)
+		int BlockIDSize;
+		//! Number of block per entry in directory
+		int NbBlocksPerEntry;
 	public:
 		//! Default constructor
 		CDiscFormat();
 		//! Constructor
-		CDiscFormat(int blockSize, int maxEntry);
+		CDiscFormat(int blockSize, int maxEntry, int blockIDSize, int blocksPerEntry);
 		//! Copy constructor
 		CDiscFormat(const CDiscFormat &disc);
 
