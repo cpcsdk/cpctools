@@ -1626,8 +1626,6 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 
     TDisc format = Unknown;
 
-    cout << "Trying to guess format ..." << endl;
-
     // Init geometry
     geometry.dg_cylinders = 80;
     geometry.dg_heads = 1;

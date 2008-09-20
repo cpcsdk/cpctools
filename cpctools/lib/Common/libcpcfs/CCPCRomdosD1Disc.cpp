@@ -19,7 +19,7 @@ void CCPCRomdosD1Disc::getEmptyBlock(std::vector<unsigned int> &o_block) const
 			unsigned int b = (f*_geometry.dg_cylinders*_geometry.dg_sectors + c*_geometry.dg_sectors + s) >> 2;
 			int entry = getDirectoryEntryForBlock(b);
 			if (((f*_geometry.dg_cylinders*_geometry.dg_sectors + c*_geometry.dg_sectors + s) % 4) == 0)
-				if (b < 4 && entry == -1)
+				if (b!=0 && b!=1 && entry == -1)
 					o_block.push_back(b);
 		}
 }
@@ -35,10 +35,10 @@ void CCPCRomdosD1Disc::ReadBlock(const unsigned char i_idBlock, void* o_buffer) 
 	unsigned char track4 = ((i_idBlock*4+3) - ((i_idBlock*4+3) % _geometry.dg_sectors)) / _geometry.dg_sectors;
 	unsigned char sector4 = _geometry.dg_secbase+((i_idBlock*4+3) % _geometry.dg_sectors);
 	unsigned char side=0;
-	if (track1 > 80){track1-=80;side=1;}
-	if (track2 > 80){track2-=80;}
-	if (track3 > 80){track3-=80;}
-	if (track4 > 80){track4-=80;}
+	if (track1 >= 80){track1-=80;side=1;}
+	if (track2 >= 80){track2-=80;}
+	if (track3 >= 80){track3-=80;}
+	if (track4 >= 80){track4-=80;}
 	
 	ReadSector(track1,side,sector1,o_buffer);
 	ReadSector(track2,side,sector2,(char*)o_buffer+_geometry.dg_secsize);
