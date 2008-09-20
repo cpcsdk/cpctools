@@ -99,7 +99,7 @@ void removeArgv(int *argc, char ***argv, int idx)
 	}
 	newArgv2[(*argc)-1] = NULL;
 
-	if(*argv) free(*argv);
+//	if(*argv) free(*argv);
 
 	*argv = newArgv2;
 	(*argc)--;
