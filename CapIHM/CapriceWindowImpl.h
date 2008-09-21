@@ -29,9 +29,14 @@ class CapriceWindowImpl : public CapriceWindow
 	
 	
 	virtual void OnFullScreen( wxCommandEvent& event);
+	virtual void OnReset( wxCommandEvent& event);
 
 	virtual void OnRun( wxCommandEvent& event) ;
 	virtual void OnPause( wxCommandEvent& event) ;
+
+	virtual void OnRegister( wxCommandEvent& event);
+
+	virtual void OnAbout( wxCommandEvent& event);
 	
 	private:
 	SDLPanel*	panel2;

@@ -1,3 +1,12 @@
+2008-09-21 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* emulation core : now when the emulator have nothing to do, he make
+	usleep() instead of do loop, this reduce the CPU usage, speed up
+	program with lower priority then caprice and make the sleeps states of
+	CPU to be active.
+	* GUI : now there are an AboutBox, in menu, the Reset works, had the
+	actually working shortcut, and make a Registers Dialog for the Debug
+	Mode (Actually open but not working).
+
 2008-04-18 Romain Giot <krusty@cpcscene.com>
 
         * build : adapatation of the build mecanism in order to build on UNIX. 

@@ -68,9 +68,26 @@ void CapriceWindowImpl::OnRun( wxCommandEvent& event)
 
 }
 
- void CapriceWindowImpl::OnFullScreen( wxCommandEvent& event){
+void CapriceWindowImpl::OnFullScreen( wxCommandEvent& event){
     emulator->GetRenderer().ToggleFullScreen() ;
- }
+}
+
+void CapriceWindowImpl::OnReset( wxCommandEvent& event)
+{
+    emulator->emulator_reset(1);
+}
+
+void CapriceWindowImpl::OnRegister( wxCommandEvent& event)
+{
+    wxDialog *RegistersDialog = new RegistersStates(NULL);
+    RegistersDialog->Show(true);
+}
+
+void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
+{
+    wxDialog *AboutDialog = new CapriceAbout(NULL);
+    AboutDialog->Show(true);
+}
 // ============================= Various functions ===================================
 
 /**

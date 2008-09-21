@@ -33,6 +33,7 @@ IMPLEMENT_APP(CapriceApp)
 // This is executed upon startup, like 'main()' in non-wxWidgets programs.
 bool CapriceApp::OnInit()
 {
+	wxImage::AddHandler(new wxPNGHandler);
 	emulator = new Emulator();
 
 

@@ -577,13 +577,21 @@ void Emulator::Emulate()
 			}
 
             // limit speed !
-            if (dwTicks < dwTicksTarget)
+	
+            if(_config.limit_speed)
             {
-                // delay emulation
-                continue;
+                if (dwTicks < dwTicksTarget)
+                {
+                    // delay emulation
+                    if((dwTicksTarget - dwTicks) > 1)
+                    {
+                      usleep(((dwTicksTarget - dwTicks)*950));
+                    }
+                    continue;
+                }
+                // prep counter for the next run
+                dwTicksTarget = dwTicksTarget + dwTicksOffset;
             }
-            // prep counter for the next run
-            dwTicksTarget = dwTicksTarget + dwTicksOffset;
 /*
 			// limit to original CPC speed?
 			if (_config.limit_speed)
@@ -634,6 +642,8 @@ void Emulator::Emulate()
 					sprintf(chStr, "%3dFPS %3d%%", (int)dwFPS, (int)dwFPS * 100 / 50);
 					_renderer.AddTextLocate(0, 0, chStr);
 				}
+				
+
 
 				_renderer.EndDisplay(true);
 				return;

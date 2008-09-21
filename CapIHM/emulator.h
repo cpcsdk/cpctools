@@ -105,7 +105,6 @@ private:
 	dword dwTicksTarget ;
 	dword dwTicksTargetFPS ;
 
-
 };
 
 #endif
