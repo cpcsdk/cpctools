@@ -1,0 +1,9 @@
+- Ajouter un mode de convertion lineaire (équivalent à R9=0)
+- Extraire la palette d'un png si palette CPC
+- Gestion du registre 13
+- Possibilité de ne garder qu'un pixel sur 2 (exemple pour Mode 0)
+- Possibilité de ne garder qu'une ligne sur 2 (exemple pour Mode 2)
+- Sprite plus (4bits/pixel, 1pixel/octets, 16x16, gauche a droite, haut en bas)
+- Gestion mode entrelacé
+- Visualisation ?
+- Version Drag'n'drop pour windows ?

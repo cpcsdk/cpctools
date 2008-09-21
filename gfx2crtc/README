@@ -1,0 +1,36 @@
+English Version at the end.
+
+Version Française (French Version)
+----------------------------------------------------------------------
+ gfx2crtc - utilitaire de convertion d'image vers image au format cpc 
+----------------------------------------------------------------------
+
+gfx2crtc est un utilitaire qui permet la convertion d'image (format brut
+lineaire 8bits par pixel ou PNG 1,2 ou 4 bits) dans un format compatible avec
+l'Amstrad CPC et Plus.
+
+Logiciel Initial écrit par :
+CloudStrife/Shinra (Quentin Carlier) <cloudstrife@cpcscene.com>.
+Il est diffusé sur la Licence de Logiciel Libre CeCILL version 2, 
+Voire LICENCE pour plus d'information.
+Voire le fichier AUTHORS pour voire la liste des differents Contributeur.
+
+Utilisation :
+-------------
+
+English Version
+----------------------------------------------------
+ gfx2crtc - gfx convert tools to amstrad cpc format 
+----------------------------------------------------
+
+gfx2crtc is a tools program for convert gfx (linear raw 8bits per pixel or 
+PNG 1,2 ou 4 bits) in a compatible format for Amstrad CPC and Plus.
+
+Initial Software write by :
+CloudStrife/Shinra (Quentin Carlier) <cloudstrife@cpcscene.com>.
+It is diffused on the CeCILL Free Software License v2,
+See LICENSE for more information.
+See AUTHORS for the list of Contributor.
+
+Usage :
+-------
