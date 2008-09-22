@@ -20,8 +20,6 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
     event.RequestMore(true);
 }
 
-
-
 // =============================== Menus Event ===============================================
 
 void CapriceWindowImpl::onExit2( wxCommandEvent& event )
@@ -79,8 +77,9 @@ void CapriceWindowImpl::OnReset( wxCommandEvent& event)
 
 void CapriceWindowImpl::OnRegister( wxCommandEvent& event)
 {
-    wxDialog *RegistersDialog = new RegistersStates(NULL);
+    CapriceRegistersDialogImpl *RegistersDialog = new CapriceRegistersDialogImpl();
     RegistersDialog->Show(true);
+    RegistersDialog->SetEmulator(emulator);
 }
 
 void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
@@ -88,6 +87,7 @@ void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
     wxDialog *AboutDialog = new CapriceAbout(NULL);
     AboutDialog->Show(true);
 }
+
 // ============================= Various functions ===================================
 
 /**

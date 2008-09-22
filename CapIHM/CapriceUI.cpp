@@ -512,6 +512,9 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_notebook2 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panel4 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer23;
+	bSizer23 = new wxBoxSizer( wxVERTICAL );
+	
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 2, 2, 0, 0 );
 	fgSizer2->SetFlexibleDirection( wxBOTH );
@@ -527,113 +530,117 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_staticText9 = new wxStaticText( m_panel4, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
+	m_staticText9->Hide();
+	
 	fgSizer3->Add( m_staticText9, 0, wxALL, 5 );
 	
 	m_staticText10 = new wxStaticText( m_panel4, wxID_ANY, wxT("Primary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	fgSizer3->Add( m_staticText10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer3->Add( m_staticText10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText11 = new wxStaticText( m_panel4, wxID_ANY, wxT("Shadow"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
-	fgSizer3->Add( m_staticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer3->Add( m_staticText11, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText12 = new wxStaticText( m_panel4, wxID_ANY, wxT("A"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	fgSizer3->Add( m_staticText12, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText12, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_textCtrl3 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl3, 0, wxALL, 5 );
+	m_tCrA = new wxTextCtrl( m_panel4, wxID_ANY, wxT("a"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrA, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl4 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl4, 0, wxALL, 5 );
+	m_tCrAx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrAx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText13 = new wxStaticText( m_panel4, wxID_ANY, wxT("F"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
-	fgSizer3->Add( m_staticText13, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText13, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_textCtrl5 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl5, 0, wxALL, 5 );
+	m_tCrF = new wxTextCtrl( m_panel4, wxID_ANY, wxT("f"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrF, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl6 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl6, 0, wxALL, 5 );
+	m_tCrFx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrFx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText14 = new wxStaticText( m_panel4, wxID_ANY, wxT("B"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
-	fgSizer3->Add( m_staticText14, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText14, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl7 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl7, 0, wxALL, 5 );
+	m_tCrB = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrB, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl8 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl8, 0, wxALL, 5 );
+	m_tCrBx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrBx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText15 = new wxStaticText( m_panel4, wxID_ANY, wxT("C"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText15->Wrap( -1 );
-	fgSizer3->Add( m_staticText15, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText15, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl9 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl9, 0, wxALL, 5 );
+	m_tCrC = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrC, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl10 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl10, 0, wxALL, 5 );
+	m_tCrCx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrCx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText16 = new wxStaticText( m_panel4, wxID_ANY, wxT("D"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
-	fgSizer3->Add( m_staticText16, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText16, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl11 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl11, 0, wxALL, 5 );
+	m_tCrD = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrD, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl12 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl12, 0, wxALL, 5 );
+	m_tCrDx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrDx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText17 = new wxStaticText( m_panel4, wxID_ANY, wxT("E"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
-	fgSizer3->Add( m_staticText17, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText17, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl13 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl13, 0, wxALL, 5 );
+	m_tCrE = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrE, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl14 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl14, 0, wxALL, 5 );
+	m_tCrEx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrEx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText18 = new wxStaticText( m_panel4, wxID_ANY, wxT("H"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
-	fgSizer3->Add( m_staticText18, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText18, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl15 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl15, 0, wxALL, 5 );
+	m_tCrH = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrH, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl16 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl16, 0, wxALL, 5 );
+	m_tCrHx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrHx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText19 = new wxStaticText( m_panel4, wxID_ANY, wxT("L"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
-	fgSizer3->Add( m_staticText19, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText19, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl17 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl17, 0, wxALL, 5 );
+	m_tCrL = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrL, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
-	m_textCtrl18 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl18, 0, wxALL, 5 );
+	m_tCrLx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrLx, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText31 = new wxStaticText( m_panel4, wxID_ANY, wxT("I"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText31->Wrap( -1 );
-	fgSizer3->Add( m_staticText31, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText31, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl33 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl33, 0, wxALL, 5 );
+	m_tCrI = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrI, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_staticText32 = new wxStaticText( m_panel4, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
+	m_staticText32->Hide();
+	
 	fgSizer3->Add( m_staticText32, 0, wxALL, 5 );
 	
 	m_staticText33 = new wxStaticText( m_panel4, wxID_ANY, wxT("R"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText33->Wrap( -1 );
-	fgSizer3->Add( m_staticText33, 0, wxALL, 5 );
+	fgSizer3->Add( m_staticText33, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl34 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_textCtrl34, 0, wxALL, 5 );
+	m_tCrR = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_tCrR, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	sbSizer1->Add( fgSizer3, 0, wxEXPAND, 5 );
 	
@@ -659,83 +666,93 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_staticText21 = new wxStaticText( m_panel4, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
+	m_staticText21->Hide();
+	
 	fgSizer5->Add( m_staticText21, 0, wxALL, 5 );
 	
 	m_staticText22 = new wxStaticText( m_panel4, wxID_ANY, wxT("Primary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
-	fgSizer5->Add( m_staticText22, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer5->Add( m_staticText22, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText23 = new wxStaticText( m_panel4, wxID_ANY, wxT("Shadow"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText23->Wrap( -1 );
-	fgSizer5->Add( m_staticText23, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer5->Add( m_staticText23, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText24 = new wxStaticText( m_panel4, wxID_ANY, wxT("BC"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText24->Wrap( -1 );
-	fgSizer5->Add( m_staticText24, 0, wxALL, 5 );
+	fgSizer5->Add( m_staticText24, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl19 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl19, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrBC = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrBC, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl20 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl20, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrBCx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrBCx, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText25 = new wxStaticText( m_panel4, wxID_ANY, wxT("DE"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText25->Wrap( -1 );
-	fgSizer5->Add( m_staticText25, 0, wxALL, 5 );
+	fgSizer5->Add( m_staticText25, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl21 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl21, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrDE = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrDE, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl22 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl22, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrDEx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrDEx, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText26 = new wxStaticText( m_panel4, wxID_ANY, wxT("HL"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText26->Wrap( -1 );
-	fgSizer5->Add( m_staticText26, 0, wxALL, 5 );
+	fgSizer5->Add( m_staticText26, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl23 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl23, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrHL = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrHL, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl24 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl24, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrHLx = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrHLx, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText27 = new wxStaticText( m_panel4, wxID_ANY, wxT("IX"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText27->Wrap( -1 );
-	fgSizer5->Add( m_staticText27, 0, wxALL, 5 );
+	fgSizer5->Add( m_staticText27, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl25 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl25, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrIX = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrIX, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl26 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl26, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_staticText45 = new wxStaticText( m_panel4, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText45->Wrap( -1 );
+	m_staticText45->Hide();
+	
+	fgSizer5->Add( m_staticText45, 0, wxALL, 5 );
 	
 	m_staticText28 = new wxStaticText( m_panel4, wxID_ANY, wxT("IY"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText28->Wrap( -1 );
-	fgSizer5->Add( m_staticText28, 0, wxALL, 5 );
+	fgSizer5->Add( m_staticText28, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl27 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl27, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrIY = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrIY, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl28 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl28, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_staticText44 = new wxStaticText( m_panel4, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText44->Wrap( -1 );
+	m_staticText44->Hide();
+	
+	fgSizer5->Add( m_staticText44, 0, wxALL, 5 );
 	
 	m_staticText29 = new wxStaticText( m_panel4, wxID_ANY, wxT("PC"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText29->Wrap( -1 );
-	fgSizer5->Add( m_staticText29, 0, wxALL, 5 );
+	fgSizer5->Add( m_staticText29, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl29 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl29, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrPC = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrPC, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText43 = new wxStaticText( m_panel4, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText43->Wrap( -1 );
+	m_staticText43->Hide();
+	
 	fgSizer5->Add( m_staticText43, 0, wxALL, 5 );
 	
 	m_staticText30 = new wxStaticText( m_panel4, wxID_ANY, wxT("SP"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText30->Wrap( -1 );
-	fgSizer5->Add( m_staticText30, 0, wxALL, 5 );
+	fgSizer5->Add( m_staticText30, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
-	m_textCtrl31 = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer5->Add( m_textCtrl31, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_tCrSP = new wxTextCtrl( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer5->Add( m_tCrSP, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	sbSizer2->Add( fgSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -751,6 +768,8 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_staticText34 = new wxStaticText( m_panel4, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText34->Wrap( -1 );
+	m_staticText34->Hide();
+	
 	fgSizer6->Add( m_staticText34, 0, wxALL, 5 );
 	
 	m_staticText35 = new wxStaticText( m_panel4, wxID_ANY, wxT("S"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -779,59 +798,59 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	m_staticText41 = new wxStaticText( m_panel4, wxID_ANY, wxT("Primary"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText41->Wrap( -1 );
-	fgSizer6->Add( m_staticText41, 0, wxALL, 5 );
+	fgSizer6->Add( m_staticText41, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBox3 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox3, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
 	
 	m_checkBox4 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox4, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox4, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox5 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox6 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox6, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox7 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox7, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox7, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox8 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox8, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox8, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_staticText42 = new wxStaticText( m_panel4, wxID_ANY, wxT("Shadow"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText42->Wrap( -1 );
-	fgSizer6->Add( m_staticText42, 0, wxALL, 5 );
+	fgSizer6->Add( m_staticText42, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_checkBox9 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox9, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox9, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox10 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox10, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox11 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox11, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox11, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox12 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox12, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox12, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox13 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox13, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox13, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_checkBox14 = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	
-	fgSizer6->Add( m_checkBox14, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	fgSizer6->Add( m_checkBox14, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	sbSizer3->Add( fgSizer6, 1, wxEXPAND, 5 );
 	
@@ -839,20 +858,235 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	fgSizer2->Add( bSizer18, 0, wxEXPAND, 5 );
 	
-	m_panel4->SetSizer( fgSizer2 );
+	bSizer23->Add( fgSizer2, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer24;
+	bSizer24 = new wxBoxSizer( wxVERTICAL );
+	
+	wxStaticBoxSizer* sbSizer7;
+	sbSizer7 = new wxStaticBoxSizer( new wxStaticBox( m_panel4, wxID_ANY, wxT("Shadow Register States") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer14;
+	fgSizer14 = new wxFlexGridSizer( 1, 2, 0, 0 );
+	fgSizer14->SetFlexibleDirection( wxBOTH );
+	fgSizer14->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_checkBox15 = new wxCheckBox( m_panel4, wxID_ANY, wxT("AF Register in Shadow"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgSizer14->Add( m_checkBox15, 0, wxALL, 5 );
+	
+	m_checkBox16 = new wxCheckBox( m_panel4, wxID_ANY, wxT("General Register in Shadow Mode"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgSizer14->Add( m_checkBox16, 0, wxALL, 5 );
+	
+	sbSizer7->Add( fgSizer14, 1, wxEXPAND, 5 );
+	
+	bSizer24->Add( sbSizer7, 1, wxEXPAND, 5 );
+	
+	bSizer23->Add( bSizer24, 0, wxEXPAND, 5 );
+	
+	m_panel4->SetSizer( bSizer23 );
 	m_panel4->Layout();
-	fgSizer2->Fit( m_panel4 );
-	m_notebook2->AddPage( m_panel4, wxT("a page"), false );
-	m_panel5 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_notebook2->AddPage( m_panel5, wxT("a page"), false );
+	bSizer23->Fit( m_panel4 );
+	m_notebook2->AddPage( m_panel4, wxT("Z80 Registers"), false );
+	m_panel8 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer21;
+	bSizer21 = new wxBoxSizer( wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer8;
+	fgSizer8 = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizer8->SetFlexibleDirection( wxBOTH );
+	fgSizer8->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	wxStaticBoxSizer* sbSizer4;
+	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( m_panel8, wxID_ANY, wxT("Internal Counter") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer9;
+	fgSizer9 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer9->SetFlexibleDirection( wxBOTH );
+	fgSizer9->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText46 = new wxStaticText( m_panel8, wxID_ANY, wxT("HCC"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText46->Wrap( -1 );
+	fgSizer9->Add( m_staticText46, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_tCcHCC = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcHCC->SetToolTip( wxT("Horizontal Caracter Counter") );
+	
+	fgSizer9->Add( m_tCcHCC, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_staticText47 = new wxStaticText( m_panel8, wxID_ANY, wxT("VCC"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText47->Wrap( -1 );
+	fgSizer9->Add( m_staticText47, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_tCcVCC = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcVCC->SetToolTip( wxT("Vertical Caracter Counter") );
+	
+	fgSizer9->Add( m_tCcVCC, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_staticText48 = new wxStaticText( m_panel8, wxID_ANY, wxT("VLA"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText48->Wrap( -1 );
+	fgSizer9->Add( m_staticText48, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_tCcVLA = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcVLA->SetToolTip( wxT("Vertical Line Adjust") );
+	
+	fgSizer9->Add( m_tCcVLA, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	m_staticText49 = new wxStaticText( m_panel8, wxID_ANY, wxT("VLC"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText49->Wrap( -1 );
+	fgSizer9->Add( m_staticText49, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	
+	m_tCcVLC = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcVLC->SetToolTip( wxT("Vertical Line Counter") );
+	
+	fgSizer9->Add( m_tCcVLC, 0, wxALIGN_CENTER|wxALL, 5 );
+	
+	sbSizer4->Add( fgSizer9, 1, wxEXPAND, 5 );
+	
+	fgSizer8->Add( sbSizer4, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer5;
+	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( m_panel8, wxID_ANY, wxT("Horizontal Register") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer10;
+	fgSizer10 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer10->SetFlexibleDirection( wxBOTH );
+	fgSizer10->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	wxFlexGridSizer* fgSizer11;
+	fgSizer11 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer11->SetFlexibleDirection( wxBOTH );
+	fgSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText50 = new wxStaticText( m_panel8, wxID_ANY, wxT("R0"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText50->Wrap( -1 );
+	fgSizer11->Add( m_staticText50, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR0 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR0->SetToolTip( wxT("Horizontal total character number") );
+	
+	fgSizer11->Add( m_tCcR0, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText51 = new wxStaticText( m_panel8, wxID_ANY, wxT("R1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText51->Wrap( -1 );
+	fgSizer11->Add( m_staticText51, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR1 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR1->SetToolTip( wxT("Horizontal displayed character number") );
+	
+	fgSizer11->Add( m_tCcR1, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText52 = new wxStaticText( m_panel8, wxID_ANY, wxT("R2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText52->Wrap( -1 );
+	fgSizer11->Add( m_staticText52, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR2 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR2->SetToolTip( wxT("Position of horizontal sync. pulse") );
+	
+	fgSizer11->Add( m_tCcR2, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText53 = new wxStaticText( m_panel8, wxID_ANY, wxT("R3"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText53->Wrap( -1 );
+	fgSizer11->Add( m_staticText53, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR3 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR3->SetToolTip( wxT("Width of horizontal/vertical sync. pulses") );
+	
+	fgSizer11->Add( m_tCcR3, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	fgSizer10->Add( fgSizer11, 1, wxEXPAND, 5 );
+	
+	sbSizer5->Add( fgSizer10, 1, wxEXPAND, 5 );
+	
+	fgSizer8->Add( sbSizer5, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer6;
+	sbSizer6 = new wxStaticBoxSizer( new wxStaticBox( m_panel8, wxID_ANY, wxT("Vertical Register") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer12;
+	fgSizer12 = new wxFlexGridSizer( 2, 2, 0, 0 );
+	fgSizer12->SetFlexibleDirection( wxBOTH );
+	fgSizer12->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText54 = new wxStaticText( m_panel8, wxID_ANY, wxT("R4"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText54->Wrap( -1 );
+	fgSizer12->Add( m_staticText54, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR4 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR4->SetToolTip( wxT(" Vertical total Line character number") );
+	
+	fgSizer12->Add( m_tCcR4, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText55 = new wxStaticText( m_panel8, wxID_ANY, wxT("R5"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText55->Wrap( -1 );
+	fgSizer12->Add( m_staticText55, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR5 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR5->SetToolTip( wxT("Vertical raster adjust") );
+	
+	fgSizer12->Add( m_tCcR5, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText56 = new wxStaticText( m_panel8, wxID_ANY, wxT("R6"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText56->Wrap( -1 );
+	fgSizer12->Add( m_staticText56, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR6 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR6->SetToolTip( wxT("Vertical displayed character number") );
+	
+	fgSizer12->Add( m_tCcR6, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText57 = new wxStaticText( m_panel8, wxID_ANY, wxT("R7"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText57->Wrap( -1 );
+	fgSizer12->Add( m_staticText57, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR7 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR7->SetToolTip( wxT("Position of vertical sync. pulse") );
+	
+	fgSizer12->Add( m_tCcR7, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	m_staticText58 = new wxStaticText( m_panel8, wxID_ANY, wxT("R9"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText58->Wrap( -1 );
+	fgSizer12->Add( m_staticText58, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_tCcR9 = new wxTextCtrl( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_tCcR9->SetToolTip( wxT("Maximum raster") );
+	
+	fgSizer12->Add( m_tCcR9, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	
+	sbSizer6->Add( fgSizer12, 1, wxEXPAND, 5 );
+	
+	fgSizer8->Add( sbSizer6, 1, wxEXPAND, 5 );
+	
+	bSizer21->Add( fgSizer8, 1, wxEXPAND, 5 );
+	
+	m_panel8->SetSizer( bSizer21 );
+	m_panel8->Layout();
+	bSizer21->Fit( m_panel8 );
+	m_notebook2->AddPage( m_panel8, wxT("CRTC Registers and States"), true );
+	m_panel9 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_notebook2->AddPage( m_panel9, wxT("GateArray States"), false );
 	
 	bSizer16->Add( m_notebook2, 1, wxALL, 5 );
 	
 	this->SetSizer( bSizer16 );
 	this->Layout();
 	bSizer16->Fit( this );
+	
+	// Connect Events
+	this->Connect( wxEVT_IDLE, wxIdleEventHandler( RegistersStates::OnIdleR ) );
+	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( RegistersStates::OnInitR ) );
+	m_tCcR0->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR0 ), NULL, this );
+	m_tCcR0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( RegistersStates::OnTextR0 ), NULL, this );
+	m_tCcR0->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( RegistersStates::OnTextEnterR0 ), NULL, this );
 }
 
 RegistersStates::~RegistersStates()
 {
+	// Disconnect Events
+	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( RegistersStates::OnIdleR ) );
+	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( RegistersStates::OnInitR ) );
+	m_tCcR0->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR0 ), NULL, this );
+	m_tCcR0->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( RegistersStates::OnTextR0 ), NULL, this );
+	m_tCcR0->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( RegistersStates::OnTextEnterR0 ), NULL, this );
 }

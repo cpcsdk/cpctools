@@ -3,6 +3,7 @@
 
 
 #include "CapriceUI.h"
+#include "CapriceRegistersDialogImpl.h"
 #include "emulator.h"
 
 #   include "SDLPanel.h"

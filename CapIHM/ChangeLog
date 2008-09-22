@@ -1,3 +1,8 @@
+2008-09-23 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* emulation core : some cleanup.
+	* GUI : Working on Registers Dialog, now you can see states of Z80 and
+	CRTC register.
+
 2008-09-21 CloudStrife/Shinra <cloudstrife@cpcscene.com>
 	* emulation core : now when the emulator have nothing to do, he make
 	usleep() instead of do loop, this reduce the CPU usage, speed up

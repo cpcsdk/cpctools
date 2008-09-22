@@ -2,6 +2,7 @@
 #define INCLUDED_CAPRICEAPP_H
 
 #include "CapriceWindowImpl.h"
+#include "CapriceRegistersDialogImpl.h"
 #include "emulator.h"
 
 
