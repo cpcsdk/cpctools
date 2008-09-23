@@ -1,3 +1,7 @@
+2008-09-23 Krusty/Benediction <krusty@cpcscene.com>
+	* GUI : add the beginnning of a splash screen.
+	* application : possibility to use the command line.
+
 2008-09-23 CloudStrife/Shinra <cloudstrife@cpcscene.com>
 	* emulation core : some cleanup.
 	* GUI : Working on Registers Dialog, now you can see states of Z80 and
