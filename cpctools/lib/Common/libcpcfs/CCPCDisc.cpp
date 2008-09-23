@@ -1872,11 +1872,13 @@ void CCPCDisc::Create(TDisc i_type, const string &i_filename, int i_inside)
 #else
 	    e = dsk_creat(&_driver,i_filename.c_str(), "floppy", NULL);
 #endif
+	    break;
 	case 0:
 	    e = dsk_creat(&_driver,i_filename.c_str(), "edsk", NULL);
-
+	    break;
 	case 2:
 	    e = dsk_creat(&_driver,i_filename.c_str(), "raw",NULL);
+	    break;
     }
     TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error creating dsk :" << string(dsk_strerror(e)));
 
