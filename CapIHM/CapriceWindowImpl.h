@@ -4,6 +4,7 @@
 
 #include "CapriceUI.h"
 #include "CapriceRegistersDialogImpl.h"
+#include "CapriceAboutImpl.h"
 #include "emulator.h"
 
 #   include "SDLPanel.h"
@@ -38,7 +39,7 @@ class CapriceWindowImpl : public CapriceWindow
 	virtual void OnRegister( wxCommandEvent& event);
 
 	virtual void OnAbout( wxCommandEvent& event);
-	
+
 	private:
 	SDLPanel*	panel2;
 	Emulator*	emulator ;

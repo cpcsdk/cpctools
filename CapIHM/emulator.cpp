@@ -575,23 +575,22 @@ void Emulator::Emulate()
 				// prep counter for the next run
 				dwTicksTargetFPS = dwTicks + 1000;
 			}
+			// limit speed !
 
-            // limit speed !
-	
-            if(_config.limit_speed)
-            {
-                if (dwTicks < dwTicksTarget)
-                {
-                    // delay emulation
-                    if((dwTicksTarget - dwTicks) > 1)
-                    {
-                      usleep(((dwTicksTarget - dwTicks)*950));
-                    }
-                    continue;
-                }
-                // prep counter for the next run
-                dwTicksTarget = dwTicksTarget + dwTicksOffset;
-            }
+			if(_config.limit_speed)
+			{
+				if (dwTicks < dwTicksTarget)
+				{
+				// delay emulation
+					if((dwTicksTarget - dwTicks) > 1)
+					{
+					usleep(((dwTicksTarget - dwTicks)*950));
+					}
+					continue;
+				}
+				// prep counter for the next run
+				dwTicksTarget = dwTicksTarget + dwTicksOffset;
+			}
 /*
 			// limit to original CPC speed?
 			if (_config.limit_speed)
@@ -696,14 +695,14 @@ void Emulator::Loop()
 				dwTicksTargetFPS = dwTicks + 1000;
 			}
 
-            // limit speed !
-            if (dwTicks < dwTicksTarget)
-            {
-                // delay emulation
-                continue;
-            }
-            // prep counter for the next run
-            dwTicksTarget = dwTicksTarget + dwTicksOffset;
+			// limit speed !
+			if (dwTicks < dwTicksTarget)
+			{
+				// delay emulation
+				continue;
+			}
+			// prep counter for the next run
+			dwTicksTarget = dwTicksTarget + dwTicksOffset;
 /*
 			// limit to original CPC speed?
 			if (_config.limit_speed)

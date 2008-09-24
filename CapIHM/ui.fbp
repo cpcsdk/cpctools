@@ -2132,7 +2132,7 @@
             <event name="OnActivate"></event>
             <event name="OnActivateApp"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">OnAboutClose</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -2499,7 +2499,7 @@
             <event name="OnActivate"></event>
             <event name="OnActivateApp"></event>
             <event name="OnChar"></event>
-            <event name="OnClose"></event>
+            <event name="OnClose">OnCloseR</event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
             <event name="OnHibernate"></event>
@@ -6979,8 +6979,8 @@
                                     <object class="sizeritem" expanded="1">
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
-                                        <property name="proportion">1</property>
-                                        <object class="wxFlexGridSizer" expanded="1">
+                                        <property name="proportion">0</property>
+                                        <object class="wxFlexGridSizer" expanded="0">
                                             <property name="cols">3</property>
                                             <property name="flexible_direction">wxBOTH</property>
                                             <property name="growablecols"></property>
@@ -7102,7 +7102,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusHCC</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -7117,7 +7117,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusHCC</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -7208,7 +7208,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusVCC</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -7223,7 +7223,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusVCC</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -7314,7 +7314,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusVLA</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -7329,7 +7329,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusVLA</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -7420,7 +7420,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusVLC</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -7435,7 +7435,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusVLC</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -7589,7 +7589,7 @@
                                                                             <event name="OnRightDClick"></event>
                                                                             <event name="OnRightDown"></event>
                                                                             <event name="OnRightUp"></event>
-                                                                            <event name="OnSetFocus"></event>
+                                                                            <event name="OnSetFocus">OnSetFocusR0</event>
                                                                             <event name="OnSize"></event>
                                                                             <event name="OnText">OnTextR0</event>
                                                                             <event name="OnTextEnter">OnTextEnterR0</event>
@@ -7680,7 +7680,7 @@
                                                                             <event name="OnEraseBackground"></event>
                                                                             <event name="OnKeyDown"></event>
                                                                             <event name="OnKeyUp"></event>
-                                                                            <event name="OnKillFocus"></event>
+                                                                            <event name="OnKillFocus">OnKillFocusR1</event>
                                                                             <event name="OnLeaveWindow"></event>
                                                                             <event name="OnLeftDClick"></event>
                                                                             <event name="OnLeftDown"></event>
@@ -7695,7 +7695,7 @@
                                                                             <event name="OnRightDClick"></event>
                                                                             <event name="OnRightDown"></event>
                                                                             <event name="OnRightUp"></event>
-                                                                            <event name="OnSetFocus"></event>
+                                                                            <event name="OnSetFocus">OnSetFocusR1</event>
                                                                             <event name="OnSize"></event>
                                                                             <event name="OnText"></event>
                                                                             <event name="OnTextEnter"></event>
@@ -7786,7 +7786,7 @@
                                                                             <event name="OnEraseBackground"></event>
                                                                             <event name="OnKeyDown"></event>
                                                                             <event name="OnKeyUp"></event>
-                                                                            <event name="OnKillFocus"></event>
+                                                                            <event name="OnKillFocus">OnKillFocusR2</event>
                                                                             <event name="OnLeaveWindow"></event>
                                                                             <event name="OnLeftDClick"></event>
                                                                             <event name="OnLeftDown"></event>
@@ -7801,7 +7801,7 @@
                                                                             <event name="OnRightDClick"></event>
                                                                             <event name="OnRightDown"></event>
                                                                             <event name="OnRightUp"></event>
-                                                                            <event name="OnSetFocus"></event>
+                                                                            <event name="OnSetFocus">OnSetFocusR2</event>
                                                                             <event name="OnSize"></event>
                                                                             <event name="OnText"></event>
                                                                             <event name="OnTextEnter"></event>
@@ -7892,7 +7892,7 @@
                                                                             <event name="OnEraseBackground"></event>
                                                                             <event name="OnKeyDown"></event>
                                                                             <event name="OnKeyUp"></event>
-                                                                            <event name="OnKillFocus"></event>
+                                                                            <event name="OnKillFocus">OnKillFocusR3</event>
                                                                             <event name="OnLeaveWindow"></event>
                                                                             <event name="OnLeftDClick"></event>
                                                                             <event name="OnLeftDown"></event>
@@ -7907,7 +7907,7 @@
                                                                             <event name="OnRightDClick"></event>
                                                                             <event name="OnRightDown"></event>
                                                                             <event name="OnRightUp"></event>
-                                                                            <event name="OnSetFocus"></event>
+                                                                            <event name="OnSetFocus">OnSetFocusR3</event>
                                                                             <event name="OnSize"></event>
                                                                             <event name="OnText"></event>
                                                                             <event name="OnTextEnter"></event>
@@ -8032,7 +8032,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusR4</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -8047,7 +8047,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusR4</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -8138,7 +8138,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusR5</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -8153,7 +8153,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusR5</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -8244,7 +8244,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusR6</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -8259,7 +8259,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusR6</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -8350,7 +8350,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusR7</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -8365,7 +8365,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusR7</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -8456,6 +8456,104 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusR9</event>
+                                                                    <event name="OnLeaveWindow"></event>
+                                                                    <event name="OnLeftDClick"></event>
+                                                                    <event name="OnLeftDown"></event>
+                                                                    <event name="OnLeftUp"></event>
+                                                                    <event name="OnMiddleDClick"></event>
+                                                                    <event name="OnMiddleDown"></event>
+                                                                    <event name="OnMiddleUp"></event>
+                                                                    <event name="OnMotion"></event>
+                                                                    <event name="OnMouseEvents"></event>
+                                                                    <event name="OnMouseWheel"></event>
+                                                                    <event name="OnPaint"></event>
+                                                                    <event name="OnRightDClick"></event>
+                                                                    <event name="OnRightDown"></event>
+                                                                    <event name="OnRightUp"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusR9</event>
+                                                                    <event name="OnSize"></event>
+                                                                    <event name="OnText"></event>
+                                                                    <event name="OnTextEnter"></event>
+                                                                    <event name="OnTextMaxLen"></event>
+                                                                    <event name="OnTextURL"></event>
+                                                                    <event name="OnUpdateUI"></event>
+                                                                </object>
+                                                            </object>
+                                                        </object>
+                                                    </object>
+                                                </object>
+                                            </object>
+                                        </object>
+                                    </object>
+                                    <object class="sizeritem" expanded="1">
+                                        <property name="border">5</property>
+                                        <property name="flag">wxEXPAND</property>
+                                        <property name="proportion">1</property>
+                                        <object class="wxBoxSizer" expanded="1">
+                                            <property name="minimum_size"></property>
+                                            <property name="name">bSizer20</property>
+                                            <property name="orient">wxVERTICAL</property>
+                                            <property name="permission">none</property>
+                                            <object class="sizeritem" expanded="1">
+                                                <property name="border">5</property>
+                                                <property name="flag">wxEXPAND</property>
+                                                <property name="proportion">1</property>
+                                                <object class="wxStaticBoxSizer" expanded="1">
+                                                    <property name="id">wxID_ANY</property>
+                                                    <property name="label">Timing Checking</property>
+                                                    <property name="minimum_size"></property>
+                                                    <property name="name">sbSizer8</property>
+                                                    <property name="orient">wxVERTICAL</property>
+                                                    <property name="permission">none</property>
+                                                    <event name="OnUpdateUI"></event>
+                                                    <object class="sizeritem" expanded="1">
+                                                        <property name="border">5</property>
+                                                        <property name="flag">wxEXPAND</property>
+                                                        <property name="proportion">1</property>
+                                                        <object class="wxFlexGridSizer" expanded="1">
+                                                            <property name="cols">3</property>
+                                                            <property name="flexible_direction">wxBOTH</property>
+                                                            <property name="growablecols"></property>
+                                                            <property name="growablerows"></property>
+                                                            <property name="hgap">0</property>
+                                                            <property name="minimum_size"></property>
+                                                            <property name="name">fgSizer121</property>
+                                                            <property name="non_flexible_grow_mode">wxFLEX_GROWMODE_SPECIFIED</property>
+                                                            <property name="permission">none</property>
+                                                            <property name="rows">2</property>
+                                                            <property name="vgap">0</property>
+                                                            <object class="sizeritem" expanded="1">
+                                                                <property name="border">5</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="proportion">0</property>
+                                                                <object class="wxStaticText" expanded="1">
+                                                                    <property name="bg"></property>
+                                                                    <property name="context_help"></property>
+                                                                    <property name="enabled">1</property>
+                                                                    <property name="fg"></property>
+                                                                    <property name="font"></property>
+                                                                    <property name="hidden">0</property>
+                                                                    <property name="id">wxID_ANY</property>
+                                                                    <property name="label">Horizontal Line Length</property>
+                                                                    <property name="maximum_size"></property>
+                                                                    <property name="minimum_size"></property>
+                                                                    <property name="name">m_staticText59</property>
+                                                                    <property name="permission">protected</property>
+                                                                    <property name="pos"></property>
+                                                                    <property name="size"></property>
+                                                                    <property name="style"></property>
+                                                                    <property name="subclass"></property>
+                                                                    <property name="tooltip"></property>
+                                                                    <property name="window_extra_style"></property>
+                                                                    <property name="window_name"></property>
+                                                                    <property name="window_style"></property>
+                                                                    <property name="wrap">-1</property>
+                                                                    <event name="OnChar"></event>
+                                                                    <event name="OnEnterWindow"></event>
+                                                                    <event name="OnEraseBackground"></event>
+                                                                    <event name="OnKeyDown"></event>
+                                                                    <event name="OnKeyUp"></event>
                                                                     <event name="OnKillFocus"></event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
@@ -8473,10 +8571,263 @@
                                                                     <event name="OnRightUp"></event>
                                                                     <event name="OnSetFocus"></event>
                                                                     <event name="OnSize"></event>
-                                                                    <event name="OnText"></event>
-                                                                    <event name="OnTextEnter"></event>
-                                                                    <event name="OnTextMaxLen"></event>
-                                                                    <event name="OnTextURL"></event>
+                                                                    <event name="OnUpdateUI"></event>
+                                                                </object>
+                                                            </object>
+                                                            <object class="sizeritem" expanded="1">
+                                                                <property name="border">5</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="proportion">0</property>
+                                                                <object class="wxStaticText" expanded="1">
+                                                                    <property name="bg"></property>
+                                                                    <property name="context_help"></property>
+                                                                    <property name="enabled">1</property>
+                                                                    <property name="fg"></property>
+                                                                    <property name="font"></property>
+                                                                    <property name="hidden">0</property>
+                                                                    <property name="id">wxID_ANY</property>
+                                                                    <property name="label">MyLabel</property>
+                                                                    <property name="maximum_size"></property>
+                                                                    <property name="minimum_size"></property>
+                                                                    <property name="name">m_sT_HLineLength</property>
+                                                                    <property name="permission">protected</property>
+                                                                    <property name="pos"></property>
+                                                                    <property name="size"></property>
+                                                                    <property name="style"></property>
+                                                                    <property name="subclass"></property>
+                                                                    <property name="tooltip"></property>
+                                                                    <property name="window_extra_style"></property>
+                                                                    <property name="window_name"></property>
+                                                                    <property name="window_style"></property>
+                                                                    <property name="wrap">-1</property>
+                                                                    <event name="OnChar"></event>
+                                                                    <event name="OnEnterWindow"></event>
+                                                                    <event name="OnEraseBackground"></event>
+                                                                    <event name="OnKeyDown"></event>
+                                                                    <event name="OnKeyUp"></event>
+                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnLeaveWindow"></event>
+                                                                    <event name="OnLeftDClick"></event>
+                                                                    <event name="OnLeftDown"></event>
+                                                                    <event name="OnLeftUp"></event>
+                                                                    <event name="OnMiddleDClick"></event>
+                                                                    <event name="OnMiddleDown"></event>
+                                                                    <event name="OnMiddleUp"></event>
+                                                                    <event name="OnMotion"></event>
+                                                                    <event name="OnMouseEvents"></event>
+                                                                    <event name="OnMouseWheel"></event>
+                                                                    <event name="OnPaint"></event>
+                                                                    <event name="OnRightDClick"></event>
+                                                                    <event name="OnRightDown"></event>
+                                                                    <event name="OnRightUp"></event>
+                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSize"></event>
+                                                                    <event name="OnUpdateUI"></event>
+                                                                </object>
+                                                            </object>
+                                                            <object class="sizeritem" expanded="1">
+                                                                <property name="border">5</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="proportion">0</property>
+                                                                <object class="wxCheckBox" expanded="1">
+                                                                    <property name="bg"></property>
+                                                                    <property name="checked">0</property>
+                                                                    <property name="context_help"></property>
+                                                                    <property name="enabled">1</property>
+                                                                    <property name="fg"></property>
+                                                                    <property name="font"></property>
+                                                                    <property name="hidden">0</property>
+                                                                    <property name="id">wxID_ANY</property>
+                                                                    <property name="label">Timing is Ok !</property>
+                                                                    <property name="maximum_size"></property>
+                                                                    <property name="minimum_size"></property>
+                                                                    <property name="name">m_cB_HLineLengthIsOk</property>
+                                                                    <property name="permission">protected</property>
+                                                                    <property name="pos"></property>
+                                                                    <property name="size"></property>
+                                                                    <property name="style"></property>
+                                                                    <property name="subclass"></property>
+                                                                    <property name="tooltip"></property>
+                                                                    <property name="window_extra_style"></property>
+                                                                    <property name="window_name"></property>
+                                                                    <property name="window_style"></property>
+                                                                    <event name="OnChar"></event>
+                                                                    <event name="OnCheckBox"></event>
+                                                                    <event name="OnEnterWindow"></event>
+                                                                    <event name="OnEraseBackground"></event>
+                                                                    <event name="OnKeyDown"></event>
+                                                                    <event name="OnKeyUp"></event>
+                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnLeaveWindow"></event>
+                                                                    <event name="OnLeftDClick"></event>
+                                                                    <event name="OnLeftDown"></event>
+                                                                    <event name="OnLeftUp"></event>
+                                                                    <event name="OnMiddleDClick"></event>
+                                                                    <event name="OnMiddleDown"></event>
+                                                                    <event name="OnMiddleUp"></event>
+                                                                    <event name="OnMotion"></event>
+                                                                    <event name="OnMouseEvents"></event>
+                                                                    <event name="OnMouseWheel"></event>
+                                                                    <event name="OnPaint"></event>
+                                                                    <event name="OnRightDClick"></event>
+                                                                    <event name="OnRightDown"></event>
+                                                                    <event name="OnRightUp"></event>
+                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSize"></event>
+                                                                    <event name="OnUpdateUI"></event>
+                                                                </object>
+                                                            </object>
+                                                            <object class="sizeritem" expanded="1">
+                                                                <property name="border">5</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="proportion">0</property>
+                                                                <object class="wxStaticText" expanded="1">
+                                                                    <property name="bg"></property>
+                                                                    <property name="context_help"></property>
+                                                                    <property name="enabled">1</property>
+                                                                    <property name="fg"></property>
+                                                                    <property name="font"></property>
+                                                                    <property name="hidden">0</property>
+                                                                    <property name="id">wxID_ANY</property>
+                                                                    <property name="label">Vertical Frame Length</property>
+                                                                    <property name="maximum_size"></property>
+                                                                    <property name="minimum_size"></property>
+                                                                    <property name="name">m_staticText61</property>
+                                                                    <property name="permission">protected</property>
+                                                                    <property name="pos"></property>
+                                                                    <property name="size"></property>
+                                                                    <property name="style"></property>
+                                                                    <property name="subclass"></property>
+                                                                    <property name="tooltip"></property>
+                                                                    <property name="window_extra_style"></property>
+                                                                    <property name="window_name"></property>
+                                                                    <property name="window_style"></property>
+                                                                    <property name="wrap">-1</property>
+                                                                    <event name="OnChar"></event>
+                                                                    <event name="OnEnterWindow"></event>
+                                                                    <event name="OnEraseBackground"></event>
+                                                                    <event name="OnKeyDown"></event>
+                                                                    <event name="OnKeyUp"></event>
+                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnLeaveWindow"></event>
+                                                                    <event name="OnLeftDClick"></event>
+                                                                    <event name="OnLeftDown"></event>
+                                                                    <event name="OnLeftUp"></event>
+                                                                    <event name="OnMiddleDClick"></event>
+                                                                    <event name="OnMiddleDown"></event>
+                                                                    <event name="OnMiddleUp"></event>
+                                                                    <event name="OnMotion"></event>
+                                                                    <event name="OnMouseEvents"></event>
+                                                                    <event name="OnMouseWheel"></event>
+                                                                    <event name="OnPaint"></event>
+                                                                    <event name="OnRightDClick"></event>
+                                                                    <event name="OnRightDown"></event>
+                                                                    <event name="OnRightUp"></event>
+                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSize"></event>
+                                                                    <event name="OnUpdateUI"></event>
+                                                                </object>
+                                                            </object>
+                                                            <object class="sizeritem" expanded="1">
+                                                                <property name="border">5</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="proportion">0</property>
+                                                                <object class="wxStaticText" expanded="1">
+                                                                    <property name="bg"></property>
+                                                                    <property name="context_help"></property>
+                                                                    <property name="enabled">1</property>
+                                                                    <property name="fg"></property>
+                                                                    <property name="font"></property>
+                                                                    <property name="hidden">0</property>
+                                                                    <property name="id">wxID_ANY</property>
+                                                                    <property name="label">MyLabel</property>
+                                                                    <property name="maximum_size"></property>
+                                                                    <property name="minimum_size"></property>
+                                                                    <property name="name">m_sT_VFrameLength</property>
+                                                                    <property name="permission">protected</property>
+                                                                    <property name="pos"></property>
+                                                                    <property name="size"></property>
+                                                                    <property name="style"></property>
+                                                                    <property name="subclass"></property>
+                                                                    <property name="tooltip"></property>
+                                                                    <property name="window_extra_style"></property>
+                                                                    <property name="window_name"></property>
+                                                                    <property name="window_style"></property>
+                                                                    <property name="wrap">-1</property>
+                                                                    <event name="OnChar"></event>
+                                                                    <event name="OnEnterWindow"></event>
+                                                                    <event name="OnEraseBackground"></event>
+                                                                    <event name="OnKeyDown"></event>
+                                                                    <event name="OnKeyUp"></event>
+                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnLeaveWindow"></event>
+                                                                    <event name="OnLeftDClick"></event>
+                                                                    <event name="OnLeftDown"></event>
+                                                                    <event name="OnLeftUp"></event>
+                                                                    <event name="OnMiddleDClick"></event>
+                                                                    <event name="OnMiddleDown"></event>
+                                                                    <event name="OnMiddleUp"></event>
+                                                                    <event name="OnMotion"></event>
+                                                                    <event name="OnMouseEvents"></event>
+                                                                    <event name="OnMouseWheel"></event>
+                                                                    <event name="OnPaint"></event>
+                                                                    <event name="OnRightDClick"></event>
+                                                                    <event name="OnRightDown"></event>
+                                                                    <event name="OnRightUp"></event>
+                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSize"></event>
+                                                                    <event name="OnUpdateUI"></event>
+                                                                </object>
+                                                            </object>
+                                                            <object class="sizeritem" expanded="1">
+                                                                <property name="border">5</property>
+                                                                <property name="flag">wxALL|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="proportion">0</property>
+                                                                <object class="wxCheckBox" expanded="1">
+                                                                    <property name="bg"></property>
+                                                                    <property name="checked">0</property>
+                                                                    <property name="context_help"></property>
+                                                                    <property name="enabled">1</property>
+                                                                    <property name="fg"></property>
+                                                                    <property name="font"></property>
+                                                                    <property name="hidden">0</property>
+                                                                    <property name="id">wxID_ANY</property>
+                                                                    <property name="label">Timing is Ok !</property>
+                                                                    <property name="maximum_size"></property>
+                                                                    <property name="minimum_size"></property>
+                                                                    <property name="name">m_cB_VFrameLengthIsOk</property>
+                                                                    <property name="permission">protected</property>
+                                                                    <property name="pos"></property>
+                                                                    <property name="size"></property>
+                                                                    <property name="style"></property>
+                                                                    <property name="subclass"></property>
+                                                                    <property name="tooltip"></property>
+                                                                    <property name="window_extra_style"></property>
+                                                                    <property name="window_name"></property>
+                                                                    <property name="window_style"></property>
+                                                                    <event name="OnChar"></event>
+                                                                    <event name="OnCheckBox"></event>
+                                                                    <event name="OnEnterWindow"></event>
+                                                                    <event name="OnEraseBackground"></event>
+                                                                    <event name="OnKeyDown"></event>
+                                                                    <event name="OnKeyUp"></event>
+                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnLeaveWindow"></event>
+                                                                    <event name="OnLeftDClick"></event>
+                                                                    <event name="OnLeftDown"></event>
+                                                                    <event name="OnLeftUp"></event>
+                                                                    <event name="OnMiddleDClick"></event>
+                                                                    <event name="OnMiddleDown"></event>
+                                                                    <event name="OnMiddleUp"></event>
+                                                                    <event name="OnMotion"></event>
+                                                                    <event name="OnMouseEvents"></event>
+                                                                    <event name="OnMouseWheel"></event>
+                                                                    <event name="OnPaint"></event>
+                                                                    <event name="OnRightDClick"></event>
+                                                                    <event name="OnRightDown"></event>
+                                                                    <event name="OnRightUp"></event>
+                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSize"></event>
                                                                     <event name="OnUpdateUI"></event>
                                                                 </object>
                                                             </object>

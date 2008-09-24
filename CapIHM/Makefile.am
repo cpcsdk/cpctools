@@ -55,6 +55,8 @@ caprice_SOURCES = audio.cpp \
 		  glfuncs.h \
 		fileutils.h \
 		fileutils.cpp \
+		CapriceAboutImpl.cpp \
+		CapriceAboutImpl.h \
 		CapriceApp.cpp  \
 		CapriceApp.h  \
 		CapriceRegistersDialogImpl.cpp \

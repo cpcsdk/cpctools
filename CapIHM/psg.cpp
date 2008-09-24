@@ -110,7 +110,7 @@ void t_PSG::Init()
 #ifdef AYEMU
      ayemu_init(&m_ayemu);
      ayemu_set_chip_freq(&m_ayemu, 1000000);
-     ayemu_set_chip_type(&m_ayemu, AYEMU_YM, NULL);
+     ayemu_set_chip_type(&m_ayemu, AYEMU_AY_LOG, NULL);
      ayemu_set_sound_format (&m_ayemu, 44100 , 2, 16);
      ayemu_set_stereo(&m_ayemu, AYEMU_ABC, NULL);
 #endif

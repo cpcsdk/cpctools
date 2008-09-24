@@ -67,7 +67,8 @@ am__caprice_SOURCES_DIST = audio.cpp emulator.cpp input.cpp ppi.cpp \
 	input.h ppi.h rom_mods.h vdu.h z80.h cap32type.h crtc.h \
 	emulator.h filetools.h ioport.h psg.h snapshot.h video.h zip.h \
 	YmTypes.h glfunclist.h glfuncs.cpp fileutils.h fileutils.cpp \
-	CapriceApp.cpp CapriceApp.h CapriceRegistersDialogImpl.cpp \
+	CapriceAboutImpl.cpp CapriceAboutImpl.h CapriceApp.cpp \
+	CapriceApp.h CapriceRegistersDialogImpl.cpp \
 	CapriceRegistersDialogImpl.h CapriceUI.cpp CapriceUI.h \
 	CapriceWindowImpl.cpp CapriceWindowImpl.h SDLPanel.cpp \
 	SDLPanel.h aylet/sound.cc aylet/sound.h aylet/drv-oss.cc \
@@ -86,7 +87,8 @@ am_caprice_OBJECTS = caprice-audio.$(OBJEXT) \
 	caprice-filetools.$(OBJEXT) caprice-memory.$(OBJEXT) \
 	caprice-render.$(OBJEXT) caprice-snapshot.$(OBJEXT) \
 	caprice-video.$(OBJEXT) caprice-glfuncs.$(OBJEXT) \
-	caprice-fileutils.$(OBJEXT) caprice-CapriceApp.$(OBJEXT) \
+	caprice-fileutils.$(OBJEXT) caprice-CapriceAboutImpl.$(OBJEXT) \
+	caprice-CapriceApp.$(OBJEXT) \
 	caprice-CapriceRegistersDialogImpl.$(OBJEXT) \
 	caprice-CapriceUI.$(OBJEXT) \
 	caprice-CapriceWindowImpl.$(OBJEXT) caprice-SDLPanel.$(OBJEXT) \
@@ -234,10 +236,11 @@ caprice_SOURCES = audio.cpp emulator.cpp input.cpp ppi.cpp \
 	input.h ppi.h rom_mods.h vdu.h z80.h cap32type.h crtc.h \
 	emulator.h filetools.h ioport.h psg.h snapshot.h video.h zip.h \
 	YmTypes.h glfunclist.h glfuncs.cpp glfuncs.h fileutils.h \
-	fileutils.cpp CapriceApp.cpp CapriceApp.h \
-	CapriceRegistersDialogImpl.cpp CapriceRegistersDialogImpl.h \
-	CapriceUI.cpp CapriceUI.h CapriceWindowImpl.cpp \
-	CapriceWindowImpl.h SDLPanel.cpp SDLPanel.h $(am__append_2)
+	fileutils.cpp CapriceAboutImpl.cpp CapriceAboutImpl.h \
+	CapriceApp.cpp CapriceApp.h CapriceRegistersDialogImpl.cpp \
+	CapriceRegistersDialogImpl.h CapriceUI.cpp CapriceUI.h \
+	CapriceWindowImpl.cpp CapriceWindowImpl.h SDLPanel.cpp \
+	SDLPanel.h $(am__append_2)
 caprice_CPPFLAGS = $(SDL_CFLAGS) $(WX_CPPFLAGS) $(am__append_1) \
 	$(am__append_3)
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -ldsk
@@ -329,6 +332,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceAboutImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceApp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceRegistersDialogImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceUI.Po@am__quote@
@@ -710,6 +714,20 @@ caprice-fileutils.obj: fileutils.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fileutils.cpp' object='caprice-fileutils.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-fileutils.obj `if test -f 'fileutils.cpp'; then $(CYGPATH_W) 'fileutils.cpp'; else $(CYGPATH_W) '$(srcdir)/fileutils.cpp'; fi`
+
+caprice-CapriceAboutImpl.o: CapriceAboutImpl.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceAboutImpl.o -MD -MP -MF $(DEPDIR)/caprice-CapriceAboutImpl.Tpo -c -o caprice-CapriceAboutImpl.o `test -f 'CapriceAboutImpl.cpp' || echo '$(srcdir)/'`CapriceAboutImpl.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceAboutImpl.Tpo $(DEPDIR)/caprice-CapriceAboutImpl.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceAboutImpl.cpp' object='caprice-CapriceAboutImpl.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceAboutImpl.o `test -f 'CapriceAboutImpl.cpp' || echo '$(srcdir)/'`CapriceAboutImpl.cpp
+
+caprice-CapriceAboutImpl.obj: CapriceAboutImpl.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceAboutImpl.obj -MD -MP -MF $(DEPDIR)/caprice-CapriceAboutImpl.Tpo -c -o caprice-CapriceAboutImpl.obj `if test -f 'CapriceAboutImpl.cpp'; then $(CYGPATH_W) 'CapriceAboutImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceAboutImpl.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceAboutImpl.Tpo $(DEPDIR)/caprice-CapriceAboutImpl.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceAboutImpl.cpp' object='caprice-CapriceAboutImpl.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceAboutImpl.obj `if test -f 'CapriceAboutImpl.cpp'; then $(CYGPATH_W) 'CapriceAboutImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceAboutImpl.cpp'; fi`
 
 caprice-CapriceApp.o: CapriceApp.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceApp.o -MD -MP -MF $(DEPDIR)/caprice-CapriceApp.Tpo -c -o caprice-CapriceApp.o `test -f 'CapriceApp.cpp' || echo '$(srcdir)/'`CapriceApp.cpp

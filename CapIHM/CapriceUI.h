@@ -143,6 +143,10 @@ class CapriceAbout : public wxDialog
 		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText5;
 		wxStaticText* m_staticText10;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnAboutClose( wxCloseEvent& event ){ event.Skip(); }
+		
 	
 	public:
 		CapriceAbout( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("About CapriceReloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
@@ -265,14 +269,46 @@ class RegistersStates : public wxDialog
 		wxTextCtrl* m_tCcR7;
 		wxStaticText* m_staticText58;
 		wxTextCtrl* m_tCcR9;
+		wxStaticText* m_staticText59;
+		wxStaticText* m_sT_HLineLength;
+		wxCheckBox* m_cB_HLineLengthIsOk;
+		wxStaticText* m_staticText61;
+		wxStaticText* m_sT_VFrameLength;
+		wxCheckBox* m_cB_VFrameLengthIsOk;
 		wxPanel* m_panel9;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseR( wxCloseEvent& event ){ event.Skip(); }
 		virtual void OnIdleR( wxIdleEvent& event ){ event.Skip(); }
 		virtual void OnInitR( wxInitDialogEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusHCC( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusHCC( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusVCC( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusVCC( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusVLA( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusVLA( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusVLC( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusVLC( wxFocusEvent& event ){ event.Skip(); }
 		virtual void OnKillFocusR0( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR0( wxFocusEvent& event ){ event.Skip(); }
 		virtual void OnTextR0( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnTextEnterR0( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR1( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR1( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR2( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR2( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR3( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR3( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR4( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR4( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR5( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR5( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR6( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR6( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR7( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR7( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR9( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR9( wxFocusEvent& event ){ event.Skip(); }
 		
 	
 	public:

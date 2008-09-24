@@ -84,7 +84,7 @@ void CapriceWindowImpl::OnRegister( wxCommandEvent& event)
 
 void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
 {
-    wxDialog *AboutDialog = new CapriceAbout(NULL);
+    CapriceAboutImpl *AboutDialog = new CapriceAboutImpl();
     AboutDialog->Show(true);
 }
 

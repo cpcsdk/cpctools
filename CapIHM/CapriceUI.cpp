@@ -497,10 +497,15 @@ CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& tit
 	this->SetSizer( bSizer8 );
 	this->Layout();
 	bSizer8->Fit( this );
+	
+	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceAbout::OnAboutClose ) );
 }
 
 CapriceAbout::~CapriceAbout()
 {
+	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceAbout::OnAboutClose ) );
 }
 
 RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -1058,7 +1063,48 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	
 	fgSizer8->Add( sbSizer6, 1, wxEXPAND, 5 );
 	
-	bSizer21->Add( fgSizer8, 1, wxEXPAND, 5 );
+	bSizer21->Add( fgSizer8, 0, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer20;
+	bSizer20 = new wxBoxSizer( wxVERTICAL );
+	
+	wxStaticBoxSizer* sbSizer8;
+	sbSizer8 = new wxStaticBoxSizer( new wxStaticBox( m_panel8, wxID_ANY, wxT("Timing Checking") ), wxVERTICAL );
+	
+	wxFlexGridSizer* fgSizer121;
+	fgSizer121 = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizer121->SetFlexibleDirection( wxBOTH );
+	fgSizer121->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	m_staticText59 = new wxStaticText( m_panel8, wxID_ANY, wxT("Horizontal Line Length"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText59->Wrap( -1 );
+	fgSizer121->Add( m_staticText59, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_sT_HLineLength = new wxStaticText( m_panel8, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sT_HLineLength->Wrap( -1 );
+	fgSizer121->Add( m_sT_HLineLength, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_cB_HLineLengthIsOk = new wxCheckBox( m_panel8, wxID_ANY, wxT("Timing is Ok !"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgSizer121->Add( m_cB_HLineLengthIsOk, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_staticText61 = new wxStaticText( m_panel8, wxID_ANY, wxT("Vertical Frame Length"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText61->Wrap( -1 );
+	fgSizer121->Add( m_staticText61, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_sT_VFrameLength = new wxStaticText( m_panel8, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_sT_VFrameLength->Wrap( -1 );
+	fgSizer121->Add( m_sT_VFrameLength, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_cB_VFrameLengthIsOk = new wxCheckBox( m_panel8, wxID_ANY, wxT("Timing is Ok !"), wxDefaultPosition, wxDefaultSize, 0 );
+	
+	fgSizer121->Add( m_cB_VFrameLengthIsOk, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	sbSizer8->Add( fgSizer121, 1, wxEXPAND, 5 );
+	
+	bSizer20->Add( sbSizer8, 1, wxEXPAND, 5 );
+	
+	bSizer21->Add( bSizer20, 1, wxEXPAND, 5 );
 	
 	m_panel8->SetSizer( bSizer21 );
 	m_panel8->Layout();
@@ -1074,19 +1120,71 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	bSizer16->Fit( this );
 	
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( RegistersStates::OnCloseR ) );
 	this->Connect( wxEVT_IDLE, wxIdleEventHandler( RegistersStates::OnIdleR ) );
 	this->Connect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( RegistersStates::OnInitR ) );
+	m_tCcHCC->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusHCC ), NULL, this );
+	m_tCcHCC->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusHCC ), NULL, this );
+	m_tCcVCC->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusVCC ), NULL, this );
+	m_tCcVCC->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusVCC ), NULL, this );
+	m_tCcVLA->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusVLA ), NULL, this );
+	m_tCcVLA->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusVLA ), NULL, this );
+	m_tCcVLC->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusVLC ), NULL, this );
+	m_tCcVLC->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusVLC ), NULL, this );
 	m_tCcR0->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR0 ), NULL, this );
+	m_tCcR0->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR0 ), NULL, this );
 	m_tCcR0->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( RegistersStates::OnTextR0 ), NULL, this );
 	m_tCcR0->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( RegistersStates::OnTextEnterR0 ), NULL, this );
+	m_tCcR1->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR1 ), NULL, this );
+	m_tCcR1->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR1 ), NULL, this );
+	m_tCcR2->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR2 ), NULL, this );
+	m_tCcR2->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR2 ), NULL, this );
+	m_tCcR3->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR3 ), NULL, this );
+	m_tCcR3->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR3 ), NULL, this );
+	m_tCcR4->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR4 ), NULL, this );
+	m_tCcR4->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR4 ), NULL, this );
+	m_tCcR5->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR5 ), NULL, this );
+	m_tCcR5->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR5 ), NULL, this );
+	m_tCcR6->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR6 ), NULL, this );
+	m_tCcR6->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR6 ), NULL, this );
+	m_tCcR7->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR7 ), NULL, this );
+	m_tCcR7->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR7 ), NULL, this );
+	m_tCcR9->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR9 ), NULL, this );
+	m_tCcR9->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR9 ), NULL, this );
 }
 
 RegistersStates::~RegistersStates()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( RegistersStates::OnCloseR ) );
 	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( RegistersStates::OnIdleR ) );
 	this->Disconnect( wxEVT_INIT_DIALOG, wxInitDialogEventHandler( RegistersStates::OnInitR ) );
+	m_tCcHCC->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusHCC ), NULL, this );
+	m_tCcHCC->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusHCC ), NULL, this );
+	m_tCcVCC->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusVCC ), NULL, this );
+	m_tCcVCC->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusVCC ), NULL, this );
+	m_tCcVLA->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusVLA ), NULL, this );
+	m_tCcVLA->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusVLA ), NULL, this );
+	m_tCcVLC->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusVLC ), NULL, this );
+	m_tCcVLC->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusVLC ), NULL, this );
 	m_tCcR0->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR0 ), NULL, this );
+	m_tCcR0->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR0 ), NULL, this );
 	m_tCcR0->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( RegistersStates::OnTextR0 ), NULL, this );
 	m_tCcR0->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( RegistersStates::OnTextEnterR0 ), NULL, this );
+	m_tCcR1->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR1 ), NULL, this );
+	m_tCcR1->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR1 ), NULL, this );
+	m_tCcR2->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR2 ), NULL, this );
+	m_tCcR2->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR2 ), NULL, this );
+	m_tCcR3->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR3 ), NULL, this );
+	m_tCcR3->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR3 ), NULL, this );
+	m_tCcR4->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR4 ), NULL, this );
+	m_tCcR4->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR4 ), NULL, this );
+	m_tCcR5->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR5 ), NULL, this );
+	m_tCcR5->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR5 ), NULL, this );
+	m_tCcR6->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR6 ), NULL, this );
+	m_tCcR6->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR6 ), NULL, this );
+	m_tCcR7->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR7 ), NULL, this );
+	m_tCcR7->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR7 ), NULL, this );
+	m_tCcR9->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR9 ), NULL, this );
+	m_tCcR9->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR9 ), NULL, this );
 }

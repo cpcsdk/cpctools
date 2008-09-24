@@ -4,6 +4,9 @@
 #include <sstream>
 #include <string>
 
+#define  UpCRTCRegTextControl(X, Y) if(!X->IsModified()){X->Clear();*X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
+#define  ModifCRTCReg(X, Y) {wxString str; long val; bool test; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetCRTC().SetRegisterValue(Y, (unsigned char)(val));} X->Clear(); *X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
+
 // Registers Dialog Event
 void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
 {
@@ -103,100 +106,156 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 //     CRTC Register
 
     // Internal Counter
+    if(!m_tCcHCC->IsModified())
+    {
     m_tCcHCC->Clear();
     *m_tCcHCC << (int)(emulator->GetCRTC().GetCharCount());
+    }
+    if(!m_tCcVCC->IsModified())
+    {
     m_tCcVCC->Clear();
     *m_tCcVCC << (int)(emulator->GetCRTC().GetLineCount());
+    }
+    if(!m_tCcVLC->IsModified())
+    {
     m_tCcVLC->Clear();
     *m_tCcVLC << (int)(emulator->GetCRTC().GetRasterCount());
+    }
     
     // Horizontal Register
-    //m_tCcR0->Clear();
-    //*m_tCcR0 << (int)(emulator->GetCRTC().GetRegisterValue(0));
-    m_tCcR1->Clear();
-    *m_tCcR1 << (int)(emulator->GetCRTC().GetRegisterValue(1));
-    m_tCcR2->Clear();
-    *m_tCcR2 << (int)(emulator->GetCRTC().GetRegisterValue(2));
-    m_tCcR3->Clear();
-    *m_tCcR3 << (int)(emulator->GetCRTC().GetRegisterValue(3));
-    
+    UpCRTCRegTextControl(m_tCcR0, 0);
+    UpCRTCRegTextControl(m_tCcR1, 1);
+    UpCRTCRegTextControl(m_tCcR2, 2);
+    UpCRTCRegTextControl(m_tCcR3, 3);
+
+
     // Vertical Register
-    m_tCcR4->Clear();
-    *m_tCcR4 << (int)(emulator->GetCRTC().GetRegisterValue(4));
-    m_tCcR5->Clear();
-    *m_tCcR5 << (int)(emulator->GetCRTC().GetRegisterValue(5));
-    m_tCcR6->Clear();
-    *m_tCcR6 << (int)(emulator->GetCRTC().GetRegisterValue(6));
-    m_tCcR7->Clear();
-    *m_tCcR7 << (int)(emulator->GetCRTC().GetRegisterValue(7));
-    m_tCcR9->Clear();
-    *m_tCcR9 << (int)(emulator->GetCRTC().GetRegisterValue(9));
-    /*unsigned char GetRegisterValue(unsigned char reg) const;
-	void SetRegisterValue(unsigned char reg, unsigned char val);*/
+    UpCRTCRegTextControl(m_tCcR4, 4);
+    UpCRTCRegTextControl(m_tCcR5, 5);
+    UpCRTCRegTextControl(m_tCcR6, 6);
+    UpCRTCRegTextControl(m_tCcR7, 7);
+    UpCRTCRegTextControl(m_tCcR9, 9);
+
+/*    tmp.str("");
+    tmp << ((int)(emulator->GetCRTC().GetRegisterValue(0) + 1)) << " µs";
+    *m_sT_HLineLength << wxString::FromAscii((tmp.str()).data());
+    tmp.str("");
+    tmp << ((int)(emulator->GetCRTC().GetRegisterValue(0) + 1)*((emulator->GetCRTC().GetRegisterValue(4) + 1)*(emulator->GetCRTC().GetRegisterValue(9) + 1) + emulator->GetCRTC().GetRegisterValue(5) + 1)) << " µs";
+    *m_sT_VFrameLength << wxString::FromAscii((tmp.str()).data());*/
 }
 
 void CapriceRegistersDialogImpl::OnTextR0( wxCommandEvent& event )
 {
-    /*wxString str;
-    long val;
-    bool test;
-    str = m_tCcR0->GetValue();
-    cout << "str:" << (const char*)str.mb_str(wxConvUTF8) << endl;
-    test = str.ToLong(&val,10);
-    cout << "test : " << test << endl;
-    cout << "val : " << val << endl;
-    if(str.ToLong(&val,10))
-    {
-        cout << val;
-        if((val > 0) && (val < 255));
-        emulator->GetCRTC().SetRegisterValue(0, (unsigned char)(val));
-    }
-    ostringstream tmp;
-    tmp << (int)(emulator->GetCRTC().GetRegisterValue(0));
-    m_staticText50->SetLabel(wxString::FromAscii((tmp.str()).data()));*/
-    //m_tCcR0->Clear();
-    //*m_tCcR0 << (int)(emulator->GetCRTC().GetRegisterValue(0));
 }
 
 void CapriceRegistersDialogImpl::OnTextEnterR0( wxCommandEvent& event )
 {
-    wxString str;
-    long val;
-    bool test;
-    str = m_tCcR0->GetValue();
-    cout << "str:" << (const char*)str.mb_str(wxConvUTF8) << endl;
-    test = str.ToLong(&val,10);
-    cout << "test : " << test << endl;
-    cout << "val : " << val << endl;
-    if(str.ToLong(&val,10))
-    {
-        cout << val;
-        if((val > 0) && (val < 255));
-        emulator->GetCRTC().SetRegisterValue(0, (unsigned char)(val));
-    }
-    //m_tCcR0->Clear();
-    //*m_tCcR0 << (int)(emulator->GetCRTC().GetRegisterValue(0));
 }
 
+void CapriceRegistersDialogImpl::OnKillFocusHCC( wxFocusEvent& event )
+{
+}
+void CapriceRegistersDialogImpl::OnSetFocusHCC( wxFocusEvent& event )
+{
+}
+void CapriceRegistersDialogImpl::OnKillFocusVCC( wxFocusEvent& event )
+{
+}
+void CapriceRegistersDialogImpl::OnSetFocusVCC( wxFocusEvent& event )
+{
+}
+void CapriceRegistersDialogImpl::OnKillFocusVLA( wxFocusEvent& event )
+{
+}
+void CapriceRegistersDialogImpl::OnSetFocusVLA( wxFocusEvent& event )
+{
+}
+void CapriceRegistersDialogImpl::OnKillFocusVLC( wxFocusEvent& event )
+{
+}
+void CapriceRegistersDialogImpl::OnSetFocusVLC( wxFocusEvent& event )
+{
+}
 void CapriceRegistersDialogImpl::OnKillFocusR0( wxFocusEvent& event )
 {
-    wxString str;
-    long val;
-    bool test;
-    str = m_tCcR0->GetValue();
-    cout << "str:" << (const char*)str.mb_str(wxConvUTF8) << endl;
-    test = str.ToLong(&val,10);
-    cout << "test : " << test << endl;
-    cout << "val : " << val << endl;
-    if(str.ToLong(&val,10))
-    {
-        cout << val;
-        if((val > 0) && (val < 255));
-        emulator->GetCRTC().SetRegisterValue(0, (unsigned char)(val));
-    }
+    ModifCRTCReg(m_tCcR0, 0);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR0( wxFocusEvent& event )
+{
+    m_tCcR0->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR1( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR1, 1);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR1( wxFocusEvent& event )
+{
+    m_tCcR1->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR2( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR2, 2);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR2( wxFocusEvent& event )
+{
+    m_tCcR2->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR3( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR3, 3);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR3( wxFocusEvent& event )
+{
+    m_tCcR3->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR4( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR4, 4);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR4( wxFocusEvent& event )
+{
+    m_tCcR4->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR5( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR5, 5);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR5( wxFocusEvent& event )
+{
+    m_tCcR5->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR6( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR6, 6);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR6( wxFocusEvent& event )
+{
+    m_tCcR6->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR7( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR7, 7);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR7( wxFocusEvent& event )
+{
+    m_tCcR7->MarkDirty();
+}
+void CapriceRegistersDialogImpl::OnKillFocusR9( wxFocusEvent& event )
+{
+    ModifCRTCReg(m_tCcR9, 9);
+}
+void CapriceRegistersDialogImpl::OnSetFocusR9( wxFocusEvent& event )
+{
+    m_tCcR9->MarkDirty();
 }
 
 void CapriceRegistersDialogImpl::SetEmulator(Emulator *emulator)
 {
 	this->emulator = emulator ;
+}
+
+void CapriceRegistersDialogImpl::OnCloseR( wxCloseEvent& event )
+{
+   cout << "Close" << endl;
+   this->Destroy();
 }
