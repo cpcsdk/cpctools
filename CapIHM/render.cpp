@@ -16,6 +16,15 @@
 
 #include <iostream>
 
+// SSE Intrinsics
+#ifdef __SSE__
+#include <xmmintrin.h>
+#endif
+#ifdef __SSE2__
+#include <emmintrin.h>
+#endif
+
+
 Renderer::Renderer() :
 _currentFlagConfig(0),
 _renderFunc(NULL),
@@ -603,12 +612,23 @@ void Renderer::PreRenderSyncHalfFunction::PreRender(unsigned int /*memAddr*/)
 
 void Renderer::PreRenderNormalFunction::PreRender(unsigned int memAddr)
 {
-	register byte bVidMem = *(_memory + memAddr);
+	/*register byte bVidMem = *(_memory + memAddr);
 	*_renderPos = *(_modeMap + (bVidMem * 2));
 	*(_renderPos + 1) = *(_modeMap + (bVidMem * 2) + 1);
 	bVidMem = *(_memory + memAddr + 1);
 	*(_renderPos + 2) = *(_modeMap + (bVidMem * 2));
 	*(_renderPos + 3) = *(_modeMap + (bVidMem * 2) + 1);
+	_renderPos += 4;*/
+	register byte bVidMem = *(_memory + memAddr);
+	register byte bVidMem2 = *(_memory + memAddr + 1);
+#ifdef __SSE__
+	_mm_prefetch(_modeMap + (bVidMem * 2), _MM_HINT_NTA);
+	_mm_prefetch(_modeMap + (bVidMem2 * 2), _MM_HINT_NTA);
+#endif
+	*_renderPos = *(_modeMap + (bVidMem * 2));
+	*(_renderPos + 1) = *(_modeMap + (bVidMem * 2) + 1);
+	*(_renderPos + 2) = *(_modeMap + (bVidMem2 * 2));
+	*(_renderPos + 3) = *(_modeMap + (bVidMem2 * 2) + 1);
 	_renderPos += 4;
 }
 
@@ -705,6 +725,10 @@ void Renderer::Render24BppFunction::PlotPixel(int x, int y, const SDL_Color &col
 void Renderer::Render32BppFunction::Render(void)
 {
 	register byte bCount = *_renderWidth++;
+#ifdef __SSE__
+	_mm_prefetch(_palette, _MM_HINT_NTA);
+	//_mm_prefetch(_renderData, _MM_HINT_NTA);
+#endif
 	while (bCount--) {
 		*_scrPos++ = _palette[*_renderData++];
 	}

@@ -1,3 +1,16 @@
+2008-09-25 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* GUI : On the fly edition of Z80 8bits Register now works ! Add
+	screen timing checker in CRTC Tabs. Some speed up with the Register
+	Box open : the update now only on the active tabs. Some Cleanup in the
+	GUI code.
+	* emulation core : Slow speed up in the render by doing some cache
+	prefetch if SSE is active (need to add the flags -msse)
+
+2008-09-24 CloudStrife/Shinra <cloudstrife@cpcsene.com>
+	* GUI : On the fly edition of CRTC Register now works ! Register
+	windows now destroy on close and don't use any ressource. AboutBox
+	move in is own file.
+
 2008-09-23 Krusty/Benediction <krusty@cpcscene.com>
 	* GUI : add the beginnning of a splash screen.
 	* application : possibility to use the command line.

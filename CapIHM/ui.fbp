@@ -2546,7 +2546,7 @@
                         <property name="id">wxID_ANY</property>
                         <property name="maximum_size"></property>
                         <property name="minimum_size"></property>
-                        <property name="name">m_notebook2</property>
+                        <property name="name">m_nb_Register</property>
                         <property name="permission">protected</property>
                         <property name="pos"></property>
                         <property name="size"></property>
@@ -2627,7 +2627,7 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
-                                <object class="wxBoxSizer" expanded="1">
+                                <object class="wxBoxSizer" expanded="0">
                                     <property name="minimum_size"></property>
                                     <property name="name">bSizer23</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -2902,7 +2902,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass"></property>
                                                                     <property name="tooltip"></property>
-                                                                    <property name="value">a</property>
+                                                                    <property name="value"></property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
@@ -2911,7 +2911,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusA</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -2926,7 +2926,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusA</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -2966,7 +2966,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusAx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -2981,7 +2981,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusAx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3063,7 +3063,7 @@
                                                                     <property name="style"></property>
                                                                     <property name="subclass"></property>
                                                                     <property name="tooltip"></property>
-                                                                    <property name="value">f</property>
+                                                                    <property name="value"></property>
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
@@ -3072,7 +3072,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusF</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3087,7 +3087,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusF</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3127,7 +3127,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusFx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3142,7 +3142,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusFx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3233,7 +3233,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusB</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3248,7 +3248,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusB</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3288,7 +3288,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusBx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3303,7 +3303,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusBx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3394,7 +3394,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusC</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3409,7 +3409,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusC</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3449,7 +3449,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusCx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3464,7 +3464,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusCx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3555,7 +3555,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusD</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3570,7 +3570,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusD</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3610,7 +3610,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusDx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3625,7 +3625,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusDx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3716,7 +3716,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusE</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3731,7 +3731,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusE</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3771,7 +3771,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusEx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3786,7 +3786,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusEx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3877,7 +3877,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusH</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3892,7 +3892,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusH</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -3932,7 +3932,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusHx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -3947,7 +3947,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusHx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -4038,7 +4038,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusL</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -4053,7 +4053,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusL</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -4093,7 +4093,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusLx</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -4108,7 +4108,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusLx</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -4199,7 +4199,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusI</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -4214,7 +4214,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusI</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -4356,7 +4356,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnKillFocusR</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -4371,7 +4371,7 @@
                                                                     <event name="OnRightDClick"></event>
                                                                     <event name="OnRightDown"></event>
                                                                     <event name="OnRightUp"></event>
-                                                                    <event name="OnSetFocus"></event>
+                                                                    <event name="OnSetFocus">OnSetFocusR</event>
                                                                     <event name="OnSize"></event>
                                                                     <event name="OnText"></event>
                                                                     <event name="OnTextEnter"></event>
@@ -6108,7 +6108,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox3</property>
+                                                                            <property name="name">m_cB_SFlags</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6160,7 +6160,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox4</property>
+                                                                            <property name="name">m_cB_ZFlags</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6212,7 +6212,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox5</property>
+                                                                            <property name="name">m_cB_HFlags</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6264,7 +6264,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox6</property>
+                                                                            <property name="name">m_cB_PFlags</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6316,7 +6316,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox7</property>
+                                                                            <property name="name">m_cB_NFlags</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6368,7 +6368,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox8</property>
+                                                                            <property name="name">m_cB_CFlags</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6471,7 +6471,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox9</property>
+                                                                            <property name="name">m_cB_SFlagsShadow</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6523,7 +6523,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox10</property>
+                                                                            <property name="name">m_cB_ZFlagsShadow</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6575,7 +6575,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox11</property>
+                                                                            <property name="name">m_cB_HFlagsShadow</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6627,7 +6627,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox12</property>
+                                                                            <property name="name">m_cB_PFlagsShadow</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6679,7 +6679,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox13</property>
+                                                                            <property name="name">m_cB_NFlagsShadow</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6731,7 +6731,7 @@
                                                                             <property name="label"></property>
                                                                             <property name="maximum_size"></property>
                                                                             <property name="minimum_size"></property>
-                                                                            <property name="name">m_checkBox14</property>
+                                                                            <property name="name">m_cB_CFlagsShadow</property>
                                                                             <property name="permission">protected</property>
                                                                             <property name="pos"></property>
                                                                             <property name="size"></property>
@@ -6779,7 +6779,7 @@
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">0</property>
-                                        <object class="wxBoxSizer" expanded="1">
+                                        <object class="wxBoxSizer" expanded="0">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizer24</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -6788,7 +6788,7 @@
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">1</property>
-                                                <object class="wxStaticBoxSizer" expanded="1">
+                                                <object class="wxStaticBoxSizer" expanded="0">
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Shadow Register States</property>
                                                     <property name="minimum_size"></property>
@@ -6800,7 +6800,7 @@
                                                         <property name="border">5</property>
                                                         <property name="flag">wxEXPAND</property>
                                                         <property name="proportion">1</property>
-                                                        <object class="wxFlexGridSizer" expanded="1">
+                                                        <object class="wxFlexGridSizer" expanded="0">
                                                             <property name="cols">2</property>
                                                             <property name="flexible_direction">wxBOTH</property>
                                                             <property name="growablecols"></property>
@@ -6971,7 +6971,7 @@
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
                                 <event name="OnUpdateUI"></event>
-                                <object class="wxBoxSizer" expanded="1">
+                                <object class="wxBoxSizer" expanded="0">
                                     <property name="minimum_size"></property>
                                     <property name="name">bSizer21</property>
                                     <property name="orient">wxVERTICAL</property>
@@ -8490,7 +8490,7 @@
                                         <property name="border">5</property>
                                         <property name="flag">wxEXPAND</property>
                                         <property name="proportion">1</property>
-                                        <object class="wxBoxSizer" expanded="1">
+                                        <object class="wxBoxSizer" expanded="0">
                                             <property name="minimum_size"></property>
                                             <property name="name">bSizer20</property>
                                             <property name="orient">wxVERTICAL</property>
@@ -8499,7 +8499,7 @@
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND</property>
                                                 <property name="proportion">1</property>
-                                                <object class="wxStaticBoxSizer" expanded="1">
+                                                <object class="wxStaticBoxSizer" expanded="0">
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="label">Timing Checking</property>
                                                     <property name="minimum_size"></property>
@@ -8511,7 +8511,7 @@
                                                         <property name="border">5</property>
                                                         <property name="flag">wxEXPAND</property>
                                                         <property name="proportion">1</property>
-                                                        <object class="wxFlexGridSizer" expanded="1">
+                                                        <object class="wxFlexGridSizer" expanded="0">
                                                             <property name="cols">3</property>
                                                             <property name="flexible_direction">wxBOTH</property>
                                                             <property name="growablecols"></property>
@@ -8586,7 +8586,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">MyLabel</property>
+                                                                    <property name="label">xxxxx us</property>
                                                                     <property name="maximum_size"></property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_sT_HLineLength</property>
@@ -8740,7 +8740,7 @@
                                                                     <property name="font"></property>
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
-                                                                    <property name="label">MyLabel</property>
+                                                                    <property name="label">xxxxx us</property>
                                                                     <property name="maximum_size"></property>
                                                                     <property name="minimum_size"></property>
                                                                     <property name="name">m_sT_VFrameLength</property>

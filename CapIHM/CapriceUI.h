@@ -162,7 +162,7 @@ class RegistersStates : public wxDialog
 	private:
 	
 	protected:
-		wxNotebook* m_notebook2;
+		wxNotebook* m_nb_Register;
 		wxPanel* m_panel4;
 		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText10;
@@ -227,19 +227,19 @@ class RegistersStates : public wxDialog
 		wxStaticText* m_staticText39;
 		wxStaticText* m_staticText40;
 		wxStaticText* m_staticText41;
-		wxCheckBox* m_checkBox3;
-		wxCheckBox* m_checkBox4;
-		wxCheckBox* m_checkBox5;
-		wxCheckBox* m_checkBox6;
-		wxCheckBox* m_checkBox7;
-		wxCheckBox* m_checkBox8;
+		wxCheckBox* m_cB_SFlags;
+		wxCheckBox* m_cB_ZFlags;
+		wxCheckBox* m_cB_HFlags;
+		wxCheckBox* m_cB_PFlags;
+		wxCheckBox* m_cB_NFlags;
+		wxCheckBox* m_cB_CFlags;
 		wxStaticText* m_staticText42;
-		wxCheckBox* m_checkBox9;
-		wxCheckBox* m_checkBox10;
-		wxCheckBox* m_checkBox11;
-		wxCheckBox* m_checkBox12;
-		wxCheckBox* m_checkBox13;
-		wxCheckBox* m_checkBox14;
+		wxCheckBox* m_cB_SFlagsShadow;
+		wxCheckBox* m_cB_ZFlagsShadow;
+		wxCheckBox* m_cB_HFlagsShadow;
+		wxCheckBox* m_cB_PFlagsShadow;
+		wxCheckBox* m_cB_NFlagsShadow;
+		wxCheckBox* m_cB_CFlagsShadow;
 		wxCheckBox* m_checkBox15;
 		wxCheckBox* m_checkBox16;
 		wxPanel* m_panel8;
@@ -281,6 +281,42 @@ class RegistersStates : public wxDialog
 		virtual void OnCloseR( wxCloseEvent& event ){ event.Skip(); }
 		virtual void OnIdleR( wxIdleEvent& event ){ event.Skip(); }
 		virtual void OnInitR( wxInitDialogEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusA( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusA( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusAx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusAx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusF( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusF( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusFx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusFx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusB( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusB( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusBx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusBx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusC( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusC( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusCx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusCx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusD( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusD( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusDx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusDx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusE( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusE( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusEx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusEx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusH( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusH( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusHx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusHx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusL( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusL( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusLx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusLx( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusI( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusI( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnKillFocusR( wxFocusEvent& event ){ event.Skip(); }
+		virtual void OnSetFocusR( wxFocusEvent& event ){ event.Skip(); }
 		virtual void OnKillFocusHCC( wxFocusEvent& event ){ event.Skip(); }
 		virtual void OnSetFocusHCC( wxFocusEvent& event ){ event.Skip(); }
 		virtual void OnKillFocusVCC( wxFocusEvent& event ){ event.Skip(); }
