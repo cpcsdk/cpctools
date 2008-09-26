@@ -10,14 +10,18 @@
 #include <stdio.h>
 
 #include <iostream>
-#include <cstring>
 
 /**
  * @todo Gerer comNumber comme un entier sous windows et une chaine sous linux
  *
  * Pourquoi ne pas avoir utilise les read/write buffer depuis les read/write byte/word ?
  */
+#if _WINDOWS
 CCPCBooster::CCPCBooster(int comNumber) :
+#else
+CCPCBooster::CCPCBooster(std::string comNumber) :
+_COMPortHandle(comNumber),
+#endif
 _COMPortNumber(comNumber),
 _currentState(PortFailed),
 _currentError(ErrOK)
@@ -127,88 +131,54 @@ void CCPCBooster::OpenPort()
  * Code specifique aux unices
  */
 #else
-	sprintf(portName,"/dev/ttyS%d", _COMPortNumber) ;
-
-	_COMPortHandle = open(portName, O_RDWR | O_NOCTTY );
-        if (_COMPortHandle < 0)
-        {
-                _currentError = ErrInvalidHandle;
-        }
-        else
-        {
-
-	struct termios oldtio,newtio;
-
-		tcgetattr(_COMPortHandle,&oldtio); 		/* save current serial port settings */
-        	bzero(&newtio, sizeof(newtio)); /* clear struct for new port settings */
-        		
-		
-		if ( /*fSuccess != TRUE*/ 0) 
-		{
-			_currentError = ErrGetStateFailed;
-		}
-		else
-		{
- /* 
- *           CRTSCTS : output hardware flow control (only used if the cable has
- *           all necessary lines. See sect. 7 of Serial-HOWTO)
- *           CS8     : 8n1 (8bit,no parity,1 stopbit)
- *           CLOCAL  : local connection, no modem contol
- *          CREAD   : enable receiving characters
- */
-   
-	      newtio.c_cflag = B115200 | CRTSCTS | CS8 | CLOCAL | CREAD;
-         
+	//portName = _COMPortNumber ;
 /*
- *           IGNPAR  : ignore bytes with parity errors
- *           ICRNL   : map CR to NL (otherwise a CR input on the other computer
- *                     will not terminate input)
- *                otherwise make device raw (no other input processing)
- */
-         newtio.c_iflag = IGNPAR | ICRNL;
-         
-/*
- *          Raw output.
- */
-         newtio.c_oflag = 0;
-         
-/*
- *           ICANON  : enable canonical input
- *                     disable all echo functionality, and don't send signals to calling program
- */
-         newtio.c_lflag = ICANON;
-         
-        /* 
- *           initialize all control characters 
- *                     default values can be found in /usr/include/termios.h, and are given
- *                               in the comments, but we don't need them here
- *                                       */
-         newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */ 
-         newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
-         newtio.c_cc[VERASE]   = 0;     /* del */
-         newtio.c_cc[VKILL]    = 0;     /* @ */
-         newtio.c_cc[VEOF]     = 4;     /* Ctrl-d */
-         newtio.c_cc[VTIME]    = 10;    // Timeout 
-         newtio.c_cc[VMIN]     = 0;     
-         newtio.c_cc[VSWTC]    = 0;     /* '\0' */
-         newtio.c_cc[VSTART]   = 0;     /* Ctrl-q */ 
-         newtio.c_cc[VSTOP]    = 0;     /* Ctrl-s */
-         newtio.c_cc[VSUSP]    = 0;     /* Ctrl-z */
-         newtio.c_cc[VEOL]     = 0;     /* '\0' */
-         newtio.c_cc[VREPRINT] = 0;     /* Ctrl-r */
-         newtio.c_cc[VDISCARD] = 0;     /* Ctrl-u */
-         newtio.c_cc[VWERASE]  = 0;     /* Ctrl-w */
-         newtio.c_cc[VLNEXT]   = 0;     /* Ctrl-v */
-         newtio.c_cc[VEOL2]    = 0;     /* '\0' */
+	_COMPortHandle.Open(
+	    SerialPort::BAUD_115200,
+	    SerialPort::CHAR_SIZE_8,
+	    SerialPort::PARITY_NONE,
+	    SerialPort::STOP_BITS_1,
+	    SerialPort::FLOW_CONTROL_HARD);	
+	    */
 
-        /* 
- *           now clean the modem line and activate the settings for the port
- *                   */
-         tcflush(_COMPortHandle, TCIFLUSH);
-         tcsetattr(_COMPortHandle,TCSANOW,&newtio);
-
-		}
+	_COMPortHandle.SetBaudRate(SerialStreamBuf::BAUD_115200);
+	if ( !_COMPortHandle.good())
+	{
+	    _currentError = ErrInvalidHandle ;
+	    return ;
 	}
+
+	_COMPortHandle.SetCharSize(LibSerial::SerialStreamBuf::CHAR_SIZE_8);
+	if ( !_COMPortHandle.good())
+	{
+	    _currentError = ErrInvalidHandle ;
+	    return ;
+	}
+
+	_COMPortHandle.SetParity(SerialStreamBuf::PARITY_NONE) ;
+	if ( !_COMPortHandle.good())
+	{
+	    _currentError = ErrInvalidHandle ;
+	    return ;
+	}
+
+	_COMPortHandle.SetNumOfStopBits(1);
+	if ( !_COMPortHandle.good())
+	{
+	    _currentError = ErrInvalidHandle ;
+	    return ;
+	}
+	
+	_COMPortHandle.SetFlowControl( SerialStreamBuf::FLOW_CONTROL_NONE ) ;
+
+	_COMPortHandle.unsetf( std::ios_base::skipws ) ;
+
+
+	if (_COMPortHandle.IsOpen())
+	{
+	    _currentState = PortOpened ;
+	}
+
 #endif
 	
 }
@@ -219,7 +189,7 @@ void CCPCBooster::ClosePort()
 #if _WINDOWS
 		CloseHandle(_COMPortHandle);
 #else
-		close(_COMPortHandle);
+		_COMPortHandle.Close();
 #endif
 	}
 	_currentState = PortClosed;
@@ -237,13 +207,15 @@ bool CCPCBooster::ReadWaitByte(unsigned char &val)
 
 	return ((nbBytesReceived == 1) && fSuccess);
 #else
-	unsigned long nbBytesReceived = 0 ;
-	while ( nbBytesReceived != 1 )
-	{
-		nbBytesReceived = read( _COMPortHandle, &val, 1) ;	
-	}
+	unsigned long nbBytesReceived = 1 ;
+	/*
+	char byte = _COMPortHandle.ReadByte();
 
-	return nbBytesReceived == 1 ;
+	val = byte ;
+	*/
+
+	_COMPortHandle >> val ;
+	return true ; 
 #endif
 }
 bool CCPCBooster::ReadByte(unsigned char &val)
@@ -255,9 +227,17 @@ bool CCPCBooster::ReadByte(unsigned char &val)
 
 	return nbBytesReceived == 1 ;
 #else
-        unsigned long nbBytesReceived = 0 ;
-        nbBytesReceived = read( _COMPortHandle, &val, 1) ;  
-	return nbBytesReceived == 1;
+	 unsigned long nbBytesReceived = 1 ;
+
+	 /*
+	 try{
+		 val = _COMPortHandle.ReadByte(); 
+	}catch(SerialPort::ReadTimeout e){
+	    nbBytesReceived = 0 ;
+	}*/
+
+	 _COMPortHandle >> val ;
+	return true;
 #endif
 
 }
@@ -270,8 +250,13 @@ bool CCPCBooster::WriteByte(const unsigned char val)
 	
 	return ((nbBytesSend == 1) && fSuccess);
 #else
-	unsigned long nbBytesSend = 0 ;
-	nbBytesSend = write( _COMPortHandle, &val, 1) ;
+	unsigned long nbBytesSend = 1 ;
+//	_COMPortHandle.WriteByte(val);
+//
+
+	_COMPortHandle.write( (const char *)&val,1) ;
+	_COMPortHandle.flush();
+	printf("\tWrite : $%x\n", val);
 	return nbBytesSend == 1 ;
 #endif
 }
@@ -288,13 +273,19 @@ bool CCPCBooster::ReadWaitWord(unsigned short &val)
 
 	return ((nbBytesReceived == 2) && fSuccess);
 #else
-        unsigned long nbBytesReceived = 0 ;
-        while ( nbBytesReceived != 2 )
-        {
-                nbBytesReceived = read( _COMPortHandle, &val, 2) ;
-        }
+	unsigned char byte1, byte2 ;
 
-        return nbBytesReceived == 2 ;
+	if (
+		ReadWaitByte(byte1) &&
+		ReadWaitByte(byte2) 
+	    )
+	{
+	    val = byte1 * 256 + byte2 ;
+	    return 1 == 1 ;
+	}
+	else{
+	    return 1 == 0 ;
+	}
 
 #endif
 }
@@ -308,9 +299,20 @@ bool CCPCBooster::ReadWord(unsigned short &val)
 
 	return ((nbBytesReceived == 2) && fSuccess);
 #else
-        unsigned long nbBytesReceived = 0 ;
-        nbBytesReceived = read( _COMPortHandle, &val, 2) ;
-        return nbBytesReceived == 2;
+	unsigned char byte1, byte2 ;
+
+	if (
+		ReadByte(byte1) &&
+		ReadByte(byte2) 
+	    )
+	{
+	    val = byte1 * 256 + byte2 ;
+	    return 1 == 1 ;
+	}
+	else{
+	    return 1 == 0 ;
+	}
+
 
 #endif
 }
@@ -323,10 +325,18 @@ bool CCPCBooster::WriteWord(const unsigned short val)
 	
 	return ((nbBytesSend == 2) && fSuccess);
 #else
-        unsigned long nbBytesSend = 0 ;
-        nbBytesSend = write( _COMPortHandle, &val, 2) ;
-        return nbBytesSend == 2 ;
+/*
+	unsigned char byte1, byte2 ;
 
+	byte1 = val % 256 ;
+	byte2 = val / 256 ;
+
+	_COMPortHandle.WriteByte(byte1);
+	_COMPortHandle.WriteByte(byte2) ;
+*/
+
+	_COMPortHandle << val ;
+	return true ;
 #endif
 }
 
@@ -344,16 +354,19 @@ bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 
 	return ((nbBytesReceived == nbBytes) && fSuccess);
 #else
-        unsigned long nbBytesReceived = 0 ;
-        while ( nbBytesReceived != nbBytes )
-        {
-                nbBytesReceived = read( _COMPortHandle, buffer, nbBytes) ;
-        }
+	/*
+	for (long i=0 ; i< nbBytes ; i++)
+	    buffer[i] =_COMPortHandle.ReadByte( );
+	    */
 
-        return nbBytesReceived == nbBytes ;
+	_COMPortHandle.read( (char *)buffer, 
+		             nbBytes) ;
 
+	return true ;
 #endif
 }
+
+
 bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 {
 #if _WINDOWS
@@ -363,9 +376,13 @@ bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 
 	return ((nbBytesReceived == nbBytes) && fSuccess);
 #else
-        unsigned long nbBytesRead = 0 ;
-        nbBytesRead = write( _COMPortHandle, buffer, nbBytes) ;
-        return nbBytesRead == nbBytes ;
+	/*
+	for (long i=0 ; i< nbBytes ; i++)
+	    buffer[i] =_COMPortHandle.ReadByte( 100 );
+	    */
+	_COMPortHandle.read( (char *)buffer,                                                                             
+	                     nbBytes) ; 
+	return true ;
 
 #endif
 }
@@ -380,10 +397,13 @@ bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
 	std::cout << (int)nbBytesSend << " bytes send" << std::endl;
 	return ((nbBytesSend == nbBytes) && fSuccess);
 #else
-        unsigned long nbBytesSend = 0 ;
-        nbBytesSend = write( _COMPortHandle, buffer, nbBytes) ;
-	std::cout << (int)nbBytesSend << " bytes send" << std::endl;
-        return nbBytesSend == nbBytes ;
+	/*
+	 for (long i=0 ; i< nbBytes ; i++)
+	    _COMPortHandle.WriteByte(buffer[i]);
+    */
+
+	_COMPortHandle.write( (char *) buffer, nbBytes);
+	return true ;
 #endif
 
 }

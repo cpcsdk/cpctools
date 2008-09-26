@@ -9,7 +9,6 @@
 #include "CAksFileTransfert.h"
 
 #include <iostream>
-#include <cstring>
 
 char* CAksFileTransfert::AksCommandShortDesc[] = 
 {
@@ -55,7 +54,11 @@ char* CAksFileTransfert::DisplayMessageHeader[] =
 	"Debug: "
 };
 
+#if _WINDOWS
 CAksFileTransfert::CAksFileTransfert(int comNumber) :
+#else
+CAksFileTransfert::CAksFileTransfert(std::string comNumber) :
+#endif
 CCPCBooster(comNumber),
 _transfertMode(NoTransfert),
 _nbTransfert(0),
@@ -149,8 +152,8 @@ CAksCommand CAksFileTransfert::GetCommand(bool wait)
 		}
 		else
 		{
-			std::cout << "Unknwon command get" << std::endl;
-
+			//std::cout << "Unknwon command get" << std::endl;
+			printf(" Unknwon command get ($%x)\n", command );
 			return AksUnknownCommand;
 		}
 	}

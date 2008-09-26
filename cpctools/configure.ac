@@ -67,6 +67,10 @@ if (test "$with_cpcfs" = "yes") || (test "$with_cpcdskmanager" = "yes"); then
 	AC_CHECK_HEADERS([libdsk.h])
 fi
 
+if test "$with_aft" = "yes" ; then
+    AC_CHECK_HEADERS([SerialStream.h])
+    AC_CHECK_HEADERS([SerialPort.h])
+fi
 
 if test "$with_cpcdskmanager" = "yes" ; then
 	AC_CHECK_HEADERS([ctype.h])

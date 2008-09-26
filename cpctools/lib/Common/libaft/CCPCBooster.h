@@ -19,6 +19,12 @@
 #include <fcntl.h>
 #include <sys/signal.h>
 #include <sys/types.h>
+
+#include <string>
+#include <SerialStream.h>
+#include <SerialPort.h>
+ using namespace LibSerial ;
+
 #endif
 
 
@@ -47,12 +53,16 @@ protected:
 #if _WINDOWS
     //! COM port handle
 	HANDLE				_COMPortHandle;
-#else
-	int				_COMPortHandle;
-#endif
-
 	//! Current COM port number
 	int					_COMPortNumber;
+
+#else
+	SerialStream				_COMPortHandle;
+	//! Current COM port number
+	std::string					_COMPortNumber;
+
+#endif
+
 	//! Current port state
 	CCPCBoosterState	_currentState;
 	//! Current error
@@ -60,7 +70,11 @@ protected:
 
 public:
 	//! Constructor, opening a COM port
+#if _WINDOWS
 	CCPCBooster(int comNumber = 1);
+#else 
+	CCPCBooster(std::string comNumber = "/dev/ttyS0");
+#endif
 	//! Destructor, closing opended COM port
 	virtual ~CCPCBooster();
 

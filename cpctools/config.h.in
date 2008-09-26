@@ -21,6 +21,12 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define to 1 if you have the <SerialPort.h> header file. */
+#undef HAVE_SERIALPORT_H
+
+/* Define to 1 if you have the <SerialStream.h> header file. */
+#undef HAVE_SERIALSTREAM_H
+
 /* Define to 1 if you have the <sstream> header file. */
 #undef HAVE_SSTREAM
 

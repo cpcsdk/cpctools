@@ -34,22 +34,27 @@ int main(int argc, char *argv[])
 {
 	try
 	{
-		COptionParser optParser(appliOption, appliName, appliUsageShort, appliUsageLong, authorName, authorMail);
+//		COptionParser optParser(appliOption, appliName, appliUsageShort, appliUsageLong, authorName, authorMail);
 		
-		optParser.PrintHeader(std::cout);
-
+//		optParser.PrintHeader(std::cout);
+/*
 		if (!optParser.ParseCommandLine(&argc, &argv, 0, false))
 		{
 			optParser.PrintError(std::cout);
 			optParser.PrintUsage(std::cout);
 			return -1;
 		}
-
+*/
 		bool noLoop = false;
+#if _WINDOWS
 		int COMport = 1;
+#else
+		std::string COMport = "/dev/ttyS0" ;
+#endif
 		std::string filename = "";
 		std::string dir = "";
 
+		/*
 		int i=0;
 		while (optParser.GetOptionI(i) != 0)
 		{
@@ -57,7 +62,11 @@ int main(int argc, char *argv[])
 			{
 			case 'p':
 				{
+#if _WINDOWS
 					COMport = optParser.GetIntOptionI(i);
+#else
+					COMport = optParser.GetStringOptionI(i);
+#endif
 					break;
 				}
 			case 'f':
@@ -84,12 +93,13 @@ int main(int argc, char *argv[])
 
 			i++;
 		}
-
+*/
+		std::cout << "COMport " << COMport << endl ;
 		CAksFileTransfert transfert(COMport);
 
 		if (!transfert.IsOpen())
 		{
-			std::cout << "Unable to open port COM" << COMport << std::endl;
+			std::cout << "Unable to open port COM " << COMport << std::endl;
 			return -1;
 		}
 
