@@ -8,12 +8,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-unsigned short addrCalc(unsigned char vcc, unsigned char rcc, unsigned char hcc, unsigned char cclk, unsigned char r1)
+unsigned short addrCalc(unsigned char vcc, unsigned char rcc, unsigned char hcc, unsigned char cclk, unsigned char r1, unsigned char r12, unsigned char r13)
 {
   unsigned short MA;
   unsigned short addr;
 
-  MA = vcc*r1 + hcc + (0x0C)*256;
+  //MA = vcc*r1 + hcc + (0x0C)*256;
+  MA = vcc*r1 + hcc + r12*256 + r13;
   addr = cclk | ((MA & 0x03FF) << 1);
   addr = addr | ((rcc & 0x07) << 11);
   addr = addr | ((MA & 0x3000) << 2);
@@ -49,7 +50,7 @@ unsigned char mode3interlace(unsigned char *x)
 
 unsigned char (*ptrMode)(unsigned char *x);
 
-unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned short height, unsigned char mode, unsigned char r9, unsigned long *outSize, unsigned char *r1)
+unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned short height, unsigned char mode, unsigned char r9, unsigned long *outSize, unsigned char *r1, unsigned char r12, unsigned char r13)
 {
   unsigned char *outBuffer;
   unsigned char *tmpBuffer;
@@ -125,8 +126,8 @@ unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned sho
 	{
 	  x = (hcc << 1 | cclk);
 	  y = vcc*(r9+1) + rcc;
-	  *(tmpBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1)) = (*ptrMode)(input + y*width + x*nbPixPerByte);
-	  *(allocationBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1)) += 1;
+	  *(tmpBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1, r12, r13)) = (*ptrMode)(input + y*width + x*nbPixPerByte);
+	  *(allocationBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1, r12, r13)) += 1;
 	}
       }
     }

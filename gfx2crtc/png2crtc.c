@@ -17,13 +17,14 @@ int main(int argc, char **argv)
   unsigned char *inBuffer, *outBuffer;
   unsigned long outSize;
 
-  unsigned char r1, r9;
+  unsigned char r1, r9, r12, r13;
   png_uint_32 width;
   png_uint_32 height;
   int bitdepth;
   int colorType;
   unsigned char mode;
   unsigned char forcemode = 0;
+  unsigned char forcer12 = 0, forcer13 = 0;
 
   unsigned char header[8];
   unsigned char is_png;
@@ -35,24 +36,39 @@ int main(int argc, char **argv)
 
   png_bytep * ptrRow;
 
-  if((argc != 3) && (argc != 4) && (argc != 5))
+  if((argc != 3) && (argc != 4) && (argc != 5) && (argc != 6) && (argc != 7))
   {
-    printf("Utilisation : %s input_filename output_filename [registre9] [mode]\n",argv[0]);
+    printf("Utilisation : %s input_filename output_filename [registre9] [mode] [r12] [r13]\n",argv[0]);
     exit(0);
   }
 
   inFile = fopen(argv[1],"rb");
 
-  if((argc == 4) || (argc == 5)) 
+  if(argc >= 4) 
   {sscanf(argv[3],"%hhud",&r9);}
   else
   {r9 = 7;}
-  if(argc == 5)
+  if(argc >= 5)
   {
     sscanf(argv[4],"%hhud",&mode);
     forcemode = 1;
     if(mode > 3) printf("mode doit être compris entre 0 et 3");
     mode = mode & 3;
+  }
+
+  // Registre r12 et r13 par défaut :
+  r12 = 0x0C;
+  r13 = 0x00;
+
+  if(argc >= 6)
+  {
+    sscanf(argv[5],"%hhud",&r12);
+    forcer12 = 1;
+  }
+  if(argc >= 7)
+  {
+    sscanf(argv[6],"%hhud",&r13);
+    forcer13 = 1;
   }
 
   if (inFile == NULL)
@@ -151,7 +167,7 @@ int main(int argc, char **argv)
 
   png_read_image(png_ptr, ptrRow);
 
-  outBuffer = raw2crtc(inBuffer, width, height, mode, r9, &outSize, &r1);
+  outBuffer = raw2crtc(inBuffer, width, height, mode, r9, &outSize, &r1, r12, r13);
 
   printf("Taille de l'écran de sortie : %lu\n",outSize);
   printf("Mode = %d  Largeur = %d  Hauteur = %d  R1 = %d  R9 = %d\n",mode,(int)width,(int)height,r1,r9);
