@@ -608,6 +608,7 @@ CDSKTrack* CDSKFile::GetTrack(unsigned char track, unsigned char side)
 CStandardDSKFile::CStandardDSKFile()
 {
 }
+
 CStandardDSKFile::CStandardDSKFile(unsigned char nbTrack, unsigned char nbSide)
 {
 	_header.NbTrack = nbTrack;

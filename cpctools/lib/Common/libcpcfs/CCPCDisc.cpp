@@ -595,7 +595,7 @@ void CCPCDisc::writeDirectory()
 		// On en recrée un nouveau
 		for (CCPCDirectoryMap::const_iterator it=_directory.begin();it!=_directory.end();it++)
 		{
-			int nbEntry = getNbEntry(it->second.Size);
+			int nbEntry = ceil(it->second.Size / (float)_discFormat.NbBlocksPerEntry);
 			char name[11];
 			char ordreChargement=0;
 			unsigned int nbRecord = it->second.NbRecord;
@@ -605,24 +605,25 @@ void CCPCDisc::writeDirectory()
 //			cout << "Writing file " << name << endl;
 			name[8] = it->first.WriteProtected ? name[8]|128 : name[8];
 			name[9] = it->first.System ? name[9]|128 : name[9];
+//			cout << name << " is " << nbEntry << " entries " << endl ;
 //			cout << "Size in blocks is " << it->second.Size << endl;
 			for (int j=0;j<nbEntry;j++)
 			{
 				for (unsigned int k=0;k<CCPCDisc::EntrySize;k++)
 					pCatBuffer[k]=0;
 
-				pCatBuffer[0] = (char)it->first.User;
-				memcpy(pCatBuffer+1,name,11);
-				pCatBuffer[12] = ordreChargement;
-				pCatBuffer[15] = (nbRecord > nbRecordMaxPerEntry) ? nbRecordMaxPerEntry : nbRecord;
+				pCatBuffer[0] = (char)it->first.User;	// Numéro d'USER
+				memcpy(pCatBuffer+1,name,11);		// Nom du fichier
+				pCatBuffer[12] = ordreChargement;	// Numéro du bloc dans le fichier
+				pCatBuffer[15] = (nbRecord > nbRecordMaxPerEntry) ? nbRecordMaxPerEntry : nbRecord; // Taille du bloc (attention, pour le dernier bloc il faut indiquer la taille restante ?)
 				for (unsigned int b=16;b<CCPCDisc::EntrySize;b+=_discFormat.BlockIDSize)
 				{
 					unsigned int bI = (ordreChargement*_discFormat.NbBlocksPerEntry + (b/_discFormat.BlockIDSize) - _discFormat.NbBlocksPerEntry);
 					if (bI < it->second.Size)
 					{
-//					    cout << "CATALOG: block " << b << "is number " << it->second.Blocks[bI] << " at offset " << b << endl;
-						pCatBuffer[b] = it->second.Blocks[bI] % 256;
-						if(_discFormat.BlockIDSize==2) pCatBuffer[b+1] = it->second.Blocks[bI] / 256;
+//					    cout << name << " block " << b << " is number " << it->second.Blocks[bI] << " at offset " << b <<  " and entry number " << (int)ordreChargement << endl;
+					    pCatBuffer[b] = it->second.Blocks[bI] % 256;
+					    if(_discFormat.BlockIDSize==2) pCatBuffer[b+1] = it->second.Blocks[bI] / 256;
 					}
 					    
 				}
@@ -637,31 +638,38 @@ void CCPCDisc::writeDirectory()
 
 void CCPCDisc::addDirectoryEntry(const CDiscFileEntryKey &i_name, const CDiscFileEntry &i_nameData)
 {
-	CCPCDirectoryMap::iterator iNorm = _directory.find(i_name);
+    // Récupère le nombre d'entrées nécessaires pour ce fichier, vérifie qu'on a assez de place dans le catalogue
+//    cout << i_name.Name << " size is " << i_nameData.Size << endl;
+    int nbEntry = getNbEntry(i_nameData.Size);
+    TOOLS_ASSERTMSG( (nbEntry < (_discFormat.NbMaxEntry-getNbUsedEntry())) , "Directory Full");
 
-	int nbEntry = getNbEntry(i_nameData.Size);
+    // Regarde si une entrée avec ce om existe déjà
+    CCPCDirectoryMap::iterator iNorm = _directory.find(i_name);
 
-	TOOLS_ASSERTMSG( (nbEntry < (_discFormat.NbMaxEntry-getNbUsedEntry())) , "Directory Full");
-
-	if (iNorm != _directory.end())
+    // Si le fichier existe déjà
+    if (iNorm != _directory.end())
     {
-		CDiscFileEntryKey name_bak = i_name;
-		name_bak.Name[8]='B';name_bak.Name[9]='A';name_bak.Name[10]='K';
+	// On renomme l'ancien en .BAK
+	CDiscFileEntryKey name_bak = i_name;
+	name_bak.Name[8]='B';name_bak.Name[9]='A';name_bak.Name[10]='K';
 
-		CCPCDirectoryMap::iterator iBak = _directory.find(name_bak);
+	// On regarde si il n'y a pas déjà un .BAK
+	CCPCDirectoryMap::iterator iBak = _directory.find(name_bak);
 
-		if (iBak != _directory.end())
-		{
-			CDiscFileEntryKey name_bak_del = name_bak;
-			name_bak_del.User=CCPCDisc::DeleteUser;
+	if (iBak != _directory.end())
+	{
+	    // Si oui, on l'efface
+	    CDiscFileEntryKey name_bak_del = name_bak;
+	    name_bak_del.User=CCPCDisc::DeleteUser;
 
-			_directory[name_bak_del] = _directory[name_bak];
-		}
-		_directory[name_bak]=_directory[i_name];
+	    // On met à jour le catalogue
+	    _directory[name_bak_del] = _directory[name_bak];
+	}
+	_directory[name_bak]=_directory[i_name];
     }
-	_directory[i_name]=i_nameData;
+    _directory[i_name]=i_nameData;
 
-	_isDirectoryChanged = true;
+    _isDirectoryChanged = true;
 
 }
 void CCPCDisc::removeDirectoryEntry(const CDiscFileEntryKey &i_name)
