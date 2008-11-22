@@ -512,14 +512,14 @@ bool Emulator::Init()
 
 	_psg = new t_PSG(_config, *_tape);
 
-	_psg->Init();
-
 	if (audio_init(_config, _psg))
 	{
 		fprintf(stderr, "audio_init() failed. Disabling sound.\n");
 		// disable sound emulation
 		_config.snd_enabled = 0;
 	}
+
+	_psg->Init();
 
 	_ppi = new t_PPI();
 

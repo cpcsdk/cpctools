@@ -111,11 +111,11 @@ void t_PSG::Init()
      ayemu_init(&m_ayemu);
      ayemu_set_chip_freq(&m_ayemu, 1000000);
      ayemu_set_chip_type(&m_ayemu, AYEMU_AY_LOG, NULL);
-     ayemu_set_sound_format (&m_ayemu, 44100 , 2, 16);
+     ayemu_set_sound_format (&m_ayemu, audio_spec->freq , audio_spec->channels, audio_spec->format==AUDIO_S16LSB?16:8);
      ayemu_set_stereo(&m_ayemu, AYEMU_ABC, NULL);
 #endif
-	InitAYCounterVars();
-	}
+     InitAYCounterVars();
+}
 
 unsigned char t_PSG::GetAYRegister(int Num)
 {

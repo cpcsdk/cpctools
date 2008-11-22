@@ -26,4 +26,6 @@ void audio_shutdown (void);
 void audio_pause (t_CPC &CPC);
 void audio_resume (t_CPC &CPC);
 
+extern SDL_AudioSpec *audio_spec;
+
 #endif
