@@ -1,4 +1,5 @@
 #include "CapriceWindowImpl.h"
+#include "video.h"
 
 #include <wx/filedlg.h>
 
@@ -14,8 +15,11 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
-
     emulator->Emulate();
+    SDL_Surface* scr = emulator->GetRenderer().GetBackSurface();
+
+    wxBitmap bmp(wxImage(scr->w, scr->h,static_cast<unsigned char *>(scr->pixels), true));
+    wxBufferedPaintDC dc(m_panel4,bmp);
     //Ask to continue idle things
     event.RequestMore(true);
 }

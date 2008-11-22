@@ -181,8 +181,8 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 
 	int w = getConfigValueInt(chFileName, "video", "scr_width", 800);
 	int h = getConfigValueInt(chFileName, "video", "scr_height", 600);
-	int bpp = getConfigValueInt(chFileName, "video", "scr_bpp", 8);
-	int style = getConfigValueInt(chFileName, "video", "scr_style", 0);
+	int bpp = getConfigValueInt(chFileName, "video", "scr_bpp", 24);
+	int style = getConfigValueInt(chFileName, "video", "scr_style", 1);
 	bool fs = (getConfigValueInt(chFileName, "video", "scr_window", 0) & 1) == 0;
 	bool oglfilter = getConfigValueInt(chFileName, "video", "scr_oglfilter", 1) & 1;
 
