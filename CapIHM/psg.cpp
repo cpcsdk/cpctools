@@ -61,28 +61,27 @@
 t_PSG::t_PSG(t_CPC &cpc, t_Tape &tape)
  : CPC(cpc)
  , Tape(tape)
-#ifdef ST_SOUND
- , m_Ym2149(AMSTRAD_CLOCK, 1, 44100)
-#endif
 {
 }
 
 void t_PSG::Emulate(int iCycleCount)
 {
 #ifdef ST_SOUND
-    cycle_count += iCycleCount*(2<<16);
+    cycle_count += iCycleCount;
 
-    if (cycle_count >= snd_cycle_count)
+    if (cycle_count >= snd_cycle_count - 100)
     {
 	//	    std::cout << "Adding sample at : " << cycle_count << ", with snd_cycle_count : " << snd_cycle_count << std::endl;
 	cycle_count -= snd_cycle_count;
 
-	m_Ym2149.updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
+	SDL_LockAudio();
+	m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
 	pbSndBufferPtr += sizeof(ymsample)*2;
 	if (pbSndBufferPtr >= pbSndBufferEnd)
 	{
 	    pbSndBufferPtr = pbSndBuffer;
 	}
+	SDL_UnlockAudio();
 
     }
 #endif
@@ -100,10 +99,6 @@ void t_PSG::fillSample(int nbSample)
 
 void t_PSG::Init(int enableSound)
 {
-#ifdef ST_SOUND
-    m_Ym2149.reset();
-#endif
-
 #ifdef AYLET
     sound_init();
     sound_ay_reset_cpc();
@@ -119,13 +114,18 @@ void t_PSG::Init(int enableSound)
 	ayemu_set_sound_format(&m_ayemu,44100,2,16); // No audio_spec if sound disabled, so use default
     ayemu_set_stereo(&m_ayemu, AYEMU_ABC, NULL);
 #endif
+
+#ifdef ST_SOUND
+    m_Ym2149=new CYm2149Ex(AMSTRAD_CLOCK, 1, audio_spec->freq);
+    m_Ym2149->reset();
+#endif
     InitAYCounterVars();
 }
 
 unsigned char t_PSG::GetAYRegister(int Num)
 {
 #ifdef ST_SOUND
-    return m_Ym2149.readRegister(Num);
+    return m_Ym2149->readRegister(Num);
 #endif
 
 #ifdef AYLET
@@ -140,7 +140,7 @@ unsigned char t_PSG::GetAYRegister(int Num)
 void t_PSG::SetAYRegister(int Num, byte Value)
 {
 #ifdef ST_SOUND
-    m_Ym2149.writeRegister(Num, Value);
+    m_Ym2149->writeRegister(Num, Value);
 #endif
 #ifdef AYLET
     sound_ay_write(Num, Value, cycle_count/(2<<16));
@@ -273,7 +273,7 @@ void t_PSG::Reset()
 {
 	control = 0;
 #ifdef ST_SOUND
-	m_Ym2149.reset();
+	m_Ym2149->reset();
 #endif
 #ifdef AYLET
 #endif
@@ -286,5 +286,5 @@ void t_PSG::Reset()
 void t_PSG::InitAYCounterVars()
 {
     cycle_count = 0;
-    snd_cycle_count = (unsigned long)(4000000.0/44100.0)*(2<<16); // number of Z80 cycles per sample
+    snd_cycle_count = (4000000.0/(double)audio_spec->freq); // number of Z80 cycles per sample
 }

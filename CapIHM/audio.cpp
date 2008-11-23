@@ -29,12 +29,13 @@ dword freq_table[MAX_FREQ_ENTRIES] = {
 
 void audio_update (void *userdata, Uint8 *stream, int len)
 {
-//    t_PSG *psg = (t_PSG*) userdata;
+    t_PSG *psg = (t_PSG*) userdata;
 #ifdef AYEMU
     ayemu_gen_sound ( (ayemu_ay_t*)userdata, stream, len);
     return;
-#else // AYEMU
+#endif // AYEMU
 
+#ifdef AYLET
     if (audio_spec->channels==1)
     {
         psg->fillSample(len/(2*1));
@@ -47,9 +48,13 @@ void audio_update (void *userdata, Uint8 *stream, int len)
     {
         std::cerr << "Unknwon channel number ! No sound" << std::endl;
         return;
-
     }
+#endif
 
+#ifdef CLASSIC_SOUND
+    memcpy(stream, pbSndBuffer, len);
+    dwSndBufferCopied = 1;
+#else
 //    std::cout << "Reading sample of length : " << len/4 << " at " << SDL_GetTicks() << std::endl;
     if (pbSndBufferCurrent+len<pbSndBufferEnd)
     {
@@ -74,15 +79,7 @@ void audio_update (void *userdata, Uint8 *stream, int len)
 //            std::cout << "Sound buffer reading overflow (Cycling) ! Available " << (pbSndBufferCurrent-pbSndBufferPtr)/4 << ", expecting " << len/4 << std::endl;
 //        }
     }
-
-
-#ifdef CLASSIC_SOUND
-    memcpy(stream, pbSndBuffer, len);
-    dwSndBufferCopied = 1;
 #endif
-
-#endif // AYEMU
- 
 }
 
 int audio_align_samples (int given)
@@ -108,13 +105,15 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	desired->channels = 2;
 	desired->samples = audio_align_samples(desired->freq / 50); // desired is 20ms at the given frequency
 	desired->callback = audio_update;
-	desired->userdata = &psg->GetAYEmu();
+	desired->userdata = &psg;
 	
 	if (SDL_OpenAudio(desired, obtained) < 0)
 	{
 		fprintf(stderr, "Could not open audio: %s\n", SDL_GetError());
 		return 1;
 	}
+
+	printf("Audio rate obtained : %d\n",obtained->freq);
 	
 	free(desired);
 	audio_spec = obtained;
@@ -122,7 +121,7 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 //	CPC.snd_buffersize = (audio_spec->size/audio_spec->channels)/2; // size in samples : desired number of sample per 20ms
 	pbSndBuffer = (byte *)malloc(audio_spec->size*2); // allocate the sound data buffer
 	pbSndBufferEnd = pbSndBuffer + audio_spec->size*2;
-	memset(pbSndBuffer, 0, audio_spec->size*2);
+	memset(pbSndBuffer, audio_spec->silence, audio_spec->size*2);
 	pbSndBufferPtr = pbSndBuffer; // init write cursor
 	pbSndBufferCurrent = pbSndBuffer;   // init read cursor
 

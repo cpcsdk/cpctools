@@ -29,14 +29,14 @@ private:
 	unsigned char control;
 
 #ifdef ST_SOUND
-    CYm2149Ex m_Ym2149;
+    CYm2149Ex* m_Ym2149;
 #endif
 #ifdef AYEMU
     ayemu_ay_t m_ayemu ;
     ayemu_ay_reg_frame_t m_ayemu_reg_frame ;
 #endif
-	unsigned long cycle_count;
-	unsigned long snd_cycle_count;
+	double cycle_count;
+	double snd_cycle_count;
 
 	unsigned int buffer_full;
 	int AmplitudeEnv;

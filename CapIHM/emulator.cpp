@@ -479,7 +479,7 @@ bool Emulator::Init()
 		return false;
 	}
 
-	_renderer.SetVideoMode(VideoPlugin::OpenGLScale /*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
+	_renderer.SetVideoMode(VideoPlugin::HalfSize/*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
 //	_renderer.SetOpenGLFilter(true);
 
 	_renderer.SetMonitor(true, 15, true);

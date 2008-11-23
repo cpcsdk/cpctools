@@ -38,17 +38,6 @@ public:
    unsigned int snd_stereo;
    unsigned int snd_volume;
    unsigned int snd_pp_device;
-//   unsigned int snd_buffersize; // size in sample
-//   unsigned char *snd_bufferptr;
-//   union
-//   {
-//      struct
-//	  {
-//         unsigned int low;
-//         unsigned int high;
-//      };
-//      int64_t both;
-//   } snd_cycle_count_init;
 
    unsigned int kbd_layout;
 
