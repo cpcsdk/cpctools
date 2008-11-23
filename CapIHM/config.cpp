@@ -32,12 +32,10 @@ unsigned int getConfigValueInt (const char* pchFileName, const char* pchSection,
 	int val = c_inifile_get_integer(pchSection,pchKey,&err);
 	if (err!=C_INIFILE_NO_ERROR)
 	{
-	    printf("Using default value for %s %s\n",pchSection,pchKey);
 	    return iDefaultValue;
 	}
 	else
 	{
-	    printf("%s/%s = %d\n",pchSection,pchKey,val);
 	    return val;
 	}
 }
@@ -48,12 +46,10 @@ void getConfigValueString (const char* pchFileName, const char* pchSection, cons
     val = c_inifile_get_string(pchSection,pchKey,NULL);
     if(val==NULL)
     {
-	printf("Using default value for %s %s\n",pchSection,pchKey);
 	strcpy(pchValue,pchDefaultValue);
     }
     else
     {
-	printf("%s/%s = %s\n",pchSection,pchKey,val);
 	strcpy(pchValue,val);
 	free(val);
     }
@@ -153,17 +149,13 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    //renderer.scr_led = getConfigValueInt(chFileName, "video", "scr_led", 1) & 1;
 
 	    snd_enabled = getConfigValueInt(chFileName, "sound", "enabled", 1) & 1;
-	    snd_playback_rate = getConfigValueInt(chFileName, "sound", "playback_rate", 2);
-	    if (snd_playback_rate > (MAX_FREQ_ENTRIES-1))
-	    {
-		snd_playback_rate = 2;
-	    }
-	    snd_bits = getConfigValueInt(chFileName, "sound", "bits", 1) & 1;
+	    snd_playback_rate = getConfigValueInt(chFileName, "sound", "playback_rate", 44100);
+	    snd_bits = getConfigValueInt(chFileName, "sound", "bits", 16);
 	    snd_stereo = getConfigValueInt(chFileName, "sound", "stereo", 1) & 1;
-	    snd_volume = getConfigValueInt(chFileName, "sound", "volume", 80);
+	    snd_volume = getConfigValueInt(chFileName, "sound", "volume", 100);
 	    if (snd_volume > 100)
 	    {
-		snd_volume = 80;
+		snd_volume = 100;
 	    }
 	    snd_pp_device = getConfigValueInt(chFileName, "sound", "pp_device", 0) & 1;
 
@@ -362,7 +354,6 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    strncpy(chPath, chAppPath, sizeof(chPath)-5);
 	    strcat(chPath, "/rom");
 	    getConfigValueString(chFileName, "rom", "rom_path", rom_path, chPath);
-	    printf("Config/rom path : %s\n\n",rom_path);
 	    // loop for ROMs 0-15
 	    for (int iRomNum = 0; iRomNum < 16; iRomNum++)
 	    {

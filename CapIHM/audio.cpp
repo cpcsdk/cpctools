@@ -100,7 +100,7 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	SDL_AudioSpec *desired = (SDL_AudioSpec *)malloc(sizeof(SDL_AudioSpec));
 	SDL_AudioSpec *obtained = (SDL_AudioSpec *)malloc(sizeof(SDL_AudioSpec));
 	
-	desired->freq = 44100;
+	desired->freq = CPC.snd_playback_rate;
 	desired->format = AUDIO_S16LSB;
 	desired->channels = 2;
 	desired->samples = audio_align_samples(desired->freq / 50); // desired is 20ms at the given frequency

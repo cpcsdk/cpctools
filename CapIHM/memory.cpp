@@ -69,7 +69,6 @@ int t_Memory::Init()
 		return iErr;
 	}
 
-	printf("Memory init OK!\n");
 	return ERR_OK;
 }
 
@@ -322,7 +321,6 @@ int t_Memory::ROMInit()
 	// loop for ROMs 0-15
 	for (iRomNum = 0; iRomNum < 16; iRomNum++)
 	{
-	    printf("%d %s \n",iRomNum,CPC.rom_file[iRomNum]);
 		// is a ROM image specified for this slot?
 		if (CPC.rom_file[iRomNum][0])
 		{
@@ -337,7 +335,6 @@ int t_Memory::ROMInit()
 			// attempt to open the ROM image
 			if ((pfileObject = fopen(chPath, "rb")) != NULL)
 			{
-			    printf("Loading ROM file %s\n",chPath);
 				// read 128 bytes of ROM data
 				fread(pchRomData, 128, 1, pfileObject);
 				word checksum = 0;
