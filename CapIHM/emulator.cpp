@@ -479,10 +479,8 @@ bool Emulator::Init()
 		return false;
 	}
 
-	_renderer.SetVideoMode(VideoPlugin::OpenGLScale, 800, 600, 32, false);
+	_renderer.SetVideoMode(VideoPlugin::OpenGLScale /*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
 //	_renderer.SetOpenGLFilter(true);
-	
-
 
 	_renderer.SetMonitor(true, 15, true);
 
@@ -493,6 +491,7 @@ bool Emulator::Init()
 		return false;
 	}
 
+	printf("Initializing memory ...\n");
 	_cpcMemory = new t_Memory(_config);
 
 	_cpcMemory->Init();
@@ -504,12 +503,14 @@ bool Emulator::Init()
 
 	_renderer.SetMemory(_cpcMemory->GetRAM());
 
+	printf("Initializing Gate Array ...\n");
 	_gateArray = new t_GateArray(_renderer);
 	_vdu = new t_VDU(_renderer);
 	_crtc = new t_CRTC(*_gateArray, *_vdu);
 
 	_tape = new t_Tape(_config);
 
+	printf("Initializing sound ...\n");
 	_psg = new t_PSG(_config, *_tape);
 
 	if (audio_init(_config, _psg))
@@ -519,8 +520,9 @@ bool Emulator::Init()
 		_config.snd_enabled = 0;
 	}
 
-	_psg->Init();
+	_psg->Init(_config.snd_enabled);
 
+	printf("Initializing PPI\n");
 	_ppi = new t_PPI();
 
 #ifndef HAVE_LIB765_H
@@ -547,6 +549,7 @@ bool Emulator::Init()
 	dwTicksTargetFPS = dwTicksTarget;
 
 
+	printf("Initialization OK !\n");
 	return true;
 }
 

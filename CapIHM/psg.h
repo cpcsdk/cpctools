@@ -47,7 +47,7 @@ public:
 
 	void Emulate(int iCycleCount);
 
-	void Init();
+	void Init(int enableSound);
 
 	void Reset();
 

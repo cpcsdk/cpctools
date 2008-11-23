@@ -10,6 +10,7 @@ class Emulator;
 
 #include "cap32.h"
 #include "cap32type.h"
+#include "video.h"
 
 class t_CPC
 {
@@ -78,6 +79,9 @@ public:
    bool scr_tube ;
    int  scr_intensity ;
    bool scr_remanency ;
+
+   int vid_w,vid_h,vid_bpp;
+   VideoPlugin::VideoType vid_style;
 public:
 	void loadConfiguration (Emulator &emulator);
 };

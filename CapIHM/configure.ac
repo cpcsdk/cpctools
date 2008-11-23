@@ -31,7 +31,6 @@ AC_TYPE_INT64_T
 
 #AM_PROG_CC_C_O
 
-
 m4_include(wxwin.m4)
 #IHM
 AM_OPTIONS_WXCONFIG

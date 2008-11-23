@@ -29,12 +29,11 @@ dword freq_table[MAX_FREQ_ENTRIES] = {
 
 void audio_update (void *userdata, Uint8 *stream, int len)
 {
-    t_PSG *psg = (t_PSG*) userdata;
-
+//    t_PSG *psg = (t_PSG*) userdata;
 #ifdef AYEMU
-    ayemu_gen_sound ( &psg->GetAYEmu(), stream, len);
+    ayemu_gen_sound ( (ayemu_ay_t*)userdata, stream, len);
     return;
-#endif
+#else // AYEMU
 
     if (audio_spec->channels==1)
     {
@@ -81,6 +80,8 @@ void audio_update (void *userdata, Uint8 *stream, int len)
     memcpy(stream, pbSndBuffer, len);
     dwSndBufferCopied = 1;
 #endif
+
+#endif // AYEMU
  
 }
 
@@ -107,7 +108,7 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	desired->channels = 2;
 	desired->samples = audio_align_samples(desired->freq / 50); // desired is 20ms at the given frequency
 	desired->callback = audio_update;
-	desired->userdata = psg;
+	desired->userdata = &psg->GetAYEmu();
 	
 	if (SDL_OpenAudio(desired, obtained) < 0)
 	{

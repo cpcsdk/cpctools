@@ -66,7 +66,9 @@ caprice_SOURCES = audio.cpp \
 		CapriceWindowImpl.cpp \
 		CapriceWindowImpl.h \
 		SDLPanel.cpp \
-		SDLPanel.h
+		SDLPanel.h \
+		c_inifile.cpp \
+		c_inifile.h
 
 
 caprice_CPPFLAGS = $(SDL_CFLAGS) $(WX_CPPFLAGS)

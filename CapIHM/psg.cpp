@@ -70,23 +70,24 @@ t_PSG::t_PSG(t_CPC &cpc, t_Tape &tape)
 void t_PSG::Emulate(int iCycleCount)
 {
 #ifdef ST_SOUND
-	cycle_count += iCycleCount*(2<<16);
+    cycle_count += iCycleCount*(2<<16);
 
-	if (cycle_count >= snd_cycle_count)
-{
-//	    std::cout << "Adding sample at : " << cycle_count << ", with snd_cycle_count : " << snd_cycle_count << std::endl;
-		cycle_count -= snd_cycle_count;
-	
-        m_Ym2149.updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
-        pbSndBufferPtr += sizeof(ymsample)*2;
-        if (pbSndBufferPtr >= pbSndBufferEnd)
-{
-            pbSndBufferPtr = pbSndBuffer;
-}
+    if (cycle_count >= snd_cycle_count)
+    {
+	//	    std::cout << "Adding sample at : " << cycle_count << ", with snd_cycle_count : " << snd_cycle_count << std::endl;
+	cycle_count -= snd_cycle_count;
 
-}
+	m_Ym2149.updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
+	pbSndBufferPtr += sizeof(ymsample)*2;
+	if (pbSndBufferPtr >= pbSndBufferEnd)
+	{
+	    pbSndBufferPtr = pbSndBuffer;
+	}
+
+    }
 #endif
 }
+
 
 void t_PSG::fillSample(int nbSample)
 {
@@ -96,7 +97,8 @@ void t_PSG::fillSample(int nbSample)
 #endif
 }
 
-void t_PSG::Init()
+
+void t_PSG::Init(int enableSound)
 {
 #ifdef ST_SOUND
     m_Ym2149.reset();
@@ -108,19 +110,22 @@ void t_PSG::Init()
 #endif
 
 #ifdef AYEMU
-     ayemu_init(&m_ayemu);
-     ayemu_set_chip_freq(&m_ayemu, 1000000);
-     ayemu_set_chip_type(&m_ayemu, AYEMU_AY_LOG, NULL);
-     ayemu_set_sound_format (&m_ayemu, audio_spec->freq , audio_spec->channels, audio_spec->format==AUDIO_S16LSB?16:8);
-     ayemu_set_stereo(&m_ayemu, AYEMU_ABC, NULL);
+    ayemu_init(&m_ayemu);
+    ayemu_set_chip_freq(&m_ayemu, 1000000);
+    ayemu_set_chip_type(&m_ayemu, AYEMU_AY_LOG, NULL);
+    if(enableSound)
+	ayemu_set_sound_format (&m_ayemu, audio_spec->freq , audio_spec->channels, audio_spec->format==AUDIO_S16LSB?16:8);
+    else
+	ayemu_set_sound_format(&m_ayemu,44100,2,16); // No audio_spec if sound disabled, so use default
+    ayemu_set_stereo(&m_ayemu, AYEMU_ABC, NULL);
 #endif
-     InitAYCounterVars();
+    InitAYCounterVars();
 }
 
 unsigned char t_PSG::GetAYRegister(int Num)
 {
 #ifdef ST_SOUND
-	return m_Ym2149.readRegister(Num);
+    return m_Ym2149.readRegister(Num);
 #endif
 
 #ifdef AYLET
@@ -149,64 +154,64 @@ void t_PSG::SetAYRegister(int Num, byte Value)
 void t_PSG::SetEnvDirection(unsigned char dir)
 {
     // TODO : add env direction
-//	FirstPeriod = false;
+    //	FirstPeriod = false;
 
-	// up
-	if (dir == 0x01) 
-	{
-/*		switch (RegisterAY.EnvType)
-		{
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-		case 13:
-		case 14:
-		case 15:
+    // up
+    if (dir == 0x01) 
+    {
+	/*		switch (RegisterAY.EnvType)
 			{
-				FirstPeriod = true;
-				break;
-			}
-		}
-*/
-	}
-	// down
-	else if (dir == 0xff) 
-	{
-/*
-		switch (RegisterAY.EnvType)
-		{
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 9:
-		case 10:
-		case 11:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			case 13:
+			case 14:
+			case 15:
 			{
-				FirstPeriod = true;
-				break;
+			FirstPeriod = true;
+			break;
 			}
-		}
-*/
-	}
+			}
+	 */
+    }
+    // down
+    else if (dir == 0xff) 
+    {
+	/*
+	   switch (RegisterAY.EnvType)
+	   {
+	   case 0:
+	   case 1:
+	   case 2:
+	   case 3:
+	   case 9:
+	   case 10:
+	   case 11:
+	   {
+	   FirstPeriod = true;
+	   break;
+	   }
+	   }
+	 */
+    }
 }
 
 unsigned char t_PSG::GetEnvDirection()
 {
     // TODO
-/*
-	if (FirstPeriod)
-	{
-		switch (RegisterAY.EnvType)
-		{
-		case 0:
-		case 1:
-		case 2:
-		case 3:
-		case 8:
-		case 9:
-		case 10:
+    /*
+       if (FirstPeriod)
+       {
+       switch (RegisterAY.EnvType)
+       {
+       case 0:
+       case 1:
+       case 2:
+       case 3:
+       case 8:
+       case 9:
+       case 10:
 		case 11:
 			{
 				return 0xff; // down
@@ -281,5 +286,5 @@ void t_PSG::Reset()
 void t_PSG::InitAYCounterVars()
 {
     cycle_count = 0;
-	snd_cycle_count = (unsigned long)(4000000.0/44100.0)*(2<<16); // number of Z80 cycles per sample
+    snd_cycle_count = (unsigned long)(4000000.0/44100.0)*(2<<16); // number of Z80 cycles per sample
 }
