@@ -1,3 +1,7 @@
+2008-11-24 PulkoMandy/Shinra <pulkomandy@gmail.com>
+	* Sound : Fixed STSound and SDL buffers. Fully working sound !
+	* GUI : Some work in getting the cpc screen embedded in the wx window.
+
 2008-09-25 CloudStrife/Shinra <cloudstrife@cpcscene.com>
 	* GUI : On the fly edition of Z80 8bits Register now works ! Add
 	screen timing checker in CRTC Tabs. Some speed up with the Register

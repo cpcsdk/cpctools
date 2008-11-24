@@ -121,7 +121,7 @@ void t_PSG::Init(int enableSound)
 #endif
 
 #ifdef ST_SOUND
-    m_Ym2149=new CYm2149Ex(AMSTRAD_CLOCK, 1, audio_spec->freq);
+    m_Ym2149=new CYm2149Ex(AMSTRAD_CLOCK, 1, audio_spec==NULL?44100:audio_spec->freq);
     m_Ym2149->reset();
 #endif
     InitAYCounterVars();
@@ -291,6 +291,6 @@ void t_PSG::Reset()
 void t_PSG::InitAYCounterVars()
 {
     cycle_count = 0;
-    snd_cycle_count = (4000000.0/(double)audio_spec->freq); // number of Z80 cycles per sample
+    snd_cycle_count = (4000000.0/(double)(audio_spec==NULL?44100:audio_spec->freq)); // number of Z80 cycles per sample
     std::cout << "Audio cycle count : " << snd_cycle_count << std::endl;
 }

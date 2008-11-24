@@ -1,0 +1,18 @@
+Important :
+- Fenetre de configuration
+- Gestion du clavier (voire idée longshot)
+- Ajout registre Gate Array
+- Ajout fenetre deassemblage
+- Ajout Breakpoint
+- Optimisation emulation video
+
+Mineur :
+- Gestion Cassette
+- Gestion correcte volume son
+- Possibilité correction des niveaux de mixage son
+- Possibilité modifier palette 27 couleurs et faire des presets
+- Ajustement de la taille du buffer de son par l'utilisateur (Buffer SDL et buffer local)
+
+Urgent :
+- Corriger probleme sauvegarde snapshot (ajout automatique du .sna)
+- Possibilité de compilation CrossDev windows

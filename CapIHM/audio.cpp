@@ -106,7 +106,7 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	desired->freq = CPC.snd_playback_rate;
 	desired->format = AUDIO_S16LSB;
 	desired->channels = 2;
-	desired->samples = audio_align_samples(desired->freq / 50); // desired is 20ms at the given frequency
+	desired->samples = audio_align_samples(desired->freq / 75 /*50*/); // desired is 10 /*20*/ ms at the given frequency // Try to do less than 1VBL as the SDL+OS will add more latency
 	desired->callback = audio_update;
 	desired->userdata = &psg;
 	
