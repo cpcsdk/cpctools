@@ -36,13 +36,13 @@ private:
     ayemu_ay_reg_frame_t m_ayemu_reg_frame ;
 #endif
 	double cycle_count;
-	double snd_cycle_count;
 
 	unsigned int buffer_full;
 	int AmplitudeEnv;
 	bool FirstPeriod;
 
 public:
+	double snd_cycle_count;
 	t_PSG(t_CPC &cpc, t_Tape &tape);
 
 	void Emulate(int iCycleCount);

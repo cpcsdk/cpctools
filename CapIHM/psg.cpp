@@ -69,19 +69,24 @@ void t_PSG::Emulate(int iCycleCount)
 #ifdef ST_SOUND
     cycle_count += iCycleCount;
 
-    if (cycle_count >= snd_cycle_count - 100)
+    if (cycle_count >= snd_cycle_count)
     {
 	//	    std::cout << "Adding sample at : " << cycle_count << ", with snd_cycle_count : " << snd_cycle_count << std::endl;
 	cycle_count -= snd_cycle_count;
 
 	SDL_LockAudio();
+
 	m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
 	pbSndBufferPtr += sizeof(ymsample)*2;
+	
+	SDL_UnlockAudio();
+
 	if (pbSndBufferPtr >= pbSndBufferEnd)
 	{
 	    pbSndBufferPtr = pbSndBuffer;
+	 //   std::cout << "Audio buffer overflow !" << std::endl;
 	}
-	SDL_UnlockAudio();
+
 
     }
 #endif
@@ -287,4 +292,5 @@ void t_PSG::InitAYCounterVars()
 {
     cycle_count = 0;
     snd_cycle_count = (4000000.0/(double)audio_spec->freq); // number of Z80 cycles per sample
+    std::cout << "Audio cycle count : " << snd_cycle_count << std::endl;
 }

@@ -58,10 +58,13 @@ void audio_update (void *userdata, Uint8 *stream, int len)
 //    std::cout << "Reading sample of length : " << len/4 << " at " << SDL_GetTicks() << std::endl;
     if (pbSndBufferCurrent+len<pbSndBufferEnd)
     {
-//        if (pbSndBufferCurrent+len>pbSndBufferPtr)
-//        {
-//            std::cout << "Sound buffer reading overflow ! Available " << (pbSndBufferCurrent+len-pbSndBufferPtr)/4 << ", expecting " << len/4 << std::endl;
-//        }
+        if (pbSndBufferCurrent+len>pbSndBufferPtr && pbSndBufferCurrent<pbSndBufferPtr)
+        {
+            std::cout << "Sound buffer reading overflow ! Available " << ((int)(pbSndBufferCurrent-pbSndBufferPtr)+len) << ", expecting " << len << std::endl;
+	    pbSndBufferCurrent -= len; // Better make a big desync than many little clicks
+	    // This adds latency (space between reader and writer) but it will max out at the buffer size
+	    if(pbSndBufferCurrent < pbSndBuffer) pbSndBufferCurrent = pbSndBuffer;
+        }
 
         memcpy(stream, pbSndBufferCurrent, len);
         pbSndBufferCurrent = pbSndBufferCurrent+len;
@@ -74,10 +77,10 @@ void audio_update (void *userdata, Uint8 *stream, int len)
         memcpy(stream+rest, pbSndBufferCurrent, len-rest);
         pbSndBufferCurrent+=len-rest;
 
-//        if (pbSndBufferCurrent>pbSndBufferPtr)
-//        {
-//            std::cout << "Sound buffer reading overflow (Cycling) ! Available " << (pbSndBufferCurrent-pbSndBufferPtr)/4 << ", expecting " << len/4 << std::endl;
-//        }
+        if (pbSndBufferCurrent>pbSndBufferPtr)
+        {
+            std::cout << "Sound buffer reading overflow (Cycling) ! Available " << (pbSndBufferCurrent-pbSndBufferPtr)/4 << ", expecting " << len/4 << std::endl;
+        }
     }
 #endif
 }
@@ -119,10 +122,12 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	audio_spec = obtained;
 	
 //	CPC.snd_buffersize = (audio_spec->size/audio_spec->channels)/2; // size in samples : desired number of sample per 20ms
-	pbSndBuffer = (byte *)malloc(audio_spec->size*2); // allocate the sound data buffer
-	pbSndBufferEnd = pbSndBuffer + audio_spec->size*2;
-	memset(pbSndBuffer, audio_spec->silence, audio_spec->size*2);
-	pbSndBufferPtr = pbSndBuffer; // init write cursor
+	// The multiplicator here (3) defines the latency. Lower is better. Best should be 1
+#define SND_LATENCY 3
+	pbSndBuffer = (byte *)malloc(audio_spec->size*SND_LATENCY); // allocate the sound data buffer
+	pbSndBufferEnd = pbSndBuffer + audio_spec->size*SND_LATENCY;
+	memset(pbSndBuffer, audio_spec->silence, audio_spec->size*SND_LATENCY);
+	pbSndBufferPtr = pbSndBuffer+audio_spec->size; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
 	pbSndBufferCurrent = pbSndBuffer;   // init read cursor
 
     //std::cout << "Audio_spec size : " << audio_spec->size << std::endl;
