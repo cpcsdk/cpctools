@@ -7,18 +7,15 @@
 #include "CapriceAboutImpl.h"
 #include "emulator.h"
 
-#   include "SDLPanel.h"
-
-
 class CapriceWindowImpl : public CapriceWindow 
 {
 	public:
 	CapriceWindowImpl() : CapriceWindow(NULL) 
 	{
-		// create the SDLPanel
 	}
 
 	void SetEmulator(Emulator *emulator);	
+	wxPanel* getPanel();
 
 	protected:
 
@@ -40,8 +37,11 @@ class CapriceWindowImpl : public CapriceWindow
 
 	virtual void OnAbout( wxCommandEvent& event);
 
+	virtual void windowKeyDown( wxKeyEvent& event);
+	virtual void windowKeyUp( wxKeyEvent& event );
+
 	private:
-	SDLPanel*	panel2;
 	Emulator*	emulator ;
 };
 #endif
+

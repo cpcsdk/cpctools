@@ -36,6 +36,10 @@
 #include <math.h>
 #include <malloc.h>
 #include <algorithm>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/dcbuffer.h>
+#include "CapriceApp.h"
 
 #ifndef min
 #define min(a,b) (a<b ? a : b)
@@ -340,11 +344,12 @@ SDL_Surface* DoublePlugin::Init(int w,int h, int bpp, bool fs)
 		w=CPCVisibleSCRWidth*2;
 		h=CPCVisibleSCRHeight*2;
 	}
-	_video=SDL_SetVideoMode(w,h,bpp,SDL_ANYFORMAT | SDL_HWSURFACE | SDL_HWPALETTE | (fs?SDL_FULLSCREEN:0));
+//	_video=SDL_SetVideoMode(w,h,bpp,SDL_ANYFORMAT | SDL_HWSURFACE | SDL_HWPALETTE | (fs?SDL_FULLSCREEN:0));
+	_video=SDL_CreateRGBSurface(SDL_SWSURFACE,w,h,bpp,0x0000FF,0x00FF00,0xFF0000,0);
 	if (!_video)
 		return NULL;
 	SDL_FillRect(_video,NULL,SDL_MapRGB(_video->format,0,0,0));
-	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,bpp,0,0,0,0);
+	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,bpp,0x0000FF,0x00FF00,0xFF0000,0);
 	return _publicVideo;
 }
 
@@ -366,6 +371,8 @@ void DoublePlugin::Unlock()
 void DoublePlugin::Flip()
 {
 	int line;
+    // As we know both surface have the same format, use memcpy instead of sdl blit. Simpler and faster.
+#ifdef USE_SDL_BLITS
 	SDL_Rect sr,dr;
 	if (CPCVisibleSCRWidth*2>_video->w)
 		sr.x=(CPCVisibleSCRWidth*2-_video->w)/2;
@@ -394,6 +401,23 @@ void DoublePlugin::Flip()
 	dr.w=min(_publicVideo->w,_video->w);
 	dr.h=min(_publicVideo->h*2,_video->h);
 	SDL_UpdateRects(_video,1,&dr);
+#else
+	byte* src = (byte*)_publicVideo->pixels;
+	byte* dest = (byte*)_video->pixels;
+	int length = _publicVideo->w * 3;
+	for(line=0;line<_publicVideo->h;line++)
+	{
+	    memcpy(dest,src,length);
+	    dest+=length;
+	    memcpy(dest,src,length);
+	    dest+=length;
+	    src+=length;
+	}
+	//SDL_UpdateRect(_video,0,0,0,0);
+    wxBitmap bmp(wxImage(_video->w, _video->h,static_cast<unsigned char *>(_video->pixels), true));
+    CapriceApp* MyApp =static_cast<CapriceApp*>(wxTheApp) ;
+    wxBufferedPaintDC dc(MyApp->frame->getPanel(),bmp);
+#endif
 }
 
 void DoublePlugin::Close()

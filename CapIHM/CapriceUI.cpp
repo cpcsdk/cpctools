@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep 19 2008)
+// C++ code generated with wxFormBuilder (version Nov 25 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -260,11 +260,15 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	wxBoxSizer* bSizer12;
 	bSizer12 = new wxBoxSizer( wxVERTICAL );
 	
-	m_panel4 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizer12->Add( m_panel4, 1, wxEXPAND | wxALL, 5 );
+	m_panel4 = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxSize( 768,540 ), wxTAB_TRAVERSAL );
+	m_panel4->SetMinSize( wxSize( 768,540 ) );
+	m_panel4->SetMaxSize( wxSize( 768,540 ) );
+	
+	bSizer12->Add( m_panel4, 1, wxALL|wxFIXED_MINSIZE, 0 );
 	
 	this->SetSizer( bSizer12 );
 	this->Layout();
+	bSizer12->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
@@ -279,6 +283,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Connect( m_menuItem_registers->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
 	this->Connect( m_menuItem57->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
 	this->Connect( m_menuItem58->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
+	m_panel4->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
+	m_panel4->Connect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
 }
 
 CapriceWindow::~CapriceWindow()
@@ -296,6 +302,8 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
+	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
+	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
 }
 
 DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )

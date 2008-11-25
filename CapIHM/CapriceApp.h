@@ -22,9 +22,9 @@ public:
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
 
+	CapriceWindowImpl 	*frame ;
 
 private:
-	CapriceWindowImpl 	*frame ;
 	Emulator			*emulator ;
 
 	//params

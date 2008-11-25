@@ -65,8 +65,6 @@ caprice_SOURCES = audio.cpp \
 		CapriceUI.h \
 		CapriceWindowImpl.cpp \
 		CapriceWindowImpl.h \
-		SDLPanel.cpp \
-		SDLPanel.h \
 		c_inifile.cpp \
 		c_inifile.h
 

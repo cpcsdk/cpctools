@@ -16,10 +16,7 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
     emulator->Emulate();
-    SDL_Surface* scr = emulator->GetRenderer().GetBackSurface();
 
-    wxBitmap bmp(wxImage(scr->w, scr->h,static_cast<unsigned char *>(scr->pixels), true));
-    wxBufferedPaintDC dc(m_panel4,bmp);
     //Ask to continue idle things
     event.RequestMore(true);
 }
@@ -97,7 +94,7 @@ void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
 /**
  * Get the Caprice SDL panel
  */
-//inline SDLPanel &CapriceWindowImpl::getPanel() { return *panel; }
+wxPanel* CapriceWindowImpl::getPanel() { return m_panel4; }
 
 /**
  * Set the emulator
@@ -107,4 +104,27 @@ void CapriceWindowImpl::SetEmulator(Emulator *emulator)
 {
 	this->emulator = emulator ;
 //	panel2 = new SDLPanel(this, emulator);
+}
+
+/********************************************************
+* Keyboard management : for now, pass the events to SDL *
+********************************************************/
+void CapriceWindowImpl::windowKeyDown( wxKeyEvent& event )
+{
+    SDL_Event evt;
+    evt.type = SDL_KEYDOWN;
+    evt.key.keysym.sym = (SDLKey)event.GetKeyCode();
+    evt.key.keysym.mod = KMOD_NONE /*(SDLMod)event.GetModifiers()*/;
+    SDL_PushEvent(&evt);
+}
+
+void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
+{
+    SDL_Event evt;
+    evt.type = SDL_KEYUP;
+    evt.key.keysym.sym = (SDLKey)event.GetKeyCode();
+    evt.key.keysym.mod = KMOD_NONE /*(SDLMod)event.GetModifiers()*/;
+    SDL_PushEvent(&evt);
+
+    cout << "keydown" << event.GetKeyCode() << endl;
 }

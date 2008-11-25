@@ -10,6 +10,7 @@ class CapriceAboutImpl : public CapriceAbout
 	{
 
 	}
+	
 
 	protected:
 

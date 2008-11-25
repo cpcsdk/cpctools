@@ -18,7 +18,7 @@
         <property name="relative_path">1</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Frame" expanded="1">
+        <object class="Frame" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -32,8 +32,8 @@
             <property name="minimum_size"></property>
             <property name="name">CapriceWindow</property>
             <property name="pos"></property>
-            <property name="size">500,300</property>
-            <property name="style">wxDEFAULT_FRAME_STYLE</property>
+            <property name="size">-1,-1</property>
+            <property name="style">wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU</property>
             <property name="subclass"></property>
             <property name="title">CapriceReloaded</property>
             <property name="tooltip"></property>
@@ -947,8 +947,8 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
-                    <property name="flag">wxEXPAND | wxALL</property>
+                    <property name="border">0</property>
+                    <property name="flag">wxALL|wxFIXED_MINSIZE</property>
                     <property name="proportion">1</property>
                     <object class="wxPanel" expanded="1">
                         <property name="bg"></property>
@@ -958,12 +958,12 @@
                         <property name="font"></property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="maximum_size"></property>
-                        <property name="minimum_size"></property>
+                        <property name="maximum_size">768,540</property>
+                        <property name="minimum_size">768,540</property>
                         <property name="name">m_panel4</property>
                         <property name="permission">protected</property>
                         <property name="pos"></property>
-                        <property name="size"></property>
+                        <property name="size">768,540</property>
                         <property name="subclass"></property>
                         <property name="tooltip"></property>
                         <property name="window_extra_style"></property>
@@ -972,8 +972,8 @@
                         <event name="OnChar"></event>
                         <event name="OnEnterWindow"></event>
                         <event name="OnEraseBackground"></event>
-                        <event name="OnKeyDown"></event>
-                        <event name="OnKeyUp"></event>
+                        <event name="OnKeyDown">windowKeyDown</event>
+                        <event name="OnKeyUp">windowKeyUp</event>
                         <event name="OnKillFocus"></event>
                         <event name="OnLeaveWindow"></event>
                         <event name="OnLeftDClick"></event>

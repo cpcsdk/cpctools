@@ -261,6 +261,7 @@ bool Emulator::KeyboardEmulation()
 					// consult the normal table
 					cpc_key = _input.keyboard_normal[event.key.keysym.sym];
 				}
+
 				if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused) && ((byte)cpc_key != 0xff))
 				{
 					// key is being held down
@@ -277,6 +278,7 @@ bool Emulator::KeyboardEmulation()
 						// make sure key is unSHIFTed
 						_input.keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
 					}
+
 					// CPC CONTROL key required?
 					if (cpc_key & MOD_CPC_CTRL)
 					{
@@ -318,6 +320,7 @@ bool Emulator::KeyboardEmulation()
 					// consult the normal table
 					cpc_key = _input.keyboard_normal[event.key.keysym.sym];
 				}
+
 				// a key of the CPC keyboard?
 				if (!(cpc_key & MOD_EMU_KEY))
 				{
