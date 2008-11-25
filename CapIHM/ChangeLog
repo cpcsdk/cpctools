@@ -1,3 +1,6 @@
+2008-11-25 Krusty/Benediction <krusty@cpcscene.com>
+	* all : Add the GPL header on all the forgotten files
+
 2008-11-24 PulkoMandy/Shinra <pulkomandy@gmail.com>
 	* Sound : Fixed STSound and SDL buffers. Fully working sound !
 	* GUI : Some work in getting the cpc screen embedded in the wx window.
