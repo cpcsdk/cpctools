@@ -453,8 +453,9 @@ bool Emulator::KeyboardEmulation()
     return isTimeToExit;
 }
 
-Emulator::Emulator()
-: FPSDisplay(true)
+Emulator::Emulator():
+  _renderer(this),
+  FPSDisplay(true)
 {
 }
 

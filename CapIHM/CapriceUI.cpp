@@ -496,7 +496,7 @@ CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Credit :\nWrited by :\nUlrich Doewich\nRamlaid/Arkos <contact@ramlaid.com>\nRomain Giot  - Krusty/Benediction <krusty@cpcscene.com>\nContributor :\nPulkoMandy/Shinra <pulkomandy@gmail.com>\nCloudStrife/Shinra <cloudstrife@cpcscene.com>\nAnd a lot of other contributor"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Credits :\nWritten by :\nUlrich Doewich\nRamlaid/Arkos <contact@ramlaid.com>\nRomain Giot  - Krusty/Benediction <krusty@cpcscene.com>\nPulkoMandy/Shinra <pulkomandy@gmail.com>\nContributors :\nCloudStrife/Shinra <cloudstrife@cpcscene.com>\nAnd a lot of other contributors\nStSound - LibDSK - Lib765 - SDL - wxWidgets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	bSizer11->Add( m_staticText10, 0, wxALL|wxEXPAND, 5 );
 	
@@ -901,7 +901,7 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panel4->SetSizer( bSizer23 );
 	m_panel4->Layout();
 	bSizer23->Fit( m_panel4 );
-	m_nb_Register->AddPage( m_panel4, wxT("Z80 Registers"), false );
+	m_nb_Register->AddPage( m_panel4, wxT("Z80 Registers"), true );
 	m_panel8 = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
@@ -1117,7 +1117,7 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	m_panel8->SetSizer( bSizer21 );
 	m_panel8->Layout();
 	bSizer21->Fit( m_panel8 );
-	m_nb_Register->AddPage( m_panel8, wxT("CRTC Registers and States"), true );
+	m_nb_Register->AddPage( m_panel8, wxT("CRTC Registers and States"), false );
 	m_panel9 = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_nb_Register->AddPage( m_panel9, wxT("GateArray States"), false );
 	

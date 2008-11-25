@@ -49,6 +49,54 @@
 
 extern t_disk_format disk_format[MAX_DISK_FORMAT];
 
+t_CPC::t_CPC()
+{
+    model=0;
+    jumpers=0;
+    ram_size=0;
+    speed=0;
+    limit_speed=0;
+    paused=0;
+    auto_pause=0;
+    keyboard_line=0;
+    tape_motor=0;
+    tape_play_button=0;
+    printer=0;
+    mf2=0;
+    keyboard=0;
+    joysticks=0;
+    cycle_count=0;
+
+    snd_enabled=0;
+    snd_playback_rate=0;
+    snd_bits=0;
+    snd_stereo=0;
+    snd_volume=0;
+    snd_pp_device=0;
+
+    kbd_layout=0;
+
+    max_tracksize=0;
+
+    snap_zip=false;
+    drvA_zip=false;
+    drvA_format = 0;
+    drvB_zip=false;
+    drvB_format=0;
+    tape_zip=false;
+
+    scr_fps=false;
+    scr_tube=false;
+    scr_intensity=0;
+    scr_remanency=false;
+
+    vid_w=800;
+    vid_h=600;
+    vid_bpp=24;
+    vid_style=VideoPlugin::DoubleWidth;
+
+}
+
 unsigned int getConfigValueInt (const char* pchFileName, const char* pchSection, const char* pchKey, unsigned int iDefaultValue)
 {
 	C_Inifile_error err = C_INIFILE_NO_ERROR;
@@ -151,22 +199,19 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    bool fs = (getConfigValueInt(chFileName, "video", "scr_window", 0) & 1) == 0;
 	    bool oglfilter = getConfigValueInt(chFileName, "video", "scr_oglfilter", 1) & 1;
 
-//	    emulator.GetRenderer().SetVideoMode((VideoPlugin::VideoType)style, w, h, bpp, fs);
 	    emulator.GetRenderer().SetOpenGLFilter(oglfilter);
 
 
-	    bool scr_fps = getConfigValueInt(chFileName, "video", "scr_fps", 0) & 1;
-	    //	renderer.SetDisplayFPS(scr_fps);
+	    scr_fps = getConfigValueInt(chFileName, "video", "scr_fps", 0) & 1;
 
-
-	    bool color = scr_tube = (getConfigValueInt(chFileName, "video", "scr_tube", 0) & 1) == 0;
-	    int intensity = scr_intensity = getConfigValueInt(chFileName, "video", "scr_intensity", 10);
-	    bool remanency = scr_remanency = getConfigValueInt(chFileName, "video", "scr_remanency", 0) & 1;
-	    if ((intensity < 5) || (intensity > 15))
+	    scr_tube = (getConfigValueInt(chFileName, "video", "scr_tube", 0) & 1) == 0;
+	    scr_intensity = getConfigValueInt(chFileName, "video", "scr_intensity", 10);
+	    scr_remanency = getConfigValueInt(chFileName, "video", "scr_remanency", 0) & 1;
+	    if ((scr_intensity < 5) || (scr_intensity > 15))
 	    {
-		intensity = 10;
+		scr_intensity = 10;
 	    }
-	    emulator.GetRenderer().SetMonitor(color, intensity, remanency);
+	    //emulator.GetRenderer().SetMonitor(color, intensity, remanency);
 
 	    //renderer.scr_vsync = getConfigValueInt(chFileName, "video", "scr_vsync", 1) & 1;
 	    //renderer.scr_led = getConfigValueInt(chFileName, "video", "scr_led", 1) & 1;

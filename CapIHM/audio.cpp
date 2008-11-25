@@ -51,13 +51,13 @@ dword freq_table[MAX_FREQ_ENTRIES] = {
 
 void audio_update (void *userdata, Uint8 *stream, int len)
 {
-    t_PSG *psg = (t_PSG*) userdata;
 #ifdef AYEMU
     ayemu_gen_sound ( (ayemu_ay_t*)userdata, stream, len);
     return;
 #endif // AYEMU
 
 #ifdef AYLET
+    t_PSG *psg = (t_PSG*) userdata;
     if (audio_spec->channels==1)
     {
         psg->fillSample(len/(2*1));
@@ -82,7 +82,7 @@ void audio_update (void *userdata, Uint8 *stream, int len)
     {
         if (pbSndBufferCurrent+len>pbSndBufferPtr && pbSndBufferCurrent<pbSndBufferPtr)
         {
-            std::cout << "Sound buffer reading overflow ! Available " << ((int)(pbSndBufferCurrent-pbSndBufferPtr)+len) << ", expecting " << len << std::endl;
+//            std::cout << "Sound buffer reading overflow ! Available " << ((int)(pbSndBufferCurrent-pbSndBufferPtr)+len) << ", expecting " << len << std::endl;
 	    pbSndBufferCurrent -= len; // Better make a big desync than many little clicks
 	    // This adds latency (space between reader and writer) but it will max out at the buffer size
 	    if(pbSndBufferCurrent < pbSndBuffer) pbSndBufferCurrent = pbSndBuffer;

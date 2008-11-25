@@ -15,6 +15,7 @@ class Emulator;
 class t_CPC
 {
 public:
+    // System
    unsigned int model;
    unsigned int jumpers;
    unsigned int ram_size;
@@ -32,6 +33,7 @@ public:
    unsigned int joysticks;
    int cycle_count;
 
+   // Sound
    unsigned int snd_enabled;
    unsigned int snd_playback_rate;
    unsigned int snd_bits;
@@ -39,9 +41,13 @@ public:
    unsigned int snd_volume;
    unsigned int snd_pp_device;
 
+   // Keyboard
    unsigned int kbd_layout;
 
+   // Floppy
    unsigned int max_tracksize;
+
+   // Files
    char snap_path[_MAX_PATH + 1];
    char snap_file[_MAX_PATH + 1];
    bool snap_zip;
@@ -63,7 +69,7 @@ public:
    char rom_file[16][_MAX_PATH + 1];
    char rom_mf2[_MAX_PATH + 1];
 
-
+    // Video
    bool scr_fps ;
    bool scr_tube ;
    int  scr_intensity ;
@@ -71,8 +77,10 @@ public:
 
    int vid_w,vid_h,vid_bpp;
    VideoPlugin::VideoType vid_style;
+
 public:
-	void loadConfiguration (Emulator &emulator);
+   void loadConfiguration (Emulator &emulator);
+    t_CPC();    
 };
 
 #endif

@@ -6,6 +6,7 @@
 #define _RENDER_H_
 #include "cap32type.h"
 #include "video.h"
+#include "config.h"
 #include <string.h>
 #include <SDL_video.h>
 #include <string>
@@ -13,11 +14,11 @@
 
 class Renderer
 {
-private:
+    private:
 	// Render function
 	class RenderFunction
 	{
-	protected:
+	    protected:
 		//! Array of number of byte to render each time
 		byte			*_renderWidth;
 		//! Address of prerenderered data
@@ -33,14 +34,15 @@ private:
 		//! (include index to antialiasing color for displaying)
 		unsigned int	_palette[20];
 
-	public:
+	    public:
 		RenderFunction() : _scrPos(NULL)
 		{
-            for( int i = 0; i < 20; i++)
-            {
-                _palette[i] = 0;
-            }
-        }
+		    for( int i = 0; i < 20; i++)
+		    {
+			_palette[i] = 0;
+		    }
+		}
+
 		virtual ~RenderFunction() { }
 
 		inline void SetBackSurface(SDL_Surface *surface)		{ _backSurface = surface;		}
@@ -52,56 +54,57 @@ private:
 		virtual void PlotPixel(int x, int y, const SDL_Color &colour) = 0;
 		inline unsigned int GetScreenPosition() const
 		{
-			return _scrPos - (dword *)_backSurface->pixels;
+		    return _scrPos - (dword *)_backSurface->pixels;
 		}
 		inline void SetScreenPosition(unsigned int v)
 		{
-			_scrPos = (dword *)_backSurface->pixels + v;
+		    _scrPos = (dword *)_backSurface->pixels + v;
 		}
 
 		virtual void Render() = 0;
 		inline byte* GetRenderWidth() const						{ return _renderWidth;			}
 		inline void SetRenderWidth(byte* v)						{ _renderWidth = v;				}
-//		inline byte* GetRenderData() const						{ return _renderData;			}
+		//		inline byte* GetRenderData() const						{ return _renderData;			}
 		inline void SetRenderData(byte* v)						{ _renderData = v;				}
 	};
+
 	class Render32BppFunction : public RenderFunction
-	{
-	    virtual ~Render32BppFunction() { }
+    {
+	virtual ~Render32BppFunction() { }
 
 	public:
-		virtual void Render();
-		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-	};
+	virtual void Render();
+	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+    };
 	class Render24BppFunction : public RenderFunction
-	{
-	    virtual ~Render24BppFunction() { }
+    {
+	virtual ~Render24BppFunction() { }
 
 	public:
-		virtual void Render();
-		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-	};
+	virtual void Render();
+	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+    };
 	class Render16BppFunction : public RenderFunction
-	{
-	    virtual ~Render16BppFunction() { }
+    {
+	virtual ~Render16BppFunction() { }
 
 	public:
-		virtual void Render();
-		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-	};
+	virtual void Render();
+	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+    };
 	class Render8BppFunction : public RenderFunction
-	{
-	    virtual ~Render8BppFunction() { }
+    {
+	virtual ~Render8BppFunction() { }
 
 	public:
-		virtual void Render();
-		virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-	};
+	virtual void Render();
+	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+    };
 
 	// Pre render function
 	class PreRenderFunction
 	{
-	protected:
+	    protected:
 		//! Prerender buffer pointer
 		dword			*_renderPos;
 		//! Current mode map (conversion from CPC memory to SDL memory)
@@ -110,13 +113,13 @@ private:
 		byte			*_memory;
 		//! Current CPC mode
 		unsigned int	_mode;
-	public:
+	    public:
 		inline PreRenderFunction() : _renderPos(NULL), _modeMap(NULL), _memory(NULL), _mode(0) {}
 		virtual ~PreRenderFunction() {}
 
 		inline unsigned int GetMode() const	{ return _mode;				}
 		inline void SetMode(unsigned int m)	{ _mode = m; UpdateMode();	}
-		
+
 		inline dword* GetRenderPos() const	{ return _renderPos;		}
 		inline void SetRenderPos(dword* v)	{ _renderPos = v;			}
 
@@ -124,103 +127,103 @@ private:
 		inline byte* GetMemory() const		{ return _memory;			}
 
 		virtual void PreRender(unsigned int memAddr) = 0;
-	protected:
+	    protected:
 		virtual void UpdateMode() = 0;
 	};
 	class PreRenderStandardFunction : public PreRenderFunction
-	{
-    protected:
+    {
+	protected:
 	    virtual ~PreRenderStandardFunction() {}
 
 	private:
-		static dword M0Map[0x200];
-		static dword M1Map[0x200];
-		static dword M2Map[0x200];
-		static dword M3Map[0x200];
+	    static dword M0Map[0x200];
+	    static dword M1Map[0x200];
+	    static dword M2Map[0x200];
+	    static dword M3Map[0x200];
 	protected:
-		virtual void UpdateMode();
-	};
+	    virtual void UpdateMode();
+    };
 	class PreRenderHalfFunction : public PreRenderFunction
-	{
-    protected:
+    {
+	protected:
 	    virtual ~PreRenderHalfFunction() {}
 
 	private:
-		static dword M0hMap[0x100];
-		static dword M1hMap[0x100];
-		static dword M2hMap[0x100];
-		static dword M3hMap[0x100];
+	    static dword M0hMap[0x100];
+	    static dword M1hMap[0x100];
+	    static dword M2hMap[0x100];
+	    static dword M3hMap[0x100];
 	protected:
-		virtual void UpdateMode();
-	};
+	    virtual void UpdateMode();
+    };
 	class PreRenderSyncFunction : public PreRenderStandardFunction
-	{
-	    virtual ~PreRenderSyncFunction() {}
+    {
+	virtual ~PreRenderSyncFunction() {}
 
 	public:
-		virtual void PreRender(unsigned int memAddr);
-	};
+	virtual void PreRender(unsigned int memAddr);
+    };
 	class PreRenderBorderFunction : public PreRenderStandardFunction
-	{
-	    virtual ~PreRenderBorderFunction() {}
+    {
+	virtual ~PreRenderBorderFunction() {}
 
 	public:
-		virtual void PreRender(unsigned int memAddr);
-	};
+	virtual void PreRender(unsigned int memAddr);
+    };
 	class PreRenderNormalFunction : public PreRenderStandardFunction
-	{
-	    virtual ~PreRenderNormalFunction() {}
+    {
+	virtual ~PreRenderNormalFunction() {}
 
 	public:
-		virtual void PreRender(unsigned int memAddr);
-	};
+	virtual void PreRender(unsigned int memAddr);
+    };
 	class PreRenderSyncHalfFunction : public PreRenderHalfFunction
-	{
-	    virtual ~PreRenderSyncHalfFunction() {}
+    {
+	virtual ~PreRenderSyncHalfFunction() {}
 
 	public:
-		virtual void PreRender(unsigned int memAddr);
-	};
+	virtual void PreRender(unsigned int memAddr);
+    };
 	class PreRenderBorderHalfFunction : public PreRenderHalfFunction
-	{
-	    virtual ~PreRenderBorderHalfFunction() {}
+    {
+	virtual ~PreRenderBorderHalfFunction() {}
 
 	public:
-		virtual void PreRender(unsigned int memAddr);
-	};
+	virtual void PreRender(unsigned int memAddr);
+    };
 	class PreRenderNormalHalfFunction : public PreRenderHalfFunction
-	{
-	    virtual ~PreRenderNormalHalfFunction() {}
+    {
+	virtual ~PreRenderNormalHalfFunction() {}
 
 	public:
-		virtual void PreRender(unsigned int memAddr);
-	};
+	virtual void PreRender(unsigned int memAddr);
+    };
 
 	//! Text display class
 	class TextDisplay
 	{
-	public:
+	    public:
 		int		PosX;
 		int		PosY;
 		string	Text;
 		bool	Shadow;
-	public:
+	    public:
 		TextDisplay(int x, int y, const string &text, bool shw) : PosX(x), PosY(y), Text(text), Shadow(shw) {}
 	};
 
-private:
+    private:
 	static double		ColoursRGB[32][3];
 	static double		ColoursGreen[32];
 	static byte			Font[768];
 
-private:
+    private:
 	//! Current CRTC flag config used to switch preRenderer
 	dword				_currentFlagConfig;
 	//! Render buffer to be fill by preRenderer
 	byte				_renderBuffer[800];
 	//!	Start address for preRenderer
 	dword				*_renderStart;
-	
+
 	//! Current horizontal position (char * 256)
 	//! Used to handle monitor displaying
 	int					_horizontalPosition;
@@ -256,7 +259,7 @@ private:
 
 	//! Video plugin used for rendering
 	VideoPlugin			*_videoPlugin;
-	
+
 	//! Current screen line offset (in DWord)
 	unsigned int		_scrLineOffset;
 	//! Current screen base rendering
@@ -276,7 +279,7 @@ private:
 	VideoPlugin::VideoType	_videoPluginType;
 	//! Use OpenGL filter for video
 	bool				_videoPluginOpenGLFilter;
-						
+
 	//! Color monitor mode
 	bool				_colorMonitor;
 	//! Monitor intensity
@@ -286,10 +289,11 @@ private:
 
 	//! Display text array
 	vector<TextDisplay>	_textArray;
-public:
+	t_CPC* config;
+    public:
 
 	//! Constructor
-	Renderer();
+	Renderer(Emulator* emu);
 	//! Destructor
 	~Renderer();
 
@@ -326,14 +330,14 @@ public:
 	void Reset();
 
 	// Renderer emulation
-	
+
 	//! Set CPC Mode (update ModeMap pointer)
 	void SetMode(unsigned int mode);
 	//! Set CPC Ink
 	void SetPalette(unsigned int pen, unsigned int colour);
 	//! Set CPC antialiasing color
 	void SetAntiAliasingColour(unsigned int col0, unsigned int col1);
-	
+
 	//! Render CPC memory
 	void Render(unsigned int memAddr, dword flags);
 	//! HSync reach
@@ -341,10 +345,10 @@ public:
 	//! Update CPC horizontal position
 	inline int UpdateHorzPos()
 	{
-		_horizontalPosition += 0x100;
-		_horizontalCurrentChar++;
-		
-		return _horizontalPosition;
+	    _horizontalPosition += 0x100;
+	    _horizontalCurrentChar++;
+
+	    return _horizontalPosition;
 	}
 
 	// Pixel rendering
@@ -355,10 +359,10 @@ public:
 	void AddTextLocate(int x, int y, const string &text, bool shadow = true);
 	//! Add text with pixel coord
 	void AddText(int x, int y, const string &text, bool shadow = true);
-private:
+    private:
 	//! Print with pixel position
 	void Print(int x, int y, const string &text, bool shadow = true);
-	
+
 	void SetPreRender(dword flags);
 
 	void InitPalette();

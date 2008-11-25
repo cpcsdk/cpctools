@@ -217,41 +217,34 @@ void ParseCommandLine( Emulator &emulator, int argc, char ** argv )
 
 int main (int argc, char **argv)
 {
-	// initialize SDL
-	if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0) 
-	{
-		std::cerr << "SDL_Init() failed: " << SDL_GetError() << std::endl;
-		return -1;
-	}
-	
+    // initialize SDL
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0) 
+    {
+	std::cerr << "SDL_Init() failed: " << SDL_GetError() << std::endl;
+	return -1;
+    }
 
-	if (emulator.Init())
-	{
+
+    if (emulator.Init())
+    {
 #ifdef DEBUG
 	InitDebug();
 #endif
-        ParseCommandLine(emulator, argc, argv);
-
-
+	ParseCommandLine(emulator, argc, argv);
 
 	Renderer render = emulator.GetRenderer();
 
+	emulator.Loop();
 
-;
+	SDL_Quit();
 
+	return 0;
+    }
+    else
+    {
+	SDL_Quit();
 
-
-        emulator.Loop();
-   
-        SDL_Quit();
-   
-        return 0;
-	}
-	else
-	{
-        SDL_Quit();
-   
-		std::cerr << "Emulator initialisation failed !" << std::endl;
-		return -1;
-	}
+	std::cerr << "Emulator initialisation failed !" << std::endl;
+	return -1;
+    }
 }

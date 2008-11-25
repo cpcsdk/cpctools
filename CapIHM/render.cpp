@@ -26,6 +26,7 @@
 
 #include "render.h"
 #include "video.h"
+#include "emulator.h"
 
 #define FNT_CHAR_WIDTH 8
 #define FNT_CHAR_HEIGHT 8
@@ -47,7 +48,7 @@
 #endif
 
 
-Renderer::Renderer() :
+Renderer::Renderer(Emulator* emu) :
 _currentFlagConfig(0),
 _renderFunc(NULL),
 _preRenderFunc(NULL),
@@ -73,6 +74,8 @@ _monitorRemanency(false)
     {
         _renderBuffer[i] = 0;
     }
+
+    config = &emu->GetConfig();
 }
 
 Renderer::~Renderer()
@@ -112,11 +115,14 @@ void Renderer::EndDisplay(bool frameCompleted)
 	if (frameCompleted)
 	{
 		// Display texts
+	    if(config->scr_fps)
+	    {
 		for (unsigned int t=0 ; t < _textArray.size() ; t++)
 		{
 			Print(_textArray[t].PosX, _textArray[t].PosY, _textArray[t].Text, _textArray[t].Shadow);
 		}
 		_textArray.clear();
+	    }
 
 		_videoPlugin->Unlock();
 		_videoPlugin->Flip(); // update PC display
