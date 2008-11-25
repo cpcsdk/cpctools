@@ -1,5 +1,5 @@
 /**
- *   $Id$
+ *   $Id: CapriceApp.h 60 2008-11-25 17:08:52Z giot.romain $
  *	 CapriceReloded an Amstrad CPC emulator
  *   Copyright (C) 2008  cpcsdk crew
  *

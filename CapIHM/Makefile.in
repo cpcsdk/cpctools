@@ -13,7 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -30,16 +29,6 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-bin_PROGRAMS = caprice$(EXEEXT)
-
-#Add aylet files if used as backend
-@AYLET_TRUE@am__append_1 = -Iaylet
-@AYLET_TRUE@am__append_2 = aylet/sound.cc \
-@AYLET_TRUE@		     aylet/sound.h \
-@AYLET_TRUE@		     aylet/drv-oss.cc \
-@AYLET_TRUE@		     aylet/driver.h 
-
-@RELEASE_TRUE@am__append_3 = -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/configBis.h.in \
@@ -55,64 +44,20 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = configBis.h
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
-am__caprice_SOURCES_DIST = audio.cpp emulator.cpp input.cpp ppi.cpp \
-	renderData.cpp tape.cpp z80.cpp crtc.cpp fdc.cpp gatearray.cpp \
-	ioport.cpp psg.cpp rom_mods.cpp vdu.cpp zip.cpp config.cpp \
-	dsk.cpp filetools.cpp memory.cpp render.cpp snapshot.cpp \
-	video.cpp audio.h config.h debug.h error.h glfuncs.h memory.h \
-	render.h tape.h z80daa.h cap32.h dsk.h fdc.h gatearray.h \
-	input.h ppi.h rom_mods.h vdu.h z80.h cap32type.h crtc.h \
-	emulator.h filetools.h ioport.h psg.h snapshot.h video.h zip.h \
-	YmTypes.h glfunclist.h glfuncs.cpp fileutils.h fileutils.cpp \
-	CapriceAboutImpl.cpp CapriceAboutImpl.h CapriceApp.cpp \
-	CapriceApp.h CapriceRegistersDialogImpl.cpp \
-	CapriceRegistersDialogImpl.h CapriceUI.cpp CapriceUI.h \
-	CapriceWindowImpl.cpp CapriceWindowImpl.h c_inifile.cpp \
-	c_inifile.h aylet/sound.cc aylet/sound.h aylet/drv-oss.cc \
-	aylet/driver.h
-@AYLET_TRUE@am__objects_1 = caprice-sound.$(OBJEXT) \
-@AYLET_TRUE@	caprice-drv-oss.$(OBJEXT)
-am_caprice_OBJECTS = caprice-audio.$(OBJEXT) \
-	caprice-emulator.$(OBJEXT) caprice-input.$(OBJEXT) \
-	caprice-ppi.$(OBJEXT) caprice-renderData.$(OBJEXT) \
-	caprice-tape.$(OBJEXT) caprice-z80.$(OBJEXT) \
-	caprice-crtc.$(OBJEXT) caprice-fdc.$(OBJEXT) \
-	caprice-gatearray.$(OBJEXT) caprice-ioport.$(OBJEXT) \
-	caprice-psg.$(OBJEXT) caprice-rom_mods.$(OBJEXT) \
-	caprice-vdu.$(OBJEXT) caprice-zip.$(OBJEXT) \
-	caprice-config.$(OBJEXT) caprice-dsk.$(OBJEXT) \
-	caprice-filetools.$(OBJEXT) caprice-memory.$(OBJEXT) \
-	caprice-render.$(OBJEXT) caprice-snapshot.$(OBJEXT) \
-	caprice-video.$(OBJEXT) caprice-glfuncs.$(OBJEXT) \
-	caprice-fileutils.$(OBJEXT) caprice-CapriceAboutImpl.$(OBJEXT) \
-	caprice-CapriceApp.$(OBJEXT) \
-	caprice-CapriceRegistersDialogImpl.$(OBJEXT) \
-	caprice-CapriceUI.$(OBJEXT) \
-	caprice-CapriceWindowImpl.$(OBJEXT) \
-	caprice-c_inifile.$(OBJEXT) $(am__objects_1)
-caprice_OBJECTS = $(am_caprice_OBJECTS)
-am__DEPENDENCIES_1 =
-caprice_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-DEFAULT_INCLUDES = -I.@am__isrc@
-depcomp = $(SHELL) $(top_srcdir)/depcomp
-am__depfiles_maybe = depfiles
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
-	-o $@
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(caprice_SOURCES)
-DIST_SOURCES = $(am__caprice_SOURCES_DIST)
+SOURCES =
+DIST_SOURCES =
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-dvi-recursive install-exec-recursive \
+	install-html-recursive install-info-recursive \
+	install-pdf-recursive install-ps-recursive install-recursive \
+	installcheck-recursive installdirs-recursive pdf-recursive \
+	ps-recursive uninstall-recursive
+RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+  distclean-recursive maintainer-clean-recursive
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -167,6 +112,7 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
@@ -227,28 +173,11 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-caprice_SOURCES = audio.cpp emulator.cpp input.cpp ppi.cpp \
-	renderData.cpp tape.cpp z80.cpp crtc.cpp fdc.cpp gatearray.cpp \
-	ioport.cpp psg.cpp rom_mods.cpp vdu.cpp zip.cpp config.cpp \
-	dsk.cpp filetools.cpp memory.cpp render.cpp snapshot.cpp \
-	video.cpp audio.h config.h debug.h error.h glfuncs.h memory.h \
-	render.h tape.h z80daa.h cap32.h dsk.h fdc.h gatearray.h \
-	input.h ppi.h rom_mods.h vdu.h z80.h cap32type.h crtc.h \
-	emulator.h filetools.h ioport.h psg.h snapshot.h video.h zip.h \
-	YmTypes.h glfunclist.h glfuncs.cpp glfuncs.h fileutils.h \
-	fileutils.cpp CapriceAboutImpl.cpp CapriceAboutImpl.h \
-	CapriceApp.cpp CapriceApp.h CapriceRegistersDialogImpl.cpp \
-	CapriceRegistersDialogImpl.h CapriceUI.cpp CapriceUI.h \
-	CapriceWindowImpl.cpp CapriceWindowImpl.h c_inifile.cpp \
-	c_inifile.h $(am__append_2)
-caprice_CPPFLAGS = $(SDL_CFLAGS) $(WX_CPPFLAGS) $(am__append_1) \
-	$(am__append_3)
-caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -ldsk
+SUBDIRS = src 
 all: configBis.h
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cc .cpp .o .obj
 am--refresh:
 	@:
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
@@ -299,547 +228,76 @@ $(srcdir)/configBis.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f configBis.h stamp-h1
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
-	  else :; fi; \
+
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+$(RECURSIVE_TARGETS):
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
+
+$(RECURSIVE_CLEAN_TARGETS):
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
+	done; \
+	rev="$$rev ."; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
 	done
-
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
+ctags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
 	done
-
-clean-binPROGRAMS:
-	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-caprice$(EXEEXT): $(caprice_OBJECTS) $(caprice_DEPENDENCIES) 
-	@rm -f caprice$(EXEEXT)
-	$(CXXLINK) $(caprice_OBJECTS) $(caprice_LDADD) $(LIBS)
-
-mostlyclean-compile:
-	-rm -f *.$(OBJEXT)
-
-distclean-compile:
-	-rm -f *.tab.c
-
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceAboutImpl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceApp.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceRegistersDialogImpl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceUI.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-CapriceWindowImpl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-audio.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-c_inifile.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-config.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-crtc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-drv-oss.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-dsk.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-emulator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-fdc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-filetools.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-fileutils.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-gatearray.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-glfuncs.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-input.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-ioport.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-memory.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-ppi.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-psg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-render.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-renderData.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-rom_mods.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-snapshot.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-sound.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-tape.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-vdu.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-video.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-z80.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-zip.Po@am__quote@
-
-.cc.o:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
-
-.cc.obj:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-caprice-audio.o: audio.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-audio.o -MD -MP -MF $(DEPDIR)/caprice-audio.Tpo -c -o caprice-audio.o `test -f 'audio.cpp' || echo '$(srcdir)/'`audio.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-audio.Tpo $(DEPDIR)/caprice-audio.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='audio.cpp' object='caprice-audio.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-audio.o `test -f 'audio.cpp' || echo '$(srcdir)/'`audio.cpp
-
-caprice-audio.obj: audio.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-audio.obj -MD -MP -MF $(DEPDIR)/caprice-audio.Tpo -c -o caprice-audio.obj `if test -f 'audio.cpp'; then $(CYGPATH_W) 'audio.cpp'; else $(CYGPATH_W) '$(srcdir)/audio.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-audio.Tpo $(DEPDIR)/caprice-audio.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='audio.cpp' object='caprice-audio.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-audio.obj `if test -f 'audio.cpp'; then $(CYGPATH_W) 'audio.cpp'; else $(CYGPATH_W) '$(srcdir)/audio.cpp'; fi`
-
-caprice-emulator.o: emulator.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-emulator.o -MD -MP -MF $(DEPDIR)/caprice-emulator.Tpo -c -o caprice-emulator.o `test -f 'emulator.cpp' || echo '$(srcdir)/'`emulator.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-emulator.Tpo $(DEPDIR)/caprice-emulator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='emulator.cpp' object='caprice-emulator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-emulator.o `test -f 'emulator.cpp' || echo '$(srcdir)/'`emulator.cpp
-
-caprice-emulator.obj: emulator.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-emulator.obj -MD -MP -MF $(DEPDIR)/caprice-emulator.Tpo -c -o caprice-emulator.obj `if test -f 'emulator.cpp'; then $(CYGPATH_W) 'emulator.cpp'; else $(CYGPATH_W) '$(srcdir)/emulator.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-emulator.Tpo $(DEPDIR)/caprice-emulator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='emulator.cpp' object='caprice-emulator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-emulator.obj `if test -f 'emulator.cpp'; then $(CYGPATH_W) 'emulator.cpp'; else $(CYGPATH_W) '$(srcdir)/emulator.cpp'; fi`
-
-caprice-input.o: input.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-input.o -MD -MP -MF $(DEPDIR)/caprice-input.Tpo -c -o caprice-input.o `test -f 'input.cpp' || echo '$(srcdir)/'`input.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-input.Tpo $(DEPDIR)/caprice-input.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='input.cpp' object='caprice-input.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-input.o `test -f 'input.cpp' || echo '$(srcdir)/'`input.cpp
-
-caprice-input.obj: input.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-input.obj -MD -MP -MF $(DEPDIR)/caprice-input.Tpo -c -o caprice-input.obj `if test -f 'input.cpp'; then $(CYGPATH_W) 'input.cpp'; else $(CYGPATH_W) '$(srcdir)/input.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-input.Tpo $(DEPDIR)/caprice-input.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='input.cpp' object='caprice-input.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-input.obj `if test -f 'input.cpp'; then $(CYGPATH_W) 'input.cpp'; else $(CYGPATH_W) '$(srcdir)/input.cpp'; fi`
-
-caprice-ppi.o: ppi.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-ppi.o -MD -MP -MF $(DEPDIR)/caprice-ppi.Tpo -c -o caprice-ppi.o `test -f 'ppi.cpp' || echo '$(srcdir)/'`ppi.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-ppi.Tpo $(DEPDIR)/caprice-ppi.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ppi.cpp' object='caprice-ppi.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-ppi.o `test -f 'ppi.cpp' || echo '$(srcdir)/'`ppi.cpp
-
-caprice-ppi.obj: ppi.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-ppi.obj -MD -MP -MF $(DEPDIR)/caprice-ppi.Tpo -c -o caprice-ppi.obj `if test -f 'ppi.cpp'; then $(CYGPATH_W) 'ppi.cpp'; else $(CYGPATH_W) '$(srcdir)/ppi.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-ppi.Tpo $(DEPDIR)/caprice-ppi.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ppi.cpp' object='caprice-ppi.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-ppi.obj `if test -f 'ppi.cpp'; then $(CYGPATH_W) 'ppi.cpp'; else $(CYGPATH_W) '$(srcdir)/ppi.cpp'; fi`
-
-caprice-renderData.o: renderData.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-renderData.o -MD -MP -MF $(DEPDIR)/caprice-renderData.Tpo -c -o caprice-renderData.o `test -f 'renderData.cpp' || echo '$(srcdir)/'`renderData.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-renderData.Tpo $(DEPDIR)/caprice-renderData.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='renderData.cpp' object='caprice-renderData.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-renderData.o `test -f 'renderData.cpp' || echo '$(srcdir)/'`renderData.cpp
-
-caprice-renderData.obj: renderData.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-renderData.obj -MD -MP -MF $(DEPDIR)/caprice-renderData.Tpo -c -o caprice-renderData.obj `if test -f 'renderData.cpp'; then $(CYGPATH_W) 'renderData.cpp'; else $(CYGPATH_W) '$(srcdir)/renderData.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-renderData.Tpo $(DEPDIR)/caprice-renderData.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='renderData.cpp' object='caprice-renderData.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-renderData.obj `if test -f 'renderData.cpp'; then $(CYGPATH_W) 'renderData.cpp'; else $(CYGPATH_W) '$(srcdir)/renderData.cpp'; fi`
-
-caprice-tape.o: tape.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-tape.o -MD -MP -MF $(DEPDIR)/caprice-tape.Tpo -c -o caprice-tape.o `test -f 'tape.cpp' || echo '$(srcdir)/'`tape.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-tape.Tpo $(DEPDIR)/caprice-tape.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tape.cpp' object='caprice-tape.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-tape.o `test -f 'tape.cpp' || echo '$(srcdir)/'`tape.cpp
-
-caprice-tape.obj: tape.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-tape.obj -MD -MP -MF $(DEPDIR)/caprice-tape.Tpo -c -o caprice-tape.obj `if test -f 'tape.cpp'; then $(CYGPATH_W) 'tape.cpp'; else $(CYGPATH_W) '$(srcdir)/tape.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-tape.Tpo $(DEPDIR)/caprice-tape.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tape.cpp' object='caprice-tape.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-tape.obj `if test -f 'tape.cpp'; then $(CYGPATH_W) 'tape.cpp'; else $(CYGPATH_W) '$(srcdir)/tape.cpp'; fi`
-
-caprice-z80.o: z80.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-z80.o -MD -MP -MF $(DEPDIR)/caprice-z80.Tpo -c -o caprice-z80.o `test -f 'z80.cpp' || echo '$(srcdir)/'`z80.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-z80.Tpo $(DEPDIR)/caprice-z80.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='z80.cpp' object='caprice-z80.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-z80.o `test -f 'z80.cpp' || echo '$(srcdir)/'`z80.cpp
-
-caprice-z80.obj: z80.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-z80.obj -MD -MP -MF $(DEPDIR)/caprice-z80.Tpo -c -o caprice-z80.obj `if test -f 'z80.cpp'; then $(CYGPATH_W) 'z80.cpp'; else $(CYGPATH_W) '$(srcdir)/z80.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-z80.Tpo $(DEPDIR)/caprice-z80.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='z80.cpp' object='caprice-z80.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-z80.obj `if test -f 'z80.cpp'; then $(CYGPATH_W) 'z80.cpp'; else $(CYGPATH_W) '$(srcdir)/z80.cpp'; fi`
-
-caprice-crtc.o: crtc.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-crtc.o -MD -MP -MF $(DEPDIR)/caprice-crtc.Tpo -c -o caprice-crtc.o `test -f 'crtc.cpp' || echo '$(srcdir)/'`crtc.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-crtc.Tpo $(DEPDIR)/caprice-crtc.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='crtc.cpp' object='caprice-crtc.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-crtc.o `test -f 'crtc.cpp' || echo '$(srcdir)/'`crtc.cpp
-
-caprice-crtc.obj: crtc.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-crtc.obj -MD -MP -MF $(DEPDIR)/caprice-crtc.Tpo -c -o caprice-crtc.obj `if test -f 'crtc.cpp'; then $(CYGPATH_W) 'crtc.cpp'; else $(CYGPATH_W) '$(srcdir)/crtc.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-crtc.Tpo $(DEPDIR)/caprice-crtc.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='crtc.cpp' object='caprice-crtc.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-crtc.obj `if test -f 'crtc.cpp'; then $(CYGPATH_W) 'crtc.cpp'; else $(CYGPATH_W) '$(srcdir)/crtc.cpp'; fi`
-
-caprice-fdc.o: fdc.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-fdc.o -MD -MP -MF $(DEPDIR)/caprice-fdc.Tpo -c -o caprice-fdc.o `test -f 'fdc.cpp' || echo '$(srcdir)/'`fdc.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-fdc.Tpo $(DEPDIR)/caprice-fdc.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fdc.cpp' object='caprice-fdc.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-fdc.o `test -f 'fdc.cpp' || echo '$(srcdir)/'`fdc.cpp
-
-caprice-fdc.obj: fdc.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-fdc.obj -MD -MP -MF $(DEPDIR)/caprice-fdc.Tpo -c -o caprice-fdc.obj `if test -f 'fdc.cpp'; then $(CYGPATH_W) 'fdc.cpp'; else $(CYGPATH_W) '$(srcdir)/fdc.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-fdc.Tpo $(DEPDIR)/caprice-fdc.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fdc.cpp' object='caprice-fdc.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-fdc.obj `if test -f 'fdc.cpp'; then $(CYGPATH_W) 'fdc.cpp'; else $(CYGPATH_W) '$(srcdir)/fdc.cpp'; fi`
-
-caprice-gatearray.o: gatearray.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-gatearray.o -MD -MP -MF $(DEPDIR)/caprice-gatearray.Tpo -c -o caprice-gatearray.o `test -f 'gatearray.cpp' || echo '$(srcdir)/'`gatearray.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-gatearray.Tpo $(DEPDIR)/caprice-gatearray.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gatearray.cpp' object='caprice-gatearray.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-gatearray.o `test -f 'gatearray.cpp' || echo '$(srcdir)/'`gatearray.cpp
-
-caprice-gatearray.obj: gatearray.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-gatearray.obj -MD -MP -MF $(DEPDIR)/caprice-gatearray.Tpo -c -o caprice-gatearray.obj `if test -f 'gatearray.cpp'; then $(CYGPATH_W) 'gatearray.cpp'; else $(CYGPATH_W) '$(srcdir)/gatearray.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-gatearray.Tpo $(DEPDIR)/caprice-gatearray.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gatearray.cpp' object='caprice-gatearray.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-gatearray.obj `if test -f 'gatearray.cpp'; then $(CYGPATH_W) 'gatearray.cpp'; else $(CYGPATH_W) '$(srcdir)/gatearray.cpp'; fi`
-
-caprice-ioport.o: ioport.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-ioport.o -MD -MP -MF $(DEPDIR)/caprice-ioport.Tpo -c -o caprice-ioport.o `test -f 'ioport.cpp' || echo '$(srcdir)/'`ioport.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-ioport.Tpo $(DEPDIR)/caprice-ioport.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ioport.cpp' object='caprice-ioport.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-ioport.o `test -f 'ioport.cpp' || echo '$(srcdir)/'`ioport.cpp
-
-caprice-ioport.obj: ioport.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-ioport.obj -MD -MP -MF $(DEPDIR)/caprice-ioport.Tpo -c -o caprice-ioport.obj `if test -f 'ioport.cpp'; then $(CYGPATH_W) 'ioport.cpp'; else $(CYGPATH_W) '$(srcdir)/ioport.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-ioport.Tpo $(DEPDIR)/caprice-ioport.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ioport.cpp' object='caprice-ioport.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-ioport.obj `if test -f 'ioport.cpp'; then $(CYGPATH_W) 'ioport.cpp'; else $(CYGPATH_W) '$(srcdir)/ioport.cpp'; fi`
-
-caprice-psg.o: psg.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-psg.o -MD -MP -MF $(DEPDIR)/caprice-psg.Tpo -c -o caprice-psg.o `test -f 'psg.cpp' || echo '$(srcdir)/'`psg.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-psg.Tpo $(DEPDIR)/caprice-psg.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='psg.cpp' object='caprice-psg.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-psg.o `test -f 'psg.cpp' || echo '$(srcdir)/'`psg.cpp
-
-caprice-psg.obj: psg.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-psg.obj -MD -MP -MF $(DEPDIR)/caprice-psg.Tpo -c -o caprice-psg.obj `if test -f 'psg.cpp'; then $(CYGPATH_W) 'psg.cpp'; else $(CYGPATH_W) '$(srcdir)/psg.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-psg.Tpo $(DEPDIR)/caprice-psg.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='psg.cpp' object='caprice-psg.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-psg.obj `if test -f 'psg.cpp'; then $(CYGPATH_W) 'psg.cpp'; else $(CYGPATH_W) '$(srcdir)/psg.cpp'; fi`
-
-caprice-rom_mods.o: rom_mods.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-rom_mods.o -MD -MP -MF $(DEPDIR)/caprice-rom_mods.Tpo -c -o caprice-rom_mods.o `test -f 'rom_mods.cpp' || echo '$(srcdir)/'`rom_mods.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-rom_mods.Tpo $(DEPDIR)/caprice-rom_mods.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rom_mods.cpp' object='caprice-rom_mods.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-rom_mods.o `test -f 'rom_mods.cpp' || echo '$(srcdir)/'`rom_mods.cpp
-
-caprice-rom_mods.obj: rom_mods.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-rom_mods.obj -MD -MP -MF $(DEPDIR)/caprice-rom_mods.Tpo -c -o caprice-rom_mods.obj `if test -f 'rom_mods.cpp'; then $(CYGPATH_W) 'rom_mods.cpp'; else $(CYGPATH_W) '$(srcdir)/rom_mods.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-rom_mods.Tpo $(DEPDIR)/caprice-rom_mods.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rom_mods.cpp' object='caprice-rom_mods.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-rom_mods.obj `if test -f 'rom_mods.cpp'; then $(CYGPATH_W) 'rom_mods.cpp'; else $(CYGPATH_W) '$(srcdir)/rom_mods.cpp'; fi`
-
-caprice-vdu.o: vdu.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-vdu.o -MD -MP -MF $(DEPDIR)/caprice-vdu.Tpo -c -o caprice-vdu.o `test -f 'vdu.cpp' || echo '$(srcdir)/'`vdu.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-vdu.Tpo $(DEPDIR)/caprice-vdu.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='vdu.cpp' object='caprice-vdu.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-vdu.o `test -f 'vdu.cpp' || echo '$(srcdir)/'`vdu.cpp
-
-caprice-vdu.obj: vdu.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-vdu.obj -MD -MP -MF $(DEPDIR)/caprice-vdu.Tpo -c -o caprice-vdu.obj `if test -f 'vdu.cpp'; then $(CYGPATH_W) 'vdu.cpp'; else $(CYGPATH_W) '$(srcdir)/vdu.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-vdu.Tpo $(DEPDIR)/caprice-vdu.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='vdu.cpp' object='caprice-vdu.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-vdu.obj `if test -f 'vdu.cpp'; then $(CYGPATH_W) 'vdu.cpp'; else $(CYGPATH_W) '$(srcdir)/vdu.cpp'; fi`
-
-caprice-zip.o: zip.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-zip.o -MD -MP -MF $(DEPDIR)/caprice-zip.Tpo -c -o caprice-zip.o `test -f 'zip.cpp' || echo '$(srcdir)/'`zip.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-zip.Tpo $(DEPDIR)/caprice-zip.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zip.cpp' object='caprice-zip.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-zip.o `test -f 'zip.cpp' || echo '$(srcdir)/'`zip.cpp
-
-caprice-zip.obj: zip.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-zip.obj -MD -MP -MF $(DEPDIR)/caprice-zip.Tpo -c -o caprice-zip.obj `if test -f 'zip.cpp'; then $(CYGPATH_W) 'zip.cpp'; else $(CYGPATH_W) '$(srcdir)/zip.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-zip.Tpo $(DEPDIR)/caprice-zip.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='zip.cpp' object='caprice-zip.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-zip.obj `if test -f 'zip.cpp'; then $(CYGPATH_W) 'zip.cpp'; else $(CYGPATH_W) '$(srcdir)/zip.cpp'; fi`
-
-caprice-config.o: config.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-config.o -MD -MP -MF $(DEPDIR)/caprice-config.Tpo -c -o caprice-config.o `test -f 'config.cpp' || echo '$(srcdir)/'`config.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-config.Tpo $(DEPDIR)/caprice-config.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='config.cpp' object='caprice-config.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-config.o `test -f 'config.cpp' || echo '$(srcdir)/'`config.cpp
-
-caprice-config.obj: config.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-config.obj -MD -MP -MF $(DEPDIR)/caprice-config.Tpo -c -o caprice-config.obj `if test -f 'config.cpp'; then $(CYGPATH_W) 'config.cpp'; else $(CYGPATH_W) '$(srcdir)/config.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-config.Tpo $(DEPDIR)/caprice-config.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='config.cpp' object='caprice-config.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-config.obj `if test -f 'config.cpp'; then $(CYGPATH_W) 'config.cpp'; else $(CYGPATH_W) '$(srcdir)/config.cpp'; fi`
-
-caprice-dsk.o: dsk.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-dsk.o -MD -MP -MF $(DEPDIR)/caprice-dsk.Tpo -c -o caprice-dsk.o `test -f 'dsk.cpp' || echo '$(srcdir)/'`dsk.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-dsk.Tpo $(DEPDIR)/caprice-dsk.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dsk.cpp' object='caprice-dsk.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-dsk.o `test -f 'dsk.cpp' || echo '$(srcdir)/'`dsk.cpp
-
-caprice-dsk.obj: dsk.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-dsk.obj -MD -MP -MF $(DEPDIR)/caprice-dsk.Tpo -c -o caprice-dsk.obj `if test -f 'dsk.cpp'; then $(CYGPATH_W) 'dsk.cpp'; else $(CYGPATH_W) '$(srcdir)/dsk.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-dsk.Tpo $(DEPDIR)/caprice-dsk.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='dsk.cpp' object='caprice-dsk.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-dsk.obj `if test -f 'dsk.cpp'; then $(CYGPATH_W) 'dsk.cpp'; else $(CYGPATH_W) '$(srcdir)/dsk.cpp'; fi`
-
-caprice-filetools.o: filetools.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-filetools.o -MD -MP -MF $(DEPDIR)/caprice-filetools.Tpo -c -o caprice-filetools.o `test -f 'filetools.cpp' || echo '$(srcdir)/'`filetools.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-filetools.Tpo $(DEPDIR)/caprice-filetools.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='filetools.cpp' object='caprice-filetools.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-filetools.o `test -f 'filetools.cpp' || echo '$(srcdir)/'`filetools.cpp
-
-caprice-filetools.obj: filetools.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-filetools.obj -MD -MP -MF $(DEPDIR)/caprice-filetools.Tpo -c -o caprice-filetools.obj `if test -f 'filetools.cpp'; then $(CYGPATH_W) 'filetools.cpp'; else $(CYGPATH_W) '$(srcdir)/filetools.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-filetools.Tpo $(DEPDIR)/caprice-filetools.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='filetools.cpp' object='caprice-filetools.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-filetools.obj `if test -f 'filetools.cpp'; then $(CYGPATH_W) 'filetools.cpp'; else $(CYGPATH_W) '$(srcdir)/filetools.cpp'; fi`
-
-caprice-memory.o: memory.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-memory.o -MD -MP -MF $(DEPDIR)/caprice-memory.Tpo -c -o caprice-memory.o `test -f 'memory.cpp' || echo '$(srcdir)/'`memory.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-memory.Tpo $(DEPDIR)/caprice-memory.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='memory.cpp' object='caprice-memory.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-memory.o `test -f 'memory.cpp' || echo '$(srcdir)/'`memory.cpp
-
-caprice-memory.obj: memory.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-memory.obj -MD -MP -MF $(DEPDIR)/caprice-memory.Tpo -c -o caprice-memory.obj `if test -f 'memory.cpp'; then $(CYGPATH_W) 'memory.cpp'; else $(CYGPATH_W) '$(srcdir)/memory.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-memory.Tpo $(DEPDIR)/caprice-memory.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='memory.cpp' object='caprice-memory.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-memory.obj `if test -f 'memory.cpp'; then $(CYGPATH_W) 'memory.cpp'; else $(CYGPATH_W) '$(srcdir)/memory.cpp'; fi`
-
-caprice-render.o: render.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-render.o -MD -MP -MF $(DEPDIR)/caprice-render.Tpo -c -o caprice-render.o `test -f 'render.cpp' || echo '$(srcdir)/'`render.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-render.Tpo $(DEPDIR)/caprice-render.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='render.cpp' object='caprice-render.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-render.o `test -f 'render.cpp' || echo '$(srcdir)/'`render.cpp
-
-caprice-render.obj: render.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-render.obj -MD -MP -MF $(DEPDIR)/caprice-render.Tpo -c -o caprice-render.obj `if test -f 'render.cpp'; then $(CYGPATH_W) 'render.cpp'; else $(CYGPATH_W) '$(srcdir)/render.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-render.Tpo $(DEPDIR)/caprice-render.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='render.cpp' object='caprice-render.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-render.obj `if test -f 'render.cpp'; then $(CYGPATH_W) 'render.cpp'; else $(CYGPATH_W) '$(srcdir)/render.cpp'; fi`
-
-caprice-snapshot.o: snapshot.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-snapshot.o -MD -MP -MF $(DEPDIR)/caprice-snapshot.Tpo -c -o caprice-snapshot.o `test -f 'snapshot.cpp' || echo '$(srcdir)/'`snapshot.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-snapshot.Tpo $(DEPDIR)/caprice-snapshot.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='snapshot.cpp' object='caprice-snapshot.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-snapshot.o `test -f 'snapshot.cpp' || echo '$(srcdir)/'`snapshot.cpp
-
-caprice-snapshot.obj: snapshot.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-snapshot.obj -MD -MP -MF $(DEPDIR)/caprice-snapshot.Tpo -c -o caprice-snapshot.obj `if test -f 'snapshot.cpp'; then $(CYGPATH_W) 'snapshot.cpp'; else $(CYGPATH_W) '$(srcdir)/snapshot.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-snapshot.Tpo $(DEPDIR)/caprice-snapshot.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='snapshot.cpp' object='caprice-snapshot.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-snapshot.obj `if test -f 'snapshot.cpp'; then $(CYGPATH_W) 'snapshot.cpp'; else $(CYGPATH_W) '$(srcdir)/snapshot.cpp'; fi`
-
-caprice-video.o: video.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-video.o -MD -MP -MF $(DEPDIR)/caprice-video.Tpo -c -o caprice-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-video.Tpo $(DEPDIR)/caprice-video.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='video.cpp' object='caprice-video.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
-
-caprice-video.obj: video.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-video.obj -MD -MP -MF $(DEPDIR)/caprice-video.Tpo -c -o caprice-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-video.Tpo $(DEPDIR)/caprice-video.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='video.cpp' object='caprice-video.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
-
-caprice-glfuncs.o: glfuncs.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-glfuncs.o -MD -MP -MF $(DEPDIR)/caprice-glfuncs.Tpo -c -o caprice-glfuncs.o `test -f 'glfuncs.cpp' || echo '$(srcdir)/'`glfuncs.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-glfuncs.Tpo $(DEPDIR)/caprice-glfuncs.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='glfuncs.cpp' object='caprice-glfuncs.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-glfuncs.o `test -f 'glfuncs.cpp' || echo '$(srcdir)/'`glfuncs.cpp
-
-caprice-glfuncs.obj: glfuncs.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-glfuncs.obj -MD -MP -MF $(DEPDIR)/caprice-glfuncs.Tpo -c -o caprice-glfuncs.obj `if test -f 'glfuncs.cpp'; then $(CYGPATH_W) 'glfuncs.cpp'; else $(CYGPATH_W) '$(srcdir)/glfuncs.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-glfuncs.Tpo $(DEPDIR)/caprice-glfuncs.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='glfuncs.cpp' object='caprice-glfuncs.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-glfuncs.obj `if test -f 'glfuncs.cpp'; then $(CYGPATH_W) 'glfuncs.cpp'; else $(CYGPATH_W) '$(srcdir)/glfuncs.cpp'; fi`
-
-caprice-fileutils.o: fileutils.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-fileutils.o -MD -MP -MF $(DEPDIR)/caprice-fileutils.Tpo -c -o caprice-fileutils.o `test -f 'fileutils.cpp' || echo '$(srcdir)/'`fileutils.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-fileutils.Tpo $(DEPDIR)/caprice-fileutils.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fileutils.cpp' object='caprice-fileutils.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-fileutils.o `test -f 'fileutils.cpp' || echo '$(srcdir)/'`fileutils.cpp
-
-caprice-fileutils.obj: fileutils.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-fileutils.obj -MD -MP -MF $(DEPDIR)/caprice-fileutils.Tpo -c -o caprice-fileutils.obj `if test -f 'fileutils.cpp'; then $(CYGPATH_W) 'fileutils.cpp'; else $(CYGPATH_W) '$(srcdir)/fileutils.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-fileutils.Tpo $(DEPDIR)/caprice-fileutils.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='fileutils.cpp' object='caprice-fileutils.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-fileutils.obj `if test -f 'fileutils.cpp'; then $(CYGPATH_W) 'fileutils.cpp'; else $(CYGPATH_W) '$(srcdir)/fileutils.cpp'; fi`
-
-caprice-CapriceAboutImpl.o: CapriceAboutImpl.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceAboutImpl.o -MD -MP -MF $(DEPDIR)/caprice-CapriceAboutImpl.Tpo -c -o caprice-CapriceAboutImpl.o `test -f 'CapriceAboutImpl.cpp' || echo '$(srcdir)/'`CapriceAboutImpl.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceAboutImpl.Tpo $(DEPDIR)/caprice-CapriceAboutImpl.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceAboutImpl.cpp' object='caprice-CapriceAboutImpl.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceAboutImpl.o `test -f 'CapriceAboutImpl.cpp' || echo '$(srcdir)/'`CapriceAboutImpl.cpp
-
-caprice-CapriceAboutImpl.obj: CapriceAboutImpl.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceAboutImpl.obj -MD -MP -MF $(DEPDIR)/caprice-CapriceAboutImpl.Tpo -c -o caprice-CapriceAboutImpl.obj `if test -f 'CapriceAboutImpl.cpp'; then $(CYGPATH_W) 'CapriceAboutImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceAboutImpl.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceAboutImpl.Tpo $(DEPDIR)/caprice-CapriceAboutImpl.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceAboutImpl.cpp' object='caprice-CapriceAboutImpl.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceAboutImpl.obj `if test -f 'CapriceAboutImpl.cpp'; then $(CYGPATH_W) 'CapriceAboutImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceAboutImpl.cpp'; fi`
-
-caprice-CapriceApp.o: CapriceApp.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceApp.o -MD -MP -MF $(DEPDIR)/caprice-CapriceApp.Tpo -c -o caprice-CapriceApp.o `test -f 'CapriceApp.cpp' || echo '$(srcdir)/'`CapriceApp.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceApp.Tpo $(DEPDIR)/caprice-CapriceApp.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceApp.cpp' object='caprice-CapriceApp.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceApp.o `test -f 'CapriceApp.cpp' || echo '$(srcdir)/'`CapriceApp.cpp
-
-caprice-CapriceApp.obj: CapriceApp.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceApp.obj -MD -MP -MF $(DEPDIR)/caprice-CapriceApp.Tpo -c -o caprice-CapriceApp.obj `if test -f 'CapriceApp.cpp'; then $(CYGPATH_W) 'CapriceApp.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceApp.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceApp.Tpo $(DEPDIR)/caprice-CapriceApp.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceApp.cpp' object='caprice-CapriceApp.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceApp.obj `if test -f 'CapriceApp.cpp'; then $(CYGPATH_W) 'CapriceApp.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceApp.cpp'; fi`
-
-caprice-CapriceRegistersDialogImpl.o: CapriceRegistersDialogImpl.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceRegistersDialogImpl.o -MD -MP -MF $(DEPDIR)/caprice-CapriceRegistersDialogImpl.Tpo -c -o caprice-CapriceRegistersDialogImpl.o `test -f 'CapriceRegistersDialogImpl.cpp' || echo '$(srcdir)/'`CapriceRegistersDialogImpl.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceRegistersDialogImpl.Tpo $(DEPDIR)/caprice-CapriceRegistersDialogImpl.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceRegistersDialogImpl.cpp' object='caprice-CapriceRegistersDialogImpl.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceRegistersDialogImpl.o `test -f 'CapriceRegistersDialogImpl.cpp' || echo '$(srcdir)/'`CapriceRegistersDialogImpl.cpp
-
-caprice-CapriceRegistersDialogImpl.obj: CapriceRegistersDialogImpl.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceRegistersDialogImpl.obj -MD -MP -MF $(DEPDIR)/caprice-CapriceRegistersDialogImpl.Tpo -c -o caprice-CapriceRegistersDialogImpl.obj `if test -f 'CapriceRegistersDialogImpl.cpp'; then $(CYGPATH_W) 'CapriceRegistersDialogImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceRegistersDialogImpl.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceRegistersDialogImpl.Tpo $(DEPDIR)/caprice-CapriceRegistersDialogImpl.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceRegistersDialogImpl.cpp' object='caprice-CapriceRegistersDialogImpl.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceRegistersDialogImpl.obj `if test -f 'CapriceRegistersDialogImpl.cpp'; then $(CYGPATH_W) 'CapriceRegistersDialogImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceRegistersDialogImpl.cpp'; fi`
-
-caprice-CapriceUI.o: CapriceUI.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceUI.o -MD -MP -MF $(DEPDIR)/caprice-CapriceUI.Tpo -c -o caprice-CapriceUI.o `test -f 'CapriceUI.cpp' || echo '$(srcdir)/'`CapriceUI.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceUI.Tpo $(DEPDIR)/caprice-CapriceUI.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceUI.cpp' object='caprice-CapriceUI.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceUI.o `test -f 'CapriceUI.cpp' || echo '$(srcdir)/'`CapriceUI.cpp
-
-caprice-CapriceUI.obj: CapriceUI.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceUI.obj -MD -MP -MF $(DEPDIR)/caprice-CapriceUI.Tpo -c -o caprice-CapriceUI.obj `if test -f 'CapriceUI.cpp'; then $(CYGPATH_W) 'CapriceUI.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceUI.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceUI.Tpo $(DEPDIR)/caprice-CapriceUI.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceUI.cpp' object='caprice-CapriceUI.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceUI.obj `if test -f 'CapriceUI.cpp'; then $(CYGPATH_W) 'CapriceUI.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceUI.cpp'; fi`
-
-caprice-CapriceWindowImpl.o: CapriceWindowImpl.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceWindowImpl.o -MD -MP -MF $(DEPDIR)/caprice-CapriceWindowImpl.Tpo -c -o caprice-CapriceWindowImpl.o `test -f 'CapriceWindowImpl.cpp' || echo '$(srcdir)/'`CapriceWindowImpl.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceWindowImpl.Tpo $(DEPDIR)/caprice-CapriceWindowImpl.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceWindowImpl.cpp' object='caprice-CapriceWindowImpl.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceWindowImpl.o `test -f 'CapriceWindowImpl.cpp' || echo '$(srcdir)/'`CapriceWindowImpl.cpp
-
-caprice-CapriceWindowImpl.obj: CapriceWindowImpl.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-CapriceWindowImpl.obj -MD -MP -MF $(DEPDIR)/caprice-CapriceWindowImpl.Tpo -c -o caprice-CapriceWindowImpl.obj `if test -f 'CapriceWindowImpl.cpp'; then $(CYGPATH_W) 'CapriceWindowImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceWindowImpl.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-CapriceWindowImpl.Tpo $(DEPDIR)/caprice-CapriceWindowImpl.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceWindowImpl.cpp' object='caprice-CapriceWindowImpl.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-CapriceWindowImpl.obj `if test -f 'CapriceWindowImpl.cpp'; then $(CYGPATH_W) 'CapriceWindowImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceWindowImpl.cpp'; fi`
-
-caprice-c_inifile.o: c_inifile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-c_inifile.o -MD -MP -MF $(DEPDIR)/caprice-c_inifile.Tpo -c -o caprice-c_inifile.o `test -f 'c_inifile.cpp' || echo '$(srcdir)/'`c_inifile.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-c_inifile.Tpo $(DEPDIR)/caprice-c_inifile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='c_inifile.cpp' object='caprice-c_inifile.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-c_inifile.o `test -f 'c_inifile.cpp' || echo '$(srcdir)/'`c_inifile.cpp
-
-caprice-c_inifile.obj: c_inifile.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-c_inifile.obj -MD -MP -MF $(DEPDIR)/caprice-c_inifile.Tpo -c -o caprice-c_inifile.obj `if test -f 'c_inifile.cpp'; then $(CYGPATH_W) 'c_inifile.cpp'; else $(CYGPATH_W) '$(srcdir)/c_inifile.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-c_inifile.Tpo $(DEPDIR)/caprice-c_inifile.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='c_inifile.cpp' object='caprice-c_inifile.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-c_inifile.obj `if test -f 'c_inifile.cpp'; then $(CYGPATH_W) 'c_inifile.cpp'; else $(CYGPATH_W) '$(srcdir)/c_inifile.cpp'; fi`
-
-caprice-sound.o: aylet/sound.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-sound.o -MD -MP -MF $(DEPDIR)/caprice-sound.Tpo -c -o caprice-sound.o `test -f 'aylet/sound.cc' || echo '$(srcdir)/'`aylet/sound.cc
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-sound.Tpo $(DEPDIR)/caprice-sound.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='aylet/sound.cc' object='caprice-sound.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-sound.o `test -f 'aylet/sound.cc' || echo '$(srcdir)/'`aylet/sound.cc
-
-caprice-sound.obj: aylet/sound.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-sound.obj -MD -MP -MF $(DEPDIR)/caprice-sound.Tpo -c -o caprice-sound.obj `if test -f 'aylet/sound.cc'; then $(CYGPATH_W) 'aylet/sound.cc'; else $(CYGPATH_W) '$(srcdir)/aylet/sound.cc'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-sound.Tpo $(DEPDIR)/caprice-sound.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='aylet/sound.cc' object='caprice-sound.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-sound.obj `if test -f 'aylet/sound.cc'; then $(CYGPATH_W) 'aylet/sound.cc'; else $(CYGPATH_W) '$(srcdir)/aylet/sound.cc'; fi`
-
-caprice-drv-oss.o: aylet/drv-oss.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-drv-oss.o -MD -MP -MF $(DEPDIR)/caprice-drv-oss.Tpo -c -o caprice-drv-oss.o `test -f 'aylet/drv-oss.cc' || echo '$(srcdir)/'`aylet/drv-oss.cc
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-drv-oss.Tpo $(DEPDIR)/caprice-drv-oss.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='aylet/drv-oss.cc' object='caprice-drv-oss.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-drv-oss.o `test -f 'aylet/drv-oss.cc' || echo '$(srcdir)/'`aylet/drv-oss.cc
-
-caprice-drv-oss.obj: aylet/drv-oss.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-drv-oss.obj -MD -MP -MF $(DEPDIR)/caprice-drv-oss.Tpo -c -o caprice-drv-oss.obj `if test -f 'aylet/drv-oss.cc'; then $(CYGPATH_W) 'aylet/drv-oss.cc'; else $(CYGPATH_W) '$(srcdir)/aylet/drv-oss.cc'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-drv-oss.Tpo $(DEPDIR)/caprice-drv-oss.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='aylet/drv-oss.cc' object='caprice-drv-oss.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-drv-oss.obj `if test -f 'aylet/drv-oss.cc'; then $(CYGPATH_W) 'aylet/drv-oss.cc'; else $(CYGPATH_W) '$(srcdir)/aylet/drv-oss.cc'; fi`
-
-.cpp.o:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -851,10 +309,23 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES) configBis.h.in $(TAGS_DEPENDENCIES) \
+TAGS: tags-recursive $(HEADERS) $(SOURCES) configBis.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      tags="$$tags $$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	list='$(SOURCES) $(HEADERS) configBis.h.in $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
@@ -867,7 +338,7 @@ TAGS:  $(HEADERS) $(SOURCES) configBis.h.in $(TAGS_DEPENDENCIES) \
 	    $$tags $$unique; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES) configBis.h.in $(TAGS_DEPENDENCIES) \
+CTAGS: ctags-recursive $(HEADERS) $(SOURCES) configBis.h.in $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	list='$(SOURCES) $(HEADERS) configBis.h.in $(LISP) $(TAGS_FILES)'; \
@@ -914,6 +385,23 @@ distdir: $(DISTFILES)
 	    test -f $(distdir)/$$file \
 	    || cp -p $$d/$$file $(distdir)/$$file \
 	    || exit 1; \
+	  fi; \
+	done
+	list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d "$(distdir)/$$subdir" \
+	    || $(MKDIR_P) "$(distdir)/$$subdir" \
+	    || exit 1; \
+	    distdir=`$(am__cd) $(distdir) && pwd`; \
+	    top_distdir=`$(am__cd) $(top_distdir) && pwd`; \
+	    (cd $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$top_distdir" \
+	        distdir="$$distdir/$$subdir" \
+		am__remove_distdir=: \
+		am__skip_length_check=: \
+	        distdir) \
+	      || exit 1; \
 	  fi; \
 	done
 	-find $(distdir) -type d ! -perm -777 -exec chmod a+rwx {} \; -o \
@@ -1020,21 +508,19 @@ distcleancheck: distclean
 	       $(distcleancheck_listfiles) ; \
 	       exit 1; } >&2
 check-am: all-am
-check: check-am
-all-am: Makefile $(PROGRAMS) configBis.h
-installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+check: check-recursive
+all-am: Makefile configBis.h
+installdirs: installdirs-recursive
+installdirs-am:
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -1050,83 +536,85 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-am
+clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
+clean-am: clean-generic mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
-distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-hdr distclean-tags
+distclean-am: clean-am distclean-generic distclean-hdr distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
-info: info-am
+info: info-recursive
 
 info-am:
 
 install-data-am:
 
-install-dvi: install-dvi-am
+install-dvi: install-dvi-recursive
 
-install-exec-am: install-binPROGRAMS
+install-exec-am:
 
-install-html: install-html-am
+install-html: install-html-recursive
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-man:
 
-install-pdf: install-pdf-am
+install-pdf: install-pdf-recursive
 
-install-ps: install-ps-am
+install-ps: install-ps-recursive
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-compile mostlyclean-generic
+mostlyclean-am: mostlyclean-generic
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am:
 
-.MAKE: install-am install-strip
+.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) install-am \
+	install-strip
 
-.PHONY: CTAGS GTAGS all all-am am--refresh check check-am clean \
-	clean-binPROGRAMS clean-generic ctags dist dist-all dist-bzip2 \
-	dist-gzip dist-lzma dist-shar dist-tarZ dist-zip distcheck \
-	distclean distclean-compile distclean-generic distclean-hdr \
-	distclean-tags distcleancheck distdir distuninstallcheck dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-binPROGRAMS
+.PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
+	all all-am am--refresh check check-am clean clean-generic \
+	ctags ctags-recursive dist dist-all dist-bzip2 dist-gzip \
+	dist-lzma dist-shar dist-tarZ dist-zip distcheck distclean \
+	distclean-generic distclean-hdr distclean-tags distcleancheck \
+	distdir distuninstallcheck dvi dvi-am html html-am info \
+	info-am install install-am install-data install-data-am \
+	install-dvi install-dvi-am install-exec install-exec-am \
+	install-html install-html-am install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
+	pdf-am ps ps-am tags tags-recursive uninstall uninstall-am
 
+
+all: configBis.h
+	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+	cp src/caprice caprice
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

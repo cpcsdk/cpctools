@@ -1,10 +1,11 @@
 # Init
 AC_INIT([CapriceReloaded], [5], [ramlaid@cpcscene.com])
 AM_INIT_AUTOMAKE([ -Wall ])
-AC_CONFIG_SRCDIR(cap32.cpp)
+#AC_CONFIG_SRCDIR(core/cap32.cpp)
 
 AC_PROG_CXX
 AC_LANG([C++])
+AC_PROG_RANLIB
 
 m4_pattern_allow([^AC])
 
@@ -151,6 +152,7 @@ AC_CHECK_HEADER([SDL/SDL_opengl.h], , AC_MSG_ERROR([SDL_opengl.h not found !]))
 AC_CONFIG_HEADERS([configBis.h])
 AC_CONFIG_FILES([
         Makefile
+		src/Makefile
 ])
 
 AC_OUTPUT
