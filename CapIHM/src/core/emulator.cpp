@@ -44,6 +44,7 @@
 #include "error.h"
 
 #include "audio.h"
+#include <wx/defs.h>
 //#include "filetools.h"
 #include <SDL.h>
 
@@ -260,27 +261,31 @@ bool Emulator::KeyboardEmulation()
 				dword cpc_key;
 
 				// PC SHIFT key held down?
-				if (event.key.keysym.mod & KMOD_SHIFT)
+				if (event.key.keysym.mod & wxMOD_SHIFT/*KMOD_SHIFT*/)
 				{
 					// consult the SHIFT table
 					cpc_key = _input.keyboard_shift[event.key.keysym.sym];
+					std::cout << "SHIFTED" << std::endl;
 				}
 				// PC CTRL key held down?
-				else if (event.key.keysym.mod & KMOD_CTRL)
+				else if (event.key.keysym.mod & wxMOD_CONTROL/*KMOD_CTRL*/)
 				{
 					// consult the CTRL table
 					cpc_key = _input.keyboard_ctrl[event.key.keysym.sym];
+					std::cout << "CTRLED" << std::endl;
 				}
 				// PC AltGr key held down?
-				else if (event.key.keysym.mod & KMOD_MODE)
+				else if (event.key.keysym.mod & wxMOD_ALT /*KMOD_MODE*/)
 				{
 					// consult the AltGr table
 					cpc_key = _input.keyboard_mode[event.key.keysym.sym];
+					std::cout << "ALTED" << std::endl;
 				}
 				else
 				{
 					// consult the normal table
 					cpc_key = _input.keyboard_normal[event.key.keysym.sym];
+					std::cout << "NORMAL" << std::endl;
 				}
 
 				if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused) && ((byte)cpc_key != 0xff))
@@ -319,19 +324,19 @@ bool Emulator::KeyboardEmulation()
 			{
 				dword cpc_key;
 				// PC SHIFT key held down?
-				if (event.key.keysym.mod & KMOD_SHIFT)
+				if (event.key.keysym.mod & wxMOD_SHIFT/*KMOD_SHIFT*/)
 				{
 					// consult the SHIFT table
 					cpc_key = _input.keyboard_shift[event.key.keysym.sym];
 				}
 				// PC CTRL key held down?
-				else if (event.key.keysym.mod & KMOD_CTRL)
+				else if (event.key.keysym.mod & wxMOD_CONTROL/*KMOD_CTRL*/)
 				{
 					// consult the CTRL table
 					cpc_key = _input.keyboard_ctrl[event.key.keysym.sym];
 				}
 				// PC AltGr key held down?
-				else if (event.key.keysym.mod & KMOD_MODE)
+				else if (event.key.keysym.mod & wxMOD_ALT/*KMOD_MODE*/)
 				{
 					// consult the AltGr table
 					cpc_key = _input.keyboard_mode[event.key.keysym.sym];

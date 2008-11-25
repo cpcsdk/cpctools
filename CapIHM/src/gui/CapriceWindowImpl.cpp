@@ -136,7 +136,7 @@ void CapriceWindowImpl::windowKeyDown( wxKeyEvent& event )
     SDL_Event evt;
     evt.type = SDL_KEYDOWN;
     evt.key.keysym.sym = (SDLKey)event.GetKeyCode();
-    evt.key.keysym.mod = KMOD_NONE /*(SDLMod)event.GetModifiers()*/;
+    evt.key.keysym.mod = (SDLMod)event.GetModifiers();
     SDL_PushEvent(&evt);
 }
 
@@ -145,7 +145,7 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
     SDL_Event evt;
     evt.type = SDL_KEYUP;
     evt.key.keysym.sym = (SDLKey)event.GetKeyCode();
-    evt.key.keysym.mod = KMOD_NONE /*(SDLMod)event.GetModifiers()*/;
+    evt.key.keysym.mod = (SDLMod)event.GetModifiers();
     SDL_PushEvent(&evt);
 
     cout << "keydown" << event.GetKeyCode() << endl;

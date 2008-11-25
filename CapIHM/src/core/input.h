@@ -13,9 +13,9 @@ class t_CPC;
 #define MOD_CPC_CTRL    (0x02 << 8)
 #define MOD_EMU_KEY     (0x10 << 8)
 
-#define MOD_PC_SHIFT    (KMOD_SHIFT << 16)
-#define MOD_PC_CTRL     (KMOD_CTRL << 16)
-#define MOD_PC_MODE     (KMOD_MODE << 16)
+#define MOD_PC_SHIFT    /*wxMOD_SHIFT */(KMOD_SHIFT << 16)
+#define MOD_PC_CTRL     /*wxMOD_CONTROL */(KMOD_CTRL << 16)
+#define MOD_PC_MODE     /*wxMOD_ALT */(KMOD_MODE << 16)
 
 #define KBD_MAX_ENTRIES 160
 
