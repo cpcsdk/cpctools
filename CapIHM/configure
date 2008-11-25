@@ -8150,7 +8150,7 @@ fi
 #Output file
 ac_config_headers="$ac_config_headers configBis.h"
 
-ac_config_files="$ac_config_files Makefile src/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/gui/Makefile src/core/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -8755,6 +8755,8 @@ do
     "configBis.h") CONFIG_HEADERS="$CONFIG_HEADERS configBis.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+    "src/gui/Makefile") CONFIG_FILES="$CONFIG_FILES src/gui/Makefile" ;;
+    "src/core/Makefile") CONFIG_FILES="$CONFIG_FILES src/core/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

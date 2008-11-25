@@ -153,6 +153,8 @@ AC_CONFIG_HEADERS([configBis.h])
 AC_CONFIG_FILES([
         Makefile
 		src/Makefile
+		src/gui/Makefile
+		src/core/Makefile
 ])
 
 AC_OUTPUT

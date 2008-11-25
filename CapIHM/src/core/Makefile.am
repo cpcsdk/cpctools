@@ -2,61 +2,64 @@ noinst_LIBRARIES = libcapricecore.a
 
 libcapricecore_a_CPPFLAGS=$(SDL_CFLAGS) 
 libcapricecore_a_SOURCES = \
-		  audio.cpp \
-		  emulator.cpp \
-		  input.cpp \
-		  ppi.cpp \
-		  renderData.cpp \
-		  tape.cpp \
-		  z80.cpp \
-		  crtc.cpp \
-		  fdc.cpp \
-          gatearray.cpp \
-		  ioport.cpp \
-		  psg.cpp \
-		  rom_mods.cpp \
-		  vdu.cpp \
-		  zip.cpp \
-		  config.cpp \
-		  dsk.cpp \
-		  filetools.cpp \
-		  memory.cpp \
-		  render.cpp \
-          snapshot.cpp \
-		  audio.h \
-		  config.h \
-		  debug.h \
-		  error.h \
-		  glfuncs.h \
-		  memory.h \
-		  render.h \
-		  tape.h \
-		  z80daa.h \
-		  cap32.h \
-		  dsk.h \
-		  fdc.h \
-		  gatearray.h \
-		  input.h \
-		  ppi.h \
-		  rom_mods.h \
-		  vdu.h \
-		  z80.h \
-		  cap32type.h \
-		  crtc.h \
-		  emulator.h \
-          filetools.h  \
-		  ioport.h \
-		  psg.h \
-		  snapshot.h \
-		  video.h \
-		  zip.h \
-		  YmTypes.h \
-		  glfunclist.h  \
-		  glfuncs.cpp  \
-		glfuncs.h \
-		fileutils.h \
-		fileutils.cpp \
-	 	c_inifile.cpp \
-		c_inifile.h
+audio.cpp\
+audio.h\
+c_bool.h\
+c_inifile.cpp\
+c_inifile.h\
+cap32.h\
+cap32type.h\
+config.cpp\
+config.h\
+crtc.cpp\
+crtc.h\
+debug.h\
+dsk.cpp\
+dsk.h\
+emulator.h\
+error.h\
+fdc.cpp\
+fdc.h\
+fdc_765.cpp\
+fdc_765.h\
+fdc_old.h\
+filetools.cpp\
+filetools.h\
+fileutils.cpp\
+fileutils.h\
+gatearray.cpp\
+gatearray.h\
+glfunclist.h\
+glfuncs.cpp\
+glfuncs.h\
+input.h\
+ioport.cpp\
+ioport.h\
+memory.cpp\
+memory.h\
+ppi.cpp\
+ppi.h\
+psg.cpp\
+psg.h\
+render.cpp\
+render.h\
+renderData.cpp\
+rom_mods.cpp\
+rom_mods.h\
+snapshot.cpp\
+snapshot.h\
+tape.cpp\
+tape.h\
+vdu.cpp\
+vdu.h\
+video.h\
+z80.cpp\
+z80.h\
+z80daa.h\
+zip.cpp\
+zip.h
 
 
+if RELEASE
+	libcapricecore_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+endif

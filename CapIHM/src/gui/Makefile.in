@@ -30,6 +30,9 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+#video.cpp \
+#input.cpp
+@RELEASE_TRUE@am__append_1 = -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
 subdir = src/gui
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -49,8 +52,7 @@ am_libcapricewx_a_OBJECTS = libcapricewx_a-CapriceAboutImpl.$(OBJEXT) \
 	libcapricewx_a-CapriceApp.$(OBJEXT) \
 	libcapricewx_a-CapriceRegistersDialogImpl.$(OBJEXT) \
 	libcapricewx_a-CapriceUI.$(OBJEXT) \
-	libcapricewx_a-CapriceWindowImpl.$(OBJEXT) \
-	libcapricewx_a-video.$(OBJEXT)
+	libcapricewx_a-CapriceWindowImpl.$(OBJEXT)
 libcapricewx_a_OBJECTS = $(am_libcapricewx_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -174,21 +176,20 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libcapricewx.a
-libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) 
+libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) \
+	-I@top_srcdir@/src/core $(am__append_1)
 libcapricewx_a_SOURCES = \
-		CapriceAboutImpl.cpp \
-		CapriceAboutImpl.h \
-		CapriceApp.cpp  \
-		CapriceApp.h  \
-		CapriceRegistersDialogImpl.cpp \
-		CapriceRegistersDialogImpl.h \
-		CapriceUI.cpp \
-		CapriceUI.h \
-		CapriceWindowImpl.cpp \
-		CapriceWindowImpl.h \
-		video.cpp 
+CapriceAboutImpl.cpp \
+CapriceAboutImpl.h\
+CapriceApp.cpp\
+CapriceApp.h\
+CapriceRegistersDialogImpl.cpp\
+CapriceRegistersDialogImpl.h\
+CapriceUI.cpp\
+CapriceUI.h\
+CapriceWindowImpl.cpp\
+CapriceWindowImpl.h 
 
-INCLUDES = -I@top_srcdir@/src/core
 all: all-am
 
 .SUFFIXES:
@@ -241,7 +242,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceRegistersDialogImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceUI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceWindowImpl.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-video.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -326,20 +326,6 @@ libcapricewx_a-CapriceWindowImpl.obj: CapriceWindowImpl.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceWindowImpl.cpp' object='libcapricewx_a-CapriceWindowImpl.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricewx_a-CapriceWindowImpl.obj `if test -f 'CapriceWindowImpl.cpp'; then $(CYGPATH_W) 'CapriceWindowImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceWindowImpl.cpp'; fi`
-
-libcapricewx_a-video.o: video.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libcapricewx_a-video.o -MD -MP -MF $(DEPDIR)/libcapricewx_a-video.Tpo -c -o libcapricewx_a-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libcapricewx_a-video.Tpo $(DEPDIR)/libcapricewx_a-video.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='video.cpp' object='libcapricewx_a-video.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricewx_a-video.o `test -f 'video.cpp' || echo '$(srcdir)/'`video.cpp
-
-libcapricewx_a-video.obj: video.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libcapricewx_a-video.obj -MD -MP -MF $(DEPDIR)/libcapricewx_a-video.Tpo -c -o libcapricewx_a-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libcapricewx_a-video.Tpo $(DEPDIR)/libcapricewx_a-video.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='video.cpp' object='libcapricewx_a-video.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricewx_a-video.obj `if test -f 'video.cpp'; then $(CYGPATH_W) 'video.cpp'; else $(CYGPATH_W) '$(srcdir)/video.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
