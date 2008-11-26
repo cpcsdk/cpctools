@@ -428,8 +428,10 @@ int DSK::FileExist( char * Nom ) {
 	int i;
 	for ( i = 0; i < 64; i++ ) {
 		StDirEntry * Dir = GetInfoDirEntry( i ); 
+		for(int q=0;q<12;q++)
+		    Dir->Nom[q]=Dir->Nom[q]&127; // Avoid missing hidden files
 		if (  Dir->User != USER_DELETED 
-			  && ! strncmp( Nom, ( char * )Dir->Nom, 13 )
+			  && ! strncmp( Nom, ( char * )Dir->Nom, 11 ) // 11 = 8+3 car le point est enlevé
 			  )
 			return( i );
 	}
