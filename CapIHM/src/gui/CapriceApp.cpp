@@ -59,7 +59,7 @@ bool CapriceApp::OnInit()
 	//Splash screen managment
 	wxBitmap bitmap;
 	//wxImage image;
-	if (bitmap.LoadFile( wxT("logo.png"), wxBITMAP_TYPE_PNG))
+	if (bitmap.LoadFile( wxT( DATA_PATH "logo.png"), wxBITMAP_TYPE_PNG))
 	//if (image.LoadFile( wxT("logo.png"), wxBITMAP_TYPE_PNG))
 	{
 	//	unsigned char *alpha;

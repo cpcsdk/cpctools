@@ -168,6 +168,7 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+regex_cmd = @regex_cmd@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -177,7 +178,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libcapricewx.a
 libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) \
-	-I@top_srcdir@/src/core $(am__append_1)
+	-I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\" \
+	$(am__append_1)
 libcapricewx_a_SOURCES = \
 CapriceAboutImpl.cpp \
 CapriceAboutImpl.h\

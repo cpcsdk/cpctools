@@ -30,25 +30,14 @@ AC_HEADER_STDC
 AC_PROG_CC
 AC_TYPE_INT64_T
 
-#AM_PROG_CC_C_O
 
-m4_include(wxwin.m4)
-#IHM
-AM_OPTIONS_WXCONFIG
-reqwx=2.4.0
-AM_PATH_WXCONFIG($reqwx, wxWin=1)
-if test "$wxWin" != 1; then
-	AC_MSG_ERROR([
-		wxWidgets must be installed on your system.
- 
-		Please check that wx-config is in path, the directory
-		where wxWidgets libraries are installed (returned by
-		'wx-config --libs' or 'wx-config --static --libs' command)
-		is in LD_LIBRARY_PATH or equivalent variable and
-		wxWidgets version is $reqwx or above.
-		])
+dnl Check for sed
+AC_CHECK_PROGS(regex_cmd, sed)
+if test x$regex_cmd = "x" ; then
+	    AC_MSG_ERROR([sed is required to build the data files.])
 fi
 
+#AM_PROG_CC_C_O
 
 
 #ARGS
@@ -75,9 +64,15 @@ AC_ARG_WITH(	dsk,
 		with_lib765=no,
 		with_lib765=yes)
 
+AC_ARG_WITH( wxWidget,
+		[--with-wxwidget	use wxWidget as a gui [default=yes]],
+		with_wxwidget=no,
+		with_wxwidget=yes)
 
 AC_MSG_CHECKING(for debugging environment)
 AC_ARG_ENABLE(debug, [--enable-debug turn on debug compiler. default=yes], [enable_debug=no], [enable_debug=yes])
+
+
 
 if test "$enable_debug" = yes ; then
 	CXXFLAGS="-O0 -Wall -g -DDEBUG"
@@ -87,6 +82,28 @@ fi
 AM_CONDITIONAL([RELEASE], [test ! "enable_debug" = "yes"])
 
 AC_MSG_RESULT([ $enable_debug ])
+
+
+
+# GUI
+if test "$with_wxwidget" = "yes" ; then
+	m4_include(wxwin.m4)
+	
+	AM_OPTIONS_WXCONFIG
+	reqwx=2.4.0
+	AM_PATH_WXCONFIG($reqwx, wxWin=1)
+	if test "$wxWin" != 1; then
+	AC_MSG_ERROR([
+		wxWidgets must be installed on your system.
+
+		Please check that wx-config is in path, the directory
+		where wxWidgets libraries are installed (returned by
+		'wx-config --libs' or 'wx-config --static --libs' command)
+		is in LD_LIBRARY_PATH or equivalent variable and
+		wxWidgets version is $reqwx or above.
+		])
+	fi
+fi
 
 
 # Sound

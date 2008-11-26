@@ -19,7 +19,9 @@
  */  
 
 
-
+/**
+ * @todo Clean this totally unreadable file
+ */
 
 //
 // Caprice32 config manager
@@ -117,12 +119,12 @@ void getConfigValueString (const char* pchFileName, const char* pchSection, cons
     val = c_inifile_get_string(pchSection,pchKey,NULL);
     if(val==NULL)
     {
-	strcpy(pchValue,pchDefaultValue);
+		strcpy(pchValue,pchDefaultValue);
     }
     else
     {
-	strcpy(pchValue,val);
-	free(val);
+		strcpy(pchValue,val);
+		free(val);
     }
     return;
 }
@@ -131,64 +133,59 @@ void getConfigValueString (const char* pchFileName, const char* pchSection, cons
 
 void t_CPC::loadConfiguration (Emulator &emulator)
 {
-	char chFileName[_MAX_PATH + 1];
-	char chPath[_MAX_PATH + 1];
-	FILE *pfileObject = NULL;
-	C_Inifile_error err = C_INIFILE_NO_ERROR;
+	C_Inifile_error err = C_INIFILE_NO_ERROR ;
 
-	char chAppPath[_MAX_PATH + 1];
-	// get the location of the executable
-#ifdef WIN32
-	_getcwd(chAppPath, sizeof(chAppPath)-1);
-#else
-	getcwd (chAppPath, sizeof(chAppPath)-1);
-#endif
 
-	//strncpy(chFileName, chAppPath, sizeof(chFileName)-10);
-	//strcat(chFileName, "/cap32.cfg");
-	strcpy(chFileName, "cap32.cfg");
-	c_inifile_init(chFileName,&err);
+	char chFileName[] = DATA_PATH "cap32.cfg" ;
+
+	c_inifile_init( chFileName,&err);
+
 	if(err!=C_INIFILE_NO_ERROR)
+	{
 	    printf("Error opening configfile !\n");
+		exit(-1);
+	}
 	else
 	{
-//	    memset(this, 0, sizeof(t_CPC)); // EUH ??!
 
 	    // CPC 6128
 	    model = getConfigValueInt(chFileName, "system", "model", 2);
-	    if (model > 2)
+	    if (model > 2 || model < 0) 
 	    {
-		model = 2;
+			model = 2;
 	    }
 
 	    // OEM is Amstrad, video refresh is 50Hz
 	    jumpers = getConfigValueInt(chFileName, "system", "jumpers", 0x1e) & 0x1e;
+
 	    // 128KB RAM
 	    ram_size = getConfigValueInt(chFileName, "system", "ram_size", 128) & 0x02c0;
 	    if (ram_size > 576)
 	    {
-		ram_size = 576;
+			ram_size = 576;
 	    }
 	    else if ((model == 2) && (ram_size < 128))
 	    {
-		// minimum RAM size for CPC 6128 is 128KB
-		ram_size = 128;
+			// minimum RAM size for CPC 6128 is 128KB
+			ram_size = 128;
 	    }
 
 	    // original CPC speed
 	    speed = getConfigValueInt(chFileName, "system", "speed", DEF_SPEED_SETTING);
 	    if ((speed < MIN_SPEED_SETTING) || (speed > MAX_SPEED_SETTING))
 	    {
-		speed = DEF_SPEED_SETTING;
+			speed = DEF_SPEED_SETTING;
 	    }
 	    limit_speed = 1;
+
 	    auto_pause = getConfigValueInt(chFileName, "system", "auto_pause", 1) & 1;
 	    printer = getConfigValueInt(chFileName, "system", "printer", 0) & 1;
 	    mf2 = getConfigValueInt(chFileName, "system", "mf2", 0) & 1;
+
 	    keyboard = getConfigValueInt(chFileName, "system", "keyboard", 0);
 	    if (keyboard > MAX_ROM_MODS)
 	    {
-		keyboard = 0;
+			keyboard = 0;
 	    }
 	    joysticks = getConfigValueInt(chFileName, "system", "joysticks", 0) & 1;
 
@@ -209,7 +206,7 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    scr_remanency = getConfigValueInt(chFileName, "video", "scr_remanency", 0) & 1;
 	    if ((scr_intensity < 5) || (scr_intensity > 15))
 	    {
-		scr_intensity = 10;
+			scr_intensity = 10;
 	    }
 	    //emulator.GetRenderer().SetMonitor(color, intensity, remanency);
 
@@ -223,50 +220,46 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    snd_volume = getConfigValueInt(chFileName, "sound", "volume", 100);
 	    if (snd_volume > 100)
 	    {
-		snd_volume = 100;
+			snd_volume = 100;
 	    }
 	    snd_pp_device = getConfigValueInt(chFileName, "sound", "pp_device", 0) & 1;
 
 	    kbd_layout = getConfigValueInt(chFileName, "control", "kbd_layout", 0);
 	    if (kbd_layout > 3)
 	    {
-		kbd_layout = 0;
+			kbd_layout = 0;
 	    }
 
 	    max_tracksize = getConfigValueInt(chFileName, "file", "max_track_size", 6144-154);
-	    strncpy(chPath, chAppPath, sizeof(chPath)-7);
-	    strcat(chPath, "/snap");
-	    getConfigValueString(chFileName, "file", "snap_path", snap_path, chPath);
+	    getConfigValueString(chFileName, "file", "snap_path", snap_path, DATA_PATH "snap");
 	    if (snap_path[0] == '\0')
 	    {
-		strcpy(snap_path, chPath);
+			strcpy(snap_path, DATA_PATH "snap");
 	    }
 	    getConfigValueString(chFileName, "file", "snap_file", snap_file, "");
 	    snap_zip = getConfigValueInt(chFileName, "file", "snap_zip", 0) & 1;
-	    strncpy(chPath, chAppPath, sizeof(chPath)-7);
-	    strcat(chPath, "\\disk");
-	    getConfigValueString(chFileName, "file", "drvA_path", drvA_path, chPath);
+
+	    getConfigValueString(chFileName, "file", "drvA_path", drvA_path, DATA_PATH "disc");
 	    if (drvA_path[0] == '\0')
 	    {
-		strcpy(drvA_path, chPath);
+			strcpy(drvA_path, DATA_PATH "disc");
 	    }
 	    getConfigValueString(chFileName, "file", "drvA_file", drvA_file, "");
 	    drvA_zip = getConfigValueInt(chFileName, "file", "drvA_zip", 0) & 1;
 	    drvA_format = getConfigValueInt(chFileName, "file", "drvA_format", DEFAULT_DISK_FORMAT);
-	    getConfigValueString(chFileName, "file", "drvB_path", drvB_path, chPath);
+	    getConfigValueString(chFileName, "file", "drvB_path", drvB_path, DATA_PATH "disc");
 	    if (drvB_path[0] == '\0')
 	    {
-		strcpy(drvB_path, chPath);
+			strcpy(drvB_path, DATA_PATH "disc");
 	    }
 	    getConfigValueString(chFileName, "file", "drvB_file", drvB_file, "");
 	    drvB_zip = getConfigValueInt(chFileName, "file", "drvB_zip", 0) & 1;
 	    drvB_format = getConfigValueInt(chFileName, "file", "drvB_format", DEFAULT_DISK_FORMAT);
-	    strncpy(chPath, chAppPath, sizeof(chPath)-7);
-	    strcat(chPath, "/tape");
-	    getConfigValueString(chFileName, "file", "tape_path", tape_path, chPath);
+	    
+		getConfigValueString(chFileName, "file", "tape_path", tape_path, DATA_PATH "tape");
 	    if (tape_path[0] == '\0')
 	    {
-		strcpy(tape_path, chPath);
+			strcpy(tape_path, DATA_PATH "tape");
 	    }
 	    getConfigValueString(chFileName, "file", "tape_file", tape_file, "");
 	    tape_zip = getConfigValueInt(chFileName, "file", "tape_zip", 0) & 1;
@@ -404,37 +397,35 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 		}
 	    }
 #endif
-	    strncpy(chPath, chAppPath, sizeof(chPath)-13);
-	    strcat(chPath, "/printer.dat");
-	    getConfigValueString(chFileName, "file", "printer_file", printer_file, chPath);
+	    getConfigValueString(chFileName, "file", "printer_file", printer_file, DATA_PATH "printer.dat");
 	    if (printer_file[0] == '\0')
 	    {
-		strcpy(printer_file, chPath);
-	    }
-	    strncpy(chPath, chAppPath, sizeof(chPath)-12);
-	    strcat(chPath, "/screen.png");
-	    getConfigValueString(chFileName, "file", "sdump_file", sdump_file, chPath);
-	    if (sdump_file[0] == '\0')
-	    {
-		strcpy(sdump_file, chPath);
+			strcpy(printer_file, DATA_PATH "printer.dat");
 	    }
 
-	    strncpy(chPath, chAppPath, sizeof(chPath)-5);
-	    strcat(chPath, "/rom");
-	    getConfigValueString(chFileName, "rom", "rom_path", rom_path, chPath);
+	    getConfigValueString(chFileName, "file", "sdump_file", sdump_file, DATA_PATH "screen.png");
+	    if (sdump_file[0] == '\0')
+	    {
+			strcpy(sdump_file, DATA_PATH "screen.png");
+	    }
+
+	    getConfigValueString(chFileName, "rom", "rom_path", rom_path, DATA_PATH "rom");
 	    // loop for ROMs 0-15
 	    for (int iRomNum = 0; iRomNum < 16; iRomNum++)
 	    {
-		char chRomId[14];
-		sprintf(chRomId, "slot%02d", iRomNum); // build ROM ID
-		getConfigValueString(chFileName, "rom", chRomId, rom_file[iRomNum], "");
+			char chRomId[14];
+			sprintf(chRomId, "slot%02d", iRomNum); // build ROM ID
+			getConfigValueString(chFileName, "rom", chRomId, rom_file[iRomNum], "");
 	    }
-	    // if the path is empty, set it to the default
+	    
+		
+		// if the path is empty, set it to the default
 	    if (rom_path[0] == '\0')
 	    {
-		strcpy(rom_path, chPath);
+			strcpy(rom_path, DATA_PATH "rom");
 	    }
 
+		FILE *pfileObject;
 	    if ((pfileObject = fopen(chFileName, "rt")) == NULL)
 	    {
 		// insert AMSDOS in slot 7 if the config file does not exist yet

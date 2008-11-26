@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libcapricecore.a
 
-libcapricecore_a_CPPFLAGS=$(SDL_CFLAGS) 
+libcapricecore_a_CPPFLAGS=$(SDL_CFLAGS) -DDATA_PATH=\"$(pkgdatadir)//\" 
 libcapricecore_a_SOURCES = \
 audio.cpp\
 audio.h\
