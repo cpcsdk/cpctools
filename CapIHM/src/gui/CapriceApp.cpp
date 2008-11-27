@@ -46,7 +46,9 @@
 //TODO destroy emulator when finishing
 
 IMPLEMENT_APP(CapriceApp)
- 
+
+	wxSplashScreen* splash ;
+
 // This is executed upon startup, like 'main()' in non-wxWidgets programs.
 bool CapriceApp::OnInit()
 {
@@ -68,7 +70,7 @@ bool CapriceApp::OnInit()
 	//	memset(alpha, 255, image.GetHeight()*image.GetWidth());
 	//	image.SetAlpha(alpha, false);
 	//	bitmap = wxBitmap(image, -1);
-		wxSplashScreen* splash = new wxSplashScreen(bitmap,
+		splash = new wxSplashScreen(bitmap,
 		wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
 		6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
 		wxSIMPLE_BORDER|wxSTAY_ON_TOP);
@@ -82,7 +84,6 @@ bool CapriceApp::OnInit()
 	frame = new CapriceWindowImpl();
 	frame->Show(true);
 
-	SetTopWindow(frame);
 
 	return true ; 
 }
@@ -118,7 +119,13 @@ int CapriceApp::OnRun() {
 		if (fullscreen) emulator->GetRenderer().ToggleFullScreen();		
 
 	}
-    // generate an initial idle event to start things
+
+	delete splash;
+
+	SetTopWindow(frame);
+    
+	
+	// generate an initial idle event to start things
     wxIdleEvent event;
     //event.SetEventObject(&frame->getPanel());
     //frame->getPanel().AddPendingEvent(event);
