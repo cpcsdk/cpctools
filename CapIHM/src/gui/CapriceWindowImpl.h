@@ -24,6 +24,11 @@ class CapriceWindowImpl : public CapriceWindow
 
 
 	virtual void onInsertDiscA( wxCommandEvent& event );
+	virtual void onInsertDiscB( wxCommandEvent& event );
+
+	virtual void onLoadSNA( wxCommandEvent& event );
+	virtual void onSaveSNA( wxCommandEvent& event );
+
 	virtual void onExit2( wxCommandEvent& );
 	
 	

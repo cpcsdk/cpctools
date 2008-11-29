@@ -74,7 +74,7 @@ typedef struct {
    unsigned char unused2[75];
 } t_SNA_header;
 
-int snapshot_load (Emulator &emulator, char *pchFileName);
-int snapshot_save (Emulator &emulator, char *pchFileName);
+int snapshot_load (Emulator &emulator, const char *pchFileName);
+int snapshot_save (Emulator &emulator, const char *pchFileName);
 
 #endif

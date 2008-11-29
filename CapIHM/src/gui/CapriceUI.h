@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 25 2008)
+// C++ code generated with wxFormBuilder (version Sep 19 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -51,7 +51,7 @@ class CapriceWindow : public wxFrame
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu_file;
 		wxMenu* m_menu_drivea;
-		wxMenu* m_menu_drivea1;
+		wxMenu* m_menu_driveb;
 		wxMenu* m_menu8;
 		wxMenu* m_menu3;
 		wxMenu* m_menu2;
@@ -65,7 +65,11 @@ class CapriceWindow : public wxFrame
 		virtual void onExit1( wxCloseEvent& event ){ event.Skip(); }
 		virtual void OnIdle( wxIdleEvent& event ){ event.Skip(); }
 		virtual void onInsertDiscA( wxCommandEvent& event ){ event.Skip(); }
+		virtual void onInsertDiscB( wxCommandEvent& event ){ event.Skip(); }
+		virtual void onLoadSNA( wxCommandEvent& event ){ event.Skip(); }
+		virtual void onSaveSNA( wxCommandEvent& event ){ event.Skip(); }
 		virtual void onExit2( wxCommandEvent& event ){ event.Skip(); }
+		virtual void OnOpenConfigGeneral( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnFullScreen( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnReset( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRun( wxCommandEvent& event ){ event.Skip(); }
@@ -352,6 +356,44 @@ class RegistersStates : public wxDialog
 	public:
 		RegistersStates( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Registers States"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~RegistersStates();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class Memory
+///////////////////////////////////////////////////////////////////////////////
+class Memory : public wxDialog 
+{
+	private:
+	
+	protected:
+	
+	public:
+		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		~Memory();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class ConfigDialog
+///////////////////////////////////////////////////////////////////////////////
+class ConfigDialog : public wxDialog 
+{
+	private:
+	
+	protected:
+		wxNotebook* m_notebook3;
+		wxPanel* m_panel7;
+		wxStaticText* m_staticText62;
+		wxTextCtrl* m_textCtrl44;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseC( wxCloseEvent& event ){ event.Skip(); }
+		
+	
+	public:
+		ConfigDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Configuration"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		~ConfigDialog();
 	
 };
 

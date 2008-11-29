@@ -21,9 +21,11 @@
 
 
 #include "CapriceWindowImpl.h"
+#include "snapshot.h"
 #include "video.h"
 
 #include <wx/filedlg.h>
+#include <wx/filename.h>
 
 
 // =============================== Window Event =============================================
@@ -71,6 +73,70 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 		emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
 	}
 
+}
+
+/*
+ * Ask from the menu to change the disc in the drive B
+ */
+void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
+{
+	wxFileDialog* OpenDialog = new wxFileDialog(
+		this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
+		wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
+		wxOPEN, wxDefaultPosition);
+ 
+	// Creates a "open file" dialog with 4 file types
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+		wxString CurrentDocPath = OpenDialog->GetPath();
+		SetTitle(wxString( wxT("Edit - ")) << 
+			OpenDialog->GetFilename()); // Set the Title to reflect the file open
+
+		emulator->GetFDC().insertB(std::string(CurrentDocPath.mb_str()));
+	}
+
+}
+
+/*
+ * Ask from the menu to load a snapshot
+ */
+void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
+{
+  wxFileDialog* OpenDialog = new wxFileDialog(
+  	this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
+  	wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
+  	wxOPEN, wxDefaultPosition);
+
+  if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+  {
+    wxString CurrentDocPath = OpenDialog->GetPath();
+    SetTitle(wxString( wxT("Edit - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
+
+    snapshot_load(*emulator, CurrentDocPath.mb_str());
+  }
+}
+
+/*
+ * Ask from the menu to save a snapshot
+ */
+void CapriceWindowImpl::onSaveSNA( wxCommandEvent& event )
+{
+  wxFileDialog* SaveDialog = new wxFileDialog(
+  	this, wxT("Choose a file to save"), wxEmptyString, wxEmptyString,
+  	wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
+  	wxSAVE, wxDefaultPosition);
+
+  if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Save" instead of "Cancel"
+  {
+    wxFileName FileName = SaveDialog->GetPath();
+
+    if(!FileName.HasExt())
+    {
+      FileName.SetExt(wxT("sna"));
+    }
+
+    snapshot_save(*emulator, FileName.GetFullPath().mb_str());
+  }
 }
 
 void CapriceWindowImpl::OnPause( wxCommandEvent& event)

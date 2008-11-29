@@ -79,7 +79,7 @@
 
 FILE *pSNAfileObject;
 
-int snapshot_load (Emulator &emulator, char *pchFileName)
+int snapshot_load (Emulator &emulator, const char *pchFileName)
 {
 	t_GateArray& GateArray = emulator.GetGateArray();
 	t_CRTC& CRTC = emulator.GetCRTC();
@@ -343,7 +343,7 @@ int snapshot_load (Emulator &emulator, char *pchFileName)
 
 
 
-int snapshot_save (Emulator &emulator, char *pchFileName)
+int snapshot_save (Emulator &emulator, const char *pchFileName)
 {
 	t_GateArray& GateArray = emulator.GetGateArray();
 	t_CRTC& CRTC = emulator.GetCRTC();

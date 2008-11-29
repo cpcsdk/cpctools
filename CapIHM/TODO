@@ -14,5 +14,4 @@ Mineur :
 - Ajustement de la taille du buffer de son par l'utilisateur (Buffer SDL et buffer local)
 
 Urgent :
-- Corriger probleme sauvegarde snapshot (ajout automatique du .sna)
 - Possibilité de compilation CrossDev windows
