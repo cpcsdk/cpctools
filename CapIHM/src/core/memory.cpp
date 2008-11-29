@@ -428,6 +428,7 @@ int t_Memory::emulator_patch_ROM (void)
 		return ERR_CPC_ROM_MISSING;
 	}
 
+    /*
 	if (CPC.keyboard) {
 		pbPtr = pbROMlo;
 		switch(CPC.model)
@@ -458,6 +459,6 @@ int t_Memory::emulator_patch_ROM (void)
 			memcpy(pbPtr, cpc_charset[CPC.keyboard-1], 2048);
 		}
 	}
-
+    */
 	return 0;
 }

@@ -3,24 +3,37 @@ AC_INIT([CapriceReloaded], [5], [ramlaid@cpcscene.com])
 AM_INIT_AUTOMAKE([ -Wall ])
 #AC_CONFIG_SRCDIR(core/cap32.cpp)
 
+# Check for programs
 AC_PROG_CXX
 AC_LANG([C++])
 AC_PROG_RANLIB
+AC_PROG_MAKE_SET
 
 m4_pattern_allow([^AC])
 
+# Check for functions
 AC_CHECK_FUNCS([getcwd])
 AC_CHECK_FUNCS([memset])
 AC_CHECK_FUNCS([pow])
 AC_CHECK_FUNCS([strcspn])
 AC_CHECK_FUNCS([strrchr])
 AC_CHECK_FUNCS([strtoul])
+
+# Check for headers
 AC_CHECK_HEADERS([malloc.h])
 AC_CHECK_HEADERS([memory.h])
 AC_CHECK_HEADERS([stdlib.h])
 AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADERS([zlib.h])
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS([fcntl.h limits.h malloc.h memory.h stdlib.h string.h sys/ioctl.h unistd.h])
 
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
 AC_C_CONST
 AC_C_INLINE
 AC_FUNC_MALLOC
@@ -29,6 +42,16 @@ AC_HEADER_STDBOOL
 AC_HEADER_STDC
 AC_PROG_CC
 AC_TYPE_INT64_T
+
+# Checks for library functions.
+AC_FUNC_CLOSEDIR_VOID
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_MALLOC
+AC_FUNC_MEMCMP
+AC_FUNC_REALLOC
+AC_FUNC_STRTOD
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([memchr memset pow strchr strcspn strrchr strstr strtol strtoul])
 
 
 dnl Check for sed
@@ -108,7 +131,8 @@ fi
 
 # Sound
 
-
+AC_MSG_CHECKING([ sound options ----------------------------------------------
+])
 if test "$with_aylet" = "yes" ; then
     with_stsound="no";
     with_ayemu="no" ;
@@ -147,9 +171,12 @@ AM_CONDITIONAL([AYLET], [test "$with_aylet" = "yes"])
 
 
 # Dsk
+AC_MSG_CHECKING([ disk management options ------------------------------------
+])
 if test "$with_lib765" = "yes" ; then
 	AC_CHECK_HEADER( 765.h, AC_DEFINE(HAVE_LIB765_H,1,[Use lib765 for FDC emulation]), AC_MSG_ERROR([lib765 not found ! look at http://www.seasip.demon.co.uk/Unix/LibDsk ]))
 	AC_SUBST([LIB765], [-l765])
+	AC_CHECK_LIB([dsk], [dsk_open])
 fi
 
 
