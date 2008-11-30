@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep 19 2008)
+// C++ code generated with wxFormBuilder (version Nov 25 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -21,17 +21,21 @@
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>
+#include <wx/stattext.h>
+#include <wx/combobox.h>
+#include <wx/choice.h>
+#include <wx/button.h>
+#include <wx/gbsizer.h>
+#include <wx/notebook.h>
+#include <wx/dialog.h>
 #include <wx/checkbox.h>
 #include <wx/toolbar.h>
 #include <wx/listbook.h>
 #include <wx/listctrl.h>
-#include <wx/stattext.h>
 #include <wx/spinctrl.h>
 #include <wx/listbox.h>
 #include <wx/textctrl.h>
-#include <wx/notebook.h>
 #include <wx/imaglist.h>
-#include <wx/dialog.h>
 #include <wx/statbmp.h>
 #include <wx/statline.h>
 #include <wx/statbox.h>
@@ -52,8 +56,8 @@ class CapriceWindow : public wxFrame
 		wxMenu* m_menu_file;
 		wxMenu* m_menu_drivea;
 		wxMenu* m_menu_driveb;
-		wxMenu* m_menu8;
-		wxMenu* m_menu3;
+		wxMenu* m_Tape;
+		wxMenu* m_menu_settings;
 		wxMenu* m_menu2;
 		wxMenuItem* m_menuItem_run;
 		wxMenuItem* m_menuItem_pause;
@@ -70,6 +74,7 @@ class CapriceWindow : public wxFrame
 		virtual void onSaveSNA( wxCommandEvent& event ){ event.Skip(); }
 		virtual void onExit2( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnOpenConfigGeneral( wxCommandEvent& event ){ event.Skip(); }
+		virtual void onMenuInput( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnFullScreen( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnReset( wxCommandEvent& event ){ event.Skip(); }
 		virtual void OnRun( wxCommandEvent& event ){ event.Skip(); }
@@ -84,6 +89,105 @@ class CapriceWindow : public wxFrame
 	public:
 		CapriceWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("CapriceReloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxTAB_TRAVERSAL, const wxString& name = wxT("CapriceMainWindow") );
 		~CapriceWindow();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class InputSettings
+///////////////////////////////////////////////////////////////////////////////
+class InputSettings : public wxDialog 
+{
+	private:
+	
+	protected:
+		wxNotebook* m_notebook4;
+		wxPanel* m_panel8;
+		wxStaticText* m_staticText63;
+		wxComboBox* m_comboBox1;
+		wxStaticText* m_staticText64;
+		wxChoice* m_choice1;
+		wxButton* k_TAB;
+		wxButton* k_TAB1;
+		wxButton* k_TAB2;
+		wxButton* k_TAB3;
+		wxButton* k_TAB4;
+		wxButton* k_TAB5;
+		wxButton* k_TAB6;
+		wxButton* k_TAB7;
+		wxButton* k_TAB8;
+		wxButton* k_TAB9;
+		wxButton* k_TAB10;
+		wxButton* k_TAB11;
+		wxButton* k_TAB12;
+		wxButton* k_TAB13;
+		wxButton* k_TAB14;
+		wxButton* k_TAB15;
+		wxButton* k_TAB16;
+		wxButton* k_CAPS;
+		wxButton* k_CAPS1;
+		wxButton* k_CAPS2;
+		wxButton* k_CAPS3;
+		wxButton* k_CAPS4;
+		wxButton* k_CAPS5;
+		wxButton* k_CAPS6;
+		wxButton* k_CAPS7;
+		wxButton* k_CAPS8;
+		wxButton* k_CAPS9;
+		wxButton* k_CAPS10;
+		wxButton* k_CAPS11;
+		wxButton* k_CAPS12;
+		wxButton* k_CAPS13;
+		wxButton* k_CAPS14;
+		wxButton* k_CAPS15;
+		wxButton* k_LSHIFT;
+		wxButton* k_LSHIFT1;
+		wxButton* k_LSHIFT2;
+		wxButton* k_LSHIFT3;
+		wxButton* k_LSHIFT4;
+		wxButton* k_LSHIFT5;
+		wxButton* k_LSHIFT6;
+		wxButton* k_LSHIFT7;
+		wxButton* k_LSHIFT8;
+		wxButton* k_LSHIFT9;
+		wxButton* k_LSHIFT10;
+		wxButton* k_LSHIFT11;
+		wxButton* k_LSHIFT12;
+		wxButton* k_LSHIFT13;
+		wxButton* k_LSHIFT14;
+		wxButton* k_LSHIFT15;
+		wxButton* k_CONTROL;
+		wxButton* k_CONTROL1;
+		wxButton* k_CONTROL2;
+		wxButton* k_CONTROL3;
+		wxButton* k_CONTROL4;
+		wxButton* k_CONTROL5;
+		wxButton* k_CONTROL6;
+		wxButton* k_ESC;
+		wxButton* k_ESC1;
+		wxButton* k_ESC2;
+		wxButton* k_ESC3;
+		wxButton* k_ESC4;
+		wxButton* k_ESC5;
+		wxButton* k_ESC6;
+		wxButton* k_ESC7;
+		wxButton* k_ESC8;
+		wxButton* k_ESC9;
+		wxButton* k_ESC10;
+		wxButton* k_ESC11;
+		wxButton* k_ESC12;
+		wxButton* k_ESC13;
+		wxButton* k_ESC14;
+		wxButton* k_ESC15;
+		wxButton* k_ESC16;
+		wxButton* k_ESC17;
+		wxStdDialogButtonSizer* m_sdbSizer1;
+		wxButton* m_sdbSizer1Save;
+		wxButton* m_sdbSizer1Apply;
+		wxButton* m_sdbSizer1Cancel;
+	
+	public:
+		InputSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Input Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );
+		~InputSettings();
 	
 };
 

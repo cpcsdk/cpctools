@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep 19 2008)
+// C++ code generated with wxFormBuilder (version Nov 25 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,18 +19,18 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menubar1 = new wxMenuBar( 0 );
 	m_menu_file = new wxMenu();
 	m_menu_drivea = new wxMenu();
-	wxMenuItem* m_menuItem1;
-	m_menuItem1 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu_drivea->Append( m_menuItem1 );
+	wxMenuItem* m_menu_insertDiscA;
+	m_menu_insertDiscA = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_drivea->Append( m_menu_insertDiscA );
 	
-	wxMenuItem* m_menuItem3;
-	m_menuItem3 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("New Blank Image") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu_drivea->Append( m_menuItem3 );
+	wxMenuItem* m_menu_insertBlakDiskA;
+	m_menu_insertBlakDiskA = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("New Blank Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_drivea->Append( m_menu_insertBlakDiskA );
 	
-	wxMenuItem* m_menuItem4;
-	m_menuItem4 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Format Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu_drivea->Append( m_menuItem4 );
-	m_menuItem4->Enable( false );
+	wxMenuItem* m_menu_formatDiscA;
+	m_menu_formatDiscA = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Format Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_drivea->Append( m_menu_formatDiscA );
+	m_menu_formatDiscA->Enable( false );
 	
 	wxMenuItem* m_menuItem5;
 	m_menuItem5 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
@@ -82,39 +82,39 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem24 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Load Cartridge") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem24 );
 	
-	m_menu8 = new wxMenu();
+	m_Tape = new wxMenu();
 	wxMenuItem* m_menuItem25;
-	m_menuItem25 = new wxMenuItem( m_menu8, wxID_ANY, wxString( wxT("Show Tape Controls") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu8->Append( m_menuItem25 );
+	m_menuItem25 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Show Tape Controls") ) , wxEmptyString, wxITEM_NORMAL );
+	m_Tape->Append( m_menuItem25 );
 	
 	wxMenuItem* m_menuItem26;
-	m_menuItem26 = new wxMenuItem( m_menu8, wxID_ANY, wxString( wxT("Insert Tape Image") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu8->Append( m_menuItem26 );
+	m_menuItem26 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Insert Tape Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_Tape->Append( m_menuItem26 );
 	
 	wxMenuItem* m_menuItem27;
-	m_menuItem27 = new wxMenuItem( m_menu8, wxID_ANY, wxString( wxT("Rewind Tape") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu8->Append( m_menuItem27 );
+	m_menuItem27 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Rewind Tape") ) , wxEmptyString, wxITEM_NORMAL );
+	m_Tape->Append( m_menuItem27 );
 	m_menuItem27->Enable( false );
 	
 	wxMenuItem* m_menuItem28;
-	m_menuItem28 = new wxMenuItem( m_menu8, wxID_ANY, wxString( wxT("Remove Tape") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu8->Append( m_menuItem28 );
+	m_menuItem28 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Remove Tape") ) , wxEmptyString, wxITEM_NORMAL );
+	m_Tape->Append( m_menuItem28 );
 	m_menuItem28->Enable( false );
 	
 	wxMenuItem* m_menuItem29;
-	m_menuItem29 = new wxMenuItem( m_menu8, wxID_ANY, wxString( wxT("Press Play") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu8->Append( m_menuItem29 );
+	m_menuItem29 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Press Play") ) , wxEmptyString, wxITEM_NORMAL );
+	m_Tape->Append( m_menuItem29 );
 	m_menuItem29->Enable( false );
 	
 	wxMenuItem* m_menuItem30;
-	m_menuItem30 = new wxMenuItem( m_menu8, wxID_ANY, wxString( wxT("Press Record") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu8->Append( m_menuItem30 );
+	m_menuItem30 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Press Record") ) , wxEmptyString, wxITEM_NORMAL );
+	m_Tape->Append( m_menuItem30 );
 	
 	wxMenuItem* m_menuItem6;
-	m_menuItem6 = new wxMenuItem( m_menu8, wxID_ANY, wxString( wxT("Flip Disc") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu8->Append( m_menuItem6 );
+	m_menuItem6 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Flip Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_Tape->Append( m_menuItem6 );
 	
-	m_menu_file->Append( -1, wxT("Tape"), m_menu8 );
+	m_menu_file->Append( -1, wxT("Tape"), m_Tape );
 	
 	m_menu_file->AppendSeparator();
 	
@@ -182,50 +182,50 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	
 	m_menubar1->Append( m_menu_file, wxT("File") );
 	
-	m_menu3 = new wxMenu();
+	m_menu_settings = new wxMenu();
 	wxMenuItem* m_menuItem43;
-	m_menuItem43 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("General") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem43 );
+	m_menuItem43 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("General") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem43 );
 	
 	wxMenuItem* m_menuItem44;
-	m_menuItem44 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Display") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem44 );
+	m_menuItem44 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Display") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem44 );
 	
 	wxMenuItem* m_menuItem45;
-	m_menuItem45 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Sound") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem45 );
+	m_menuItem45 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Sound") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem45 );
 	
 	wxMenuItem* m_menuItem46;
-	m_menuItem46 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem46 );
+	m_menuItem46 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem46 );
 	
-	wxMenuItem* m_menuItem47;
-	m_menuItem47 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Input") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem47 );
+	wxMenuItem* m_menu_input;
+	m_menu_input = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Input") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menu_input );
 	
 	wxMenuItem* m_menuItem48;
-	m_menuItem48 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Other") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem48 );
+	m_menuItem48 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Other") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem48 );
 	
-	m_menu3->AppendSeparator();
+	m_menu_settings->AppendSeparator();
 	
 	wxMenuItem* m_menuItem49;
-	m_menuItem49 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Full Screen") ) + wxT('\t') + wxT("F1"), wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem49 );
+	m_menuItem49 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Full Screen") ) + wxT('\t') + wxT("F1"), wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem49 );
 	
 	wxMenuItem* m_menuItem50;
-	m_menuItem50 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Reset") ) + wxT('\t') + wxT("F5"), wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem50 );
+	m_menuItem50 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Reset") ) + wxT('\t') + wxT("F5"), wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem50 );
 	
 	wxMenuItem* m_menuItem511;
-	m_menuItem511 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("AMX Mouse") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem511 );
+	m_menuItem511 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("AMX Mouse") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem511 );
 	
 	wxMenuItem* m_menuItem52;
-	m_menuItem52 = new wxMenuItem( m_menu3, wxID_ANY, wxString( wxT("Multiface Stop") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu3->Append( m_menuItem52 );
+	m_menuItem52 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Multiface Stop") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_settings->Append( m_menuItem52 );
 	
-	m_menubar1->Append( m_menu3, wxT("Settings") );
+	m_menubar1->Append( m_menu_settings, wxT("Settings") );
 	
 	m_menu2 = new wxMenu();
 	m_menuItem_run = new wxMenuItem( m_menu2, wxID_ANY, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
@@ -273,12 +273,13 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
 	this->Connect( wxEVT_IDLE, wxIdleEventHandler( CapriceWindow::OnIdle ) );
-	this->Connect( m_menuItem1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
+	this->Connect( m_menu_insertDiscA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
 	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
 	this->Connect( m_mI_LoadSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
 	this->Connect( m_mI_SaveSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
 	this->Connect( m_menu_exit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
 	this->Connect( m_menuItem43->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnOpenConfigGeneral ) );
+	this->Connect( m_menu_input->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
 	this->Connect( m_menuItem49->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
 	this->Connect( m_menuItem50->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
 	this->Connect( m_menuItem_run->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
@@ -301,6 +302,7 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnOpenConfigGeneral ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
@@ -310,6 +312,295 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
 	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
 	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
+}
+
+InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	wxBoxSizer* bSizer24;
+	bSizer24 = new wxBoxSizer( wxVERTICAL );
+	
+	m_notebook4 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panel8 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer26;
+	bSizer26 = new wxBoxSizer( wxVERTICAL );
+	
+	wxGridSizer* gSizer1;
+	gSizer1 = new wxGridSizer( 2, 2, 0, 0 );
+	
+	m_staticText63 = new wxStaticText( m_panel8, wxID_ANY, wxT("Preset"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText63->Wrap( -1 );
+	gSizer1->Add( m_staticText63, 0, 0, 5 );
+	
+	m_comboBox1 = new wxComboBox( m_panel8, wxID_ANY, wxT("FR-FR"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
+	gSizer1->Add( m_comboBox1, 0, 0, 5 );
+	
+	m_staticText64 = new wxStaticText( m_panel8, wxID_ANY, wxT("CPC Layout"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText64->Wrap( -1 );
+	gSizer1->Add( m_staticText64, 0, 0, 5 );
+	
+	wxString m_choice1Choices[] = { wxT("English 6128"), wxT("French 6128"), wxT("Spanish 6128"), wxT("English 464"), wxT("French 464"), wxT("Spanish 464") };
+	int m_choice1NChoices = sizeof( m_choice1Choices ) / sizeof( wxString );
+	m_choice1 = new wxChoice( m_panel8, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice1NChoices, m_choice1Choices, 0 );
+	m_choice1->SetSelection( 1 );
+	gSizer1->Add( m_choice1, 0, 0, 5 );
+	
+	bSizer26->Add( gSizer1, 0, wxEXPAND, 5 );
+	
+	wxGridBagSizer* gbSizer1;
+	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1->SetFlexibleDirection( wxBOTH );
+	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	
+	k_TAB = new wxButton( m_panel8, wxID_ANY, wxT("TAB"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	
+	k_TAB1 = new wxButton( m_panel8, wxID_ANY, wxT("A"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB1, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB2 = new wxButton( m_panel8, wxID_ANY, wxT("Z"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB2, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB3 = new wxButton( m_panel8, wxID_ANY, wxT("E"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB3, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB4 = new wxButton( m_panel8, wxID_ANY, wxT("R"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB4, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB5 = new wxButton( m_panel8, wxID_ANY, wxT("T"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB5, wxGBPosition( 1, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB6 = new wxButton( m_panel8, wxID_ANY, wxT("Y"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB6, wxGBPosition( 1, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB7 = new wxButton( m_panel8, wxID_ANY, wxT("U"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB7, wxGBPosition( 1, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB8 = new wxButton( m_panel8, wxID_ANY, wxT("I"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB8, wxGBPosition( 1, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB9 = new wxButton( m_panel8, wxID_ANY, wxT("O"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB9, wxGBPosition( 1, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB10 = new wxButton( m_panel8, wxID_ANY, wxT("P"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB10, wxGBPosition( 1, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB11 = new wxButton( m_panel8, wxID_ANY, wxT("|^"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB11, wxGBPosition( 1, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB12 = new wxButton( m_panel8, wxID_ANY, wxT("<*"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB12, wxGBPosition( 1, 13 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB13 = new wxButton( m_panel8, wxID_ANY, wxT("↵"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB13, wxGBPosition( 1, 14 ), wxGBSpan( 2, 1 ), wxEXPAND, 5 );
+	
+	k_TAB14 = new wxButton( m_panel8, wxID_ANY, wxT("F4"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB14, wxGBPosition( 1, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB15 = new wxButton( m_panel8, wxID_ANY, wxT("F5"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB15, wxGBPosition( 1, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_TAB16 = new wxButton( m_panel8, wxID_ANY, wxT("F6"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_TAB16, wxGBPosition( 1, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS = new wxButton( m_panel8, wxID_ANY, wxT("CAPS"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	
+	k_CAPS1 = new wxButton( m_panel8, wxID_ANY, wxT("Q"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS1, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS2 = new wxButton( m_panel8, wxID_ANY, wxT("S"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS2, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS3 = new wxButton( m_panel8, wxID_ANY, wxT("D"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS3, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS4 = new wxButton( m_panel8, wxID_ANY, wxT("F"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS4, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS5 = new wxButton( m_panel8, wxID_ANY, wxT("G"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS5, wxGBPosition( 2, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS6 = new wxButton( m_panel8, wxID_ANY, wxT("H"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS6, wxGBPosition( 2, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS7 = new wxButton( m_panel8, wxID_ANY, wxT("J"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS7, wxGBPosition( 2, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS8 = new wxButton( m_panel8, wxID_ANY, wxT("K"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS8, wxGBPosition( 2, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS9 = new wxButton( m_panel8, wxID_ANY, wxT("L"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS9, wxGBPosition( 2, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS10 = new wxButton( m_panel8, wxID_ANY, wxT("M"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS10, wxGBPosition( 2, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS11 = new wxButton( m_panel8, wxID_ANY, wxT("%ù"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS11, wxGBPosition( 2, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS12 = new wxButton( m_panel8, wxID_ANY, wxT(">#"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS12, wxGBPosition( 2, 13 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS13 = new wxButton( m_panel8, wxID_ANY, wxT("F1"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS13, wxGBPosition( 2, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS14 = new wxButton( m_panel8, wxID_ANY, wxT("F2"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS14, wxGBPosition( 2, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CAPS15 = new wxButton( m_panel8, wxID_ANY, wxT("F3"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CAPS15, wxGBPosition( 2, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT = new wxButton( m_panel8, wxID_ANY, wxT("SHIFT"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	
+	k_LSHIFT1 = new wxButton( m_panel8, wxID_ANY, wxT("W"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT1, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT2 = new wxButton( m_panel8, wxID_ANY, wxT("X"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT2, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT3 = new wxButton( m_panel8, wxID_ANY, wxT("C"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT3, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT4 = new wxButton( m_panel8, wxID_ANY, wxT("V"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT4, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT5 = new wxButton( m_panel8, wxID_ANY, wxT("B"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT5, wxGBPosition( 3, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT6 = new wxButton( m_panel8, wxID_ANY, wxT("N"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT6, wxGBPosition( 3, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT7 = new wxButton( m_panel8, wxID_ANY, wxT("?,"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT7, wxGBPosition( 3, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT8 = new wxButton( m_panel8, wxID_ANY, wxT(".;"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT8, wxGBPosition( 3, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT9 = new wxButton( m_panel8, wxID_ANY, wxT("/:"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT9, wxGBPosition( 3, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT10 = new wxButton( m_panel8, wxID_ANY, wxT("+="), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT10, wxGBPosition( 3, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT11 = new wxButton( m_panel8, wxID_ANY, wxT("@\\$"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT11, wxGBPosition( 3, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT12 = new wxButton( m_panel8, wxID_ANY, wxT("SHIFT"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT12, wxGBPosition( 3, 13 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	
+	k_LSHIFT13 = new wxButton( m_panel8, wxID_ANY, wxT("F0"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT13, wxGBPosition( 3, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT14 = new wxButton( m_panel8, wxID_ANY, wxT("↑"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT14, wxGBPosition( 3, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_LSHIFT15 = new wxButton( m_panel8, wxID_ANY, wxT("."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_LSHIFT15, wxGBPosition( 3, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CONTROL = new wxButton( m_panel8, wxID_ANY, wxT("CONTROL"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CONTROL, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	
+	k_CONTROL1 = new wxButton( m_panel8, wxID_ANY, wxT("COPY"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CONTROL1, wxGBPosition( 4, 2 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
+	
+	k_CONTROL2 = new wxButton( m_panel8, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CONTROL2, wxGBPosition( 4, 4 ), wxGBSpan( 1, 8 ), wxEXPAND, 5 );
+	
+	k_CONTROL3 = new wxButton( m_panel8, wxID_ANY, wxT("ENTER"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CONTROL3, wxGBPosition( 4, 12 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+	
+	k_CONTROL4 = new wxButton( m_panel8, wxID_ANY, wxT("←"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CONTROL4, wxGBPosition( 4, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CONTROL5 = new wxButton( m_panel8, wxID_ANY, wxT("↓"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CONTROL5, wxGBPosition( 4, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_CONTROL6 = new wxButton( m_panel8, wxID_ANY, wxT("→"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_CONTROL6, wxGBPosition( 4, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC = new wxButton( m_panel8, wxID_ANY, wxT("ESC"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC1 = new wxButton( m_panel8, wxID_ANY, wxT("1&&"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC1, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC2 = new wxButton( m_panel8, wxID_ANY, wxT("2é"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC2, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC3 = new wxButton( m_panel8, wxID_ANY, wxT("3\""), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC3, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC4 = new wxButton( m_panel8, wxID_ANY, wxT("4'"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC4, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC5 = new wxButton( m_panel8, wxID_ANY, wxT("5("), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC5, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC6 = new wxButton( m_panel8, wxID_ANY, wxT("6]"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC6, wxGBPosition( 0, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC7 = new wxButton( m_panel8, wxID_ANY, wxT("7è"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC7, wxGBPosition( 0, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC8 = new wxButton( m_panel8, wxID_ANY, wxT("8!"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC8, wxGBPosition( 0, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC9 = new wxButton( m_panel8, wxID_ANY, wxT("9ç"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC9, wxGBPosition( 0, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC10 = new wxButton( m_panel8, wxID_ANY, wxT("0à"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC10, wxGBPosition( 0, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC11 = new wxButton( m_panel8, wxID_ANY, wxT("[)"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC11, wxGBPosition( 0, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC12 = new wxButton( m_panel8, wxID_ANY, wxT("_-"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC12, wxGBPosition( 0, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC13 = new wxButton( m_panel8, wxID_ANY, wxT("CLR"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC13, wxGBPosition( 0, 13 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC14 = new wxButton( m_panel8, wxID_ANY, wxT("DEL"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC14, wxGBPosition( 0, 14 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC15 = new wxButton( m_panel8, wxID_ANY, wxT("F7"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC15, wxGBPosition( 0, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC16 = new wxButton( m_panel8, wxID_ANY, wxT("F8"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC16, wxGBPosition( 0, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	k_ESC17 = new wxButton( m_panel8, wxID_ANY, wxT("F9"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	gbSizer1->Add( k_ESC17, wxGBPosition( 0, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
+	
+	bSizer26->Add( gbSizer1, 0, wxEXPAND, 5 );
+	
+	m_panel8->SetSizer( bSizer26 );
+	m_panel8->Layout();
+	bSizer26->Fit( m_panel8 );
+	m_notebook4->AddPage( m_panel8, wxT("Keyboard"), false );
+	
+	bSizer24->Add( m_notebook4, 0, 0, 5 );
+	
+	m_sdbSizer1 = new wxStdDialogButtonSizer();
+	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
+	m_sdbSizer1->AddButton( m_sdbSizer1Save );
+	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
+	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
+	m_sdbSizer1->Realize();
+	bSizer24->Add( m_sdbSizer1, 0, wxALL, 5 );
+	
+	this->SetSizer( bSizer24 );
+	this->Layout();
+	bSizer24->Fit( this );
+}
+
+InputSettings::~InputSettings()
+{
 }
 
 DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )

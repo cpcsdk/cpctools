@@ -790,7 +790,7 @@ int t_Input::kbd_layout[4][KBD_MAX_ENTRIES][2] =
 		{ CAP32_DEBUG,		SDLK_F9}
 	},
 	{ // French PC to CPC keyboard layout translation
- 		{ CPC_0,			192 /*SDLK_WORLD_64*/ | MOD_PC_SHIFT },
+ 		{ CPC_0,			192 /*SDLK_WORLD_64*/ | MOD_PC_SHIFT }, // _
  		{ CPC_1,			SDLK_AMPERSAND | MOD_PC_SHIFT },
  		{ CPC_2,			201/*SDLK_WORLD_73*/ | MOD_PC_SHIFT},
  		{ CPC_3,			SDLK_QUOTEDBL | MOD_PC_SHIFT },

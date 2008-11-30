@@ -20,7 +20,7 @@
 
 #ifdef HAVE_LIB765_H
 
-#include "fdc.h"
+#include "fdc_765.h"
 #include "cap32.h"
 #include "config.h"
 #include "debug.h"

@@ -1,5 +1,6 @@
 noinst_LIBRARIES = libcapricecore.a
 
+libcapricecore_a_LIBADD = /usr/local/lib/lib765.a /usr/local/lib/libdsk.a
 libcapricecore_a_CPPFLAGS=$(SDL_CFLAGS) -DDATA_PATH=\"$(pkgdatadir)//\" 
 libcapricecore_a_SOURCES = \
 audio.cpp\
@@ -22,7 +23,6 @@ fdc.cpp\
 fdc.h\
 fdc_765.cpp\
 fdc_765.h\
-fdc_old.h\
 filetools.cpp\
 filetools.h\
 fileutils.cpp\

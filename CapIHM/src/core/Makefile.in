@@ -44,7 +44,8 @@ LIBRARIES = $(noinst_LIBRARIES)
 AR = ar
 ARFLAGS = cru
 libcapricecore_a_AR = $(AR) $(ARFLAGS)
-libcapricecore_a_LIBADD =
+libcapricecore_a_DEPENDENCIES = /usr/local/lib/lib765.a \
+	/usr/local/lib/libdsk.a
 am_libcapricecore_a_OBJECTS = libcapricecore_a-audio.$(OBJEXT) \
 	libcapricecore_a-c_inifile.$(OBJEXT) \
 	libcapricecore_a-config.$(OBJEXT) \
@@ -189,6 +190,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libcapricecore.a
+libcapricecore_a_LIBADD = /usr/local/lib/lib765.a /usr/local/lib/libdsk.a
 libcapricecore_a_CPPFLAGS = $(SDL_CFLAGS) -DDATA_PATH=\"$(pkgdatadir)//\" 
 libcapricecore_a_SOURCES = \
 audio.cpp\
@@ -211,7 +213,6 @@ fdc.cpp\
 fdc.h\
 fdc_765.cpp\
 fdc_765.h\
-fdc_old.h\
 filetools.cpp\
 filetools.h\
 fileutils.cpp\

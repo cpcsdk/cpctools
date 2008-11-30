@@ -205,7 +205,7 @@ caprice_SOURCES = gui/video.cpp gui/input.cpp core/emulator.cpp \
 	$(am__append_2)
 caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui \
 	$(am__append_1) $(am__append_3)
-caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -ldsk gui/libcapricewx.a core/libcapricecore.a 
+caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -L/usr/local/lib -l765 -ldsk gui/libcapricewx.a core/libcapricecore.a 
 all: all-recursive
 
 .SUFFIXES:

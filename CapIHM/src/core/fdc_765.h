@@ -34,8 +34,8 @@
 #include "configBis.h"
 #include <cstring>
 #include <string>
-#include "libdsk.h"
-#include "765.h"
+#include <libdsk.h>
+#include <765.h>
 
 using namespace std;
 

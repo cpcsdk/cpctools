@@ -23,6 +23,7 @@
 #include "CapriceWindowImpl.h"
 #include "snapshot.h"
 #include "video.h"
+#include "CapriceInputSettingsImpl.h"
 
 #include <wx/filedlg.h>
 #include <wx/filename.h>
@@ -175,6 +176,12 @@ void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
 {
     CapriceAboutImpl *AboutDialog = new CapriceAboutImpl();
     AboutDialog->Show(true);
+}
+
+void CapriceWindowImpl::onMenuInput(wxCommandEvent& event)
+{
+    CapriceInputSettingsImpl* InputSettingsWindow = new CapriceInputSettingsImpl(this);
+    InputSettingsWindow->Show(true);
 }
 
 // ============================= Various functions ===================================
