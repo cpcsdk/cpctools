@@ -11,7 +11,9 @@ CapriceRegistersDialogImpl.h\
 CapriceUI.cpp\
 CapriceUI.h\
 CapriceWindowImpl.cpp\
-CapriceWindowImpl.h 
+CapriceWindowImpl.h\
+CapriceInputSettingsImpl.h\
+CapriceInputSettingsImpl.cpp
 #video.cpp \
 #input.cpp
 

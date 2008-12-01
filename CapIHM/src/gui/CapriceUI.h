@@ -26,6 +26,7 @@
 #include <wx/choice.h>
 #include <wx/button.h>
 #include <wx/gbsizer.h>
+#include <wx/textctrl.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 #include <wx/checkbox.h>
@@ -34,7 +35,6 @@
 #include <wx/listctrl.h>
 #include <wx/spinctrl.h>
 #include <wx/listbox.h>
-#include <wx/textctrl.h>
 #include <wx/imaglist.h>
 #include <wx/statbmp.h>
 #include <wx/statline.h>
@@ -42,6 +42,77 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define wxID_TAB 1000
+#define wxID_A 1001
+#define wxID_Z 1002
+#define wxID_E 1003
+#define wxID_R 1004
+#define wxID_T 1005
+#define wxID_Y 1006
+#define wxID_U 1007
+#define wxID_I 1008
+#define wxID_O 1009
+#define wxID_P 1010
+#define wxID_PIPE 1011
+#define wxID_LESS 1012
+#define wxID_RETURN 1013
+#define wxID_F4 1014
+#define wxID_F5 1015
+#define wxID_F6 1016
+#define wxID_CAPS 1017
+#define wxID_Q 1018
+#define wxID_S 1019
+#define wxID_D 1020
+#define wxID_F 1021
+#define wxID_G 1022
+#define wxID_H 1023
+#define wxID_J 1024
+#define wxID_K 1025
+#define wxID_L 1026
+#define wxID_M 1027
+#define wxID_percent 1028
+#define wxID_greater 1029
+#define wxID_F1 1030
+#define wxID_F2 1031
+#define wxID_F3 1032
+#define wxID_LSHIFT 1033
+#define wxID_W 1034
+#define wxID_X 1035
+#define wxID_C 1036
+#define wxID_V 1037
+#define wxID_B 1038
+#define wxID_N 1039
+#define wxID_question 1040
+#define wxID_dot 1041
+#define wxID_slash 1042
+#define wxID_plus 1043
+#define wxID_at 1044
+#define wxID_RSHIFT 1045
+#define wxID_F0 1046
+#define wxID_Fdot 1047
+#define wxID_CONTROL 1048
+#define wxID_SPACE 1049
+#define wxID_ENTER 1050
+#define wxID_LEFT 1051
+#define wxID_RIGHT 1052
+#define wxID_ESC 1053
+#define wxID_1 1054
+#define wxID_2 1055
+#define wxID_3 1056
+#define wxID_4 1057
+#define wxID_5 1058
+#define wxID_6 1059
+#define wxID_7 1060
+#define wxID_8 1061
+#define wxID_9 1062
+#define wxID_0 1063
+#define wxID_parenthesis 1064
+#define wxID_dash 1065
+#define wxID_clr 1066
+#define wxID_del 1067
+#define wxID_f7 1068
+#define wxID_f8 1069
+#define wxID_f9 1070
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class CapriceWindow
@@ -180,10 +251,23 @@ class InputSettings : public wxDialog
 		wxButton* k_ESC15;
 		wxButton* k_ESC16;
 		wxButton* k_ESC17;
+		wxStaticText* m_staticText65;
+		wxStaticText* m_keyName;
+		wxStaticText* m_staticText67;
+		wxTextCtrl* m_regularKey;
+		wxStaticText* m_staticText68;
+		wxTextCtrl* m_shiftKey;
+		wxStaticText* m_staticText69;
+		wxTextCtrl* m_ctrlKey;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1Save;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void onKeyClick( wxCommandEvent& event ){ event.Skip(); }
+		virtual void onKeyPress( wxKeyEvent& event ){ event.Skip(); }
+		
 	
 	public:
 		InputSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Input Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );

@@ -461,9 +461,9 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 	_GLScanlines = glScanline;
 
 #ifdef _WIN32
-	char *gl_library = "OpenGL32.DLL";
+	const char *gl_library = "OpenGL32.DLL";
 #else
-	char *gl_library = "libGL.so.1";
+	const char *gl_library = "libGL.so.1";
 #endif
 	int surface_bpp;
 	

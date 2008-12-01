@@ -52,7 +52,8 @@ am_libcapricewx_a_OBJECTS = libcapricewx_a-CapriceAboutImpl.$(OBJEXT) \
 	libcapricewx_a-CapriceApp.$(OBJEXT) \
 	libcapricewx_a-CapriceRegistersDialogImpl.$(OBJEXT) \
 	libcapricewx_a-CapriceUI.$(OBJEXT) \
-	libcapricewx_a-CapriceWindowImpl.$(OBJEXT)
+	libcapricewx_a-CapriceWindowImpl.$(OBJEXT) \
+	libcapricewx_a-CapriceInputSettingsImpl.$(OBJEXT)
 libcapricewx_a_OBJECTS = $(am_libcapricewx_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -191,7 +192,9 @@ CapriceRegistersDialogImpl.h\
 CapriceUI.cpp\
 CapriceUI.h\
 CapriceWindowImpl.cpp\
-CapriceWindowImpl.h 
+CapriceWindowImpl.h\
+CapriceInputSettingsImpl.h\
+CapriceInputSettingsImpl.cpp
 
 all: all-am
 
@@ -242,6 +245,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceAboutImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceApp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceInputSettingsImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceRegistersDialogImpl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceUI.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricewx_a-CapriceWindowImpl.Po@am__quote@
@@ -329,6 +333,20 @@ libcapricewx_a-CapriceWindowImpl.obj: CapriceWindowImpl.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceWindowImpl.cpp' object='libcapricewx_a-CapriceWindowImpl.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricewx_a-CapriceWindowImpl.obj `if test -f 'CapriceWindowImpl.cpp'; then $(CYGPATH_W) 'CapriceWindowImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceWindowImpl.cpp'; fi`
+
+libcapricewx_a-CapriceInputSettingsImpl.o: CapriceInputSettingsImpl.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libcapricewx_a-CapriceInputSettingsImpl.o -MD -MP -MF $(DEPDIR)/libcapricewx_a-CapriceInputSettingsImpl.Tpo -c -o libcapricewx_a-CapriceInputSettingsImpl.o `test -f 'CapriceInputSettingsImpl.cpp' || echo '$(srcdir)/'`CapriceInputSettingsImpl.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libcapricewx_a-CapriceInputSettingsImpl.Tpo $(DEPDIR)/libcapricewx_a-CapriceInputSettingsImpl.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceInputSettingsImpl.cpp' object='libcapricewx_a-CapriceInputSettingsImpl.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricewx_a-CapriceInputSettingsImpl.o `test -f 'CapriceInputSettingsImpl.cpp' || echo '$(srcdir)/'`CapriceInputSettingsImpl.cpp
+
+libcapricewx_a-CapriceInputSettingsImpl.obj: CapriceInputSettingsImpl.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libcapricewx_a-CapriceInputSettingsImpl.obj -MD -MP -MF $(DEPDIR)/libcapricewx_a-CapriceInputSettingsImpl.Tpo -c -o libcapricewx_a-CapriceInputSettingsImpl.obj `if test -f 'CapriceInputSettingsImpl.cpp'; then $(CYGPATH_W) 'CapriceInputSettingsImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceInputSettingsImpl.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libcapricewx_a-CapriceInputSettingsImpl.Tpo $(DEPDIR)/libcapricewx_a-CapriceInputSettingsImpl.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceInputSettingsImpl.cpp' object='libcapricewx_a-CapriceInputSettingsImpl.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricewx_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricewx_a-CapriceInputSettingsImpl.obj `if test -f 'CapriceInputSettingsImpl.cpp'; then $(CYGPATH_W) 'CapriceInputSettingsImpl.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceInputSettingsImpl.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
