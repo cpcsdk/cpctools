@@ -1,0 +1,113 @@
+	  __   __	     _ 	 
+_________/ /\ /	/\__________/ /\_______________________________________________
+_ _     / /_// / /     	   / / / _ _ _ 	       	 
+       / ___  /	/ __   	 _/ / / ___    _  _    ___
+     _/	/  / / / / /\  /   / / / _/\  //_//\  /	_/\  
+    |__/  /_/_/	/_/_/ /___/_/  \_\\/ /___/_/ /_/\\/    
+      		     __	  ___  	  	       __      	_ _ _
+      _ _ _    	    /  \_/  /\ 	   _ _ _      / /\   
+   _ _ _       	   / _ __  / / __      __    / __/\  ___    _  _    ___	
+      		  / / /	/ / / /	 /\   / /\  /  \_\/ / _/\  //_//\  / _/\ 
+      		 /_/_/ /_/_/ /___\_\ /_/_/ /_/\_\   \_\\/ /___/_/ /_/\\/ 2.0
+       	       	       _ _ _ _ 	       	_ _ _  	       _ _ _   	       	
+       	       	       	       	       	   _ _ _ 
+
+
+AITTAHAR Mounir/Downwater (c) 2002 
+Lundi 25 Mars 23:00
+
+Quoi de neuf ?
+
+- code source entièrement réécrit
+- conforme aux règles du C-ANSI 
+- lancement en ligne de commande au lieu du mode interactif
+- utilisation plus intuitive (j'imagine :)
+- "CPC rulez"
+- "PC stinks"
+
+Lisez INSTALLFR pour les instructions de compilation 
+
+I.   SYNOPSIS
+II.  UTILISATION
+III. OPTIONS
+IV.  REMERCIEMENTS ;)
+
+
+-------------------------------------------------------------------------------
+I. SYNOPSIS
+-------------------------------------------------------------------------------
+
+Conversion : hideur fichierDos -o fichierAms [-u user] [-t type]
+                               [-x adrexe] [-l adrload] [-v]
+Info :       hideur -info fichier
+Help :       hideur -h
+
+
+-------------------------------------------------------------------------------
+II. DESCRIPTION
+-------------------------------------------------------------------------------
+
+ N'avez vous jamais utilisé un trans assembleur pour les systèmes Z80 ?
+Ou un de ces convertisseurs d'images comme Graphics Wizard ? Et quand
+vous vouliez les charger sur CPC avec une commande LOAD ou SAVE
+command, ou encore en passant par les vecteurs AMSDOS, vous obteniez
+un message d'erreur. Zut alors, que se passe-t-il ?
+
+ Votre fichier a besoin d'un EN-TÊTE AMSDOS. Il s'agit de quatre-vingt
+petis octets ajoutés au début de votre fichier contenant des
+informations utiles comme le numéro de répertoire du fichier (user),
+sa taille, l'adresse de chargement (quand LOAD est invoqué sur un
+fichier binaire), adresse d'exécution (quand RUN est invoqué sur un
+fichier binaire... 
+
+ Hideur Maikeur est un petit utilitaire qui vous permet d'ajouter cet
+en-tête. Simple d'utilisation, vous pouvez l'incorporer dans un
+script (shell, dos,...) parce qu'il se lance en ligne de commande. La
+syntaxe d'appel ressemble furieusement à un célèbre compilateur C GNU :).
+
+ Hideur Maikeur utilise les codes ansi en mode verbeux. Si vous êtes
+sous MS-DOS ou Windows, ajoutez cette ligne dans le fichier
+C:\CONFIG.SYS :
+
+DEVICEHIGH=C:\WINDOWS\COMMAND\Ansi.sys
+
+ Où C:\WINDOWS\COMMAND\ est le chemin du fichier Ansi.sys. Maintenant,
+redémarrez la machine :(. 
+
+
+-------------------------------------------------------------------------------
+III. OPTIONS
+-------------------------------------------------------------------------------
+
+ Hideur Maikeur prends les options suivantes :
+
+* fichierDos    : le fichier à convertir
+* -o fichierAms : le fichier amsdos à obtenir
+* -u user       : le répertoire amsdos du fichier (0-255)
+* -t type       : le type de fichier 0 : Basic
+                                  1 : Basic Protégé
+                                  2 : Binaire
+                                  3 : Binaire protégé
+* -x adrexe     : adresse d'exécution
+* -l adrload    : adresse de chargement
+* -v            : mode verbeux, affiche le résultat
+
+ Je pense que les options parlent d'elles-mêmes, non ? :) 
+
+
+-------------------------------------------------------------------------------
+IV. REMERCIEMENTS :)
+-------------------------------------------------------------------------------
+
+
+
+* Roudoudou (roudoudou@cpcscene.com) pour les conseils et publicité;)
+* Overflow pour m'avoir donné une raison de faire cette version
+* OffseT pour le test sur Amiga et pour ses "trolls" sympathiques
+* Tous les membres de la scène CPC et les utilisateurs
+* Et tous les autres
+
+ Désolé pour les fautes s'il y en a, je fais ma propre relecture... ;)
+
+Envoyez moi les bugs relevés à <downwater@free.fr>
+Site : http://downwater.free.fr

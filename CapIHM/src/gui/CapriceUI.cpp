@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 25 2008)
+// C++ code generated with wxFormBuilder (version Dec  2 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -521,37 +521,37 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_CONTROL6 = new wxButton( m_panel8, wxID_RIGHT, wxT("→"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL6, wxGBPosition( 4, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC = new wxButton( m_panel8, wxID_ESC, wxT("ESC"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC = new wxButton( m_panel8, CPC_ESC, wxT("ESC"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC1 = new wxButton( m_panel8, wxID_1, wxT("1&&"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC1 = new wxButton( m_panel8, CPC_1, wxT("1&&"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC1, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC2 = new wxButton( m_panel8, wxID_2, wxT("2é"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC2 = new wxButton( m_panel8, CPC_2, wxT("2é"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC2, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC3 = new wxButton( m_panel8, wxID_3, wxT("3\""), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC3 = new wxButton( m_panel8, CPC_3, wxT("3\""), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC3, wxGBPosition( 0, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC4 = new wxButton( m_panel8, wxID_4, wxT("4'"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC4 = new wxButton( m_panel8, CPC_4, wxT("4'"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC4, wxGBPosition( 0, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC5 = new wxButton( m_panel8, wxID_5, wxT("5("), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC5 = new wxButton( m_panel8, CPC_5, wxT("5("), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC5, wxGBPosition( 0, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC6 = new wxButton( m_panel8, wxID_6, wxT("6]"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC6 = new wxButton( m_panel8, CPC_6, wxT("6]"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC6, wxGBPosition( 0, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC7 = new wxButton( m_panel8, wxID_7, wxT("7è"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC7 = new wxButton( m_panel8, CPC_7, wxT("7è"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC7, wxGBPosition( 0, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC8 = new wxButton( m_panel8, wxID_8, wxT("8!"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC8 = new wxButton( m_panel8, CPC_8, wxT("8!"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC8, wxGBPosition( 0, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC9 = new wxButton( m_panel8, wxID_9, wxT("9ç"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC9 = new wxButton( m_panel8, CPC_9, wxT("9ç"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC9, wxGBPosition( 0, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC10 = new wxButton( m_panel8, wxID_0, wxT("0à"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC10 = new wxButton( m_panel8, CPC_0, wxT("0à"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC10, wxGBPosition( 0, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_ESC11 = new wxButton( m_panel8, wxID_parenthesis, wxT("[)"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -633,45 +633,79 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	bSizer24->Fit( this );
 	
 	// Connect Events
+	k_TAB->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_TAB1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB2->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_TAB3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_TAB5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB6->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB8->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB10->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB12->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB13->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB15->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC2->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC6->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC7->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC8->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC9->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC10->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC11->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC12->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC13->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC14->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC15->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC16->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC17->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	m_regularKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
+	m_sdbSizer1Save->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
 }
 
 InputSettings::~InputSettings()
 {
 	// Disconnect Events
+	k_TAB->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_TAB1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB2->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_TAB3->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_TAB5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB6->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB8->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB10->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB12->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB13->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_TAB15->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC2->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC3->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC6->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC7->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC8->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC9->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC10->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC11->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC12->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC13->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC14->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC15->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_ESC16->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_ESC17->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	m_regularKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
+	m_sdbSizer1Save->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
 }
 
 DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -694,10 +728,8 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	
 	m_toolBar1 = new wxToolBar( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
 	m_checkBox1 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Show System files"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_toolBar1->AddControl( m_checkBox1 );
 	m_checkBox2 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Add/Remove Amsdos Header"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	m_toolBar1->AddControl( m_checkBox2 );
 	m_toolBar1->Realize();
 	
@@ -1182,27 +1214,21 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	fgSizer6->Add( m_staticText41, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_cB_SFlags = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_SFlags, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 1 );
 	
 	m_cB_ZFlags = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_ZFlags, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_HFlags = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_HFlags, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_PFlags = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_PFlags, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_NFlags = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_NFlags, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_CFlags = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_CFlags, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_staticText42 = new wxStaticText( m_panel4, wxID_ANY, wxT("Shadow"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -1210,27 +1236,21 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	fgSizer6->Add( m_staticText42, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_cB_SFlagsShadow = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_SFlagsShadow, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_ZFlagsShadow = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_ZFlagsShadow, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_HFlagsShadow = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_HFlagsShadow, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_PFlagsShadow = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_PFlagsShadow, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_NFlagsShadow = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_NFlagsShadow, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	m_cB_CFlagsShadow = new wxCheckBox( m_panel4, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer6->Add( m_cB_CFlagsShadow, 0, wxALIGN_CENTER_HORIZONTAL|wxALL|wxALIGN_CENTER_VERTICAL, 1 );
 	
 	sbSizer3->Add( fgSizer6, 1, wxEXPAND, 5 );
@@ -1253,11 +1273,9 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	fgSizer14->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_checkBox15 = new wxCheckBox( m_panel4, wxID_ANY, wxT("AF Register in Shadow"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer14->Add( m_checkBox15, 0, wxALL, 5 );
 	
 	m_checkBox16 = new wxCheckBox( m_panel4, wxID_ANY, wxT("General Register in Shadow Mode"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer14->Add( m_checkBox16, 0, wxALL, 5 );
 	
 	sbSizer7->Add( fgSizer14, 1, wxEXPAND, 5 );
@@ -1461,7 +1479,6 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	fgSizer121->Add( m_sT_HLineLength, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_cB_HLineLengthIsOk = new wxCheckBox( m_panel8, wxID_ANY, wxT("Timing is Ok !"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer121->Add( m_cB_HLineLengthIsOk, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_staticText61 = new wxStaticText( m_panel8, wxID_ANY, wxT("Vertical Frame Length"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -1473,7 +1490,6 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	fgSizer121->Add( m_sT_VFrameLength, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_cB_VFrameLengthIsOk = new wxCheckBox( m_panel8, wxID_ANY, wxT("Timing is Ok !"), wxDefaultPosition, wxDefaultSize, 0 );
-	
 	fgSizer121->Add( m_cB_VFrameLengthIsOk, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	sbSizer8->Add( fgSizer121, 1, wxEXPAND, 5 );

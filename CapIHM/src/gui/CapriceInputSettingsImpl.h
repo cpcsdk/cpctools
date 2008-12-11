@@ -5,17 +5,19 @@
 class CapriceInputSettingsImpl : public InputSettings
 {
     public:
-
-    CapriceInputSettingsImpl(wxWindow* WinID);
+	CapriceInputSettingsImpl(wxWindow* WinID);
+	~CapriceInputSettingsImpl();
 
     private:
 	virtual void onKeyClick(wxCommandEvent& event);
-
+	virtual void onSave(wxCommandEvent& event);
+	
+	void saveKeymap();
 	wxString keyCodeToName(int keycode);
+
 
 	typedef struct{
 	    uint16_t CPC_KeyId;
-	    wxString KeyName;
 	    int stdKeyCode;
 	    int shiftKeyCode;
 	    int ctrlKeyCode;
@@ -23,5 +25,4 @@ class CapriceInputSettingsImpl : public InputSettings
 
 	typedef std::map<int,CPC_Key> CPC_Keymap;
 	CPC_Keymap keymap;
-
 };

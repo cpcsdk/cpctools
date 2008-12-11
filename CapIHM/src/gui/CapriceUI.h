@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 25 2008)
+// C++ code generated with wxFormBuilder (version Dec  2 2008)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -41,78 +41,6 @@
 #include <wx/statbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
-
-#define wxID_TAB 1000
-#define wxID_A 1001
-#define wxID_Z 1002
-#define wxID_E 1003
-#define wxID_R 1004
-#define wxID_T 1005
-#define wxID_Y 1006
-#define wxID_U 1007
-#define wxID_I 1008
-#define wxID_O 1009
-#define wxID_P 1010
-#define wxID_PIPE 1011
-#define wxID_LESS 1012
-#define wxID_RETURN 1013
-#define wxID_F4 1014
-#define wxID_F5 1015
-#define wxID_F6 1016
-#define wxID_CAPS 1017
-#define wxID_Q 1018
-#define wxID_S 1019
-#define wxID_D 1020
-#define wxID_F 1021
-#define wxID_G 1022
-#define wxID_H 1023
-#define wxID_J 1024
-#define wxID_K 1025
-#define wxID_L 1026
-#define wxID_M 1027
-#define wxID_percent 1028
-#define wxID_greater 1029
-#define wxID_F1 1030
-#define wxID_F2 1031
-#define wxID_F3 1032
-#define wxID_LSHIFT 1033
-#define wxID_W 1034
-#define wxID_X 1035
-#define wxID_C 1036
-#define wxID_V 1037
-#define wxID_B 1038
-#define wxID_N 1039
-#define wxID_question 1040
-#define wxID_dot 1041
-#define wxID_slash 1042
-#define wxID_plus 1043
-#define wxID_at 1044
-#define wxID_RSHIFT 1045
-#define wxID_F0 1046
-#define wxID_Fdot 1047
-#define wxID_CONTROL 1048
-#define wxID_SPACE 1049
-#define wxID_ENTER 1050
-#define wxID_LEFT 1051
-#define wxID_RIGHT 1052
-#define wxID_ESC 1053
-#define wxID_1 1054
-#define wxID_2 1055
-#define wxID_3 1056
-#define wxID_4 1057
-#define wxID_5 1058
-#define wxID_6 1059
-#define wxID_7 1060
-#define wxID_8 1061
-#define wxID_9 1062
-#define wxID_0 1063
-#define wxID_parenthesis 1064
-#define wxID_dash 1065
-#define wxID_clr 1066
-#define wxID_del 1067
-#define wxID_f7 1068
-#define wxID_f8 1069
-#define wxID_f9 1070
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class CapriceWindow
@@ -158,6 +86,7 @@ class CapriceWindow : public wxFrame
 		
 	
 	public:
+		
 		CapriceWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("CapriceReloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxTAB_TRAVERSAL, const wxString& name = wxT("CapriceMainWindow") );
 		~CapriceWindow();
 	
@@ -267,9 +196,11 @@ class InputSettings : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void onKeyClick( wxCommandEvent& event ){ event.Skip(); }
 		virtual void onKeyPress( wxKeyEvent& event ){ event.Skip(); }
+		virtual void onSave( wxCommandEvent& event ){ event.Skip(); }
 		
 	
 	public:
+		
 		InputSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Input Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );
 		~InputSettings();
 	
@@ -298,6 +229,7 @@ class DiscEditor : public wxDialog
 		wxTextCtrl* m_textCtrl78;
 	
 	public:
+		
 		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 643,345 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~DiscEditor();
 	
@@ -319,6 +251,7 @@ class FileProperties : public wxDialog
 		wxStaticLine* m_staticline2;
 	
 	public:
+		
 		FileProperties( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 411,367 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~FileProperties();
 	
@@ -343,6 +276,7 @@ class CapriceAbout : public wxDialog
 		
 	
 	public:
+		
 		CapriceAbout( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("About CapriceReloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~CapriceAbout();
 	
@@ -542,6 +476,7 @@ class RegistersStates : public wxDialog
 		
 	
 	public:
+		
 		RegistersStates( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Registers States"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~RegistersStates();
 	
@@ -557,6 +492,7 @@ class Memory : public wxDialog
 	protected:
 	
 	public:
+		
 		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 		~Memory();
 	
@@ -580,6 +516,7 @@ class ConfigDialog : public wxDialog
 		
 	
 	public:
+		
 		ConfigDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Configuration"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 		~ConfigDialog();
 	

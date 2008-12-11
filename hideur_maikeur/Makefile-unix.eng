@@ -3,24 +3,22 @@
 CC=gcc
 FLAGS= -Wall -ansi -pedantic
 TMPFILES = *.o *~
-
-OS=-DDOS # ascii fix if dos is the plattforms
+DIR=Hideur2.0
+FILES=INSTALL README hideur
+ARCHIVE=hideur-linux.eng
 
 LG= -DENG # Choose your Language
-#LG=-DFRENCH
 
-EXE=hideur # Choose the executable name
-#EXE=hideur.exe
+EXE=hideur # choose executable name
 
-CLEANCMD=rm -f# the clean command (MS-DOS)
-#CLEANCMD=del
+CLEANCMD=rm -f # the clean command (Unix, Linux...)
 
 # Datas which should'nt be edited
 
 #DEBUG=-DDBG
 
 hideur : header.o main.o
-	$(CC) -o $(EXE) header.o main.o $(FLAGS) $(LG) $(OS) $(DEBUG)
+	$(CC) -o $(EXE) header.o main.o $(FLAGS) $(LG) $(DEBUG)
 	@echo Ok...
 	@hideur
 
@@ -37,7 +35,18 @@ clean :
 superclean :
 	@$(CLEANCMD) $(TMPFILES) $(EXE)
 
+install :
+	mkdir $(DIR)
+	cp $(FILES) $(DIR)
+	tar xvfz $(ARCHIVE) $(DIR)
+	rm -fr DIR
+
 idiot :
 	@echo Agaaaa...gagaga.
 
-
+tar :
+	@echo "Creating archive" $(ARCHIVE).tar.gz ...
+	@mkdir $(DIR)
+	@cp $(FILES) $(DIR)
+	@tar cvfz $(ARCHIVE).tar.gz  $(DIR) > /dev/null
+	@rm -fr $(DIR)
