@@ -10,6 +10,7 @@ class CapriceInputSettingsImpl : public InputSettings
 
     private:
 	virtual void onKeyClick(wxCommandEvent& event);
+	virtual void onKeyPress(wxKeyEvent& event);
 	virtual void onSave(wxCommandEvent& event);
 	
 	void saveKeymap();
@@ -17,12 +18,12 @@ class CapriceInputSettingsImpl : public InputSettings
 
 
 	typedef struct{
-	    uint16_t CPC_KeyId;
 	    int stdKeyCode;
 	    int shiftKeyCode;
 	    int ctrlKeyCode;
 	} CPC_Key;
 
-	typedef std::map<int,CPC_Key> CPC_Keymap;
+	typedef std::map<uint16_t,CPC_Key> CPC_Keymap;
 	CPC_Keymap keymap;
+	CPC_Keymap::iterator iter;
 };

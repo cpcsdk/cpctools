@@ -1,27 +1,34 @@
 #include <iostream>
+#include <sstream>
 #include <fstream>
 
 #include "CapriceInputSettingsImpl.h"
 #include "input.h"
+#include "CPCKeyDefs.h"
 
 CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
     InputSettings(WinID)
 {
-    // TODO : Init the keymap from the config file and a static table of wxID > CPC_id
-
+    std::ifstream file;
     CPC_Key tmpk;
+    uint16_t kid;
+    std::string line;
+    std::istringstream iss;
 
-    tmpk.CPC_KeyId = CPC_ESC;
-    tmpk.stdKeyCode = WXK_ESCAPE;
-    tmpk.shiftKeyCode = WXK_ESCAPE;
-    tmpk.ctrlKeyCode = WXK_ESCAPE;
-    keymap.insert(std::pair<int, CPC_Key>(wxID_ESC, tmpk));
+    file.open("Keymap.cfg");
 
-    tmpk.CPC_KeyId = CPC_1;
-    tmpk.stdKeyCode = '1';
-    tmpk.shiftKeyCode = '1';
-    tmpk.ctrlKeyCode = '1';
-    keymap.insert(std::pair<int, CPC_Key>(wxID_1, tmpk));
+    while(getline(file,line))
+    {
+	iss.str(line);
+	iss >> kid;
+	iss >> tmpk.stdKeyCode;
+	iss >> tmpk.shiftKeyCode;
+	iss >> tmpk.ctrlKeyCode;
+
+	iss.clear();
+	
+	keymap.insert(std::pair<int, CPC_Key>(kid, tmpk));
+    }
 }
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
@@ -33,7 +40,7 @@ void CapriceInputSettingsImpl::onKeyClick(wxCommandEvent& event)
 {
     m_keyName->SetLabel(dynamic_cast<wxButton*>(event.GetEventObject())->GetLabel());
 
-    CPC_Keymap::iterator iter = keymap.find(event.GetId());
+    iter = keymap.find(event.GetId());
     if( iter != keymap.end() )
     {
 	m_regularKey->SetValue(keyCodeToName(iter->second.stdKeyCode));
@@ -43,14 +50,20 @@ void CapriceInputSettingsImpl::onKeyClick(wxCommandEvent& event)
 	std::cout << "Warning : key not found in keymap ! Adding it ..." << std::endl;
 	CPC_Key tmpk;
 
-	tmpk.CPC_KeyId = 9999 ; // Valeur bidon, pour bien faire comprendre a l'utilisateur que ça peut pas marcher
 	tmpk.stdKeyCode = 0;
 	tmpk.shiftKeyCode = 0;
 	tmpk.ctrlKeyCode = 0;
 
 	keymap.insert(std::pair<int,CPC_Key>(event.GetId(),tmpk));
-
+	iter = keymap.find(event.GetId()); // iter pointe sur l'élément cliqué, on va pouvoir le modifier 
+					   // dans key_pressed
     }
+}
+
+void CapriceInputSettingsImpl::onKeyPress(wxKeyEvent& event)
+{
+    m_regularKey->SetValue(event.GetUnicodeKey());
+    iter->second.stdKeyCode = event.GetKeyCode();
 }
 
 void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
@@ -66,7 +79,8 @@ void CapriceInputSettingsImpl::saveKeymap()
 
     for(CPC_Keymap::iterator iter=keymap.begin();iter!=keymap.end();iter++)
     {
-	file << iter->first << "," << iter->second.CPC_KeyId << "," << iter->second.stdKeyCode << "\n";
+	file << iter->first << " " << iter->second.stdKeyCode << " " << iter->second.shiftKeyCode 
+			    << " " << iter->second.ctrlKeyCode << std::endl;
     }
 
     file.close();
