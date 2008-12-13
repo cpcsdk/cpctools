@@ -53,18 +53,17 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am__caprice_SOURCES_DIST = gui/video.cpp gui/input.cpp \
-	core/emulator.cpp aylet/sound.cc aylet/sound.h \
-	aylet/drv-oss.cc aylet/driver.h
+am__caprice_SOURCES_DIST = gui/video.cpp core/emulator.cpp \
+	aylet/sound.cc aylet/sound.h aylet/drv-oss.cc aylet/driver.h
 @AYLET_TRUE@am__objects_1 = caprice-sound.$(OBJEXT) \
 @AYLET_TRUE@	caprice-drv-oss.$(OBJEXT)
-am_caprice_OBJECTS = caprice-video.$(OBJEXT) caprice-input.$(OBJEXT) \
+am_caprice_OBJECTS = caprice-video.$(OBJEXT) \
 	caprice-emulator.$(OBJEXT) $(am__objects_1)
 caprice_OBJECTS = $(am_caprice_OBJECTS)
 am__DEPENDENCIES_1 =
 caprice_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) gui/libcapricewx.a \
-	core/libcapricecore.a
+	core/libcapricecore.a gui/libfoo.a
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -201,11 +200,10 @@ top_srcdir = @top_srcdir@
 SUBDIRS = core gui
 
 #TODO : achieve to put the compilation of first 2files in libcapricewx.a and the other in libcapricecore.a
-caprice_SOURCES = gui/video.cpp gui/input.cpp core/emulator.cpp \
-	$(am__append_2)
+caprice_SOURCES = gui/video.cpp core/emulator.cpp $(am__append_2)
 caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui \
 	$(am__append_1) $(am__append_3)
-caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -L/usr/local/lib -l765 -ldsk gui/libcapricewx.a core/libcapricecore.a 
+caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -L/usr/local/lib -l765 -ldsk gui/libcapricewx.a core/libcapricecore.a gui/libfoo.a 
 all: all-recursive
 
 .SUFFIXES:
@@ -274,7 +272,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-drv-oss.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-emulator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-input.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-sound.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/caprice-video.Po@am__quote@
 
@@ -305,20 +302,6 @@ caprice-video.obj: gui/video.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gui/video.cpp' object='caprice-video.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-video.obj `if test -f 'gui/video.cpp'; then $(CYGPATH_W) 'gui/video.cpp'; else $(CYGPATH_W) '$(srcdir)/gui/video.cpp'; fi`
-
-caprice-input.o: gui/input.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-input.o -MD -MP -MF $(DEPDIR)/caprice-input.Tpo -c -o caprice-input.o `test -f 'gui/input.cpp' || echo '$(srcdir)/'`gui/input.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-input.Tpo $(DEPDIR)/caprice-input.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gui/input.cpp' object='caprice-input.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-input.o `test -f 'gui/input.cpp' || echo '$(srcdir)/'`gui/input.cpp
-
-caprice-input.obj: gui/input.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-input.obj -MD -MP -MF $(DEPDIR)/caprice-input.Tpo -c -o caprice-input.obj `if test -f 'gui/input.cpp'; then $(CYGPATH_W) 'gui/input.cpp'; else $(CYGPATH_W) '$(srcdir)/gui/input.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/caprice-input.Tpo $(DEPDIR)/caprice-input.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='gui/input.cpp' object='caprice-input.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o caprice-input.obj `if test -f 'gui/input.cpp'; then $(CYGPATH_W) 'gui/input.cpp'; else $(CYGPATH_W) '$(srcdir)/gui/input.cpp'; fi`
 
 caprice-emulator.o: core/emulator.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(caprice_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT caprice-emulator.o -MD -MP -MF $(DEPDIR)/caprice-emulator.Tpo -c -o caprice-emulator.o `test -f 'core/emulator.cpp' || echo '$(srcdir)/'`core/emulator.cpp

@@ -46,7 +46,8 @@ AR = ar
 ARFLAGS = cru
 libfoo_a_AR = $(AR) $(ARFLAGS)
 libfoo_a_LIBADD =
-am_libfoo_a_OBJECTS = libfoo_a-CapriceUI.$(OBJEXT)
+am_libfoo_a_OBJECTS = libfoo_a-CapriceUI.$(OBJEXT) \
+	libfoo_a-input.$(OBJEXT)
 libfoo_a_OBJECTS = $(am_libfoo_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -190,7 +191,7 @@ CapriceInputSettingsImpl.cpp
 #video.cpp \
 #input.cpp
 libcapricewx_a_LDADD = libfoo.a
-libfoo_a_SOURCES = CapriceUI.cpp CapriceUI.h
+libfoo_a_SOURCES = CapriceUI.cpp CapriceUI.h input.cpp
 libfoo_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\" -include CPCKeyDefs.h 
 all: all-am
 
@@ -240,6 +241,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfoo_a-CapriceUI.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfoo_a-input.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -268,6 +270,20 @@ libfoo_a-CapriceUI.obj: CapriceUI.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CapriceUI.cpp' object='libfoo_a-CapriceUI.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libfoo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libfoo_a-CapriceUI.obj `if test -f 'CapriceUI.cpp'; then $(CYGPATH_W) 'CapriceUI.cpp'; else $(CYGPATH_W) '$(srcdir)/CapriceUI.cpp'; fi`
+
+libfoo_a-input.o: input.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libfoo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libfoo_a-input.o -MD -MP -MF $(DEPDIR)/libfoo_a-input.Tpo -c -o libfoo_a-input.o `test -f 'input.cpp' || echo '$(srcdir)/'`input.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libfoo_a-input.Tpo $(DEPDIR)/libfoo_a-input.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='input.cpp' object='libfoo_a-input.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libfoo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libfoo_a-input.o `test -f 'input.cpp' || echo '$(srcdir)/'`input.cpp
+
+libfoo_a-input.obj: input.cpp
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libfoo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libfoo_a-input.obj -MD -MP -MF $(DEPDIR)/libfoo_a-input.Tpo -c -o libfoo_a-input.obj `if test -f 'input.cpp'; then $(CYGPATH_W) 'input.cpp'; else $(CYGPATH_W) '$(srcdir)/input.cpp'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libfoo_a-input.Tpo $(DEPDIR)/libfoo_a-input.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='input.cpp' object='libfoo_a-input.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libfoo_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libfoo_a-input.obj `if test -f 'input.cpp'; then $(CYGPATH_W) 'input.cpp'; else $(CYGPATH_W) '$(srcdir)/input.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

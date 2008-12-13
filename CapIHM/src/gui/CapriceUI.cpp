@@ -353,172 +353,172 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	k_TAB = new wxButton( m_panel8, wxID_TAB, wxT("TAB"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB = new wxButton( m_panel8, CPC_TAB, wxT("TAB"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB, wxGBPosition( 1, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
-	k_TAB1 = new wxButton( m_panel8, wxID_A, wxT("A"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB1 = new wxButton( m_panel8, CPC_A, wxT("A"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB1, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB2 = new wxButton( m_panel8, wxID_Z, wxT("Z"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB2 = new wxButton( m_panel8, CPC_Z, wxT("Z"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB2, wxGBPosition( 1, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB3 = new wxButton( m_panel8, wxID_E, wxT("E"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB3 = new wxButton( m_panel8, CPC_E, wxT("E"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB3, wxGBPosition( 1, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB4 = new wxButton( m_panel8, wxID_R, wxT("R"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB4 = new wxButton( m_panel8, CPC_R, wxT("R"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB4, wxGBPosition( 1, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB5 = new wxButton( m_panel8, wxID_T, wxT("T"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB5 = new wxButton( m_panel8, CPC_T, wxT("T"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB5, wxGBPosition( 1, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB6 = new wxButton( m_panel8, wxID_Y, wxT("Y"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB6 = new wxButton( m_panel8, CPC_Y, wxT("Y"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB6, wxGBPosition( 1, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB7 = new wxButton( m_panel8, wxID_U, wxT("U"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB7 = new wxButton( m_panel8, CPC_U, wxT("U"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB7, wxGBPosition( 1, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB8 = new wxButton( m_panel8, wxID_I, wxT("I"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB8 = new wxButton( m_panel8, CPC_I, wxT("I"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB8, wxGBPosition( 1, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB9 = new wxButton( m_panel8, wxID_O, wxT("O"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB9 = new wxButton( m_panel8, CPC_O, wxT("O"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB9, wxGBPosition( 1, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB10 = new wxButton( m_panel8, wxID_P, wxT("P"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB10 = new wxButton( m_panel8, CPC_P, wxT("P"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB10, wxGBPosition( 1, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB11 = new wxButton( m_panel8, wxID_PIPE, wxT("|^"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB11 = new wxButton( m_panel8, CPC_PIPE, wxT("|^"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB11, wxGBPosition( 1, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB12 = new wxButton( m_panel8, wxID_LESS, wxT("<*"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB12 = new wxButton( m_panel8, CPC_LESS, wxT("<*"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB12, wxGBPosition( 1, 13 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB13 = new wxButton( m_panel8, wxID_RETURN, wxT("↵"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB13 = new wxButton( m_panel8, CPC_RETURN, wxT("↵"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB13, wxGBPosition( 1, 14 ), wxGBSpan( 2, 1 ), wxEXPAND, 5 );
 	
-	k_TAB14 = new wxButton( m_panel8, wxID_F4, wxT("F4"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB14 = new wxButton( m_panel8, CPC_F4, wxT("F4"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB14, wxGBPosition( 1, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB15 = new wxButton( m_panel8, wxID_F5, wxT("F5"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB15 = new wxButton( m_panel8, CPC_F5, wxT("F5"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB15, wxGBPosition( 1, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB16 = new wxButton( m_panel8, wxID_F6, wxT("F6"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB16 = new wxButton( m_panel8, CPC_F6, wxT("F6"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB16, wxGBPosition( 1, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS = new wxButton( m_panel8, wxID_CAPS, wxT("CAPS"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS = new wxButton( m_panel8, CPC_CAPSLOCK, wxT("CAPS"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
-	k_CAPS1 = new wxButton( m_panel8, wxID_Q, wxT("Q"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS1 = new wxButton( m_panel8, CPC_Q, wxT("Q"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS1, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS2 = new wxButton( m_panel8, wxID_S, wxT("S"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS2 = new wxButton( m_panel8, CPC_S, wxT("S"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS2, wxGBPosition( 2, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS3 = new wxButton( m_panel8, wxID_D, wxT("D"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS3 = new wxButton( m_panel8, CPC_D, wxT("D"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS3, wxGBPosition( 2, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS4 = new wxButton( m_panel8, wxID_F, wxT("F"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS4 = new wxButton( m_panel8, CPC_F, wxT("F"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS4, wxGBPosition( 2, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS5 = new wxButton( m_panel8, wxID_G, wxT("G"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS5 = new wxButton( m_panel8, CPC_G, wxT("G"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS5, wxGBPosition( 2, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS6 = new wxButton( m_panel8, wxID_H, wxT("H"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS6 = new wxButton( m_panel8, CPC_H, wxT("H"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS6, wxGBPosition( 2, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS7 = new wxButton( m_panel8, wxID_J, wxT("J"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS7 = new wxButton( m_panel8, CPC_J, wxT("J"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS7, wxGBPosition( 2, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS8 = new wxButton( m_panel8, wxID_K, wxT("K"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS8 = new wxButton( m_panel8, CPC_K, wxT("K"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS8, wxGBPosition( 2, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS9 = new wxButton( m_panel8, wxID_L, wxT("L"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS9 = new wxButton( m_panel8, CPC_L, wxT("L"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS9, wxGBPosition( 2, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS10 = new wxButton( m_panel8, wxID_M, wxT("M"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS10 = new wxButton( m_panel8, CPC_M, wxT("M"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS10, wxGBPosition( 2, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS11 = new wxButton( m_panel8, wxID_percent, wxT("%ù"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS11 = new wxButton( m_panel8, CPC_PERCENT, wxT("%ù"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS11, wxGBPosition( 2, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS12 = new wxButton( m_panel8, wxID_greater, wxT(">#"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS12 = new wxButton( m_panel8, CPC_GREATER, wxT(">#"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS12, wxGBPosition( 2, 13 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS13 = new wxButton( m_panel8, wxID_F1, wxT("F1"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS13 = new wxButton( m_panel8, CPC_F1, wxT("F1"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS13, wxGBPosition( 2, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS14 = new wxButton( m_panel8, wxID_F2, wxT("F2"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS14 = new wxButton( m_panel8, CPC_F2, wxT("F2"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS14, wxGBPosition( 2, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS15 = new wxButton( m_panel8, wxID_F3, wxT("F3"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS15 = new wxButton( m_panel8, CPC_F3, wxT("F3"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS15, wxGBPosition( 2, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT = new wxButton( m_panel8, wxID_LSHIFT, wxT("SHIFT"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT = new wxButton( m_panel8, CPC_LSHIFT, wxT("SHIFT"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
-	k_LSHIFT1 = new wxButton( m_panel8, wxID_W, wxT("W"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT1 = new wxButton( m_panel8, CPC_W, wxT("W"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT1, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT2 = new wxButton( m_panel8, wxID_X, wxT("X"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT2 = new wxButton( m_panel8, CPC_X, wxT("X"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT2, wxGBPosition( 3, 3 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT3 = new wxButton( m_panel8, wxID_C, wxT("C"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT3 = new wxButton( m_panel8, CPC_C, wxT("C"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT3, wxGBPosition( 3, 4 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT4 = new wxButton( m_panel8, wxID_V, wxT("V"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT4 = new wxButton( m_panel8, CPC_V, wxT("V"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT4, wxGBPosition( 3, 5 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT5 = new wxButton( m_panel8, wxID_B, wxT("B"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT5 = new wxButton( m_panel8, CPC_B, wxT("B"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT5, wxGBPosition( 3, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT6 = new wxButton( m_panel8, wxID_N, wxT("N"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT6 = new wxButton( m_panel8, CPC_N, wxT("N"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT6, wxGBPosition( 3, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT7 = new wxButton( m_panel8, wxID_question, wxT("?,"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT7 = new wxButton( m_panel8, CPC_QUESTION, wxT("?,"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT7, wxGBPosition( 3, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT8 = new wxButton( m_panel8, wxID_dot, wxT(".;"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT8 = new wxButton( m_panel8, CPC_PERIOD, wxT(".;"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT8, wxGBPosition( 3, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT9 = new wxButton( m_panel8, wxID_slash, wxT("/:"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT9 = new wxButton( m_panel8, CPC_SLASH, wxT("/:"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT9, wxGBPosition( 3, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT10 = new wxButton( m_panel8, wxID_plus, wxT("+="), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT10 = new wxButton( m_panel8, CPC_PLUS, wxT("+="), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT10, wxGBPosition( 3, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT11 = new wxButton( m_panel8, wxID_at, wxT("@\\$"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT11 = new wxButton( m_panel8, CPC_AT, wxT("@\\$"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT11, wxGBPosition( 3, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT12 = new wxButton( m_panel8, wxID_RSHIFT, wxT("SHIFT"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT12 = new wxButton( m_panel8, CPC_RSHIFT, wxT("SHIFT"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT12, wxGBPosition( 3, 13 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
-	k_LSHIFT13 = new wxButton( m_panel8, wxID_F0, wxT("F0"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT13 = new wxButton( m_panel8, CPC_F0, wxT("F0"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT13, wxGBPosition( 3, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT14 = new wxButton( m_panel8, wxID_UP, wxT("↑"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT14 = new wxButton( m_panel8, CPC_CUR_UP, wxT("↑"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT14, wxGBPosition( 3, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT15 = new wxButton( m_panel8, wxID_Fdot, wxT("."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT15 = new wxButton( m_panel8, CPC_FPERIOD, wxT("."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT15, wxGBPosition( 3, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CONTROL = new wxButton( m_panel8, wxID_CONTROL, wxT("CONTROL"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL = new wxButton( m_panel8, CPC_CONTROL, wxT("CONTROL"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL, wxGBPosition( 4, 0 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
 	k_CONTROL1 = new wxButton( m_panel8, wxID_COPY, wxT("COPY"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL1, wxGBPosition( 4, 2 ), wxGBSpan( 1, 2 ), wxEXPAND, 5 );
 	
-	k_CONTROL2 = new wxButton( m_panel8, wxID_SPACE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL2 = new wxButton( m_panel8, CPC_SPACE, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL2, wxGBPosition( 4, 4 ), wxGBSpan( 1, 8 ), wxEXPAND, 5 );
 	
-	k_CONTROL3 = new wxButton( m_panel8, wxID_ENTER, wxT("ENTER"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL3 = new wxButton( m_panel8, CPC_ENTER, wxT("ENTER"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL3, wxGBPosition( 4, 12 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 	
-	k_CONTROL4 = new wxButton( m_panel8, wxID_LEFT, wxT("←"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL4 = new wxButton( m_panel8, CPC_CUR_LEFT, wxT("←"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL4, wxGBPosition( 4, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CONTROL5 = new wxButton( m_panel8, wxID_DOWN, wxT("↓"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL5 = new wxButton( m_panel8, CPC_CUR_DOWN, wxT("↓"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL5, wxGBPosition( 4, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CONTROL6 = new wxButton( m_panel8, wxID_RIGHT, wxT("→"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL6 = new wxButton( m_panel8, CPC_CUR_RIGHT, wxT("→"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL6, wxGBPosition( 4, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_ESC = new wxButton( m_panel8, CPC_ESC, wxT("ESC"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -554,25 +554,25 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_ESC10 = new wxButton( m_panel8, CPC_0, wxT("0à"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC10, wxGBPosition( 0, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC11 = new wxButton( m_panel8, wxID_parenthesis, wxT("[)"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC11 = new wxButton( m_panel8, CPC_LBRACKET, wxT("[)"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC11, wxGBPosition( 0, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC12 = new wxButton( m_panel8, wxID_dash, wxT("_-"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC12 = new wxButton( m_panel8, CPC_UNDERSCORE, wxT("_-"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC12, wxGBPosition( 0, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC13 = new wxButton( m_panel8, wxID_clr, wxT("CLR"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC13 = new wxButton( m_panel8, CPC_CLR, wxT("CLR"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC13, wxGBPosition( 0, 13 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC14 = new wxButton( m_panel8, wxID_del, wxT("DEL"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC14 = new wxButton( m_panel8, CPC_DEL, wxT("DEL"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC14, wxGBPosition( 0, 14 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC15 = new wxButton( m_panel8, wxID_f7, wxT("F7"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC15 = new wxButton( m_panel8, CPC_F7, wxT("F7"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC15, wxGBPosition( 0, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC16 = new wxButton( m_panel8, wxID_f8, wxT("F8"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC16 = new wxButton( m_panel8, CPC_F8, wxT("F8"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC16, wxGBPosition( 0, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC17 = new wxButton( m_panel8, wxID_f9, wxT("F9"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC17 = new wxButton( m_panel8, CPC_F9, wxT("F9"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC17, wxGBPosition( 0, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	bSizer26->Add( gbSizer1, 0, wxEXPAND, 5 );

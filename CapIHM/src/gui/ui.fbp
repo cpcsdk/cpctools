@@ -1449,7 +1449,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_TAB</property>
+                                                    <property name="id">CPC_TAB</property>
                                                     <property name="label">TAB</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1626,7 +1626,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_E</property>
+                                                    <property name="id">CPC_E</property>
                                                     <property name="label">E</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1685,7 +1685,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_R</property>
+                                                    <property name="id">CPC_R</property>
                                                     <property name="label">R</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1744,7 +1744,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_T</property>
+                                                    <property name="id">CPC_T</property>
                                                     <property name="label">T</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1803,7 +1803,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_Y</property>
+                                                    <property name="id">CPC_Y</property>
                                                     <property name="label">Y</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1862,7 +1862,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_U</property>
+                                                    <property name="id">CPC_U</property>
                                                     <property name="label">U</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1921,7 +1921,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_I</property>
+                                                    <property name="id">CPC_I</property>
                                                     <property name="label">I</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1980,7 +1980,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_O</property>
+                                                    <property name="id">CPC_O</property>
                                                     <property name="label">O</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2039,7 +2039,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_P</property>
+                                                    <property name="id">CPC_P</property>
                                                     <property name="label">P</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2098,7 +2098,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_PIPE</property>
+                                                    <property name="id">CPC_PIPE</property>
                                                     <property name="label">|^</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2157,7 +2157,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_LESS</property>
+                                                    <property name="id">CPC_LESS</property>
                                                     <property name="label">&lt;*</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2216,7 +2216,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_RETURN</property>
+                                                    <property name="id">CPC_RETURN</property>
                                                     <property name="label">↵</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2275,7 +2275,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F4</property>
+                                                    <property name="id">CPC_F4</property>
                                                     <property name="label">F4</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2334,7 +2334,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F5</property>
+                                                    <property name="id">CPC_F5</property>
                                                     <property name="label">F5</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2393,7 +2393,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F6</property>
+                                                    <property name="id">CPC_F6</property>
                                                     <property name="label">F6</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2452,7 +2452,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_CAPS</property>
+                                                    <property name="id">CPC_CAPSLOCK</property>
                                                     <property name="label">CAPS</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2511,7 +2511,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_Q</property>
+                                                    <property name="id">CPC_Q</property>
                                                     <property name="label">Q</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2570,7 +2570,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_S</property>
+                                                    <property name="id">CPC_S</property>
                                                     <property name="label">S</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2629,7 +2629,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_D</property>
+                                                    <property name="id">CPC_D</property>
                                                     <property name="label">D</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2688,7 +2688,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F</property>
+                                                    <property name="id">CPC_F</property>
                                                     <property name="label">F</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2747,7 +2747,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_G</property>
+                                                    <property name="id">CPC_G</property>
                                                     <property name="label">G</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2806,7 +2806,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_H</property>
+                                                    <property name="id">CPC_H</property>
                                                     <property name="label">H</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2865,7 +2865,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_J</property>
+                                                    <property name="id">CPC_J</property>
                                                     <property name="label">J</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2924,7 +2924,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_K</property>
+                                                    <property name="id">CPC_K</property>
                                                     <property name="label">K</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2983,7 +2983,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_L</property>
+                                                    <property name="id">CPC_L</property>
                                                     <property name="label">L</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3042,7 +3042,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_M</property>
+                                                    <property name="id">CPC_M</property>
                                                     <property name="label">M</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3101,7 +3101,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_percent</property>
+                                                    <property name="id">CPC_PERCENT</property>
                                                     <property name="label">%ù</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3160,7 +3160,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_greater</property>
+                                                    <property name="id">CPC_GREATER</property>
                                                     <property name="label">&gt;#</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3219,7 +3219,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F1</property>
+                                                    <property name="id">CPC_F1</property>
                                                     <property name="label">F1</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3278,7 +3278,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F2</property>
+                                                    <property name="id">CPC_F2</property>
                                                     <property name="label">F2</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3337,7 +3337,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F3</property>
+                                                    <property name="id">CPC_F3</property>
                                                     <property name="label">F3</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3396,7 +3396,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_LSHIFT</property>
+                                                    <property name="id">CPC_LSHIFT</property>
                                                     <property name="label">SHIFT</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3455,7 +3455,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_W</property>
+                                                    <property name="id">CPC_W</property>
                                                     <property name="label">W</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3514,7 +3514,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_X</property>
+                                                    <property name="id">CPC_X</property>
                                                     <property name="label">X</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3573,7 +3573,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_C</property>
+                                                    <property name="id">CPC_C</property>
                                                     <property name="label">C</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3632,7 +3632,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_V</property>
+                                                    <property name="id">CPC_V</property>
                                                     <property name="label">V</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3691,7 +3691,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_B</property>
+                                                    <property name="id">CPC_B</property>
                                                     <property name="label">B</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3750,7 +3750,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_N</property>
+                                                    <property name="id">CPC_N</property>
                                                     <property name="label">N</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3809,7 +3809,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_question</property>
+                                                    <property name="id">CPC_QUESTION</property>
                                                     <property name="label">?,</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3868,7 +3868,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_dot</property>
+                                                    <property name="id">CPC_PERIOD</property>
                                                     <property name="label">.;</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3927,7 +3927,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_slash</property>
+                                                    <property name="id">CPC_SLASH</property>
                                                     <property name="label">/:</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3986,7 +3986,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_plus</property>
+                                                    <property name="id">CPC_PLUS</property>
                                                     <property name="label">+=</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4045,7 +4045,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_at</property>
+                                                    <property name="id">CPC_AT</property>
                                                     <property name="label">@\$</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4104,7 +4104,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_RSHIFT</property>
+                                                    <property name="id">CPC_RSHIFT</property>
                                                     <property name="label">SHIFT</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4163,7 +4163,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_F0</property>
+                                                    <property name="id">CPC_F0</property>
                                                     <property name="label">F0</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4222,7 +4222,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_UP</property>
+                                                    <property name="id">CPC_CUR_UP</property>
                                                     <property name="label">↑</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4281,7 +4281,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_Fdot</property>
+                                                    <property name="id">CPC_FPERIOD</property>
                                                     <property name="label">.</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4340,7 +4340,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_CONTROL</property>
+                                                    <property name="id">CPC_CONTROL</property>
                                                     <property name="label">CONTROL</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4458,7 +4458,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_SPACE</property>
+                                                    <property name="id">CPC_SPACE</property>
                                                     <property name="label"></property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4517,7 +4517,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_ENTER</property>
+                                                    <property name="id">CPC_ENTER</property>
                                                     <property name="label">ENTER</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4576,7 +4576,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_LEFT</property>
+                                                    <property name="id">CPC_CUR_LEFT</property>
                                                     <property name="label">←</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4635,7 +4635,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_DOWN</property>
+                                                    <property name="id">CPC_CUR_DOWN</property>
                                                     <property name="label">↓</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4694,7 +4694,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_RIGHT</property>
+                                                    <property name="id">CPC_CUR_RIGHT</property>
                                                     <property name="label">→</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5402,7 +5402,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_parenthesis</property>
+                                                    <property name="id">CPC_LBRACKET</property>
                                                     <property name="label">[)</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5461,7 +5461,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_dash</property>
+                                                    <property name="id">CPC_UNDERSCORE</property>
                                                     <property name="label">_-</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5520,7 +5520,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_clr</property>
+                                                    <property name="id">CPC_CLR</property>
                                                     <property name="label">CLR</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5579,7 +5579,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_del</property>
+                                                    <property name="id">CPC_DEL</property>
                                                     <property name="label">DEL</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5638,7 +5638,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_f7</property>
+                                                    <property name="id">CPC_F7</property>
                                                     <property name="label">F7</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5697,7 +5697,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_f8</property>
+                                                    <property name="id">CPC_F8</property>
                                                     <property name="label">F8</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5756,7 +5756,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">wxID_f9</property>
+                                                    <property name="id">CPC_F9</property>
                                                     <property name="label">F9</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
