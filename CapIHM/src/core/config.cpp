@@ -193,15 +193,15 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    vid_h = getConfigValueInt(chFileName, "video", "scr_height", 600);
 	    vid_bpp = getConfigValueInt(chFileName, "video", "scr_bpp", 24);
 	    vid_style = (VideoPlugin::VideoType)getConfigValueInt(chFileName, "video", "scr_style", 1);
-	    bool fs = (getConfigValueInt(chFileName, "video", "scr_window", 0) & 1) == 0;
-	    bool oglfilter = getConfigValueInt(chFileName, "video", "scr_oglfilter", 1) & 1;
+	    fs = (getConfigValueInt(chFileName, "video", "scr_window", 0) & 1) == 0;
+	    oglfilter = getConfigValueInt(chFileName, "video", "scr_oglfilter", 1) & 1;
 
 	    emulator.GetRenderer().SetOpenGLFilter(oglfilter);
 
 
 	    scr_fps = getConfigValueInt(chFileName, "video", "scr_fps", 0) & 1;
 
-	    scr_tube = (getConfigValueInt(chFileName, "video", "scr_tube", 0) & 1) == 0;
+	    scr_tube = !(getConfigValueInt(chFileName, "video", "scr_tube", 0) & 1) == 0;
 	    scr_intensity = getConfigValueInt(chFileName, "video", "scr_intensity", 10);
 	    scr_remanency = getConfigValueInt(chFileName, "video", "scr_remanency", 0) & 1;
 	    if ((scr_intensity < 5) || (scr_intensity > 15))

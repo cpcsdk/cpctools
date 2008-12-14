@@ -17,9 +17,9 @@ scr_oglfilter=0
 scr_vsync=0
 scr_led=1
 scr_fps=0
-scr_tube=0
-scr_intensity=10
-scr_remanency=0
+scr_tube=1
+scr_intensity=8
+scr_remanency=1
 scr_window=0
 [sound]
 enabled=1

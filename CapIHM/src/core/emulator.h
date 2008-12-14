@@ -66,7 +66,7 @@ public:
 	inline	t_Input&		GetInput()					{ return _input;		}
 
 	inline  t_z80regs&		GetZ80()					{ return *_z80;			}
-	inline  t_GateArray&		GetGateArray()				{ return *_gateArray;	}
+	inline  t_GateArray&	GetGateArray()				{ return *_gateArray;	}
 	inline  t_CRTC&			GetCRTC()					{ return *_crtc;		}
 	inline  t_VDU&			GetVDU()					{ return *_vdu;			}
 	inline  t_PSG&			GetPSG()					{ return *_psg;			}

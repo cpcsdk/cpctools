@@ -1,3 +1,7 @@
+2008-12-14 Krust/Benediction <krusty@cpcscene.com>
+	* Command Line, Configuration : Read the screen options from the configuration file.
+	Add some command line options for the screen (color, intensity).
+
 2008-11-29 CloudStrife/Shinra <cloudstrife@cpcscene.com>
 	* GUI : Now you can load and save snapshot from the GUI ! and you can
 	load a disc image in the drive B.

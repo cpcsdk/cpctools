@@ -105,6 +105,12 @@ int CapriceApp::OnRun() {
         return -1;
     }
 	
+
+	//Set command line options
+	if (greenscreen)	emulator->GetConfig().scr_tube = false ;
+	if (intensity!=-1)	emulator->GetConfig().scr_intensity = intensity ;
+	if (remanency)		emulator->GetConfig().scr_remanency = true ;
+	
 	if(emulator->Init()){
 		frame->SetEmulator(emulator);
 
@@ -148,7 +154,15 @@ void CapriceApp::OnInitCmdLine(wxCmdLineParser& parser)
  
 bool CapriceApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
+	intensity = -1 ;
+	greenscreen = false ;
+	remanency = false ;
+
     fullscreen = parser.Found(wxT("f"));
+	greenscreen = parser.Found(wxT("g"));
+	remanency = parser.Found(wxT("r"));
+	parser.Found(wxT("i"), &intensity);
+
 	parser.Found(wxT("a"), &drivea);
 	parser.Found(wxT("b"), &driveb);
 	parser.Found(wxT("t"), &tape);

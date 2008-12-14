@@ -462,6 +462,10 @@ Emulator::Emulator():
   _renderer(this),
   FPSDisplay(true)
 {
+	// retrieve the emulator configuration
+	_config.loadConfiguration(*this);
+
+
 }
 
 Emulator::~Emulator()
@@ -485,9 +489,6 @@ Emulator::~Emulator()
 
 bool Emulator::Init()
 {
-	// retrieve the emulator configuration
-	_config.loadConfiguration(*this);
-
 	// attempt to allocate the general purpose buffer
 	pbGPBuffer = new byte [128*1024];
 
@@ -510,9 +511,9 @@ bool Emulator::Init()
 	}
 
 	_renderer.SetVideoMode(VideoPlugin::DoubleSize/*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
-//	_renderer.SetOpenGLFilter(true);
+	_renderer.SetOpenGLFilter(true);
 
-	_renderer.SetMonitor(true, 15, true);
+	_renderer.SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
 
 	_renderer.SetCaption("Caprice32 " VERSION_STRING, "Caprice32");
 

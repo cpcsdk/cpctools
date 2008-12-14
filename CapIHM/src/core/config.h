@@ -74,7 +74,8 @@ public:
    bool scr_tube ;
    int  scr_intensity ;
    bool scr_remanency ;
-
+   bool fs;
+   bool oglfilter;
    int vid_w,vid_h,vid_bpp;
    VideoPlugin::VideoType vid_style;
 
