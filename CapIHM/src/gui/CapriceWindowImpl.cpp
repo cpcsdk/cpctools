@@ -1,6 +1,6 @@
 /**
  *   $Id: CapriceWindowImpl.cpp 60 2008-11-25 17:08:52Z giot.romain $
- *	 CapriceReloded an Amstrad CPC emulator
+ *   CapriceReloded an Amstrad CPC emulator
  *   Copyright (C) 2008  cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -28,11 +28,10 @@
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 
-
 // =============================== Window Event =============================================
 void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 {
-	exit(0);
+    exit(0);
 }
 
 /**
@@ -50,7 +49,7 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 
 void CapriceWindowImpl::onExit2( wxCommandEvent& event )
 {
-	exit(0);
+    exit(0);
 }
 
 
@@ -59,20 +58,20 @@ void CapriceWindowImpl::onExit2( wxCommandEvent& event )
  */
 void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 {
-	wxFileDialog* OpenDialog = new wxFileDialog(
-		this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
-		wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
-		wxOPEN, wxDefaultPosition);
+    wxFileDialog* OpenDialog = new wxFileDialog(
+        this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
+        wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
+        wxOPEN, wxDefaultPosition);
  
-	// Creates a "open file" dialog with 4 file types
-	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
-	{
-		wxString CurrentDocPath = OpenDialog->GetPath();
-		SetTitle(wxString( wxT("Edit - ")) << 
-			OpenDialog->GetFilename()); // Set the Title to reflect the file open
+    // Creates a "open file" dialog with 4 file types
+    if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+    {
+        wxString CurrentDocPath = OpenDialog->GetPath();
+        SetTitle(wxString( wxT("Edit - ")) << 
+            OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-		emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
-	}
+        emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+    }
 
 }
 
@@ -81,20 +80,20 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
  */
 void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
 {
-	wxFileDialog* OpenDialog = new wxFileDialog(
-		this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
-		wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
-		wxOPEN, wxDefaultPosition);
+    wxFileDialog* OpenDialog = new wxFileDialog(
+        this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
+        wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
+        wxOPEN, wxDefaultPosition);
  
-	// Creates a "open file" dialog with 4 file types
-	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
-	{
-		wxString CurrentDocPath = OpenDialog->GetPath();
-		SetTitle(wxString( wxT("Edit - ")) << 
-			OpenDialog->GetFilename()); // Set the Title to reflect the file open
+    // Creates a "open file" dialog with 4 file types
+    if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+    {
+        wxString CurrentDocPath = OpenDialog->GetPath();
+        SetTitle(wxString( wxT("Edit - ")) << 
+            OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-		emulator->GetFDC().insertB(std::string(CurrentDocPath.mb_str()));
-	}
+        emulator->GetFDC().insertB(std::string(CurrentDocPath.mb_str()));
+    }
 
 }
 
@@ -104,9 +103,9 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
 void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
 {
   wxFileDialog* OpenDialog = new wxFileDialog(
-  	this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
-  	wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
-  	wxOPEN, wxDefaultPosition);
+    this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
+    wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
+    wxOPEN, wxDefaultPosition);
 
   if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
   {
@@ -123,9 +122,9 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
 void CapriceWindowImpl::onSaveSNA( wxCommandEvent& event )
 {
   wxFileDialog* SaveDialog = new wxFileDialog(
-  	this, wxT("Choose a file to save"), wxEmptyString, wxEmptyString,
-  	wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
-  	wxSAVE, wxDefaultPosition);
+    this, wxT("Choose a file to save"), wxEmptyString, wxEmptyString,
+    wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
+    wxSAVE, wxDefaultPosition);
 
   if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Save" instead of "Cancel"
   {
@@ -197,8 +196,8 @@ wxPanel* CapriceWindowImpl::getPanel() { return m_panel4; }
  */
 void CapriceWindowImpl::SetEmulator(Emulator *emulator)
 {
-	this->emulator = emulator ;
-//	panel2 = new SDLPanel(this, emulator);
+    this->emulator = emulator ;
+//  panel2 = new SDLPanel(this, emulator);
 }
 
 /********************************************************
@@ -222,4 +221,13 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
     SDL_PushEvent(&evt);
 
     cout << "keydown" << event.GetKeyCode() << endl;
+}
+
+
+// ============== DND ===================
+bool CapriceWindowImpl::OnDropFiles(wxCoord x, wxCoord y , const wxArrayString& filenames)
+{
+    wxString CurrentDocPath = filenames[0];
+    emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+    return true;
 }
