@@ -27,6 +27,9 @@
 
 #include <wx/filedlg.h>
 #include <wx/filename.h>
+#include <wx/dcbuffer.h>
+#include "CapriceApp.h"
+
 
 // =============================== Window Event =============================================
 void CapriceWindowImpl::onExit1( wxCloseEvent& event )
@@ -44,6 +47,18 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
         emulator->Emulate();
         //Ask to continue idle things
         event.RequestMore(true);
+    }
+    else
+    {
+        //TODO: modify to do that only one time
+        wxBitmap bitmap;
+	    if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
+        {
+            CapriceApp* MyApp =static_cast<CapriceApp*>(wxTheApp) ;
+            wxBufferedPaintDC dc(MyApp->frame->getPanel(),bitmap);
+        //    event.RequestMore(false);
+        }
+
     }
 }
 
@@ -147,6 +162,7 @@ void CapriceWindowImpl::OnPause( wxCommandEvent& event)
     m_menuItem_pause->Enable(false) ;
     m_menuItem_run->Enable(true);
     this->paused = true ;
+
 }
 
 

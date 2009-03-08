@@ -60,21 +60,13 @@ bool CapriceApp::OnInit()
 
 	//Splash screen managment
 	wxBitmap bitmap;
-	//wxImage image;
 	if (bitmap.LoadFile( wxT( DATA_PATH "logo.png"), wxBITMAP_TYPE_PNG))
-	//if (image.LoadFile( wxT("logo.png"), wxBITMAP_TYPE_PNG))
-	{
-	//	unsigned char *alpha;
-	//	wxBitmap bitmap;
-	//	alpha = (unsigned char*)malloc(image.GetHeight()*image.GetWidth()*sizeof(unsigned char));
-	//	memset(alpha, 255, image.GetHeight()*image.GetWidth());
-	//	image.SetAlpha(alpha, false);
-	//	bitmap = wxBitmap(image, -1);
+    {
 		splash = new wxSplashScreen(bitmap,
-		wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-		6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
-		wxSIMPLE_BORDER|wxSTAY_ON_TOP);
-	}
+		                wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+		                6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+		                wxSIMPLE_BORDER|wxSTAY_ON_TOP);
+    }
 	wxYield();
 
 
