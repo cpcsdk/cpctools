@@ -14,6 +14,7 @@ class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget
     public:
     CapriceWindowImpl() : CapriceWindow(NULL) 
     {
+        paused = true ;
         this->SetDropTarget(this);
     }
 
@@ -54,6 +55,7 @@ class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget
 
     private:
     Emulator*   emulator ;
+    bool paused ;
 };
 #endif
 

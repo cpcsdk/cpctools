@@ -39,10 +39,12 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
-    emulator->Emulate();
-
-    //Ask to continue idle things
-    event.RequestMore(true);
+    if (emulator && !paused)
+    {
+        emulator->Emulate();
+        //Ask to continue idle things
+        event.RequestMore(true);
+    }
 }
 
 // =============================== Menus Event ===============================================
@@ -144,6 +146,7 @@ void CapriceWindowImpl::OnPause( wxCommandEvent& event)
     emulator->Pause();
     m_menuItem_pause->Enable(false) ;
     m_menuItem_run->Enable(true);
+    this->paused = true ;
 }
 
 
@@ -152,6 +155,7 @@ void CapriceWindowImpl::OnRun( wxCommandEvent& event)
     emulator->Run();
     m_menuItem_pause->Enable(true) ;
     m_menuItem_run->Enable(false);
+    this->paused = false ;
 
 }
 
@@ -197,7 +201,7 @@ wxPanel* CapriceWindowImpl::getPanel() { return m_panel4; }
 void CapriceWindowImpl::SetEmulator(Emulator *emulator)
 {
     this->emulator = emulator ;
-//  panel2 = new SDLPanel(this, emulator);
+    paused = false ;
 }
 
 /********************************************************
