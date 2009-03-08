@@ -11,7 +11,8 @@ CapriceRegistersDialogImpl.h\
 CapriceWindowImpl.cpp\
 CapriceWindowImpl.h\
 CapriceInputSettingsImpl.h\
-CapriceInputSettingsImpl.cpp
+CapriceInputSettingsImpl.cpp\
+CPCKeyDefs.h
 #video.cpp \
 #input.cpp
 libcapricewx_a_LIBADD = libfoo.a
