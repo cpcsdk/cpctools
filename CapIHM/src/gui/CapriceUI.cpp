@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  2 2008)
+// C++ code generated with wxFormBuilder (version Mar 14 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -116,7 +116,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	
 	m_menu_file->Append( -1, wxT("Tape"), m_Tape );
 	
-	m_menu_file->AppendSeparator();
+	wxMenuItem* m_separator1;
+	m_separator1 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_mI_LoadSNA;
 	m_mI_LoadSNA = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Load Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
@@ -130,7 +131,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem33 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Update Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem33 );
 	
-	m_menu_file->AppendSeparator();
+	wxMenuItem* m_separator2;
+	m_separator2 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menuItem34;
 	m_menuItem34 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Playback Session") ) , wxEmptyString, wxITEM_NORMAL );
@@ -140,7 +142,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem35 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Record Session") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem35 );
 	
-	m_menu_file->AppendSeparator();
+	wxMenuItem* m_separator3;
+	m_separator3 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menuItem36;
 	m_menuItem36 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Save Screenshot") ) , wxEmptyString, wxITEM_NORMAL );
@@ -158,13 +161,15 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem39 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Record YM") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem39 );
 	
-	m_menu_file->AppendSeparator();
+	wxMenuItem* m_separator4;
+	m_separator4 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menuItem40;
 	m_menuItem40 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Pokes") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem40 );
 	
-	m_menu_file->AppendSeparator();
+	wxMenuItem* m_separator5;
+	m_separator5 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menuItem411;
 	m_menuItem411 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Auto Types") ) , wxEmptyString, wxITEM_NORMAL );
@@ -174,7 +179,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem42 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Paste") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem42 );
 	
-	m_menu_file->AppendSeparator();
+	wxMenuItem* m_separator6;
+	m_separator6 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menu_exit;
 	m_menu_exit = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
@@ -207,7 +213,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem48 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Other") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menuItem48 );
 	
-	m_menu_settings->AppendSeparator();
+	wxMenuItem* m_separator7;
+	m_separator7 = m_menu_settings->AppendSeparator();
 	
 	wxMenuItem* m_menuItem49;
 	m_menuItem49 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Full Screen") ) + wxT('\t') + wxT("F1"), wxEmptyString, wxITEM_NORMAL );
@@ -707,6 +714,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_regularKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
+	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
 }
 
@@ -787,6 +795,7 @@ InputSettings::~InputSettings()
 	m_regularKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
+	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
 }
 

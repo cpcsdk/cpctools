@@ -3,11 +3,13 @@
 #include <fstream>
 
 #include "CapriceInputSettingsImpl.h"
+#include "CapriceWindowImpl.h"
 #include "input.h"
 #include "CPCKeyDefs.h"
 
 CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
-    InputSettings(WinID)
+    InputSettings(WinID),
+    emulatorInputHandler(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator()->GetInput())
 {
     std::ifstream file;
     CPC_Key tmpk;
@@ -29,6 +31,7 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	
 	keymap.insert(std::pair<int, CPC_Key>(kid, tmpk));
     }
+
 }
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
@@ -69,6 +72,14 @@ void CapriceInputSettingsImpl::onKeyPress(wxKeyEvent& event)
 void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
 {
     saveKeymap();
+}
+
+void CapriceInputSettingsImpl::applySettings(wxCommandEvent& event)
+{
+    for(CPC_Keymap::iterator iter=keymap.begin();iter!=keymap.end();iter++)
+    {
+	 emulatorInputHandler.setupKey(iter->first,iter->second.stdKeyCode,iter->second.shiftKeyCode,iter->second.ctrlKeyCode);
+    }
 }
 
 void CapriceInputSettingsImpl::saveKeymap()

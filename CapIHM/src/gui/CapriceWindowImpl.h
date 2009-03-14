@@ -19,6 +19,7 @@ class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget
     }
 
     void SetEmulator(Emulator *emulator);   
+    Emulator* GetEmulator() {return emulator;};   
     wxPanel* getPanel();
 
     protected:

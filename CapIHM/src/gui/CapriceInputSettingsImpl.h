@@ -2,6 +2,8 @@
 #include <map>
 #include "CapriceUI.h"
 
+class t_Input;
+
 class CapriceInputSettingsImpl : public InputSettings
 {
     public:
@@ -12,10 +14,12 @@ class CapriceInputSettingsImpl : public InputSettings
 	virtual void onKeyClick(wxCommandEvent& event);
 	virtual void onKeyPress(wxKeyEvent& event);
 	virtual void onSave(wxCommandEvent& event);
+	virtual void applySettings(wxCommandEvent& event);
 	
 	void saveKeymap();
 	wxString keyCodeToName(int keycode);
 
+        t_Input& emulatorInputHandler;
 
 	typedef struct{
 	    int stdKeyCode;

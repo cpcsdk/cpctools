@@ -1048,6 +1048,14 @@ void t_Input::input_swap_joy (t_CPC &CPC)
 }
 
 
+void t_Input::setupKey(int cpc_code, int pc_stdcode, int pc_shiftcode  , int pc_ctrlcode , int pc_altcode )
+{
+    keyboard_normal[pc_stdcode]=cpc_code;
+    keyboard_shift[pc_shiftcode>=0?pc_shiftcode:pc_stdcode]=cpc_code;
+    keyboard_ctrl[pc_ctrlcode>=0?pc_ctrlcode:pc_stdcode]=cpc_code;
+    keyboard_mode[pc_altcode>=0?pc_altcode:pc_stdcode]=cpc_code;
+}
+
 
 int t_Input::input_init (t_CPC &CPC)
 {

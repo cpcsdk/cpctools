@@ -60,6 +60,7 @@ public:
 
 	void input_swap_joy (t_CPC &CPC);
 	int input_init (t_CPC &CPC);	
+        void setupKey(int,int,int=-1,int=-1,int=-1);
 };
 
 #endif
