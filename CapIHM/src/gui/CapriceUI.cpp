@@ -659,6 +659,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_TAB16->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_CAPS2->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
@@ -740,6 +741,7 @@ InputSettings::~InputSettings()
 	k_TAB16->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_CAPS2->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS3->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CAPS5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );

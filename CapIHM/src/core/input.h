@@ -44,9 +44,7 @@ class t_Input
 {
 private:
 	//! CPC keyboard layout (English, French, Spanish)
-	static dword		cpc_kbd[3][149];
-	//! PC keyboard layout (English, French, Spanish)
-	static int			kbd_layout[4][KBD_MAX_ENTRIES][2];
+	static dword		cpc_kbd[149];
 	static int			joy_layout[12][2];
 public:
 	byte				keyboard_matrix[16];

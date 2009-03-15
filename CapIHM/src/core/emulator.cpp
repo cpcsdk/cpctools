@@ -265,7 +265,7 @@ bool Emulator::KeyboardEmulation()
 				{
 					// consult the SHIFT table
 					cpc_key = _input.keyboard_shift[event.key.keysym.sym];
-					std::cout << "SHIFTED" << std::endl;
+					std::cout << "SHIFTED" << std::hex << cpc_key << std::endl;
 				}
 				// PC CTRL key held down?
 				else if (event.key.keysym.mod & wxMOD_CONTROL/*KMOD_CTRL*/)
