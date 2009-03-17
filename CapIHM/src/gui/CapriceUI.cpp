@@ -690,6 +690,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_LSHIFT15->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_CONTROL2->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL3->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL4->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
@@ -772,6 +773,7 @@ InputSettings::~InputSettings()
 	k_LSHIFT15->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
+	k_CONTROL2->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL3->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL4->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
 	k_CONTROL5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onKeyClick ), NULL, this );
