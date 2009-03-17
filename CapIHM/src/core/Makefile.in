@@ -61,7 +61,6 @@ am_libcapricecore_a_OBJECTS = libcapricecore_a-audio.$(OBJEXT) \
 	libcapricecore_a-ppi.$(OBJEXT) libcapricecore_a-psg.$(OBJEXT) \
 	libcapricecore_a-render.$(OBJEXT) \
 	libcapricecore_a-renderData.$(OBJEXT) \
-	libcapricecore_a-rom_mods.$(OBJEXT) \
 	libcapricecore_a-snapshot.$(OBJEXT) \
 	libcapricecore_a-tape.$(OBJEXT) libcapricecore_a-vdu.$(OBJEXT) \
 	libcapricecore_a-z80.$(OBJEXT) libcapricecore_a-zip.$(OBJEXT)
@@ -187,6 +186,7 @@ sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
+top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LIBRARIES = libcapricecore.a
@@ -234,8 +234,6 @@ psg.h\
 render.cpp\
 render.h\
 renderData.cpp\
-rom_mods.cpp\
-rom_mods.h\
 snapshot.cpp\
 snapshot.h\
 tape.cpp\
@@ -313,7 +311,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricecore_a-psg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricecore_a-render.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricecore_a-renderData.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricecore_a-rom_mods.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricecore_a-snapshot.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricecore_a-tape.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcapricecore_a-vdu.Po@am__quote@
@@ -571,20 +568,6 @@ libcapricecore_a-renderData.obj: renderData.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='renderData.cpp' object='libcapricecore_a-renderData.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricecore_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricecore_a-renderData.obj `if test -f 'renderData.cpp'; then $(CYGPATH_W) 'renderData.cpp'; else $(CYGPATH_W) '$(srcdir)/renderData.cpp'; fi`
-
-libcapricecore_a-rom_mods.o: rom_mods.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricecore_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libcapricecore_a-rom_mods.o -MD -MP -MF $(DEPDIR)/libcapricecore_a-rom_mods.Tpo -c -o libcapricecore_a-rom_mods.o `test -f 'rom_mods.cpp' || echo '$(srcdir)/'`rom_mods.cpp
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libcapricecore_a-rom_mods.Tpo $(DEPDIR)/libcapricecore_a-rom_mods.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rom_mods.cpp' object='libcapricecore_a-rom_mods.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricecore_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricecore_a-rom_mods.o `test -f 'rom_mods.cpp' || echo '$(srcdir)/'`rom_mods.cpp
-
-libcapricecore_a-rom_mods.obj: rom_mods.cpp
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricecore_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libcapricecore_a-rom_mods.obj -MD -MP -MF $(DEPDIR)/libcapricecore_a-rom_mods.Tpo -c -o libcapricecore_a-rom_mods.obj `if test -f 'rom_mods.cpp'; then $(CYGPATH_W) 'rom_mods.cpp'; else $(CYGPATH_W) '$(srcdir)/rom_mods.cpp'; fi`
-@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libcapricecore_a-rom_mods.Tpo $(DEPDIR)/libcapricecore_a-rom_mods.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='rom_mods.cpp' object='libcapricecore_a-rom_mods.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricecore_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libcapricecore_a-rom_mods.obj `if test -f 'rom_mods.cpp'; then $(CYGPATH_W) 'rom_mods.cpp'; else $(CYGPATH_W) '$(srcdir)/rom_mods.cpp'; fi`
 
 libcapricecore_a-snapshot.o: snapshot.cpp
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libcapricecore_a_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libcapricecore_a-snapshot.o -MD -MP -MF $(DEPDIR)/libcapricecore_a-snapshot.Tpo -c -o libcapricecore_a-snapshot.o `test -f 'snapshot.cpp' || echo '$(srcdir)/'`snapshot.cpp

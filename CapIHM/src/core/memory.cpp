@@ -33,8 +33,6 @@
 extern dword dwMF2Flags;
 extern byte *pbMF2ROM;
 
-#include "rom_mods.h"
-
 char chROMFile[3][14] =
 {
 	"cpc464.rom",

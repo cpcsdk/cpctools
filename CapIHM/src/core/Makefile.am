@@ -44,8 +44,6 @@ psg.h\
 render.cpp\
 render.h\
 renderData.cpp\
-rom_mods.cpp\
-rom_mods.h\
 snapshot.cpp\
 snapshot.h\
 tape.cpp\

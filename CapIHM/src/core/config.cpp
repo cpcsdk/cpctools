@@ -32,7 +32,6 @@
 #include "cap32type.h"
 #include <string.h>
 #include <stdlib.h>
-#include "rom_mods.h"
 #include "audio.h"
 #include "dsk.h"
 #include "render.h"
@@ -183,10 +182,7 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    mf2 = getConfigValueInt(chFileName, "system", "mf2", 0) & 1;
 
 	    keyboard = getConfigValueInt(chFileName, "system", "keyboard", 0);
-	    if (keyboard > MAX_ROM_MODS)
-	    {
-			keyboard = 0;
-	    }
+            // TODO ; load keymap
 	    joysticks = getConfigValueInt(chFileName, "system", "joysticks", 0) & 1;
 
 	    vid_w = getConfigValueInt(chFileName, "video", "scr_width", 800);
