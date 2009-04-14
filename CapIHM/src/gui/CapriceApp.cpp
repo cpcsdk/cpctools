@@ -107,8 +107,8 @@ int CapriceApp::OnRun() {
 		frame->SetEmulator(emulator);
 
 		//do the initialisations
-		if (!drivea.IsEmpty()) emulator->GetFDC().insertA( (const char *) drivea.char_str());
-		if (!driveb.IsEmpty()) emulator->GetFDC().insertB( (const char *) driveb.char_str());
+		if (!drivea.IsEmpty()) emulator->GetFDC().insertA( (const char *) drivea.mb_str());
+		if (!driveb.IsEmpty()) emulator->GetFDC().insertB( (const char *) driveb.mb_str());
 
 		if (!snapshot.IsEmpty()) snapshot_load( *emulator,  snapshot.char_str()) ;
 

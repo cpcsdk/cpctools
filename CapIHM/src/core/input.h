@@ -5,6 +5,8 @@
 #ifndef _INPUT_H_
 #define _INPUT_H_
 
+#include <map>
+
 #include "cap32type.h"
 #include <SDL_keysym.h>
 class t_CPC;
@@ -48,10 +50,10 @@ private:
 	static int			joy_layout[12][2];
 public:
 	byte				keyboard_matrix[16];
-	dword				keyboard_normal[SDLK_LAST];
-	dword				keyboard_shift[SDLK_LAST];
-	dword				keyboard_ctrl[SDLK_LAST];
-	dword				keyboard_mode[SDLK_LAST];
+	std::map<unsigned int,dword> keyboard_normal;
+	std::map<unsigned int,dword> keyboard_shift;
+	std::map<unsigned int,dword> keyboard_ctrl;
+	std::map<unsigned int,dword> keyboard_mode;
 public:
 	
 	void Reset();

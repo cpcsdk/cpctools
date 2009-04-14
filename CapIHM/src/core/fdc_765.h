@@ -42,16 +42,16 @@ using namespace std;
 class t_CPC;
 
 typedef struct {
-   unsigned int tracks; // total number of tracks
-   unsigned int current_track; // location of drive head
-   unsigned int sides; // total number of sides
-   unsigned int current_side; // side being accessed
+   unsigned int tracks; 	// total number of tracks
+   unsigned int current_track; 	// location of drive head
+   unsigned int sides; 		// total number of sides
+   unsigned int current_side; 	// side being accessed
    unsigned int current_sector; // sector being accessed
-   unsigned int altered; // has the image been modified?
+   unsigned int altered; 	// has the image been modified?
    unsigned int write_protected; // is the image write protected?
-   unsigned int random_DEs; // sectors with Data Errors return random data?
-   unsigned int flipped; // reverse the side to access?
-   FDRV_PTR fdl; //LibDSK drive
+   unsigned int random_DEs; 	// sectors with Data Errors return random data?
+   unsigned int flipped; 	// reverse the side to access?
+   FDRV_PTR fdl; 		//LibDSK drive
 } t_drive;
 
 class t_FDC

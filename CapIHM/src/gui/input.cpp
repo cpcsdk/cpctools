@@ -196,10 +196,10 @@ int t_Input::input_init (t_CPC &CPC)
 {
 	dword n, pc_key, pc_idx, cpc_idx, cpc_key;
 
-	memset(keyboard_normal, 0xff, sizeof(keyboard_normal));
-	memset(keyboard_shift, 0xff, sizeof(keyboard_shift));
-	memset(keyboard_ctrl, 0xff, sizeof(keyboard_ctrl));
-	memset(keyboard_mode, 0xff, sizeof(keyboard_mode));
+	keyboard_normal.clear();
+	keyboard_shift.clear();
+	keyboard_ctrl.clear();
+	keyboard_mode.clear();
 
 	// enable keyboard joystick emulation?
 	if (CPC.joysticks)
