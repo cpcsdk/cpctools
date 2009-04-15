@@ -89,41 +89,45 @@ int CapriceApp::OnExit()
 }
 
 
-int CapriceApp::OnRun() {
+int CapriceApp::OnRun()
+{
     // initialize SDL
-    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0){ 
+    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0)
+    {
         std::cerr << "unable to init SDL: " << SDL_GetError() << '\n';
-        
         return -1;
     }
-	
 
-	//Set command line options
-	if (greenscreen)	emulator->GetConfig().scr_tube = Renderer::GreenMode ;
-	if (intensity!=-1)	emulator->GetConfig().scr_intensity = intensity ;
-	if (remanency)		emulator->GetConfig().scr_remanency = true ;
-	
-	if(emulator->Init()){
-		frame->SetEmulator(emulator);
+    //Set command line options
+    if (greenscreen) emulator->GetConfig().scr_tube = Renderer::GreenMode;
+    if (intensity!=-1) emulator->GetConfig().scr_intensity = intensity;
+    if (remanency) emulator->GetConfig().scr_remanency = true;
 
-		//do the initialisations
-		if (!drivea.IsEmpty()) emulator->GetFDC().insertA( (const char *) drivea.mb_str());
-		if (!driveb.IsEmpty()) emulator->GetFDC().insertB( (const char *) driveb.mb_str());
+    if(emulator->Init())
+    {
+        #ifdef DEBUG
+        InitDebug();
+        #endif
 
-		if (!snapshot.IsEmpty()) snapshot_load( *emulator,  snapshot.char_str()) ;
+        frame->SetEmulator(emulator);
 
-		if (!tape.IsEmpty()) emulator->GetTape().tape_insert(tape.char_str()) ; 
-	
-		if (fullscreen) emulator->GetRenderer().ToggleFullScreen();		
+        //do the initialisations
+        if (!drivea.IsEmpty()) emulator->GetFDC().insertA( (const char *) drivea.mb_str());
+        if (!driveb.IsEmpty()) emulator->GetFDC().insertB( (const char *) driveb.mb_str());
 
-	}
+        if (!snapshot.IsEmpty()) snapshot_load( *emulator,  snapshot.char_str()) ;
 
-	delete splash;
+        if (!tape.IsEmpty()) emulator->GetTape().tape_insert(tape.char_str()) ; 
 
-	SetTopWindow(frame);
-    
-	
-	// generate an initial idle event to start things
+        if (fullscreen) emulator->GetRenderer().ToggleFullScreen();		
+
+    }
+
+    delete splash;
+
+    SetTopWindow(frame);
+
+    // generate an initial idle event to start things
     wxIdleEvent event;
     //event.SetEventObject(&frame->getPanel());
     //frame->getPanel().AddPendingEvent(event);
