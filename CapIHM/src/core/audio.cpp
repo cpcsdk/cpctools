@@ -41,14 +41,6 @@ dword dwSndBufferCopied;
 
 SDL_AudioSpec *audio_spec = NULL;
 
-dword freq_table[MAX_FREQ_ENTRIES] = {
-	11025,
-	22050,
-	44100,
-	48000,
-	96000
-};
-
 void audio_update (void *userdata, Uint8 *stream, int len)
 {
 #ifdef AYEMU
