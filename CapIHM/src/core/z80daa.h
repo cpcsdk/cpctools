@@ -29,7 +29,7 @@
 #define ZF	0x40
 #define SF	0x80
 
-static word DAATable[0x800] = {
+static const word DAATable[0x800] = {
   (0x00<<8)   +ZF         +VF      ,
   (0x01<<8)                        ,
   (0x02<<8)                        ,
