@@ -44,6 +44,7 @@ class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget
     virtual void OnPause( wxCommandEvent& event) ;
 
     virtual void OnRegister( wxCommandEvent& event);
+    virtual void OnDebugMemory( wxCommandEvent& event );
 
     virtual void OnAbout( wxCommandEvent& event);
     virtual void onMenuInput( wxCommandEvent& event);

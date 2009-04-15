@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 14 2009)
+// C++ code generated with wxFormBuilder (version Apr 16 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -234,19 +234,23 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	
 	m_menubar1->Append( m_menu_settings, wxT("Settings") );
 	
-	m_menu2 = new wxMenu();
-	m_menuItem_run = new wxMenuItem( m_menu2, wxID_ANY, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu2->Append( m_menuItem_run );
+	m_menu_debug = new wxMenu();
+	m_menuItem_run = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_debug->Append( m_menuItem_run );
 	m_menuItem_run->Enable( false );
 	
-	m_menuItem_pause = new wxMenuItem( m_menu2, wxID_ANY, wxString( wxT("Pause") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu2->Append( m_menuItem_pause );
+	m_menuItem_pause = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Pause") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_debug->Append( m_menuItem_pause );
 	
 	wxMenuItem* m_menuItem_registers;
-	m_menuItem_registers = new wxMenuItem( m_menu2, wxID_ANY, wxString( wxT("Register") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu2->Append( m_menuItem_registers );
+	m_menuItem_registers = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Register") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_debug->Append( m_menuItem_registers );
 	
-	m_menubar1->Append( m_menu2, wxT("Debug") );
+	wxMenuItem* m_menuItem_memory;
+	m_menuItem_memory = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_debug->Append( m_menuItem_memory );
+	
+	m_menubar1->Append( m_menu_debug, wxT("Debug") );
 	
 	m_menu4 = new wxMenu();
 	wxMenuItem* m_menuItem57;
@@ -292,6 +296,7 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Connect( m_menuItem_run->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
 	this->Connect( m_menuItem_pause->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
 	this->Connect( m_menuItem_registers->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
+	this->Connect( m_menuItem_memory->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
 	this->Connect( m_menuItem57->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
 	this->Connect( m_menuItem491->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
 	m_panel4->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
@@ -315,6 +320,7 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
 	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
@@ -1753,15 +1759,82 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
 	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxVERTICAL );
+	bSizer21 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_grid1 = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	
+	// Grid
+	m_grid1->CreateGrid( 32, 16 );
+	m_grid1->EnableEditing( false );
+	m_grid1->EnableGridLines( true );
+	m_grid1->EnableDragGridSize( false );
+	m_grid1->SetMargins( 0, 0 );
+	
+	// Columns
+	m_grid1->AutoSizeColumns();
+	m_grid1->EnableDragColMove( false );
+	m_grid1->EnableDragColSize( false );
+	m_grid1->SetColLabelSize( 30 );
+	m_grid1->SetColLabelValue( 0, wxT("0") );
+	m_grid1->SetColLabelValue( 1, wxT("1") );
+	m_grid1->SetColLabelValue( 2, wxT("2") );
+	m_grid1->SetColLabelValue( 3, wxT("3") );
+	m_grid1->SetColLabelValue( 4, wxT("4") );
+	m_grid1->SetColLabelValue( 5, wxT("5") );
+	m_grid1->SetColLabelValue( 6, wxT("6") );
+	m_grid1->SetColLabelValue( 7, wxT("7") );
+	m_grid1->SetColLabelValue( 8, wxT("8") );
+	m_grid1->SetColLabelValue( 9, wxT("9") );
+	m_grid1->SetColLabelValue( 10, wxT("A") );
+	m_grid1->SetColLabelValue( 11, wxT("B") );
+	m_grid1->SetColLabelValue( 12, wxT("C") );
+	m_grid1->SetColLabelValue( 13, wxT("D") );
+	m_grid1->SetColLabelValue( 14, wxT("E") );
+	m_grid1->SetColLabelValue( 15, wxT("F") );
+	m_grid1->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Rows
+	m_grid1->EnableDragRowSize( false );
+	m_grid1->SetRowLabelSize( 80 );
+	m_grid1->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	
+	// Label Appearance
+	
+	// Cell Defaults
+	m_grid1->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer21->Add( m_grid1, 0, wxALL, 5 );
+	
+	m_scrollBar1 = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
+	bSizer21->Add( m_scrollBar1, 0, wxALL|wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();
 	bSizer21->Fit( this );
+	
+	// Connect Events
+	m_scrollBar1->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 }
 
 Memory::~Memory()
 {
+	// Disconnect Events
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_scrollBar1->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 }
 
 ConfigDialog::ConfigDialog( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )

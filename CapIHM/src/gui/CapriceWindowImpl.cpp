@@ -24,6 +24,7 @@
 #include "snapshot.h"
 #include "video.h"
 #include "CapriceInputSettingsImpl.h"
+#include "MemoryImpl.h"
 
 #include <wx/filedlg.h>
 #include <wx/filename.h>
@@ -189,6 +190,12 @@ void CapriceWindowImpl::OnRegister( wxCommandEvent& event)
     CapriceRegistersDialogImpl *RegistersDialog = new CapriceRegistersDialogImpl();
     RegistersDialog->Show(true);
     RegistersDialog->SetEmulator(emulator);
+}
+
+void CapriceWindowImpl::OnDebugMemory( wxCommandEvent& event ) 
+{
+	MemoryImpl* MemoryDialog = new MemoryImpl(this,emulator);
+	MemoryDialog -> Show(true);
 }
 
 void CapriceWindowImpl::OnAbout( wxCommandEvent& event)

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 14 2009)
+// C++ code generated with wxFormBuilder (version Apr 16 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -39,6 +39,8 @@
 #include <wx/statbmp.h>
 #include <wx/statline.h>
 #include <wx/statbox.h>
+#include <wx/grid.h>
+#include <wx/scrolbar.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +59,7 @@ class CapriceWindow : public wxFrame
 		wxMenu* m_menu_driveb;
 		wxMenu* m_Tape;
 		wxMenu* m_menu_settings;
-		wxMenu* m_menu2;
+		wxMenu* m_menu_debug;
 		wxMenuItem* m_menuItem_run;
 		wxMenuItem* m_menuItem_pause;
 		wxMenu* m_menu4;
@@ -79,6 +81,7 @@ class CapriceWindow : public wxFrame
 		virtual void OnRun( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegister( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDebugMemory( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowAssembler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
 		virtual void windowKeyDown( wxKeyEvent& event ) { event.Skip(); }
@@ -491,10 +494,16 @@ class Memory : public wxDialog
 	private:
 	
 	protected:
+		wxGrid* m_grid1;
+		wxScrollBar* m_scrollBar1;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		
-		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~Memory();
 	
 };

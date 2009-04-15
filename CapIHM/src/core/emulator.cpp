@@ -65,7 +65,7 @@ byte *pbTapeImageEnd = NULL;
 FILE *pfoPrinter;
 
 #ifdef DEBUG
-dword dwDebugFlag = 0;
+dword dwDebugFlag = 1;
 FILE *pfoDebug;
 #endif
 

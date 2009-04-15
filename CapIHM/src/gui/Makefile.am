@@ -8,6 +8,8 @@ CapriceApp.cpp\
 CapriceApp.h\
 CapriceRegistersDialogImpl.cpp\
 CapriceRegistersDialogImpl.h\
+MemoryImpl.cpp\
+MemoryImpl.h\
 CapriceWindowImpl.cpp\
 CapriceWindowImpl.h\
 CapriceInputSettingsImpl.h\
