@@ -1,5 +1,12 @@
+2009-04-20 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* Core : Now other monitor mode are usable (Green and Gray Level,
+	Standard Color Mode, more fidelitous Color Mode (Level based on
+	mesurement on a real cpc), and a personal Color Mode (configuration
+	not implemented).
+
 2008-12-14 Krust/Benediction <krusty@cpcscene.com>
-	* Command Line, Configuration : Read the screen options from the configuration file.
+	* Command Line, Configuration : Read the screen options from the
+	configuration file.
 	Add some command line options for the screen (color, intensity).
 
 2008-11-29 CloudStrife/Shinra <cloudstrife@cpcscene.com>

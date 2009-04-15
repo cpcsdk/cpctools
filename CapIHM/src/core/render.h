@@ -6,11 +6,13 @@
 #define _RENDER_H_
 #include "cap32type.h"
 #include "video.h"
-#include "config.h"
+//#include "config.h" // Inutil
 #include <string.h>
 #include <SDL_video.h>
 #include <string>
 #include <vector>
+
+class Emulator;
 
 class Renderer
 {
@@ -68,38 +70,38 @@ class Renderer
 		inline void SetRenderData(byte* v)						{ _renderData = v;				}
 	};
 
-	class Render32BppFunction : public RenderFunction
-    {
-	virtual ~Render32BppFunction() { }
+        class Render32BppFunction : public RenderFunction
+        {
+            virtual ~Render32BppFunction() { }
 
-	public:
-	virtual void Render();
-	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-    };
-	class Render24BppFunction : public RenderFunction
-    {
-	virtual ~Render24BppFunction() { }
+            public:
+                virtual void Render();
+                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+        };
+        class Render24BppFunction : public RenderFunction
+        {
+            virtual ~Render24BppFunction() { }
 
-	public:
-	virtual void Render();
-	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-    };
-	class Render16BppFunction : public RenderFunction
-    {
-	virtual ~Render16BppFunction() { }
+            public:
+                virtual void Render();
+                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+        };
+        class Render16BppFunction : public RenderFunction
+        {
+            virtual ~Render16BppFunction() { }
 
-	public:
-	virtual void Render();
-	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-    };
-	class Render8BppFunction : public RenderFunction
-    {
-	virtual ~Render8BppFunction() { }
+            public:
+                virtual void Render();
+                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+        };
+        class Render8BppFunction : public RenderFunction
+        {
+            virtual ~Render8BppFunction() { }
 
-	public:
-	virtual void Render();
-	virtual void PlotPixel(int x, int y, const SDL_Color &colour);
-    };
+            public:
+                virtual void Render();
+                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+        };
 
 	// Pre render function
 	class PreRenderFunction
@@ -212,9 +214,12 @@ class Renderer
 	};
 
     private:
-	static double		ColoursRGB[32][3];
-	static double		ColoursGreen[32];
-	static byte			Font[768];
+        static double ColoursRGB[32][3];
+        static double ColoursPersonal[32][3];
+        static double ColoursHiFi[32][3];
+        static double ColoursGrey[32];
+        static double ColoursGreen[32];
+        static byte Font[768];
 
     private:
 	//! Current CRTC flag config used to switch preRenderer
@@ -281,19 +286,32 @@ class Renderer
 	bool				_videoPluginOpenGLFilter;
 
 	//! Color monitor mode
-	bool				_colorMonitor;
+    int _monitorMode;
+
 	//! Monitor intensity
 	unsigned int		_monitorIntensity;
 	//! Enable monitor remanency
 	bool				_monitorRemanency;
+	
+	//! Enable display FPS counter in OSR
+	bool _displayFPS;
 
 	//! Display text array
 	vector<TextDisplay>	_textArray;
-	t_CPC* config;
+//	t_CPC* config; // Inutile
     public:
 
+    enum MonitorMode
+    {
+        GreenMode,
+        GreyMode,
+        ColoursMode,
+        ColoursHiFiMode,
+        PersonalMode,
+    };
+
 	//! Constructor
-	Renderer(Emulator* emu);
+	Renderer(Emulator *emu);
 	//! Destructor
 	~Renderer();
 
@@ -305,16 +323,25 @@ class Renderer
 	void SetMemory(byte *memory);
 	void SetVideoMode(VideoPlugin::VideoType type, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
 	void SetOpenGLFilter(bool val);
-	void SetMonitor(bool color, unsigned int intensity, bool remanency);
+	void SetMonitor(MonitorMode mode, unsigned int intensity, bool remanency);
+	
+	inline void DisplayFPS(bool fps) { _displayFPS = fps;}
 
 	//! Set monitor intensity
 	inline void SetMonitorIntensity(unsigned int intensity)	{ _monitorIntensity = intensity; InitPalette(); }
 	//! Get monitor intensity
 	inline unsigned int GetMonitorIntensity() const			{ return _monitorIntensity ;					}
 	//! Set monitor color mode
-	void SetMonitorColorTube(bool color)					{ _colorMonitor = color; InitPalette();			}
+	void SetMonitorColorTube(MonitorMode mode)					{ _monitorMode = mode; InitPalette();			}
 	//! Return true if monitor is color
-	bool IsMonitorColorTube() const							{ return _colorMonitor;							}
+    bool IsMonitorColorTube() const
+    {
+        if(_monitorMode == ColoursMode)
+        {
+            return true;
+        }
+        else return false;
+    }
 
 
 	bool SetFullScreen(bool fs);

@@ -87,7 +87,7 @@ t_CPC::t_CPC()
     tape_zip=false;
 
     scr_fps=false;
-    scr_tube=false;
+    scr_tube=Renderer::ColoursMode;
     scr_intensity=0;
     scr_remanency=false;
 
@@ -196,8 +196,26 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 
 
 	    scr_fps = getConfigValueInt(chFileName, "video", "scr_fps", 0) & 1;
-
-	    scr_tube = !(getConfigValueInt(chFileName, "video", "scr_tube", 0) & 1) == 0;
+            switch (getConfigValueInt(chFileName, "video", "scr_tube", 0))
+            {
+                case 0:
+                    scr_tube = Renderer::GreenMode;
+                    break;
+                case 1:
+                    scr_tube = Renderer::ColoursMode;
+                    break;
+                case 2:
+                    scr_tube = Renderer::GreyMode;
+                    break;
+                case 3:
+                    scr_tube = Renderer::PersonalMode;
+                    break;
+                case 4:
+                    scr_tube = Renderer::ColoursHiFiMode;
+                    break;
+                default:
+                    scr_tube = Renderer::ColoursHiFiMode;
+            }
 	    scr_intensity = getConfigValueInt(chFileName, "video", "scr_intensity", 10);
 	    scr_remanency = getConfigValueInt(chFileName, "video", "scr_remanency", 0) & 1;
 	    if ((scr_intensity < 5) || (scr_intensity > 15))

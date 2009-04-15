@@ -12,6 +12,10 @@ class Emulator;
 #include "cap32type.h"
 #include "video.h"
 
+class t_CPC;
+
+#include "render.h"
+
 class t_CPC
 {
 public:
@@ -70,18 +74,18 @@ public:
    char rom_mf2[_MAX_PATH + 1];
 
     // Video
-   bool scr_fps ;
-   bool scr_tube ;
-   int  scr_intensity ;
-   bool scr_remanency ;
-   bool fs;
-   bool oglfilter;
-   int vid_w,vid_h,vid_bpp;
-   VideoPlugin::VideoType vid_style;
+    bool scr_fps ;
+    int  scr_intensity ;
+    bool scr_remanency ;
+    bool fs;
+    bool oglfilter;
+    int vid_w,vid_h,vid_bpp;
+    VideoPlugin::VideoType vid_style;
+    Renderer::MonitorMode scr_tube;
 
 public:
    void loadConfiguration (Emulator &emulator);
-    t_CPC();    
+    t_CPC();
 };
 
 #endif

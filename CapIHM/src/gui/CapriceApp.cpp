@@ -99,7 +99,7 @@ int CapriceApp::OnRun() {
 	
 
 	//Set command line options
-	if (greenscreen)	emulator->GetConfig().scr_tube = false ;
+	if (greenscreen)	emulator->GetConfig().scr_tube = Renderer::GreenMode ;
 	if (intensity!=-1)	emulator->GetConfig().scr_intensity = intensity ;
 	if (remanency)		emulator->GetConfig().scr_remanency = true ;
 	

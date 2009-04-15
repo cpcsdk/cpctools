@@ -56,9 +56,10 @@ _preRenderSyncFunc(NULL),
 _preRenderBorderFunc(NULL),
 _preRenderNormalFunc(NULL),
 _videoPlugin(NULL),
-_colorMonitor(true),
+_monitorMode(ColoursMode),
 _monitorIntensity(10),
-_monitorRemanency(false)
+_monitorRemanency(false),
+_displayFPS(false)
 {
 	for( int i = 0; i < 20; i++)
     {
@@ -75,7 +76,7 @@ _monitorRemanency(false)
         _renderBuffer[i] = 0;
     }
 
-    config = &emu->GetConfig();
+//    config = &emu->GetConfig(); // Inutile
 }
 
 Renderer::~Renderer()
@@ -112,25 +113,26 @@ bool Renderer::BeginDisplay(int screenLine)
 
 void Renderer::EndDisplay(bool frameCompleted)
 {
-	if (frameCompleted)
-	{
-		// Display texts
-	    if(config->scr_fps)
-	    {
-		for (unsigned int t=0 ; t < _textArray.size() ; t++)
-		{
-			Print(_textArray[t].PosX, _textArray[t].PosY, _textArray[t].Text, _textArray[t].Shadow);
-		}
-		_textArray.clear();
-	    }
+    if (frameCompleted)
+    {
+    // Display texts
+//        if(config->scr_fps)
+        if(_displayFPS)
+        {
+            for (unsigned int t=0 ; t < _textArray.size() ; t++)
+            {
+                Print(_textArray[t].PosX, _textArray[t].PosY, _textArray[t].Text, _textArray[t].Shadow);
+            }
+            _textArray.clear();
+        }
 
-		_videoPlugin->Unlock();
-		_videoPlugin->Flip(); // update PC display
-	}
-	else
-	{
-		_videoPlugin->Unlock();
-	}
+        _videoPlugin->Unlock();
+        _videoPlugin->Flip(); // update PC display
+    }
+    else
+    {
+        _videoPlugin->Unlock();
+    }
 }
 
 
@@ -234,67 +236,110 @@ void Renderer::Print(int x, int y, const string &text, bool shadow)
 
 void Renderer::InitPalette()
 {
-	if (_colorMonitor) 
-	{
-		int n;
-		for (n = 0; n < 32; n++) 
-		{
-			dword red = (dword)(ColoursRGB[n][0] * (_monitorIntensity / 10.0) * 255);
-			// limit to the maximum
-			if (red > 255) 
-			{ 
-				red = 255;
-			}
-			dword green = (dword)(ColoursRGB[n][1] * (_monitorIntensity / 10.0) * 255);
-			if (green > 255) 
-			{
-				green = 255;
-			}
-			dword blue = (dword)(ColoursRGB[n][2] * (_monitorIntensity / 10.0) * 255);
-			if (blue > 255) 
-			{
-				blue = 255;
-			}
-			_colours[n].r = red;
-			_colours[n].g = green;
-			_colours[n].b = blue;
-		}
-	} 
-	else 
-	{
-		int n;
-		for (n = 0; n < 32; n++) 
-		{
-			dword green = (dword)(ColoursGreen[n] * (_monitorIntensity / 10.0) * 255);
-			if (green > 255) 
-			{
-				green = 255;
-			}
-			_colours[n].r = 0;
-			_colours[n].g = green;
-			_colours[n].b = 0;
-		}
-	}
-	
-	_videoPlugin->SetPalette(_colours);
+    switch (_monitorMode)
+    {
+        case PersonalMode:
+            {
+                for (int n = 0; n < 32; n++)
+                {
+                    dword red = (dword)(ColoursPersonal[n][0] * (_monitorIntensity / 10.0) * 255);
+                    if (red > 255) {red = 255;} // limit to the maximum
+                    dword green = (dword)(ColoursPersonal[n][1] * (_monitorIntensity / 10.0) * 255);
+                    if (green > 255) {green = 255;}
+                    dword blue = (dword)(ColoursPersonal[n][2] * (_monitorIntensity / 10.0) * 255);
+                    if (blue > 255) {blue = 255;}
+                    _colours[n].r = red;
+                    _colours[n].g = green;
+                    _colours[n].b = blue;
+                }
+                break;
+            }
+        case ColoursMode:
+            {
+                for (int n = 0; n < 32; n++)
+                {
+                    dword red = (dword)(ColoursRGB[n][0] * (_monitorIntensity / 10.0) * 255);
+                    if (red > 255) {red = 255;}
+                    dword green = (dword)(ColoursRGB[n][1] * (_monitorIntensity / 10.0) * 255);
+                    if (green > 255) {green = 255;}
+                    dword blue = (dword)(ColoursRGB[n][2] * (_monitorIntensity / 10.0) * 255);
+                    if (blue > 255) {blue = 255;}
+                    _colours[n].r = red;
+                    _colours[n].g = green;
+                    _colours[n].b = blue;
+                }
+                break;
+            }
+        case ColoursHiFiMode:
+            {
+                for (int n = 0; n < 32; n++)
+                {
+                    dword red = (dword)(ColoursHiFi[n][0] * (_monitorIntensity / 10.0) * 255);
+                    if (red > 255) {red = 255;}
+                    dword green = (dword)(ColoursHiFi[n][1] * (_monitorIntensity / 10.0) * 255);
+                    if (green > 255) {green = 255;}
+                    dword blue = (dword)(ColoursHiFi[n][2] * (_monitorIntensity / 10.0) * 255);
+                    if (blue > 255) {blue = 255;}
+                    _colours[n].r = red;
+                    _colours[n].g = green;
+                    _colours[n].b = blue;
+                }
+                break;
+            }
+        case GreenMode:
+            {
+                for (int n = 0; n < 32; n++)
+                {
+                    dword green = (dword)(ColoursGreen[n] * (_monitorIntensity / 10.0) * 255);
+                    if (green > 255) {green = 255;}
+                    _colours[n].r = 0;
+                    _colours[n].g = green;
+                    _colours[n].b = 0;
+                }
+                break;
+            }
+        case GreyMode:
+            {
+                for (int n = 0; n < 32; n++)
+                {
+                    dword grey = (dword)(ColoursGrey[n] * (_monitorIntensity / 10.0) * 255);
+                    if (grey > 255) {grey = 255;}
+                    _colours[n].r = grey;
+                    _colours[n].g = grey;
+                    _colours[n].b = grey;
+                }
+                break;
+            }
+        default:
+            {
+                for (int n = 0; n < 32; n++)
+                {
+                    dword green = (dword)(ColoursGreen[n] * (_monitorIntensity / 10.0) * 255);
+                    if (green > 255) {green = 255;}
+                    _colours[n].r = 0;
+                    _colours[n].g = green;
+                    _colours[n].b = 0;
+                }
+            }
+    }
 
-	if (_renderFunc != NULL)
-	{
-		for (int i=0 ; i<17 ; i++)
-		{
-			_renderFunc->SetPalette(i, _colours[_palette[i]]);
-		}
-		
-		SDL_Color colour;
-		colour.r = ((dword)_colours[_palette[18]].r + (dword)_colours[_palette[19]].r) >> 1;
-		colour.g = ((dword)_colours[_palette[18]].g + (dword)_colours[_palette[19]].g) >> 1;
-		colour.b = ((dword)_colours[_palette[18]].b + (dword)_colours[_palette[19]].b) >> 1;
-		
-		_renderFunc->SetAntiAliasingColour(colour);
-	}
+    _videoPlugin->SetPalette(_colours);
+
+    if (_renderFunc != NULL)
+    {
+        for (int i=0 ; i<17 ; i++)
+        {
+            _renderFunc->SetPalette(i, _colours[_palette[i]]);
+        }
+
+        SDL_Color colour;
+        colour.r = ((dword)_colours[_palette[18]].r + (dword)_colours[_palette[19]].r) >> 1;
+        colour.g = ((dword)_colours[_palette[18]].g + (dword)_colours[_palette[19]].g) >> 1;
+        colour.b = ((dword)_colours[_palette[18]].b + (dword)_colours[_palette[19]].b) >> 1;
+
+        _renderFunc->SetAntiAliasingColour(colour);
+    }
 }
-
-
 
 void Renderer::SetMemory(byte *memory)
 {
@@ -315,9 +360,9 @@ void Renderer::SetOpenGLFilter(bool val)
 	_videoPluginOpenGLFilter = val; 
 }
 
-void Renderer::SetMonitor(bool color, unsigned int intensity, bool remanency)
+void Renderer::SetMonitor(MonitorMode mode, unsigned int intensity, bool remanency)
 {
-	_colorMonitor = color;
+	_monitorMode = mode;
 	_monitorIntensity = intensity;
 	_monitorRemanency = remanency;
 }
