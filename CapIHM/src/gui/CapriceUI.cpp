@@ -1761,7 +1761,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_grid1 = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_grid1 = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	
 	// Grid
 	m_grid1->CreateGrid( 32, 16 );
@@ -1771,10 +1771,25 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_grid1->SetMargins( 0, 0 );
 	
 	// Columns
-	m_grid1->AutoSizeColumns();
+	m_grid1->SetColSize( 0, 40 );
+	m_grid1->SetColSize( 1, 40 );
+	m_grid1->SetColSize( 2, 40 );
+	m_grid1->SetColSize( 3, 40 );
+	m_grid1->SetColSize( 4, 40 );
+	m_grid1->SetColSize( 5, 40 );
+	m_grid1->SetColSize( 6, 40 );
+	m_grid1->SetColSize( 7, 40 );
+	m_grid1->SetColSize( 8, 40 );
+	m_grid1->SetColSize( 9, 40 );
+	m_grid1->SetColSize( 10, 40 );
+	m_grid1->SetColSize( 11, 40 );
+	m_grid1->SetColSize( 12, 40 );
+	m_grid1->SetColSize( 13, 40 );
+	m_grid1->SetColSize( 14, 40 );
+	m_grid1->SetColSize( 15, 40 );
 	m_grid1->EnableDragColMove( false );
 	m_grid1->EnableDragColSize( false );
-	m_grid1->SetColLabelSize( 30 );
+	m_grid1->SetColLabelSize( 20 );
 	m_grid1->SetColLabelValue( 0, wxT("0") );
 	m_grid1->SetColLabelValue( 1, wxT("1") );
 	m_grid1->SetColLabelValue( 2, wxT("2") );
@@ -1791,21 +1806,23 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_grid1->SetColLabelValue( 13, wxT("D") );
 	m_grid1->SetColLabelValue( 14, wxT("E") );
 	m_grid1->SetColLabelValue( 15, wxT("F") );
-	m_grid1->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	m_grid1->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	
 	// Rows
 	m_grid1->EnableDragRowSize( false );
-	m_grid1->SetRowLabelSize( 80 );
-	m_grid1->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
+	m_grid1->SetRowLabelSize( 60 );
+	m_grid1->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	
 	// Label Appearance
+	m_grid1->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
 	// Cell Defaults
+	m_grid1->SetDefaultCellFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	m_grid1->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer21->Add( m_grid1, 0, wxALL, 5 );
+	bSizer21->Add( m_grid1, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
 	m_scrollBar1 = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
-	bSizer21->Add( m_scrollBar1, 0, wxALL|wxEXPAND, 5 );
+	bSizer21->Add( m_scrollBar1, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
 	
 	this->SetSizer( bSizer21 );
 	this->Layout();
