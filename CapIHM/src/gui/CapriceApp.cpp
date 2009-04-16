@@ -23,6 +23,7 @@
  
 #include "CapriceApp.h"
 #include "CapriceWindowImpl.h"
+#include "CapriceInputSettingsImpl.h"
 
 #include <wx/splash.h> 
 #include <zlib.h>
@@ -121,6 +122,10 @@ int CapriceApp::OnRun()
 
         if (fullscreen) emulator->GetRenderer().ToggleFullScreen();		
 
+		// Initializing the keymap is done in the input settings window...
+		CapriceInputSettingsImpl* InputSettingsWindow = new CapriceInputSettingsImpl(frame);
+		InputSettingsWindow -> applySettings();
+		delete InputSettingsWindow;
     }
 
     delete splash;

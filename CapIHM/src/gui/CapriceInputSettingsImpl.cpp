@@ -74,7 +74,7 @@ void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
     saveKeymap();
 }
 
-void CapriceInputSettingsImpl::applySettings(wxCommandEvent& event)
+void CapriceInputSettingsImpl::applySettings()
 {
     for(CPC_Keymap::iterator iter=keymap.begin();iter!=keymap.end();iter++)
     {

@@ -31,11 +31,17 @@
 #include <wx/dcbuffer.h>
 #include "CapriceApp.h"
 
+CapriceWindowImpl::CapriceWindowImpl() 
+	: CapriceWindow(NULL) 
+{
+	paused = true ;
+	this->SetDropTarget(this);
+}
 
 // =============================== Window Event =============================================
 void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 {
-    exit(0);
+	exit(0);
 }
 
 /**
@@ -43,8 +49,8 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
-    if (emulator && !paused)
-    {
+	if (emulator && !paused)
+	{
         emulator->Emulate();
         //Ask to continue idle things
         event.RequestMore(true);

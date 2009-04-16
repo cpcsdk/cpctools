@@ -9,12 +9,13 @@ class CapriceInputSettingsImpl : public InputSettings
     public:
 	CapriceInputSettingsImpl(wxWindow* WinID);
 	~CapriceInputSettingsImpl();
+	void applySettings();
 
     private:
 	virtual void onKeyClick(wxCommandEvent& event);
 	virtual void onKeyPress(wxKeyEvent& event);
 	virtual void onSave(wxCommandEvent& event);
-	virtual void applySettings(wxCommandEvent& event);
+	virtual void applySettings(wxCommandEvent& event) { applySettings(); }
 	
 	void saveKeymap();
 	wxString keyCodeToName(int keycode);
