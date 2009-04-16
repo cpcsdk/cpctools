@@ -23,7 +23,8 @@ MemoryImpl::MemoryImpl(wxWindow* parent,Emulator* emulator)
 	}
 
 	// wxFormBuilder does not setup the scrollbar correctly so we do it here.
-	m_scrollBar1 -> SetScrollbar(0,0x200/16,128*1024/16,0x200/16);
+	// This way we can adjust it depending to the actual memory (64 or 128k)
+	m_scrollBar1 -> SetScrollbar(0,0x200/16,emulator->GetConfig().ram_size*1024/16,0x200/16);
 }
 
 MemoryImpl::~MemoryImpl()
