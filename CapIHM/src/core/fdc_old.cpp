@@ -58,6 +58,8 @@
 #include "config.h"
 #include "debug.h"
 
+#include "dsk.h"
+
 extern byte *pbGPBuffer;
 
 #ifdef DEBUG_FDC
@@ -88,10 +90,8 @@ command code, number of bytes for command, number of bytes for result, direction
 	{0x5d, 9, 7, CPU_TO_FDC, fdc_scan},    // scan high or equal
 };
 
-t_FDC::t_FDC(t_CPC &cpc, t_drive &dA, t_drive &dB) :
+t_FDC::t_FDC(t_CPC &cpc) :
 CPC(cpc),
-driveA(dA),
-driveB(dB),
 read_status_delay(0)
 {
 }
@@ -1005,6 +1005,15 @@ void t_FDC::fdc_scan(t_FDC &FDC)
 	}
 }
 
+void t_FDC::insertA(const string filename, const char *type )
+{
+    dsk_load(filename.c_str(), &driveA, 'A');
+}
+
+void t_FDC::insertB(const string filename, const char *type )
+{
+    dsk_load(filename.c_str(), &driveB, 'B');
+}
 
 #endif
 

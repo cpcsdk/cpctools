@@ -59,7 +59,7 @@ void dsk_eject (t_drive *drive)
 
 
 
-int dsk_load (char *pchFileName, t_drive *drive, char /*chID*/)
+int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 {
 	int iRetCode;
 	dword dwTrackSize, track, side, sector, dwSectorSize, dwSectors;
@@ -204,7 +204,7 @@ exit:
 
 
 
-int dsk_save (char *pchFileName, t_drive *drive, char /*chID*/)
+int dsk_save (const char *pchFileName, t_drive *drive, char /*chID*/)
 {
 	t_DSK_header dh;
 	t_track_header th;

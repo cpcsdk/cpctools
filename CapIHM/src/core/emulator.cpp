@@ -472,10 +472,10 @@ Emulator::~Emulator()
 {
 	printer_stop();
 //TODO use lib765 for ejecting floppies
-#ifndef HAVE_LIB765_H
-	dsk_eject(&_driveA);
-	dsk_eject(&_driveB);
-#endif
+//#ifndef HAVE_LIB765_H
+//	dsk_eject(&_driveA);
+//	dsk_eject(&_driveB);
+//#endif
 	_tape->tape_eject();
 
 	emulator_shutdown();
@@ -552,11 +552,7 @@ bool Emulator::Init()
 
 	_ppi = new t_PPI();
 
-#ifndef HAVE_LIB765_H
-	_fdc = new t_FDC(_config, _driveA, _driveB);
-#else
 	_fdc = new t_FDC(_config) ;
-#endif
 
 	_z80 = new t_z80regs(*this);
 

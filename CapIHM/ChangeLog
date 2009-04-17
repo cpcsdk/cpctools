@@ -1,4 +1,12 @@
-2009-04-20 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+2009-04-17 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* FDC : Now the old caprice fdc routine are reusable (better
+	compatibility with some program, need to work on this issue in
+	libdsk/lib765)
+	* Tape : Some clear and more C++-style memory allocation
+	* SNA : When a snapshot was make a text file with memory dump was
+	made, (need to seperate in two different option in futurs time)
+
+2009-04-15 CloudStrife/Shinra <cloudstrife@cpcscene.com>
 	* Core : Now other monitor mode are usable (Green and Gray Level,
 	Standard Color Mode, more fidelitous Color Mode (Level based on
 	mesurement on a real cpc), and a personal Color Mode (configuration

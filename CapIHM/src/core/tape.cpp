@@ -95,404 +95,431 @@ void t_Tape::tape_eject (void)
 
 int t_Tape::tape_insert (char *pchFileName)
 {
-	long lFileSize;
-	int iBlockLength;
-	byte bID;
-	byte *pbPtr, *pbBlock;
-	FILE *pfileObject = NULL;
+    long lFileSize;
+    int iBlockLength;
+    byte bID;
+    byte *pbPtr, *pbBlock;
+    FILE *pfileObject = NULL;
 
-	tape_eject();
-	if ((pfileObject = fopen(pchFileName, "rb")) == NULL) {
-		return ERR_FILE_NOT_FOUND;
-	}
-	fread(pbGPBuffer, 10, 1, pfileObject); // read CDT header
-	pbPtr = pbGPBuffer;
-	if (memcmp(pbPtr, "ZXTape!\032", 8) != 0) { // valid CDT file?
-		fclose(pfileObject);
-		return ERR_TAP_INVALID;
-	}
-	if (*(pbPtr + 0x08) != 1) { // major version must be 1
-		fclose(pfileObject);
-		return ERR_TAP_INVALID;
-	}
-	lFileSize = file_size(fileno(pfileObject)) - 0x0a;
-	if (lFileSize <= 0) { // the tape image should have at least one block...
-		fclose(pfileObject);
-		return ERR_TAP_INVALID;
-	}
-	pbTapeImage = (byte *)malloc(lFileSize+6);
-	*pbTapeImage = 0x20; // start off with a pause block
-	*(word *)(pbTapeImage+1) = 2000; // set the length to 2 seconds
-	fread(pbTapeImage+3, lFileSize, 1, pfileObject); // append the entire CDT file
-	fclose(pfileObject);
-	*(pbTapeImage+lFileSize+3) = 0x20; // end with a pause block
-	*(word *)(pbTapeImage+lFileSize+3+1) = 2000; // set the length to 2 seconds
+    tape_eject();
+    if ((pfileObject = fopen(pchFileName, "rb")) == NULL)
+    {
+        return ERR_FILE_NOT_FOUND;
+    }
+    fread(pbGPBuffer, 10, 1, pfileObject); // read CDT header
+    pbPtr = pbGPBuffer;
+    if (memcmp(pbPtr, "ZXTape!\032", 8) != 0) // valid CDT file?
+    {
+        fclose(pfileObject);
+        return ERR_TAP_INVALID;
+    }
+    if (*(pbPtr + 0x08) != 1) // major version must be 1
+    {
+        fclose(pfileObject);
+        return ERR_TAP_INVALID;
+    }
+    lFileSize = file_size(fileno(pfileObject)) - 0x0a;
+    if (lFileSize <= 0) // the tape image should have at least one block...
+    {
+        fclose(pfileObject);
+        return ERR_TAP_INVALID;
+    }
+    pbTapeImage = new byte[lFileSize+6];
+    *pbTapeImage = 0x20; // start off with a pause block
+    *(word *)(pbTapeImage+1) = 2000; // set the length to 2 seconds
+    fread(pbTapeImage+3, lFileSize, 1, pfileObject); // append the entire CDT file
+    fclose(pfileObject);
+    *(pbTapeImage+lFileSize+3) = 0x20; // end with a pause block
+    *(word *)(pbTapeImage+lFileSize+3+1) = 2000; // set the length to 2 seconds
 	
 #ifdef DEBUG_TAPE
-	if (dwDebugFlag)
-		fputs("--- New Tape\r\n", pfoDebug);
+    if (dwDebugFlag) fputs("--- New Tape\r\n", pfoDebug);
 #endif
-	pbTapeImageEnd = pbTapeImage + lFileSize+6;
-	pbBlock = pbTapeImage;
-	bool bolGotDataBlock = false;
-	while (pbBlock < pbTapeImageEnd) {
-		bID = *pbBlock++;
-		switch(bID) {
-		case 0x10: // standard speed data block
-            iBlockLength = *(word *)(pbBlock+2) + 4;
-            bolGotDataBlock = true;
-            break;
-		case 0x11: // turbo loading data block
-            iBlockLength = (*(dword *)(pbBlock+0x0f) & 0x00ffffff) + 0x12;
-            bolGotDataBlock = true;
-            break;
-		case 0x12: // pure tone
-            iBlockLength = 4;
-            bolGotDataBlock = true;
-            break;
-		case 0x13: // sequence of pulses of different length
-            iBlockLength = *pbBlock * 2 + 1;
-            bolGotDataBlock = true;
-            break;
-		case 0x14: // pure data block
-            iBlockLength = (*(dword *)(pbBlock+0x07) & 0x00ffffff) + 0x0a;
-            bolGotDataBlock = true;
-            break;
-		case 0x15: // direct recording
-            iBlockLength = (*(dword *)(pbBlock+0x05) & 0x00ffffff) + 0x08;
-            bolGotDataBlock = true;
-            break;
-		case 0x20: // pause
-            if ((!bolGotDataBlock) && (pbBlock != pbTapeImage+1)) {
-				*(word *)pbBlock = 0; // remove any pauses (execept ours) before the data starts
-            }
-            iBlockLength = 2;
-            break;
-		case 0x21: // group start
-            iBlockLength = *pbBlock + 1;
-            break;
-		case 0x22: // group end
-            iBlockLength = 0;
-            break;
-		case 0x23: // jump to block
-			return ERR_TAP_UNSUPPORTED;
-            iBlockLength = 2;
-            break;
-		case 0x24: // loop start
-			return ERR_TAP_UNSUPPORTED;
-            iBlockLength = 2;
-            break;
-		case 0x25: // loop end
-			return ERR_TAP_UNSUPPORTED;
-            iBlockLength = 0;
-            break;
-		case 0x26: // call sequence
-			return ERR_TAP_UNSUPPORTED;
-            iBlockLength = (*(word *)pbBlock * 2) + 2;
-            break;
-		case 0x27: // return from sequence
-			return ERR_TAP_UNSUPPORTED;
-            iBlockLength = 0;
-            break;
-		case 0x28: // select block
-			return ERR_TAP_UNSUPPORTED;
-            iBlockLength = *(word *)pbBlock + 2;
-            break;
-		case 0x30: // text description
-            iBlockLength = *pbBlock + 1;
-            break;
-		case 0x31: // message block
-            iBlockLength = *(pbBlock+1) + 2;
-            break;
-		case 0x32: // archive info
-            iBlockLength = *(word *)pbBlock + 2;
-            break;
-		case 0x33: // hardware type
-            iBlockLength = (*pbBlock * 3) + 1;
-            break;
-		case 0x34: // emulation info
-            iBlockLength = 8;
-            break;
-		case 0x35: // custom info block
-            iBlockLength = *(dword *)(pbBlock+0x10) + 0x14;
-            break;
-		case 0x40: // snapshot block
-            iBlockLength = (*(dword *)(pbBlock+0x01) & 0x00ffffff) + 0x04;
-            break;
-		case 0x5A: // another tzx/cdt file
-            iBlockLength = 9;
-            break;
-			
-		default: // "extension rule"
-            iBlockLength = *(dword *)pbBlock + 4;
-		}
-		
+    pbTapeImageEnd = pbTapeImage + lFileSize+6;
+    pbBlock = pbTapeImage;
+    bool bolGotDataBlock = false;
+    while (pbBlock < pbTapeImageEnd)
+    {
+        bID = *pbBlock++;
+        switch(bID)
+        {
+            case 0x10: // standard speed data block
+                iBlockLength = *(word *)(pbBlock+2) + 4;
+                bolGotDataBlock = true;
+                break;
+            case 0x11: // turbo loading data block
+                iBlockLength = (*(dword *)(pbBlock+0x0f) & 0x00ffffff) + 0x12;
+                bolGotDataBlock = true;
+                break;
+            case 0x12: // pure tone
+                iBlockLength = 4;
+                bolGotDataBlock = true;
+                break;
+            case 0x13: // sequence of pulses of different length
+                iBlockLength = *pbBlock * 2 + 1;
+                bolGotDataBlock = true;
+                break;
+            case 0x14: // pure data block
+                iBlockLength = (*(dword *)(pbBlock+0x07) & 0x00ffffff) + 0x0a;
+                bolGotDataBlock = true;
+                break;
+            case 0x15: // direct recording
+                iBlockLength = (*(dword *)(pbBlock+0x05) & 0x00ffffff) + 0x08;
+                bolGotDataBlock = true;
+                break;
+            case 0x20: // pause
+                if ((!bolGotDataBlock) && (pbBlock != pbTapeImage+1))
+                {
+                    *(word *)pbBlock = 0; // remove any pauses (execept ours) before the data starts
+                }
+                iBlockLength = 2;
+                break;
+            case 0x21: // group start
+                iBlockLength = *pbBlock + 1;
+                break;
+            case 0x22: // group end
+                iBlockLength = 0;
+                break;
+            case 0x23: // jump to block
+                return ERR_TAP_UNSUPPORTED;
+                iBlockLength = 2;
+                break;
+            case 0x24: // loop start
+                return ERR_TAP_UNSUPPORTED;
+                iBlockLength = 2;
+                break;
+            case 0x25: // loop end
+                return ERR_TAP_UNSUPPORTED;
+                iBlockLength = 0;
+                break;
+            case 0x26: // call sequence
+                return ERR_TAP_UNSUPPORTED;
+                iBlockLength = (*(word *)pbBlock * 2) + 2;
+                break;
+            case 0x27: // return from sequence
+                return ERR_TAP_UNSUPPORTED;
+                iBlockLength = 0;
+                break;
+            case 0x28: // select block
+                return ERR_TAP_UNSUPPORTED;
+                iBlockLength = *(word *)pbBlock + 2;
+                break;
+            case 0x30: // text description
+                iBlockLength = *pbBlock + 1;
+                break;
+            case 0x31: // message block
+                iBlockLength = *(pbBlock+1) + 2;
+                break;
+            case 0x32: // archive info
+                iBlockLength = *(word *)pbBlock + 2;
+                break;
+            case 0x33: // hardware type
+                iBlockLength = (*pbBlock * 3) + 1;
+                break;
+            case 0x34: // emulation info
+                iBlockLength = 8;
+                break;
+            case 0x35: // custom info block
+                iBlockLength = *(dword *)(pbBlock+0x10) + 0x14;
+                break;
+            case 0x40: // snapshot block
+                iBlockLength = (*(dword *)(pbBlock+0x01) & 0x00ffffff) + 0x04;
+                break;
+            case 0x5A: // another tzx/cdt file
+                iBlockLength = 9;
+                break;		
+           default: // "extension rule"
+                iBlockLength = *(dword *)pbBlock + 4;
+        }
+
 #ifdef DEBUG_TAPE
-		if (dwDebugFlag)
-			fprintf(pfoDebug, "%02x %d\r\n", bID, iBlockLength);
+        if (dwDebugFlag) fprintf(pfoDebug, "%02x %d\r\n", bID, iBlockLength);
 #endif
-		
-		pbBlock += iBlockLength;
-	}
-	if (pbBlock != pbTapeImageEnd) {
-		tape_eject();
-		return ERR_TAP_INVALID;
-	}
-	
-	Tape_Rewind();
-	
-	/* char *pchTmpBuffer = new char[MAX_LINE_LEN];
-	LoadString(hAppInstance, MSG_TAP_INSERT, chMsgBuffer, sizeof(chMsgBuffer));
-	snprintf(pchTmpBuffer, _MAX_PATH-1, chMsgBuffer, CPC.tape_file);
-	add_message(pchTmpBuffer);
-	delete [] pchTmpBuffer; */
-	return 0;
+
+        pbBlock += iBlockLength;
+    }
+
+    if (pbBlock != pbTapeImageEnd)
+    {
+        tape_eject();
+        return ERR_TAP_INVALID;
+    }
+
+    Tape_Rewind();
+
+    /* char *pchTmpBuffer = new char[MAX_LINE_LEN];
+    LoadString(hAppInstance, MSG_TAP_INSERT, chMsgBuffer, sizeof(chMsgBuffer));
+    snprintf(pchTmpBuffer, _MAX_PATH-1, chMsgBuffer, CPC.tape_file);
+    add_message(pchTmpBuffer);
+    delete [] pchTmpBuffer; */
+    return 0;
 }
 
 
 
 int t_Tape::tape_insert_voc (char *pchFileName)
 {
-	long lFileSize, lOffset, lInitialOffset, lSampleLength;
-	int iBlockLength;
-	byte *pbPtr, *pbTapeImagePtr, *pbVocDataBlock, *pbVocDataBlockPtr;
-	bool bolDone;
-	
-	FILE *pfileObject = NULL;
+    long lFileSize, lOffset, lInitialOffset, lSampleLength;
+    int iBlockLength;
+    byte *pbPtr, *pbTapeImagePtr, *pbVocDataBlock, *pbVocDataBlockPtr;
+    bool bolDone;
 
-	tape_eject();
-	if ((pfileObject = fopen(pchFileName, "rb")) == NULL) {
-		return ERR_FILE_NOT_FOUND;
-	}
-	fread(pbGPBuffer, 26, 1, pfileObject); // read VOC header
-	pbPtr = pbGPBuffer;
-	if (memcmp(pbPtr, "Creative Voice File\032", 20) != 0) { // valid VOC file?
-		fclose(pfileObject);
-		return ERR_TAP_BAD_VOC;
-	}
-	lOffset =
-		lInitialOffset = *(word *)(pbPtr + 0x14);
-	lFileSize = file_size(fileno(pfileObject));
-	if ((lFileSize-26) <= 0) { // should have at least one block...
-		fclose(pfileObject);
-		return ERR_TAP_BAD_VOC;
-	}
-	
+    FILE *pfileObject = NULL;
+
+    tape_eject();
+    if ((pfileObject = fopen(pchFileName, "rb")) == NULL)
+    {
+        return ERR_FILE_NOT_FOUND;
+    }
+    fread(pbGPBuffer, 26, 1, pfileObject); // read VOC header
+    pbPtr = pbGPBuffer;
+    if (memcmp(pbPtr, "Creative Voice File\032", 20) != 0) // valid VOC file?
+    {
+        fclose(pfileObject);
+        return ERR_TAP_BAD_VOC;
+    }
+    lOffset = lInitialOffset = *(word *)(pbPtr + 0x14);
+    lFileSize = file_size(fileno(pfileObject));
+    if ((lFileSize-26) <= 0) // should have at least one block...
+    {
+        fclose(pfileObject);
+        return ERR_TAP_BAD_VOC;
+    }
+
 #ifdef DEBUG_TAPE
-	if (dwDebugFlag)
-		fputs("--- New Tape\r\n", pfoDebug);
+    if (dwDebugFlag) fputs("--- New Tape\r\n", pfoDebug);
 #endif
-	iBlockLength = 0;
-	lSampleLength = 0;
-	byte bSampleRate = 0;
-	bolDone = false;
-	while ((!bolDone) && (lOffset < lFileSize)) {
-		fseek(pfileObject, lOffset, SEEK_SET);
-		fread(pbPtr, 16, 1, pfileObject); // read block ID + size
+    iBlockLength = 0;
+    lSampleLength = 0;
+    byte bSampleRate = 0;
+    bolDone = false;
+    while ((!bolDone) && (lOffset < lFileSize))
+    {
+        fseek(pfileObject, lOffset, SEEK_SET);
+        fread(pbPtr, 16, 1, pfileObject); // read block ID + size
 #ifdef DEBUG_TAPE
-		if (dwDebugFlag)
-			fprintf(pfoDebug, "%02x %d\r\n", *pbPtr, *(dword *)(pbPtr+0x01) & 0x00ffffff);
+        if (dwDebugFlag) fprintf(pfoDebug, "%02x %d\r\n", *pbPtr, *(dword *)(pbPtr+0x01) & 0x00ffffff);
 #endif
-		switch(*pbPtr) {
-		case 0x0: // terminator
-            bolDone = true;
-            break;
-		case 0x1: // sound data
-            iBlockLength = (*(dword *)(pbPtr+0x01) & 0x00ffffff) + 4;
-            lSampleLength += iBlockLength - 6;
-            if ((bSampleRate) && (bSampleRate != *(pbPtr+0x04))) { // no change in sample rate allowed
-				fclose(pfileObject);
-				return ERR_TAP_BAD_VOC;
-            }
-            bSampleRate = *(pbPtr+0x04);
-            if (*(pbPtr+0x05) != 0) { // must be 8 bits wide
-				fclose(pfileObject);
-				return ERR_TAP_BAD_VOC;
-            }
-            break;
-		case 0x2: // sound continue
-            iBlockLength = (*(dword *)(pbPtr+0x01) & 0x00ffffff) + 4;
-            lSampleLength += iBlockLength - 4;
-            break;
-		case 0x3: // silence
-            iBlockLength = 4;
-            lSampleLength += *(word *)(pbPtr+0x01) + 1;
-            if ((bSampleRate) && (bSampleRate != *(pbPtr+0x03))) { // no change in sample rate allowed
-				fclose(pfileObject);
-				return ERR_TAP_BAD_VOC;
-            }
-            bSampleRate = *(pbPtr+0x03);
-            break;
-		case 0x4: // marker
-            iBlockLength = 3;
-            break;
-		case 0x5: // ascii
-            iBlockLength = (*(dword *)(pbPtr+0x01) & 0x00ffffff) + 4;
-            break;
-		default:
-            fclose(pfileObject);
-            return ERR_TAP_BAD_VOC;
-		}
-		lOffset += iBlockLength;
-	}
+        switch(*pbPtr)
+        {
+            case 0x0: // terminator
+                bolDone = true;
+                break;
+            case 0x1: // sound data
+                iBlockLength = (*(dword *)(pbPtr+0x01) & 0x00ffffff) + 4;
+                lSampleLength += iBlockLength - 6;
+                if ((bSampleRate) && (bSampleRate != *(pbPtr+0x04))) // no change in sample rate allowed
+                {
+                    fclose(pfileObject);
+                    return ERR_TAP_BAD_VOC;
+                }
+                bSampleRate = *(pbPtr+0x04);
+                if (*(pbPtr+0x05) != 0) // must be 8 bits wide
+                {
+                    fclose(pfileObject);
+                    return ERR_TAP_BAD_VOC;
+                }
+                break;
+            case 0x2: // sound continue
+                iBlockLength = (*(dword *)(pbPtr+0x01) & 0x00ffffff) + 4;
+                lSampleLength += iBlockLength - 4;
+                break;
+            case 0x3: // silence
+                iBlockLength = 4;
+                lSampleLength += *(word *)(pbPtr+0x01) + 1;
+                if ((bSampleRate) && (bSampleRate != *(pbPtr+0x03))) // no change in sample rate allowed
+                {
+                    fclose(pfileObject);
+                    return ERR_TAP_BAD_VOC;
+                }
+                bSampleRate = *(pbPtr+0x03);
+                break;
+            case 0x4: // marker
+                iBlockLength = 3;
+                break;
+            case 0x5: // ascii
+                iBlockLength = (*(dword *)(pbPtr+0x01) & 0x00ffffff) + 4;
+                break;
+            default:
+                fclose(pfileObject);
+                return ERR_TAP_BAD_VOC;
+        }
+        lOffset += iBlockLength;
+    }
 #ifdef DEBUG_TAPE
-	if (dwDebugFlag)
-		fprintf(pfoDebug, "--- %ld bytes\r\n", lSampleLength);
+    if (dwDebugFlag) fprintf(pfoDebug, "--- %ld bytes\r\n", lSampleLength);
 #endif
-	
-	dword dwTapePulseCycles = 3500000L / (1000000L / (256 - bSampleRate)); // length of one pulse in ZX Spectrum T states
-	dword dwCompressedSize = lSampleLength >> 3; // 8x data reduction
-	if (dwCompressedSize > 0x00ffffff) { // we only support one direct recording block right now
-		fclose(pfileObject);
-		return ERR_TAP_BAD_VOC;
-	}
-	pbTapeImage = (byte *)malloc(dwCompressedSize+1+8+6);
-	if (pbTapeImage == NULL) { // check if the memory allocation has failed
-		fclose(pfileObject);
-		return ERR_OUT_OF_MEMORY;
-	}
-	*pbTapeImage = 0x20; // start off with a pause block
-	*(word *)(pbTapeImage+1) = 2000; // set the length to 2 seconds
-	
-	*(pbTapeImage+3) = 0x15; // direct recording block
-	*(word *)(pbTapeImage+4) = (word)dwTapePulseCycles; // number of T states per sample
-	*(word *)(pbTapeImage+6) = 0; // pause after block
-	*(pbTapeImage+8) = lSampleLength & 7 ? lSampleLength & 7 : 8; // bits used in last byte
-	*(dword *)(pbTapeImage+9) = dwCompressedSize & 0x00ffffff; // data length
-	pbTapeImagePtr = pbTapeImage + 12;
-	
-	lOffset = lInitialOffset;
-	bolDone = false;
-	dword dwBit = 8;
-	byte bByte = 0;
-	while ((!bolDone) && (lOffset < lFileSize)) {
-		fseek(pfileObject, lOffset, SEEK_SET);
-		fread(pbPtr, 1, 1, pfileObject); // read block ID
-		switch(*pbPtr) {
-		case 0x0: // terminator
-            bolDone = true;
-            break;
-		case 0x1: // sound data
-			{
-				fread(pbPtr, 3+2, 1, pfileObject); // get block size and sound info
-				iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
-				lSampleLength = iBlockLength - 6;
-				pbVocDataBlock = (byte *)malloc(lSampleLength);
-				if (pbVocDataBlock == NULL) {
-					fclose(pfileObject);
-					tape_eject();
-					return ERR_OUT_OF_MEMORY;
-				}
-				fread(pbVocDataBlock, lSampleLength, 1, pfileObject);
-				pbVocDataBlockPtr = pbVocDataBlock;
-				for (int iBytePos = 0; iBytePos < lSampleLength; iBytePos++) {
-					byte bVocSample = *pbVocDataBlockPtr++;
-					dwBit--;
-					if (bVocSample > VOC_THRESHOLD) {
-						bByte |= (1 << dwBit);
-					}
-					if (!dwBit) { // got all 8 bits?
-						*pbTapeImagePtr++ = bByte;
-						dwBit = 8;
-						bByte = 0;
-					}
-				}
-				free(pbVocDataBlock);
-				break;
-			}
-		case 0x2: // sound continue
-			{
-				fread(pbPtr, 3, 1, pfileObject); // get block size
-				iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
-				lSampleLength = iBlockLength - 4;
-				pbVocDataBlock = (byte *)malloc(lSampleLength);
-				if (pbVocDataBlock == NULL) {
-					fclose(pfileObject);
-					tape_eject();
-					return ERR_OUT_OF_MEMORY;
-				}
-				fread(pbVocDataBlock, lSampleLength, 1, pfileObject);
-				pbVocDataBlockPtr = pbVocDataBlock;
-				for (int iBytePos = 0; iBytePos < lSampleLength; iBytePos++) {
-					byte bVocSample = *pbVocDataBlockPtr++;
-					dwBit--;
-					if (bVocSample > VOC_THRESHOLD) {
-						bByte |= (1 << dwBit);
-					}
-					if (!dwBit) { // got all 8 bits?
-						*pbTapeImagePtr++ = bByte;
-						dwBit = 8;
-						bByte = 0;
-					}
-				}
-				free(pbVocDataBlock);
-				break;
-			}
-		case 0x3: // silence
-			{
-				iBlockLength = 4;
-				lSampleLength = *(word *)(pbPtr) + 1;
-				for (int iBytePos = 0; iBytePos < lSampleLength; iBytePos++) {
-					dwBit--;
-					if (!dwBit) { // got all 8 bits?
-						*pbTapeImagePtr++ = bByte;
-						dwBit = 8;
-						bByte = 0;
-					}
-				}
-			}
-            break;
-		case 0x4: // marker
-            iBlockLength = 3;
-            break;
-		case 0x5: // ascii
-            iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
-            break;
-		}
-		lOffset += iBlockLength;
-	}
-	fclose(pfileObject);
-	
-	*pbTapeImagePtr = 0x20; // end with a pause block
-	*(word *)(pbTapeImagePtr+1) = 2000; // set the length to 2 seconds
-	
-	pbTapeImageEnd = pbTapeImagePtr + 3;
-	/*
-	#ifdef DEBUG_TAPE
-	if ((pfileObject = fopen("./test.cdt", "wb")) != NULL) {
-	fwrite(pbTapeImage, (int)((pbTapeImagePtr+3)-pbTapeImage), 1, pfileObject);
-	fclose(pfileObject);
-	}
-	#endif
-	*/
-	Tape_Rewind();
-	
-	/* char *pchTmpBuffer = new char[MAX_LINE_LEN];
-	LoadString(hAppInstance, MSG_TAP_INSERT, chMsgBuffer, sizeof(chMsgBuffer));
-	snprintf(pchTmpBuffer, _MAX_PATH-1, chMsgBuffer, CPC.tape_file);
-	add_message(pchTmpBuffer);
-	delete [] pchTmpBuffer; */
-	return 0;
+
+    dword dwTapePulseCycles = 3500000L / (1000000L / (256 - bSampleRate)); // length of one pulse in ZX Spectrum T states
+    dword dwCompressedSize = lSampleLength >> 3; // 8x data reduction
+    if (dwCompressedSize > 0x00ffffff) // we only support one direct recording block right now
+    {
+        fclose(pfileObject);
+        return ERR_TAP_BAD_VOC;
+    }
+    pbTapeImage = new byte[dwCompressedSize+1+8+6];
+    if (pbTapeImage == NULL) // check if the memory allocation has failed
+    {
+        fclose(pfileObject);
+        return ERR_OUT_OF_MEMORY;
+    }
+    *pbTapeImage = 0x20; // start off with a pause block
+    *(word *)(pbTapeImage+1) = 2000; // set the length to 2 seconds
+
+    *(pbTapeImage+3) = 0x15; // direct recording block
+    *(word *)(pbTapeImage+4) = (word)dwTapePulseCycles; // number of T states per sample
+    *(word *)(pbTapeImage+6) = 0; // pause after block
+    *(pbTapeImage+8) = lSampleLength & 7 ? lSampleLength & 7 : 8; // bits used in last byte
+    *(dword *)(pbTapeImage+9) = dwCompressedSize & 0x00ffffff; // data length
+    pbTapeImagePtr = pbTapeImage + 12;
+
+    lOffset = lInitialOffset;
+    bolDone = false;
+    dword dwBit = 8;
+    byte bByte = 0;
+    while ((!bolDone) && (lOffset < lFileSize))
+    {
+        fseek(pfileObject, lOffset, SEEK_SET);
+        fread(pbPtr, 1, 1, pfileObject); // read block ID
+        switch(*pbPtr)
+        {
+            case 0x0: // terminator
+                bolDone = true;
+                break;
+            case 0x1: // sound data
+                {
+                    fread(pbPtr, 3+2, 1, pfileObject); // get block size and sound info
+                    iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
+                    lSampleLength = iBlockLength - 6;
+                    pbVocDataBlock = new byte[lSampleLength];
+                    if (pbVocDataBlock == NULL)
+                    {
+                        fclose(pfileObject);
+                        tape_eject();
+                        return ERR_OUT_OF_MEMORY;
+                    }
+                    fread(pbVocDataBlock, lSampleLength, 1, pfileObject);
+                    pbVocDataBlockPtr = pbVocDataBlock;
+                    for (int iBytePos = 0; iBytePos < lSampleLength; iBytePos++)
+                    {
+                        byte bVocSample = *pbVocDataBlockPtr++;
+                        dwBit--;
+                        if (bVocSample > VOC_THRESHOLD)
+                        {
+                            bByte |= (1 << dwBit);
+                        }
+                        if (!dwBit) // got all 8 bits?
+                        {
+                            *pbTapeImagePtr++ = bByte;
+                            dwBit = 8;
+                            bByte = 0;
+                        }
+                    }
+                    free(pbVocDataBlock);
+                    break;
+                }
+            case 0x2: // sound continue
+                {
+                    fread(pbPtr, 3, 1, pfileObject); // get block size
+                    iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
+                    lSampleLength = iBlockLength - 4;
+                    pbVocDataBlock = new byte[lSampleLength];
+                    if (pbVocDataBlock == NULL)
+                    {
+                        fclose(pfileObject);
+                        tape_eject();
+                        return ERR_OUT_OF_MEMORY;
+                    }
+                    fread(pbVocDataBlock, lSampleLength, 1, pfileObject);
+                    pbVocDataBlockPtr = pbVocDataBlock;
+                    for (int iBytePos = 0; iBytePos < lSampleLength; iBytePos++)
+                    {
+                        byte bVocSample = *pbVocDataBlockPtr++;
+                        dwBit--;
+                        if (bVocSample > VOC_THRESHOLD)
+                        {
+                            bByte |= (1 << dwBit);
+                        }
+                        if (!dwBit) // got all 8 bits?
+                        {
+                            *pbTapeImagePtr++ = bByte;
+                            dwBit = 8;
+                            bByte = 0;
+                        }
+                    }
+                    free(pbVocDataBlock);
+                    break;
+                }
+            case 0x3: // silence
+                {
+                    iBlockLength = 4;
+                    lSampleLength = *(word *)(pbPtr) + 1;
+                    for (int iBytePos = 0; iBytePos < lSampleLength; iBytePos++)
+                    {
+                        dwBit--;
+                        if (!dwBit) // got all 8 bits?
+                        {
+                            *pbTapeImagePtr++ = bByte;
+                            dwBit = 8;
+                            bByte = 0;
+                        }
+                    }
+                }
+                break;
+            case 0x4: // marker
+                iBlockLength = 3;
+                break;
+            case 0x5: // ascii
+                iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
+                break;
+        }
+        lOffset += iBlockLength;
+    }
+    fclose(pfileObject);
+
+    *pbTapeImagePtr = 0x20; // end with a pause block
+    *(word *)(pbTapeImagePtr+1) = 2000; // set the length to 2 seconds
+
+    pbTapeImageEnd = pbTapeImagePtr + 3;
+    /*
+    #ifdef DEBUG_TAPE
+    if ((pfileObject = fopen("./test.cdt", "wb")) != NULL) {
+    fwrite(pbTapeImage, (int)((pbTapeImagePtr+3)-pbTapeImage), 1, pfileObject);
+    fclose(pfileObject);
+    }
+    #endif
+    */
+    Tape_Rewind();
+
+    /* char *pchTmpBuffer = new char[MAX_LINE_LEN];
+    LoadString(hAppInstance, MSG_TAP_INSERT, chMsgBuffer, sizeof(chMsgBuffer));
+    snprintf(pchTmpBuffer, _MAX_PATH-1, chMsgBuffer, CPC.tape_file);
+    add_message(pchTmpBuffer);
+    delete [] pchTmpBuffer; */
+    return 0;
 }
 
 void t_Tape::Tape_GetCycleCount(void)
 {
-	dwTapePulseCycles = CYCLE_ADJUST(*pwTapePulseTablePtr++);
-	if (pwTapePulseTablePtr >= pwTapePulseTableEnd) {
-		pwTapePulseTablePtr = pwTapePulseTable;
-	}
+    dwTapePulseCycles = CYCLE_ADJUST(*pwTapePulseTablePtr++);
+    if (pwTapePulseTablePtr >= pwTapePulseTableEnd)
+    {
+    pwTapePulseTablePtr = pwTapePulseTable;
+    }
 }
 
 
 
 void t_Tape::Tape_SwitchLevel(void)
 {
-	if (bTapeLevel == TAPE_LEVEL_LOW) {
-		bTapeLevel = TAPE_LEVEL_HIGH; // reverse the level
-	}
-	else {
-		bTapeLevel = TAPE_LEVEL_LOW; // reverse the level
-	}
+    if (bTapeLevel == TAPE_LEVEL_LOW)
+    {
+        bTapeLevel = TAPE_LEVEL_HIGH; // reverse the level
+    }
+    else
+    {
+        bTapeLevel = TAPE_LEVEL_LOW; // reverse the level
+    }
 }
 
 

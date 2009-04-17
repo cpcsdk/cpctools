@@ -11,6 +11,9 @@
 #include "cap32type.h"
 #include "configBis.h"
 
+#include <string>
+
+using namespace std;
 
 class t_CPC;
 
@@ -104,8 +107,8 @@ private:
 private:
 	t_CPC&	CPC;
 
-	t_drive&	driveA;
-	t_drive&	driveB;
+	t_drive driveA;
+	t_drive driveB;
 
 	t_drive *active_drive; // reference to the currently selected drive
 	t_track *active_track; // reference to the currently selected track, of the active_drive
@@ -128,7 +131,7 @@ private:
 	unsigned char result[8];
 
 public:
-	t_FDC(t_CPC &CPC, t_drive &dA, t_drive &dB);
+	t_FDC(t_CPC &CPC);
 
 	void Reset();
 
@@ -146,6 +149,9 @@ public:
 
 	inline t_drive&		GetDriveA()							{ return driveA;		}
 	inline t_drive&		GetDriveB()							{ return driveB;		}
+
+	void insertA(const string filename, const char *type = NULL);
+	void insertB(const string filename, const char *type = NULL);
 
 	void fdc_write_data(unsigned char val);
 	unsigned char fdc_read_status(void);

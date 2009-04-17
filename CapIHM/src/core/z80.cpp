@@ -970,12 +970,16 @@ int t_z80regs::z80_execute(void)
 		if (dwDebugFlag)
 		{
 			dbg_z80_diff = (int)abs( (int) (dbg_z80_lastPC - _rPC));
-			if (dbg_z80_diff > 0x100) {
+			if (dbg_z80_diff > 0x100)
+			{
 				fprintf(pfoDebug, "Z80 PC : %04x\n", _rPC);
+				fprintf(pfoDebug, "Oc: %04x\n", bOpCode);
 			}
-			//    else {
-			//       fprintf(pfoDebug, "%04x ", _rPC);
-			//    }
+			else
+			{
+			       fprintf(pfoDebug, "%04x ", _rPC);
+			       fprintf(pfoDebug, "Oc %04x ", bOpCode);
+			}
 			dbg_z80_lastPC = _rPC;
 		}
 #endif

@@ -54,8 +54,8 @@ typedef struct {
 } t_disk_format;
 
 void dsk_eject (t_drive *drive);
-int dsk_load (char *pchFileName, t_drive *drive, char chID);
-int dsk_save (char *pchFileName, t_drive *drive, char chID);
+int dsk_load (const char *pchFileName, t_drive *drive, char chID);
+int dsk_save (const char *pchFileName, t_drive *drive, char chID);
 int dsk_format (t_drive *drive, int iFormat);
 
 #endif

@@ -43,10 +43,6 @@ private:
 	t_Memory				*_cpcMemory;
 	unsigned int			_cycleCount;
 
-#ifndef HAVE_LIB765_H
-	t_drive					_driveA;
-	t_drive					_driveB;
-#endif
 public:
 	Emulator();
 	~Emulator();
@@ -75,13 +71,8 @@ public:
 	inline  t_PPI&			GetPPI()					{ return *_ppi;			}
 	inline  t_Tape&			GetTape()					{ return *_tape;		}
 
-#ifndef HAVE_LIB765_H
-	t_drive&		GetDriveA()					{ return _driveA;		}
-	t_drive&		GetDriveB()					{ return _driveB;		}
-#else
 	t_drive&		GetDriveA()					{ return GetFDC().GetDriveA();	}
 	t_drive&		GetDriveB()					{ return GetFDC().GetDriveB();	}
-#endif
 
 private:
 	bool MF2Init();

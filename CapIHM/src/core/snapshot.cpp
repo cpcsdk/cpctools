@@ -78,6 +78,7 @@
 #define __rHALT     z80.HALT
 
 FILE *pSNAfileObject;
+FILE *pMemoryfileObject;
 
 int snapshot_load (Emulator &emulator, const char *pchFileName)
 {
@@ -485,6 +486,31 @@ int snapshot_save (Emulator &emulator, const char *pchFileName)
 			return ERR_SNA_WRITE;
 		}
 		fclose(pSNAfileObject);
+                if((pMemoryfileObject = fopen("memory.txt", "wt")) != NULL)
+                {
+                    for(int i = 0; i < 0xFFFF; i+=0x10)
+                    {
+                        fprintf(pMemoryfileObject,"%04x    ",i);
+                        for(int j = 0; j < 0x10; j++)
+                        {
+                            fprintf(pMemoryfileObject,"%02x ",*(Memory.GetRAM() + i + j));
+                        }
+                        fprintf(pMemoryfileObject,"   ");
+                        for(int j = 0; j < 0x10; j++)
+                        {
+                            if(*(Memory.GetRAM() + i + j) >= 0x20)
+                            {
+                                fprintf(pMemoryfileObject,"%c",*(Memory.GetRAM() + i + j));
+                            }
+                            else
+                            {
+                                fprintf(pMemoryfileObject,".");
+                            }
+                        }
+                        fprintf(pMemoryfileObject,"\n");
+                    }
+                }
+                fclose(pMemoryfileObject);
 	} 
 	else 
 	{
