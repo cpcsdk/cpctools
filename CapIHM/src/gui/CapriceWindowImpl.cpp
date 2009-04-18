@@ -261,6 +261,24 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
 bool CapriceWindowImpl::OnDropFiles(wxCoord x, wxCoord y , const wxArrayString& filenames)
 {
     wxString CurrentDocPath = filenames[0];
-    emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+    wxFileName FileName(CurrentDocPath);
+    if(FileName.HasExt())
+    {
+        std::cout << "FileDrop : " << std::string(FileName.GetExt().mb_str()) << endl;
+        if(FileName.GetExt().CmpNoCase(wxT("dsk")) == 0)
+        {
+            std::cout << "Loading Disk file" << endl;
+            emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+        }
+        else if(FileName.GetExt().CmpNoCase(wxT("sna")) == 0)
+        {
+            std::cout << "Loading Snapshot file" << endl;
+            snapshot_load(*emulator, CurrentDocPath.mb_str());
+        }
+        else
+        {
+            cout << "This file type was unmanaged" << endl;
+        }
+    }
     return true;
 }

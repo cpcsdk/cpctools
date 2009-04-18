@@ -1,3 +1,7 @@
+2009-04-18 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* GUI : Drag'n'Drop now work with snapshot too and make file type
+	checking
+
 2009-04-17 CloudStrife/Shinra <cloudstrife@cpcscene.com>
 	* FDC : Now the old caprice fdc routine are reusable (better
 	compatibility with some program, need to work on this issue in
