@@ -124,7 +124,15 @@ int t_Tape::tape_insert (char *pchFileName)
         fclose(pfileObject);
         return ERR_TAP_INVALID;
     }
-    pbTapeImage = new byte[lFileSize+6];
+    try
+    {
+        pbTapeImage = new byte[lFileSize+6];
+    }
+    catch (bad_alloc&)
+    {
+        fclose(pfileObject);
+        return ERR_OUT_OF_MEMORY;
+    }
     *pbTapeImage = 0x20; // start off with a pause block
     *(word *)(pbTapeImage+1) = 2000; // set the length to 2 seconds
     fread(pbTapeImage+3, lFileSize, 1, pfileObject); // append the entire CDT file
@@ -357,8 +365,11 @@ int t_Tape::tape_insert_voc (char *pchFileName)
         fclose(pfileObject);
         return ERR_TAP_BAD_VOC;
     }
-    pbTapeImage = new byte[dwCompressedSize+1+8+6];
-    if (pbTapeImage == NULL) // check if the memory allocation has failed
+    try
+    {
+        pbTapeImage = new byte[dwCompressedSize+1+8+6];
+    }
+    catch (bad_alloc&)
     {
         fclose(pfileObject);
         return ERR_OUT_OF_MEMORY;
@@ -391,8 +402,11 @@ int t_Tape::tape_insert_voc (char *pchFileName)
                     fread(pbPtr, 3+2, 1, pfileObject); // get block size and sound info
                     iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
                     lSampleLength = iBlockLength - 6;
-                    pbVocDataBlock = new byte[lSampleLength];
-                    if (pbVocDataBlock == NULL)
+                    try
+                    {
+                        pbVocDataBlock = new byte[lSampleLength];
+                    }
+                    catch (bad_alloc&)
                     {
                         fclose(pfileObject);
                         tape_eject();
@@ -423,8 +437,11 @@ int t_Tape::tape_insert_voc (char *pchFileName)
                     fread(pbPtr, 3, 1, pfileObject); // get block size
                     iBlockLength = (*(dword *)(pbPtr) & 0x00ffffff) + 4;
                     lSampleLength = iBlockLength - 4;
-                    pbVocDataBlock = new byte[lSampleLength];
-                    if (pbVocDataBlock == NULL)
+                    try
+                    {
+                        pbVocDataBlock = new byte[lSampleLength];
+                    }
+                    catch (bad_alloc&)
                     {
                         fclose(pfileObject);
                         tape_eject();
