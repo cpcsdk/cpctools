@@ -18,9 +18,23 @@ class CapriceInputSettingsImpl : public InputSettings
 	virtual void applySettings(wxCommandEvent& event) { applySettings(); }
 	
 	void saveKeymap();
+
 	wxString keyCodeToName(int keycode);
 
-        t_Input& emulatorInputHandler;
+  /**
+   * Returns the name of the keyboard configuration file
+   * @TODO Find the real file to use between share,directory or user
+   */
+
+  const char * getKeymapFileNameLoad();
+  /**
+   * Returns the name of the keyboard configuration file
+   * @TODO Find the real file to use between directory or user
+   */
+  const char * getKeymapFileNameSave();
+
+
+  t_Input& emulatorInputHandler;
 
 	typedef struct{
 	    int stdKeyCode;

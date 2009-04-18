@@ -17,7 +17,7 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
     std::string line;
     std::istringstream iss;
 
-    file.open("Keymap.cfg");
+    file.open(getKeymapFileNameLoad());
 
     while(getline(file,line))
     {
@@ -33,6 +33,18 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
     }
 
 }
+
+const char * CapriceInputSettingsImpl::getKeymapFileNameLoad()
+{
+  return DATA_PATH "Keymap.cfg" ;
+}
+
+const char * CapriceInputSettingsImpl::getKeymapFileNameSave()
+{
+  return DATA_PATH "Keymap.cfg" ;
+}
+
+
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
 {
@@ -82,11 +94,14 @@ void CapriceInputSettingsImpl::applySettings()
     }
 }
 
+/**
+ * @TODO save the keymap at the right place (not in share, but user home)
+ */
 void CapriceInputSettingsImpl::saveKeymap()
 {
     std::cout << "SAVING THE KEYMAP\n";
     std::ofstream file;
-    file.open("Keymap.cfg");
+    file.open( getKeymapFileNameSave());
 
     for(CPC_Keymap::iterator iter=keymap.begin();iter!=keymap.end();iter++)
     {

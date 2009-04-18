@@ -3,10 +3,10 @@ SUBDIRS = src
 
 IMGS = logo.png pause.png
 
-EXTRA_DIST = rom $(IMGS) cap32.cfg.tpl
+EXTRA_DIST = rom $(IMGS) cap32.cfg.tpl Keymap.cfg
 
 capricedir = $(pkgdatadir)
-caprice_DATA = $(IMGS) cap32.cfg
+caprice_DATA = $(IMGS) cap32.cfg Keymap.cfg
 
 capriceromdir = $(pkgdatadir)/rom
 capricerom_DATA = rom/*
