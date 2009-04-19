@@ -33,6 +33,7 @@ glfunclist.h\
 glfuncs.cpp\
 glfuncs.h\
 input.h\
+input.cpp\
 ioport.cpp\
 ioport.h\
 memory.cpp\

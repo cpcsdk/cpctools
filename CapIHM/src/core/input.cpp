@@ -27,7 +27,7 @@
 #include "input.h"
 #include "cap32type.h"
 #include "config.h"
-#include <wx/defs.h>
+#include "CPCKeyDefs.h"
 #include <iostream>
 
 
