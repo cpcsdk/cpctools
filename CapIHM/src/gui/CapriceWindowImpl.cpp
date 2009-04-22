@@ -34,6 +34,7 @@
 #include "Desass.h"
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 CapriceWindowImpl::CapriceWindowImpl() 
 	: CapriceWindow(NULL) 
@@ -178,6 +179,7 @@ void CapriceWindowImpl::OnPause( wxCommandEvent& event)
         //Interval of disassembling
         int memory_length = 0xFFFF ;
         int start_disassm = 0 ;
+        
 
         //Get the cpc memory
         byte * memory = emulator->GetMemory().GetRAM();
@@ -186,7 +188,7 @@ void CapriceWindowImpl::OnPause( wxCommandEvent& event)
         char * listing = (char *) malloc( sizeof(char) * 256 *  256 *  1024);
 
         //Get the disassembled memory
-        Desass( memory , listing, memory_length - start_disassm );
+        Desass( memory , std::cout, /*memory_length - start_disassm*/ 100 );
 
         printf("%s", listing);
 

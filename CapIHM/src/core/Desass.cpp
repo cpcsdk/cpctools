@@ -423,17 +423,16 @@ const char * TabInstr[ 256 ] =
 // Convertir le buffer en listing désassemblé
 // TODO Populate a buffer instead of a string
 //
-void Desass( unsigned char * Prg, char * Listing, int Longueur )
+void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
 {
     int i, Instr, Inst2 = 0, Inst3 = 0, Inst4 = 0, Ad16;
     const char * Chaine; 
     char *p;
     char Inst[ 1024 ];
 
-    int Adr, OldAdr, PosD = 0;
+    int Adr, OldAdr = 0;
     char Ad8;
 
-    * Listing = 0;
     for ( Adr = 0; Adr < Longueur; )
         {
         OldAdr = Adr;
@@ -532,25 +531,36 @@ void Desass( unsigned char * Prg, char * Listing, int Longueur )
         else
             sprintf( Inst, "%02X %02X %02X ????", Instr, Inst2, Inst3 );
 
-        Hex( &Listing[ PosD ], OldAdr, 4 );
-        Listing[ PosD + 4 ] = ' ';
-        PosD += 5;
-        for ( i = OldAdr; i < Adr; i++ )
-            {
-            Hex( &Listing[ PosD ], Prg[ i ], 2 );
-            Listing[ PosD + 2 ] = ' ';
-            PosD += 3;
-            }
-        for ( i = 0; i < 5 - Adr + OldAdr; i++ )
-            {
-            Listing[ PosD ] = Listing[ PosD + 1 ] = Listing[ PosD + 2 ] = ' ';
-            PosD += 3;
-            }
-        char * p = Inst;
-        while( * p )
-            Listing[ PosD++ ] = * p++;
 
-        Listing[ PosD++ ] = '\r';
-        Listing[ PosD++ ] = '\n';
+        //Memory adress part
+        Listing.fill('0');
+        Listing.setf(ios::hex);
+        Listing.width(4);
+        Listing <<  OldAdr ; 
+        Listing << ' ' ;
+        Listing.unsetf(ios::hex);
+
+        //Memory content part
+        for ( i = OldAdr; i < Adr; i++ )
+        {
+          int val = Prg[i]; 
+
+          Listing.width(2);
+          Listing.setf(ios::hex,std::ios::basefield);
+          Listing << val ; 
+          Listing << ' ' ;
+          Listing.unsetf(ios::hex);
+        }
+
+        for ( i = 0; i < 5 - Adr + OldAdr; i++ )
+        {
+            Listing << "   " ;
+        }
+
+        //Instruction part
+        Listing << Inst ;
+
+        //End of line
+        Listing << '\n';
         }
 }

@@ -16,6 +16,7 @@ void Hex( char Chaine[], int Valeur, int Digit )
 }
 
 
+
 //
 // Conversion hexa->décimal
 //
