@@ -119,21 +119,21 @@ const char * TabInstrED[ 256 ] =
     0,0,0,0,
     0,0,0,0,
     0,0,0,0,
-    "IN B,(C)","OUT (C),B","SBC HL,BC","LD (nnnn),BC",
+    "IN B,(C)","OUT (C),B","SBC HL,BC","LD (0xnnnn),BC",
     "NEG","RETN","IM 0","LD I,A",
-    "IN C,(C)","OUT (C),C","ADC HL,BC","LD BC,(nnnn)",
+    "IN C,(C)","OUT (C),C","ADC HL,BC","LD BC,(0xnnnn)",
     0,"RETI",0,"LD R,A",
-    "IN D,(C)","OUT (C),D","SBC HL,DE","LD (nnnn),DE",
+    "IN D,(C)","OUT (C),D","SBC HL,DE","LD (0xnnnn),DE",
     0,0,"IM 1","LD A,I",
-    "IN E,(C)","OUT (C),E","ADC HL,DE","LD DE,(nnnn)",
+    "IN E,(C)","OUT (C),E","ADC HL,DE","LD DE,(0xnnnn)",
     0,0,"IM 2","LD A,R",
     "IN H,(C)","OUT (C),H","SBC HL,HL",0,
     0,0,0,"RRD",
     "IN L,(C)","OUT (C),L","ADC HL,HL",0,
     0,0,0,"RLD",
-    0,"OUT (C),0","SBC HL,SP","LD (nnnn),SP",
+    0,"OUT (C),0","SBC HL,SP","LD (0xnnnn),SP",
     0,0,0,0,
-    "IN A,(C)","OUT (C),A","ADC HL,SP","LD SP,(nnnn)",
+    "IN A,(C)","OUT (C),A","ADC HL,SP","LD SP,(0xnnnn)",
     0,0,0,0,
     0,0,0,0,
     0,0,0,0,
@@ -180,12 +180,12 @@ const char * TabInstrDD[ 256 ] =
     0,0,0,0,
     0,"ADD IX,DE",0,0,
     0,0,0,0,
-    0,"LD IX,nnnn","LD (nnnn),IX","INC IX",
-    "INC IXh","DEC IXh","LD IXh,nn",0,
-    0,"ADD IX,HL","LD IX,(nnnn)","DEC IX",
-    "INC IXl","DEC IXl","LD IXl,nn",0,
+    0,"LD IX,0xnnnn","LD (0xnnnn),IX","INC IX",
+    "INC IXh","DEC IXh","LD IXh,0xnn",0,
+    0,"ADD IX,HL","LD IX,(0xnnnn)","DEC IX",
+    "INC IXl","DEC IXl","LD IXl,0xnn",0,
     0,0,0,0,
-    "INC (IX+nn)","DEC (IX+nn)","LD (IX+nn),nn",0,
+    "INC (IX+nn)","DEC (IX+nn)","LD (IX+nn),0xnn",0,
     0,"ADD IX,SP",0,0,
     0,0,0,0,
     0,0,0,0,
@@ -282,9 +282,9 @@ const char * TabInstrFD[ 256 ] =
     0,"ADD IY,BC",0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,
     0,"ADD IY,DE",0,0,0,0,0,0,
-    0,"LD IY,nnnn","LD (nnnn),IY","INC IY","INC IYh","DEC IYh","LD IYh,nn",0,
-    0,"ADD IY,HL","LD IY,(nnnn)","DEC IY","INC IYl","DEC IYl","LD IYl,nn",0,
-    0,0,0,0,"INC (IY+nn)","DEC (IY+nn)","LD (IY+nn),nn",0,
+    0,"LD IY,0xnnnn","LD (0xnnnn),IY","INC IY","INC IYh","DEC IYh","LD IYh,0xnn",0,
+    0,"ADD IY,HL","LD IY,(0xnnnn)","DEC IY","INC IYl","DEC IYl","LD IYl,0xnn",0,
+    0,0,0,0,"INC (IY+nn)","DEC (IY+nn)","LD (IY+nn),0xnn",0,
     0,"ADD IY,SP",0,0,0,0,0,0,
     0,0,0,0,"LD B,IYh","LD B,IYl","LD B,(IY+nn)",0,
     0,0,0,0,"LD C,IYh","LD C,IYl","LD C,(IY+nn)",0,
@@ -352,22 +352,22 @@ const char * TabInstrFDCB[ 256 ] =
 
 const char * TabInstr[ 256 ] =
     {
-    "NOP","LD BC,nnnn","LD (BC),A","INC BC",
-    "INC B","DEC B","LD B,nn","RLCA",
+    "NOP","LD BC,0xnnnn","LD (BC),A","INC BC",
+    "INC B","DEC B","LD B,0xnn","RLCA",
     "EX AF,AF","ADD HL,BC","LD A,(BC)","DEC BC",
-    "INC C","DEC C","LD C,nn","RRCA",
-    "DJNZ eeee","LD DE,nnnn","LD (DE),A","INC DE",
-    "INC D","DEC D","LD D,nn","RLA",
+    "INC C","DEC C","LD C,0xnn","RRCA",
+    "DJNZ eeee","LD DE,0xnnnn","LD (DE),A","INC DE",
+    "INC D","DEC D","LD D,0xnn","RLA",
     "JR eeee","ADD HL,DE","LD A,(DE)","DEC DE",
-    "INC E","DEC E","LD E,nn","RRA",
-    "JR NZ,eeee","LD HL,nnnn","LD (nnnn),HL","INC HL",
-    "INC H","DEC H","LD H,nn","DAA",
-    "JR Z,eeee","ADD HL,HL","LD HL,(nnnn)","DEC HL",
-    "INC L","DEC L","LD L,nn","CPL",
-    "JR NC,eeee","LD SP,nnnn","LD (nnnn),A","INC SP",
-    "INC (HL)","DEC (HL)","LD (HL),nn","SCF",
-    "JR C,eeee","ADD HL,SP","LD A,(nnnn)","DEC SP",
-    "INC A","DEC A","LD A,nn","CCF",
+    "INC E","DEC E","LD E,0xnn","RRA",
+    "JR NZ,eeee","LD HL,0xnnnn","LD (0xnnnn),HL","INC HL",
+    "INC H","DEC H","LD H,0xnn","DAA",
+    "JR Z,eeee","ADD HL,HL","LD HL,(0xnnnn)","DEC HL",
+    "INC L","DEC L","LD L,0xnn","CPL",
+    "JR NC,eeee","LD SP,0xnnnn","LD (0xnnnn),A","INC SP",
+    "INC (HL)","DEC (HL)","LD (HL),0xnn","SCF",
+    "JR C,eeee","ADD HL,SP","LD A,(0xnnnn)","DEC SP",
+    "INC A","DEC A","LD A,0xnn","CCF",
     "LD B,B","LD B,C","LD B,D","LD B,E",
     "LD B,H","LD B,L","LD B,(HL)","LD B,A",
     "LD C,B","LD C,C","LD C,D","LD C,E",
@@ -400,22 +400,22 @@ const char * TabInstr[ 256 ] =
     "OR H","OR L","OR (HL)","OR A",
     "CP B","CP C","CP D","CP E",
     "CP H","CP L","CP (HL)","CP A",
-    "RET NZ","POP BC","JP NZ,nnnn","JP nnnn",
-    "CALL NZ,nnnn","PUSH BC","ADD A,nn","RST 00",
-    "RET Z","RET","JP Z,nnnn",0,
-    "CALL Z,nnnn","CALL nnnn","ADC A,nn","RST 08",
-    "RET NC","POP DE","JP NC,nnnn","OUT (nn),A",
-    "CALL NC,nnnn","PUSH DE","SUB nn","RST 10",
-    "RET C","EXX","JP C,nnnn","IN A,(nn)",
-    "CALL C,nnnn",0,"SBC A,nn","RST 18",
-    "RET PE","POP HL","JP PE,nnnn","EX (SP),HL",
-    "CALL PE,nnnn","PUSH HL","AND nn","RST 20",
-    "RET PO","JP (HL)","JP PO,nnnn","EX DE,HL",
-    "CALL PO,nnnn",0,"XOR nn","RST 28",
-    "RET P","POP AF","JP P,nnnn","DI",
-    "CALL P,nnnn","PUSH AF","OR nn","RST 30",
-    "RET M","LD SP,HL","JP M,nnnn","EI",
-    "CALL M,nnnn",0,"CP nn","RST 38"
+    "RET NZ","POP BC","JP NZ,0xnnnn","JP 0xnnnn",
+    "CALL NZ,0xnnnn","PUSH BC","ADD A,0xnn","RST 00",
+    "RET Z","RET","JP Z,0xnnnn",0,
+    "CALL Z,0xnnnn","CALL 0xnnnn","ADC A,0xnn","RST 08",
+    "RET NC","POP DE","JP NC,0xnnnn","OUT (0xnn),A",
+    "CALL NC,0xnnnn","PUSH DE","SUB 0xnn","RST 10",
+    "RET C","EXX","JP C,0xnnnn","IN A,(0xnn)",
+    "CALL C,0xnnnn",0,"SBC A,0xnn","RST 18",
+    "RET PE","POP HL","JP PE,0xnnnn","EX (SP),HL",
+    "CALL PE,0xnnnn","PUSH HL","AND 0xnn","RST 20",
+    "RET PO","JP (HL)","JP PO,0xnnnn","EX DE,HL",
+    "CALL PO,0xnnnn",0,"XOR 0xnn","RST 28",
+    "RET P","POP AF","JP P,0xnnnn","DI",
+    "CALL P,0xnnnn","PUSH AF","OR 0xnn","RST 30",
+    "RET M","LD SP,HL","JP M,0xnnnn","EI",
+    "CALL M,0xnnnn",0,"CP 0xnn","RST 38"
     };
 
 
@@ -453,7 +453,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
                     Inst4 = Prg[ Adr++ ];
                     Chaine = TabInstrDDCB[ Inst4 ];
                     strcpy( Inst, Chaine );
-                    p = strstr( Inst, "0xnn" );
+                    p = strstr( Inst, "nn" );
                     if ( p )
                         {
                         if ( Inst3 < 0x80 )
@@ -488,7 +488,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
                                 {
                                 strcpy( Inst, Chaine );
                                 Chaine = Inst;
-                                p = strstr( Inst, "0xnn" );
+                                p = strstr( Inst, "nn" );
                                 if ( p )
                                     Hex( p, Ad8, 2 );
                                 }
@@ -499,7 +499,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
         if ( Chaine )
             {
             strcpy( Inst, Chaine );
-            p = strstr( Inst, "0xnnnn" );
+            p = strstr( Inst, "nnnn" );
             Ad16 = Prg[ Adr++ ];
             Ad16 += Prg[ Adr ] << 8;
             Ad8 = ( char ) Ad16;
@@ -510,11 +510,11 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
                 }
             else
                 {
-                p = strstr( Inst, "0xnn" );
+                p = strstr( Inst, "nn" );
                 if ( p )
                     {
                     Hex( p, Ad16, 2 );
-                    p = strstr( Inst, "0xnn" );
+                    p = strstr( Inst, "nn" );
                     if ( p )
                         Hex( p, Ad16 >> 8, 2 );
                     }
