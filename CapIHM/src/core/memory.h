@@ -45,6 +45,9 @@ public:
 
 	char* GetROMFile(unsigned int idx) const;
 
+  /**
+   * Return the RAM pointer
+   */
 	inline byte*			GetRAM() const						{ return pbRAM;				}
 	inline byte*			GetROMLow() const					{ return pbROMlo;			}
 	inline byte*			GetROMHigh() const					{ return pbROMhi;			}

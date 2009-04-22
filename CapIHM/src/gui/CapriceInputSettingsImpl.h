@@ -1,6 +1,8 @@
 #pragma once
 #include <map>
 #include "CapriceUI.h"
+#include <wx/stdpaths.h>
+#include <wx/string.h>
 
 class t_Input;
 

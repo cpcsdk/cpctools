@@ -56,7 +56,13 @@ z80.cpp\
 z80.h\
 z80daa.h\
 zip.cpp\
-zip.h
+zip.h\
+Desass.cpp \
+Desass.h \
+Outils.h \
+Outils.cpp \
+Itoa.h \
+Itoa.cpp
 
 
 if RELEASE
