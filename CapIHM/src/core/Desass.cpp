@@ -537,7 +537,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
         Listing.setf(ios::hex);
         Listing.width(4);
         Listing <<  OldAdr ; 
-        Listing << ' ' ;
+        Listing << ": " ;
         Listing.unsetf(ios::hex);
 
         //Memory content part
@@ -557,6 +557,26 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
             Listing << "   " ;
         }
 
+        for ( i = OldAdr; i < Adr; i++ )
+        {
+          int val = Prg[i]; 
+
+          if (val > 32 && val <= 127)
+          {
+            Listing << (char) val ;
+          }
+          else
+          {
+            Listing << ".";
+          }
+        }
+
+        for ( i = 0; i < 7 - Adr + OldAdr; i++ )
+        {
+            Listing << " " ;
+        }
+
+               
         //Instruction part
         Listing << Inst ;
 
