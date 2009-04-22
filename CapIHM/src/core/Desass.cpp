@@ -453,7 +453,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
                     Inst4 = Prg[ Adr++ ];
                     Chaine = TabInstrDDCB[ Inst4 ];
                     strcpy( Inst, Chaine );
-                    p = strstr( Inst, "nn" );
+                    p = strstr( Inst, "0xnn" );
                     if ( p )
                         {
                         if ( Inst3 < 0x80 )
@@ -488,7 +488,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
                                 {
                                 strcpy( Inst, Chaine );
                                 Chaine = Inst;
-                                p = strstr( Inst, "nn" );
+                                p = strstr( Inst, "0xnn" );
                                 if ( p )
                                     Hex( p, Ad8, 2 );
                                 }
@@ -499,7 +499,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
         if ( Chaine )
             {
             strcpy( Inst, Chaine );
-            p = strstr( Inst, "nnnn" );
+            p = strstr( Inst, "0xnnnn" );
             Ad16 = Prg[ Adr++ ];
             Ad16 += Prg[ Adr ] << 8;
             Ad8 = ( char ) Ad16;
@@ -510,11 +510,11 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
                 }
             else
                 {
-                p = strstr( Inst, "nn" );
+                p = strstr( Inst, "0xnn" );
                 if ( p )
                     {
                     Hex( p, Ad16, 2 );
-                    p = strstr( Inst, "nn" );
+                    p = strstr( Inst, "0xnn" );
                     if ( p )
                         Hex( p, Ad16 >> 8, 2 );
                     }
