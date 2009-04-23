@@ -58,6 +58,7 @@
                            DI did not clear the z80.EI_issued counter
 */
 
+#include <iostream>
 #include "z80.h"
 #include "cap32.h"
 #include "tape.h"
@@ -404,8 +405,8 @@ void t_z80regs::reset()
 	EI_issued = 0x00;
 	int_pending = 0x00;
 
-	// clear break point
-	break_point = 0xffffffff;
+	break_points.clear();
+
 	trace = 0x00000000;
 }
 
@@ -964,7 +965,8 @@ int t_z80regs::z80_execute(void)
 {
 	byte bOpCode;
 
-	while (_rPCdword != break_point) { // loop until break point
+	while ( break_points.end() 
+          == break_points.find( _rPCdword )) { // loop until break point
 
 #ifdef DEBUG_Z80
 		if (dwDebugFlag)
@@ -1284,6 +1286,8 @@ int t_z80regs::z80_execute(void)
 			  return EC_CYCLE_COUNT; // exit emulation loop
 		  }
    }
+
+   std::cout << "[DEBUG] Breakpoint in " << _rPCdword << endl ;
    return EC_BREAKPOINT;
 }
 
@@ -2907,4 +2911,16 @@ void t_z80regs::z80_pfx_fdcb(void)
 	case srl_l:       _rL = read_mem(_rIY+o); _rL = SRL(_rL); write_mem(_rIY+o, _rL); break;
 	case srl_mhl:     { byte b = read_mem(_rIY+o); write_mem(_rIY+o, SRL(b)); } break;
    }
+}
+
+//break points code
+
+void t_z80regs::add_break_point(dword adress)
+{
+  break_points.insert(adress);
+}
+
+void t_z80regs::remove_break_point(dword adress)
+{
+  break_points.erase(adress);
 }

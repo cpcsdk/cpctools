@@ -19,6 +19,9 @@
 #ifndef Z80_H
 #define Z80_H
 
+
+#include <set>
+
 #include "cap32type.h"
 #include "ioport.h"
 #include "memory.h"
@@ -104,7 +107,13 @@ private:
 	t_CPC			&CPC;
 	t_FDC			&FDC;
 	t_PSG			&PSG;
-	t_Tape			&Tape;
+  t_Tape			&Tape;
+
+  /**
+   * List of adresses where to break
+   */
+  std::set<dword> break_points;
+
 public:
 	reg_pair AF;
 	reg_pair BC;
@@ -128,8 +137,6 @@ public:
 	byte HALT;
 	byte EI_issued;
 	byte int_pending;
-
-	dword break_point;
 	dword trace;
 
 public:
@@ -151,7 +158,7 @@ public:
 	{
 		return _ioPort.z80_IN_handler(port);
 	}
-	void z80_OUT_handler(reg_pair port, byte val)
+	inline void z80_OUT_handler(reg_pair port, byte val)
 	{
 		_ioPort.z80_OUT_handler(port, val);
 	}
@@ -165,6 +172,18 @@ public:
 	void z80_pfx_ed(void);
 	void z80_pfx_fd(void);
 	void z80_pfx_fdcb(void);
+
+  //Break points managment
+  /**
+   * Add a break point to the emulator
+   * @param adress Adress where to break
+   */
+  void add_break_point(dword adress);
+  /**
+   * Remove a break point to the emulator
+   * @param adress Adress where to remove
+   */
+  void remove_break_point(dword adress);
 
 protected:
 	inline byte RES(byte bit, byte val) 
