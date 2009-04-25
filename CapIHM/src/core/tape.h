@@ -63,8 +63,8 @@ public:
 	void Emulate(int iCycleCount);
 
 	void tape_eject (void);
-	int tape_insert (char *pchFileName);
-	int tape_insert_voc (char *pchFileName);
+	int tape_insert (const char *pchFileName);
+	int tape_insert_voc (const char *pchFileName);
 
 	void Tape_UpdateLevel(void);
 	void Tape_Rewind(void);

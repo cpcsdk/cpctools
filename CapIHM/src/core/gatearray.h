@@ -10,9 +10,6 @@ class t_z80regs;
 
 class t_GateArray
 {
-public:
-	static unsigned int HardToSoftTable[32];
-	static unsigned int SoftToHardTable[27];
 private:
 	t_z80regs	*_z80;
 	Renderer	&_renderer;

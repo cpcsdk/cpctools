@@ -202,7 +202,7 @@ void t_PSG::SetEnvDirection(unsigned char dir)
     }
 }
 
-unsigned char t_PSG::GetEnvDirection()
+unsigned char t_PSG::GetEnvDirection() const
 {
     // TODO
     /*

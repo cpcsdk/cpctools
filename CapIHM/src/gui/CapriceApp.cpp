@@ -126,9 +126,9 @@ int CapriceApp::OnRun()
         if (!drivea.IsEmpty()) emulator->GetFDC().insertA( (const char *) drivea.mb_str());
         if (!driveb.IsEmpty()) emulator->GetFDC().insertB( (const char *) driveb.mb_str());
 
-        if (!snapshot.IsEmpty()) snapshot_load( *emulator,  snapshot.char_str()) ;
+        if (!snapshot.IsEmpty()) snapshot_load( *emulator,  (const char *)snapshot.c_str()) ;
 
-        if (!tape.IsEmpty()) emulator->GetTape().tape_insert(tape.char_str()) ; 
+        if (!tape.IsEmpty()) emulator->GetTape().tape_insert((const char *)tape.c_str()) ; 
 
         if (fullscreen) emulator->GetRenderer().ToggleFullScreen();		
 

@@ -78,7 +78,7 @@ public:
 
 
 	void					SetEnvDirection(unsigned char dir);
-	unsigned char			GetEnvDirection();
+	unsigned char GetEnvDirection() const;
 
 	inline unsigned char	GetControl() const					{ return control;		}
 	inline void				SetControl(unsigned char r)			{ control = r;			}

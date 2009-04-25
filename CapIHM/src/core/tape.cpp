@@ -93,7 +93,7 @@ void t_Tape::tape_eject (void)
 }
 
 
-int t_Tape::tape_insert (char *pchFileName)
+int t_Tape::tape_insert (const char *pchFileName)
 {
     long lFileSize;
     int iBlockLength;
@@ -265,7 +265,7 @@ int t_Tape::tape_insert (char *pchFileName)
 
 
 
-int t_Tape::tape_insert_voc (char *pchFileName)
+int t_Tape::tape_insert_voc (const char *pchFileName)
 {
     long lFileSize, lOffset, lInitialOffset, lSampleLength;
     int iBlockLength;

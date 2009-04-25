@@ -30,7 +30,7 @@
 #include "render.h"
 
 /*
-	Soft -> Hard color table
+Soft -> Hard color table
 0 Black				20	&54
 1 Blue				4	&44
 2 Bright Blue		21	&55
@@ -60,49 +60,6 @@
 26 Bright White		11	&4B
 */
 
-// Table de conversion Hard->Soft couleur
-unsigned int t_GateArray::HardToSoftTable[32] =
-{
-	13,		// White			0	&40
-	13,		// White			1	&41
-	19,		// Sea Green		2	&42
-	25,		// Pastel Yellow	3	&43
-	1,		// Blue				4	&44
-	7,		// Purple			5	&45
-	10,		// Cyan				6	&46
-	16,		// Pink				7	&47
-	7,		// Purple			8	&48
-	25,		// Pastel Yellow	9	&49
-	24,		// Bright Yellow	10	&4A
-	26,		// Bright White		11	&4B
-	6,		// Bright Red		12	&4C
-	8,		// Bright Magenta	13	&4D
-	15,		// Orange			14	&4E
-	17,		// Pastel Magenta	15	&4F
-	1,		// Blue				16	&50
-	19,		// Sea Green		17	&51
-	18,		// Bright Green		18	&52
-	20,		// Bright Cyan		19	&53
-	0,		// Black			20	&54
-	2,		// Bright Blue		21	&55
-	9,		// Green			22	&56
-	11,		// Sky Blue			23	&57
-	4,		// Magenta			24	&58
-	22,		// Pastel Green		25	&59
-	21,		// Lime				26	&5A
-	23,		// Pastel Cyan		27	&5B
-	3,		// Red				28	&5C
-	5,		// Mauve			29	&5D
-	12,		// Yellow			30	&5E
-	14		// Pastel Blue		31	&5F
-};
-
-// Table de conversion Hard->Soft couleur
-unsigned int t_GateArray::SoftToHardTable[27] =
-{
-	20,4,21,28,24,29,12,5,13,22,6,23,30,0,31,14,7,15,18,2,19,26,25,27,10,3,11
-};
-
 t_GateArray::t_GateArray(Renderer &render) :
 _z80(NULL),
 _renderer(render)
@@ -121,7 +78,7 @@ void t_GateArray::Reset(int mode)
 
 	for (int i=0 ; i<17 ; i++)
 	{
-		SetInk(i, SoftToHardTable[0]);
+		SetInk(i, 20); // Set all color to Bright Cyan on Reset
 	}
 
 	hs_count = 0;

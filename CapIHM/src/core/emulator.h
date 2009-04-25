@@ -71,8 +71,8 @@ public:
 	inline  t_PPI&			GetPPI()					{ return *_ppi;			}
 	inline  t_Tape&			GetTape()					{ return *_tape;		}
 
-	t_drive&		GetDriveA()					{ return GetFDC().GetDriveA();	}
-	t_drive&		GetDriveB()					{ return GetFDC().GetDriveB();	}
+	inline t_drive& GetDriveA() {return GetFDC().GetDriveA();}
+	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
 
 private:
 	bool MF2Init();

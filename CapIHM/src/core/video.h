@@ -112,7 +112,7 @@ public:
 	virtual void SetOption(const string &optionName, bool val);
 	
 	//! Set post render call back
-	void SetPostRenderCallBack(int (*cb)()) { _postRenderCallBack = cb;}
+	inline void SetPostRenderCallBack(int (*cb)()) { _postRenderCallBack = cb;}
 
 protected:
 	//! Default constructor
