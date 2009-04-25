@@ -1,0 +1,44 @@
+//CLI syntax for CapriceReloaded (cliparser)
+
+// ============ Registers ============
+
+//List registers values
+show registers
+
+//List CRTC registers values
+show registers crtc
+
+//List GA registers values
+show registers ga
+
+//List Z80 registers
+show registers z80
+
+// ============ Breakpoints ============
+//Add a breakpoint in the memory
+breakpoints add <HEX:adress>
+
+//Remove a breakpoint
+breakpoints remove <HEX:adress>
+
+//List all breakpoints
+breakpoints list
+
+
+// =========== video ==============
+//put screen in color 
+video color on
+
+//put screen in grayscale
+video color gray
+
+//put screen in greenscale
+video color green
+
+
+// ============ various ============
+// Quit Caprice
+quit
+
+//Reset emu
+reset
