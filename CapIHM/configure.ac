@@ -82,7 +82,7 @@ AC_ARG_WITH(	ayemu,
 		with_ayemu=no)
 
 
-AC_ARG_WITH(	lib765dsk,
+AC_ARG_WITH(	lib765,
 		[--with-lib765		use lib765 backend associate with libdsk for fdc emulation[default=yes]],
 		with_lib765=no,
 		with_lib765=yes)
