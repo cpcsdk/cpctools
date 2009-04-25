@@ -66,34 +66,37 @@ fi
 #ARGS
 
 AC_ARG_WITH(	stsound,
-		[--with-stsound          use St Sound backend [default=yes]],
+		[  --with-stsound	  use St Sound backend [default=yes]],
                  with_stsound=no,
 		 with_stsound=yes)
 	   
 
 AC_ARG_WITH(	aylet,
-		[--with-aylet		use Aylet backend [default=no]],
+		[  --with-aylet		  use Aylet backend [default=no]],
 		with_aylet=yes,
 		with_aylet=no)
 
 AC_ARG_WITH(	ayemu,
-		[--with-ayemu		use LibAYEmul [default=no]],
+		[  --with-ayemu		  use LibAYEmul [default=no]],
 		with_ayemu=yes,
 		with_ayemu=no)
 
 
 AC_ARG_WITH(	lib765,
-		[--with-lib765		use lib765 backend associate with libdsk for fdc emulation[default=yes]],
+		[  --with-lib765		  use lib765 backend associate with libdsk for fdc emulation [default=yes]],
 		with_lib765=no,
 		with_lib765=yes)
 
 AC_ARG_WITH(	wxwidget,
-		[--with-wxwidget	use wxWidget as a gui [default=yes]],
+		[  --with-wxwidget	  use wxWidget as a gui [default=yes]],
 		with_wxwidget=no,
 		with_wxwidget=yes)
 
 AC_MSG_CHECKING(for debugging environment)
-AC_ARG_ENABLE(debug, [--enable-debug turn on debug compiler. default=yes], [enable_debug=no], [enable_debug=yes])
+AC_ARG_ENABLE(	debug,
+		[  --enable-debug	  turn on debug compiler [default=yes]],
+		enable_debug=no,
+		enable_debug=yes)
 
 if test "$enable_debug" = yes ; then
 	CXXFLAGS="-O0 -Wall -g -DDEBUG"
@@ -105,7 +108,10 @@ AM_CONDITIONAL([RELEASE], [test ! "enable_debug" = "yes"])
 AC_MSG_RESULT([ $enable_debug ])
 
 
-AC_ARG_ENABLE(cli, [--enable-cli turn on cli interface. default=no], [enable_cli=yes], [enable_cli=no])
+AC_ARG_ENABLE(	cli,
+		[  --enable-cli		  turn on cli interface [default=no]],
+		enable_cli=yes,
+		enable_cli=no)
 
 if test "$enable_cli" = "yes" ; then
     AC_DEFINE(CLI,1,[Use a command line interface])

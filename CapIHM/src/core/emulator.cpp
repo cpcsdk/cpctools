@@ -577,45 +577,41 @@ bool Emulator::Init()
 
 void Emulator::Emulate()
 {
-	int iExitCondition;
-	bool bolDone;
+    int iExitCondition;
+    bool bolDone;
 
-	iExitCondition = EC_FRAME_COMPLETE;
-	bolDone = false;
-
-	//while (!bolDone)
-	for (int i=0; i<100000; i++)
+    iExitCondition = EC_FRAME_COMPLETE;
+    bolDone = false;
+	
+    for (int i=0; i<100000; i++)
+    {
+        bool exit = KeyboardEmulation();
+	
+	dwTicks = SDL_GetTicks();
+	// update FPS counter?
+	if (dwTicks >= dwTicksTargetFPS)
 	{
-		bool exit = KeyboardEmulation();
-
-		// run the emulation, as long as the user doesn't pause it
-		if (!_config.paused)
+	    dwFPS = dwFrameCount;
+	    dwFrameCount = 0;
+	    // prep counter for the next run
+	    dwTicksTargetFPS = dwTicks + 1000;
+	}
+	
+	// limit speed !
+	if(_config.limit_speed)
+	{
+	    if (dwTicks < dwTicksTarget)
+	    {
+	    // delay emulation
+		if((dwTicksTarget - dwTicks) > 1)
 		{
-			dwTicks = SDL_GetTicks();
-			// update FPS counter?
-			if (dwTicks >= dwTicksTargetFPS)
-			{
-				dwFPS = dwFrameCount;
-				dwFrameCount = 0;
-				// prep counter for the next run
-				dwTicksTargetFPS = dwTicks + 1000;
-			}
-			// limit speed !
-
-			if(_config.limit_speed)
-			{
-				if (dwTicks < dwTicksTarget)
-				{
-				// delay emulation
-					if((dwTicksTarget - dwTicks) > 1)
-					{
-					usleep(((dwTicksTarget - dwTicks)*950));
-					}
-					continue;
-				}
-				// prep counter for the next run
-				dwTicksTarget = dwTicksTarget + dwTicksOffset;
-			}
+		    usleep(((dwTicksTarget - dwTicks)*950));
+		}
+		continue;
+	    }
+	// prep counter for the next run
+	    dwTicksTarget = dwTicksTarget + dwTicksOffset;
+	}
 /*
 			// limit to original CPC speed?
 			if (_config.limit_speed)
@@ -647,43 +643,41 @@ void Emulator::Emulate()
 				}
 			}
 */
-			if (! _renderer.BeginDisplay(_vdu->GetScrLn()))
-			{
-				continue;
-			}
-
-			// run the emulation until an exit condition is met
-			iExitCondition = _z80->z80_execute();
-
-			// emulation finished rendering a complete frame?
-			if (iExitCondition == EC_FRAME_COMPLETE)
-			{
-				dwFrameCount++;
-
-				if (FPSDisplay)
-				{
-					char chStr[15];
-					sprintf(chStr, "%3dFPS %3d%%", (int)dwFPS, (int)dwFPS * 100 / 50);
-					_renderer.AddTextLocate(0, 0, chStr);
-				}
-				
-
-
-				_renderer.EndDisplay(true);
-				return;
-			}
-			else
-			{
-				_renderer.EndDisplay(false);
-			}
-		}
-
-		if (exit)
-		{
-		    break;
-		}
+	if (! _renderer.BeginDisplay(_vdu->GetScrLn()))
+	{
+	     continue;
 	}
+
+	// run the emulation until an exit condition is met
+	iExitCondition = _z80->z80_execute();
+
+	// emulation finished rendering a complete frame?
+	if (iExitCondition == EC_FRAME_COMPLETE)
+	{
+	    dwFrameCount++;
+
+	    if (FPSDisplay)
+	    {
+		char chStr[15];
+		sprintf(chStr, "%3dFPS %3d%%", (int)dwFPS, (int)dwFPS * 100 / 50);
+		_renderer.AddTextLocate(0, 0, chStr);
+	    }
+
+	    _renderer.EndDisplay(true);
+	    return;
+	}
+	else
+	{
+	    _renderer.EndDisplay(false);
+	}
+
+        if (exit)
+	{
+	    break;
+	}
+    }
 }
+
 void Emulator::Loop()
 {
 	int iExitCondition;
