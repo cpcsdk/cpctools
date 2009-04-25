@@ -39,8 +39,10 @@
 #include <wx/statbmp.h>
 #include <wx/statline.h>
 #include <wx/statbox.h>
+#include <wx/checklst.h>
 #include <wx/grid.h>
 #include <wx/scrolbar.h>
+#include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -494,6 +496,10 @@ class Memory : public wxDialog
 	private:
 	
 	protected:
+		wxSplitterWindow* m_splitter1;
+		wxPanel* m_panel10;
+		wxCheckListBox* m_checkList1;
+		wxPanel* m_panel9;
 		wxGrid* m_grid1;
 		wxScrollBar* m_scrollBar1;
 		
@@ -505,6 +511,12 @@ class Memory : public wxDialog
 		
 		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~Memory();
+		void m_splitter1OnIdle( wxIdleEvent& )
+		{
+		m_splitter1->SetSashPosition( 90 );
+		m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
+		}
+		
 	
 };
 

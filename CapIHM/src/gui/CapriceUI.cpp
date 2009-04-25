@@ -1758,10 +1758,27 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
+	wxBoxSizer* bSizer26;
+	bSizer26 = new wxBoxSizer( wxVERTICAL );
+	
+	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
+	m_panel10 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer29;
+	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxArrayString m_checkList1Choices;
+	m_checkList1 = new wxCheckListBox( m_panel10, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkList1Choices, 0 );
+	bSizer29->Add( m_checkList1, 0, wxALL|wxEXPAND, 5 );
+	
+	m_panel10->SetSizer( bSizer29 );
+	m_panel10->Layout();
+	bSizer29->Fit( m_panel10 );
+	m_panel9 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_grid1 = new wxGrid( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_grid1 = new wxGrid( m_panel9, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	
 	// Grid
 	m_grid1->CreateGrid( 32, 16 );
@@ -1821,12 +1838,18 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_grid1->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	bSizer21->Add( m_grid1, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_scrollBar1 = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
+	m_scrollBar1 = new wxScrollBar( m_panel9, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
 	bSizer21->Add( m_scrollBar1, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
 	
-	this->SetSizer( bSizer21 );
+	m_panel9->SetSizer( bSizer21 );
+	m_panel9->Layout();
+	bSizer21->Fit( m_panel9 );
+	m_splitter1->SplitHorizontally( m_panel10, m_panel9, 90 );
+	bSizer26->Add( m_splitter1, 1, wxEXPAND, 5 );
+	
+	this->SetSizer( bSizer26 );
 	this->Layout();
-	bSizer21->Fit( this );
+	bSizer26->Fit( this );
 	
 	// Connect Events
 	m_scrollBar1->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
