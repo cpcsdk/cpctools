@@ -1,11 +1,13 @@
 bin_PROGRAMS = caprice
 
-SUBDIRS = core gui
+DIST_SUBDIRS = core gui cli
+SUBDIRS = core gui $(MAYBE_CLI)
 
 #TODO : achieve to put the compilation of first 2files in libcapricewx.a and the other in libcapricecore.a
 caprice_SOURCES = gui/video.cpp core/emulator.cpp 
-caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
-caprice_LDADD =  $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -L/usr/local/lib -l765 -ldsk gui/libcapricewx.a core/libcapricecore.a gui/libfoo.a 
+caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui -cli
+caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) -L/usr/local/lib -l765 -ldsk gui/libcapricewx.a gui/libfoo.a core/libcapricecore.a $(CLI_LIB)
+
 
 #Add aylet files if used as backend
 if AYLET

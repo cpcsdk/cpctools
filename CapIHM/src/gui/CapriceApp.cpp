@@ -24,6 +24,14 @@
 #include "CapriceApp.h"
 #include "CapriceWindowImpl.h"
 #include "CapriceInputSettingsImpl.h"
+#include <pthread.h>
+
+extern "C" {
+#include "cparser.h"
+#include "cparser_priv.h"
+#include "cparser_token.h"
+#include "cparser_tree.h"
+}
 
 #include <wx/splash.h> 
 #include <zlib.h>
@@ -43,6 +51,8 @@
 #include "filetools.h"
 #include "configBis.h"
 #include <iostream>
+
+extern cparser_node_t cparser_root;
 
 //TODO destroy emulator when finishing
 
@@ -152,7 +162,40 @@ void CapriceApp::OnInitCmdLine(wxCmdLineParser& parser)
     // must refuse '/' as parameter starter or cannot use "/path" style paths
     parser.SetSwitchChars (wxT("-"));
 }
- 
+
+#if CLI
+ /**
+ * CLI in a thread
+ * @todo use locks and co
+ */
+void* cliRout(void* args)
+{ 
+   cparser_t parser;;
+
+    parser.cfg.root = &cparser_root;
+    parser.cfg.ch_complete = '\t' ;
+    parser.cfg.ch_erase ='\b' ;
+    parser.cfg.ch_del = 127 ;
+    parser.cfg.ch_help = '?' ;
+    parser.cfg.flags =  0 ;
+    strcpy(parser.cfg.prompt, "caprice>> ");
+    parser.cfg.fd = STDOUT_FILENO ;
+    cparser_io_config(&parser);
+
+    //Load cli interface
+    if (CPARSER_OK != cparser_init(&parser.cfg, &parser))
+    {
+      std::cout << "Fail to initialize parser." << endl;
+      return false;
+    }
+    cparser_run(&parser) ;
+
+    //TODO quit application
+
+}
+#endif
+
+
 bool CapriceApp::OnCmdLineParsed(wxCmdLineParser& parser)
 {
 	intensity = -1 ;
@@ -169,6 +212,19 @@ bool CapriceApp::OnCmdLineParsed(wxCmdLineParser& parser)
 	parser.Found(wxT("t"), &tape);
 	parser.Found(wxT("s"), &snapshot);
 
+#if CLI
+  if (parser.Found(wxT("c")))
+  {
+    pthread_t threadcli;
+    if (pthread_create (&threadcli, NULL, cliRout, NULL) < 0)
+    {
+      std::cout << "Fail to create cli thread." << endl ;
+      return false ;
+    }
+  }
+#endif
 
     return true;
 }
+
+

@@ -67,6 +67,10 @@ static const wxCmdLineEntryDesc g_cmdLineDesc [] =
 
     { wxCMD_LINE_SWITCH, wxT("h"), wxT("help"), wxT("displays help on the command line parameters"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
 
+#if CLI
+    { wxCMD_LINE_SWITCH, wxT("c"), wxT("cli"), wxT("cli interface") },
+#endif
+
     { wxCMD_LINE_SWITCH, wxT("f"), wxT("fullscreen"), wxT("display Caprice in full screen") },
     { wxCMD_LINE_SWITCH, wxT("g"), wxT("greenscreen"), wxT("display Caprice with a green screen") },
 	{ wxCMD_LINE_SWITCH, wxT("r"), wxT("remanancy"), wxT("use remanancy") },

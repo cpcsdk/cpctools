@@ -6,6 +6,9 @@
 /* Use Aylet as a sound backend */
 #undef AYLET
 
+/* Use a command line interface */
+#undef CLI
+
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 #undef CLOSEDIR_VOID
 

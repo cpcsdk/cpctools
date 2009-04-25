@@ -95,8 +95,6 @@ AC_ARG_WITH(	wxwidget,
 AC_MSG_CHECKING(for debugging environment)
 AC_ARG_ENABLE(debug, [--enable-debug turn on debug compiler. default=yes], [enable_debug=no], [enable_debug=yes])
 
-
-
 if test "$enable_debug" = yes ; then
 	CXXFLAGS="-O0 -Wall -g -DDEBUG"
 	CFLAGS="-O0 -Wall  -g -DDEBUG"
@@ -107,6 +105,18 @@ AM_CONDITIONAL([RELEASE], [test ! "enable_debug" = "yes"])
 AC_MSG_RESULT([ $enable_debug ])
 
 
+AC_ARG_ENABLE(cli, [--enable-cli turn on cli interface. default=no], [enable_cli=yes], [enable_cli=no])
+
+if test "$enable_cli" = "yes" ; then
+    AC_DEFINE(CLI,1,[Use a command line interface])
+    MAYBE_CLI=cli
+    CLI_LIB=cli/libcapricecli.a
+else
+    MAYBE_CLI=
+    CLI_LIB=
+fi
+AC_SUBST([MAYBE_CLI])
+AC_SUBST([CLI_LIB])
 
 # GUI
 if test "$with_wxwidget" = "yes" ; then
@@ -199,6 +209,7 @@ AC_CONFIG_FILES([
 		src/Makefile
 		src/gui/Makefile
 		src/core/Makefile
+    src/cli/Makefile
 ])
 
 AC_OUTPUT
@@ -212,6 +223,8 @@ CapriceReloaded compilation option :
 
     Use lib765 ................... ${with_lib765}
     Sound Backend ................ ${sound_backend}
+
+    Cli interface ................ ${enable_cli}
 
     Debug mode ................... ${enable_debug}
 
