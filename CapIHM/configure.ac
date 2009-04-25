@@ -82,12 +82,12 @@ AC_ARG_WITH(	ayemu,
 		with_ayemu=no)
 
 
-AC_ARG_WITH(	dsk,
+AC_ARG_WITH(	lib765dsk,
 		[--with-lib765		use lib765 backend associate with libdsk for fdc emulation[default=yes]],
 		with_lib765=no,
 		with_lib765=yes)
 
-AC_ARG_WITH( wxWidget,
+AC_ARG_WITH(	wxwidget,
 		[--with-wxwidget	use wxWidget as a gui [default=yes]],
 		with_wxwidget=no,
 		with_wxwidget=yes)
@@ -113,7 +113,7 @@ if test "$with_wxwidget" = "yes" ; then
 	m4_include(wxwin.m4)
 	
 	AM_OPTIONS_WXCONFIG
-	reqwx=2.4.0
+	reqwx=2.8.0
 	AM_PATH_WXCONFIG($reqwx, wxWin=1)
 	if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
