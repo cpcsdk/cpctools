@@ -39,7 +39,6 @@
 CapriceWindowImpl::CapriceWindowImpl() 
 	: CapriceWindow(NULL) 
 {
-	paused = true ;
 	this->SetDropTarget(this);
 }
 
@@ -54,14 +53,20 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
-	if (emulator && !paused)
+	if (emulator && ! emulator->GetConfig().paused)
 	{
         emulator->Emulate();
         //Ask to continue idle things
         event.RequestMore(true);
      }
     else
-    {
+    { 
+        //TODO: use listeners to do that only when emulator is paused 
+        //(due to pause not controlled by ihm)
+        m_menuItem_pause->Enable(false) ;
+        m_menuItem_run->Enable(true);
+
+
         //TODO: modify to do that only one time
         wxBitmap bitmap;
 	    if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
@@ -173,7 +178,6 @@ void CapriceWindowImpl::OnPause( wxCommandEvent& event)
     emulator->Pause();
     m_menuItem_pause->Enable(false) ;
     m_menuItem_run->Enable(true);
-    this->paused = true ;
 
  
         //Interval of disassembling
@@ -203,7 +207,6 @@ void CapriceWindowImpl::OnRun( wxCommandEvent& event)
     emulator->Run();
     m_menuItem_pause->Enable(true) ;
     m_menuItem_run->Enable(false);
-    this->paused = false ;
 
 }
 
@@ -255,7 +258,6 @@ wxPanel* CapriceWindowImpl::getPanel() { return m_panel4; }
 void CapriceWindowImpl::SetEmulator(Emulator *emulator)
 {
     this->emulator = emulator ;
-    paused = false ;
 }
 
 /********************************************************

@@ -651,6 +651,15 @@ void Emulator::Emulate()
 	// run the emulation until an exit condition is met
 	iExitCondition = _z80->z80_execute();
 
+  //We have meet a breakpoint
+  if (iExitCondition == EC_BREAKPOINT)
+  {
+    this->Pause();
+    return;
+  }
+
+
+
 	// emulation finished rendering a complete frame?
 	if (iExitCondition == EC_FRAME_COMPLETE)
 	{
@@ -671,13 +680,14 @@ void Emulator::Emulate()
 	    _renderer.EndDisplay(false);
 	}
 
-        if (exit)
+  if (exit)
 	{
 	    break;
 	}
     }
 }
 
+#if 0
 void Emulator::Loop()
 {
 	int iExitCondition;
@@ -761,6 +771,15 @@ void Emulator::Loop()
 			// run the emulation until an exit condition is met
 			iExitCondition = _z80->z80_execute();
 
+      //We have meet a breakpoint
+      if (iExitCondition == EC_BREAKPOINT)
+      {
+        Pause();
+        std::cout << "==================================" << endl ;
+        continue;
+      }
+
+
 			// emulation finished rendering a complete frame?
 			if (iExitCondition == EC_FRAME_COMPLETE)
 			{
@@ -787,3 +806,4 @@ void Emulator::Loop()
 		}
 	}
 }
+#endif

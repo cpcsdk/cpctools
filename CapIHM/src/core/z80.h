@@ -113,6 +113,10 @@ private:
    * List of adresses where to break
    */
   std::set<dword> break_points;
+  /**
+   * Flag to know if the memory have already been blocked
+   */
+  bool adressAlreadyBlocked;
 
 public:
 	reg_pair AF;

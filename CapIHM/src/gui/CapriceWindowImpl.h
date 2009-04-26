@@ -54,7 +54,6 @@ class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget
 
     private:
     Emulator*   emulator ;
-    bool paused ;
 };
 #endif
 

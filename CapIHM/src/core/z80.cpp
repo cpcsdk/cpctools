@@ -406,6 +406,7 @@ void t_z80regs::reset()
 	int_pending = 0x00;
 
 	break_points.clear();
+  adressAlreadyBlocked = false ;
 
 	trace = 0x00000000;
 }
@@ -965,9 +966,10 @@ int t_z80regs::z80_execute(void)
 {
 	byte bOpCode;
 
-	while ( break_points.end() 
-          == break_points.find( _rPCdword )) { // loop until break point
+	while ( adressAlreadyBlocked ||
+        break_points.end() == break_points.find(_rPCdword)           ) { // loop until break point
 
+    adressAlreadyBlocked = false ;
 #ifdef DEBUG_Z80
 		if (dwDebugFlag)
 		{
@@ -1287,7 +1289,10 @@ int t_z80regs::z80_execute(void)
 		  }
    }
 
+#if DEBUG
    std::cout << "[DEBUG] Breakpoint in " << _rPCdword << endl ;
+#endif
+   adressAlreadyBlocked = true ;
    return EC_BREAKPOINT;
 }
 
