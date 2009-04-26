@@ -22,12 +22,12 @@
 #ifndef INCLUDED_CAPRICEAPP_H
 #define INCLUDED_CAPRICEAPP_H
 
+#include "configBis.h"
 #include <wx/wxprec.h>
 #include <wx/cmdline.h>
 #ifndef WX_PRECOMP
        #include <wx/wx.h>
 #endif
- 
 
 #include "CapriceWindowImpl.h"
 #include "CapriceRegistersDialogImpl.h"
@@ -53,12 +53,12 @@ private:
 	bool		greenscreen ;
 	bool		remanency ;
 	long		intensity;
+  bool    cli;
 
 	wxString	drivea ;
 	wxString	driveb ;
 	wxString	tape ;
 	wxString 	snapshot ;	
-
 };
  
 

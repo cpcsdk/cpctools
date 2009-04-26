@@ -26,13 +26,6 @@
 #include "CapriceInputSettingsImpl.h"
 #include <pthread.h>
 
-extern "C" {
-#include "cparser.h"
-#include "cparser_priv.h"
-#include "cparser_token.h"
-#include "cparser_tree.h"
-}
-
 #include <wx/splash.h> 
 #include <zlib.h>
 #include <SDL.h>
@@ -51,8 +44,18 @@ extern "C" {
 #include "filetools.h"
 #include "configBis.h"
 #include <iostream>
+ 
+#if CLI
+extern "C" {
+#include "cparser.h"
+#include "cparser_priv.h"
+#include "cparser_token.h"
+#include "cparser_tree.h"
+  }
 
-extern cparser_node_t cparser_root;
+  cparser_t parser;
+  extern cparser_node_t cparser_root;
+#endif
 
 //TODO destroy emulator when finishing
 
@@ -96,6 +99,14 @@ bool CapriceApp::OnInit()
  */
 int CapriceApp::OnExit()
 {
+  cout << "Quit" << endl ;
+#if CLI
+  if (cli)
+  {
+    cout << "Quit parser" << endl ;
+    cparser_quit(&parser) ;
+  }
+#endif
 	return 0;
 }
 
@@ -170,7 +181,6 @@ void CapriceApp::OnInitCmdLine(wxCmdLineParser& parser)
  */
 void* cliRout(void* args)
 { 
-   cparser_t parser;;
 
     parser.cfg.root = &cparser_root;
     parser.cfg.ch_complete = '\t' ;
@@ -201,6 +211,7 @@ bool CapriceApp::OnCmdLineParsed(wxCmdLineParser& parser)
 	intensity = -1 ;
 	greenscreen = false ;
 	remanency = false ;
+  cli = false;
 
     fullscreen = parser.Found(wxT("f"));
 	greenscreen = parser.Found(wxT("g"));
@@ -215,6 +226,7 @@ bool CapriceApp::OnCmdLineParsed(wxCmdLineParser& parser)
 #if CLI
   if (parser.Found(wxT("c")))
   {
+    cli = true ;
     pthread_t threadcli;
     if (pthread_create (&threadcli, NULL, cliRout, NULL) < 0)
     {
@@ -222,6 +234,7 @@ bool CapriceApp::OnCmdLineParsed(wxCmdLineParser& parser)
       return false ;
     }
   }
+
 #endif
 
     return true;

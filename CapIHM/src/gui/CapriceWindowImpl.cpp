@@ -46,7 +46,7 @@ CapriceWindowImpl::CapriceWindowImpl()
 // =============================== Window Event =============================================
 void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 {
-	exit(0);
+  this->Destroy();
 }
 
 /**
@@ -78,7 +78,7 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 
 void CapriceWindowImpl::onExit2( wxCommandEvent& event )
 {
-    exit(0);
+  this->Close();
 }
 
 
