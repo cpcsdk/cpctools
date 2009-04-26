@@ -105,3 +105,16 @@ cparser_cmd_reset(cparser_context_t *context)
   return CPARSER_OK;
 }
 
+cparser_result_t
+cparser_cmd_help_filter (cparser_context_t *context, char **filter)
+{
+    return cparser_help_cmd(context->parser, filter ? *filter : 0);
+}
+
+cparser_result_t
+cparser_cmd_emp_help_filter (cparser_context_t *context, char **filter)
+{
+    return cparser_help_cmd(context->parser, filter ? *filter : 0);
+}
+
+

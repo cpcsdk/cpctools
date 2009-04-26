@@ -42,3 +42,6 @@ quit
 
 //Reset emu
 reset
+
+// Show help
+help { <STRING:filter> }

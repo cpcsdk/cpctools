@@ -109,6 +109,56 @@ cparser_glue_reset (cparser_t *parser)
     return CPARSER_OK;
 }
 
+cparser_result_t
+cparser_glue_help_filter (cparser_t *parser)
+{
+    char *filter_val;
+    char **filter_ptr = NULL;
+    cparser_result_t rc;
+
+    rc = cparser_get_string(&parser->tokens[1], &filter_val);
+    if (CPARSER_OK == rc) {
+        filter_ptr = &filter_val;
+    } else {
+        assert(2 > parser->token_tos);
+    }
+    cparser_cmd_help_filter(&parser->context,
+        filter_ptr);
+    return CPARSER_OK;
+}
+
+cparser_node_t cparser_node_help_filter_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_help_filter,
+    "Show help",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_help_filter = {
+    CPARSER_NODE_STRING,
+    CPARSER_NODE_FLAGS_OPT_END,
+    "<STRING:filter>",
+    NULL,
+    NULL,
+    &cparser_node_help_filter_eol
+};
+cparser_node_t cparser_node_help_eol = {
+    CPARSER_NODE_END,
+    CPARSER_NODE_FLAGS_OPT_PARTIAL,
+    cparser_glue_help_filter,
+    NULL,
+    &cparser_node_help_filter,
+    NULL
+};
+cparser_node_t cparser_node_help = {
+    CPARSER_NODE_KEYWORD,
+    CPARSER_NODE_FLAGS_OPT_START,
+    "help",
+    NULL,
+    NULL,
+    &cparser_node_help_eol
+};
 cparser_node_t cparser_node_reset_eol = {
     CPARSER_NODE_END,
     0,
@@ -122,7 +172,7 @@ cparser_node_t cparser_node_reset = {
     0,
     "reset",
     NULL,
-    NULL,
+    &cparser_node_help,
     &cparser_node_reset_eol
 };
 cparser_node_t cparser_node_quit_eol = {

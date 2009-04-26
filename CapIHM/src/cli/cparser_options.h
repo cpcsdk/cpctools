@@ -42,7 +42,7 @@
 /**
  * Maximum number of nested sub-mode levels.
  */
-#define CPARSER_MAX_NESTED_LEVELS  (4)
+#define CPARSER_MAX_NESTED_LEVELS  (10)
 
 /**
  * Maximum number of characters in one token.

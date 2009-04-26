@@ -20,5 +20,7 @@ cparser_result_t cparser_cmd_video_color_gray(cparser_context_t *context);
 cparser_result_t cparser_cmd_video_color_green(cparser_context_t *context);
 cparser_result_t cparser_cmd_quit(cparser_context_t *context);
 cparser_result_t cparser_cmd_reset(cparser_context_t *context);
+cparser_result_t cparser_cmd_help_filter(cparser_context_t *context,
+    char **filter_ptr);
 
 #endif /* __CPARSER_TREE_H__ */
