@@ -196,6 +196,7 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 
 
 	    scr_fps = getConfigValueInt(chFileName, "video", "scr_fps", 0) & 1;
+	    emulator.GetRenderer().DisplayFPS(scr_fps);
             switch (getConfigValueInt(chFileName, "video", "scr_tube", 0))
             {
                 case 0:

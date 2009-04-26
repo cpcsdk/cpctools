@@ -155,7 +155,7 @@ protected:
 	void DisplayDebug() const;
 	
 protected:
-	static void NoChar(t_CRTC &CRTC);
+	inline static void NoChar(t_CRTC &CRTC) {/* Nothing */}
 	
 	static void CharSL2(t_CRTC &CRTC);
 	static void CharSL1(t_CRTC &CRTC);

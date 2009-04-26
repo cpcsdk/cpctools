@@ -11,8 +11,17 @@
 #include <SDL_video.h>
 #include <string>
 #include <vector>
+#include <exception>
 
 class Emulator;
+
+class RendererException: public exception
+{
+	virtual const char* what() const throw()
+	{
+		return "RendererException happened";
+	}
+};
 
 class Renderer
 {

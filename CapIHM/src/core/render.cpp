@@ -47,6 +47,7 @@
 #include <emmintrin.h>
 #endif
 
+RendererException RendererEx;
 
 Renderer::Renderer(Emulator* emu) :
 _currentFlagConfig(0),
@@ -413,16 +414,64 @@ bool Renderer::Init()
 
 	if (_renderHalf)
 	{
-		_preRenderSyncFunc = new PreRenderSyncHalfFunction;
-		_preRenderBorderFunc = new PreRenderBorderHalfFunction;
-		_preRenderNormalFunc = new PreRenderNormalHalfFunction;
+		try
+		{
+			_preRenderSyncFunc = new PreRenderSyncHalfFunction;
+		}
+		catch(bad_alloc&)
+		{
+			cerr << "Error, can't alloc _preRenderSyncFunc" << endl;
+			throw RendererEx;
+		}
+		try
+		{
+			_preRenderBorderFunc = new PreRenderBorderHalfFunction;
+		}
+		catch(bad_alloc&)
+		{
+			cerr << "Error, can't alloc _preRenderBorderFunc" << endl;
+			throw RendererEx;
+		}
+		try
+		{
+			_preRenderNormalFunc = new PreRenderNormalHalfFunction;
+		}
+		catch(bad_alloc&)
+		{
+			cerr << "Error, can't alloc _preRenderNormalFunc" << endl;
+			throw RendererEx;
+		}
 		_preRenderFunc = _preRenderNormalFunc;
 	}
 	else
 	{
-		_preRenderSyncFunc = new PreRenderSyncFunction;
-		_preRenderBorderFunc = new PreRenderBorderFunction;
-		_preRenderNormalFunc = new PreRenderNormalFunction;
+		try
+		{
+			_preRenderSyncFunc = new PreRenderSyncFunction;
+		}
+		catch(bad_alloc&)
+		{
+			cerr << "Error, can't alloc _preRenderSyncFunc" << endl;
+			throw RendererEx;
+		}
+		try
+		{
+			_preRenderBorderFunc = new PreRenderBorderFunction;
+		}
+		catch(bad_alloc&)
+		{
+			cerr << "Error, can't alloc _preRenderBorderFunc" << endl;
+			throw RendererEx;
+		}
+		try
+		{
+			_preRenderNormalFunc = new PreRenderNormalFunction;
+		}
+		catch(bad_alloc&)
+		{
+			cerr << "Error, can't alloc _preRenderNormalFunc" << endl;
+			throw RendererEx;
+		}
 		_preRenderFunc = _preRenderNormalFunc;
 	}
 	

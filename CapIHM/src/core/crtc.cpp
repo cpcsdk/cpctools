@@ -654,15 +654,6 @@ void t_CRTC::MatchHsw()
 	}
 }
 
-
-
-void t_CRTC::NoChar(t_CRTC &/*CRTC*/)
-{
-	// nothing to do
-}
-
-
-
 void t_CRTC::CharSL2(t_CRTC &CRTC)
 {
 	CRTC._reg5 = CRTC._registers[5];
