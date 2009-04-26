@@ -55,6 +55,7 @@ extern "C" {
 
   cparser_t parser;
   extern cparser_node_t cparser_root;
+  wxFrame *frameClone;
 #endif
 
 //TODO destroy emulator when finishing
@@ -90,7 +91,9 @@ bool CapriceApp::OnInit()
 	frame = new CapriceWindowImpl();
 	frame->Show(true);
 
-
+  #if CLI
+    frameClone = frame ;
+  #endif
 	return true ; 
 }
 
@@ -201,6 +204,7 @@ void* cliRout(void* args)
     cparser_run(&parser) ;
 
     //TODO quit application
+    frameClone->Close();
 
 }
 #endif
