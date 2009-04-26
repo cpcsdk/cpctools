@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include "emulator.h"
+#include "z80.h"
 
 /**
  * Reference to the Emulator
@@ -35,4 +36,31 @@ extern "C" void caprice_cli_show_registers()
 extern "C" void caprice_cli_emu_reset()
 {
   emulatorClone->emulator_reset(true);
+}
+
+extern "C" void caprice_cli_add_breakpoint(int adress)
+{
+  std::cout << "# Add breakpoint :" << adress << endl ;
+  emulatorClone->GetZ80().add_break_point(adress);
+}
+
+extern "C" void caprice_cli_remove_breakpoint(int adress)
+{
+  std::cout << "# Remove breakpoint :" << adress << endl ;
+  emulatorClone->GetZ80().remove_break_point(adress);
+}
+
+
+extern "C" void caprice_cli_show_breakpoints()
+{
+  std::cout << "List of breakpoints :" << std::endl ;
+  std::set<dword>  breakpoints = emulatorClone->GetZ80().GetBreakpoints() ;
+
+  std::set<dword>::const_iterator iter;
+  int i = 0 ;
+  for(iter = breakpoints.begin(); iter != breakpoints.end() ; iter++)
+  {
+    std::cout << i << " : " << *iter << endl ;
+    i++;
+  }
 }

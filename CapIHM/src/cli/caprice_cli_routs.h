@@ -28,3 +28,15 @@ void caprice_cli_show_registers();
  * Reset emulator
  */
 void caprice_cli_emu_reset();
+/**
+ * Add a breakpoint
+ */
+void caprice_cli_add_breakpoint(int adress);
+/**
+ * Remove a breakpoint
+ */
+void caprice_cli_remove_breakpoint(int adress);
+/**
+ * List all the breakpoints
+ */
+void caprice_cli_show_breakpoints();

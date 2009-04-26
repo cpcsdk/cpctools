@@ -22,7 +22,7 @@
 #include "cparser.h"
 #include "cparser_token.h"
 
-#include "caprice_cli_routs.h";
+#include "caprice_cli_routs.h"
 
 /**
  * Quit the application
@@ -63,24 +63,29 @@ cparser_cmd_show_registers_z80(cparser_context_t *context)
   return CPARSER_OK;
 }
 
+//Breakpoints
 cparser_result_t
-cparser_cmd_breakpoints_add_adress(cparser_context_t *context)
+cparser_cmd_breakpoints_add_adress(cparser_context_t *context, uint32_t *adress_ptr)
 {
+  caprice_cli_add_breakpoint(*adress_ptr);
   return CPARSER_OK;
 }
 
 cparser_result_t
-cparser_cmd_breakpoints_remove_adress(cparser_context_t *context)
+cparser_cmd_breakpoints_remove_adress(cparser_context_t *context, uint32_t *adress_ptr)
 {
+  caprice_cli_remove_breakpoint(*adress_ptr);
   return CPARSER_OK;
 }
 
 cparser_result_t
 cparser_cmd_breakpoints_list(cparser_context_t *context)
 {
+  caprice_cli_show_breakpoints();
   return CPARSER_OK;
 }
 
+//Video
 cparser_result_t
 cparser_cmd_video_color_on(cparser_context_t *context)
 {
@@ -99,6 +104,7 @@ cparser_cmd_video_color_green(cparser_context_t *context)
   return CPARSER_OK;
 }
 
+//Emu
 cparser_result_t
 cparser_cmd_reset(cparser_context_t *context)
 {
@@ -106,6 +112,7 @@ cparser_cmd_reset(cparser_context_t *context)
   return CPARSER_OK;
 }
 
+//Help
 cparser_result_t
 cparser_cmd_help_filter (cparser_context_t *context, char **filter)
 {

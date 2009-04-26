@@ -163,6 +163,11 @@ public:
 		_ioPort.z80_OUT_handler(port, val);
 	}
 
+  inline std::set<dword> GetBreakpoints()
+  {
+    return break_points;
+  }
+
 	void z80_init_tables(void);
 	void z80_mf2stop(void);
 	int z80_execute(void);
