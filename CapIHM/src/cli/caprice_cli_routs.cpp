@@ -20,8 +20,19 @@
 
 
 #include <iostream>
+#include "emulator.h"
+
+/**
+ * Reference to the Emulator
+ */
+extern Emulator *emulatorClone;
 
 extern "C" void caprice_cli_show_registers()
 {
   std::cout << "Z80 Registers :" << std::endl ;
+}
+
+extern "C" void caprice_cli_emu_reset()
+{
+  emulatorClone->emulator_reset(true);
 }

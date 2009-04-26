@@ -24,3 +24,7 @@
  * Give informations about registers
  */
 void caprice_cli_show_registers();
+/**
+ * Reset emulator
+ */
+void caprice_cli_emu_reset();

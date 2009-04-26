@@ -1,5 +1,6 @@
 noinst_LIBRARIES = libcapricecli.a
 
+libcapricecli_a_CPPFLAGS = -I@top_srcdir@/src/core $(SDL_CFLAGS) 
 libcapricecli_a_SOURCES = \
                           cparser_tree.c  cparser_tree.h \
                           cparser.h  cparser_io.h  cparser_line.h  cparser_options.h \

@@ -102,6 +102,7 @@ cparser_cmd_video_color_green(cparser_context_t *context)
 cparser_result_t
 cparser_cmd_reset(cparser_context_t *context)
 {
+  caprice_cli_emu_reset() ;
   return CPARSER_OK;
 }
 
