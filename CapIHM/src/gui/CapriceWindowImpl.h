@@ -9,6 +9,7 @@
 
 #include <wx/dnd.h>
 
+#if ENABLE_FILEDROP
 class CapriceDNDHandler : public wxFileDropTarget
 {
 	public:
@@ -18,6 +19,7 @@ class CapriceDNDHandler : public wxFileDropTarget
 	private:
 		Emulator* emulator;
 };
+#endif
 
 class CapriceWindowImpl : public CapriceWindow
 {
@@ -61,7 +63,9 @@ class CapriceWindowImpl : public CapriceWindow
 
     private:
     Emulator*   emulator ;
+#if ENABLE_FILEDROP
 	CapriceDNDHandler* dndhandler;
+#endif
 };
 #endif
 

@@ -40,8 +40,10 @@ CapriceWindowImpl::CapriceWindowImpl(Emulator* emu)
 	: CapriceWindow(NULL)
 {
 	emulator = emu ;
+#if ENABLE_FILLDROP
 	dndhandler= new CapriceDNDHandler(emulator);
 	this->SetDropTarget(dndhandler);
+#endif
 }
 
 CapriceWindowImpl::~CapriceWindowImpl()
@@ -278,7 +280,7 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
     SDL_PushEvent(&evt);
 }
 
-
+#if ENABLE_FILEDROP
 // ============== DND ===================
 CapriceDNDHandler::CapriceDNDHandler(Emulator* emu)
 	: wxFileDropTarget()
@@ -310,4 +312,5 @@ bool CapriceDNDHandler::OnDropFiles(wxCoord x, wxCoord y , const wxArrayString& 
     }
     return true;
 }
+#endif
 

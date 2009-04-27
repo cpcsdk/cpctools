@@ -107,6 +107,14 @@ AM_CONDITIONAL([RELEASE], [test ! "enable_debug" = "yes"])
 
 AC_MSG_RESULT([ $enable_debug ])
 
+AC_ARG_ENABLE(	filedrop,
+	      	[  --enable-filedrop	  turn on filedrop capacity [default=yes]],
+		enable_filedrop=no,
+		enable_filedrop=yes)
+
+if test "$enable_filedrop" = "yes" ; then
+	AC_DEFINE(ENABLE_FILEDROP,1,[Activate FileDrop ability])
+fi
 
 AC_ARG_ENABLE(	cli,
 		[  --enable-cli		  turn on cli interface [default=no]],
