@@ -90,7 +90,7 @@ bool CapriceApp::OnInit()
 	emulator = new Emulator();
 
 
-	frame = new CapriceWindowImpl();
+	frame = new CapriceWindowImpl(emulator);
 	frame->Show(true);
 
   #if CLI
@@ -136,8 +136,6 @@ int CapriceApp::OnRun()
         #ifdef DEBUG
         InitDebug();
         #endif
-
-        frame->SetEmulator(emulator);
 
         //do the initialisations
         if (!drivea.IsEmpty()) emulator->GetFDC().insertA( (const char *) drivea.mb_str());
@@ -209,6 +207,7 @@ void* cliRout(void* args)
     //TODO quit application
     frameClone->Close();
 
+	return args;
 }
 #endif
 

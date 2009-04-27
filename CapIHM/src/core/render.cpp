@@ -823,17 +823,24 @@ void Renderer::Render24BppFunction::Render(void)
 {
 	register byte *pbPos = (byte *)_scrPos;
 	register byte bCount = *_renderWidth++;
+	register int val;
 #ifdef __SSE__
 	_mm_prefetch(_palette, _MM_HINT_NTA);
 	//_mm_prefetch(_renderData, _MM_HINT_NTA);
 #endif
-	while (bCount--) {
-		register dword val = _palette[*_renderData++];
+	while (--bCount) {
+		val = _palette[*_renderData++];
 //		*(word *)pbPos = (word)val;
 //		*(pbPos + 2) = (byte)(val >> 16);
 		*(dword*)pbPos=val;
 		pbPos += 3;
 	}
+	// On copie le dernier octet avec la méthode lente sinon ça dépasse
+	val = _palette[*_renderData++];
+	*(word *)pbPos = (word)val;
+	*(pbPos + 2) = (byte)(val >> 16);
+	pbPos += 3;
+
 	_scrPos = (dword *)pbPos;
 }
 

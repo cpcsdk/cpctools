@@ -60,7 +60,7 @@ if test x$regex_cmd = "x" ; then
 	    AC_MSG_ERROR([sed is required to build the data files.])
 fi
 
-#AM_PROG_CC_C_O
+AM_PROG_CC_C_O
 
 
 #ARGS

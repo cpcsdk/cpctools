@@ -53,11 +53,11 @@ const char * CapriceInputSettingsImpl::getKeymapFileNameSave()
     wxStandardPathsBase &stdPth = wxStandardPaths::Get();
     wxString sPath = stdPth.GetExecutablePath();
 
-  std::cout << a << endl
-            << b << endl
-            << c << endl
-            << d << endl
-            << (wxChar *)sPath.c_str() << endl ;
+//  std::cout << a << endl
+//            << b << endl
+//            << c << endl
+//            << d << endl
+//            << (wxChar *)sPath.c_str() << endl ;
 
   std::cout << wxDir::Exists(wxStandardPaths::Get().GetUserDataDir()) << endl ;
 

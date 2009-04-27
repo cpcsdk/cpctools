@@ -36,10 +36,16 @@
 #include <cstdlib>
 #include <iostream>
 
-CapriceWindowImpl::CapriceWindowImpl() 
-	: CapriceWindow(NULL) 
+CapriceWindowImpl::CapriceWindowImpl(Emulator* emu) 
+	: CapriceWindow(NULL)
 {
-	this->SetDropTarget(this);
+	emulator = emu ;
+	dndhandler= new CapriceDNDHandler(emulator);
+	this->SetDropTarget(dndhandler);
+}
+
+CapriceWindowImpl::~CapriceWindowImpl()
+{
 }
 
 // =============================== Window Event =============================================
@@ -192,7 +198,7 @@ void CapriceWindowImpl::OnPause( wxCommandEvent& event)
         char * listing = (char *) malloc( sizeof(char) * 256 *  256 *  1024);
 
         //Get the disassembled memory
-        Desass( memory , std::cout, /*memory_length - start_disassm*/ 100 );
+        //Desass( memory , std::cout, /*memory_length - start_disassm*/ 100 );
 
         printf("%s", listing);
 
@@ -251,15 +257,6 @@ void CapriceWindowImpl::onMenuInput(wxCommandEvent& event)
  */
 wxPanel* CapriceWindowImpl::getPanel() { return m_panel4; }
 
-/**
- * Set the emulator
- * @param emulator Emulator to set
- */
-void CapriceWindowImpl::SetEmulator(Emulator *emulator)
-{
-    this->emulator = emulator ;
-}
-
 /********************************************************
 * Keyboard management : for now, pass the events to SDL *
 ********************************************************/
@@ -279,13 +276,17 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
     evt.key.keysym.sym = (SDLKey)event.GetKeyCode();
     evt.key.keysym.mod = (SDLMod)event.GetModifiers();
     SDL_PushEvent(&evt);
-
-    cout << "keydown" << event.GetKeyCode() << endl;
 }
 
 
 // ============== DND ===================
-bool CapriceWindowImpl::OnDropFiles(wxCoord x, wxCoord y , const wxArrayString& filenames)
+CapriceDNDHandler::CapriceDNDHandler(Emulator* emu)
+	: wxFileDropTarget()
+{
+	emulator=emu;
+}
+
+bool CapriceDNDHandler::OnDropFiles(wxCoord x, wxCoord y , const wxArrayString& filenames)
 {
     wxString CurrentDocPath = filenames[0];
     wxFileName FileName(CurrentDocPath);
@@ -309,3 +310,4 @@ bool CapriceWindowImpl::OnDropFiles(wxCoord x, wxCoord y , const wxArrayString& 
     }
     return true;
 }
+

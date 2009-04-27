@@ -9,11 +9,22 @@
 
 #include <wx/dnd.h>
 
-class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget 
+class CapriceDNDHandler : public wxFileDropTarget
+{
+	public:
+		CapriceDNDHandler(Emulator* emu);
+	protected:
+    	bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
+	private:
+		Emulator* emulator;
+};
+
+class CapriceWindowImpl : public CapriceWindow
 {
     public:
 
-	CapriceWindowImpl();
+	CapriceWindowImpl(Emulator* emu);
+	virtual ~CapriceWindowImpl();
 
     void SetEmulator(Emulator *emulator);   
     Emulator* GetEmulator() {return emulator;};   
@@ -23,7 +34,6 @@ class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget
 
     virtual void onExit1( wxCloseEvent& );
     virtual void OnIdle( wxIdleEvent& event );
-
 
     virtual void onInsertDiscA( wxCommandEvent& event );
     virtual void onInsertDiscB( wxCommandEvent& event );
@@ -49,11 +59,9 @@ class CapriceWindowImpl : public CapriceWindow , public wxFileDropTarget
     virtual void windowKeyDown( wxKeyEvent& event);
     virtual void windowKeyUp( wxKeyEvent& event );
 
-    // DND
-    bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
-
     private:
     Emulator*   emulator ;
+	CapriceDNDHandler* dndhandler;
 };
 #endif
 

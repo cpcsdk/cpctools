@@ -265,27 +265,23 @@ bool Emulator::KeyboardEmulation()
 				{
 					// consult the SHIFT table
 					cpc_key = _input.keyboard_shift[event.key.keysym.sym];
-					std::cout << "SHIFTED" << std::hex << cpc_key << std::endl;
 				}
 				// PC CTRL key held down?
 				else if (event.key.keysym.mod & wxMOD_CONTROL/*KMOD_CTRL*/)
 				{
 					// consult the CTRL table
 					cpc_key = _input.keyboard_ctrl[event.key.keysym.sym];
-					std::cout << "CTRLED" << std::endl;
 				}
 				// PC AltGr key held down?
 				else if (event.key.keysym.mod & wxMOD_ALT /*KMOD_MODE*/)
 				{
 					// consult the AltGr table
 					cpc_key = _input.keyboard_mode[event.key.keysym.sym];
-					std::cout << "ALTED" << std::endl;
 				}
 				else
 				{
 					// consult the normal table
 					cpc_key = _input.keyboard_normal[event.key.keysym.sym];
-					std::cout << "NORMAL" << std::endl;
 				}
 
 				if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused) && ((byte)cpc_key != 0xff))
