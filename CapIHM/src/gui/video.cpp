@@ -424,6 +424,7 @@ void DoublePlugin::Close()
 {
 	if (!_video)
 		return;
+	SDL_FreeSurface(_video);
 	SDL_FreeSurface(_publicVideo);
 }
 
@@ -1675,7 +1676,7 @@ void DotMatrixPlugin::Filter(Uint8 *srcPtr, Uint32 srcPitch,
 int VideoPlugin::CPCVisibleSCRWidth = 384; // visible width: 4+40+4 * 8
 int VideoPlugin::CPCVisibleSCRHeight = 270;
 
-VideoPlugin::VideoPlugin(const string &name, const Uint32 &format, const Uint8 &halfPixels) :
+VideoPlugin::VideoPlugin(const string name, const Uint32 format, const Uint8 halfPixels) :
 _name(name),
 _formats(format),
 _halfPixels(halfPixels),

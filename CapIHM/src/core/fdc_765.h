@@ -71,6 +71,7 @@ private:
 
 public:
 	t_FDC(t_CPC &CPC);
+	~t_FDC();
 
 	void Reset();
 

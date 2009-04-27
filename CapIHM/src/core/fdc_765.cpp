@@ -83,6 +83,13 @@ CPC(cpc)
 	fdc_setdrive(m_fdc, 3, driveB.fdl);
 }
 
+
+t_FDC::~t_FDC()
+{
+	fdc_destroy(&m_fdc);
+}
+
+
 void t_FDC::Reset()
 {
 }

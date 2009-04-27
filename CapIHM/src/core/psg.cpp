@@ -64,6 +64,13 @@ t_PSG::t_PSG(t_CPC &cpc, t_Tape &tape)
 {
 }
 
+t_PSG::~t_PSG()
+{
+	#ifdef ST_SOUND
+		delete m_Ym2149;
+	#endif
+}
+
 void t_PSG::Emulate(int iCycleCount)
 {
 #ifdef ST_SOUND

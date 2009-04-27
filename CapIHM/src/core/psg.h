@@ -44,6 +44,7 @@ private:
 public:
 	double snd_cycle_count;
 	t_PSG(t_CPC &cpc, t_Tape &tape);
+	~t_PSG();
 
 	void Emulate(int iCycleCount);
 

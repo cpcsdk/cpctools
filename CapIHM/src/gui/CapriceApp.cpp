@@ -105,13 +105,15 @@ bool CapriceApp::OnInit()
  */
 int CapriceApp::OnExit()
 {
-  cout << "Quit" << endl ;
+	delete emulator;
+	SDL_Quit();
+  	cout << "Quit" << endl ;
 #if CLI
-  if (cli)
-  {
-    cout << "Quit parser" << endl ;
-    cparser_quit(&parser) ;
-  }
+  	if (cli)
+  	{
+    	cout << "Quit parser" << endl ;
+    	cparser_quit(&parser) ;
+  	}
 #endif
 	return 0;
 }
