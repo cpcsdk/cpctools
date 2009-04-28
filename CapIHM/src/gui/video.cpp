@@ -419,8 +419,8 @@ void DoublePlugin::Flip()
 	}
 	//SDL_UpdateRect(_video,0,0,0,0);
     wxBitmap bmp(*img);
-    CapriceApp* MyApp =static_cast<CapriceApp*>(wxTheApp) ;
-    wxBufferedPaintDC dc(MyApp->frame->getPanel(),bmp);
+    wxClientDC dc(static_cast<CapriceApp*>(wxTheApp)->frame->getPanel());
+	dc.DrawBitmap(bmp,0,0,false);
 #endif
 }
 
