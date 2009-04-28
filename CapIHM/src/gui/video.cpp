@@ -335,6 +335,8 @@ public:
 	virtual void Unlock();
 	virtual void Flip();
 	virtual void Close();
+
+	wxImage* img;
 };
 
 SDL_Surface* DoublePlugin::Init(int w,int h, int bpp, bool fs)
@@ -349,6 +351,8 @@ SDL_Surface* DoublePlugin::Init(int w,int h, int bpp, bool fs)
 	if (!_video)
 		return NULL;
 	SDL_FillRect(_video,NULL,SDL_MapRGB(_video->format,0,0,0));
+
+	img = new wxImage(w,h,(unsigned char*)_video->pixels,true);
 	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,bpp,0x0000FF,0x00FF00,0xFF0000,0);
 	return _publicVideo;
 }
@@ -414,7 +418,7 @@ void DoublePlugin::Flip()
 	    src+=length;
 	}
 	//SDL_UpdateRect(_video,0,0,0,0);
-    wxBitmap bmp(wxImage(_video->w, _video->h,static_cast<unsigned char *>(_video->pixels), true));
+    wxBitmap bmp(*img);
     CapriceApp* MyApp =static_cast<CapriceApp*>(wxTheApp) ;
     wxBufferedPaintDC dc(MyApp->frame->getPanel(),bmp);
 #endif
@@ -424,6 +428,7 @@ void DoublePlugin::Close()
 {
 	if (!_video)
 		return;
+	delete img; 
 	SDL_FreeSurface(_video);
 	SDL_FreeSurface(_publicVideo);
 }

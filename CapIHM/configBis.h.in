@@ -12,6 +12,9 @@
 /* Define to 1 if the `closedir' function returns void instead of `int'. */
 #undef CLOSEDIR_VOID
 
+/* Activate FileDrop ability */
+#undef ENABLE_FILEDROP
+
 /* Define to 1 if you have the <ayemu.h> header file. */
 #undef HAVE_AYEMU_H
 
