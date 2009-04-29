@@ -40,6 +40,7 @@ CapriceWindowImpl::CapriceWindowImpl(Emulator* emu)
 	: CapriceWindow(NULL)
 {
 	emulator = emu ;
+  m_panel4->SetFocus();
 #if ENABLE_FILLDROP
 	dndhandler= new CapriceDNDHandler(emulator);
 	this->SetDropTarget(dndhandler);
