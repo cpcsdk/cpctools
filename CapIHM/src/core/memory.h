@@ -22,9 +22,13 @@ private:
 
 	byte*			membank_config[8][4];
 
+  //RAM pointer
 	byte*			pbRAM;
+  //Low ROM
 	byte*			pbROMlo;
+  //High ROM
 	byte*			pbROMhi;
+  //Expension ROM
 	byte*			pbExpansionROM;
 
 	byte*			membank_read[4];

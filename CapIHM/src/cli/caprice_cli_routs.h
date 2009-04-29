@@ -46,3 +46,11 @@ void caprice_cli_show_breakpoints();
  * @param mode 1 fo color, 2 for gray, 3 for green
  */
 void caprice_cli_video_color(int mode);
+/**
+ * Poke a byte or word in memory
+ */
+void caprice_cli_memory_poke(int address, int value);
+/**
+ * Peek a byte in memory
+ */
+void caprice_cli_memory_peek(int address);

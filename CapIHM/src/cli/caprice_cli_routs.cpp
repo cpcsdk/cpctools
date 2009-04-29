@@ -71,17 +71,50 @@ void caprice_cli_video_color(int mode)
 {
   if (mode == 1)
   {
-    std::cout << "Set color screen" << endl;
+    std::cout << "# Set color screen" << endl;
     emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::ColoursMode);
   }
   else if (mode == 2)
   {
-    std::cout << "Set grey screen" << endl;
+    std::cout << "# Set grey screen" << endl;
     emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::GreyMode);
   }
   else if (mode == 3)
   {
-    std::cout << "Set green screen" << endl;
+    std::cout << "# Set green screen" << endl;
     emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::GreenMode);
   }
+}
+
+extern "C"
+void caprice_cli_memory_peek(int address)
+{
+  byte * ram = emulatorClone->GetMemory().GetRAM();
+  int value = ram[address];
+
+  std::cout << std::hex << value << endl ;
+}
+
+
+//TODO verify in order to avoid memory leaks
+extern "C"
+void caprice_cli_memory_poke(int address, int value)
+{
+  byte * ram = emulatorClone->GetMemory().GetRAM();
+
+  if (value>255)
+  {
+    std::cout << "# Put byte 0x" << std::hex << value << " in 0x" << std::hex << address << endl ;
+    ram[address] = value ;
+  }
+  else
+  {
+    std::cout << "# Put word " << value << " in " << address << endl ;
+    byte high  = value/256 ;
+    byte low   = value%256 ;
+
+    ram[address] = low ;
+    ram[ (address+1) & 0xffff ] = high ;
+  }
+  
 }

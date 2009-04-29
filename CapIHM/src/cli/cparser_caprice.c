@@ -23,6 +23,7 @@
 #include "cparser_token.h"
 
 #include "caprice_cli_routs.h"
+typedef unsigned char byte;
 
 /**
  * Quit the application
@@ -104,6 +105,21 @@ cparser_result_t
 cparser_cmd_video_color_green(cparser_context_t *context)
 {
   caprice_cli_video_color(3);
+  return CPARSER_OK;
+}
+
+//Memory
+cparser_result_t
+cparser_cmd_memory_peek_address(cparser_context_t *context, uint32_t *address_ptr)
+{
+  caprice_cli_memory_peek(*address_ptr & 0xffff);
+  return CPARSER_OK;
+}
+
+cparser_result_t
+cparser_cmd_memory_poke_address_value(cparser_context_t *context, uint32_t *address_ptr, uint32_t *value_ptr)
+{
+  caprice_cli_memory_poke(*address_ptr & 0xffff, *value_ptr & 0xffff);
   return CPARSER_OK;
 }
 

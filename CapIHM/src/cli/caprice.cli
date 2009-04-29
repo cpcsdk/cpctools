@@ -36,6 +36,14 @@ video color grey
 video color green
 
 
+// ============ Memory =============
+//Poke a byte (or word) in memory
+memory poke <HEX:address> <HEX:value>
+
+//Read a byte in memory
+memory peek <HEX:address>
+
+
 // ============ various ============
 // Quit Caprice
 quit

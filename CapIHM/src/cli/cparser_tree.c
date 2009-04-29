@@ -96,6 +96,42 @@ cparser_glue_video_color_green (cparser_t *parser)
 }
 
 cparser_result_t
+cparser_glue_memory_poke_address_value (cparser_t *parser)
+{
+    uint32_t address_val;
+    uint32_t *address_ptr = NULL;
+    uint32_t value_val;
+    uint32_t *value_ptr = NULL;
+    cparser_result_t rc;
+
+    rc = cparser_get_hex(&parser->tokens[2], &address_val);
+    assert(CPARSER_OK == rc);
+    address_ptr = &address_val;
+    rc = cparser_get_hex(&parser->tokens[3], &value_val);
+    assert(CPARSER_OK == rc);
+    value_ptr = &value_val;
+    cparser_cmd_memory_poke_address_value(&parser->context,
+        address_ptr,
+        value_ptr);
+    return CPARSER_OK;
+}
+
+cparser_result_t
+cparser_glue_memory_peek_address (cparser_t *parser)
+{
+    uint32_t address_val;
+    uint32_t *address_ptr = NULL;
+    cparser_result_t rc;
+
+    rc = cparser_get_hex(&parser->tokens[2], &address_val);
+    assert(CPARSER_OK == rc);
+    address_ptr = &address_val;
+    cparser_cmd_memory_peek_address(&parser->context,
+        address_ptr);
+    return CPARSER_OK;
+}
+
+cparser_result_t
 cparser_glue_quit (cparser_t *parser)
 {
     cparser_cmd_quit(&parser->context);
@@ -191,6 +227,70 @@ cparser_node_t cparser_node_quit = {
     &cparser_node_reset,
     &cparser_node_quit_eol
 };
+cparser_node_t cparser_node_memory_peek_address_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_memory_peek_address,
+    "Read a byte in memory",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_memory_peek_address = {
+    CPARSER_NODE_HEX,
+    0,
+    "<HEX:address>",
+    NULL,
+    NULL,
+    &cparser_node_memory_peek_address_eol
+};
+cparser_node_t cparser_node_memory_peek = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "peek",
+    NULL,
+    NULL,
+    &cparser_node_memory_peek_address
+};
+cparser_node_t cparser_node_memory_poke_address_value_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_memory_poke_address_value,
+    "Poke a byte (or word) in memory",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_memory_poke_address_value = {
+    CPARSER_NODE_HEX,
+    0,
+    "<HEX:value>",
+    NULL,
+    NULL,
+    &cparser_node_memory_poke_address_value_eol
+};
+cparser_node_t cparser_node_memory_poke_address = {
+    CPARSER_NODE_HEX,
+    0,
+    "<HEX:address>",
+    NULL,
+    NULL,
+    &cparser_node_memory_poke_address_value
+};
+cparser_node_t cparser_node_memory_poke = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "poke",
+    NULL,
+    &cparser_node_memory_peek,
+    &cparser_node_memory_poke_address
+};
+cparser_node_t cparser_node_memory = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "memory",
+    NULL,
+    &cparser_node_quit,
+    &cparser_node_memory_poke
+};
 cparser_node_t cparser_node_video_color_green_eol = {
     CPARSER_NODE_END,
     0,
@@ -252,7 +352,7 @@ cparser_node_t cparser_node_video = {
     0,
     "video",
     NULL,
-    &cparser_node_quit,
+    &cparser_node_memory,
     &cparser_node_video_color
 };
 cparser_node_t cparser_node_breakpoints_list_eol = {

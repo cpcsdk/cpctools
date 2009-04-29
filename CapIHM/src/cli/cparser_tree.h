@@ -18,6 +18,11 @@ cparser_result_t cparser_cmd_breakpoints_list(cparser_context_t *context);
 cparser_result_t cparser_cmd_video_color_on(cparser_context_t *context);
 cparser_result_t cparser_cmd_video_color_grey(cparser_context_t *context);
 cparser_result_t cparser_cmd_video_color_green(cparser_context_t *context);
+cparser_result_t cparser_cmd_memory_poke_address_value(cparser_context_t *context,
+    uint32_t *address_ptr,
+    uint32_t *value_ptr);
+cparser_result_t cparser_cmd_memory_peek_address(cparser_context_t *context,
+    uint32_t *address_ptr);
 cparser_result_t cparser_cmd_quit(cparser_context_t *context);
 cparser_result_t cparser_cmd_reset(cparser_context_t *context);
 cparser_result_t cparser_cmd_help_filter(cparser_context_t *context,
