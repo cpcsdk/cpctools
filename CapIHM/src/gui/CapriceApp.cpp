@@ -92,6 +92,7 @@ bool CapriceApp::OnInit()
 
 	frame = new CapriceWindowImpl(emulator);
 	frame->Show(true);
+  frame->Raise();
 
   #if CLI
     frameClone = frame ;
