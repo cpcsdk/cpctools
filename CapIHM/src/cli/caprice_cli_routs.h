@@ -19,6 +19,7 @@
  */  
 
 
+//TODO: Move in the core this file in order to be also used by gui
 
 /**
  * Give informations about registers
@@ -40,3 +41,8 @@ void caprice_cli_remove_breakpoint(int adress);
  * List all the breakpoints
  */
 void caprice_cli_show_breakpoints();
+/**
+ * Choose the video color mode
+ * @param mode 1 fo color, 2 for gray, 3 for green
+ */
+void caprice_cli_video_color(int mode);

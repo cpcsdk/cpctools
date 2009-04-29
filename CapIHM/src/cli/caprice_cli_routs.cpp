@@ -22,6 +22,7 @@
 #include <iostream>
 #include "emulator.h"
 #include "z80.h"
+#include "render.h"
 
 /**
  * Reference to the Emulator
@@ -62,5 +63,25 @@ extern "C" void caprice_cli_show_breakpoints()
   {
     std::cout << i << " : " << *iter << endl ;
     i++;
+  }
+}
+
+extern "C" 
+void caprice_cli_video_color(int mode)
+{
+  if (mode == 1)
+  {
+    std::cout << "Set color screen" << endl;
+    emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::ColoursMode);
+  }
+  else if (mode == 2)
+  {
+    std::cout << "Set grey screen" << endl;
+    emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::GreyMode);
+  }
+  else if (mode == 3)
+  {
+    std::cout << "Set green screen" << endl;
+    emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::GreenMode);
   }
 }
