@@ -29,8 +29,8 @@ breakpoints list
 //put screen in color 
 video color on
 
-//put screen in grayscale
-video color gray
+//put screen in greyscale
+video color grey
 
 //put screen in greenscale
 video color green

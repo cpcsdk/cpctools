@@ -94,7 +94,7 @@ cparser_cmd_video_color_on(cparser_context_t *context)
 }
 
 cparser_result_t
-cparser_cmd_video_color_gray(cparser_context_t *context)
+cparser_cmd_video_color_grey(cparser_context_t *context)
 {
   caprice_cli_video_color(2);
   return CPARSER_OK;

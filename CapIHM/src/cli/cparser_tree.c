@@ -82,9 +82,9 @@ cparser_glue_video_color_on (cparser_t *parser)
 }
 
 cparser_result_t
-cparser_glue_video_color_gray (cparser_t *parser)
+cparser_glue_video_color_grey (cparser_t *parser)
 {
-    cparser_cmd_video_color_gray(&parser->context);
+    cparser_cmd_video_color_grey(&parser->context);
     return CPARSER_OK;
 }
 
@@ -207,21 +207,21 @@ cparser_node_t cparser_node_video_color_green = {
     NULL,
     &cparser_node_video_color_green_eol
 };
-cparser_node_t cparser_node_video_color_gray_eol = {
+cparser_node_t cparser_node_video_color_grey_eol = {
     CPARSER_NODE_END,
     0,
-    cparser_glue_video_color_gray,
-    "put screen in grayscale",
+    cparser_glue_video_color_grey,
+    "put screen in greyscale",
     NULL,
     NULL
 };
-cparser_node_t cparser_node_video_color_gray = {
+cparser_node_t cparser_node_video_color_grey = {
     CPARSER_NODE_KEYWORD,
     0,
-    "gray",
+    "grey",
     NULL,
     &cparser_node_video_color_green,
-    &cparser_node_video_color_gray_eol
+    &cparser_node_video_color_grey_eol
 };
 cparser_node_t cparser_node_video_color_on_eol = {
     CPARSER_NODE_END,
@@ -236,7 +236,7 @@ cparser_node_t cparser_node_video_color_on = {
     0,
     "on",
     NULL,
-    &cparser_node_video_color_gray,
+    &cparser_node_video_color_grey,
     &cparser_node_video_color_on_eol
 };
 cparser_node_t cparser_node_video_color = {
