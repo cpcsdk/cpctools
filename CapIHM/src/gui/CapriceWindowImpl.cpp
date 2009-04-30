@@ -80,8 +80,8 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
         wxBitmap bitmap;
 	    if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
         {
-            CapriceApp* MyApp =static_cast<CapriceApp*>(wxTheApp) ;
-            wxBufferedPaintDC dc(MyApp->frame->getPanel(),bitmap);
+            wxClientDC dc(getPanel());
+			dc.DrawBitmap(bitmap,0,0,false);
         //    event.RequestMore(false);
         }
 

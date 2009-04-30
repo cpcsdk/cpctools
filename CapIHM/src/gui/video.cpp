@@ -418,9 +418,13 @@ void DoublePlugin::Flip()
 	    src+=length;
 	}
 	//SDL_UpdateRect(_video,0,0,0,0);
-    wxBitmap bmp(*img);
-    wxClientDC dc(static_cast<CapriceApp*>(wxTheApp)->frame->getPanel());
-	dc.DrawBitmap(bmp,0,0,false);
+	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
+	if (f->IsShownOnScreen() && !f->IsIconized())
+	{
+    	wxBitmap bmp(*img);
+    	wxClientDC dc(f->getPanel());
+		dc.DrawBitmap(bmp,0,0,false);
+	}
 #endif
 }
 
