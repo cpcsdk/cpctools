@@ -33,7 +33,31 @@ extern "C" void caprice_cli_show_registers()
 {
   {
     std::cout << "Z80 Registers :" << std::endl ;
-    std::cout << "PC : " <<  uppercase << hex << emulatorClone->GetZ80().PC.w.l << std::endl ;
+    std::cout << "AF : 0X" <<  uppercase << hex << emulatorClone->GetZ80().AF.w.l 
+      << "\t\tAF' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().AFx.w.l 
+      << std::endl ;
+    std::cout << "BC : 0X" <<  uppercase << hex << emulatorClone->GetZ80().BC.w.l 
+      << "\t\tBC' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().BCx.w.l 
+      << std::endl ;
+    std::cout << "DE : 0X" <<  uppercase << hex << emulatorClone->GetZ80().DE.w.l 
+      << "\t\tDE' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().DEx.w.l 
+      << std::endl ;
+    std::cout << "HL : 0x" <<  uppercase << hex << emulatorClone->GetZ80().HL.w.l 
+      << "\t\tHL' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().HLx.w.l 
+      << std::endl ;
+
+    std::cout << "PC : 0x" <<  uppercase << hex << emulatorClone->GetZ80().PC.w.l 
+      << "\t\tSP : 0X" <<  uppercase << hex << emulatorClone->GetZ80().SP.w.l 
+      << std::endl ;
+
+    std::cout << "IX  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().IX.w.l 
+      << "\t\tIY  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().IY.w.l 
+      << std::endl ;
+ 
+    std::cout << "I  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().I 
+      << "\t\tR  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().R 
+      << std::endl ;
+
   }
 }
 
