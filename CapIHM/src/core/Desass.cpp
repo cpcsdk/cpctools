@@ -421,9 +421,9 @@ const char * TabInstr[ 256 ] =
 
 //
 // Convertir le buffer en listing désassemblé
-// TODO Populate a buffer instead of a string
+// TODO Check size in order to avoid overflow
 //
-void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
+void Desass( unsigned char * Prg, std::ostream &Listing, int Start, int Longueur )
 {
     int i, Instr, Inst2 = 0, Inst3 = 0, Inst4 = 0, Ad16;
     const char * Chaine; 
@@ -433,7 +433,7 @@ void Desass( unsigned char * Prg, std::ostream &Listing, int Longueur )
     int Adr, OldAdr = 0;
     char Ad8;
 
-    for ( Adr = 0; Adr < Longueur; )
+    for ( Adr = Start; Adr < Start+Longueur; )
         {
         OldAdr = Adr;
         Instr = Prg[ Adr++ ];

@@ -16,10 +16,10 @@ show registers z80
 
 // ============ Breakpoints ============
 //Add a breakpoint in the memory
-breakpoints add <HEX:adress>
+breakpoints add <UINT:adress>
 
 //Remove a breakpoint
-breakpoints remove <HEX:adress>
+breakpoints remove <UINT:adress>
 
 //List all breakpoints
 breakpoints list
@@ -43,10 +43,13 @@ video color green
 
 // ============ Memory =============
 //Poke a byte (or word) in memory
-memory poke <HEX:address> <HEX:value>
+memory poke <UINT:address> <UINT:value>
 
 //Read a byte in memory
-memory peek <HEX:address>
+memory peek <UINT:address>
+
+//Disassemble memory
+memory disassemble  <UINT:address> { <UINT:quantity> }
 
 
 // ============ various ============

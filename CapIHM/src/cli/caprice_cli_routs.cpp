@@ -18,11 +18,11 @@
  *
  */  
 
-
 #include <iostream>
 #include "emulator.h"
 #include "z80.h"
 #include "render.h"
+#include "Desass.h"
 
 /**
  * Reference to the Emulator
@@ -175,3 +175,26 @@ void caprice_cli_memory_poke(int address, int value)
   }
   
 }
+
+extern "C"
+void caprice_cli_memory_disasm_quantity(int address, int size)
+{
+  byte * ram = emulatorClone->GetMemory().GetRAM();
+  Desass(
+      (unsigned char *) ram,
+      (std::ostream &) std::cout,
+      address,
+      size);
+
+}
+
+extern "C"
+void caprice_cli_memory_disasm(int address)
+{
+  int size = 0x10000 - address  ;
+  caprice_cli_memory_disasm_quantity( address, size) ;
+}
+
+
+
+

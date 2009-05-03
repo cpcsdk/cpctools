@@ -1,4 +1,4 @@
-noinst_LIBRARIES = libcapricecore.a
+noinst_LIBRARIES = libcapricecore.a libdisass.a
 
 libcapricecore_a_LIBADD = /usr/local/lib/lib765.a /usr/local/lib/libdsk.a
 libcapricecore_a_CPPFLAGS=$(SDL_CFLAGS) -DDATA_PATH=\"$(pkgdatadir)//\" 
@@ -56,7 +56,11 @@ z80.cpp\
 z80.h\
 z80daa.h\
 zip.cpp\
-zip.h\
+zip.h
+
+#Created due to cross references ...
+#TODO: change that
+libdisass_a_SOURCES = \
 Desass.cpp \
 Desass.h \
 Outils.h \

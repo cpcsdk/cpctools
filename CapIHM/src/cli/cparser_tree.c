@@ -44,7 +44,7 @@ cparser_glue_breakpoints_add_adress (cparser_t *parser)
     uint32_t *adress_ptr = NULL;
     cparser_result_t rc;
 
-    rc = cparser_get_hex(&parser->tokens[2], &adress_val);
+    rc = cparser_get_uint(&parser->tokens[2], &adress_val);
     assert(CPARSER_OK == rc);
     adress_ptr = &adress_val;
     cparser_cmd_breakpoints_add_adress(&parser->context,
@@ -59,7 +59,7 @@ cparser_glue_breakpoints_remove_adress (cparser_t *parser)
     uint32_t *adress_ptr = NULL;
     cparser_result_t rc;
 
-    rc = cparser_get_hex(&parser->tokens[2], &adress_val);
+    rc = cparser_get_uint(&parser->tokens[2], &adress_val);
     assert(CPARSER_OK == rc);
     adress_ptr = &adress_val;
     cparser_cmd_breakpoints_remove_adress(&parser->context,
@@ -118,10 +118,10 @@ cparser_glue_memory_poke_address_value (cparser_t *parser)
     uint32_t *value_ptr = NULL;
     cparser_result_t rc;
 
-    rc = cparser_get_hex(&parser->tokens[2], &address_val);
+    rc = cparser_get_uint(&parser->tokens[2], &address_val);
     assert(CPARSER_OK == rc);
     address_ptr = &address_val;
-    rc = cparser_get_hex(&parser->tokens[3], &value_val);
+    rc = cparser_get_uint(&parser->tokens[3], &value_val);
     assert(CPARSER_OK == rc);
     value_ptr = &value_val;
     cparser_cmd_memory_poke_address_value(&parser->context,
@@ -137,11 +137,35 @@ cparser_glue_memory_peek_address (cparser_t *parser)
     uint32_t *address_ptr = NULL;
     cparser_result_t rc;
 
-    rc = cparser_get_hex(&parser->tokens[2], &address_val);
+    rc = cparser_get_uint(&parser->tokens[2], &address_val);
     assert(CPARSER_OK == rc);
     address_ptr = &address_val;
     cparser_cmd_memory_peek_address(&parser->context,
         address_ptr);
+    return CPARSER_OK;
+}
+
+cparser_result_t
+cparser_glue_memory_disassemble_address_quantity (cparser_t *parser)
+{
+    uint32_t address_val;
+    uint32_t *address_ptr = NULL;
+    uint32_t quantity_val;
+    uint32_t *quantity_ptr = NULL;
+    cparser_result_t rc;
+
+    rc = cparser_get_uint(&parser->tokens[2], &address_val);
+    assert(CPARSER_OK == rc);
+    address_ptr = &address_val;
+    rc = cparser_get_uint(&parser->tokens[3], &quantity_val);
+    if (CPARSER_OK == rc) {
+        quantity_ptr = &quantity_val;
+    } else {
+        assert(4 > parser->token_tos);
+    }
+    cparser_cmd_memory_disassemble_address_quantity(&parser->context,
+        address_ptr,
+        quantity_ptr);
     return CPARSER_OK;
 }
 
@@ -241,6 +265,46 @@ cparser_node_t cparser_node_quit = {
     &cparser_node_reset,
     &cparser_node_quit_eol
 };
+cparser_node_t cparser_node_memory_disassemble_address_quantity_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_memory_disassemble_address_quantity,
+    "Disassemble memory",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_memory_disassemble_address_quantity = {
+    CPARSER_NODE_UINT,
+    CPARSER_NODE_FLAGS_OPT_END,
+    "<UINT:quantity>",
+    NULL,
+    NULL,
+    &cparser_node_memory_disassemble_address_quantity_eol
+};
+cparser_node_t cparser_node_memory_disassemble_address_eol = {
+    CPARSER_NODE_END,
+    CPARSER_NODE_FLAGS_OPT_PARTIAL,
+    cparser_glue_memory_disassemble_address_quantity,
+    NULL,
+    &cparser_node_memory_disassemble_address_quantity,
+    NULL
+};
+cparser_node_t cparser_node_memory_disassemble_address = {
+    CPARSER_NODE_UINT,
+    CPARSER_NODE_FLAGS_OPT_START,
+    "<UINT:address>",
+    NULL,
+    NULL,
+    &cparser_node_memory_disassemble_address_eol
+};
+cparser_node_t cparser_node_memory_disassemble = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "disassemble",
+    NULL,
+    NULL,
+    &cparser_node_memory_disassemble_address
+};
 cparser_node_t cparser_node_memory_peek_address_eol = {
     CPARSER_NODE_END,
     0,
@@ -250,9 +314,9 @@ cparser_node_t cparser_node_memory_peek_address_eol = {
     NULL
 };
 cparser_node_t cparser_node_memory_peek_address = {
-    CPARSER_NODE_HEX,
+    CPARSER_NODE_UINT,
     0,
-    "<HEX:address>",
+    "<UINT:address>",
     NULL,
     NULL,
     &cparser_node_memory_peek_address_eol
@@ -262,7 +326,7 @@ cparser_node_t cparser_node_memory_peek = {
     0,
     "peek",
     NULL,
-    NULL,
+    &cparser_node_memory_disassemble,
     &cparser_node_memory_peek_address
 };
 cparser_node_t cparser_node_memory_poke_address_value_eol = {
@@ -274,17 +338,17 @@ cparser_node_t cparser_node_memory_poke_address_value_eol = {
     NULL
 };
 cparser_node_t cparser_node_memory_poke_address_value = {
-    CPARSER_NODE_HEX,
+    CPARSER_NODE_UINT,
     0,
-    "<HEX:value>",
+    "<UINT:value>",
     NULL,
     NULL,
     &cparser_node_memory_poke_address_value_eol
 };
 cparser_node_t cparser_node_memory_poke_address = {
-    CPARSER_NODE_HEX,
+    CPARSER_NODE_UINT,
     0,
-    "<HEX:address>",
+    "<UINT:address>",
     NULL,
     NULL,
     &cparser_node_memory_poke_address_value
@@ -426,9 +490,9 @@ cparser_node_t cparser_node_breakpoints_remove_adress_eol = {
     NULL
 };
 cparser_node_t cparser_node_breakpoints_remove_adress = {
-    CPARSER_NODE_HEX,
+    CPARSER_NODE_UINT,
     0,
-    "<HEX:adress>",
+    "<UINT:adress>",
     NULL,
     NULL,
     &cparser_node_breakpoints_remove_adress_eol
@@ -450,9 +514,9 @@ cparser_node_t cparser_node_breakpoints_add_adress_eol = {
     NULL
 };
 cparser_node_t cparser_node_breakpoints_add_adress = {
-    CPARSER_NODE_HEX,
+    CPARSER_NODE_UINT,
     0,
-    "<HEX:adress>",
+    "<UINT:adress>",
     NULL,
     NULL,
     &cparser_node_breakpoints_add_adress_eol

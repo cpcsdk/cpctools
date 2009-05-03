@@ -58,3 +58,12 @@ void caprice_cli_memory_poke(int address, int value);
  * Peek a byte in memory
  */
 void caprice_cli_memory_peek(int address);
+/**
+ * Disassemble memory and show it on screen
+ * TODO: use a pager
+ */
+void caprice_cli_memory_disasm(int address);
+/**
+ * Disassemble memory until attended quantity attended
+ */
+void caprice_cli_memory_disasm_quantity(int address, int size);

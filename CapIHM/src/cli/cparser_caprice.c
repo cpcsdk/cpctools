@@ -136,6 +136,22 @@ cparser_cmd_memory_poke_address_value(cparser_context_t *context, uint32_t *addr
   return CPARSER_OK;
 }
 
+cparser_result_t
+cparser_cmd_memory_disassemble_address_quantity(  cparser_context_t *context,
+                                                  uint32_t *address_ptr, uint32_t *size_ptr)
+{
+
+  int size = (size_ptr ? *size_ptr : 0x0);
+  if (size == 0)
+  {
+    caprice_cli_memory_disasm(*address_ptr & 0xffff);
+  }
+  else
+  {
+    caprice_cli_memory_disasm_quantity(*address_ptr & 0xffff, size & 0xffff);
+  }
+  return CPARSER_OK ;
+}
 //Emu
 cparser_result_t
 cparser_cmd_reset(cparser_context_t *context)
