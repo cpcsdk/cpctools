@@ -75,6 +75,20 @@ cparser_glue_breakpoints_list (cparser_t *parser)
 }
 
 cparser_result_t
+cparser_glue_continue (cparser_t *parser)
+{
+    cparser_cmd_continue(&parser->context);
+    return CPARSER_OK;
+}
+
+cparser_result_t
+cparser_glue_step (cparser_t *parser)
+{
+    cparser_cmd_step(&parser->context);
+    return CPARSER_OK;
+}
+
+cparser_result_t
 cparser_glue_video_color_on (cparser_t *parser)
 {
     cparser_cmd_video_color_on(&parser->context);
@@ -355,6 +369,38 @@ cparser_node_t cparser_node_video = {
     &cparser_node_memory,
     &cparser_node_video_color
 };
+cparser_node_t cparser_node_step_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_step,
+    "Step execute step by step",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_step = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "step",
+    NULL,
+    &cparser_node_video,
+    &cparser_node_step_eol
+};
+cparser_node_t cparser_node_continue_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_continue,
+    "Continue program execution",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_continue = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "continue",
+    NULL,
+    &cparser_node_step,
+    &cparser_node_continue_eol
+};
 cparser_node_t cparser_node_breakpoints_list_eol = {
     CPARSER_NODE_END,
     0,
@@ -424,7 +470,7 @@ cparser_node_t cparser_node_breakpoints = {
     0,
     "breakpoints",
     NULL,
-    &cparser_node_video,
+    &cparser_node_continue,
     &cparser_node_breakpoints_add
 };
 cparser_node_t cparser_node_show_registers_z80_eol = {

@@ -86,6 +86,18 @@ cparser_cmd_breakpoints_list(cparser_context_t *context)
   return CPARSER_OK;
 }
 
+cparser_result_t
+cparser_cmd_step(cparser_context_t * context)
+{
+  return CPARSER_OK;
+}
+
+cparser_result_t
+cparser_cmd_continue(cparser_context_t * context)
+{
+  caprice_cli_continue();
+  return CPARSER_OK;
+}
 //Video
 cparser_result_t
 cparser_cmd_video_color_on(cparser_context_t *context)

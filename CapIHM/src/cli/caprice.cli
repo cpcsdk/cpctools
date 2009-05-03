@@ -24,6 +24,11 @@ breakpoints remove <HEX:adress>
 //List all breakpoints
 breakpoints list
 
+//Continue program execution
+continue
+
+//Step execute step by step
+step
 
 // =========== video ==============
 //put screen in color 

@@ -66,6 +66,21 @@ extern "C" void caprice_cli_show_breakpoints()
   }
 }
 
+
+extern "C"
+void caprice_cli_continue()
+{
+  if (emulatorClone->GetConfig().breakpoint)
+  {
+    std::cout << "# Continue execution flow" << std::endl ;
+    emulatorClone->Run();
+  }
+  else
+  {
+    std::cout << "# Error ! Emulator not in a breakpoint strop !" << std::endl ;
+  }
+}
+
 extern "C" 
 void caprice_cli_video_color(int mode)
 {

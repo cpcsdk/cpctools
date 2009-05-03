@@ -196,7 +196,7 @@ void* cliRout(void* args)
     parser.cfg.ch_help = '?' ;
     parser.cfg.flags =  0 ;
     strcpy(parser.cfg.prompt, "caprice>> ");
-    parser.cfg.fd = STDOUT_FILENO ;
+    //parser.cfg.fd = STDOUT_FILENO ;
     cparser_io_config(&parser);
 
     //Load cli interface
