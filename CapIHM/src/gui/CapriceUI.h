@@ -81,6 +81,7 @@ class CapriceWindow : public wxFrame
 		virtual void OnFullScreen( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRun( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnStep( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPause( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegister( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDebugMemory( wxCommandEvent& event ) { event.Skip(); }

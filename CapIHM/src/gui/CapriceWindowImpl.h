@@ -61,6 +61,7 @@ class CapriceWindowImpl : public CapriceWindow
     virtual void OnReset( wxCommandEvent& event);
 
     virtual void OnRun( wxCommandEvent& event) ;
+    virtual void OnStep( wxCommandEvent& event) ;
     virtual void OnPause( wxCommandEvent& event) ;
 
     virtual void OnRegister( wxCommandEvent& event);

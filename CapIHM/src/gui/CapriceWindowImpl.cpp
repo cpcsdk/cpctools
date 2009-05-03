@@ -236,7 +236,12 @@ void CapriceWindowImpl::OnRun( wxCommandEvent& event)
     emulator->Run();
     m_menuItem_pause->Enable(true) ;
     m_menuItem_run->Enable(false);
+}
 
+void CapriceWindowImpl::OnStep( wxCommandEvent& event)
+{
+    emulator->Step();
+    m_menuItem_run->Enable(true);
 }
 
 void CapriceWindowImpl::OnFullScreen( wxCommandEvent& event){
