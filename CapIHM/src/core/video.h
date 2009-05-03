@@ -78,14 +78,14 @@ protected:
 	//! this plugin wants : 0 half sized pixels (320x200 screen)/1 full sized pixels (640x200 screen)*/
 	byte			_halfPixels;
 
-	//! the real video surface
-	SDL_Surface*	_video;
-	//! Post render call back
+		//! Post render call back
 	int				(*_postRenderCallBack)();
 
 public:
 		//! the video surface shown by the plugin to the application
 	SDL_Surface*	_publicVideo;
+//! the real video surface
+	SDL_Surface*	_video;
 
 //! Return halfsize config
 	inline bool IsHalfSize() const	{ return _halfPixels == 1;	};

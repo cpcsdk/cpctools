@@ -353,6 +353,8 @@ SDL_Surface* DoublePlugin::Init(int w,int h, int bpp, bool fs)
 	SDL_FillRect(_video,NULL,SDL_MapRGB(_video->format,0,0,0));
 
 	img = new wxImage(w,h,(unsigned char*)_video->pixels,true);
+	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
+  f->SetEmuImage(img);
 	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,bpp,0x0000FF,0x00FF00,0xFF0000,0);
 	return _publicVideo;
 }

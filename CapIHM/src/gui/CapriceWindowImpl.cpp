@@ -70,6 +70,25 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
      }
     else
     { 
+      if (emulator->GetConfig().breakpoint)
+      {
+         //TODO: use listeners to do that only when emulator is paused 
+        //(due to pause not controlled by ihm)
+        m_menuItem_pause->Enable(false) ;
+        m_menuItem_run->Enable(true);
+
+       //Breakpoint mode
+       	if (IsShownOnScreen() && !IsIconized())
+	      {
+    	    wxBitmap bmp( *image);
+    	    wxClientDC dc(getPanel());
+		      dc.DrawBitmap(bmp,0,0,false);
+	      }
+      }
+      else
+      {
+        //Pause mode
+        //
         //TODO: use listeners to do that only when emulator is paused 
         //(due to pause not controlled by ihm)
         m_menuItem_pause->Enable(false) ;
@@ -78,12 +97,13 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 
         //TODO: modify to do that only one time
         wxBitmap bitmap;
-	    if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
+	      if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
         {
-            wxClientDC dc(getPanel());
-			dc.DrawBitmap(bitmap,0,0,false);
+          wxClientDC dc(getPanel());
+			    dc.DrawBitmap(bitmap,0,0,false);
         //    event.RequestMore(false);
         }
+      }
 
     }
 }

@@ -26,6 +26,7 @@ public:
    unsigned int speed;
    unsigned int limit_speed;
    unsigned int paused;
+   unsigned int breakpoint;
    unsigned int auto_pause;
    unsigned int keyboard_line;
    unsigned int tape_motor;

@@ -58,6 +58,7 @@ t_CPC::t_CPC()
     speed=0;
     limit_speed=0;
     paused=0;
+    breakpoint=0;
     auto_pause=0;
     keyboard_line=0;
     tape_motor=0;

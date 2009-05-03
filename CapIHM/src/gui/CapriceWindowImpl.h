@@ -8,6 +8,7 @@
 #include "emulator.h"
 
 #include <wx/dnd.h>
+#include <wx/image.h>
 
 #if ENABLE_FILEDROP
 class CapriceDNDHandler : public wxFileDropTarget
@@ -23,14 +24,24 @@ class CapriceDNDHandler : public wxFileDropTarget
 
 class CapriceWindowImpl : public CapriceWindow
 {
-    public:
+  public:
 
 	CapriceWindowImpl(Emulator* emu);
 	virtual ~CapriceWindowImpl();
 
     void SetEmulator(Emulator *emulator);   
     Emulator* GetEmulator() {return emulator;};   
+    /**
+     * Get the emulator panel
+     */
     wxPanel* getPanel();
+    /**
+     * Set the image to show
+     */
+    inline void SetEmuImage(wxImage* img)
+    {
+      this->image = img ;
+    };
 
     protected:
 
@@ -62,7 +73,15 @@ class CapriceWindowImpl : public CapriceWindow
     virtual void windowKeyUp( wxKeyEvent& event );
 
     private:
+    /**
+     * Pointer to the emu
+     */
     Emulator*   emulator ;
+    /**
+     * Pointer to the emu display
+     */
+    wxImage*    image;
+
 #if ENABLE_FILEDROP
 	CapriceDNDHandler* dndhandler;
 #endif

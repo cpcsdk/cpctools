@@ -75,11 +75,23 @@ public:
   /**
    * Pause the emulator
    */
-	void Pause() { GetConfig().paused = 1; }
+	inline void Pause() { GetConfig().paused = 1; }
+  /**
+   * Pause the emulator due to a breakpoint
+   */
+  inline void Breakpoint() 
+  { 
+    Pause();
+    GetConfig().breakpoint = 1 ; 
+  }
   /**
    * Run the emulator
    */
-	void Run() { GetConfig().paused = 0; }
+	inline void Run() 
+  { 
+    GetConfig().paused = 0; 
+    GetConfig().breakpoint = 0;
+  }
 
   /**
    * Reset computer

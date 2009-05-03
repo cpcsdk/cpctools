@@ -650,7 +650,7 @@ void Emulator::Emulate()
   //We have meet a breakpoint
   if (iExitCondition == EC_BREAKPOINT)
   {
-    this->Pause();
+    this->Breakpoint();
     return;
   }
 
