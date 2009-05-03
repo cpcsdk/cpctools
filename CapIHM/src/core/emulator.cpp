@@ -644,11 +644,16 @@ void Emulator::Emulate()
 	     continue;
 	}
 
+  //active if necessary trace mode
+  if (GetConfig().breakpoint)
+  {
+    _z80->trace = 1 ;
+  }
 	// run the emulation until an exit condition is met
 	iExitCondition = _z80->z80_execute();
 
   //We have meet a breakpoint
-  if (iExitCondition == EC_BREAKPOINT)
+  if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
   {
     this->Breakpoint();
     return;

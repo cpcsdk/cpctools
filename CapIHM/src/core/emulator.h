@@ -92,6 +92,13 @@ public:
     GetConfig().paused = 0; 
     GetConfig().breakpoint = 0;
   }
+  /**
+   * Run the emulator step by step
+   */
+  inline void Step()
+  {
+    GetConfig().paused = 0 ;
+  }
 
   /**
    * Reset computer

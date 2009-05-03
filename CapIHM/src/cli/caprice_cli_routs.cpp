@@ -31,7 +31,10 @@ extern Emulator *emulatorClone;
 
 extern "C" void caprice_cli_show_registers()
 {
-  std::cout << "Z80 Registers :" << std::endl ;
+  {
+    std::cout << "Z80 Registers :" << std::endl ;
+    std::cout << "PC : " <<  uppercase << hex << emulatorClone->GetZ80().PC.w.l << std::endl ;
+  }
 }
 
 extern "C" void caprice_cli_emu_reset()
@@ -81,6 +84,21 @@ void caprice_cli_continue()
   }
 }
 
+
+extern "C"
+void caprice_cli_step()
+{
+  if (emulatorClone->GetConfig().breakpoint)
+  {
+    std::cout << "# Continue execution flow step by step" << std::endl ;
+    emulatorClone->Step();
+  }
+  else
+  {
+    std::cout << "# Error ! Emulator not in a breakpoint strop !" << std::endl ;
+  }
+
+}
 extern "C" 
 void caprice_cli_video_color(int mode)
 {

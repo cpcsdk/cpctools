@@ -89,6 +89,7 @@ cparser_cmd_breakpoints_list(cparser_context_t *context)
 cparser_result_t
 cparser_cmd_step(cparser_context_t * context)
 {
+  caprice_cli_step();
   return CPARSER_OK;
 }
 
