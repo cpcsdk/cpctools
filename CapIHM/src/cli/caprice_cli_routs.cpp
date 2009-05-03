@@ -179,6 +179,7 @@ void caprice_cli_memory_poke(int address, int value)
 extern "C"
 void caprice_cli_memory_disasm_quantity(int address, int size)
 {
+   std::cout << address << "\t" << size << endl;
   byte * ram = emulatorClone->GetMemory().GetRAM();
   Desass(
       (unsigned char *) ram,
@@ -191,10 +192,18 @@ void caprice_cli_memory_disasm_quantity(int address, int size)
 extern "C"
 void caprice_cli_memory_disasm(int address)
 {
-  int size = 0x10000 - address  ;
+  int size ;
+
+  size = 0x10000 - address  ;
   caprice_cli_memory_disasm_quantity( address, size) ;
 }
 
 
-
+extern "C"
+void caprice_cli_memory_disasm_pc(int size)
+{
+  caprice_cli_memory_disasm_quantity( 
+      emulatorClone->GetZ80().PC.w.l , 
+      size) ;
+}
 

@@ -49,8 +49,9 @@ memory poke <UINT:address> <UINT:value>
 memory peek <UINT:address>
 
 //Disassemble memory
-memory disassemble  <UINT:address> { <UINT:quantity> }
-
+memory disassemble  { <UINT:address> { <UINT:quantity> } }
+//Disassemble memory at pc
+memory disassemble pc { <UINT:quantity> }
 
 // ============ various ============
 // Quit Caprice

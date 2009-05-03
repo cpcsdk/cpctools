@@ -136,20 +136,41 @@ cparser_cmd_memory_poke_address_value(cparser_context_t *context, uint32_t *addr
   return CPARSER_OK;
 }
 
+//BUG memory disassemble do not work ...
 cparser_result_t
 cparser_cmd_memory_disassemble_address_quantity(  cparser_context_t *context,
                                                   uint32_t *address_ptr, uint32_t *size_ptr)
 {
 
-  int size = (size_ptr ? *size_ptr : 0x0);
+  int adr  = (address_ptr ? *address_ptr & 0xffff: -1);
+  int size = (size_ptr    ? *size_ptr : 0x0);
+
   if (size == 0)
   {
-    caprice_cli_memory_disasm(*address_ptr & 0xffff);
+    if (adr == -1)
+    {
+      return CPARSER_OK ;
+      caprice_cli_memory_disasm_pc(5);
+    }
+    else
+    {
+      caprice_cli_memory_disasm( adr );
+    }
   }
   else
   {
-    caprice_cli_memory_disasm_quantity(*address_ptr & 0xffff, size & 0xffff);
+    caprice_cli_memory_disasm_quantity( adr, size & 0xffff);
   }
+
+  return CPARSER_OK ;
+}
+
+cparser_result_t
+cparser_cmd_memory_disassemble_pc_quantity(cparser_context_t *context, uint32_t *size_ptr)
+{
+
+  int size = (size_ptr    ? *size_ptr : 1);
+  caprice_cli_memory_disasm_pc(size);
   return CPARSER_OK ;
 }
 //Emu

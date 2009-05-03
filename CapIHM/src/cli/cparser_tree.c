@@ -170,6 +170,24 @@ cparser_glue_memory_disassemble_address_quantity (cparser_t *parser)
 }
 
 cparser_result_t
+cparser_glue_memory_disassemble_pc_quantity (cparser_t *parser)
+{
+    uint32_t quantity_val;
+    uint32_t *quantity_ptr = NULL;
+    cparser_result_t rc;
+
+    rc = cparser_get_uint(&parser->tokens[3], &quantity_val);
+    if (CPARSER_OK == rc) {
+        quantity_ptr = &quantity_val;
+    } else {
+        assert(4 > parser->token_tos);
+    }
+    cparser_cmd_memory_disassemble_pc_quantity(&parser->context,
+        quantity_ptr);
+    return CPARSER_OK;
+}
+
+cparser_result_t
 cparser_glue_quit (cparser_t *parser)
 {
     cparser_cmd_quit(&parser->context);
@@ -265,6 +283,38 @@ cparser_node_t cparser_node_quit = {
     &cparser_node_reset,
     &cparser_node_quit_eol
 };
+cparser_node_t cparser_node_memory_disassemble_pc_quantity_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_memory_disassemble_pc_quantity,
+    "Disassemble memory at pc",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_memory_disassemble_pc_quantity = {
+    CPARSER_NODE_UINT,
+    CPARSER_NODE_FLAGS_OPT_END,
+    "<UINT:quantity>",
+    NULL,
+    NULL,
+    &cparser_node_memory_disassemble_pc_quantity_eol
+};
+cparser_node_t cparser_node_memory_disassemble_pc_eol = {
+    CPARSER_NODE_END,
+    CPARSER_NODE_FLAGS_OPT_PARTIAL,
+    cparser_glue_memory_disassemble_pc_quantity,
+    NULL,
+    &cparser_node_memory_disassemble_pc_quantity,
+    NULL
+};
+cparser_node_t cparser_node_memory_disassemble_pc = {
+    CPARSER_NODE_KEYWORD,
+    CPARSER_NODE_FLAGS_OPT_START,
+    "pc",
+    NULL,
+    NULL,
+    &cparser_node_memory_disassemble_pc_eol
+};
 cparser_node_t cparser_node_memory_disassemble_address_quantity_eol = {
     CPARSER_NODE_END,
     0,
@@ -275,7 +325,7 @@ cparser_node_t cparser_node_memory_disassemble_address_quantity_eol = {
 };
 cparser_node_t cparser_node_memory_disassemble_address_quantity = {
     CPARSER_NODE_UINT,
-    CPARSER_NODE_FLAGS_OPT_END,
+    CPARSER_NODE_FLAGS_OPT_END | CPARSER_NODE_FLAGS_OPT_END,
     "<UINT:quantity>",
     NULL,
     NULL,
@@ -294,16 +344,24 @@ cparser_node_t cparser_node_memory_disassemble_address = {
     CPARSER_NODE_FLAGS_OPT_START,
     "<UINT:address>",
     NULL,
-    NULL,
+    &cparser_node_memory_disassemble_pc,
     &cparser_node_memory_disassemble_address_eol
+};
+cparser_node_t cparser_node_memory_disassemble_eol = {
+    CPARSER_NODE_END,
+    CPARSER_NODE_FLAGS_OPT_PARTIAL,
+    cparser_glue_memory_disassemble_address_quantity,
+    NULL,
+    &cparser_node_memory_disassemble_address,
+    NULL
 };
 cparser_node_t cparser_node_memory_disassemble = {
     CPARSER_NODE_KEYWORD,
-    0,
+    CPARSER_NODE_FLAGS_OPT_START,
     "disassemble",
     NULL,
     NULL,
-    &cparser_node_memory_disassemble_address
+    &cparser_node_memory_disassemble_eol
 };
 cparser_node_t cparser_node_memory_peek_address_eol = {
     CPARSER_NODE_END,

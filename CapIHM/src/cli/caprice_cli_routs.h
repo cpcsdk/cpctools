@@ -67,3 +67,4 @@ void caprice_cli_memory_disasm(int address);
  * Disassemble memory until attended quantity attended
  */
 void caprice_cli_memory_disasm_quantity(int address, int size);
+void caprice_cli_memory_disasm_pc(int size);
