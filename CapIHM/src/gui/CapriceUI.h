@@ -507,6 +507,7 @@ class Memory : public wxDialog
 		wxScrollBar* m_scrollBar1;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
 		
 	

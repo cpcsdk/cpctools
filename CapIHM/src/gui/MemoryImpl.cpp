@@ -25,6 +25,7 @@
 #include <wx/tokenzr.h>
 
 #include "Desass.h"
+#include "z80.h"
 
 #include "MemoryImpl.h"
 #include "memory.h"
@@ -74,6 +75,27 @@ MemoryImpl::MemoryImpl(wxWindow* parent,Emulator* emulator)
 
 MemoryImpl::~MemoryImpl()
 {
+}
+
+void MemoryImpl::onBreakpoint(wxCommandEvent& event)
+{
+	int index = event.GetInt(); // Get the index of the checked/unchecked line in the listbox
+
+	// We have to parse the text in the listbox to get the address where to set the break...
+
+	long addr;
+	m_checkList1->GetString(index).Truncate(4).ToLong(&addr,16);
+
+	if(m_checkList1->IsChecked(index))
+	{
+		// Add breakpoint
+		_emulator->GetZ80().add_break_point(addr);
+	}
+	else
+	{
+		// Remove breakpoint
+		_emulator->GetZ80().remove_break_point(addr);
+	}
 }
 
 void MemoryImpl::RefreshMem(wxScrollEvent& event)

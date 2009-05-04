@@ -1874,6 +1874,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	bSizer26->Fit( this );
 	
 	// Connect Events
+	m_checkList1->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	m_scrollBar1->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
@@ -1888,6 +1889,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 Memory::~Memory()
 {
 	// Disconnect Events
+	m_checkList1->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	m_scrollBar1->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );

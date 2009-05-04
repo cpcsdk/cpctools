@@ -15016,7 +15016,7 @@
                                             <event name="OnChar"></event>
                                             <event name="OnCheckListBox"></event>
                                             <event name="OnCheckListBoxDClick"></event>
-                                            <event name="OnCheckListBoxToggled"></event>
+                                            <event name="OnCheckListBoxToggled">onBreakpoint</event>
                                             <event name="OnEnterWindow"></event>
                                             <event name="OnEraseBackground"></event>
                                             <event name="OnKeyDown"></event>

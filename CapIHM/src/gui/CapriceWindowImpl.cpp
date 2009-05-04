@@ -207,27 +207,6 @@ void CapriceWindowImpl::OnPause( wxCommandEvent& event)
     emulator->Pause();
     m_menuItem_pause->Enable(false) ;
     m_menuItem_run->Enable(true);
-
- 
-        //Interval of disassembling
-        int memory_length = 0xFFFF ;
-        int start_disassm = 0 ;
-        
-
-        //Get the cpc memory
-        byte * memory = emulator->GetMemory().GetRAM();
-
-        //Reserve space for listring string //TODO suppress that and replace by a stream
-        char * listing = (char *) malloc( sizeof(char) * 256 *  256 *  1024);
-
-        //Get the disassembled memory
-        //Desass( memory , std::cout, /*memory_length - start_disassm*/ 100 );
-
-        printf("%s", listing);
-
-        free(listing);
-
-
 }
 
 
