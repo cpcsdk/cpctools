@@ -194,4 +194,11 @@ cparser_cmd_emp_help_filter (cparser_context_t *context, char **filter)
     return cparser_help_cmd(context->parser, filter ? *filter : 0);
 }
 
+//Assembly
+cparser_result_t
+cparser_cmd_asm_compile_filename ( cparser_context_t *context, char **filename)
+{
 
+  caprice_cli_asm_compile_file(*filename);
+  return CPARSER_OK ;
+}

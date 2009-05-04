@@ -68,3 +68,7 @@ void caprice_cli_memory_disasm(int address);
  */
 void caprice_cli_memory_disasm_quantity(int address, int size);
 void caprice_cli_memory_disasm_pc(int size);
+/**
+ * Compile file
+ */
+void caprice_cli_asm_compile_file(char *filename);

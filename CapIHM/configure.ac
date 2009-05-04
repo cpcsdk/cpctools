@@ -224,6 +224,7 @@ AC_CONFIG_FILES([
 		src/gui/Makefile
 		src/core/Makefile
     src/cli/Makefile
+    src/asm/Makefile
 ])
 
 AC_OUTPUT

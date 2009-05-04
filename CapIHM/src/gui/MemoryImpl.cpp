@@ -19,17 +19,19 @@
  */  
 
 #include <sstream>
+#include <string>
 
 #include <wx/arrstr.h>
 #include <wx/string.h>
 #include <wx/tokenzr.h>
-
 #include "Desass.h"
 #include "z80.h"
 
 #include "MemoryImpl.h"
 #include "memory.h"
 
+#define cs2ws(s)   	   (wxString(s,wxConvLibc))
+#define s2ws(s) (wxString((s).c_str(), wxConvLibc))
 MemoryImpl::MemoryImpl(wxWindow* parent,Emulator* emulator)
 	: Memory(parent)
 {
@@ -57,9 +59,10 @@ MemoryImpl::MemoryImpl(wxWindow* parent,Emulator* emulator)
 	m_scrollBar1 -> SetScrollbar(0,0x200/16,emulator->GetConfig().ram_size*1024/16,0x200/16);
 
 	// Disassembly view
-	std::ostringstream data;
-	Desass(emu_mem.GetRAM(),data,0,0x1000);
+	std::stringstream data;
+	Desass(emu_mem.GetRAM(),data,0,0x10000);
 
+/*
 	wxString bloat = wxString::FromAscii(data.str().c_str());
 
 	wxStringTokenizer tkz(bloat, wxT("\n"));
@@ -70,7 +73,19 @@ MemoryImpl::MemoryImpl(wxWindow* parent,Emulator* emulator)
 
 		a.Add(token);
 	}
-	m_checkList1 -> InsertItems(a,0);
+	*/
+
+  char line[256];
+	wxArrayString a;
+  while(data)
+  {
+    data.getline( line, 256);
+    a.Add(wxString::From8BitData(line));
+  }
+
+  cout << 1 << endl;
+  m_checkList1 -> Set(a,0);
+  cout << 2 << endl;
 }
 
 MemoryImpl::~MemoryImpl()

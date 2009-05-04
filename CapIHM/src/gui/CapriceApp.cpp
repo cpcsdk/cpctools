@@ -45,6 +45,8 @@
 #include "configBis.h"
 #include <iostream>
  
+#include "../asm/CapASM.h"
+
 #if CLI
 extern "C" {
 #include "cparser.h"
@@ -58,6 +60,8 @@ extern "C" {
   wxFrame *frameClone;
   Emulator *emulatorClone;
 #endif
+
+CapASM *capAsm ;
 
 //TODO destroy emulator when finishing
 
@@ -88,7 +92,7 @@ bool CapriceApp::OnInit()
 
 	//Create emulator and IHM
 	emulator = new Emulator();
-
+  capAsm = new CapASM(emulator);
 
 	frame = new CapriceWindowImpl(emulator);
 	frame->Show(true);

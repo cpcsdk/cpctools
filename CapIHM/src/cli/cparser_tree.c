@@ -188,6 +188,21 @@ cparser_glue_memory_disassemble_pc_quantity (cparser_t *parser)
 }
 
 cparser_result_t
+cparser_glue_asm_compile_filename (cparser_t *parser)
+{
+    char *filename_val;
+    char **filename_ptr = NULL;
+    cparser_result_t rc;
+
+    rc = cparser_get_file(&parser->tokens[2], &filename_val);
+    assert(CPARSER_OK == rc);
+    filename_ptr = &filename_val;
+    cparser_cmd_asm_compile_filename(&parser->context,
+        filename_ptr);
+    return CPARSER_OK;
+}
+
+cparser_result_t
 cparser_glue_quit (cparser_t *parser)
 {
     cparser_cmd_quit(&parser->context);
@@ -282,6 +297,38 @@ cparser_node_t cparser_node_quit = {
     NULL,
     &cparser_node_reset,
     &cparser_node_quit_eol
+};
+cparser_node_t cparser_node_asm_compile_filename_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_asm_compile_filename,
+    "Compile file in memory",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_asm_compile_filename = {
+    CPARSER_NODE_FILE,
+    0,
+    "<FILE:filename>",
+    NULL,
+    NULL,
+    &cparser_node_asm_compile_filename_eol
+};
+cparser_node_t cparser_node_asm_compile = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "compile",
+    NULL,
+    NULL,
+    &cparser_node_asm_compile_filename
+};
+cparser_node_t cparser_node_asm = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "asm",
+    NULL,
+    &cparser_node_quit,
+    &cparser_node_asm_compile
 };
 cparser_node_t cparser_node_memory_disassemble_pc_quantity_eol = {
     CPARSER_NODE_END,
@@ -424,7 +471,7 @@ cparser_node_t cparser_node_memory = {
     0,
     "memory",
     NULL,
-    &cparser_node_quit,
+    &cparser_node_asm,
     &cparser_node_memory_poke
 };
 cparser_node_t cparser_node_video_color_green_eol = {

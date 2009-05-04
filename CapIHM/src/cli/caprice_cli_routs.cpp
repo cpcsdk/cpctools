@@ -24,6 +24,13 @@
 #include "render.h"
 #include "Desass.h"
 
+#include "../asm/CapASM.h"
+
+/**
+ * Reference to the compilator
+ */
+extern CapASM * capAsm ;
+
 /**
  * Reference to the Emulator
  */
@@ -207,3 +214,9 @@ void caprice_cli_memory_disasm_pc(int size)
       size) ;
 }
 
+extern "C"
+void caprice_cli_asm_compile_file(char *filename)
+{
+
+  capAsm->Compile(filename);
+}

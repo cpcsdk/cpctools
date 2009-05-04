@@ -53,6 +53,10 @@ memory disassemble  { <UINT:address> { <UINT:quantity> } }
 //Disassemble memory at pc
 memory disassemble pc { <UINT:quantity> }
 
+// ============== Asm ==============
+//Compile file in memory
+asm compile <FILE:filename>
+
 // ============ various ============
 // Quit Caprice
 quit
