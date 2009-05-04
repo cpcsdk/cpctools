@@ -500,6 +500,8 @@ class Memory : public wxDialog
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_panel10;
 		wxCheckListBox* m_checkList1;
+		wxStaticText* m_staticText70;
+		wxSpinCtrl* m_spinCtrl2;
 		wxPanel* m_panel9;
 		wxGrid* m_grid1;
 		wxScrollBar* m_scrollBar1;
@@ -514,7 +516,7 @@ class Memory : public wxDialog
 		~Memory();
 		void m_splitter1OnIdle( wxIdleEvent& )
 		{
-		m_splitter1->SetSashPosition( 90 );
+		m_splitter1->SetSashPosition( 300 );
 		m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
 		}
 		

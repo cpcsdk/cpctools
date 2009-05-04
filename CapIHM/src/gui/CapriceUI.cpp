@@ -1768,6 +1768,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	bSizer26 = new wxBoxSizer( wxVERTICAL );
 	
 	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+	m_splitter1->SetSashGravity( 1 );
+	m_splitter1->SetMinimumPaneSize( 300 );
 	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
 	m_panel10 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer29;
@@ -1775,7 +1777,21 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	wxArrayString m_checkList1Choices;
 	m_checkList1 = new wxCheckListBox( m_panel10, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkList1Choices, 0 );
-	bSizer29->Add( m_checkList1, 0, wxALL|wxEXPAND, 5 );
+	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
+	
+	bSizer29->Add( m_checkList1, 2, wxALL|wxEXPAND, 5 );
+	
+	wxGridSizer* gSizer3;
+	gSizer3 = new wxGridSizer( 2, 2, 0, 0 );
+	
+	m_staticText70 = new wxStaticText( m_panel10, wxID_ANY, wxT("Address"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText70->Wrap( -1 );
+	gSizer3->Add( m_staticText70, 0, wxALL, 5 );
+	
+	m_spinCtrl2 = new wxSpinCtrl( m_panel10, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	gSizer3->Add( m_spinCtrl2, 0, wxALL, 5 );
+	
+	bSizer29->Add( gSizer3, 1, wxFIXED_MINSIZE, 5 );
 	
 	m_panel10->SetSizer( bSizer29 );
 	m_panel10->Layout();
@@ -1850,7 +1866,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel9->SetSizer( bSizer21 );
 	m_panel9->Layout();
 	bSizer21->Fit( m_panel9 );
-	m_splitter1->SplitHorizontally( m_panel10, m_panel9, 90 );
+	m_splitter1->SplitHorizontally( m_panel10, m_panel9, 300 );
 	bSizer26->Add( m_splitter1, 1, wxEXPAND, 5 );
 	
 	this->SetSizer( bSizer26 );

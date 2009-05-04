@@ -18,6 +18,13 @@
  *
  */  
 
+#include <sstream>
+
+#include <wx/arrstr.h>
+#include <wx/string.h>
+#include <wx/tokenzr.h>
+
+#include "Desass.h"
 
 #include "MemoryImpl.h"
 #include "memory.h"
@@ -29,6 +36,7 @@ MemoryImpl::MemoryImpl(wxWindow* parent,Emulator* emulator)
 
 	t_Memory& emu_mem = _emulator -> GetMemory();
 
+	// Hexadecimal view
 	wxString str;
 
 	for(int i=0;i<32;i++)
@@ -46,6 +54,22 @@ MemoryImpl::MemoryImpl(wxWindow* parent,Emulator* emulator)
 	// wxFormBuilder does not setup the scrollbar correctly so we do it here.
 	// This way we can adjust it depending to the actual memory (64 or 128k)
 	m_scrollBar1 -> SetScrollbar(0,0x200/16,emulator->GetConfig().ram_size*1024/16,0x200/16);
+
+	// Disassembly view
+	std::ostringstream data;
+	Desass(emu_mem.GetRAM(),data,0,0x1000);
+
+	wxString bloat = wxString::FromAscii(data.str().c_str());
+
+	wxStringTokenizer tkz(bloat, wxT("\n"));
+	wxArrayString a;
+	while ( tkz.HasMoreTokens() )
+	{
+	    wxString token = tkz.GetNextToken();
+
+		a.Add(token);
+	}
+	m_checkList1 -> InsertItems(a,0);
 }
 
 MemoryImpl::~MemoryImpl()
