@@ -2107,6 +2107,7 @@ void InsertDirectives() {
 	DirectivesTable.insertd("display", dirDISPLAY); /* added */
 	DirectivesTable.insertd("end", dirEND);
 	DirectivesTable.insertd("include", dirINCLUDE);
+	DirectivesTable.insertd("read", dirINCLUDE);  /* Caprice added */
 	DirectivesTable.insertd("incbin", dirINCBIN);
 	DirectivesTable.insertd("binary", dirINCBIN); /* added */
 	DirectivesTable.insertd("inchob", dirINCHOB); /* added */
