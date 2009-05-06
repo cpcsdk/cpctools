@@ -1,7 +1,6 @@
 noinst_LIBRARIES = libsjasm.a
 
 libsjasm_a_CPPFLAGS = -O2 -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX -Ilua5.1 -Itolua++ -Isjasm -I../core $(SDL_CFLAGS) 
-libsjasm_a_LDFLAGS="-ldl"
 
 SJASMSRC=sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
 sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp sjasm/z80.cpp

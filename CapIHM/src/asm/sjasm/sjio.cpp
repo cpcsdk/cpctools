@@ -522,7 +522,7 @@ void Emit(int byte) {
 					SPRINTF1(buf, 1024, "RAM limit exceeded %lu", CurAddress);
 					Error(buf, 0, FATAL);
 				}
-				*(MemoryPointer++) = (char) byte;
+        STORE_BYTE(byte)
 				if ((MemoryPointer - Page->RAM) >= Page->Size) {
 					++adrdisp; ++CurAddress;
 					CheckPage();
@@ -536,7 +536,7 @@ void Emit(int byte) {
 				}
 
 				//if (!nulled) {
-				*(MemoryPointer++) = (char) byte;
+        STORE_BYTE(byte)
 				//} else {
 				//	MemoryPointer++;
 				//}
@@ -616,7 +616,8 @@ void EmitBlock(aint byte, aint len, bool nulled) {
 						Error(buf, 0, FATAL);
 					}
 					if (!nulled) {
-						*(MemoryPointer++) = (char) byte;
+						//*(MemoryPointer++) = (char) byte;
+            STORE_BYTE(byte)
 					} else {
 						MemoryPointer++;
 					}
@@ -631,7 +632,8 @@ void EmitBlock(aint byte, aint len, bool nulled) {
 						Error(buf, 0, FATAL);
 					}
 					if (!nulled) {
-						*(MemoryPointer++) = (char) byte;
+						//*(MemoryPointer++) = (char) byte;
+            STORE_BYTE(byte)
 					} else {
 						MemoryPointer++;
 					}

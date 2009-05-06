@@ -166,6 +166,31 @@ void DeviceZXSpectrum128(CDevice **dev, CDevice *parent) {
 	(*dev)->CurrentSlot = 3;
 }
 
+void DeviceCPC6128(CDevice **dev, CDevice *parent) {
+  *dev = new CDevice((char *) "CPC6128", parent);
+
+  //Accessible RAM
+  (*dev)->AddSlot(0x0000, 0x4000);
+	(*dev)->AddSlot(0x4000, 0x4000);
+	(*dev)->AddSlot(0x8000, 0x4000);
+	(*dev)->AddSlot(0xC000, 0x4000);
+
+  //List of page
+	for (int i=0;i<8;i++) {
+		(*dev)->AddPage(0x4000);
+	}
+
+	(*dev)->GetSlot(0)->Page = (*dev)->GetPage(0);
+	(*dev)->GetSlot(1)->Page = (*dev)->GetPage(1);
+	(*dev)->GetSlot(2)->Page = (*dev)->GetPage(2);
+	(*dev)->GetSlot(3)->Page = (*dev)->GetPage(3);
+  //The 4 other pages are in banks
+  //
+  
+  (*dev)->CurrentSlot = 1 ;
+
+}
+
 void DevicePentagon128(CDevice **dev, CDevice *parent) {
 	// add new device
 	*dev = new CDevice((char *) "PENTAGON128", parent);
@@ -290,7 +315,9 @@ int SetDevice(char *id) {
 				DeviceZXSpectrum48(dev, parent);
 			} else if (cmphstr(id, (char *) "zxspectrum128")) {
 				DeviceZXSpectrum128(dev, parent);
-			} else if (cmphstr(id, (char *) "pentagon128")) {
+			} else if (cmphstr(id, (char *)  "cpc6128")) {
+        DeviceCPC6128(dev, parent);
+      } else if (cmphstr(id, (char *) "pentagon128")) {
 				DevicePentagon128(dev, parent);
 			} else if (cmphstr(id, (char *) "scorpion256")) {
 				DeviceScorpion256(dev, parent);
