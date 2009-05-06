@@ -368,6 +368,7 @@ int GetConstant(char*& op, aint& val) {
 	switch (*p) {
 	case '#':
 	case '$':
+  case '&':
 		++p;
 		while (isalnum((unsigned char) * p)) {
 			if ((v = getval(*p)) >= 16) {

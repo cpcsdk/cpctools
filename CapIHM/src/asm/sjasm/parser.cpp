@@ -58,7 +58,11 @@ int ParseExpPrim(char*& p, aint& nval) {
 		}
 	  	nval = (aint) (MemGetByte(nval) + (MemGetByte(nval + 1) << 8));
 	  	return 1;
-	} else if (isdigit((unsigned char) * p) || (*p == '#' && isalnum((unsigned char) * (p + 1))) || (*p == '$' && isalnum((unsigned char) * (p + 1))) || *p == '%') {
+	} else if (isdigit((unsigned char) * p) 
+              || (*p == '#' && isalnum((unsigned char) * (p + 1))) 
+              || (*p == '$' && isalnum((unsigned char) * (p + 1))) 
+              || (*p == '&' && isalnum((unsigned char) * (p + 1))) 
+              || *p == '%') {
 	  	res = GetConstant(p, nval);
 	} else if (isalpha((unsigned char) * p) || *p == '_' || *p == '.' || *p == '@') {
 	  	res = GetLabelValue(p, nval);
