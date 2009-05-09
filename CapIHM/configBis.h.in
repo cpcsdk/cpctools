@@ -37,9 +37,6 @@
 /* Use lib765 for FDC emulation */
 #undef HAVE_LIB765_H
 
-/* Define to 1 if you have the `dsk' library (-ldsk). */
-#undef HAVE_LIBDSK
-
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
 
@@ -157,6 +154,9 @@
 
 /* Use St Sound as a sound backend */
 #undef ST_SOUND
+
+/* Activate OpenGL support */
+#undef USE_OPENGL
 
 /* Version number of package */
 #undef VERSION
