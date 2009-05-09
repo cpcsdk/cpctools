@@ -506,8 +506,12 @@ bool Emulator::Init()
 		return false;
 	}
 
-	_renderer.SetVideoMode(VideoPlugin::DoubleSize/*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
+#ifdef USE_OPENGL
+	_renderer.SetVideoMode(VideoPlugin::OpenGLScale/*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
 	_renderer.SetOpenGLFilter(true);
+#else
+	_renderer.SetVideoMode(VideoPlugin::DoubleSize/*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
+#endif
 
 	_renderer.SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
 

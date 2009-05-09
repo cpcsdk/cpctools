@@ -116,6 +116,15 @@ if test "$enable_filedrop" = "yes" ; then
 	AC_DEFINE(ENABLE_FILEDROP,1,[Activate FileDrop ability])
 fi
 
+AC_ARG_ENABLE(  opengl,
+	        [  --enable-opengl	  turn on opengl support [default=no]],
+		enable_opengl=yes,
+		enable_opengl=no)
+
+if test "$enable_opengl" = "yes" ;  then
+	AC_DEFINE(USE_OPENGL,1,[Activate OpenGL support])
+fi
+
 AC_ARG_ENABLE(	cli,
 		[  --enable-cli		  turn on cli interface [default=no]],
 		enable_cli=yes,
@@ -200,7 +209,7 @@ AC_MSG_CHECKING([ disk management options ------------------------------------
 if test "$with_lib765" = "yes" ; then
 	AC_CHECK_LIB([dsk], [dsk_open])
 	AC_CHECK_HEADER( 765.h, AC_DEFINE(HAVE_LIB765_H,1,[Use lib765 for FDC emulation]), AC_MSG_ERROR([lib765 not found ! look at http://www.seasip.demon.co.uk/Unix/LibDsk ]))
-	AC_SUBST([LIB765], [-l765])
+	AC_SUBST([LIB765], [-l765 -ldsk])
 fi
 
 

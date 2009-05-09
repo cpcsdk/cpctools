@@ -7,7 +7,7 @@ SUBDIRS = core gui asm $(MAYBE_CLI)
 caprice_SOURCES = gui/video.cpp core/emulator.cpp 
 caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui -Icli
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) \
-                -L/usr/local/lib -l765 -ldsk  \
+                -L/usr/local/lib \
                 gui/libcapricewx.a gui/libfoo.a core/libcapricecore.a $(CLI_LIB) core/libdisass.a  asm/libsjasm.a 
 
 #Add aylet files if used as backend
@@ -18,8 +18,6 @@ if AYLET
 		     aylet/drv-oss.cc \
 		     aylet/driver.h 
 endif
-
-
 
 if RELEASE
   caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
