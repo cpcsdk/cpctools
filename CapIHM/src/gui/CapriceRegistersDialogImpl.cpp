@@ -26,10 +26,10 @@
 #include <string>
 
 #define  UpCRTCRegTextControl(X, Y) if(!X->IsModified()){X->Clear();*X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
-#define  ModifCRTCReg(X, Y) {wxString str; long val; bool test; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetCRTC().SetRegisterValue(Y, (unsigned char)(val));} X->Clear(); *X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
+#define  ModifCRTCReg(X, Y) {wxString str; long val; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetCRTC().SetRegisterValue(Y, (unsigned char)(val));} X->Clear(); *X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
 
 #define  UpZ80Reg8bitsTextControl(X, Y) if(!X->IsModified()){X->Clear();*X << (int)(emulator->GetZ80().Y);}
-#define  ModifZ80Reg8bits(X, Y) {wxString str; long val; bool test; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetZ80().Y = (unsigned char)(val);} X->Clear(); *X << (int)(emulator->GetZ80().Y);}
+#define  ModifZ80Reg8bits(X, Y) {wxString str; long val; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetZ80().Y = (unsigned char)(val);} X->Clear(); *X << (int)(emulator->GetZ80().Y);}
 
 // Registers Dialog Event
 void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
