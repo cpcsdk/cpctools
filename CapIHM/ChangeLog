@@ -1,3 +1,16 @@
+2009-05-10 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* Build : Now CLI (and sjasm) compiling really conditional :)
+
+2009-05-09 CloudStrife/Shinra <cloudstrife@cpcscene.com>
+	* GUI : Now OpenGL reworks (add --enable-opengl in autoconf)
+
+2009-05-04 Krusty/Benediction <krusty@cpcscene.com>
+	* CLI : Beginning of sjasmplus integration
+
+2009-04-25 Krusty/Benediction <krusty@cpcscene.com>
+	* CLI : Add the ability to use a command line interface to control the
+	emulator (WiP)
+
 2009-04-18 CloudStrife/Shinra <cloudstrife@cpcscene.com>
 	* GUI : Drag'n'Drop now work with snapshot too and make file type
 	checking

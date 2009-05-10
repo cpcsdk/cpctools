@@ -132,14 +132,8 @@ AC_ARG_ENABLE(	cli,
 
 if test "$enable_cli" = "yes" ; then
     AC_DEFINE(CLI,1,[Use a command line interface])
-    MAYBE_CLI=cli
-    CLI_LIB=cli/libcapricecli.a
-else
-    MAYBE_CLI=
-    CLI_LIB=
 fi
-AC_SUBST([MAYBE_CLI])
-AC_SUBST([CLI_LIB])
+AM_CONDITIONAL([CLI], [test "$enable_cli" = "yes"])
 
 # GUI
 if test "$with_wxwidget" = "yes" ; then
