@@ -95,7 +95,7 @@ t_CPC::t_CPC()
     vid_w=800;
     vid_h=600;
     vid_bpp=24;
-    vid_style=VideoPlugin::DoubleWidth;
+    vid_style=VideoPlugin::DoubleSize;
 
 }
 

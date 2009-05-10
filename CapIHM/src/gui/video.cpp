@@ -49,6 +49,7 @@
 #define max(a,b) (a>b ? a : b)
 #endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Half size video plugin ------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -112,7 +113,9 @@ void HalfSizePlugin::Close()
 		return;
 	SDL_FreeSurface(_publicVideo);
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Half size with hardware flip video plugin ------------------------------------------ */
 /* ------------------------------------------------------------------------------------ */
@@ -170,7 +173,9 @@ void HalfSizeHardwarePlugin::Flip()
 void HalfSizeHardwarePlugin::Close()
 {
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Double width video plugin ---------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -235,7 +240,9 @@ void DoubleWidthPlugin::Close()
 		return;
 	SDL_FreeSurface(_publicVideo);
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Scanlines video plugin ------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -319,6 +326,7 @@ void ScanlinePlugin::Close()
 		return;
 	SDL_FreeSurface(_publicVideo);
 }
+#endif
 
 /* ------------------------------------------------------------------------------------ */
 /* Line doubling video plugin --------------------------------------------------------- */
@@ -857,6 +865,7 @@ SDL_Surface* OpenGLScale100Plugin::Init(int w,int h, int bpp, bool fs)
 	return OpenGLInit(w,h,bpp,fs,100);
 }
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Generic filter video plugin -------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -1032,7 +1041,9 @@ void FilterPlugin::Close()
 		return;
 	SDL_FreeSurface(_publicVideo);
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Super eagle video plugin ----------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -1198,7 +1209,9 @@ void SuperEaglePlugin::Filter(	Uint8 *srcPtr, Uint32 srcPitch, /* byte *deltaPtr
 		dstPtr += dstPitch * 2;
 	}			// endof: for (height; height; height--)
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Scale2x video plugin --------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -1240,7 +1253,9 @@ void Scale2XPlugin::Filter(Uint8 *srcPtr, Uint32 srcPitch,
 		q += nextlineDst << 1;
 	}
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* ascale2x video plugin --------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -1446,7 +1461,9 @@ void AdvancedScale2XPlugin::Filter(Uint8 *srcPtr, Uint32 srcPitch,
 		dstPtr += dstPitch * 2;
 	}			// endof: for (height; height; height--)
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* tv2x video plugin ------------------------------------------------------------------ */
 /* ------------------------------------------------------------------------------------ */
@@ -1488,7 +1505,9 @@ void TVScale2XPlugin::Filter(	Uint8 *srcPtr, Uint32 srcPitch,
 		q += nextlineDst << 1;
 	}
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Software bilinear video plugin ----------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
@@ -1528,7 +1547,9 @@ void SoftwareBilinearPlugin::Filter(Uint8 *srcPtr, Uint32 srcPitch,
 		q += nextlineDst << 1;
 	}
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Software bicubic video plugin ------------------------------------------------------ */
 /* ------------------------------------------------------------------------------------ */
@@ -1628,7 +1649,9 @@ void SoftwareBicubicPlugin::Filter(Uint8 *srcPtr, Uint32 srcPitch,
 		v += fsy;
 	}
 }
+#endif
 
+#if 0
 /* ------------------------------------------------------------------------------------ */
 /* Dot matrix video plugin ------------------------------------------------------------ */
 /* ------------------------------------------------------------------------------------ */
@@ -1680,6 +1703,7 @@ void DotMatrixPlugin::Filter(Uint8 *srcPtr, Uint32 srcPitch,
 		q += nextlineDst << 1;
 	}
 }
+#endif
 
 /* ------------------------------------------------------------------------------------ */
 /* Generic video plugin --------------------------------------------------------------- */
@@ -1750,19 +1774,19 @@ VideoPlugin* VideoPlugin::Create(VideoType type)
 {
 	switch (type)
 	{
-	case Scanlines			: { return new ScanlinePlugin();		}
+//	case Scanlines			: { return new ScanlinePlugin();		}
 	case DoubleSize			: { return new DoublePlugin();			}
-	case DoubleWidth		: { return new DoubleWidthPlugin();		}
-	case HalfSize			: { return new HalfSizePlugin();		}
-	case HardwareHalfSize	: { return new HalfSizeHardwarePlugin();}
+//	case DoubleWidth		: { return new DoubleWidthPlugin();		}
+//	case HalfSize			: { return new HalfSizePlugin();		}
+//	case HardwareHalfSize	: { return new HalfSizeHardwarePlugin();}
 	// Filtered video
-	case SuperEagle			: { return new SuperEaglePlugin();		}
-	case Scale2x			: { return new Scale2XPlugin();			}
-	case AdvancedScale2x	: { return new AdvancedScale2XPlugin();	}
-	case TVScale2x			: { return new TVScale2XPlugin();		}
-	case SoftwareBilinear	: { return new SoftwareBilinearPlugin();}
-	case SoftwareBicubic	: { return new SoftwareBicubicPlugin();	}
-	case DotMatrix			: { return new DotMatrixPlugin();		}
+//	case SuperEagle			: { return new SuperEaglePlugin();		}
+//	case Scale2x			: { return new Scale2XPlugin();			}
+//	case AdvancedScale2x	: { return new AdvancedScale2XPlugin();	}
+//	case TVScale2x			: { return new TVScale2XPlugin();		}
+//	case SoftwareBilinear	: { return new SoftwareBilinearPlugin();}
+//	case SoftwareBicubic	: { return new SoftwareBicubicPlugin();	}
+//	case DotMatrix			: { return new DotMatrixPlugin();		}
 	// OpenGL video
 #ifdef USE_OPENGL
 	case OpenGLScale		: { return new OpenGLScalePlugin();		}
@@ -1771,14 +1795,19 @@ VideoPlugin* VideoPlugin::Create(VideoType type)
 	case OpenGLScale75		: { return new OpenGLScale75Plugin();	}
 	case OpenGLScale100		: { return new OpenGLScale100Plugin();	}
 #else
-	case OpenGLScale		: { return new ScanlinePlugin();		}
-	case OpenGLScale25		: { return new ScanlinePlugin();	}
-	case OpenGLScale50		: { return new ScanlinePlugin();	}
-	case OpenGLScale75		: { return new ScanlinePlugin();	}
-	case OpenGLScale100		: { return new ScanlinePlugin();	}
+	case OpenGLScale		: { return new DoublePlugin();			}
+//	case OpenGLScale25		: { return new ScanlinePlugin();	}
+	case OpenGLScale25		: { return new DoublePlugin();			}
+//	case OpenGLScale50		: { return new ScanlinePlugin();	}
+	case OpenGLScale50		: { return new DoublePlugin();			}
+//	case OpenGLScale75		: { return new ScanlinePlugin();	}
+	case OpenGLScale75		: { return new DoublePlugin();			}
+//	case OpenGLScale100		: { return new ScanlinePlugin();	}
+	case OpenGLScale100		: { return new DoublePlugin();			}
 #endif
 	}
-	return new ScanlinePlugin();
+//	return new ScanlinePlugin();
+	return new DoublePlugin();
 }
 
 
