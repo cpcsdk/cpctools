@@ -45,6 +45,7 @@ void caprice_cli_show_breakpoints();
  * Continue the flow execution after a breakpoint
  */
 void caprice_cli_continue();
+void caprice_cli_step();
 /**
  * Choose the video color mode
  * @param mode 1 fo color, 2 for gray, 3 for green
@@ -72,3 +73,7 @@ void caprice_cli_memory_disasm_pc(int size);
  * Compile file
  */
 void caprice_cli_asm_compile_file(char *filename);
+/**
+ * Jump at the attended address
+ */
+void caprice_cli_asm_launch(int address);

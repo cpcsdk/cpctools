@@ -202,3 +202,11 @@ cparser_cmd_asm_compile_filename ( cparser_context_t *context, char **filename)
   caprice_cli_asm_compile_file(*filename);
   return CPARSER_OK ;
 }
+
+cparser_result_t
+cparser_cmd_asm_launch_address( cparser_context_t *context, uint32_t *address_ptr)
+{
+  int address = (address_ptr) ? *address_ptr : -1 ;
+  caprice_cli_asm_launch(address);
+  return CPARSER_OK;
+}

@@ -57,6 +57,9 @@ memory disassemble pc { <UINT:quantity> }
 //Compile file in memory
 asm compile <FILE:filename>
 
+//Launch last compiled program, or jump at indiquated address
+asm launch { <UINT:address> }
+
 // ============ various ============
 // Quit Caprice
 quit

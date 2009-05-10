@@ -203,6 +203,24 @@ cparser_glue_asm_compile_filename (cparser_t *parser)
 }
 
 cparser_result_t
+cparser_glue_asm_launch_address (cparser_t *parser)
+{
+    uint32_t address_val;
+    uint32_t *address_ptr = NULL;
+    cparser_result_t rc;
+
+    rc = cparser_get_uint(&parser->tokens[2], &address_val);
+    if (CPARSER_OK == rc) {
+        address_ptr = &address_val;
+    } else {
+        assert(3 > parser->token_tos);
+    }
+    cparser_cmd_asm_launch_address(&parser->context,
+        address_ptr);
+    return CPARSER_OK;
+}
+
+cparser_result_t
 cparser_glue_quit (cparser_t *parser)
 {
     cparser_cmd_quit(&parser->context);
@@ -298,6 +316,38 @@ cparser_node_t cparser_node_quit = {
     &cparser_node_reset,
     &cparser_node_quit_eol
 };
+cparser_node_t cparser_node_asm_launch_address_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_asm_launch_address,
+    "Launch last compiled program, or jump at indiquated address",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_asm_launch_address = {
+    CPARSER_NODE_UINT,
+    CPARSER_NODE_FLAGS_OPT_END,
+    "<UINT:address>",
+    NULL,
+    NULL,
+    &cparser_node_asm_launch_address_eol
+};
+cparser_node_t cparser_node_asm_launch_eol = {
+    CPARSER_NODE_END,
+    CPARSER_NODE_FLAGS_OPT_PARTIAL,
+    cparser_glue_asm_launch_address,
+    NULL,
+    &cparser_node_asm_launch_address,
+    NULL
+};
+cparser_node_t cparser_node_asm_launch = {
+    CPARSER_NODE_KEYWORD,
+    CPARSER_NODE_FLAGS_OPT_START,
+    "launch",
+    NULL,
+    NULL,
+    &cparser_node_asm_launch_eol
+};
 cparser_node_t cparser_node_asm_compile_filename_eol = {
     CPARSER_NODE_END,
     0,
@@ -319,7 +369,7 @@ cparser_node_t cparser_node_asm_compile = {
     0,
     "compile",
     NULL,
-    NULL,
+    &cparser_node_asm_launch,
     &cparser_node_asm_compile_filename
 };
 cparser_node_t cparser_node_asm = {

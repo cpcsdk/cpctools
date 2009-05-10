@@ -220,3 +220,16 @@ void caprice_cli_asm_compile_file(char *filename)
 
   capAsm->Compile(filename);
 }
+
+extern "C"
+void  caprice_cli_asm_launch(int address)
+{
+  if (address == -1)
+  {
+    capAsm->Run();
+  }
+  else
+  {
+    emulatorClone->GoTo(address);
+  }
+}

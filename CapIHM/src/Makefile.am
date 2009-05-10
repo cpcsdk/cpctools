@@ -1,6 +1,6 @@
 bin_PROGRAMS = caprice
 
-DIST_SUBDIRS = core gui
+DIST_SUBDIRS = core gui cli asm
 SUBDIRS = core gui
 
 #TODO : achieve to put the compilation of first 2files in libcapricewx.a and the other in libcapricecore.a
@@ -15,7 +15,7 @@ if CLI
 DIST_SUBDIRS += cli asm
 SUBDIRS += cli asm
 caprice_CPPFLAGS += -Icli
-caprice_LDADD += cli/libcapricecli.a asm/libsjasm.a
+caprice_LDADD += cli/libcapricecli.a asm/libsjasm.a asm/libsjasminternal.a
 endif
 
 #Add aylet files if used as backend

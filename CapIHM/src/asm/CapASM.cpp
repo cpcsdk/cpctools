@@ -181,6 +181,13 @@ void LuaFatalError(lua_State *L) {
 }
 
 //}}}
+
+void CapASM::Run()
+{
+  extern int runAddress ;
+  emulator->GoTo(runAddress);
+}
+
 void CapASM::Compile(char * filename)
 {
   std::cout << "&Compilation of " << string(filename).c_str() << endl ;

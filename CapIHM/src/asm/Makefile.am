@@ -1,9 +1,13 @@
-noinst_LIBRARIES = libsjasm.a
+noinst_LIBRARIES = libsjasm.a \
+                   libsjasminternal.a
+
+
 
 libsjasm_a_CPPFLAGS = -O2 -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX -Ilua5.1 -Itolua++ -Isjasm -I../core $(SDL_CFLAGS) 
+libsjasminternal_a_CPPFLAGS = -O2 -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX -Ilua5.1 -Itolua++ -Isjasm $(SDL_CFLAGS) 
 
 SJASMSRC=sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
-sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp sjasm/z80.cpp
+sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp 
 
 
 
@@ -21,8 +25,13 @@ tolua++/tolua_push.c tolua++/tolua_to.c
 
 
 libsjasm_a_SOURCES = \
+  libsjasminternal.a \
   $(SJASMSRC) \
   $(LUASRC) \
   $(TOLUASRC) \
   CapASM.h \
-  CapASM.cpp
+  CapASM.cpp 
+
+#Code without no link to emu
+libsjasminternal_a_SOURCES = \
+                             sjasm/z80.cpp

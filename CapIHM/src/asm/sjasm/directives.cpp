@@ -33,6 +33,8 @@
 CFunctionTable DirectivesTable;
 CFunctionTable DirectivesTable_dup;
 
+int runAddress ;
+
 /* modified */
 int ParseDirective(bool bol) {
 	char* olp = lp;
@@ -176,6 +178,16 @@ void dirABYTE() {
 	}
 }
 
+
+void dirRUN() {
+  aint address ;
+  if (ParseExpression(lp, address)) {
+    check16(address); address &= 0xffff ;
+    runAddress = address ;
+  } else {
+    Error("RUN with no arguments", 0); return;
+  }
+}
 void dirABYTEC() {
 	aint add;
 	int teller = 0,e[129];
@@ -2096,6 +2108,7 @@ void InsertDirectives() {
 	DirectivesTable.insertd("fpos",dirFORG);
 	DirectivesTable.insertd("map", dirMAP);
 	DirectivesTable.insertd("align", dirALIGN);
+  DirectivesTable.insertd("run", dirRUN);
 	DirectivesTable.insertd("module", dirMODULE);
 	//DirectivesTable.insertd("z80", dirZ80);
 	DirectivesTable.insertd("size", dirSIZE);

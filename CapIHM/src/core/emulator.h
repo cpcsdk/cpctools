@@ -30,7 +30,9 @@
 #include "config.h"
 #include "input.h"
 #include "fdc.h"
+#include "z80.h"
 
+#include <iostream>
 class t_z80regs;
 class t_VDU;
 class t_GateArray;
@@ -98,6 +100,17 @@ public:
   inline void Step()
   {
     GetConfig().paused = 0 ;
+  }
+
+
+  /**
+   * Set PC at memory
+   * @param memory adress where to jump
+   */
+  inline void GoTo(int memory)
+  {
+    std::cout << "Launch " << std::hex << memory << std::endl ;
+    GetZ80().PC.w.l = memory & 0xffff ;
   }
 
   /**
