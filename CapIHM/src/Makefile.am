@@ -9,6 +9,7 @@ caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) \
                 -L/usr/local/lib \
                 gui/libcapricewx.a gui/libfoo.a core/libcapricecore.a core/libdisass.a
+  
 
 #Add CLI files if activate
 if CLI
@@ -27,6 +28,7 @@ if AYLET
 		     aylet/driver.h 
 endif
 
-if RELEASE
-  caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
-endif
+#BUG : activated even in debug mode ...
+#if RELEASE
+#  caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+#endif

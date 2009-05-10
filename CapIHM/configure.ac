@@ -99,11 +99,11 @@ AC_ARG_ENABLE(	debug,
 		enable_debug=yes)
 
 if test "$enable_debug" = yes ; then
-	CXXFLAGS="-O0 -Wall -g -DDEBUG"
-	CFLAGS="-O0 -Wall  -g -DDEBUG"
-fi
+	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg"
+	CFLAGS="-O0 -Wall  -g -DDEBUG -pg"
 
-AM_CONDITIONAL([RELEASE], [test ! "enable_debug" = "yes"])
+  AM_CONDITIONAL([RELEASE], [test ! "enable_debug" = "yes"])
+fi
 
 AC_MSG_RESULT([ $enable_debug ])
 

@@ -68,7 +68,8 @@ Outils.cpp \
 Itoa.h \
 Itoa.cpp
 
-
-if RELEASE
-	libcapricecore_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
-endif
+#
+#BUG : activated even in debug mode ...
+#if RELEASE
+#	libcapricecore_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+#endif
