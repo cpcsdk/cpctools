@@ -426,37 +426,5 @@ int t_Memory::emulator_patch_ROM (void)
 		return ERR_CPC_ROM_MISSING;
 	}
 
-    /*
-	if (CPC.keyboard) {
-		pbPtr = pbROMlo;
-		switch(CPC.model)
-		{
-			// 464
-		case 0:
-			{
-				// location of the keyboard translation table
-				pbPtr += 0x1d69;
-				break;
-			}
-			// 664
-		case 1:
-			// 6128
-		case 2:
-			{
-				// location of the keyboard translation table
-				pbPtr += 0x1eef;
-				break;
-			}
-		}
-		if (pbPtr != pbROMlo)
-		{
-			// patch the CPC OS ROM with the chosen keyboard layout
-			memcpy(pbPtr, cpc_keytrans[CPC.keyboard-1], 240);
-			pbPtr = pbROMlo + 0x3800;
-			// add the corresponding character set
-			memcpy(pbPtr, cpc_charset[CPC.keyboard-1], 2048);
-		}
-	}
-    */
 	return 0;
 }
