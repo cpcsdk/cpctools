@@ -406,7 +406,6 @@ int t_Memory::emulator_patch_ROM (void)
 	FILE* pfileObject;
 
 	char chPath[_MAX_PATH + 1];
-	byte *pbPtr;
 
 	strncpy(chPath, CPC.rom_path, sizeof(chPath)-2);
 	strcat(chPath, "/");

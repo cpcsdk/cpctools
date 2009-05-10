@@ -45,19 +45,22 @@ const char * CapriceInputSettingsImpl::getKeymapFileNameLoad()
 
 const char * CapriceInputSettingsImpl::getKeymapFileNameSave()
 {
+/*	
   const char * a = ( const char * ) wxStandardPaths::Get().GetDocumentsDir().c_str() ;
   const char * b = ( const char * ) wxStandardPaths::Get().GetUserConfigDir().c_str() ;
   const char * c = ( const char * ) wxStandardPaths::Get().GetExecutablePath().c_str() ;
   const char * d = ( const char * ) wxStandardPaths::Get().GetConfigDir().c_str() ;
 
-    wxStandardPathsBase &stdPth = wxStandardPaths::Get();
-    wxString sPath = stdPth.GetExecutablePath();
 
-//  std::cout << a << endl
-//            << b << endl
-//            << c << endl
-//            << d << endl
-//            << (wxChar *)sPath.c_str() << endl ;
+  std::cout << a << endl
+            << b << endl
+            << c << endl
+            << d << endl
+            << (wxChar *)sPath.c_str() << endl ;
+*/
+  
+  wxStandardPathsBase &stdPth = wxStandardPaths::Get();
+  wxString sPath = stdPth.GetExecutablePath();
 
   std::cout << wxDir::Exists(wxStandardPaths::Get().GetUserDataDir()) << endl ;
 
@@ -105,7 +108,7 @@ void CapriceInputSettingsImpl::onKeyClick(wxCommandEvent& event)
 
 void CapriceInputSettingsImpl::onKeyPress(wxKeyEvent& event)
 {
-    m_regularKey->SetValue(event.GetUnicodeKey());
+    m_regularKey->SetValue(wxChar(event.GetKeyCode()));
     iter->second.stdKeyCode = event.GetKeyCode();
 }
 
@@ -147,6 +150,6 @@ wxString CapriceInputSettingsImpl::keyCodeToName(int keycode)
 	case WXK_ESCAPE:
 	    return _T("ESCAPE");
 	default:
-	    return (wchar_t)keycode;
+	    return wxChar(keycode);
     }
 }

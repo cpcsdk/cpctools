@@ -194,8 +194,6 @@ void t_Input::setupKey(int cpc_code, int pc_stdcode, int pc_shiftcode  , int pc_
 
 int t_Input::input_init (t_CPC &CPC)
 {
-	dword n, pc_key, pc_idx, cpc_idx, cpc_key;
-
 	keyboard_normal.clear();
 	keyboard_shift.clear();
 	keyboard_ctrl.clear();
