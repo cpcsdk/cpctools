@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libcapricewx.a libfoo.a
 
-libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -I@top_srcdir@/src/cli -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\"
+libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\"
 libcapricewx_a_SOURCES = \
 CapriceAboutImpl.cpp \
 CapriceAboutImpl.h\
@@ -23,7 +23,10 @@ libcapricewx_a_LIBADD = libfoo.a
 libfoo_a_SOURCES = CapriceUI.cpp CapriceUI.h
 libfoo_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\" -include ../core/CPCKeyDefs.h 
 
-#BUG : activated even in debug mode ...
-#if RELEASE
-#  libcapricewx_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
-#endif
+if CLI
+  libcapricewx_a_CPPFLAGS += -I@top_srcdir@/src/cli 
+endif
+
+if RELEASE
+  libcapricewx_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+endif

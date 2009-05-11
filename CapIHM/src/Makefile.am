@@ -1,6 +1,6 @@
 bin_PROGRAMS = caprice
 
-DIST_SUBDIRS = core gui cli asm
+DIST_SUBDIRS = core gui
 SUBDIRS = core gui
 
 #TODO : achieve to put the compilation of first 2files in libcapricewx.a and the other in libcapricecore.a
@@ -9,7 +9,6 @@ caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) \
                 -L/usr/local/lib \
                 gui/libcapricewx.a gui/libfoo.a core/libcapricecore.a core/libdisass.a
-  
 
 #Add CLI files if activate
 if CLI
@@ -28,7 +27,6 @@ if AYLET
 		     aylet/driver.h 
 endif
 
-#BUG : activated even in debug mode ...
-#if RELEASE
-#  caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
-#endif
+if RELEASE
+  caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+endif

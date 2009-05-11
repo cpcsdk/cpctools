@@ -101,9 +101,9 @@ AC_ARG_ENABLE(	debug,
 if test "$enable_debug" = yes ; then
 	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg"
 	CFLAGS="-O0 -Wall  -g -DDEBUG -pg"
-
-  AM_CONDITIONAL([RELEASE], [test ! "enable_debug" = "yes"])
 fi
+
+AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 
 AC_MSG_RESULT([ $enable_debug ])
 
@@ -205,6 +205,7 @@ if test "$with_lib765" = "yes" ; then
 	AC_CHECK_HEADER( 765.h, AC_DEFINE(HAVE_LIB765_H,1,[Use lib765 for FDC emulation]), AC_MSG_ERROR([lib765 not found ! look at http://www.seasip.demon.co.uk/Unix/LibDsk ]))
 	AC_SUBST(LIB765)
 fi
+AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
 
 
 
