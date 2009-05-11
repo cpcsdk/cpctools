@@ -62,7 +62,7 @@
 
 extern byte *pbGPBuffer;
 
-#ifdef DEBUG_FDC
+#ifdef USE_DEBUGGER_FDC
 extern FILE *pfoDebug;
 extern dword dwDebugFlag;
 dword dwBytesTransferred = 0;
@@ -393,7 +393,7 @@ void t_FDC::fdc_write_data(byte val)
 {
 	int idx;
 	
-#ifdef DEBUG_FDC
+#ifdef USE_DEBUGGER_FDC
 	if (dwDebugFlag) 
 	{
 		if (phase == CMD_PHASE) {
@@ -604,7 +604,7 @@ byte t_FDC::fdc_read_data(void)
 		if (cmd_direction == FDC_TO_CPU) { // proper direction?
             timeout = OVERRUN_TIMEOUT;
             val = *buffer_ptr++; // read byte from current sector
-#ifdef DEBUG_FDC
+#ifdef USE_DEBUGGER_FDC
 			if (dwDebugFlag) 
 			{
 				if (!(flags & OVERRUN_flag)) {
@@ -675,7 +675,7 @@ byte t_FDC::fdc_read_data(void)
 	case RESULT_PHASE: // in result phase?
 		val = result[byte_count++]; // copy value from buffer
 		
-#ifdef DEBUG_FDC
+#ifdef USE_DEBUGGER_FDC
 		if (dwDebugFlag)
 		{
 			if (dwBytesTransferred) {

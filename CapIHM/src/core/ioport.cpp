@@ -40,7 +40,7 @@
 
 #include "debug.h"
 
-#ifdef DEBUG
+#ifdef USE_DEBUGGER
 extern dword dwDebugFlag;
 extern FILE *pfoDebug;
 #endif
@@ -247,7 +247,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 			// select pen
 		case 0:
 			{
-#ifdef DEBUG_GA
+#ifdef USE_DEBUGGER_GA
 				if (dwDebugFlag) 
 				{
 					fprintf(pfoDebug, "IOGA : pen 0x%02x\r\n", val);
@@ -265,7 +265,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 			// set colour
 		case 1:
 			{
-#ifdef DEBUG_GA
+#ifdef USE_DEBUGGER_GA
 				if (dwDebugFlag) 
 				{
 					fprintf(pfoDebug, "IOGA : clr 0x%02x\r\n", val);
@@ -288,7 +288,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 			// set mode
 		case 2:
 			{
-#ifdef DEBUG_GA
+#ifdef USE_DEBUGGER_GA
 				if (dwDebugFlag) 
 				{
 					fprintf(pfoDebug, "IOGA : rom 0x%02x\r\n", val);
@@ -316,7 +316,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 			// set memory configuration
 		case 3:
 			{
-#ifdef DEBUG_GA
+#ifdef USE_DEBUGGER_GA
 				if (dwDebugFlag) 
 				{
 					fprintf(pfoDebug, "IOGA : mem 0x%02x\r\n", val);
@@ -359,7 +359,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 			{
 				*(pbMF2ROM + (0x03db0 | (*(pbMF2ROM + 0x03cff) & 0x0f))) = val;
 			}
-#ifdef DEBUG_CRTC
+#ifdef USE_DEBUGGER_CRTC
 			if (dwDebugFlag) 
 			{
 				fprintf(pfoDebug, "IOCRTC : %02x = %02x\r\n", CRTC.GetRegisterSelect(), val);
@@ -514,7 +514,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 	if ((port.b.h == 0xfa) && (!(port.b.l & 0x80))) 
 	{
 		FDC.SetMotor(val & 0x01);
-#ifdef DEBUG_FDC
+#ifdef USE_DEBUGGER_FDC
 		if (dwDebugFlag)
 		{
 			fputs(FDC.GetMotor() ? "IOFDC : --- motor on\n" : "IOFDC : --- motor off\n", pfoDebug);

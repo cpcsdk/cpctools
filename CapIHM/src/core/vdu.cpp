@@ -30,7 +30,7 @@
 #include <math.h>
 #include <memory.h>
 
-#ifdef DEBUG_CRTC
+#ifdef USE_DEBUGGER_CRTC
 extern dword dwDebugFlag;
 extern FILE *pfoDebug;
 #endif
@@ -244,7 +244,7 @@ void t_VDU::SetScanline(int scln)
 
 void t_VDU::DisplayDebug()
 {
-#ifdef DEBUG_CRTC
+#ifdef USE_DEBUGGER_CRTC
 /*	fprintf(pfoDebug, "mhs%04X mfs%04X  s%04X p%04X e%04X p%04X c%d",
 
 		MonHSYNC,

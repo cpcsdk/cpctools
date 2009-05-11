@@ -78,7 +78,7 @@ extern byte *pbTapeImage;
 extern dword dwMF2Flags;
 extern dword dwMF2ExitAddr;
 
-#ifdef DEBUG_Z80
+#ifdef USE_DEBUGGER_Z80
 extern FILE *pfoDebug;
 extern dword dwDebugFlag;
 unsigned int dbg_z80_lastPC, dbg_z80_diff;
@@ -970,7 +970,7 @@ int t_z80regs::z80_execute(void)
         break_points.end() == break_points.find(_rPCdword)           ) { // loop until break point
 
     adressAlreadyBlocked = false ;
-#ifdef DEBUG_Z80
+#ifdef USE_DEBUGGER_Z80
 		if (dwDebugFlag)
 		{
 			dbg_z80_diff = (int)abs( (int) (dbg_z80_lastPC - _rPC));
@@ -1289,7 +1289,7 @@ int t_z80regs::z80_execute(void)
 		  }
    }
 
-#if DEBUG
+#ifdef USE_DEBUGGER_Z80
    std::cout << "[DEBUG] Breakpoint in " << _rPCdword << endl ;
 #endif
    adressAlreadyBlocked = true ;

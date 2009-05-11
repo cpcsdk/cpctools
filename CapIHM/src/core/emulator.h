@@ -42,7 +42,7 @@ class t_PPI;
 class t_Tape;
 class t_Memory;
 
-#ifdef DEBUG
+#ifdef USE_DEBUGGER
 extern dword dwDebugFlag;
 extern FILE *pfoDebug;
 void InitDebug();

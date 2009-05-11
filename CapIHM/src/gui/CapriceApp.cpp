@@ -140,7 +140,7 @@ int CapriceApp::OnRun()
 
     if(emulator->Init())
     {
-        #ifdef DEBUG
+        #ifdef USE_DEBUGGER
         InitDebug();
         #endif
 

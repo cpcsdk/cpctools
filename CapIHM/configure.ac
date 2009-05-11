@@ -92,6 +92,15 @@ AC_ARG_WITH(	wxwidget,
 		with_wxwidget=no,
 		with_wxwidget=yes)
 
+AC_ARG_WITH(	debugger,
+		[  --with-debugger	  use the internal debugger [default=yes]],
+		with_debugger=no,
+		with_debugger=yes)
+
+if test "$with_debugger" = "yes" ; then
+	AC_DEFINE(USE_DEBUGGER,1,[Activate the internal debugger])
+fi
+
 AC_MSG_CHECKING(for debugging environment)
 AC_ARG_ENABLE(	debug,
 		[  --enable-debug	  turn on debug compiler [default=yes]],
@@ -245,6 +254,7 @@ CapriceReloaded compilation option :
 
     Cli interface ................ ${enable_cli}
     OpenGL ....................... ${enable_opengl}
+    Debugger ..................... ${with_debugger}
 
     Debug mode ................... ${enable_debug}
 

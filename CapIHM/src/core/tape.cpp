@@ -50,7 +50,7 @@ extern byte *pbTapeImageEnd;
 
 extern byte *pbGPBuffer;
 
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 extern FILE *pfoDebug;
 extern dword dwDebugFlag;
 #endif
@@ -140,7 +140,7 @@ int t_Tape::tape_insert (const char *pchFileName)
     *(pbTapeImage+lFileSize+3) = 0x20; // end with a pause block
     *(word *)(pbTapeImage+lFileSize+3+1) = 2000; // set the length to 2 seconds
 	
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
     if (dwDebugFlag) fputs("--- New Tape\r\n", pfoDebug);
 #endif
     pbTapeImageEnd = pbTapeImage + lFileSize+6;
@@ -240,7 +240,7 @@ int t_Tape::tape_insert (const char *pchFileName)
                 iBlockLength = *(dword *)pbBlock + 4;
         }
 
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
         if (dwDebugFlag) fprintf(pfoDebug, "%02x %d\r\n", bID, iBlockLength);
 #endif
 
@@ -294,7 +294,7 @@ int t_Tape::tape_insert_voc (const char *pchFileName)
         return ERR_TAP_BAD_VOC;
     }
 
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
     if (dwDebugFlag) fputs("--- New Tape\r\n", pfoDebug);
 #endif
     iBlockLength = 0;
@@ -305,7 +305,7 @@ int t_Tape::tape_insert_voc (const char *pchFileName)
     {
         fseek(pfileObject, lOffset, SEEK_SET);
         fread(pbPtr, 16, 1, pfileObject); // read block ID + size
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
         if (dwDebugFlag) fprintf(pfoDebug, "%02x %d\r\n", *pbPtr, *(dword *)(pbPtr+0x01) & 0x00ffffff);
 #endif
         switch(*pbPtr)
@@ -354,7 +354,7 @@ int t_Tape::tape_insert_voc (const char *pchFileName)
         }
         lOffset += iBlockLength;
     }
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
     if (dwDebugFlag) fprintf(pfoDebug, "--- %ld bytes\r\n", lSampleLength);
 #endif
 
@@ -499,7 +499,7 @@ int t_Tape::tape_insert_voc (const char *pchFileName)
 
     pbTapeImageEnd = pbTapeImagePtr + 3;
     /*
-    #ifdef DEBUG_TAPE
+    #ifdef USE_DEBUGGER_TAPE
     if ((pfileObject = fopen("./test.cdt", "wb")) != NULL) {
     fwrite(pbTapeImage, (int)((pbTapeImagePtr+3)-pbTapeImage), 1, pfileObject);
     fclose(pfileObject);
@@ -548,7 +548,7 @@ int t_Tape::Tape_ReadDataBit(void)
 			bTapeData = *pbTapeBlockData; // get the next data byte
 			pbTapeBlockData++;
 			dwTapeBitsToShift = 8;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, ">>> 0x%02x\r\n", (byte)bTapeData);
 #endif
@@ -590,7 +590,7 @@ int t_Tape::Tape_ReadSampleDataBit(void)
 			bTapeLevel = TAPE_LEVEL_LOW; // set low level
 		}
 		iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 		if (dwDebugFlag)
 			fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -604,7 +604,7 @@ int t_Tape::Tape_ReadSampleDataBit(void)
 int t_Tape::Tape_GetNextBlock(void)
 {
 	while (pbTapeBlock < pbTapeImageEnd) { // loop until a valid block is found
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 		if (dwDebugFlag)
 			fprintf(pfoDebug, "--- New Block\r\n%02x\r\n", *pbTapeBlock);
 #endif
@@ -613,14 +613,14 @@ int t_Tape::Tape_GetNextBlock(void)
 			
 		case 0x10: // standard speed data block
             dwTapeStage = TAPE_PILOT_STAGE; // block starts with a pilot tone
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fputs("--- PILOT\r\n", pfoDebug);
 #endif
             dwTapePulseCycles = CYCLE_ADJUST(2168);
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
             dwTapePulseCount = 3220;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -628,14 +628,14 @@ int t_Tape::Tape_GetNextBlock(void)
 			
 		case 0x11: // turbo loading data block
             dwTapeStage = TAPE_PILOT_STAGE; // block starts with a pilot tone
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fputs("--- PILOT\r\n", pfoDebug);
 #endif
             dwTapePulseCycles = CYCLE_ADJUST(*(word *)(pbTapeBlock+0x01));
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
             dwTapePulseCount = *(word *)(pbTapeBlock+0x01+0x0a);
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -643,14 +643,14 @@ int t_Tape::Tape_GetNextBlock(void)
 			
 		case 0x12: // pure tone
             dwTapeStage = TAPE_PILOT_STAGE; // block starts with a pilot tone
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fputs("--- TONE\r\n", pfoDebug);
 #endif
             dwTapePulseCycles = CYCLE_ADJUST(*(word *)(pbTapeBlock+0x01));
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
             dwTapePulseCount = *(word *)(pbTapeBlock+0x01+0x02);
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -658,7 +658,7 @@ int t_Tape::Tape_GetNextBlock(void)
 			
 		case 0x13: // sequence of pulses of different length
             dwTapeStage = TAPE_SYNC_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fputs("--- PULSE SEQ\r\n", pfoDebug);
 #endif
@@ -668,7 +668,7 @@ int t_Tape::Tape_GetNextBlock(void)
             pwTapePulseTableEnd = pwTapePulseTable + dwTapePulseCount;
             Tape_GetCycleCount();
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -676,7 +676,7 @@ int t_Tape::Tape_GetNextBlock(void)
 			
 		case 0x14: // pure data block
             dwTapeStage = TAPE_DATA_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fputs("--- DATA\r\n", pfoDebug);
 #endif
@@ -688,7 +688,7 @@ int t_Tape::Tape_GetNextBlock(void)
             dwTapeBitsToShift = 0;
             Tape_ReadDataBit(); // get the first bit of the first data byte
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -696,7 +696,7 @@ int t_Tape::Tape_GetNextBlock(void)
 			
 		case 0x15: // direct recording
             dwTapeStage = TAPE_SAMPLE_DATA_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fputs("--- SAMPLE DATA\r\n", pfoDebug);
 #endif
@@ -711,7 +711,7 @@ int t_Tape::Tape_GetNextBlock(void)
 		case 0x20: // pause
             if (*(word *)(pbTapeBlock+0x01)) { // was a pause requested?
 				dwTapeStage = TAPE_PAUSE_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fputs("--- PAUSE\r\n", pfoDebug);
 #endif
@@ -719,7 +719,7 @@ int t_Tape::Tape_GetNextBlock(void)
 				iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
 				dwTapePulseCycles = MS_TO_CYCLES(*(word *)(pbTapeBlock+0x01) - 1); // get the actual pause length
 				dwTapePulseCount = 2; // just one pulse
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -832,7 +832,7 @@ void t_Tape::Tape_UpdateLevel(void)
 		dwTapePulseCount--;
 		if (dwTapePulseCount > 0) { // is the pilot tone still playing?
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -842,7 +842,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				
 			case 0x10: // standard speed data block
 				dwTapeStage = TAPE_SYNC_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fputs("--- SYNC\r\n", pfoDebug);
 #endif
@@ -853,7 +853,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				pwTapePulseTableEnd = &wCycleTable[2];
 				Tape_GetCycleCount();
 				iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -862,7 +862,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				
 			case 0x11: // turbo loading data block
 				dwTapeStage = TAPE_SYNC_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fputs("--- SYNC\r\n", pfoDebug);
 #endif
@@ -871,7 +871,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				pwTapePulseTableEnd = (word *)(pbTapeBlock+0x01+0x06);
 				Tape_GetCycleCount();
 				iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -891,7 +891,7 @@ void t_Tape::Tape_UpdateLevel(void)
 		if (dwTapePulseCount > 0) {
             Tape_GetCycleCount();
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -901,7 +901,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				
 			case 0x10: // standard speed data block
 				dwTapeStage = TAPE_DATA_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fputs("--- DATA\r\n", pfoDebug);
 #endif
@@ -912,7 +912,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				dwTapeBitsToShift = 0;
 				Tape_ReadDataBit();
 				iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -920,7 +920,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				
 			case 0x11: // turbo loading data block
 				dwTapeStage = TAPE_DATA_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fputs("--- DATA\r\n", pfoDebug);
 #endif
@@ -932,7 +932,7 @@ void t_Tape::Tape_UpdateLevel(void)
 				dwTapeBitsToShift = 0;
 				Tape_ReadDataBit();
 				iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -950,7 +950,7 @@ void t_Tape::Tape_UpdateLevel(void)
 		dwTapePulseCount--;
 		if (dwTapePulseCount > 0) {
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -958,7 +958,7 @@ void t_Tape::Tape_UpdateLevel(void)
 		else {
             if (Tape_ReadDataBit()) {
 				iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -969,13 +969,13 @@ void t_Tape::Tape_UpdateLevel(void)
 				case 0x10: // standard speed data block
 					if (*(word *)(pbTapeBlock+0x01)) { // was a pause requested?
                         dwTapeStage = TAPE_PAUSE_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 						if (dwDebugFlag)
 							fputs("--- PAUSE\r\n", pfoDebug);
 #endif
                         dwTapePulseCycles = MS_TO_CYCLES(1); // start with a 1ms level opposite to the one last played
                         iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 						if (dwDebugFlag)
 							fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -990,13 +990,13 @@ void t_Tape::Tape_UpdateLevel(void)
 				case 0x11: // turbo loading data block
 					if (*(word *)(pbTapeBlock+0x01+0x0d)) { // was a pause requested?
                         dwTapeStage = TAPE_PAUSE_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 						if (dwDebugFlag)
 							fputs("--- PAUSE\r\n", pfoDebug);
 #endif
                         dwTapePulseCycles = MS_TO_CYCLES(1); // start with a 1ms level opposite to the one last played
                         iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 						if (dwDebugFlag)
 							fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -1011,13 +1011,13 @@ void t_Tape::Tape_UpdateLevel(void)
 				case 0x14: // pure data block
 					if (*(word *)(pbTapeBlock+0x01+0x05)) { // was a pause requested?
                         dwTapeStage = TAPE_PAUSE_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 						if (dwDebugFlag)
 							fputs("--- PAUSE\r\n", pfoDebug);
 #endif
                         dwTapePulseCycles = MS_TO_CYCLES(1); // start with a 1ms level opposite to the one last played
                         iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 						if (dwDebugFlag)
 							fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -1040,13 +1040,13 @@ void t_Tape::Tape_UpdateLevel(void)
 		if (!Tape_ReadSampleDataBit()) {
             if (*(word *)(pbTapeBlock+0x01+0x02)) { // was a pause requested?
 				dwTapeStage = TAPE_PAUSE_STAGE;
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fputs("--- PAUSE\r\n", pfoDebug);
 #endif
 				dwTapePulseCycles = MS_TO_CYCLES(1); // start with a 1ms level opposite to the one last played
 				iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 				if (dwDebugFlag)
 					fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif
@@ -1064,7 +1064,7 @@ void t_Tape::Tape_UpdateLevel(void)
 		dwTapePulseCount--;
 		if (dwTapePulseCount > 0) {
             iTapeCycleCount += (int)dwTapePulseCycles; // set cycle count for current level
-#ifdef DEBUG_TAPE
+#ifdef USE_DEBUGGER_TAPE
 			if (dwDebugFlag)
 				fprintf(pfoDebug, "%c %d\r\n",(bTapeLevel == TAPE_LEVEL_HIGH ? 'H':'L'), iTapeCycleCount);
 #endif

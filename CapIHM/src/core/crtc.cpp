@@ -43,7 +43,7 @@ based on the CRTC emulation of WinAPE32 v2.0a5b by Richard Wilson
 
 #include "debug.h"
 
-#ifdef DEBUG_CRTC
+#ifdef USE_DEBUGGER_CRTC
 extern dword dwDebugFlag;
 extern FILE *pfoDebug;
 #endif
@@ -129,7 +129,7 @@ void t_CRTC::Emulate(int repeat_count)
 		_nextAddress = _maxLate[(_addr + _charCount) & 0x73ff] | _scrBase; // next address for PreRender
 		_flags1.dt.combined = _newDT.combined; // update the DISPTMG flags
 
-#ifdef DEBUG_CRTC
+#ifdef USE_DEBUGGER_CRTC
 		if (dwDebugFlag)
 		{
 			DisplayDebug();
@@ -705,7 +705,7 @@ void t_CRTC::CharMR1(t_CRTC &CRTC)
 
 void t_CRTC::DisplayDebug() const
 {
-#ifdef DEBUG_CRTC
+#ifdef USE_DEBUGGER_CRTC
 	char str[16];
 	char on[]  = "vhDDHVMa";
 	char off[] = "........";

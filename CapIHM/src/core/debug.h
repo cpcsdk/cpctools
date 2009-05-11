@@ -5,21 +5,21 @@
 #ifndef _CAPDEBUG_H_
 #define _CAPDEBUG_H_
 
-#ifdef DEBUG
+#ifdef USE_DEBUGGER
 
-//#define DEBUG_CRTC
-//#define DEBUG_FDC
-//#define DEBUG_GA
-//#define DEBUG_TAPE
-#define DEBUG_Z80
+//#define USE_DEBUGGER_CRTC
+//#define USE_DEBUGGER_FDC
+//#define USE_DEBUGGER_GA
+//#define USE_DEBUGGER_TAPE
+#define USE_DEBUGGER_Z80
 
 #else
 
-#undef DEBUG_CRTC
-#undef DEBUG_FDC
-#undef DEBUG_GA
-#undef DEBUG_TAPE
-#undef DEBUG_Z80
+#undef USE_DEBUGGER_CRTC
+#undef USE_DEBUGGER_FDC
+#undef USE_DEBUGGER_GA
+#undef USE_DEBUGGER_TAPE
+#undef USE_DEBUGGER_Z80
 
 #endif
 

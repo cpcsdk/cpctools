@@ -64,15 +64,15 @@ byte *pbTapeImageEnd = NULL;
 
 FILE *pfoPrinter;
 
-#ifdef DEBUG
+#ifdef USE_DEBUGGER
 dword dwDebugFlag = 0;
 FILE *pfoDebug;
 #endif
 
 void InitDebug()
 {
-#ifdef DEBUG
-	pfoDebug = fopen("./debug.txt", "wt");
+#ifdef USE_DEBUGGER
+	pfoDebug = fopen("./debugger.txt", "wt");
 #endif
 }
 
@@ -424,11 +424,11 @@ bool Emulator::KeyboardEmulation()
 							break;
 						}
 
-#ifdef DEBUG
+#ifdef USE_DEBUGGER
 					case CAP32_DEBUG:
 						{
 							dwDebugFlag = dwDebugFlag ? 0 : 1;
-#ifdef DEBUG_CRTC
+#ifdef USE_DEBUGGER_CRTC
 							if (!dwDebugFlag)
 								break;
 
@@ -478,7 +478,7 @@ Emulator::~Emulator()
 
 	audio_shutdown();
 
-#ifdef DEBUG
+#ifdef USE_DEBUGGER
 	fclose(pfoDebug);
 #endif
 }
