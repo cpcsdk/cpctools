@@ -77,3 +77,7 @@ void caprice_cli_asm_compile_file(char *filename);
  * Jump at the attended address
  */
 void caprice_cli_asm_launch(int address);
+/**
+ * Save screenshot
+ */
+void caprice_cli_screenshot_save();

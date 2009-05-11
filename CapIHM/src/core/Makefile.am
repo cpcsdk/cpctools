@@ -56,7 +56,9 @@ z80.cpp\
 z80.h\
 z80daa.h\
 zip.cpp\
-zip.h
+zip.h\
+IMG_savepng.h \
+IMG_savepng.cpp
 
 #Created due to cross references ...
 #TODO: change that

@@ -48,9 +48,11 @@
 //#include "filetools.h"
 #include <SDL.h>
 
+#include <IMG_savepng.h>
+
 #include <iostream>
 
-#define VERSION_STRING "v4.2.0"
+#define VERSION_STRING "v5.0.0"
 
 dword dwMF2ExitAddr;
 dword dwMF2Flags = 0;
@@ -124,6 +126,8 @@ void Emulator::emulator_reset(bool bolMF2Reset)
 		// copy the MF2 ROM to its proper place
 		memcpy(pbMF2ROM, pbMF2ROMbackup, 8192);
 	}
+
+  goToAddress = -1 ;
 }
 
 bool Emulator::MF2Init()
@@ -572,6 +576,7 @@ bool Emulator::Init()
 	dwTicksTargetFPS = dwTicksTarget;
 
 
+  goToAddress = -1 ;
 	return true;
 }
 
@@ -585,6 +590,13 @@ void Emulator::Emulate()
 	
     for (int i=0; i<100000; i++)
     {
+        //Do the goto if needed
+        if ( goToAddress != -1 )
+        {
+          ExecGoTo();
+        }
+
+        //Start emulation
         bool exit = KeyboardEmulation();
 	
 	dwTicks = SDL_GetTicks();
@@ -812,3 +824,13 @@ void Emulator::Loop()
 	}
 }
 #endif
+
+
+void Emulator::SaveScreenshot(string filename)
+{
+  std::cout << "[DEBUG] Save screenshot in " << filename << endl ;
+  IMG_SavePNG( 
+      filename.c_str(),
+      GetRenderer().GetVideoPlugin()->_publicVideo,
+      9);
+}

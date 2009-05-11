@@ -35,3 +35,8 @@ libsjasm_a_SOURCES = \
 #Code without no link to emu
 libsjasminternal_a_SOURCES = \
                              sjasm/z80.cpp
+
+if RELEASE
+	libsjasminternal_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+	libsjasm_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+endif

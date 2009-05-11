@@ -65,6 +65,11 @@ private:
 	t_Memory				*_cpcMemory;
 	unsigned int			_cycleCount;
 
+  /**
+   * Address to jump if required
+   */
+  unsigned int  goToAddress ;
+
 public:
 	Emulator();
 	~Emulator();
@@ -109,10 +114,10 @@ public:
    */
   inline void GoTo(int memory)
   {
-    std::cout << "Launch " << std::hex << memory << std::endl ;
-    GetZ80().PC.w.l = memory & 0xffff ;
+    goToAddress = memory ;
   }
 
+ 
   /**
    * Reset computer
    */
@@ -127,6 +132,8 @@ public:
    * Get the input of the emulator
    */
 	inline	t_Input&		GetInput()					{ return _input;		}
+
+  void SaveScreenshot(string );
 
   /**
    * Get the processor
@@ -185,6 +192,26 @@ private:
 
 	int printer_start();
 	void printer_stop();
+
+  /**
+   * Set PC at goToAddress
+   */
+  inline void ExecGoTo()
+  {
+     std::cout << "Launch " << std::hex << goToAddress << std::endl ;
+
+    //TODO check if in amsdos execution mode
+    //Select bank
+    GetMemory().SetROMConfig(0);
+    GetMemory().ga_memory_manager();
+
+    //Jump
+    GetZ80().PC.w.l = goToAddress & 0xffff ;
+
+    //Reset
+    goToAddress = -1 ;
+  }
+
 
   /**
    * Operate the keyboard emulation

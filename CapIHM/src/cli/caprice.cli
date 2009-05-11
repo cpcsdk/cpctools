@@ -60,6 +60,10 @@ asm compile <FILE:filename>
 //Launch last compiled program, or jump at indiquated address
 asm launch { <UINT:address> }
 
+// ========== Screenshot ===========
+//Save screenshot
+screenshot save
+
 // ============ various ============
 // Quit Caprice
 quit

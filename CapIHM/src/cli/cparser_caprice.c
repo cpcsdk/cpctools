@@ -210,3 +210,11 @@ cparser_cmd_asm_launch_address( cparser_context_t *context, uint32_t *address_pt
   caprice_cli_asm_launch(address);
   return CPARSER_OK;
 }
+
+
+cparser_result_t
+cparser_cmd_screenshot_save( cparser_context_t *context)
+{
+  caprice_cli_screenshot_save();
+  return CPARSER_OK;
+}

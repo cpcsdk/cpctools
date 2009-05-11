@@ -233,3 +233,10 @@ void  caprice_cli_asm_launch(int address)
     emulatorClone->GoTo(address);
   }
 }
+
+
+extern "C"
+void caprice_cli_screenshot_save()
+{
+  emulatorClone->SaveScreenshot("caprice.png");
+}

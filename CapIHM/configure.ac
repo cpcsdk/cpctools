@@ -110,7 +110,11 @@ AC_ARG_ENABLE(	debug,
 if test "$enable_debug" = yes ; then
 	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg"
 	CFLAGS="-O0 -Wall  -g -DDEBUG -pg"
+else
+  CXXFLAGS=" -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s " 
+  CFLAGS="-O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  "
 fi
+AM_CONDITIONAL([RELEASE], [test  "enable_debug" = "no"])
 
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 

@@ -221,6 +221,13 @@ cparser_glue_asm_launch_address (cparser_t *parser)
 }
 
 cparser_result_t
+cparser_glue_screenshot_save (cparser_t *parser)
+{
+    cparser_cmd_screenshot_save(&parser->context);
+    return CPARSER_OK;
+}
+
+cparser_result_t
 cparser_glue_quit (cparser_t *parser)
 {
     cparser_cmd_quit(&parser->context);
@@ -316,6 +323,30 @@ cparser_node_t cparser_node_quit = {
     &cparser_node_reset,
     &cparser_node_quit_eol
 };
+cparser_node_t cparser_node_screenshot_save_eol = {
+    CPARSER_NODE_END,
+    0,
+    cparser_glue_screenshot_save,
+    "Save screenshot",
+    NULL,
+    NULL
+};
+cparser_node_t cparser_node_screenshot_save = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "save",
+    NULL,
+    NULL,
+    &cparser_node_screenshot_save_eol
+};
+cparser_node_t cparser_node_screenshot = {
+    CPARSER_NODE_KEYWORD,
+    0,
+    "screenshot",
+    NULL,
+    &cparser_node_quit,
+    &cparser_node_screenshot_save
+};
 cparser_node_t cparser_node_asm_launch_address_eol = {
     CPARSER_NODE_END,
     0,
@@ -377,7 +408,7 @@ cparser_node_t cparser_node_asm = {
     0,
     "asm",
     NULL,
-    &cparser_node_quit,
+    &cparser_node_screenshot,
     &cparser_node_asm_compile
 };
 cparser_node_t cparser_node_memory_disassemble_pc_quantity_eol = {
