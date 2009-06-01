@@ -54,7 +54,8 @@ static	const ymint *	EnvWave[16] = {	Env00xx,Env00xx,Env00xx,Env00xx,
 										Env1100,Env1101,Env1110,Env1111};
 
 static	ymint ymVolumeTable[16] =
-{	62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767};
+//{	62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767};
+{	0,256,362,512,724,1024,1448,2048,2896,4096,5793,8192,11585,16384,23170,32767};
 
 
 //----------------------------------------------------------------------
@@ -404,16 +405,16 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 	//---------------------------------------------------
 	// Tone+noise+env+DAC for three voices !
 	//---------------------------------------------------
-        ymint volLeft, volRight;
+        ymfloat volLeft, volRight;
         ymint bt;
 
 		bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-		volLeft = (*pVolA)&bt;
+		volLeft = ((*pVolA)&bt)*.637*2;
 		bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-		volRight = (*pVolB)&bt;
+		volRight = ((*pVolB)&bt)*.637*2;
 		bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-		volLeft += (*pVolC)&bt;
-		volRight += (*pVolC)&bt;
+		volLeft += ((*pVolC)&bt)*.360*2;
+		volRight += ((*pVolC)&bt)*.360*2;
 
 	//---------------------------------------------------
 	// Inc

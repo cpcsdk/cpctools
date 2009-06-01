@@ -154,12 +154,8 @@ void audio_shutdown (void)
 {
 	SDL_CloseAudio();
 
-	if (audio_spec) {
-		free(audio_spec);
-	}
-	if (pbSndBuffer) {
-		free(pbSndBuffer);
-	}
+	free(audio_spec);
+	free(pbSndBuffer);
 }
 
 void audio_pause (t_CPC &CPC)

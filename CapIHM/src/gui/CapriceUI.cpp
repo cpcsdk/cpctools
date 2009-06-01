@@ -855,7 +855,7 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel1->SetSizer( bSizer4 );
 	m_panel1->Layout();
 	bSizer4->Fit( m_panel1 );
-	m_notebook2->AddPage( m_panel1, wxT("File System"), false );
+	m_notebook2->AddPage( m_panel1, wxT("File System"), true );
 	m_panel2 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
@@ -892,7 +892,7 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel2->SetSizer( bSizer5 );
 	m_panel2->Layout();
 	bSizer5->Fit( m_panel2 );
-	m_notebook2->AddPage( m_panel2, wxT("Sector Editor"), true );
+	m_notebook2->AddPage( m_panel2, wxT("Sector Editor"), false );
 	
 	bSizer2->Add( m_notebook2, 1, wxEXPAND | wxALL, 5 );
 	

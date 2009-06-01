@@ -28,11 +28,6 @@ AC_HEADER_STDC
 AC_PROG_CC
 AC_TYPE_INT64_T
 
-
-
-
-AM_PATH_SDL($SDL_VERSION, :,
-AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
 #Output file
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([

@@ -1235,12 +1235,12 @@ static void exprstat (LexState *ls) {
 static void retstat (LexState *ls) {
   /* stat -> RETURN explist */
   FuncState *fs = ls->fs;
-  expdesc e;
   int first, nret;  /* registers with returned values */
   luaX_next(ls);  /* skip RETURN */
   if (block_follow(ls->t.token) || ls->t.token == ';')
     first = nret = 0;  /* return no values */
   else {
+  	expdesc e;
     nret = explist1(ls, &e);  /* optional return values */
     if (hasmultret(e.k)) {
       luaK_setmultret(fs, &e);

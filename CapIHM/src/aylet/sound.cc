@@ -207,12 +207,11 @@ return(1);
 
 void sound_end(void)
 {
-if(sound_enabled)
+  if(sound_enabled)
   {
-  if(sound_buf)
     free(sound_buf);
-  driver_end();
-  sound_enabled=0;
+    driver_end();
+    sound_enabled=0;
   }
 }
 
@@ -806,7 +805,6 @@ signed short *ptr;
 int newpos;
 int subpos;
 int val,subval;
-int f;
 
 if(!sound_enabled) return;
 
@@ -839,6 +837,7 @@ subval=AMPL_BEEPER-beeper_last_subpos;
 
 if(newpos>=0)
   {
+	int f;
   /* fill gap from previous position */
   ptr=sound_buf+(sound_stereo?sound_fillpos*2:sound_fillpos);
   for(f=sound_fillpos;f<newpos && f<sound_framesiz;f++)

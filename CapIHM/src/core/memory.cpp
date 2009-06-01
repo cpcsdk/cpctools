@@ -315,7 +315,7 @@ int t_Memory::RAMInit()
 	pbROMhi = pbExpansionROM = pbROMlo + 16384;
 
 	// clear the expansion ROM map
-	memset(memmap_ROM, 0, sizeof(memmap_ROM[0]) * 256);
+	memset(memmap_ROM, 0, sizeof(memmap_ROM));
 
 	return ERR_OK;
 }

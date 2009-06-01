@@ -200,6 +200,8 @@ void CapriceWindowImpl::onSaveSNA( wxCommandEvent& event )
 
     snapshot_save(*emulator, FileName.GetFullPath().mb_str());
   }
+
+  delete SaveDialog;
 }
 
 void CapriceWindowImpl::OnPause( wxCommandEvent& event)

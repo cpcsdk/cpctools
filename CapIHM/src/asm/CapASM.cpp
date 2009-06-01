@@ -153,18 +153,10 @@ void InitPass(int p) {
 }
 
 void FreeRAM() {
-	if (Devices) {
-		delete Devices;
-	}
-	if (AddressList) {
-		delete AddressList;
-	}
-	if (ModuleList) {
-		delete ModuleList;
-	}
-	if (lijstp) {
-		delete lijstp;
-	}
+	delete Devices;
+	delete AddressList;
+	delete ModuleList;
+	delete lijstp;
 }
 
 /* added */
@@ -318,9 +310,8 @@ void CapASM::Compile(char * filename)
 #endif
 
 	// free RAM
-	if (Devices) {
-		delete Devices;
-	}
+	delete Devices;
+
 	// close Lua
 	lua_close(LUA);
 

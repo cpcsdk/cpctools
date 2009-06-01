@@ -286,7 +286,6 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 		// loop through all user definable disk formats
 		for (int i = iFmt; i < MAX_DISK_FORMAT; i++)
 		{
-		    dword dwVal;
 		    char *pchTail;
 		    char chFmtId[14];
 		    // clear slot
@@ -297,106 +296,108 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 		    getConfigValueString(chFileName, "file", chFmtId, chFmtStr, "");
 		    // found format definition for this slot?
 		    if (chFmtStr[0] != 0)
-		    {
-			char chDelimiters[] = ",";
-			char *pchToken;
-			// format label
-			pchToken = strtok(chFmtStr, chDelimiters);
-			strncpy((char *)disk_format[iFmt].label, pchToken, sizeof(disk_format[iFmt].label)-1);
+			{
+				char chDelimiters[] = ",";
+				char *pchToken;
+				// format label
+				pchToken = strtok(chFmtStr, chDelimiters);
+				strncpy((char *)disk_format[iFmt].label, pchToken, sizeof(disk_format[iFmt].label)-1);
 
-			// number of tracks
-			pchToken = strtok(NULL, chDelimiters);
-			// value missing?
-			if (pchToken == NULL)
-			{
-			    continue;
-			}
-			dwVal = strtoul(pchToken, &pchTail, 0);
-			// invalid value?
-			if ((dwVal < 1) || (dwVal > DSK_TRACKMAX))
-			{
-			    continue;
-			}
-			disk_format[iFmt].tracks = dwVal;
-
-			// number of sides
-			pchToken = strtok(NULL, chDelimiters);
-			// value missing?
-			if (pchToken == NULL)
-			{
-			    continue;
-			}
-			dwVal = strtoul(pchToken, &pchTail, 0);
-			// invalid value?
-			if ((dwVal < 1) || (dwVal > DSK_SIDEMAX))
-			{
-			    continue;
-			}
-			disk_format[iFmt].sides = dwVal;
-
-			// number of sectors
-			pchToken = strtok(NULL, chDelimiters);
-			// value missing?
-			if (pchToken == NULL)
-			{
-			    continue;
-			}
-			dwVal = strtoul(pchToken, &pchTail, 0);
-			// invalid value?
-			if ((dwVal < 1) || (dwVal > DSK_SECTORMAX))
-			{
-			    continue;
-			}
-			disk_format[iFmt].sectors = dwVal;
-
-			// sector size as N value
-			pchToken = strtok(NULL, chDelimiters);
-			// value missing?
-			if (pchToken == NULL)
-			{
-			    continue;
-			}
-			dwVal = strtoul(pchToken, &pchTail, 0);
-			// invalid value?
-			if ((dwVal < 1) || (dwVal > 6))
-			{
-			    continue;
-			}
-			disk_format[iFmt].sector_size = dwVal;
-
-			// gap#3 length
-			pchToken = strtok(NULL, chDelimiters);
-			// value missing?
-			if (pchToken == NULL)
-			{
-			    continue;
-			}
-			dwVal = strtoul(pchToken, &pchTail, 0);
-			// invalid value?
-			if ((dwVal < 1) || (dwVal > 255))
-			{
-			    continue;
-			}
-			disk_format[iFmt].gap3_length = dwVal;
-
-			// filler byte
-			pchToken = strtok(NULL, chDelimiters);
-			// value missing?
-			if (pchToken == NULL)
-			{
-			    continue;
-			}
-			dwVal = strtoul(pchToken, &pchTail, 0);
-			disk_format[iFmt].filler_byte = (byte)dwVal;
-
-			for (int iSide = 0; iSide < (int)disk_format[iFmt].sides; iSide++)
-			{
-			    for (int iSector = 0; iSector < (int)disk_format[iFmt].sectors; iSector++)
-			    {
-				// sector ID
+				// number of tracks
 				pchToken = strtok(NULL, chDelimiters);
 				// value missing?
 				if (pchToken == NULL)
+				{
+					continue;
+				}
+
+		    	dword dwVal;
+				dwVal = strtoul(pchToken, &pchTail, 0);
+				// invalid value?
+				if ((dwVal < 1) || (dwVal > DSK_TRACKMAX))
+				{
+					continue;
+				}
+				disk_format[iFmt].tracks = dwVal;
+
+				// number of sides
+				pchToken = strtok(NULL, chDelimiters);
+				// value missing?
+				if (pchToken == NULL)
+				{
+					continue;
+				}
+				dwVal = strtoul(pchToken, &pchTail, 0);
+				// invalid value?
+				if ((dwVal < 1) || (dwVal > DSK_SIDEMAX))
+				{
+					continue;
+				}
+				disk_format[iFmt].sides = dwVal;
+
+				// number of sectors
+				pchToken = strtok(NULL, chDelimiters);
+				// value missing?
+				if (pchToken == NULL)
+				{
+					continue;
+				}
+				dwVal = strtoul(pchToken, &pchTail, 0);
+				// invalid value?
+				if ((dwVal < 1) || (dwVal > DSK_SECTORMAX))
+				{
+					continue;
+				}
+				disk_format[iFmt].sectors = dwVal;
+
+				// sector size as N value
+				pchToken = strtok(NULL, chDelimiters);
+				// value missing?
+				if (pchToken == NULL)
+				{
+					continue;
+				}
+				dwVal = strtoul(pchToken, &pchTail, 0);
+				// invalid value?
+				if ((dwVal < 1) || (dwVal > 6))
+				{
+					continue;
+				}
+				disk_format[iFmt].sector_size = dwVal;
+
+				// gap#3 length
+				pchToken = strtok(NULL, chDelimiters);
+				// value missing?
+				if (pchToken == NULL)
+				{
+					continue;
+				}
+				dwVal = strtoul(pchToken, &pchTail, 0);
+				// invalid value?
+				if ((dwVal < 1) || (dwVal > 255))
+				{
+					continue;
+				}
+				disk_format[iFmt].gap3_length = dwVal;
+
+				// filler byte
+				pchToken = strtok(NULL, chDelimiters);
+				// value missing?
+				if (pchToken == NULL)
+				{
+					continue;
+				}
+				dwVal = strtoul(pchToken, &pchTail, 0);
+				disk_format[iFmt].filler_byte = (byte)dwVal;
+
+				for (int iSide = 0; iSide < (int)disk_format[iFmt].sides; iSide++)
+				{
+					for (int iSector = 0; iSector < (int)disk_format[iFmt].sectors; iSector++)
+					{
+						// sector ID
+						pchToken = strtok(NULL, chDelimiters);
+						// value missing?
+						if (pchToken == NULL)
 				{
 				    dwVal = iSector+1;
 				}

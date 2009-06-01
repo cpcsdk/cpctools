@@ -46,7 +46,11 @@ class Renderer
 		unsigned int	_palette[20];
 
 	    public:
-		RenderFunction() : _scrPos(NULL)
+		RenderFunction() : 
+			_scrPos(NULL),
+			_backSurface(NULL),
+			_renderData(NULL),
+			_renderWidth(0)
 		{
 		    for( int i = 0; i < 20; i++)
 		    {

@@ -451,6 +451,7 @@ C_Bool c_inifile_set (char const * const s_section,
          *p_err = C_INIFILE_OPEN_ERR;
       }
 
+	  fclose(p_src);
       return false;
    }
 
@@ -1742,6 +1743,7 @@ C_Bool c_inifile_delete (char const * const s_section,
          *p_err = C_INIFILE_OPEN_ERR;
       }
 
+	  fclose(p_src);
       return false;
    }
 
