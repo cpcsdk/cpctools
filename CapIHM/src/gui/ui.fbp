@@ -5,6 +5,7 @@
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
         <property name="disconnect_events">1</property>
+        <property name="disconnect_mode">source_name</property>
         <property name="disconnect_python_events">0</property>
         <property name="encoding">UTF-8</property>
         <property name="event_generation">connect</property>
@@ -1549,7 +1550,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_A</property>
+                                                    <property name="id">CPC_Q</property>
                                                     <property name="label">A</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -1608,7 +1609,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_Z</property>
+                                                    <property name="id">CPC_W</property>
                                                     <property name="label">Z</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2139,7 +2140,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_PIPE</property>
+                                                    <property name="id">CPC_AT</property>
                                                     <property name="label">|^</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2198,7 +2199,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_LESS</property>
+                                                    <property name="id">CPC_LBRACKET</property>
                                                     <property name="label">&lt;*</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -2552,7 +2553,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_Q</property>
+                                                    <property name="id">CPC_A</property>
                                                     <property name="label">Q</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3083,7 +3084,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_M</property>
+                                                    <property name="id">CPC_COLON</property>
                                                     <property name="label">M</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3142,7 +3143,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_PERCENT</property>
+                                                    <property name="id">CPC_SEMICOLON</property>
                                                     <property name="label">%ù</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3201,7 +3202,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_GREATER</property>
+                                                    <property name="id">CPC_RBRACKET</property>
                                                     <property name="label">&gt;#</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3496,7 +3497,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_W</property>
+                                                    <property name="id">CPC_Z</property>
                                                     <property name="label">W</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3850,7 +3851,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_QUESTION</property>
+                                                    <property name="id">CPC_M</property>
                                                     <property name="label">?,</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3909,7 +3910,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_PERIOD</property>
+                                                    <property name="id">CPC_COMMA</property>
                                                     <property name="label">.;</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -3968,7 +3969,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_SLASH</property>
+                                                    <property name="id">CPC_PERIOD</property>
                                                     <property name="label">/:</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4027,7 +4028,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_PLUS</property>
+                                                    <property name="id">CPC_SLASH</property>
                                                     <property name="label">+=</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -4086,7 +4087,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_AT</property>
+                                                    <property name="id">CPC_BACKSLASH</property>
                                                     <property name="label">@\$</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5443,7 +5444,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_LBRACKET</property>
+                                                    <property name="id">CPC_MINUS</property>
                                                     <property name="label">[)</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -5502,7 +5503,7 @@
                                                     <property name="fg"></property>
                                                     <property name="font"></property>
                                                     <property name="hidden">0</property>
-                                                    <property name="id">CPC_UNDERSCORE</property>
+                                                    <property name="id">CPC_POWER</property>
                                                     <property name="label">_-</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
@@ -6342,7 +6343,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>

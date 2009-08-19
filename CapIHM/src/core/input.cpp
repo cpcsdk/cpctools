@@ -31,7 +31,7 @@
 #include <iostream>
 
 
-dword t_Input::cpc_kbd[149] =
+dword t_Input::cpc_kbd[86] =
 {
 		0x40,						// CPC_0
 		0x80,						// CPC_1
@@ -69,7 +69,6 @@ dword t_Input::cpc_kbd[149] =
 		0x77,						// CPC_x
 		0x53,						// CPC_y
 		0x87,						// CPC_z
-		0x35 | MOD_CPC_SHIFT,		// CPC_ASTERISK
 		0x32,						// CPC_AT
 		0x26,						// CPC_BACKSLASH
 		0x86,						// CPC_CAPSLOCK
@@ -82,13 +81,9 @@ dword t_Input::cpc_kbd[149] =
 		0x10,						// CPC_CUR_LEFT
 		0x01,						// CPC_CUR_RIGHT
 		0x00,						// CPC_CUR_UP
-		0x81 | MOD_CPC_SHIFT,		// CPC_DBLQUOTE
 		0x97,						// CPC_DEL
-		0x70 | MOD_CPC_SHIFT,		// CPC_DOLLAR
 		0x06,						// CPC_ENTER
-		0x31 | MOD_CPC_SHIFT,		// CPC_EQUAL
 		0x82,						// CPC_ESC
-		0x80 | MOD_CPC_SHIFT,		// CPC_EXCLAMATN
 		0x17,						// CPC_F0
 		0x15,						// CPC_F1
 		0x16,						// CPC_F2
@@ -100,32 +95,18 @@ dword t_Input::cpc_kbd[149] =
 		0x13,						// CPC_F8
 		0x03,						// CPC_F9
 		0x07,						// CPC_FPERIOD
-		0x37 | MOD_CPC_SHIFT,		// CPC_GREATER
-		0x71 | MOD_CPC_SHIFT,		// CPC_HASH
 		0x21,						// CPC_LBRACKET
-		0x21 | MOD_CPC_SHIFT,		// CPC_LCBRACE
-		0x50 | MOD_CPC_SHIFT,		// CPC_LEFTPAREN
-		0x47 | MOD_CPC_SHIFT,		// CPC_LESS
 		0x25,						// CPC_LSHIFT
 		0x31,						// CPC_MINUS
-		0x61 | MOD_CPC_SHIFT,		// CPC_PERCENT
 		0x37,						// CPC_PERIOD
-		0x32 | MOD_CPC_SHIFT,		// CPC_PIPE
-		0x34 | MOD_CPC_SHIFT,		// CPC_PLUS
-		0x30 | MOD_CPC_SHIFT,		// CPC_POUND
 		0x30,						// CPC_POWER
-		0x36 | MOD_CPC_SHIFT,		// CPC_QUESTION
-		0x51 | MOD_CPC_SHIFT,		// CPC_QUOTE
 		0x23,						// CPC_RBRACKET
-		0x23 | MOD_CPC_SHIFT,		// CPC_RCBRACE
 		0x22,						// CPC_RETURN
-		0x41 | MOD_CPC_SHIFT,		// CPC_RIGHTPAREN
 		0x25,						// CPC_RSHIFT
 		0x34,						// CPC_SEMICOLON
 		0x36,						// CPC_SLASH
 		0x57,						// CPC_SPACE
 		0x84,						// CPC_TAB
-		0x40 | MOD_CPC_SHIFT,		// CPC_UNDERSCORE
 		0x90,						// CPC_J0_UP
 		0x91,						// CPC_J0_DOWN
 		0x92,						// CPC_J0_LEFT

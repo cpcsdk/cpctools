@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 16 2009)
+// C++ code generated with wxFormBuilder (version Aug 20 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -517,8 +517,8 @@ class Memory : public wxDialog
 		~Memory();
 		void m_splitter1OnIdle( wxIdleEvent& )
 		{
-		m_splitter1->SetSashPosition( 300 );
-		m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
+			m_splitter1->SetSashPosition( 300 );
+			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
 		}
 		
 	
