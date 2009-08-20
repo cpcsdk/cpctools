@@ -241,9 +241,9 @@ void CapriceWindowImpl::OnRegister( wxCommandEvent& event)
     RegistersDialog->SetEmulator(emulator);
 }
 
-void CapriceWindowImpl::OnDebugMemory( wxCommandEvent& event ) 
+void CapriceWindowImpl::OnDebugMemory( wxCommandEvent& event )
 {
-	MemoryImpl* MemoryDialog = new MemoryImpl(this,emulator);
+	MemoryImpl* MemoryDialog = new MemoryImpl(this, emulator);
 	MemoryDialog -> Show(true);
 }
 
@@ -255,11 +255,45 @@ void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
 
 void CapriceWindowImpl::onMenuInput(wxCommandEvent& event)
 {
-    CapriceInputSettingsImpl* InputSettingsWindow = new CapriceInputSettingsImpl(this);
-    InputSettingsWindow->Show(true);
+	CapriceInputSettingsImpl* InputSettingsWindow
+		= new CapriceInputSettingsImpl(this);
+	InputSettingsWindow->m_notebook4->ChangeSelection(0);
+	InputSettingsWindow->Show(true);
 }
 
-// ============================= Various functions ===================================
+void CapriceWindowImpl::onMenuMemory(wxCommandEvent& event)
+{
+	CapriceInputSettingsImpl* InputSettingsWindow
+		= new CapriceInputSettingsImpl(this);
+	InputSettingsWindow->m_notebook4->ChangeSelection(1);
+	InputSettingsWindow->Show(true);
+}
+
+void CapriceWindowImpl::onMenuVideo(wxCommandEvent& event)
+{
+	CapriceInputSettingsImpl* InputSettingsWindow
+		= new CapriceInputSettingsImpl(this);
+	InputSettingsWindow->m_notebook4->ChangeSelection(2);
+	InputSettingsWindow->Show(true);
+}
+
+void CapriceWindowImpl::onMenuSound(wxCommandEvent& event)
+{
+	CapriceInputSettingsImpl* InputSettingsWindow
+		= new CapriceInputSettingsImpl(this);
+	InputSettingsWindow->m_notebook4->ChangeSelection(3);
+	InputSettingsWindow->Show(true);
+}
+
+void CapriceWindowImpl::onMenuMisc(wxCommandEvent& event)
+{
+	CapriceInputSettingsImpl* InputSettingsWindow
+		= new CapriceInputSettingsImpl(this);
+	InputSettingsWindow->m_notebook4->ChangeSelection(4);
+	InputSettingsWindow->Show(true);
+}
+
+// ============================= Various functions
 
 /**
  * Get the Caprice SDL panel

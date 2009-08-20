@@ -27,17 +27,19 @@
 #include <wx/button.h>
 #include <wx/gbsizer.h>
 #include <wx/textctrl.h>
+#include <wx/radiobut.h>
+#include <wx/statline.h>
+#include <wx/filepicker.h>
+#include <wx/checkbox.h>
+#include <wx/spinctrl.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
-#include <wx/checkbox.h>
 #include <wx/toolbar.h>
 #include <wx/listbook.h>
 #include <wx/listctrl.h>
-#include <wx/spinctrl.h>
 #include <wx/listbox.h>
 #include <wx/imaglist.h>
 #include <wx/statbmp.h>
-#include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/checklst.h>
 #include <wx/grid.h>
@@ -76,8 +78,11 @@ class CapriceWindow : public wxFrame
 		virtual void onLoadSNA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSaveSNA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExit2( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOpenConfigGeneral( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMenuInput( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMenuMemory( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMenuVideo( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMenuSound( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onMenuMisc( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFullScreen( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRun( wxCommandEvent& event ) { event.Skip(); }
@@ -106,8 +111,7 @@ class InputSettings : public wxDialog
 	private:
 	
 	protected:
-		wxNotebook* m_notebook4;
-		wxPanel* m_panel8;
+		wxPanel* m_panel_input;
 		wxStaticText* m_staticText63;
 		wxComboBox* m_comboBox1;
 		wxStaticText* m_staticText64;
@@ -194,6 +198,39 @@ class InputSettings : public wxDialog
 		wxTextCtrl* m_shiftKey;
 		wxStaticText* m_staticText69;
 		wxTextCtrl* m_ctrlKey;
+		wxPanel* m_panel_memory;
+		wxStaticText* m_staticText62;
+		wxRadioButton* RAMSize64;
+		wxRadioButton* RAMSize128;
+		wxRadioButton* RAMSize576;
+		wxStaticLine* m_staticline3;
+		wxStaticText* m_staticText71;
+		wxFilePickerCtrl* ROM0file;
+		wxFilePickerCtrl* ROM1file;
+		wxFilePickerCtrl* ROM2file;
+		wxFilePickerCtrl* ROM3file;
+		wxFilePickerCtrl* ROM4file;
+		wxFilePickerCtrl* ROM5file;
+		wxFilePickerCtrl* ROM6file;
+		wxFilePickerCtrl* ROM7file;
+		wxPanel* m_panel_video;
+		wxCheckBox* m_checkBox19;
+		wxStaticText* m_staticText76;
+		wxSpinCtrl* m_spinCtrl4;
+		wxStaticText* m_staticText761;
+		wxChoice* m_choice4;
+		wxButton* m_button76;
+		wxPanel* m_panel_sound;
+		wxRadioButton* m_radioBtn11;
+		wxRadioButton* m_radioBtn12;
+		wxStaticText* m_staticText75;
+		wxSpinCtrl* m_spinCtrl3;
+		wxRadioButton* m_radioBtn111;
+		wxRadioButton* m_radioBtn121;
+		wxPanel* m_panel_misc;
+		wxStaticText* m_staticText79;
+		wxChoice* m_choice5;
+		wxStaticText* m_staticText80;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1Save;
 		wxButton* m_sdbSizer1Apply;
@@ -207,8 +244,9 @@ class InputSettings : public wxDialog
 		
 	
 	public:
+		wxNotebook* m_notebook4;
 		
-		InputSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Input Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );
+		InputSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Caprice Reloaded Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );
 		~InputSettings();
 	
 };
@@ -521,30 +559,6 @@ class Memory : public wxDialog
 			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
 		}
 		
-	
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class ConfigDialog
-///////////////////////////////////////////////////////////////////////////////
-class ConfigDialog : public wxDialog 
-{
-	private:
-	
-	protected:
-		wxNotebook* m_notebook3;
-		wxPanel* m_panel7;
-		wxStaticText* m_staticText62;
-		wxTextCtrl* m_textCtrl44;
-		
-		// Virtual event handlers, overide them in your derived class
-		virtual void OnCloseC( wxCloseEvent& event ) { event.Skip(); }
-		
-	
-	public:
-		
-		ConfigDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Configuration"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
-		~ConfigDialog();
 	
 };
 

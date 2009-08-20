@@ -47,4 +47,6 @@ class CapriceInputSettingsImpl : public InputSettings
 		typedef std::map<uint16_t, CPC_Key> CPC_Keymap;
 		CPC_Keymap keymap;
 		CPC_Keymap::iterator iter;
+
+		wxButton* lastClickedButton;
 };

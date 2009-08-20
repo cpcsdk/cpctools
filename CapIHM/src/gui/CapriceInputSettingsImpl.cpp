@@ -12,7 +12,8 @@
 
 CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	InputSettings(WinID),
-	emulatorInputHandler(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator()->GetInput())
+	emulatorInputHandler(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator()->GetInput()),
+	lastClickedButton(NULL)
 {
 	std::ifstream file;
 	CPC_Key tmpk;
@@ -84,7 +85,14 @@ CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
 
 void CapriceInputSettingsImpl::onKeyClick(wxCommandEvent& event)
 {
-	m_keyName->SetLabel(dynamic_cast<wxButton*>(event.GetEventObject())->GetLabel());
+	if (lastClickedButton != NULL)
+		lastClickedButton->SetBackgroundColour(
+			wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+	lastClickedButton = dynamic_cast<wxButton*>(event.GetEventObject());
+
+	m_keyName->SetLabel(lastClickedButton->GetLabel());
+	lastClickedButton->SetBackgroundColour(
+		wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
 
 	iter = keymap.find(event.GetId());
 	if ( iter != keymap.end() )
@@ -131,14 +139,17 @@ void CapriceInputSettingsImpl::applySettings()
  */
 void CapriceInputSettingsImpl::saveKeymap()
 {
-	std::cout << "SAVING THE KEYMAP\n";
+	std::cout << "SAVING THE KEYMAP " << getKeymapFileNameSave() << std::endl;
 	std::ofstream file;
-	file.open( getKeymapFileNameSave());
+	file.open(getKeymapFileNameSave());
+
+	//TODO add check to see if file is really open !
 
 	for (CPC_Keymap::iterator iter = keymap.begin();iter!=keymap.end();iter++)
 	{
-		file << iter->first << " " << iter->second.stdKeyCode << " " << iter->second.shiftKeyCode 
-			<< " " << iter->second.ctrlKeyCode << std::endl;
+		file << iter->first << " " << iter->second.stdKeyCode << " "
+			<< iter->second.shiftKeyCode << " " << iter->second.ctrlKeyCode
+			<< std::endl;
 	}
 
 	file.close();
@@ -146,10 +157,73 @@ void CapriceInputSettingsImpl::saveKeymap()
 
 wxString CapriceInputSettingsImpl::keyCodeToName(int keycode)
 {
+	std::cout << keycode;
 	switch(keycode)
 	{
+		case WXK_BACK:
+			return _T("BACKSPACE");
+		case WXK_TAB:
+			return _T("TAB");
+		case WXK_SPACE:
+			return _T("SPACE");
+		case WXK_DELETE:
+			return _T("DELETE");
+		case WXK_RETURN:
+			return _T("RETURN");
 		case WXK_ESCAPE:
 			return _T("ESCAPE");
+		case WXK_SHIFT:
+			return _T("SHIFT");
+		case WXK_ALT:
+			return _T("ALT");
+		case WXK_CONTROL:
+			return _T("CONTROL");
+		case WXK_MENU:
+			return _T("MENU");
+		case WXK_PAUSE:
+			return _T("PAUSE");
+		case WXK_CAPITAL:
+			return _T("CAPS");
+		case WXK_HOME:
+			return _T("HOME");
+		case WXK_END:
+			return _T("END");
+		case WXK_LEFT:
+			return _T("LEFT");
+		case WXK_UP:
+			return _T("UP");
+		case WXK_RIGHT:
+			return _T("RIGHT");
+		case WXK_DOWN:
+			return _T("DOWN");
+		case WXK_INSERT:
+			return _T("INSERT");
+		case WXK_NUMPAD0:
+			return _T("Numpad 0");
+		case WXK_NUMPAD1:
+			return _T("Numpad 1");
+		case WXK_NUMPAD2:
+			return _T("Numpad 2");
+		case WXK_NUMPAD3:
+			return _T("Numpad 3");
+		case WXK_NUMPAD4:
+			return _T("Numpad 4");
+		case WXK_NUMPAD5:
+			return _T("Numpad 5");
+		case WXK_NUMPAD6:
+			return _T("Numpad 6");
+		case WXK_NUMPAD7:
+			return _T("Numpad 7");
+		case WXK_NUMPAD8:
+			return _T("Numpad 8");
+		case WXK_NUMPAD9:
+			return _T("Numpad 9");
+		case WXK_SCROLL:
+			return _T("Scroll Lock");
+		case WXK_PAGEUP:
+			return _T("Page Up");
+		case WXK_PAGEDOWN:
+			return _T("Page Down");
 		default:
 			return wxChar(keycode);
 	}

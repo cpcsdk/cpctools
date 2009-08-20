@@ -111,7 +111,7 @@ bool CapriceApp::OnInit()
 int CapriceApp::OnExit()
 {
 	delete emulator;
-	delete frame;
+	//delete frame;
 	SDL_Quit();
   	cout << "Quit" << endl ;
 #if CLI
