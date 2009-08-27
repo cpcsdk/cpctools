@@ -1002,7 +1002,6 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	
 	m_notebook2 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	wxSize m_notebook2ImageSize = wxSize( 2,-1 );
-	int m_notebook2Index = 0;
 	wxImageList* m_notebook2Images = new wxImageList( m_notebook2ImageSize.GetWidth(), m_notebook2ImageSize.GetHeight() );
 	m_notebook2->AssignImageList( m_notebook2Images );
 	wxBitmap m_notebook2Bitmap;

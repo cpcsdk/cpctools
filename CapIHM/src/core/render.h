@@ -47,10 +47,10 @@ class Renderer
 
 	    public:
 		RenderFunction() : 
-			_scrPos(NULL),
-			_backSurface(NULL),
+			_renderWidth(0),
 			_renderData(NULL),
-			_renderWidth(0)
+			_backSurface(NULL),
+			_scrPos(NULL)
 		{
 		    for( int i = 0; i < 20; i++)
 		    {

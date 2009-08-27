@@ -3,6 +3,11 @@ AC_INIT([CapriceReloaded], [5], [ramlaid@cpcscene.com])
 AM_INIT_AUTOMAKE([ -Wall ])
 #AC_CONFIG_SRCDIR(core/cap32.cpp)
 
+# Stupid SDL test failing when done after AC_LANG([C++]) if using -Werror
+SDL_VERSION=1.2.5
+AM_PATH_SDL($SDL_VERSION, :,
+		AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
+
 # Check for programs
 AC_PROG_CXX
 AC_LANG([C++])
@@ -108,11 +113,11 @@ AC_ARG_ENABLE(	debug,
 		enable_debug=yes)
 
 if test "$enable_debug" = yes ; then
-	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg"
-	CFLAGS="-O0 -Wall  -g -DDEBUG -pg"
+	CXXFLAGS="-O0 -Wall -Werror -g -DDEBUG -pg"
+	CFLAGS="-O0 -Wall  -Werror -g -DDEBUG -pg"
 else
-  CXXFLAGS=" -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s " 
-  CFLAGS="-O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  "
+  CXXFLAGS="-Wall -Werror -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
+  CFLAGS="-Wall -Werror -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
 fi
 AM_CONDITIONAL([RELEASE], [test  "enable_debug" = "no"])
 
@@ -226,9 +231,6 @@ AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)
 
 
-SDL_VERSION=1.2.5
-AM_PATH_SDL($SDL_VERSION, :,
-		AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
 
 AC_CHECK_HEADER([SDL/SDL_opengl.h], , AC_MSG_ERROR([SDL_opengl.h not found !]))
 

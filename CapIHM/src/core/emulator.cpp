@@ -582,126 +582,126 @@ bool Emulator::Init()
 
 void Emulator::Emulate()
 {
-    int iExitCondition;
-    bool bolDone;
+	int iExitCondition;
+	bool bolDone;
 
-    iExitCondition = EC_FRAME_COMPLETE;
-    bolDone = false;
-	
-    for (int i=0; i<100000; i++)
-    {
-        //Do the goto if needed
-        if ( goToAddress != -1 )
-        {
-          ExecGoTo();
-        }
+	iExitCondition = EC_FRAME_COMPLETE;
+	bolDone = false;
 
-        //Start emulation
-        bool exit = KeyboardEmulation();
-	
-	dwTicks = SDL_GetTicks();
-	// update FPS counter?
-	if (dwTicks >= dwTicksTargetFPS)
+	for (int i = 0; i<100000; i++)
 	{
-	    dwFPS = dwFrameCount;
-	    dwFrameCount = 0;
-	    // prep counter for the next run
-	    dwTicksTargetFPS = dwTicks + 1000;
-	}
-	
-	// limit speed !
-	if(_config.limit_speed)
-	{
-	    if (dwTicks < dwTicksTarget)
-	    {
-	    // delay emulation
-		if((dwTicksTarget - dwTicks) > 1)
+		//Do the goto if needed
+		if ( goToAddress != -1 )
 		{
-		    usleep(((dwTicksTarget - dwTicks)*950));
+			ExecGoTo();
 		}
-		continue;
-	    }
-	// prep counter for the next run
-	    dwTicksTarget = dwTicksTarget + dwTicksOffset;
-	}
-/*
-			// limit to original CPC speed?
-			if (_config.limit_speed)
+
+		//Start emulation
+		bool exit = KeyboardEmulation();
+
+		dwTicks = SDL_GetTicks();
+		// update FPS counter?
+		if (dwTicks >= dwTicksTargetFPS)
+		{
+			dwFPS = dwFrameCount;
+			dwFrameCount = 0;
+			// prep counter for the next run
+			dwTicksTargetFPS = dwTicks + 1000;
+		}
+
+		// limit speed !
+		if(_config.limit_speed)
+		{
+			if (dwTicks < dwTicksTarget)
 			{
-				if (_config.snd_enabled)
+				// delay emulation
+				if((dwTicksTarget - dwTicks) > 1)
 				{
-					if (iExitCondition == EC_SOUND_BUFFER)
-					{
-						// limit speed?
-						if (!dwSndBufferCopied)
-						{
-							// delay emulation
-							continue;
-						}
-						dwSndBufferCopied = 0;
-					}
+					usleep(((dwTicksTarget - dwTicks)*950));
 				}
-				else if (iExitCondition == EC_CYCLE_COUNT)
-				{
-					dwTicks = SDL_GetTicks();
-					// limit speed?
-					if (dwTicks < dwTicksTarget)
-					{
-						// delay emulation
-						continue;
-					}
-					// prep counter for the next run
-					dwTicksTarget = dwTicks + dwTicksOffset;
-				}
+				continue;
 			}
-*/
-	if (! _renderer.BeginDisplay(_vdu->GetScrLn()))
-	{
-	     continue;
+			// prep counter for the next run
+			dwTicksTarget = dwTicksTarget + dwTicksOffset;
+		}
+		/*
+		// limit to original CPC speed?
+		if (_config.limit_speed)
+		{
+		if (_config.snd_enabled)
+		{
+		if (iExitCondition == EC_SOUND_BUFFER)
+		{
+		// limit speed?
+		if (!dwSndBufferCopied)
+		{
+		// delay emulation
+		continue;
+		}
+		dwSndBufferCopied = 0;
+		}
+		}
+		else if (iExitCondition == EC_CYCLE_COUNT)
+		{
+		dwTicks = SDL_GetTicks();
+		// limit speed?
+		if (dwTicks < dwTicksTarget)
+		{
+		// delay emulation
+		continue;
+		}
+		// prep counter for the next run
+		dwTicksTarget = dwTicks + dwTicksOffset;
+		}
+		}
+		*/
+		if (! _renderer.BeginDisplay(_vdu->GetScrLn()))
+		{
+			continue;
+		}
+
+		//active if necessary trace mode
+		if (GetConfig().breakpoint)
+		{
+			_z80->trace = 1 ;
+		}
+		// run the emulation until an exit condition is met
+		iExitCondition = _z80->z80_execute();
+
+		//We have meet a breakpoint
+		if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
+		{
+			this->Breakpoint();
+			return;
+		}
+
+
+
+		// emulation finished rendering a complete frame?
+		if (iExitCondition == EC_FRAME_COMPLETE)
+		{
+			dwFrameCount++;
+
+			if (FPSDisplay)
+			{
+				char chStr[15];
+				sprintf(chStr, "%3dFPS %3d%%", (int)dwFPS, (int)dwFPS * 100 / 50);
+				_renderer.AddTextLocate(0, 0, chStr);
+			}
+
+			_renderer.EndDisplay(true);
+			return;
+		}
+		else
+		{
+			_renderer.EndDisplay(false);
+		}
+
+		if (exit)
+		{
+			break;
+		}
 	}
-
-  //active if necessary trace mode
-  if (GetConfig().breakpoint)
-  {
-    _z80->trace = 1 ;
-  }
-	// run the emulation until an exit condition is met
-	iExitCondition = _z80->z80_execute();
-
-  //We have meet a breakpoint
-  if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
-  {
-    this->Breakpoint();
-    return;
-  }
-
-
-
-	// emulation finished rendering a complete frame?
-	if (iExitCondition == EC_FRAME_COMPLETE)
-	{
-	    dwFrameCount++;
-
-	    if (FPSDisplay)
-	    {
-		char chStr[15];
-		sprintf(chStr, "%3dFPS %3d%%", (int)dwFPS, (int)dwFPS * 100 / 50);
-		_renderer.AddTextLocate(0, 0, chStr);
-	    }
-
-	    _renderer.EndDisplay(true);
-	    return;
-	}
-	else
-	{
-	    _renderer.EndDisplay(false);
-	}
-
-  if (exit)
-	{
-	    break;
-	}
-    }
 }
 
 #if 0
@@ -749,37 +749,37 @@ void Emulator::Loop()
 			}
 			// prep counter for the next run
 			dwTicksTarget = dwTicksTarget + dwTicksOffset;
-/*
+			/*
 			// limit to original CPC speed?
 			if (_config.limit_speed)
 			{
-				if (_config.snd_enabled)
-				{
-					if (iExitCondition == EC_SOUND_BUFFER)
-					{
-						// limit speed?
-						if (!dwSndBufferCopied)
-						{
-							// delay emulation
-							continue;
-						}
-						dwSndBufferCopied = 0;
-					}
-				}
-				else if (iExitCondition == EC_CYCLE_COUNT)
-				{
-					dwTicks = SDL_GetTicks();
-					// limit speed?
-					if (dwTicks < dwTicksTarget)
-					{
-						// delay emulation
-						continue;
-					}
-					// prep counter for the next run
-					dwTicksTarget = dwTicks + dwTicksOffset;
-				}
+			if (_config.snd_enabled)
+			{
+			if (iExitCondition == EC_SOUND_BUFFER)
+			{
+			// limit speed?
+			if (!dwSndBufferCopied)
+			{
+			// delay emulation
+			continue;
 			}
-*/
+			dwSndBufferCopied = 0;
+			}
+			}
+			else if (iExitCondition == EC_CYCLE_COUNT)
+			{
+			dwTicks = SDL_GetTicks();
+			// limit speed?
+			if (dwTicks < dwTicksTarget)
+			{
+			// delay emulation
+			continue;
+			}
+			// prep counter for the next run
+			dwTicksTarget = dwTicks + dwTicksOffset;
+			}
+			}
+			*/
 			if (! _renderer.BeginDisplay(_vdu->GetScrLn()))
 			{
 				continue;
@@ -788,13 +788,13 @@ void Emulator::Loop()
 			// run the emulation until an exit condition is met
 			iExitCondition = _z80->z80_execute();
 
-      //We have meet a breakpoint
-      if (iExitCondition == EC_BREAKPOINT)
-      {
-        Pause();
-        std::cout << "==================================" << endl ;
-        continue;
-      }
+			//We have meet a breakpoint
+			if (iExitCondition == EC_BREAKPOINT)
+			{
+				Pause();
+				std::cout << "==================================" << endl ;
+				continue;
+			}
 
 
 			// emulation finished rendering a complete frame?
@@ -819,7 +819,7 @@ void Emulator::Loop()
 
 		if (exit)
 		{
-		    bolDone = true;
+			bolDone = true;
 		}
 	}
 }
@@ -828,9 +828,9 @@ void Emulator::Loop()
 
 void Emulator::SaveScreenshot(string filename)
 {
-  std::cout << "[DEBUG] Save screenshot in " << filename << endl ;
-  IMG_SavePNG( 
-      filename.c_str(),
-      GetRenderer().GetVideoPlugin()->_publicVideo,
-      9);
+	std::cout << "[DEBUG] Save screenshot in " << filename << endl ;
+	IMG_SavePNG( 
+			filename.c_str(),
+			GetRenderer().GetVideoPlugin()->_publicVideo,
+			9);
 }

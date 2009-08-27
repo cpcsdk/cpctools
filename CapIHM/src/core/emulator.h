@@ -65,10 +65,10 @@ private:
 	t_Memory				*_cpcMemory;
 	unsigned int			_cycleCount;
 
-  /**
-   * Address to jump if required
-   */
-  unsigned int  goToAddress ;
+	/**
+	 * Address to jump if required
+	 */
+	int goToAddress ;
 
 public:
 	Emulator();
@@ -79,105 +79,105 @@ public:
 	void Emulate();
 
 
-  /**
-   * Pause the emulator
-   */
+	/**
+	 * Pause the emulator
+	 */
 	inline void Pause() { GetConfig().paused = 1; }
-  /**
-   * Pause the emulator due to a breakpoint
-   */
-  inline void Breakpoint() 
-  { 
-    Pause();
-    GetConfig().breakpoint = 1 ; 
-  }
-  /**
-   * Run the emulator
-   */
+	/**
+	 * Pause the emulator due to a breakpoint
+	 */
+	inline void Breakpoint() 
+	{ 
+		Pause();
+		GetConfig().breakpoint = 1 ; 
+	}
+	/**
+	 * Run the emulator
+	 */
 	inline void Run() 
-  { 
-    GetConfig().paused = 0; 
-    GetConfig().breakpoint = 0;
-  }
-  /**
-   * Run the emulator step by step
-   */
-  inline void Step()
-  {
-    GetConfig().paused = 0 ;
-  }
+	{ 
+		GetConfig().paused = 0; 
+		GetConfig().breakpoint = 0;
+	}
+	/**
+	 * Run the emulator step by step
+	 */
+	inline void Step()
+	{
+		GetConfig().paused = 0 ;
+	}
 
 
-  /**
-   * Set PC at memory
-   * @param memory adress where to jump
-   */
-  inline void GoTo(int memory)
-  {
-    goToAddress = memory ;
-  }
+	/**
+	 * Set PC at memory
+	 * @param memory adress where to jump
+	 */
+	inline void GoTo(int memory)
+	{
+		goToAddress = memory ;
+	}
 
- 
-  /**
-   * Reset computer
-   */
+
+	/**
+	 * Reset computer
+	 */
 	void emulator_reset(bool bolMF2Reset);
 
 	inline	t_CPC&			GetConfig()					{ return _config;		}
-  /**
-   * Get the renderer of the emulator
-   */
+	/**
+	 * Get the renderer of the emulator
+	 */
 	inline	Renderer&		GetRenderer()				{ return _renderer;		}
-  /**
-   * Get the input of the emulator
-   */
+	/**
+	 * Get the input of the emulator
+	 */
 	inline	t_Input&		GetInput()					{ return _input;		}
 
-  void SaveScreenshot(string );
+	void SaveScreenshot(string );
 
-  /**
-   * Get the processor
-   */
+	/**
+	 * Get the processor
+	 */
 	inline  t_z80regs&		GetZ80()					{ return *_z80;			}
-  /**
-   * Get the gate array
-   */
+	/**
+	 * Get the gate array
+	 */
 	inline  t_GateArray&	GetGateArray()				{ return *_gateArray;	}
-  /**
-   * Get the CRTC
-   */
+	/**
+	 * Get the CRTC
+	 */
 	inline  t_CRTC&			GetCRTC()					{ return *_crtc;		}
-  /**
-   * Get the Screen
-   */
+	/**
+	 * Get the Screen
+	 */
 	inline  t_VDU&			GetVDU()					{ return *_vdu;			}
-  /**
-   * Get the PSG
-   */
+	/**
+	 * Get the PSG
+	 */
 	inline  t_PSG&			GetPSG()					{ return *_psg;			}
-  /**
-   * Get the Memory
-   */
+	/**
+	 * Get the Memory
+	 */
 	inline  t_Memory&		GetMemory()					{ return *_cpcMemory;	}
-  /**
-   * Get the FDC
-   */
+	/**
+	 * Get the FDC
+	 */
 	inline  t_FDC&			GetFDC()					{ return *_fdc;			}
-  /**
-   * Get the ppi
-   */
+	/**
+	 * Get the ppi
+	 */
 	inline  t_PPI&			GetPPI()					{ return *_ppi;			}
-  /**
-   * Get the tape reader
-   */
+	/**
+	 * Get the tape reader
+	 */
 	inline  t_Tape&			GetTape()					{ return *_tape;		}
-  /**
-   * Get drive a
-   */
+	/**
+	 * Get drive a
+	 */
 	inline t_drive& GetDriveA() {return GetFDC().GetDriveA();}
-  /**
-   * Get drive b
-   */
+	/**
+	 * Get drive b
+	 */
 	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
 
 private:
@@ -185,41 +185,41 @@ private:
 
 	int emulator_init();
 
-  /**
-   * Shutdown the emu
-   */
+	/**
+	 * Shutdown the emu
+	 */
 	void emulator_shutdown();
 
 	int printer_start();
 	void printer_stop();
 
-  /**
-   * Set PC at goToAddress
-   */
-  inline void ExecGoTo()
-  {
-     std::cout << "Launch " << std::hex << goToAddress << std::endl ;
+	/**
+	 * Set PC at goToAddress
+	 */
+	inline void ExecGoTo()
+	{
+		std::cout << "Launch " << std::hex << goToAddress << std::endl ;
 
-    //TODO check if in amsdos execution mode
-    //Select bank
-    GetMemory().SetROMConfig(0);
-    GetMemory().ga_memory_manager();
+		//TODO check if in amsdos execution mode
+		//Select bank
+		GetMemory().SetROMConfig(0);
+		GetMemory().ga_memory_manager();
 
-    //Jump
-    GetZ80().PC.w.l = goToAddress & 0xffff ;
+		//Jump
+		GetZ80().PC.w.l = goToAddress & 0xffff ;
 
-    //Reset
-    goToAddress = -1 ;
-  }
+		//Reset
+		goToAddress = -1 ;
+	}
 
 
-  /**
-   * Operate the keyboard emulation
-   */
+	/**
+	 * Operate the keyboard emulation
+	 */
 	bool KeyboardEmulation();
 	bool FPSDisplay;
 
-	
+
 	dword dwTicks ;
 	dword dwFPS ;
 	dword dwFrameCount ;
