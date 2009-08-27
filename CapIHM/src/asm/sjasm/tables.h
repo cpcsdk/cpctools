@@ -79,7 +79,7 @@ class CFunctionTable {
 public:
 	CFunctionTable();
 	int Insert(char*, void(*) (void));
-	int insertd(char*, void(*) (void));
+	int insertd(const char*, void(*) (void));
 	/*int zoek(char*);*/
 	int zoek(char*, bool =0);
 	int Find(char*);
@@ -162,10 +162,10 @@ class CDefineTable {
 public:
 	CStringsList* DefArrayList; /* added */
 	void Init();
-	void Add(char*, char*, CStringsList* /*added*/);
+	void Add(char*, const char*, CStringsList* /*added*/);
 	char* Get(char*);
 	int FindDuplicate(char*);
-	int Replace(char*, char*);
+	int Replace(const char*, char*);
 	int Remove(char*);
 	void RemoveAll();
 	CDefineTable() {

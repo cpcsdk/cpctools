@@ -31,7 +31,7 @@
 #include "sjdefs.h"
 
 /* modified */
-int cmphstr(char*& p1, char* p2) {
+int cmphstr(char*& p1, const char* p2) {
 	unsigned int i = 0;
 	/* old:
 	if (isupper(*p1)) 

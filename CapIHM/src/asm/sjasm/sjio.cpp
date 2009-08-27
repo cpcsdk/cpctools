@@ -109,7 +109,7 @@ char hd[] = {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
 };
 
-void Error(char* fout, char* bd, int type) {
+void Error(const char* fout, char* bd, int type) {
 	char* ep = ErrorLine;
 	char* count;
 	int ln;
@@ -178,7 +178,7 @@ void Error(char* fout, char* bd, int type) {
 	}
 }
 
-void Warning(char* fout, char* bd, int type) {
+void Warning(const char* fout, char* bd, int type) {
 	char* ep = ErrorLine;
 	char* count;
 	int ln;
@@ -1447,7 +1447,7 @@ int SaveHobeta(char* fname, char* fhobname, int start, int length) {
 	return 1;
 }
 
-EReturn ReadFile(char* pp, char* err) {
+EReturn ReadFile(char* pp, const char* err) {
 	CStringsList* ol;
 	char* p;
 	while (RL_Readed > 0 || !feof(FP_Input)) {
@@ -1495,7 +1495,7 @@ EReturn ReadFile(char* pp, char* err) {
 }
 
 
-EReturn SkipFile(char* pp, char* err) {
+EReturn SkipFile(char* pp, const char* err) {
 	CStringsList* ol;
 	char* p;
 	int iflevel = 0;

@@ -481,7 +481,9 @@ void dirMODULE() {
 	if (ModuleName != NULL) {
 		delete[] ModuleName;
 	}
-	if (n = GetID(lp)) {
+
+	n = GetID(lp);
+	if (n != NULL) {
 		ModuleName = STRDUP(n);
 		if (ModuleName == NULL) {
 			Error("No enough memory!", 0, FATAL);
@@ -520,7 +522,7 @@ void dirEND() {
 	if (ParseExpression(lp, val)) {
 		if (val > 65535 || val < 0) {
 			char buf[LINEMAX];
-			SPRINTF1(buf, LINEMAX, "[END] Invalid address: %s", val);
+			SPRINTF1(buf, LINEMAX, "[END] Invalid address: %lX", val);
 			Error(buf, 0, CATCHALL); return;
 		}
 		StartAddress = val;
@@ -631,7 +633,9 @@ void dirINCHOB() {
 /* added */
 void dirINCTRD() {
 	aint val;
-	char* fnaam, * fnaamh, * fnaamh2;
+	char* fnaam = NULL;
+	char* fnaamh = NULL;
+	char* fnaamh2 = NULL;
 	char hobeta[12], hdr[17];
 	int offset = -1,length = -1,res,i;
 	FILE* ff;
@@ -829,7 +833,8 @@ void dirSAVEBIN() {
 /* added */
 void dirSAVEHOB() {
 	aint val;
-	char* fnaam, * fnaamh;
+	char* fnaam = NULL;
+	char* fnaamh = NULL;
 	int start = -1,length = -1;
 	bool exec = true;
 
@@ -917,8 +922,9 @@ void dirSAVETRD() {
 	}
 
 	aint val;
-	char* fnaam, * fnaamh;
-	int start = -1,length = -1;
+	char* fnaam = NULL;
+	char* fnaamh = NULL;
+	int start = -1, length = -1;
 
 	fnaam = GetFileName(lp);
 	if (comma(lp)) {
@@ -1505,7 +1511,7 @@ void dirDISPLAY() {
 						*(ep++) = ' ';
 					}
 					if (decprint == 1 || decprint == 2) {
-						SPRINTF1(ep, (int)(&e[0] + LINEMAX - ep), "%d", val);
+						SPRINTF1(ep, (int)(&e[0] + LINEMAX - ep), "%lu", val);
 						ep += strlen(ep);
 					}
 		  		  	decprint = 0;
@@ -1910,7 +1916,7 @@ void _lua_showerror() {
 
 	// print error and other actions
 	err = ErrorLine;
-	SPRINTF3(err, LINEMAX2, "%s(%lu): error: [LUA]%s", filename, ln, pos);
+	SPRINTF3(err, LINEMAX2, "%s(%d): error: [LUA]%s", filename, ln, pos);
 
 	if (!strchr(err, '\n')) {
 		STRCAT(err, LINEMAX2, "\n");
@@ -1926,7 +1932,7 @@ void _lua_showerror() {
 	ErrorCount++;
 
 	char count[25];
-	SPRINTF1(count, 25, "%lu", ErrorCount);
+	SPRINTF1(count, 25, "%d", ErrorCount);
 	DefineTable.Replace("_ERRORS", count);
 	// end Error(...)
 
@@ -1962,7 +1968,7 @@ void dirLUA() {
 	char *rp, *id;
 	char *buff = new char[32768];
 	char *bp=buff;
-	char size=0;
+	//char size=0;
 	int ln=0;
 	bool execute=false;
 
@@ -2048,9 +2054,11 @@ void dirLUA() {
 	delete[] buff;
 }
 
+
 void dirENDLUA() {
 	Error("[ENDLUA] End of lua script without script", 0);
 }
+
 
 /* modified */
 void dirINCLUDELUA() {
@@ -2079,19 +2087,18 @@ void dirINCLUDELUA() {
 	delete[] fnaam;
 }
 
-void dirDEVICE() {
-	char* id;
 
-	if (id = GetID(lp)) {
+void dirDEVICE() {
+	char* id = GetID(lp);
+	if (id != NULL) {
 		if (!SetDevice(id)) {
 			Error("[DEVICE] Invalid parameter", 0, CATCHALL);
 		}
 	} else {
 		Error("[DEVICE] Syntax error", 0, CATCHALL);
 	}
-
-
 }
+
 
 /* modified */
 void InsertDirectives() {

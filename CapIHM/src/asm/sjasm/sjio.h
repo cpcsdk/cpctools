@@ -44,8 +44,8 @@ extern FILE* FP_UnrealList, * FP_Input; /* added */
 void OpenDest(int); /* added from new SjASM 0.39g */
 void NewDest(char* newfilename, int mode); /* added from new SjASM 0.39g */
 int FileExists(char* filename); /* added from new SjASM 0.39g */
-void Error(char*, char*, int =PASS2);
-void Warning(char*, char*, int =PASS2);
+void Error(const char*, char*, int =PASS2);
+void Warning(const char*, char*, int =PASS2);
 void ListFile();
 void ListFileSkip(char*);
 void CheckPage(); /* added */
@@ -73,9 +73,9 @@ int SaveBinary(char* fname, int start, int length); /* added */
 int SaveHobeta(char* fname, char* fhobname, int start, int length); /* added */
 int ReadLine(bool SplitByColon=true);
 EReturn ReadFile();
-EReturn ReadFile(char* pp, char* err); /* added */
+EReturn ReadFile(char* pp, const char* err); /* added */
 EReturn SkipFile();
-EReturn SkipFile(char* pp, char* err); /* added */
+EReturn SkipFile(char* pp, const char* err); /* added */
 void NewDest(char* newfilename);
 void SeekDest(long, int); /* added from new SjASM 0.39g */
 int ReadFileToCStringsList(CStringsList*& f, char* end);

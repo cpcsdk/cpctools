@@ -53,7 +53,7 @@ int GetCharConst(char*& p, aint& val);
 int GetCharConstChar(char*& op, aint& val);
 int GetCharConstCharSingle(char*& op, aint& val); /* added */
 int GetBytes(char*& p, int e[], int add, int dc);
-int cmphstr(char*& p1, char* p2);
+int cmphstr(char*& p1, const char* p2);
 char* GetFileName(char*& p, bool convertslashes=false);
 char* GetHobetaFileName(char*& p); /* added */
 int needcomma(char*& p);

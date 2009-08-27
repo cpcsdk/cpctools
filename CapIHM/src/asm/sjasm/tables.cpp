@@ -695,7 +695,7 @@ int CFunctionTable::Insert(char* nname, void(*nfunp) (void)) {
 	return 1;
 }
 
-int CFunctionTable::insertd(char* nname, void(*nfunp) (void)) {
+int CFunctionTable::insertd(const char* nname, void(*nfunp) (void)) {
 	size_t len = strlen(nname) + 2;
 	char* buf = new char[len];
 	//if (buf == NULL) {
@@ -848,7 +848,7 @@ void CDefineTable::Init() {
 	}
 }
 
-void CDefineTable::Add(char* name, char* value, CStringsList* nss/*added*/) {
+void CDefineTable::Add(char* name, const char* value, CStringsList* nss/*added*/) {
 	if (FindDuplicate(name)) {
 		Error("Duplicate define", name);
 	}
@@ -881,7 +881,7 @@ int CDefineTable::FindDuplicate(char* name) {
 	return 0;
 }
 
-int CDefineTable::Replace(char* name, char* value) {
+int CDefineTable::Replace(const char* name, char* value) {
 	CDefineTableEntry* p = defs[*name];
 	while (p) {
 		if (!strcmp(name, p->name)) {
