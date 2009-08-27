@@ -131,15 +131,16 @@ public:
 	~CStringsList() {
 		if (next) delete next;
 	}
-	CStringsList(char*, CStringsList*);
+	CStringsList(const char*, CStringsList*);
 };
 
 class CDefineTableEntry {
 public:
-	char* name, * value;
+	char* name;
+	char* value;
 	CStringsList* nss; /* added */
 	CDefineTableEntry* next;
-	CDefineTableEntry(char*, char*, CStringsList* /*added*/, CDefineTableEntry*);
+	CDefineTableEntry(const char*, const char*, CStringsList* /*added*/, CDefineTableEntry*);
 };
 
 class CMacroDefineTable {
@@ -165,7 +166,7 @@ public:
 	void Add(char*, const char*, CStringsList* /*added*/);
 	char* Get(char*);
 	int FindDuplicate(char*);
-	int Replace(const char*, char*);
+	int Replace(const char*, const char*);
 	int Remove(char*);
 	void RemoveAll();
 	CDefineTable() {

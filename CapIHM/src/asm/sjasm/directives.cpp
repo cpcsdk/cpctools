@@ -541,7 +541,7 @@ void dirSIZE() {
 	if (pass == LASTPASS) {
 		return;
 	}
-	if (size != (aint) - 1) {
+	if (size != -1) {
 		Error("[SIZE] Multiple sizes?", 0); return;
 	}
 	size = val;

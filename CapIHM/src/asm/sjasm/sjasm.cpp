@@ -81,7 +81,9 @@ int MemoryCPage = 0, MemoryPagesCount = 0, StartAddress = 0;
 aint MemorySize = 0;
 int macronummer = 0, lijst = 0, reglenwidth = 0, synerr = 1;
 aint CurAddress = 0, AddressOfMAP = 0, CurrentGlobalLine = 0, CurrentLocalLine = 0, CompiledCurrentLine = 0;
-aint destlen = 0, size = (aint)-1,PreviousErrorLine = (aint)-1, maxlin = 0, comlin = 0;
+aint PreviousErrorLine = (aint)-1, maxlin = 0, comlin = 0;
+int size = -1;
+int destlen = 0;
 char* CurrentDirectory=NULL;
 
 void (*GetCPUInstruction)(void);
@@ -130,7 +132,7 @@ void InitPass(int p) {
 		delete[] LastParsedLabel;
 	}
 	LastParsedLabel = NULL;
-	vorlabp = "_";
+	strcpy(vorlabp, "_");
 	macrolabp = NULL;
 	listmacro = 0;
 	pass = p;
@@ -284,7 +286,7 @@ int main(int argc, char **argv) {
 	char buf[MAX_PATH];
 	int base_encoding; /* added */
 	char* p;
-	char* logo = "SjASMPlus Z80 Cross-Assembler v1.07 RC7 (build 02-04-2008)";
+	const char* logo = "SjASMPlus Z80 Cross-Assembler v1.07 RC7 + CPCSDK patches";
 	int i = 1;
 
 	if (argc == 1) {

@@ -362,7 +362,8 @@ int CLabelTable::Insert(char* nname, aint nvalue, bool undefined = false, bool I
 	// Find label in label table
 	int tr, htr;
 	tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((LabelTable[htr].name), nname)) {
 			/*if (LabelTable[htr].IsDEFL) {
 							_COUT "A" _CMDL LabelTable[htr].value _ENDL;
@@ -403,7 +404,8 @@ int CLabelTable::Insert(char* nname, aint nvalue, bool undefined = false, bool I
 int CLabelTable::Update(char* nname, aint nvalue) {
 	int tr, htr, otr;
 	otr = tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((LabelTable[htr].name), nname)) {
 			LabelTable[htr].value = nvalue;
 			return 1;
@@ -421,7 +423,8 @@ int CLabelTable::Update(char* nname, aint nvalue) {
 int CLabelTable::GetValue(char* nname, aint& nvalue) {
 	int tr, htr, otr;
 	otr = tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((LabelTable[htr].name), nname)) {
 			if (LabelTable[htr].used == -1 && pass != LASTPASS)
 			{
@@ -457,7 +460,8 @@ int CLabelTable::GetValue(char* nname, aint& nvalue) {
 int CLabelTable::Find(char* nname) {
 	int tr, htr, otr;
 	otr = tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((LabelTable[htr].name), nname)) {
 			if (LabelTable[htr].page == -1) {
 				return 0;
@@ -478,7 +482,8 @@ int CLabelTable::Find(char* nname) {
 int CLabelTable::IsUsed(char* nname) {
 	int tr, htr, otr;
 	otr = tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((LabelTable[htr].name), nname)) {
 			if (LabelTable[htr].used > 0) {
 				return 1;
@@ -499,7 +504,8 @@ int CLabelTable::IsUsed(char* nname) {
 int CLabelTable::Remove(char* nname) {
 	int tr, htr, otr;
 	otr = tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((LabelTable[htr].name), nname)) {
 			*LabelTable[htr].name = 0;
 			LabelTable[htr].value = 0;
@@ -535,7 +541,8 @@ int CLabelTable::Hash(char* s) {
 	unsigned int h = 0,g;
 	for (; *ss != '\0'; ss++) {
 		h = (h << 4) + *ss;
-		if (g = h & 0xf0000000) {
+		g = h & 0xf0000000;
+		if (g != 0) {
 			h ^= g >> 24; h ^= g;
 		}
 	}
@@ -655,7 +662,8 @@ int CFunctionTable::Insert(char* nname, void(*nfunp) (void)) {
 	}
 	int tr, htr;
 	tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((funtab[htr].name), nname)) {
 			return 0;
 		} else if (++tr >= FUNTABSIZE) {
@@ -671,13 +679,14 @@ int CFunctionTable::Insert(char* nname, void(*nfunp) (void)) {
 	++NextLocation;
 
 	STRCPY(p = temp, LINEMAX, nname);
-	while (*p = (char) toupper(*p)) { ++p; }
+	while ((*p = (char) toupper(*p))) { ++p; }
 
 	if (NextLocation >= FUNTABSIZE * 2 / 3) {
 		_COUT "Functions Table is full" _ENDL; ExitASM(1);
 	}
 	tr = Hash(temp);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((funtab[htr].name), temp)) {
 			return 0;
 		} else if (++tr >= FUNTABSIZE) {
@@ -713,7 +722,8 @@ int CFunctionTable::insertd(const char* nname, void(*nfunp) (void)) {
 int CFunctionTable::zoek(char* nname, bool bol) {
 	int tr, htr, otr;
 	otr = tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((funtab[htr].name), nname)) {
 			if (bol && ((sizeof(nname) == 3 && (!strcmp("END", nname) || !strcmp("end", nname))) || (sizeof(nname) == 4 && (!strcmp(".END", nname) || !strcmp(".end", nname))))) {
 				return 0;
@@ -734,7 +744,8 @@ int CFunctionTable::zoek(char* nname, bool bol) {
 int CFunctionTable::Find(char* nname) {
 	int tr, htr, otr;
 	otr = tr = Hash(nname);
-	while (htr = HashTable[tr]) {
+	while (HashTable[tr]) {
+		htr = HashTable[tr];
 		if (!strcmp((funtab[htr].name), nname)) {
 			return 1;
 		}
@@ -822,8 +833,8 @@ aint CLocalLabelTable::zoekb(aint nnum) {
 	return (aint) - 1;
 }
 
-CDefineTableEntry::CDefineTableEntry(char* nname, char* nvalue, CStringsList* nnss/*added*/, CDefineTableEntry* nnext) {
-	char* s1, * s2;
+CDefineTableEntry::CDefineTableEntry(const char* nname, const char* nvalue, CStringsList* nnss/*added*/, CDefineTableEntry* nnext) {
+	char* s1;
 	name = STRDUP(nname);
 	if (name == NULL) {
 		Error("No enough memory!", 0, FATAL);
@@ -832,7 +843,8 @@ CDefineTableEntry::CDefineTableEntry(char* nname, char* nvalue, CStringsList* nn
 	if (value == NULL) {
 		Error("No enough memory!", 0, FATAL);
 	}
-	s1 = value; s2 = nvalue; SkipBlanks(s2);
+	const char* s2 = nvalue;
+	s1 = value; SkipBlanks(s2);
 	while (*s2 && *s2 != '\n' && *s2 != '\r') {
 		*s1 = *s2; ++s1; ++s2;
 	} 
@@ -852,11 +864,11 @@ void CDefineTable::Add(char* name, const char* value, CStringsList* nss/*added*/
 	if (FindDuplicate(name)) {
 		Error("Duplicate define", name);
 	}
-	defs[*name] = new CDefineTableEntry(name, value, nss, defs[*name]);
+	defs[(int)*name] = new CDefineTableEntry(name, value, nss, defs[(int)*name]);
 }
 
 char* CDefineTable::Get(char* name) {
-	CDefineTableEntry* p = defs[*name];
+	CDefineTableEntry* p = defs[(int)*name];
 	DefArrayList = 0;
 	while (p) {
 		if (!strcmp(name, p->name)) {
@@ -871,7 +883,7 @@ char* CDefineTable::Get(char* name) {
 }
 
 int CDefineTable::FindDuplicate(char* name) {
-	CDefineTableEntry* p = defs[*name];
+	CDefineTableEntry* p = defs[(int)*name];
 	while (p) {
 		if (!strcmp(name, p->name)) {
 			return 1;
@@ -881,24 +893,26 @@ int CDefineTable::FindDuplicate(char* name) {
 	return 0;
 }
 
-int CDefineTable::Replace(const char* name, char* value) {
-	CDefineTableEntry* p = defs[*name];
+int CDefineTable::Replace(const char* name, const char* value) {
+	CDefineTableEntry* p = defs[(int)*name];
 	while (p) {
 		if (!strcmp(name, p->name)) {
-			p->value = value;
+			free(p->value);
+			p->value = strdup(value);
 			return 0;
 		}
 		p = p->next;
 	}
-	defs[*name] = new CDefineTableEntry(name, value, 0, defs[*name]);
+	defs[(int)*name] = new CDefineTableEntry(name, value, 0, defs[(int)*name]);
 	return 1;
 }
 
 int CDefineTable::Remove(char* name) {
-	CDefineTableEntry* p = defs[*name];
+	CDefineTableEntry* p = defs[(int)*name];
 	CDefineTableEntry* p2 = NULL;
 	while (p) {
 		if (!strcmp(name, p->name)) {
+			free(p->value);
 			if (p2 != NULL) {
 				p2->next = p->next;
 			} else {
@@ -933,7 +947,7 @@ void CMacroDefineTable::Init() {
 
 void CMacroDefineTable::AddMacro(char* naam, char* vervanger) {
 	defs = new CDefineTableEntry(naam, vervanger, 0, defs);
-	used[*naam] = 1;
+	used[(int)*naam] = 1;
 }
 
 CDefineTableEntry* CMacroDefineTable::getdefs() {
@@ -946,7 +960,7 @@ void CMacroDefineTable::setdefs(CDefineTableEntry* ndefs) {
 
 char* CMacroDefineTable::getverv(char* name) {
 	CDefineTableEntry* p = defs;
-	if (!used[*name]) {
+	if (!used[(int)*name]) {
 		return NULL;
 	}
 	while (p) {
@@ -960,7 +974,7 @@ char* CMacroDefineTable::getverv(char* name) {
 
 int CMacroDefineTable::FindDuplicate(char* name) {
 	CDefineTableEntry* p = defs;
-	if (!used[*name]) {
+	if (!used[(int)*name]) {
 		return 0;
 	}
 	while (p) {
@@ -972,7 +986,7 @@ int CMacroDefineTable::FindDuplicate(char* name) {
 	return 0;
 }
 
-CStringsList::CStringsList(char* nstring, CStringsList* nnext) {
+CStringsList::CStringsList(const char* nstring, CStringsList* nnext) {
 	string = STRDUP(nstring);
 	//if (string == NULL) {
 	//	Error("No enough memory!", 0, FATAL);
@@ -993,7 +1007,7 @@ void CMacroTable::Init() {
 
 int CMacroTable::FindDuplicate(char* naam) {
 	CMacroTableEntry* p = macs;
-	if (!used[*naam]) {
+	if (!used[(int)*naam]) {
 		return 0;
 	}
 	while (p) {
@@ -1019,7 +1033,7 @@ void CMacroTable::Add(char* nnaam, char*& p) {
 		Error("No enough memory!", 0, FATAL);
 	}
 	macs = new CMacroTableEntry(macroname/*nnaam*/, macs);
-	used[*macroname/*nnaam*/] = 1;
+	used[(int)*macroname/*nnaam*/] = 1;
 	SkipBlanks(p);
 	while (*p) {
 		if (!(n = GetID(p))) {
@@ -1052,7 +1066,7 @@ int CMacroTable::Emit(char* naam, char*& p) {
 	CMacroTableEntry* m = macs;
 	CDefineTableEntry* odefs;
 	int olistmacro, olijst;
-	if (!used[*naam]) {
+	if (!used[(int)*naam]) {
 		return 0;
 	}
 	while (m) {
@@ -1455,11 +1469,11 @@ CStructure* CStructureTable::Add(char* naam, int no, int idx, int gl) {
 	if (FindDuplicate(sp)) {
 		Error("Duplicate structure name", naam, PASS1);
 	}
-	strs[*sp] = new CStructure(naam, sp, idx, 0, gl, strs[*sp]);
+	strs[(int)*sp] = new CStructure(naam, sp, idx, 0, gl, strs[(int)*sp]);
 	if (no) {
-		strs[*sp]->AddMember(new CStructureEntry2(0, no, 0, SMEMBBLOCK));
+		strs[(int)*sp]->AddMember(new CStructureEntry2(0, no, 0, SMEMBBLOCK));
 	}
-	return strs[*sp];
+	return strs[(int)*sp];
 }
 
 CStructure* CStructureTable::zoek(char* naam, int gl) {
@@ -1472,14 +1486,14 @@ CStructure* CStructureTable::zoek(char* naam, int gl) {
 	//sp = STRCAT(sn, LINEMAX, naam); //mmm
 	STRCAT(sn, LINEMAX, naam);
 	sp = sn;
-	CStructure* p = strs[*sp];
+	CStructure* p = strs[(int)*sp];
 	while (p) {
 		if (!strcmp(sp, p->id)) {
 			return p;
 		} p = p->next;
 	}
 	if (!gl && ModuleName) {
-		sp += 1 + strlen(ModuleName); p = strs[*sp];
+		sp += 1 + strlen(ModuleName); p = strs[(int)*sp];
 		while (p) {
 			if (!strcmp(sp, p->id)) {
 				return p;
@@ -1490,7 +1504,7 @@ CStructure* CStructureTable::zoek(char* naam, int gl) {
 }
 
 int CStructureTable::FindDuplicate(char* naam) {
-	CStructure* p = strs[*naam];
+	CStructure* p = strs[(int)*naam];
 	while (p) {
 		if (!strcmp(naam, p->naam)) {
 			return 1;

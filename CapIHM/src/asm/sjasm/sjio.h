@@ -78,7 +78,7 @@ EReturn SkipFile();
 EReturn SkipFile(char* pp, const char* err); /* added */
 void NewDest(char* newfilename);
 void SeekDest(long, int); /* added from new SjASM 0.39g */
-int ReadFileToCStringsList(CStringsList*& f, char* end);
+int ReadFileToCStringsList(CStringsList*& f, const char* end);
 void WriteExp(char* n, aint v);
 
 //eof sjio.h

@@ -101,6 +101,12 @@ void SkipBlanks(char*& p) {
 	}
 }
 
+void SkipBlanks(const char*& p) {
+	while (*p && *p <= ' ') {
+		++p;
+	}
+}
+
 /* added */
 void SkipParam(char*& p) {
 	SkipBlanks(p);
@@ -298,8 +304,9 @@ int need(char*& p, char c) {
 	++p; return 1;
 }
 
-int needa(char*& p, char* c1, int r1, char* c2, int r2, char* c3, int r3) {
-	//  SkipBlanks(p);
+int needa(char*& p, const char* c1, int r1, char* c2, int r2, const char* c3,
+	int r3) {
+	// SkipBlanks(p);
 	if (!isalpha((unsigned char) * p)) {
 		return 0;
 	}
@@ -315,7 +322,7 @@ int needa(char*& p, char* c1, int r1, char* c2, int r2, char* c3, int r3) {
 	return 0;
 }
 
-int need(char*& p, char* c) {
+int need(char*& p, const char* c) {
 	SkipBlanks(p);
 	while (*c) {
 		if (*p != *c) {

@@ -135,7 +135,7 @@ void Error(const char* fout, char* bd, int type) {
 	++ErrorCount;
 
 	count = new char[25];
-	SPRINTF1(count, 25, "%lu", ErrorCount);
+	SPRINTF1(count, 25, "%d", ErrorCount);
 	DefineTable.Replace("_ERRORS", count);
 
 	/*SPRINTF3(ep, LINEMAX2, "%s line %lu: %s", filename, CurrentLocalLine, fout);
@@ -156,7 +156,7 @@ void Error(const char* fout, char* bd, int type) {
 		} else {
 			ln = CurrentLocalLine;
 		}
-		SPRINTF3(ep, LINEMAX2, "%s(%lu): error: %s", filename, ln, fout);
+		SPRINTF3(ep, LINEMAX2, "%s(%d): error: %s", filename, ln, fout);
 	}
 
 	if (bd) {
@@ -193,7 +193,7 @@ void Warning(const char* fout, char* bd, int type) {
 
 	++WarningCount;
 	count = new char[25];
-	SPRINTF1(count, 25, "%lu", WarningCount);
+	SPRINTF1(count, 25, "%d", WarningCount);
 	DefineTable.Replace("_WARNINGS", count);
 	
 	if (pass > LASTPASS) {
@@ -206,7 +206,7 @@ void Warning(const char* fout, char* bd, int type) {
 		} else {
 			ln = CurrentLocalLine;
 		}
-		SPRINTF3(ep, LINEMAX2, "%s(%lu): warning: %s", filename, ln, fout);
+		SPRINTF3(ep, LINEMAX2, "%s(%d): warning: %s", filename, ln, fout);
 	}
 
 	if (bd) {
@@ -501,7 +501,7 @@ void CheckPage() {
 	MemoryPointer = MemoryRAM + addadr;*/
 
 	CDeviceSlot* S;
-	for (int i=0;i<Device->SlotsCount;i++) {
+	for (unsigned int i = 0; i<Device->SlotsCount; i++) {
 		S = Device->GetSlot(i);
 		if (CurAddress >= S->Address && ((CurAddress < 65536 && CurAddress < S->Address + S->Size) || (CurAddress >= 65536 && CurAddress <= S->Address + S->Size))) {
 			if (PseudoORG) {
@@ -537,7 +537,7 @@ void Emit(int byte) {
 					Error(buf, 0, FATAL);
 				}
         STORE_BYTE(byte)
-				if ((MemoryPointer - Page->RAM) >= Page->Size) {
+				if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 					++adrdisp; ++CurAddress;
 					CheckPage();
 					return;
@@ -557,7 +557,7 @@ void Emit(int byte) {
 			/*	if (CurAddress > 0xFFFE || (CurAddress > 0x7FFE && CurAddress < 0x8001) || (CurAddress > 0xBFFE && CurAddress < 0xC001)) {
 					_COUT CurAddress _ENDL;
 				}*/
-				if ((MemoryPointer - Page->RAM) >= Page->Size) {
+				if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 					++CurAddress; 
 					CheckPage();
 					return;
@@ -635,7 +635,7 @@ void EmitBlock(aint byte, aint len, bool nulled) {
 					} else {
 						MemoryPointer++;
 					}
-					if ((MemoryPointer - Page->RAM) >= Page->Size) {
+					if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 						++adrdisp; ++CurAddress;
 						CheckPage(); continue;
 					}
@@ -651,7 +651,7 @@ void EmitBlock(aint byte, aint len, bool nulled) {
 					} else {
 						MemoryPointer++;
 					}
-					if ((MemoryPointer - Page->RAM) >= Page->Size) {
+					if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 						++CurAddress;
 						CheckPage(); continue;
 					}
@@ -752,7 +752,7 @@ void BinIncFile(char* fname, int offset, int len) {
 							Error(buf, 0, FATAL);
 						}
 						*(MemoryPointer++) = *bp;
-						if ((MemoryPointer - Page->RAM) >= Page->Size) {
+						if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 							++adrdisp; ++CurAddress;
 							CheckPage(); continue;
 						}
@@ -763,7 +763,7 @@ void BinIncFile(char* fname, int offset, int len) {
 							Error(buf, 0, FATAL);
 						}
 						*(MemoryPointer++) = *bp;
-						if ((MemoryPointer - Page->RAM) >= Page->Size) {
+						if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 							++CurAddress;
 							CheckPage(); continue;
 						}
@@ -800,7 +800,7 @@ void BinIncFile(char* fname, int offset, int len) {
 								Error("RAM limit exceeded", 0, FATAL);
 							}
 							*(MemoryPointer++) = (char) WriteBuffer[leng++];
-							if ((MemoryPointer - Page->RAM) >= Page->Size) {
+							if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 								++adrdisp; ++CurAddress;
 								CheckPage();
 							} else {
@@ -811,7 +811,7 @@ void BinIncFile(char* fname, int offset, int len) {
 								Error("RAM limit exceeded", 0, FATAL);
 							}
 							*(MemoryPointer++) = (char) WriteBuffer[leng++];
-							if ((MemoryPointer - Page->RAM) >= Page->Size) {
+							if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 								++CurAddress;
 								CheckPage();
 							} else {
@@ -1034,7 +1034,7 @@ void ReadBufLine(bool Parse, bool SplitByColon) {
 		rlpbuf = rlbuf;
 	}
 	//for end line
-	if (feof(FP_Input) && RL_Readed <= 0 && line) {
+	if (feof(FP_Input) && RL_Readed <= 0) {
 		if (rlnewline) {
 			CurrentLocalLine++;
 			CompiledCurrentLine++;
@@ -1171,7 +1171,7 @@ void Close() {
 	//}
 }
 
-int SaveRAM(FILE* ff, int start, int length) {
+int SaveRAM(FILE* ff, unsigned int start, unsigned int length) {
 	//unsigned int addadr = 0,save = 0;
 	aint save = 0;
 
@@ -1187,10 +1187,10 @@ int SaveRAM(FILE* ff, int start, int length) {
 	}
 
 	CDeviceSlot* S;
-	for (int i=0;i<Device->SlotsCount;i++) {
+	for (unsigned int i = 0; i<Device->SlotsCount; i++) {
 		S = Device->GetSlot(i);
-		if (start >= S->Address  && start < S->Address + S->Size) {
-			if (length < S->Size - (start - S->Address)) {
+		if (start >= S->Address && start < S->Address + S->Size) {
+			if (length < S->Size + S->Address - start) {
 				save = length;
 			} else {
 				save = S->Size - (start - S->Address);
@@ -1293,7 +1293,7 @@ unsigned char MemGetByte(unsigned int address) {
 	}
 
 	CDeviceSlot* S;
-	for (int i=0;i<Device->SlotsCount;i++) {
+	for (unsigned int i = 0; i<Device->SlotsCount; i++) {
 		S = Device->GetSlot(i);
 		if (address >= S->Address  && address < S->Address + S->Size) {
 			return S->Page->RAM[address - S->Address];
@@ -1569,7 +1569,7 @@ int ReadLine(bool SplitByColon) {
 	return res;
 }
 
-int ReadFileToCStringsList(CStringsList*& f, char* end) {
+int ReadFileToCStringsList(CStringsList*& f, const char* end) {
 	CStringsList* s,* l = NULL;
 	char* p;
 	f = NULL;

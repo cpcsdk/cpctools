@@ -72,8 +72,8 @@ extern int adrdisp, PseudoORG; /* added for spectrum mode */
 extern char* MemoryRAM, * MemoryPointer; /* added for spectrum ram */
 extern int MemoryCPage, MemoryPagesCount, StartAddress;
 extern aint MemorySize;
-extern int macronummer, lijst, reglenwidth, synerr;
-extern aint CurAddress, AddressOfMAP, CurrentGlobalLine, CurrentLocalLine, CompiledCurrentLine, destlen, size, PreviousErrorLine, maxlin, comlin;
+extern int macronummer, lijst, reglenwidth, synerr, size, destlen;
+extern aint CurAddress, AddressOfMAP, CurrentGlobalLine, CurrentLocalLine, CompiledCurrentLine, PreviousErrorLine, maxlin, comlin;
 
 extern void (*GetCPUInstruction)(void);
 extern char* ModuleName, * vorlabp, * macrolabp, * LastParsedLabel;
