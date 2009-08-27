@@ -1364,7 +1364,7 @@ int SaveBinary(char* fname, int start, int length) {
 		length = 0x10000 - start;
 	}
 	//_COUT "Start: " _CMDL start _CMDL " Length: " _CMDL length _ENDL;
-	if (!SaveRAM(ff, start, length)) {
+	if (!SaveRAM(ff, (unsigned)start, (unsigned)length)) {
 		fclose(ff);return 0;
 	}
 
@@ -1439,7 +1439,7 @@ int SaveHobeta(char* fname, char* fhobname, int start, int length) {
 		fclose(ff);return 0;
 	}
 
-	if (!SaveRAM(ff, start, length)) {
+	if (!SaveRAM(ff, (unsigned)start, (unsigned)length)) {
 		fclose(ff);return 0;
 	}
 

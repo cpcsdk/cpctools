@@ -66,7 +66,7 @@ void PrintHEX16(char*& p, aint h); /* added */
 void PrintHEXAlt(char*& p, aint h); /* added */
 char* GetPath(char* fname, TCHAR** filenamebegin); /* added */
 void BinIncFile(char* fname, int offset, int length);
-int SaveRAM(FILE*, int, int);
+int SaveRAM(FILE*, unsigned int, unsigned int);
 unsigned char MemGetByte(unsigned int address); /* added */
 unsigned int MemGetWord(unsigned int address); /* added */
 int SaveBinary(char* fname, int start, int length); /* added */

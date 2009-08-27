@@ -78,7 +78,7 @@ public:
 class CFunctionTable {
 public:
 	CFunctionTable();
-	int Insert(char*, void(*) (void));
+	int Insert(const char*, void(*) (void));
 	int insertd(const char*, void(*) (void));
 	/*int zoek(char*);*/
 	int zoek(char*, bool =0);
@@ -86,7 +86,7 @@ public:
 private:
 	int HashTable[LABTABSIZE], NextLocation;
 	CFunctionTableEntry funtab[LABTABSIZE];
-	int Hash(char*);
+	int Hash(const char*);
 };
 
 class CLocalLabelTableEntry {

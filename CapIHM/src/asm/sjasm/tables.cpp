@@ -655,7 +655,7 @@ CFunctionTable::CFunctionTable() {
 	NextLocation = 1;
 }
 
-int CFunctionTable::Insert(char* nname, void(*nfunp) (void)) {
+int CFunctionTable::Insert(const char* nname, void(*nfunp) (void)) {
 	char* p;
 	if (NextLocation >= FUNTABSIZE * 2 / 3) {
 		_COUT "Functions Table is full" _ENDL; ExitASM(1);
@@ -759,8 +759,8 @@ int CFunctionTable::Find(char* nname) {
 	return 0;
 }
 
-int CFunctionTable::Hash(char* s) {
-	char* ss = s;
+int CFunctionTable::Hash(const char* s) {
+	const char* ss = s;
 	unsigned int h = 0;
 	for (; *ss != '\0'; ss++) {
 		h = (h << 3) + *ss;

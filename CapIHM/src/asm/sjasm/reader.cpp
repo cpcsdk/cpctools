@@ -304,7 +304,7 @@ int need(char*& p, char c) {
 	++p; return 1;
 }
 
-int needa(char*& p, const char* c1, int r1, char* c2, int r2, const char* c3,
+int needa(char*& p, const char* c1, int r1, const char* c2, int r2, const char* c3,
 	int r3) {
 	// SkipBlanks(p);
 	if (!isalpha((unsigned char) * p)) {

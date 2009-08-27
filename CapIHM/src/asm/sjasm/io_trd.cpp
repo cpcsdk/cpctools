@@ -150,7 +150,7 @@ int TRD_AddFile(char* fname, char* fhobname, int start, int length) {
 	if (length <= 0) {
 		length = 0x10000 - start;
 	}
-	SaveRAM(ff, start, length);
+	SaveRAM(ff, (unsigned)start, (unsigned)length);
 
 	//header of file
 	for (i = 0; i != 9; hdr[i++] = 0x20) {
