@@ -429,7 +429,7 @@ int t_Tape::tape_insert_voc (const char *pchFileName)
                             bByte = 0;
                         }
                     }
-                    free(pbVocDataBlock);
+                    delete[] pbVocDataBlock;
                     break;
                 }
             case 0x2: // sound continue
@@ -464,7 +464,7 @@ int t_Tape::tape_insert_voc (const char *pchFileName)
                             bByte = 0;
                         }
                     }
-                    free(pbVocDataBlock);
+                    delete[] pbVocDataBlock;
                     break;
                 }
             case 0x3: // silence
