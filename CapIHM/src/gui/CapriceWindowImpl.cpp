@@ -65,6 +65,12 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 	if (emulator && ! emulator->GetConfig().paused)
 	{
         emulator->Emulate();
+		wxClientDC dc(DriveActivity);
+		if (emulator->GetFDC().GetMotor())
+			dc.SetBrush(*wxRED_BRUSH);
+		else
+			dc.SetBrush(wxBrush(wxColor(127,0,0), wxSOLID));
+		dc.FloodFill(3, 3, *wxWHITE, wxFLOOD_BORDER);
         //Ask to continue idle things
         event.RequestMore(true);
      }

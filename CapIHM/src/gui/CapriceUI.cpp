@@ -15,7 +15,6 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
-	m_statusBar1 = this->CreateStatusBar( 3, wxST_SIZEGRIP, wxID_ANY );
 	m_menubar1 = new wxMenuBar( 0 );
 	m_menu_file = new wxMenu();
 	m_menu_drivea = new wxMenu();
@@ -276,6 +275,14 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_panel4->SetMaxSize( wxSize( 768,540 ) );
 	
 	bSizer12->Add( m_panel4, 1, wxALL|wxFIXED_MINSIZE, 0 );
+	
+	wxBoxSizer* statusBar;
+	statusBar = new wxBoxSizer( wxHORIZONTAL );
+	
+	DriveActivity = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER );
+	statusBar->Add( DriveActivity, 1, wxALL, 1 );
+	
+	bSizer12->Add( statusBar, 0, wxALL, 1 );
 	
 	this->SetSizer( bSizer12 );
 	this->Layout();

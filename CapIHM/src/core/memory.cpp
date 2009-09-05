@@ -254,13 +254,14 @@ void t_Memory::ga_memory_manager (void)
 	else
 	{
 		// extract expansion memory bank
-		mem_bank = (RAM_config >> 3) & 7;
-		// selection is beyond available memory?
-		if (((mem_bank+2)*64) > CPC.ram_size)
+		int k = 7;
+		// Drop bits until we fit the current configuration
+		do
 		{
-			// force default mapping
-			mem_bank = 0;
+			mem_bank = (RAM_config >> 3) & k;
+			k >>= 1;
 		}
+		while (((mem_bank+2)*64) > CPC.ram_size);
 	}
 
 	// requested bank is different from the active one?

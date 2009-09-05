@@ -8,16 +8,15 @@
 #ifndef __CapriceUI__
 #define __CapriceUI__
 
-#include <wx/statusbr.h>
-#include <wx/gdicmn.h>
-#include <wx/font.h>
-#include <wx/colour.h>
-#include <wx/settings.h>
 #include <wx/string.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/menu.h>
+#include <wx/gdicmn.h>
+#include <wx/font.h>
+#include <wx/colour.h>
+#include <wx/settings.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>
@@ -54,7 +53,6 @@ class CapriceWindow : public wxFrame
 	private:
 	
 	protected:
-		wxStatusBar* m_statusBar1;
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu_file;
 		wxMenu* m_menu_drivea;
@@ -67,6 +65,7 @@ class CapriceWindow : public wxFrame
 		wxMenu* m_menu4;
 		wxMenu* m_menu5;
 		wxPanel* m_panel4;
+		wxPanel* DriveActivity;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onExit1( wxCloseEvent& event ) { event.Skip(); }
