@@ -11,6 +11,7 @@ class MemoryImpl: public Memory
 
 	protected:
 		void RefreshMem (wxScrollEvent& event);
+		void UpdateOverview( wxPaintEvent& event );
 		void onBreakpoint(wxCommandEvent& event);
 		void JumpToAddress( wxSpinEvent& event );
 		void JumpToPC( wxCommandEvent& event );

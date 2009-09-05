@@ -534,6 +534,7 @@ class Memory : public wxDialog
 	
 	protected:
 		wxNotebook* m_notebook4;
+		wxPanel* overviewPanel;
 		wxPanel* m_panel12;
 		wxGrid* m_grid1;
 		wxPanel* m_panel13;
@@ -545,6 +546,7 @@ class Memory : public wxDialog
 		wxButton* m_button77;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void UpdateOverview( wxPaintEvent& event ) { event.Skip(); }
 		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
 		virtual void JumpToAddress( wxSpinEvent& event ) { event.Skip(); }

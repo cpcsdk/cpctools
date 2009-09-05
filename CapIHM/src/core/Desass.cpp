@@ -554,7 +554,7 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 		}
 
 		Listing << "\t" ;
-		if (Adr - OldAdr < 8)
+		if (Adr - OldAdr < 3)
 			Listing << "\t" ;
 
 		// ASCII dump

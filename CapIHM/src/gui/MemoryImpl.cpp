@@ -22,6 +22,7 @@
 #include <string>
 
 #include <wx/arrstr.h>
+#include <wx/dcclient.h>
 #include <wx/string.h>
 #include <wx/tokenzr.h>
 #include "Desass.h"
@@ -52,6 +53,21 @@ MemoryImpl::MemoryImpl(wxWindow* parent, Emulator* emulator)
 
 MemoryImpl::~MemoryImpl()
 {
+}
+
+void MemoryImpl::UpdateOverview(wxPaintEvent& event)
+{
+	wxClientDC drawContext(overviewPanel);
+	for (int x = 0; x < 256; x++)
+		for (int y = 0; y < 256; y++)
+		{
+			// TODO change colors when displaying bank or rom
+			if (_emulator->GetMemory().Read(y * 256 + x) == 0)
+				drawContext.SetPen(*wxWHITE_PEN);
+			else
+				drawContext.SetPen(*wxBLACK_PEN);
+			drawContext.DrawPoint(x, y);
+		}
 }
 
 void MemoryImpl::onBreakpoint(wxCommandEvent& event)
