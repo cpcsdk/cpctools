@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 20 2009)
+// C++ code generated with wxFormBuilder (version Sep  4 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -186,7 +186,7 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menu_exit = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menu_exit );
 	
-	m_menubar1->Append( m_menu_file, wxT("File") );
+	m_menubar1->Append( m_menu_file, wxT("File") ); 
 	
 	m_menu_settings = new wxMenu();
 	wxMenuItem* m_menu_input;
@@ -228,7 +228,7 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem52 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Multiface Stop") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menuItem52 );
 	
-	m_menubar1->Append( m_menu_settings, wxT("Settings") );
+	m_menubar1->Append( m_menu_settings, wxT("Settings") ); 
 	
 	m_menu_debug = new wxMenu();
 	m_menuItem_run = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
@@ -250,21 +250,21 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menuItem_memory = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_debug->Append( m_menuItem_memory );
 	
-	m_menubar1->Append( m_menu_debug, wxT("Debug") );
+	m_menubar1->Append( m_menu_debug, wxT("Debug") ); 
 	
 	m_menu4 = new wxMenu();
 	wxMenuItem* m_menuItem57;
 	m_menuItem57 = new wxMenuItem( m_menu4, wxID_ANY, wxString( wxT("Show Assembler") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu4->Append( m_menuItem57 );
 	
-	m_menubar1->Append( m_menu4, wxT("Assembler") );
+	m_menubar1->Append( m_menu4, wxT("Assembler") ); 
 	
 	m_menu5 = new wxMenu();
 	wxMenuItem* m_menuItem491;
 	m_menuItem491 = new wxMenuItem( m_menu5, wxID_ANY, wxString( wxT("About") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu5->Append( m_menuItem491 );
 	
-	m_menubar1->Append( m_menu5, wxT("Help") );
+	m_menubar1->Append( m_menu5, wxT("Help") ); 
 	
 	this->SetMenuBar( m_menubar1 );
 	
@@ -333,6 +333,7 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
 	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
 	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
+	
 }
 
 InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -653,7 +654,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	RAMSize128 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("128k"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer23->Add( RAMSize128, 0, wxALL, 5 );
 	
-	RAMSize576 = new wxRadioButton( this, wxID_ANY, wxT("576k"), wxDefaultPosition, wxDefaultSize, 0 );
+	RAMSize576 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("576k"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer23->Add( RAMSize576, 0, wxALL, 5 );
 	
 	bSizer28->Add( bSizer23, 1, wxEXPAND, 5 );
@@ -991,6 +992,7 @@ InputSettings::~InputSettings()
 	m_ctrlKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
+	
 }
 
 DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -1000,13 +1002,13 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 	
-	m_notebook2 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	wxSize m_notebook2ImageSize = wxSize( 2,-1 );
-	wxImageList* m_notebook2Images = new wxImageList( m_notebook2ImageSize.GetWidth(), m_notebook2ImageSize.GetHeight() );
-	m_notebook2->AssignImageList( m_notebook2Images );
-	wxBitmap m_notebook2Bitmap;
-	wxImage m_notebook2Image;
-	m_panel1 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	DiskEd_Mode_Tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	wxSize DiskEd_Mode_TabsImageSize = wxSize( 2,-1 );
+	wxImageList* DiskEd_Mode_TabsImages = new wxImageList( DiskEd_Mode_TabsImageSize.GetWidth(), DiskEd_Mode_TabsImageSize.GetHeight() );
+	DiskEd_Mode_Tabs->AssignImageList( DiskEd_Mode_TabsImages );
+	wxBitmap DiskEd_Mode_TabsBitmap;
+	wxImage DiskEd_Mode_TabsImage;
+	m_panel1 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
@@ -1032,8 +1034,8 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel1->SetSizer( bSizer4 );
 	m_panel1->Layout();
 	bSizer4->Fit( m_panel1 );
-	m_notebook2->AddPage( m_panel1, wxT("File System"), true );
-	m_panel2 = new wxPanel( m_notebook2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	DiskEd_Mode_Tabs->AddPage( m_panel1, wxT("File System"), true );
+	m_panel2 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 	
@@ -1069,9 +1071,9 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_panel2->SetSizer( bSizer5 );
 	m_panel2->Layout();
 	bSizer5->Fit( m_panel2 );
-	m_notebook2->AddPage( m_panel2, wxT("Sector Editor"), false );
+	DiskEd_Mode_Tabs->AddPage( m_panel2, wxT("Sector Editor"), false );
 	
-	bSizer2->Add( m_notebook2, 1, wxEXPAND | wxALL, 5 );
+	bSizer2->Add( DiskEd_Mode_Tabs, 1, wxEXPAND | wxALL, 5 );
 	
 	this->SetSizer( bSizer2 );
 	this->Layout();
@@ -1198,6 +1200,7 @@ CapriceAbout::~CapriceAbout()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceAbout::OnAboutClose ) );
+	
 }
 
 RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -1935,6 +1938,7 @@ RegistersStates::~RegistersStates()
 	m_tCcR7->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR7 ), NULL, this );
 	m_tCcR9->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( RegistersStates::OnKillFocusR9 ), NULL, this );
 	m_tCcR9->Disconnect( wxEVT_SET_FOCUS, wxFocusEventHandler( RegistersStates::OnSetFocusR9 ), NULL, this );
+	
 }
 
 Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -1944,41 +1948,15 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	wxBoxSizer* bSizer26;
 	bSizer26 = new wxBoxSizer( wxVERTICAL );
 	
-	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
-	m_splitter1->SetSashGravity( 1 );
-	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
-	m_splitter1->SetMinimumPaneSize( 300 );
-	
-	m_panel10 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer29;
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxArrayString m_checkList1Choices;
-	m_checkList1 = new wxCheckListBox( m_panel10, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkList1Choices, 0 );
-	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
+	m_notebook4 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panel12 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer38;
+	bSizer38 = new wxBoxSizer( wxVERTICAL );
 	
-	bSizer29->Add( m_checkList1, 2, wxALL|wxEXPAND, 5 );
-	
-	wxGridSizer* gSizer3;
-	gSizer3 = new wxGridSizer( 2, 2, 0, 0 );
-	
-	m_staticText70 = new wxStaticText( m_panel10, wxID_ANY, wxT("Address"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText70->Wrap( -1 );
-	gSizer3->Add( m_staticText70, 0, wxALL, 5 );
-	
-	m_spinCtrl2 = new wxSpinCtrl( m_panel10, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
-	gSizer3->Add( m_spinCtrl2, 0, wxALL, 5 );
-	
-	bSizer29->Add( gSizer3, 1, wxFIXED_MINSIZE, 5 );
-	
-	m_panel10->SetSizer( bSizer29 );
-	m_panel10->Layout();
-	bSizer29->Fit( m_panel10 );
-	m_panel9 = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer21;
-	bSizer21 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_grid1 = new wxGrid( m_panel9, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_grid1 = new wxGrid( m_panel12, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	
 	// Grid
 	m_grid1->CreateGrid( 32, 16 );
@@ -2036,16 +2014,53 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	// Cell Defaults
 	m_grid1->SetDefaultCellFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	m_grid1->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer21->Add( m_grid1, 0, wxBOTTOM|wxLEFT|wxTOP, 5 );
+	bSizer38->Add( m_grid1, 1, wxBOTTOM|wxLEFT|wxTOP, 5 );
 	
-	m_scrollBar1 = new wxScrollBar( m_panel9, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
-	bSizer21->Add( m_scrollBar1, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+	m_panel12->SetSizer( bSizer38 );
+	m_panel12->Layout();
+	bSizer38->Fit( m_panel12 );
+	m_notebook4->AddPage( m_panel12, wxT("Hex view"), true );
+	m_panel13 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer391;
+	bSizer391 = new wxBoxSizer( wxVERTICAL );
 	
-	m_panel9->SetSizer( bSizer21 );
-	m_panel9->Layout();
-	bSizer21->Fit( m_panel9 );
-	m_splitter1->SplitHorizontally( m_panel10, m_panel9, 300 );
-	bSizer26->Add( m_splitter1, 1, wxEXPAND, 5 );
+	wxArrayString m_checkList1Choices;
+	m_checkList1 = new wxCheckListBox( m_panel13, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkList1Choices, 0 );
+	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
+	
+	bSizer391->Add( m_checkList1, 1, wxALL|wxEXPAND, 5 );
+	
+	m_panel13->SetSizer( bSizer391 );
+	m_panel13->Layout();
+	bSizer391->Fit( m_panel13 );
+	m_notebook4->AddPage( m_panel13, wxT("Asm view"), false );
+	
+	bSizer29->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
+	
+	m_scrollBar1 = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
+	bSizer29->Add( m_scrollBar1, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+	
+	bSizer26->Add( bSizer29, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer39;
+	bSizer39 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText77 = new wxStaticText( this, wxID_ANY, wxT("Jump to"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText77->Wrap( -1 );
+	m_staticText77->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
+	bSizer39->Add( m_staticText77, 0, wxALL, 5 );
+	
+	m_spinCtrl2 = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65535, 0 );
+	bSizer39->Add( m_spinCtrl2, 0, wxALL, 5 );
+	
+	m_button76 = new wxButton( this, wxID_ANY, wxT("PC"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer39->Add( m_button76, 0, wxALL, 5 );
+	
+	m_button77 = new wxButton( this, wxID_ANY, wxT("SP"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer39->Add( m_button77, 0, wxALL, 5 );
+	
+	bSizer26->Add( bSizer39, 0, 0, 5 );
 	
 	this->SetSizer( bSizer26 );
 	this->Layout();
@@ -2062,6 +2077,9 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_scrollBar1->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_spinCtrl2->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
+	m_button76->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
+	m_button77->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
 }
 
 Memory::~Memory()
@@ -2077,4 +2095,8 @@ Memory::~Memory()
 	m_scrollBar1->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	m_scrollBar1->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	m_spinCtrl2->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
+	m_button76->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
+	m_button77->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
+	
 }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug 20 2009)
+// C++ code generated with wxFormBuilder (version Sep  4 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -41,10 +41,9 @@
 #include <wx/imaglist.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
-#include <wx/checklst.h>
 #include <wx/grid.h>
+#include <wx/checklst.h>
 #include <wx/scrolbar.h>
-#include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -259,7 +258,7 @@ class DiscEditor : public wxDialog
 	private:
 	
 	protected:
-		wxNotebook* m_notebook2;
+		wxNotebook* DiskEd_Mode_Tabs;
 		wxPanel* m_panel1;
 		wxToolBar* m_toolBar1;
 		wxCheckBox* m_checkBox1;
@@ -535,30 +534,29 @@ class Memory : public wxDialog
 	private:
 	
 	protected:
-		wxSplitterWindow* m_splitter1;
-		wxPanel* m_panel10;
-		wxCheckListBox* m_checkList1;
-		wxStaticText* m_staticText70;
-		wxSpinCtrl* m_spinCtrl2;
-		wxPanel* m_panel9;
+		wxNotebook* m_notebook4;
+		wxPanel* m_panel12;
 		wxGrid* m_grid1;
+		wxPanel* m_panel13;
+		wxCheckListBox* m_checkList1;
 		wxScrollBar* m_scrollBar1;
+		wxStaticText* m_staticText77;
+		wxSpinCtrl* m_spinCtrl2;
+		wxButton* m_button76;
+		wxButton* m_button77;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
+		virtual void JumpToAddress( wxSpinEvent& event ) { event.Skip(); }
+		virtual void JumpToPC( wxCommandEvent& event ) { event.Skip(); }
+		virtual void JumpToSP( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
 		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~Memory();
-		void m_splitter1OnIdle( wxIdleEvent& )
-		{
-			m_splitter1->SetSashPosition( 300 );
-			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( Memory::m_splitter1OnIdle ), NULL, this );
-		}
-		
 	
 };
 

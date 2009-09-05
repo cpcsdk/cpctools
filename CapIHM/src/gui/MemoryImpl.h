@@ -12,6 +12,10 @@ class MemoryImpl: public Memory
 	protected:
 		void RefreshMem (wxScrollEvent& event);
 		void onBreakpoint(wxCommandEvent& event);
+		void JumpToAddress( wxSpinEvent& event );
+		void JumpToPC( wxCommandEvent& event );
+		void JumpToSP( wxCommandEvent& event );
+		void RefreshMem(int startAddress);
 	public:
 		MemoryImpl(wxWindow* parent, Emulator* emulator);
 		~MemoryImpl();
