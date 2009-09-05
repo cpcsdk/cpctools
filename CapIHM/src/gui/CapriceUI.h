@@ -38,7 +38,6 @@
 #include <wx/listbook.h>
 #include <wx/listctrl.h>
 #include <wx/listbox.h>
-#include <wx/imaglist.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
 #include <wx/grid.h>
@@ -539,9 +538,9 @@ class Memory : public wxDialog
 		wxGrid* m_grid1;
 		wxPanel* m_panel13;
 		wxCheckListBox* m_checkList1;
-		wxScrollBar* m_scrollBar1;
+		wxScrollBar* scrollRAM;
 		wxStaticText* m_staticText77;
-		wxSpinCtrl* m_spinCtrl2;
+		wxSpinCtrl* addressSpinBox;
 		wxButton* m_button76;
 		wxButton* m_button77;
 		

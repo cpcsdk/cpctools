@@ -8400,7 +8400,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -8469,7 +8469,7 @@
                     <property name="proportion">1</property>
                     <object class="wxNotebook" expanded="1">
                         <property name="bg"></property>
-                        <property name="bitmapsize">2,-1</property>
+                        <property name="bitmapsize">-1,-1</property>
                         <property name="context_help"></property>
                         <property name="context_menu">1</property>
                         <property name="enabled">1</property>
@@ -17446,7 +17446,7 @@
                                 <property name="id">wxID_ANY</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
-                                <property name="name">m_scrollBar1</property>
+                                <property name="name">scrollRAM</property>
                                 <property name="pagesize">0</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
@@ -17594,7 +17594,7 @@
                                 <property name="maximum_size"></property>
                                 <property name="min">0</property>
                                 <property name="minimum_size"></property>
-                                <property name="name">m_spinCtrl2</property>
+                                <property name="name">addressSpinBox</property>
                                 <property name="permission">protected</property>
                                 <property name="pos"></property>
                                 <property name="size"></property>

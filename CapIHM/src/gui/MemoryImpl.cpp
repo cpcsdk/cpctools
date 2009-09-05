@@ -30,8 +30,9 @@
 #include "MemoryImpl.h"
 #include "memory.h"
 
-#define cs2ws(s)(wxString(s, wxConvLibc))
-#define s2ws(s) (wxString((s).c_str(), wxConvLibc))
+// TODO proper handling of BANKS and ROM mapping. Now you see the z80 view and
+// there is no way to get out of it
+
 MemoryImpl::MemoryImpl(wxWindow* parent, Emulator* emulator)
 	: Memory(parent)
 {
@@ -42,9 +43,11 @@ MemoryImpl::MemoryImpl(wxWindow* parent, Emulator* emulator)
 
 	// wxFormBuilder does not setup the scrollbar correctly so we do it here.
 	// This way we can adjust it depending to the actual memory (64 or 128k)
-	m_scrollBar1 -> SetScrollbar(0, 0x200 / 16,
-		emulator->GetConfig().ram_size * 1024 / 16, 0x200 / 16);
-
+	scrollRAM-> SetScrollbar(0, 0x200 / 16,
+		64 * 1024 / 16, 0x200 / 16);
+	// TODO make the spinbox use hexadecimal
+	addressSpinBox->SetValue(_emulator->GetZ80().PC.w.l);
+	scrollRAM->SetThumbPosition(_emulator->GetZ80().PC.w.l / 16);
 }
 
 MemoryImpl::~MemoryImpl()
@@ -77,21 +80,27 @@ void MemoryImpl::onBreakpoint(wxCommandEvent& event)
 void MemoryImpl::JumpToAddress( wxSpinEvent& event )
 {
 	RefreshMem(event.GetPosition());
+	scrollRAM->SetThumbPosition(event.GetPosition() / 16);
 }
 
 void MemoryImpl::JumpToPC( wxCommandEvent& event )
 {
 	RefreshMem( _emulator ->GetZ80().PC.w.l);
+	addressSpinBox->SetValue(_emulator->GetZ80().PC.w.l);
+	scrollRAM->SetThumbPosition(_emulator->GetZ80().PC.w.l / 16);
 }
 
 void MemoryImpl::JumpToSP( wxCommandEvent& event )
 {
 	RefreshMem( _emulator ->GetZ80().SP.w.l);
+	addressSpinBox->SetValue(_emulator->GetZ80().SP.w.l);
+	scrollRAM->SetThumbPosition(_emulator->GetZ80().SP.w.l / 16);
 }
 
 void MemoryImpl::RefreshMem(wxScrollEvent& event)
 {
 	RefreshMem(event.GetPosition() * 16);
+	addressSpinBox->SetValue(event.GetPosition() * 16);
 }
 
 void MemoryImpl::RefreshMem(int startAddress)
@@ -102,7 +111,7 @@ void MemoryImpl::RefreshMem(int startAddress)
 
 	for (int i = 0; i < 32; i++)
 	{
-		str.Printf(_("%04X"),startAddress + i);
+		str.Printf(_("%04X"),startAddress + (i * 0x10));
 		m_grid1 -> SetRowLabelValue(i, str);
 	}
 	for (int i = 0; i < 0x200; i++)
@@ -113,8 +122,7 @@ void MemoryImpl::RefreshMem(int startAddress)
 
 	// Disassembly view
 	std::stringstream data;
-	Desass(emu_mem.GetRAM(),data, startAddress, 0x100); // only disassemble
-		// 0x100 bytes for now else its too slow
+	Desass(emu_mem, data, startAddress, 0x200);
 
 	char line[256];
 	wxArrayString a;
@@ -125,6 +133,7 @@ void MemoryImpl::RefreshMem(int startAddress)
 	}
 
 	m_checkList1 -> Set(a, 0);
+
 }
 
 

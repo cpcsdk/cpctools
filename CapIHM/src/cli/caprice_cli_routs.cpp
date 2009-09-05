@@ -187,9 +187,8 @@ extern "C"
 void caprice_cli_memory_disasm_quantity(int address, int size)
 {
    std::cout << address << "\t" << size << endl;
-  byte * ram = emulatorClone->GetMemory().GetRAM();
   Desass(
-      (unsigned char *) ram,
+      emulatorClone->GetMemory(),
       (std::ostream &) std::cout,
       address,
       size);

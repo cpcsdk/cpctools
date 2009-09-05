@@ -1003,11 +1003,6 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	bSizer2 = new wxBoxSizer( wxVERTICAL );
 	
 	DiskEd_Mode_Tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	wxSize DiskEd_Mode_TabsImageSize = wxSize( 2,-1 );
-	wxImageList* DiskEd_Mode_TabsImages = new wxImageList( DiskEd_Mode_TabsImageSize.GetWidth(), DiskEd_Mode_TabsImageSize.GetHeight() );
-	DiskEd_Mode_Tabs->AssignImageList( DiskEd_Mode_TabsImages );
-	wxBitmap DiskEd_Mode_TabsBitmap;
-	wxImage DiskEd_Mode_TabsImage;
 	m_panel1 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -2037,8 +2032,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	bSizer29->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
 	
-	m_scrollBar1 = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
-	bSizer29->Add( m_scrollBar1, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+	scrollRAM = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
+	bSizer29->Add( scrollRAM, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
 	
 	bSizer26->Add( bSizer29, 1, wxEXPAND, 5 );
 	
@@ -2051,8 +2046,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	bSizer39->Add( m_staticText77, 0, wxALL, 5 );
 	
-	m_spinCtrl2 = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65535, 0 );
-	bSizer39->Add( m_spinCtrl2, 0, wxALL, 5 );
+	addressSpinBox = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65535, 0 );
+	bSizer39->Add( addressSpinBox, 0, wxALL, 5 );
 	
 	m_button76 = new wxButton( this, wxID_ANY, wxT("PC"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer39->Add( m_button76, 0, wxALL, 5 );
@@ -2068,16 +2063,16 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	// Connect Events
 	m_checkList1->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_spinCtrl2->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	addressSpinBox->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
 	m_button76->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
 	m_button77->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
 }
@@ -2086,16 +2081,16 @@ Memory::~Memory()
 {
 	// Disconnect Events
 	m_checkList1->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_scrollBar1->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	m_spinCtrl2->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	scrollRAM->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
+	addressSpinBox->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
 	m_button76->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
 	m_button77->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
 	
