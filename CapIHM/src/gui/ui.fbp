@@ -7290,7 +7290,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Video</property>
-                            <property name="select">0</property>
+                            <property name="select">1</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -7360,7 +7360,7 @@
                                             <property name="label">OpenGL</property>
                                             <property name="maximum_size"></property>
                                             <property name="minimum_size"></property>
-                                            <property name="name">m_checkBox19</property>
+                                            <property name="name">check_OpenGL</property>
                                             <property name="permission">protected</property>
                                             <property name="pos"></property>
                                             <property name="size"></property>
@@ -7483,7 +7483,7 @@
                                                     <property name="maximum_size"></property>
                                                     <property name="min">0</property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">m_spinCtrl4</property>
+                                                    <property name="name">spin_CRTC</property>
                                                     <property name="permission">protected</property>
                                                     <property name="pos"></property>
                                                     <property name="size"></property>
@@ -7520,7 +7520,7 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnSpinCtrl"></event>
+                                                    <event name="OnSpinCtrl">changeCRTCType</event>
                                                     <event name="OnSpinCtrlText"></event>
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
@@ -7598,7 +7598,7 @@
                                                 <property name="proportion">0</property>
                                                 <object class="wxChoice" expanded="1">
                                                     <property name="bg"></property>
-                                                    <property name="choices">&quot;Old color&quot; &quot;Plus color&quot; &quot;Green&quot; &quot;Grey&quot; &quot;Custom&quot;</property>
+                                                    <property name="choices">&quot;GT65&quot; &quot;Grey&quot; &quot;Plus color&quot; &quot;CTM644&quot; &quot;Custom&quot;</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
                                                     <property name="enabled">1</property>
@@ -7608,7 +7608,7 @@
                                                     <property name="id">wxID_ANY</property>
                                                     <property name="maximum_size"></property>
                                                     <property name="minimum_size"></property>
-                                                    <property name="name">m_choice4</property>
+                                                    <property name="name">choice_colorPalette</property>
                                                     <property name="permission">protected</property>
                                                     <property name="pos"></property>
                                                     <property name="selection">0</property>
@@ -7623,7 +7623,7 @@
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
                                                     <event name="OnChar"></event>
-                                                    <event name="OnChoice"></event>
+                                                    <event name="OnChoice">changeColorPalette</event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
                                                     <event name="OnKeyDown"></event>
@@ -7713,7 +7713,7 @@
                         <object class="notebookpage" expanded="1">
                             <property name="bitmap"></property>
                             <property name="label">Sound</property>
-                            <property name="select">1</property>
+                            <property name="select">0</property>
                             <object class="wxPanel" expanded="1">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
@@ -17024,7 +17024,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>

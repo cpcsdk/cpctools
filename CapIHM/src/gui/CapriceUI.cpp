@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  4 2009)
+// C++ code generated with wxFormBuilder (version Sep  7 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -710,8 +710,8 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	wxBoxSizer* bSizer32;
 	bSizer32 = new wxBoxSizer( wxVERTICAL );
 	
-	m_checkBox19 = new wxCheckBox( m_panel_video, wxID_ANY, wxT("OpenGL"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer32->Add( m_checkBox19, 0, wxALL, 5 );
+	check_OpenGL = new wxCheckBox( m_panel_video, wxID_ANY, wxT("OpenGL"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer32->Add( check_OpenGL, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer36;
 	bSizer36 = new wxBoxSizer( wxHORIZONTAL );
@@ -720,8 +720,8 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_staticText76->Wrap( -1 );
 	bSizer36->Add( m_staticText76, 0, wxALL, 5 );
 	
-	m_spinCtrl4 = new wxSpinCtrl( m_panel_video, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4, 0 );
-	bSizer36->Add( m_spinCtrl4, 0, wxALL, 5 );
+	spin_CRTC = new wxSpinCtrl( m_panel_video, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 4, 0 );
+	bSizer36->Add( spin_CRTC, 0, wxALL, 5 );
 	
 	bSizer32->Add( bSizer36, 0, wxEXPAND, 5 );
 	
@@ -732,11 +732,11 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_staticText761->Wrap( -1 );
 	bSizer361->Add( m_staticText761, 0, wxALL, 5 );
 	
-	wxString m_choice4Choices[] = { wxT("Old color"), wxT("Plus color"), wxT("Green"), wxT("Grey"), wxT("Custom") };
-	int m_choice4NChoices = sizeof( m_choice4Choices ) / sizeof( wxString );
-	m_choice4 = new wxChoice( m_panel_video, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice4NChoices, m_choice4Choices, 0 );
-	m_choice4->SetSelection( 0 );
-	bSizer361->Add( m_choice4, 0, wxALL, 5 );
+	wxString choice_colorPaletteChoices[] = { wxT("GT65"), wxT("Grey"), wxT("Plus color"), wxT("CTM644"), wxT("Custom") };
+	int choice_colorPaletteNChoices = sizeof( choice_colorPaletteChoices ) / sizeof( wxString );
+	choice_colorPalette = new wxChoice( m_panel_video, wxID_ANY, wxDefaultPosition, wxDefaultSize, choice_colorPaletteNChoices, choice_colorPaletteChoices, 0 );
+	choice_colorPalette->SetSelection( 0 );
+	bSizer361->Add( choice_colorPalette, 0, wxALL, 5 );
 	
 	m_button76 = new wxButton( m_panel_video, wxID_ANY, wxT("Edit custom palette"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_button76->Hide();
@@ -748,7 +748,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_panel_video->SetSizer( bSizer32 );
 	m_panel_video->Layout();
 	bSizer32->Fit( m_panel_video );
-	m_notebook4->AddPage( m_panel_video, wxT("Video"), false );
+	m_notebook4->AddPage( m_panel_video, wxT("Video"), true );
 	m_panel_sound = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer34;
 	bSizer34 = new wxBoxSizer( wxVERTICAL );
@@ -790,7 +790,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_panel_sound->SetSizer( bSizer34 );
 	m_panel_sound->Layout();
 	bSizer34->Fit( m_panel_sound );
-	m_notebook4->AddPage( m_panel_sound, wxT("Sound"), true );
+	m_notebook4->AddPage( m_panel_sound, wxT("Sound"), false );
 	m_panel_misc = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer40;
 	bSizer40 = new wxBoxSizer( wxVERTICAL );
@@ -913,6 +913,8 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_regularKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
+	spin_CRTC->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( InputSettings::changeCRTCType ), NULL, this );
+	choice_colorPalette->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::changeColorPalette ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
 }
@@ -997,6 +999,8 @@ InputSettings::~InputSettings()
 	m_regularKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
+	spin_CRTC->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( InputSettings::changeCRTCType ), NULL, this );
+	choice_colorPalette->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::changeColorPalette ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
 	

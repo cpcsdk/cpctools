@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  4 2009)
+// C++ code generated with wxFormBuilder (version Sep  7 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -211,11 +211,11 @@ class InputSettings : public wxDialog
 		wxFilePickerCtrl* ROM6file;
 		wxFilePickerCtrl* ROM7file;
 		wxPanel* m_panel_video;
-		wxCheckBox* m_checkBox19;
+		wxCheckBox* check_OpenGL;
 		wxStaticText* m_staticText76;
-		wxSpinCtrl* m_spinCtrl4;
+		wxSpinCtrl* spin_CRTC;
 		wxStaticText* m_staticText761;
-		wxChoice* m_choice4;
+		wxChoice* choice_colorPalette;
 		wxButton* m_button76;
 		wxPanel* m_panel_sound;
 		wxRadioButton* m_radioBtn11;
@@ -236,6 +236,8 @@ class InputSettings : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void onKeyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onKeyPress( wxKeyEvent& event ) { event.Skip(); }
+		virtual void changeCRTCType( wxSpinEvent& event ) { event.Skip(); }
+		virtual void changeColorPalette( wxCommandEvent& event ) { event.Skip(); }
 		virtual void applySettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSave( wxCommandEvent& event ) { event.Skip(); }
 		

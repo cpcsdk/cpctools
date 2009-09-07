@@ -10,11 +10,16 @@
 #include <wx/filename.h>
 #include <wx/dir.h>
 
+/******************************************************************************
+* COMMON BASE 
+******************************************************************************/
+
 CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	InputSettings(WinID),
-	emulatorInputHandler(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator()->GetInput()),
+	emulator(*(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator())),
 	lastClickedButton(NULL)
 {
+	// input
 	std::ifstream file;
 	CPC_Key tmpk;
 	uint16_t kid;
@@ -36,7 +41,32 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 		keymap.insert(std::pair<int, CPC_Key>(kid, tmpk));
 	}
 
+	// video
+	choice_colorPalette->SetSelection((int)(emulator.GetConfig().scr_tube));
 }
+
+CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
+{
+	saveKeymap();
+}
+
+void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
+{
+	saveKeymap();
+}
+
+void CapriceInputSettingsImpl::applySettings()
+{
+	for (CPC_Keymap::iterator iter = keymap.begin();iter!=keymap.end();iter++)
+	{
+		emulator.GetInput().setupKey(iter->first, iter->second.stdKeyCode,
+			iter->second.shiftKeyCode, iter->second.ctrlKeyCode);
+	}
+}
+
+/******************************************************************************
+* INPUT 
+******************************************************************************/
 
 const char * CapriceInputSettingsImpl::getKeymapFileNameLoad()
 {
@@ -77,12 +107,6 @@ const char * CapriceInputSettingsImpl::getKeymapFileNameSave()
 }
 
 
-
-CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
-{
-	saveKeymap();
-}
-
 void CapriceInputSettingsImpl::onKeyClick(wxCommandEvent& event)
 {
 	if (lastClickedButton != NULL)
@@ -118,20 +142,6 @@ void CapriceInputSettingsImpl::onKeyPress(wxKeyEvent& event)
 {
 	m_regularKey->SetValue(wxChar(event.GetKeyCode()));
 	iter->second.stdKeyCode = event.GetKeyCode();
-}
-
-void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
-{
-	saveKeymap();
-}
-
-void CapriceInputSettingsImpl::applySettings()
-{
-	for (CPC_Keymap::iterator iter = keymap.begin();iter!=keymap.end();iter++)
-	{
-		emulatorInputHandler.setupKey(iter->first, iter->second.stdKeyCode,
-			iter->second.shiftKeyCode, iter->second.ctrlKeyCode);
-	}
 }
 
 /**
@@ -227,4 +237,22 @@ wxString CapriceInputSettingsImpl::keyCodeToName(int keycode)
 		default:
 			return wxChar(keycode);
 	}
+}
+
+/******************************************************************************
+* VIDEO 
+******************************************************************************/
+
+void CapriceInputSettingsImpl::changeCRTCType( wxSpinEvent& event )
+{
+	// TODO
+	event.Skip();
+}
+
+void CapriceInputSettingsImpl::changeColorPalette( wxCommandEvent& event )
+{
+	t_CPC _config = emulator.GetConfig();
+	_config.scr_tube = (Renderer::MonitorMode)(event.GetInt());
+	emulator.GetRenderer().SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
+	emulator.GetRenderer().Init();
 }

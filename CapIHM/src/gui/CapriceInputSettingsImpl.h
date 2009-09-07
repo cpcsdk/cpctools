@@ -4,7 +4,7 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
-class t_Input;
+class Emulator;
 
 class CapriceInputSettingsImpl : public InputSettings
 {
@@ -18,6 +18,8 @@ class CapriceInputSettingsImpl : public InputSettings
 		virtual void onKeyPress(wxKeyEvent& event);
 		virtual void onSave(wxCommandEvent& event);
 		virtual void applySettings(wxCommandEvent& event) { applySettings(); }
+		virtual void changeCRTCType( wxSpinEvent& event );
+		virtual void changeColorPalette( wxCommandEvent& event );
 
 		void saveKeymap();
 
@@ -36,7 +38,7 @@ class CapriceInputSettingsImpl : public InputSettings
 		const char * getKeymapFileNameSave();
 
 
-		t_Input& emulatorInputHandler;
+		Emulator& emulator;
 
 		typedef struct{
 			int stdKeyCode;
