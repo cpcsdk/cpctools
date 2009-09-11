@@ -2,7 +2,7 @@ ALL=	raw2crtc png2crtc
 
 
 CC=gcc
-CCFLAGS=-Os -W -Wall -std=c99 -pg
+CCFLAGS=-Os -W -Wall -std=c99 -g
 #CCFLAGS=-O3 -W -Wall -pedantic -ansi
 
 all: $(ALL)

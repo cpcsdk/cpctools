@@ -67,7 +67,7 @@ int main(int argc, char **argv)
   fread(inBuffer, 1, inSize, inFile);
   fclose(inFile);
 
-  outBuffer = raw2crtc(inBuffer, width, height, mode, r9, &outSize, &r1);
+  outBuffer = raw2crtc(inBuffer, width, height, mode, r9, &outSize, &r1, 0, 0);
 
   printf("Taille de l'écran de sortie : %lu\n",outSize);
   printf("Mode = %d  Largeur = %d  Hauteur = %d  R1 = %d  R9 = %d\n",mode,width,height,r1,r9);

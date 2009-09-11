@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   {
     sscanf(argv[4],"%hhud",&mode);
     forcemode = 1;
-    if(mode > 3) printf("mode doit être compris entre 0 et 3");
+    if(mode > 3) puts("mode doit être compris entre 0 et 3");
     mode = mode & 3;
   }
 
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 
   if(!((colorType == PNG_COLOR_TYPE_GRAY) || (colorType == PNG_COLOR_TYPE_PALETTE)))
   {
-    printf("Ce PNG n'est pas dans un format exploitable");
+    puts("Ce PNG n'est pas dans un format exploitable (niveaux de gris ou palette)");
     return (ERROR);
   }
 
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
       }
       default:
       {
-        printf("Ce PNG n'est pas dans un format exploitable");
+        puts("Ce PNG n'est pas dans un format exploitable (bitdepth = 1, 2 ou 4)");
         return (ERROR);
       }
     }

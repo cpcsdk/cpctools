@@ -164,7 +164,7 @@ unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned sho
   ptrTmp = tmpBuffer + minAddr;
   ptrOut = outBuffer;
 
-  for(unsigned short i = minAddr; i <= (maxAddr + 1); i++)
+  for(unsigned short i = minAddr; i <= maxAddr; i++)
   {
     *(ptrOut++) = *(ptrTmp++);
   }
