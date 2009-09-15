@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  7 2009)
+// C++ code generated with wxFormBuilder (version Sep  4 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -1958,8 +1958,29 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_notebook4 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	overviewPanel = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_notebook4->AddPage( overviewPanel, wxT("Overview"), false );
+	m_panel16 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer41;
+	bSizer41 = new wxBoxSizer( wxVERTICAL );
+	
+	overviewPanel = new wxPanel( m_panel16, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	bSizer41->Add( overviewPanel, 1, wxEXPAND | wxALL, 5 );
+	
+	wxBoxSizer* bSizer42;
+	bSizer42 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText771 = new wxStaticText( m_panel16, wxID_ANY, wxT("Load symbols from"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText771->Wrap( -1 );
+	bSizer42->Add( m_staticText771, 0, wxALL, 5 );
+	
+	m_filePicker9 = new wxFilePickerCtrl( m_panel16, wxID_ANY, wxEmptyString, wxT("Select sjasmplus symbol file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE|wxFLP_FILE_MUST_EXIST|wxFLP_OPEN );
+	bSizer42->Add( m_filePicker9, 0, wxALL, 5 );
+	
+	bSizer41->Add( bSizer42, 0, wxEXPAND, 5 );
+	
+	m_panel16->SetSizer( bSizer41 );
+	m_panel16->Layout();
+	bSizer41->Fit( m_panel16 );
+	m_notebook4->AddPage( m_panel16, wxT("Overview"), false );
 	m_panel12 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer38;
 	bSizer38 = new wxBoxSizer( wxVERTICAL );
@@ -2027,7 +2048,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel12->SetSizer( bSizer38 );
 	m_panel12->Layout();
 	bSizer38->Fit( m_panel12 );
-	m_notebook4->AddPage( m_panel12, wxT("Hex view"), true );
+	m_notebook4->AddPage( m_panel12, wxT("Hex view"), false );
 	m_panel13 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer391;
 	bSizer391 = new wxBoxSizer( wxVERTICAL );
@@ -2068,6 +2089,12 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_button77 = new wxButton( this, wxID_ANY, wxT("SP"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer39->Add( m_button77, 0, wxALL, 5 );
 	
+	wxString ChoiceLabelsChoices[] = { wxT("(no symbol table loaded)") };
+	int ChoiceLabelsNChoices = sizeof( ChoiceLabelsChoices ) / sizeof( wxString );
+	ChoiceLabels = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, ChoiceLabelsNChoices, ChoiceLabelsChoices, 0 );
+	ChoiceLabels->SetSelection( 0 );
+	bSizer39->Add( ChoiceLabels, 0, wxALL, 5 );
+	
 	bSizer26->Add( bSizer39, 0, 0, 5 );
 	
 	this->SetSizer( bSizer26 );
@@ -2076,6 +2103,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	// Connect Events
 	overviewPanel->Connect( wxEVT_PAINT, wxPaintEventHandler( Memory::UpdateOverview ), NULL, this );
+	m_filePicker9->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( Memory::LoadSymbolTable ), NULL, this );
 	m_checkList1->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
@@ -2089,12 +2117,14 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	addressSpinBox->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
 	m_button76->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
 	m_button77->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
+	ChoiceLabels->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::JumpToSymbol ), NULL, this );
 }
 
 Memory::~Memory()
 {
 	// Disconnect Events
 	overviewPanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( Memory::UpdateOverview ), NULL, this );
+	m_filePicker9->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( Memory::LoadSymbolTable ), NULL, this );
 	m_checkList1->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
@@ -2108,5 +2138,6 @@ Memory::~Memory()
 	addressSpinBox->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
 	m_button76->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
 	m_button77->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
+	ChoiceLabels->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::JumpToSymbol ), NULL, this );
 	
 }

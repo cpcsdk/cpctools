@@ -24,6 +24,7 @@
 #include <wx/arrstr.h>
 #include <wx/dcclient.h>
 #include <wx/string.h>
+#include <wx/textfile.h>
 #include <wx/tokenzr.h>
 #include "Desass.h"
 #include "z80.h"
@@ -68,6 +69,12 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 				drawContext.SetPen(*wxBLACK_PEN);
 			drawContext.DrawPoint(x, y);
 		}
+
+	drawContext.DrawText(_T("&0000"),258,0);
+	drawContext.DrawText(_T("&4000"),258,64);
+	drawContext.DrawText(_T("&8000"),258,128);
+	drawContext.DrawText(_T("&C000"),258,128+64);
+	drawContext.DrawText(_T("&FFFF"),258,246);
 }
 
 void MemoryImpl::onBreakpoint(wxCommandEvent& event)
@@ -152,4 +159,41 @@ void MemoryImpl::RefreshMem(int startAddress)
 
 }
 
+
+void MemoryImpl::LoadSymbolTable( wxFileDirPickerEvent& event )
+{
+	// Open the file parse as :
+	// "Label",": equ ","value"
+	// And create an hashmap from that
+
+	// Also fill in the label selector
+	wxTextFile f(event.GetPath());
+	f.Open();
+
+	ChoiceLabels->Clear();
+
+	for (unsigned int i = 0; i < f.GetLineCount(); i++)
+	{
+		// Parse each line and insert it in the hashmap
+		wxString label = f[i].BeforeFirst(':');
+
+		unsigned long adr;
+		f[i].AfterLast(' ').ToULong(&adr, 0);
+
+		if (adr) // filter out all these stupid labels that point to 0
+		{
+			lhm[label]=adr;
+			ChoiceLabels->Append(label);
+		}
+	}
+}
+
+
+void MemoryImpl::JumpToSymbol( wxCommandEvent& event )
+{
+	// Lookup the text in a hashmap
+	RefreshMem( lhm[event.GetString()]);
+	addressSpinBox->SetValue(lhm[event.GetString()]);
+	scrollRAM->SetThumbPosition(lhm[event.GetString()] / 16);
+}
 

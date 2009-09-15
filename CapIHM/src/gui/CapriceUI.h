@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  7 2009)
+// C++ code generated with wxFormBuilder (version Sep  4 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -535,7 +535,10 @@ class Memory : public wxDialog
 	
 	protected:
 		wxNotebook* m_notebook4;
+		wxPanel* m_panel16;
 		wxPanel* overviewPanel;
+		wxStaticText* m_staticText771;
+		wxFilePickerCtrl* m_filePicker9;
 		wxPanel* m_panel12;
 		wxGrid* m_grid1;
 		wxPanel* m_panel13;
@@ -545,14 +548,17 @@ class Memory : public wxDialog
 		wxSpinCtrl* addressSpinBox;
 		wxButton* m_button76;
 		wxButton* m_button77;
+		wxChoice* ChoiceLabels;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void UpdateOverview( wxPaintEvent& event ) { event.Skip(); }
+		virtual void LoadSymbolTable( wxFileDirPickerEvent& event ) { event.Skip(); }
 		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
 		virtual void JumpToAddress( wxSpinEvent& event ) { event.Skip(); }
 		virtual void JumpToPC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void JumpToSP( wxCommandEvent& event ) { event.Skip(); }
+		virtual void JumpToSymbol( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
