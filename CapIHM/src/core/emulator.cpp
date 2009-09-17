@@ -251,216 +251,208 @@ void Emulator::printer_stop()
 	pfoPrinter = NULL;
 }
 
-bool Emulator::KeyboardEmulation()
+void Emulator::PressKey(uint32_t key, uint32_t mod)
 {
-    bool isTimeToExit = false;
-	SDL_Event event;
+	dword cpc_key;
 
-	while (SDL_PollEvent(&event))
+	/*
+	// PC SHIFT key held down?
+	if (mod & wxMOD_SHIFT)
 	{
-		switch (event.type)
+		// consult the SHIFT table
+		cpc_key = _input.keyboard_shift[key];
+	}
+	// PC CTRL key held down?
+	else if (mod & wxMOD_CONTROL)
+	{
+		// consult the CTRL table
+		cpc_key = _input.keyboard_ctrl[key];
+	}
+	// PC AltGr key held down?
+	else if (mod & wxMOD_ALT)
+	{
+		// consult the AltGr table
+		cpc_key = _input.keyboard_mode[key];
+	}
+	else
+	{
+		// consult the normal table
+		cpc_key = _input.keyboard_normal[key];
+	}
+	*/
+
+	// Always use the same table. Less flexible mapping but makes handling of Ctrl Shift Esc much easier
+	cpc_key = _input.keyboard_normal[key];
+
+	if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused) && ((byte)cpc_key != 0xff))
+	{
+		// key is being held down
+		_input.keyboard_matrix[(byte)cpc_key >> 4] &= ~(1 << ((byte)cpc_key & 7));
+
+		// CPC SHIFT key required?
+		//if (cpc_key & MOD_CPC_SHIFT)
+		if (mod & wxMOD_SHIFT)
 		{
-		case SDL_KEYDOWN:
-			{
-				dword cpc_key;
+			// key needs to be SHIFTed
+			_input.keyboard_matrix[0x25 >> 4] &= ~(1 << (0x25 & 7));
+		}
+		else
+		{
+			// make sure key is unSHIFTed
+			_input.keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
+		}
 
-				// PC SHIFT key held down?
-				if (event.key.keysym.mod & wxMOD_SHIFT/*KMOD_SHIFT*/)
-				{
-					// consult the SHIFT table
-					cpc_key = _input.keyboard_shift[event.key.keysym.sym];
-				}
-				// PC CTRL key held down?
-				else if (event.key.keysym.mod & wxMOD_CONTROL/*KMOD_CTRL*/)
-				{
-					// consult the CTRL table
-					cpc_key = _input.keyboard_ctrl[event.key.keysym.sym];
-				}
-				// PC AltGr key held down?
-				else if (event.key.keysym.mod & wxMOD_ALT /*KMOD_MODE*/)
-				{
-					// consult the AltGr table
-					cpc_key = _input.keyboard_mode[event.key.keysym.sym];
-				}
-				else
-				{
-					// consult the normal table
-					cpc_key = _input.keyboard_normal[event.key.keysym.sym];
-				}
+		// CPC CONTROL key required?
+		//if (cpc_key & MOD_CPC_CTRL)
+		if (mod & wxMOD_CONTROL)
+		{
+			// CONTROL key is held down
+			_input.keyboard_matrix[0x27 >> 4] &= ~(1 << (0x27 & 7));
+		}
+		else
+		{
+			// make sure CONTROL key is released
+			_input.keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
+		}
+	}
+}
 
-				if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused) && ((byte)cpc_key != 0xff))
-				{
-					// key is being held down
-					_input.keyboard_matrix[(byte)cpc_key >> 4] &= ~(1 << ((byte)cpc_key & 7));
 
-					// CPC SHIFT key required?
-					if (cpc_key & MOD_CPC_SHIFT)
+void Emulator::ReleaseKey(uint32_t key, uint32_t mod)
+{
+	dword cpc_key;
+	/*
+	// PC SHIFT key held down?
+	if (mod & wxMOD_SHIFT)
+	{
+		// consult the SHIFT table
+		cpc_key = _input.keyboard_shift[key];
+	}
+	// PC CTRL key held down?
+	else if (mod & wxMOD_CONTROL)
+	{
+		// consult the CTRL table
+		cpc_key = _input.keyboard_ctrl[key];
+	}
+	// PC AltGr key held down?
+	else if (mod & wxMOD_ALT)
+	{
+		// consult the AltGr table
+		cpc_key = _input.keyboard_mode[key];
+	}
+	else
+	{
+		// consult the normal table
+		cpc_key = _input.keyboard_normal[key];
+	}
+	*/
+
+	cpc_key = _input.keyboard_normal[key];
+
+	// a key of the CPC keyboard?
+	if (!(cpc_key & MOD_EMU_KEY))
+	{
+		if ((!_config.paused) && ((byte)cpc_key != 0xff))
+		{
+			// key has been released
+			_input.keyboard_matrix[(byte)cpc_key >> 4] |= (1 << ((byte)cpc_key & 7));
+			// make sure key is unSHIFTed
+			_input.keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
+			// make sure CONTROL key is not held down
+			_input.keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
+		}
+	}
+	// process emulator specific keys
+	else
+	{
+		switch (cpc_key)
+		{
+			case CAP32_FULLSCRN:
+				{
+					audio_pause(_config);
+					SDL_Delay(20);
+
+					if (!_renderer.ToggleFullScreen())
 					{
-						// key needs to be SHIFTed
-						_input.keyboard_matrix[0x25 >> 4] &= ~(1 << (0x25 & 7));
+						fprintf(stderr, "video_init() failed. Aborting.\n");
+						exit(-1);
 					}
-					else
+
+					audio_resume(_config);
+					break;
+				}
+
+			case CAP32_TAPEPLAY:
+				{
+					if (pbTapeImage)
 					{
-						// make sure key is unSHIFTed
-						_input.keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
+						if (_config.tape_play_button)
+						{
+							_config.tape_play_button = 0;
+						}
+						else
+						{
+							_config.tape_play_button = 0x10;
+						}
 					}
-
-					// CPC CONTROL key required?
-					if (cpc_key & MOD_CPC_CTRL)
-					{
-						// CONTROL key is held down
-						_input.keyboard_matrix[0x27 >> 4] &= ~(1 << (0x27 & 7));
-					}
-					else
-					{
-						// make sure CONTROL key is released
-						_input.keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
-					}
-				}
-				break;
-			}
-
-		case SDL_KEYUP:
-			{
-				dword cpc_key;
-				// PC SHIFT key held down?
-				if (event.key.keysym.mod & wxMOD_SHIFT/*KMOD_SHIFT*/)
-				{
-					// consult the SHIFT table
-					cpc_key = _input.keyboard_shift[event.key.keysym.sym];
-				}
-				// PC CTRL key held down?
-				else if (event.key.keysym.mod & wxMOD_CONTROL/*KMOD_CTRL*/)
-				{
-					// consult the CTRL table
-					cpc_key = _input.keyboard_ctrl[event.key.keysym.sym];
-				}
-				// PC AltGr key held down?
-				else if (event.key.keysym.mod & wxMOD_ALT/*KMOD_MODE*/)
-				{
-					// consult the AltGr table
-					cpc_key = _input.keyboard_mode[event.key.keysym.sym];
-				}
-				else
-				{
-					// consult the normal table
-					cpc_key = _input.keyboard_normal[event.key.keysym.sym];
+					break;
 				}
 
-				// a key of the CPC keyboard?
-				if (!(cpc_key & MOD_EMU_KEY))
+			case CAP32_RESET:
 				{
-					if ((!_config.paused) && ((byte)cpc_key != 0xff))
-					{
-						// key has been released
-						_input.keyboard_matrix[(byte)cpc_key >> 4] |= (1 << ((byte)cpc_key & 7));
-						// make sure key is unSHIFTed
-						_input.keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
-						// make sure CONTROL key is not held down
-						_input.keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
-					}
+					emulator_reset(false);
+					break;
 				}
-				// process emulator specific keys
-				else
+
+			case CAP32_JOY:
 				{
-					switch (cpc_key)
-					{
-					case CAP32_FULLSCRN:
-						{
-							audio_pause(_config);
-							SDL_Delay(20);
+					_config.joysticks = _config.joysticks ? 0 : 1;
+					_input.input_swap_joy(_config);
+					break;
+				}
 
-							if (!_renderer.ToggleFullScreen())
-							{
-								fprintf(stderr, "video_init() failed. Aborting.\n");
-								exit(-1);
-							}
+			case CAP32_EXIT:
+				{
+					exitRequested = true;
+					break;
+				}
 
-							audio_resume(_config);
-							break;
-						}
+			case CAP32_FPS:
+				{
+					FPSDisplay = !FPSDisplay;
+					break;
+				}
 
-					case CAP32_TAPEPLAY:
-						{
-							if (pbTapeImage)
-							{
-								if (_config.tape_play_button)
-								{
-									_config.tape_play_button = 0;
-								}
-								else
-								{
-									_config.tape_play_button = 0x10;
-								}
-							}
-							break;
-						}
-
-					case CAP32_RESET:
-						{
-							emulator_reset(false);
-							break;
-						}
-
-					case CAP32_JOY:
-						{
-							_config.joysticks = _config.joysticks ? 0 : 1;
-							_input.input_swap_joy(_config);
-							break;
-						}
-
-					case CAP32_EXIT:
-						{
-							isTimeToExit = true;
-							break;
-						}
-
-					case CAP32_FPS:
-						{
-							FPSDisplay = !FPSDisplay;
-							break;
-						}
-
-					case CAP32_SPEED:
-						{
-							_config.limit_speed = _config.limit_speed ? 0 : 1;
-							//fprintf(stderr, "Toggle limit speed\n");
-							break;
-						}
+			case CAP32_SPEED:
+				{
+					_config.limit_speed = _config.limit_speed ? 0 : 1;
+					//fprintf(stderr, "Toggle limit speed\n");
+					break;
+				}
 
 #ifdef USE_DEBUGGER
-					case CAP32_DEBUG:
-						{
-							dwDebugFlag = dwDebugFlag ? 0 : 1;
+			case CAP32_DEBUG:
+				{
+					dwDebugFlag = dwDebugFlag ? 0 : 1;
 #ifdef USE_DEBUGGER_CRTC
-							if (!dwDebugFlag)
-								break;
+					if (!dwDebugFlag)
+						break;
 
-							for (int n = 0; n < 14; n++)
-							{
-								fprintf(pfoDebug, "CRTC Reg %02x = %02x\r\n", n, _crtc->GetRegisterValue( n ));
-							}
-#endif
-							break;
-						}
-#endif
+					for (int n = 0; n < 14; n++)
+					{
+						fprintf(pfoDebug, "CRTC Reg %02x = %02x\r\n", n, _crtc->GetRegisterValue( n ));
 					}
+#endif
+					break;
 				}
-				break;
-               }
-
-		   case SDL_QUIT:
-			   {
-			       isTimeToExit = true;
-			   }
-         }
-      }
-    return isTimeToExit;
+#endif
+		}
+	}
 }
 
 Emulator::Emulator():
-  _renderer(this),
-  FPSDisplay(true)
+	_renderer(this),
+	FPSDisplay(true)
 {
 	// retrieve the emulator configuration
 	_config.loadConfiguration(*this);
@@ -471,11 +463,11 @@ Emulator::Emulator():
 Emulator::~Emulator()
 {
 	printer_stop();
-//TODO use lib765 for ejecting floppies
-//#ifndef HAVE_LIB765_H
-//	dsk_eject(&_driveA);
-//	dsk_eject(&_driveB);
-//#endif
+	//TODO use lib765 for ejecting floppies
+	//#ifndef HAVE_LIB765_H
+	//	dsk_eject(&_driveA);
+	//	dsk_eject(&_driveB);
+	//#endif
 	_tape->tape_eject();
 
 	emulator_shutdown();
@@ -566,7 +558,7 @@ bool Emulator::Init()
 	_config.paused &= ~1;
 
 	audio_resume(_config);
-	
+
 	dwTicks = 0;
 	dwFPS = 0;
 	dwFrameCount = 0;
@@ -576,7 +568,7 @@ bool Emulator::Init()
 	dwTicksTargetFPS = dwTicksTarget;
 
 
-  goToAddress = -1 ;
+	goToAddress = -1 ;
 	return true;
 }
 
@@ -595,9 +587,6 @@ void Emulator::Emulate()
 		{
 			ExecGoTo();
 		}
-
-		//Start emulation
-		bool exit = KeyboardEmulation();
 
 		dwTicks = SDL_GetTicks();
 		// update FPS counter?
@@ -697,7 +686,7 @@ void Emulator::Emulate()
 			_renderer.EndDisplay(false);
 		}
 
-		if (exit)
+		if (exitRequested)
 		{
 			break;
 		}

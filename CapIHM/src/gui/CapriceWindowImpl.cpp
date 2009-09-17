@@ -311,20 +311,12 @@ wxPanel* CapriceWindowImpl::getPanel() { return m_panel4; }
 ********************************************************/
 void CapriceWindowImpl::windowKeyDown( wxKeyEvent& event )
 {
-    SDL_Event evt;
-    evt.type = SDL_KEYDOWN;
-    evt.key.keysym.sym = (SDLKey)event.GetKeyCode();
-    evt.key.keysym.mod = (SDLMod)event.GetModifiers();
-    SDL_PushEvent(&evt);
+	emulator->PressKey(event.GetKeyCode(),event.GetModifiers());
 }
 
 void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
 {
-    SDL_Event evt;
-    evt.type = SDL_KEYUP;
-    evt.key.keysym.sym = (SDLKey)event.GetKeyCode();
-    evt.key.keysym.mod = (SDLMod)event.GetModifiers();
-    SDL_PushEvent(&evt);
+	emulator->ReleaseKey(event.GetKeyCode(),event.GetModifiers());
 }
 
 #if ENABLE_FILEDROP

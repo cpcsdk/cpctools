@@ -78,6 +78,12 @@ public:
 	void Loop();
 	void Emulate();
 
+	/**
+	 * Operate the keyboard emulation
+	 */
+	void PressKey(uint32_t key, uint32_t mod);
+	void ReleaseKey(uint32_t key, uint32_t mod);
+
 
 	/**
 	 * Pause the emulator
@@ -86,17 +92,17 @@ public:
 	/**
 	 * Pause the emulator due to a breakpoint
 	 */
-	inline void Breakpoint() 
-	{ 
+	inline void Breakpoint()
+	{
 		Pause();
-		GetConfig().breakpoint = 1 ; 
+		GetConfig().breakpoint = 1 ;
 	}
 	/**
 	 * Run the emulator
 	 */
-	inline void Run() 
-	{ 
-		GetConfig().paused = 0; 
+	inline void Run()
+	{
+		GetConfig().paused = 0;
 		GetConfig().breakpoint = 0;
 	}
 	/**
@@ -213,11 +219,8 @@ private:
 	}
 
 
-	/**
-	 * Operate the keyboard emulation
-	 */
-	bool KeyboardEmulation();
 	bool FPSDisplay;
+	bool exitRequested;
 
 
 	dword dwTicks ;
