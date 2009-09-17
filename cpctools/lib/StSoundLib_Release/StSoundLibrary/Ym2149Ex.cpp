@@ -405,16 +405,31 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 	//---------------------------------------------------
 	// Tone+noise+env+DAC for three voices !
 	//---------------------------------------------------
+        #ifdef YM_INTEGER_ONLY
+        ymint volLeft, volRight;
+        ymint bt;
+
+                bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+                volLeft = ((*pVolA)&bt)*11 >> 3;
+                bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+                volRight = ((*pVolB)&bt)*11 >> 3;
+                bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+                volLeft += ((*pVolC)&bt)*5 >> 3;
+                volRight += ((*pVolC)&bt)*5 >> 3;
+
+        #else
         ymfloat volLeft, volRight;
         ymint bt;
 
-		bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-		volLeft = ((*pVolA)&bt)*.637*2;
-		bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-		volRight = ((*pVolB)&bt)*.637*2;
-		bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-		volLeft += ((*pVolC)&bt)*.360*2;
-		volRight += ((*pVolC)&bt)*.360*2;
+                bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+                volLeft = ((*pVolA)&bt)*.687*2;
+                bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+                volRight = ((*pVolB)&bt)*.687*2;
+                bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+                volLeft += ((*pVolC)&bt)*.312*2;
+                volRight += ((*pVolC)&bt)*.312*2;
+
+        #endif
 
 	//---------------------------------------------------
 	// Inc

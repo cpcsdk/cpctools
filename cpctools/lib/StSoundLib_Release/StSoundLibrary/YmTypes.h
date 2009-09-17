@@ -68,8 +68,12 @@ typedef		char				ymchar;			// 8 bits char character (used for null terminated st
 #else
 
 #include <stdint.h>
+#ifdef YM_INTEGER_ONLY
 typedef		int64_t				yms64;
+#else
 typedef		float				ymfloat;
+#endif
+
 typedef		int8_t			yms8;			//  8 bits signed integer
 typedef		int16_t		yms16;			// 16 bits signed integer
 typedef		int32_t			yms32;			// 32 bits signed integer
