@@ -1,8 +1,9 @@
 #!/bin/sh
 
 aclocal
+autoheader
 autoconf
 automake -a -c
-./configure
-make clean
-make
+#./configure
+#make clean
+#make
