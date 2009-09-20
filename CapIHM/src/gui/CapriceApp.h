@@ -31,7 +31,7 @@
 
 #include "CapriceWindowImpl.h"
 #include "CapriceRegistersDialogImpl.h"
-#include "emulator.h"
+#include "WXEmulator.h"
 
 
 class CapriceApp : public wxApp

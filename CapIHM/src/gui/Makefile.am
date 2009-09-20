@@ -14,7 +14,9 @@ CapriceWindowImpl.cpp\
 CapriceWindowImpl.h\
 CapriceInputSettingsImpl.h\
 CapriceInputSettingsImpl.cpp\
-CPCKeyDefs.h
+CPCKeyDefs.h \
+WXEmulator.h \
+WXEmulator.cpp
 #video.cpp \
 #input.cpp
 libcapricewx_a_LIBADD = libfoo.a 

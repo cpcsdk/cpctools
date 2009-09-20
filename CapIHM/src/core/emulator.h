@@ -31,6 +31,7 @@
 #include "input.h"
 #include "fdc.h"
 #include "z80.h"
+#include "audio.h"
 
 #include <iostream>
 class t_z80regs;
@@ -48,9 +49,14 @@ extern FILE *pfoDebug;
 void InitDebug();
 #endif
 
+/**
+ * Emulator class.
+ * This class is now abstract in order to be easily adaptable 
+ * with other GUI.
+ */
 class Emulator
 {
-private:
+protected:
 	t_CPC					_config;
 	Renderer				_renderer;
 	t_Input					_input;
@@ -80,9 +86,10 @@ public:
 
 	/**
 	 * Operate the keyboard emulation
+   * Specific of the GUI.
 	 */
-	void PressKey(uint32_t key, uint32_t mod);
-	void ReleaseKey(uint32_t key, uint32_t mod);
+	virtual void PressKey(uint32_t key, uint32_t mod) = 0;
+	virtual void ReleaseKey(uint32_t key, uint32_t mod) = 0;
 
 
 	/**
@@ -186,7 +193,7 @@ public:
 	 */
 	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
 
-private:
+protected:
 	bool MF2Init();
 
 	int emulator_init();

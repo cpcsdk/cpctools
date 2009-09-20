@@ -5,7 +5,7 @@
 #include "CapriceUI.h"
 #include "CapriceRegistersDialogImpl.h"
 #include "CapriceAboutImpl.h"
-#include "emulator.h"
+#include "WXEmulator.h"
 
 #include <wx/dnd.h>
 #include <wx/image.h>
