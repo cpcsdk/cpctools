@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  4 2009)
+// C++ code generated with wxFormBuilder (version Sep 20 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -74,6 +74,8 @@ class CapriceWindow : public wxFrame
 		virtual void onInsertDiscB( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLoadSNA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSaveSNA( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSaveScreen( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSaveScreenshot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExit2( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMenuInput( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMenuMemory( wxCommandEvent& event ) { event.Skip(); }

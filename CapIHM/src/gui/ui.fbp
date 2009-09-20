@@ -21,7 +21,7 @@
         <property name="skip_python_events">1</property>
         <property name="use_enum">2</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Frame" expanded="0">
+        <object class="Frame" expanded="1">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -128,11 +128,11 @@
                 <event name="OnSetFocus"></event>
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">File</property>
                     <property name="name">m_menu_file</property>
                     <property name="permission">protected</property>
-                    <object class="submenu" expanded="0">
+                    <object class="submenu" expanded="1">
                         <property name="label">Drive A:</property>
                         <property name="name">m_menu_drivea</property>
                         <property name="permission">protected</property>
@@ -542,11 +542,26 @@
                         <property name="id">wxID_ANY</property>
                         <property name="kind">wxITEM_NORMAL</property>
                         <property name="label">Save Screenshot</property>
-                        <property name="name">m_menuItem36</property>
+                        <property name="name">m_mI_SaveSCR</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
+                        <event name="OnMenuSelection">onSaveScreen</event>
+                        <event name="OnUpdateUI"></event>
+                    </object>
+                    <object class="wxMenuItem" expanded="1">
+                        <property name="bitmap"></property>
+                        <property name="checked">0</property>
+                        <property name="enabled">1</property>
+                        <property name="help"></property>
+                        <property name="id">wxID_ANY</property>
+                        <property name="kind">wxITEM_NORMAL</property>
+                        <property name="label">Insert Disc Image</property>
+                        <property name="name">m_menu_insertDiscA1</property>
+                        <property name="permission">none</property>
+                        <property name="shortcut"></property>
+                        <property name="unchecked_bitmap"></property>
+                        <event name="OnMenuSelection">onSaveScreenshot</event>
                         <event name="OnUpdateUI"></event>
                     </object>
                     <object class="wxMenuItem" expanded="1">
@@ -9916,7 +9931,7 @@
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">The Original Caprice is :&#x0A;(c) 1997 - 2005 Ulrich Doewich&#x0A;&#x0A;Caprice Reloaded is :&#x0A;(c) 1997 - 2008 The Caprice Reloaded Author&apos;s</property>
+                                <property name="label">The Original Caprice is :&#x0A;(c) 1997 - 2005 Ulrich Doewich&#x0A;&#x0A;Caprice Reloaded is :&#x0A;(c) 1997 - 2009 The Caprice Reloaded Author&apos;s</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_staticText5</property>
@@ -9983,7 +9998,7 @@
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">Credits :&#x0A;Written by :&#x0A;Ulrich Doewich&#x0A;Ramlaid/Arkos &lt;contact@ramlaid.com&gt;&#x0A;Romain Giot  - Krusty/Benediction &lt;krusty@cpcscene.com&gt;&#x0A;PulkoMandy/Shinra &lt;pulkomandy@gmail.com&gt;&#x0A;Contributors :&#x0A;CloudStrife/Shinra &lt;cloudstrife@cpcscene.com&gt;&#x0A;And a lot of other contributors&#x0A;StSound - LibDSK - Lib765 - SDL - wxWidgets</property>
+                                <property name="label">Credits :&#x0A;Written by :&#x0A;Ulrich Doewich&#x0A;Ramlaid/Arkos &lt;contact@ramlaid.com&gt;&#x0A;Romain Giot  - Krusty/Benediction &lt;krusty@cpcscene.com&gt;&#x0A;PulkoMandy/Shinra &lt;pulkomandy@gmail.com&gt;&#x0A;Contributors :&#x0A;CloudStrife/Shinra &lt;cloudstrife@cpcscene.com&gt;&#x0A;And a lot of other contributors&#x0A;StSound - LibDSK - Lib765 - SDL - wxWidgets - Sjasmplus</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_staticText10</property>
@@ -17566,7 +17581,7 @@
                                 <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Asm view</property>
-                                    <property name="select">0</property>
+                                    <property name="select">1</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="bg"></property>
                                         <property name="context_help"></property>

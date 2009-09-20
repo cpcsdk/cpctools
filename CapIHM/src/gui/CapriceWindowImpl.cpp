@@ -210,6 +210,15 @@ void CapriceWindowImpl::onSaveSNA( wxCommandEvent& event )
   delete SaveDialog;
 }
 
+
+/**
+ * Operate a screen capture
+ */
+void CapriceWindowImpl::onSaveScreen( wxCommandEvent& event)
+{
+  emulator->SaveScreenshot("capture.png");
+}
+
 void CapriceWindowImpl::OnPause( wxCommandEvent& event)
 {
     emulator->Pause();

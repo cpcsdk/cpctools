@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep  4 2009)
+// C++ code generated with wxFormBuilder (version Sep 20 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -144,9 +144,13 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	wxMenuItem* m_separator3;
 	m_separator3 = m_menu_file->AppendSeparator();
 	
-	wxMenuItem* m_menuItem36;
-	m_menuItem36 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Save Screenshot") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu_file->Append( m_menuItem36 );
+	wxMenuItem* m_mI_SaveSCR;
+	m_mI_SaveSCR = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Save Screenshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_file->Append( m_mI_SaveSCR );
+	
+	wxMenuItem* m_menu_insertDiscA1;
+	m_menu_insertDiscA1 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_file->Append( m_menu_insertDiscA1 );
 	
 	wxMenuItem* m_menuItem37;
 	m_menuItem37 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Record AVI") ) , wxEmptyString, wxITEM_NORMAL );
@@ -295,6 +299,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
 	this->Connect( m_mI_LoadSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
 	this->Connect( m_mI_SaveSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
+	this->Connect( m_mI_SaveSCR->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
+	this->Connect( m_menu_insertDiscA1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
 	this->Connect( m_menu_exit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
 	this->Connect( m_menu_input->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
 	this->Connect( m_menu_memory->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
@@ -323,6 +329,8 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
@@ -1179,7 +1187,7 @@ CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("The Original Caprice is :\n(c) 1997 - 2005 Ulrich Doewich\n\nCaprice Reloaded is :\n(c) 1997 - 2008 The Caprice Reloaded Author's"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("The Original Caprice is :\n(c) 1997 - 2005 Ulrich Doewich\n\nCaprice Reloaded is :\n(c) 1997 - 2009 The Caprice Reloaded Author's"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText5->Wrap( -1 );
 	bSizer10->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
@@ -1188,7 +1196,7 @@ CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Credits :\nWritten by :\nUlrich Doewich\nRamlaid/Arkos <contact@ramlaid.com>\nRomain Giot  - Krusty/Benediction <krusty@cpcscene.com>\nPulkoMandy/Shinra <pulkomandy@gmail.com>\nContributors :\nCloudStrife/Shinra <cloudstrife@cpcscene.com>\nAnd a lot of other contributors\nStSound - LibDSK - Lib765 - SDL - wxWidgets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Credits :\nWritten by :\nUlrich Doewich\nRamlaid/Arkos <contact@ramlaid.com>\nRomain Giot  - Krusty/Benediction <krusty@cpcscene.com>\nPulkoMandy/Shinra <pulkomandy@gmail.com>\nContributors :\nCloudStrife/Shinra <cloudstrife@cpcscene.com>\nAnd a lot of other contributors\nStSound - LibDSK - Lib765 - SDL - wxWidgets - Sjasmplus"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	bSizer11->Add( m_staticText10, 0, wxALL|wxEXPAND, 5 );
 	
@@ -2062,7 +2070,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel13->SetSizer( bSizer391 );
 	m_panel13->Layout();
 	bSizer391->Fit( m_panel13 );
-	m_notebook4->AddPage( m_panel13, wxT("Asm view"), false );
+	m_notebook4->AddPage( m_panel13, wxT("Asm view"), true );
 	
 	bSizer29->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
 	

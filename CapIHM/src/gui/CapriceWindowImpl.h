@@ -53,6 +53,7 @@ class CapriceWindowImpl : public CapriceWindow
 
     virtual void onLoadSNA( wxCommandEvent& event );
     virtual void onSaveSNA( wxCommandEvent& event );
+    virtual void onSaveScreen( wxCommandEvent& event );
 
     virtual void onExit2( wxCommandEvent& );
     
