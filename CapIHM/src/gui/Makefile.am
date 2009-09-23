@@ -1,6 +1,15 @@
+DIST_SUBDIRS = IDE
+SUBDIRS = IDE
+
+
+
 noinst_LIBRARIES = libcapricewx.a libfoo.a
 
-libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\"
+libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) \
+                          -I@top_srcdir@/src/core \
+                          -I@top_srcdir@/src/gui/IDE \
+                          -I@top_srcdir@/src/asm \
+                          -DDATA_PATH=\"$(pkgdatadir)//\"
 libcapricewx_a_SOURCES = \
 CapriceAboutImpl.cpp \
 CapriceAboutImpl.h\
@@ -16,7 +25,10 @@ CapriceInputSettingsImpl.h\
 CapriceInputSettingsImpl.cpp\
 CPCKeyDefs.h \
 WXEmulator.h \
-WXEmulator.cpp
+WXEmulator.cpp \
+CapriceIDE.h \
+CapriceIDE.cpp
+
 #video.cpp \
 #input.cpp
 libcapricewx_a_LIBADD = libfoo.a 

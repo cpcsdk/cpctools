@@ -159,7 +159,10 @@ if test "$with_wxwidget" = "yes" ; then
 	
 	AM_OPTIONS_WXCONFIG
 	reqwx=2.8.0
-	AM_PATH_WXCONFIG($reqwx, wxWin=1)
+	AM_PATH_WXCONFIG($reqwx, 
+                   wxWin=1,
+                   wxWin=0,
+                   [stc,adv,core])
 	if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
 		wxWidgets must be installed on your system.
@@ -241,6 +244,7 @@ AC_CONFIG_FILES([
         Makefile
 		src/Makefile
 		src/gui/Makefile
+    src/gui/IDE/Makefile
 		src/core/Makefile
     src/cli/Makefile
     src/asm/Makefile

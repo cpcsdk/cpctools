@@ -756,7 +756,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_panel_video->SetSizer( bSizer32 );
 	m_panel_video->Layout();
 	bSizer32->Fit( m_panel_video );
-	m_notebook4->AddPage( m_panel_video, wxT("Video"), true );
+	m_notebook4->AddPage( m_panel_video, wxT("Video"), false );
 	m_panel_sound = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer34;
 	bSizer34 = new wxBoxSizer( wxVERTICAL );
@@ -825,7 +825,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_panel_misc->SetSizer( bSizer40 );
 	m_panel_misc->Layout();
 	bSizer40->Fit( m_panel_misc );
-	m_notebook4->AddPage( m_panel_misc, wxT("Misc."), false );
+	m_notebook4->AddPage( m_panel_misc, wxT("Misc."), true );
 	
 	bSizer24->Add( m_notebook4, 0, 0, 5 );
 	
@@ -1988,7 +1988,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel16->SetSizer( bSizer41 );
 	m_panel16->Layout();
 	bSizer41->Fit( m_panel16 );
-	m_notebook4->AddPage( m_panel16, wxT("Overview"), false );
+	m_notebook4->AddPage( m_panel16, wxT("Overview"), true );
 	m_panel12 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer38;
 	bSizer38 = new wxBoxSizer( wxVERTICAL );
@@ -2070,7 +2070,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel13->SetSizer( bSizer391 );
 	m_panel13->Layout();
 	bSizer391->Fit( m_panel13 );
-	m_notebook4->AddPage( m_panel13, wxT("Asm view"), true );
+	m_notebook4->AddPage( m_panel13, wxT("Asm view"), false );
 	
 	bSizer29->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
 	
@@ -2147,5 +2147,90 @@ Memory::~Memory()
 	m_button76->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
 	m_button77->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
 	ChoiceLabels->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::JumpToSymbol ), NULL, this );
+	
+}
+
+CapriceIDE::CapriceIDE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	m_menubar2 = new wxMenuBar( 0 );
+	m_menu6 = new wxMenu();
+	wxMenuItem* m_menuItemNew;
+	m_menuItemNew = new wxMenuItem( m_menu6, wxID_ANY, wxString( wxT("New") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu6->Append( m_menuItemNew );
+	
+	wxMenuItem* m_menuItemOpen;
+	m_menuItemOpen = new wxMenuItem( m_menu6, wxID_ANY, wxString( wxT("Open") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu6->Append( m_menuItemOpen );
+	
+	wxMenuItem* m_menuItemSave;
+	m_menuItemSave = new wxMenuItem( m_menu6, wxID_ANY, wxString( wxT("Save") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu6->Append( m_menuItemSave );
+	
+	wxMenuItem* m_menuItemSaveAs;
+	m_menuItemSaveAs = new wxMenuItem( m_menu6, wxID_ANY, wxString( wxT("Save as") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu6->Append( m_menuItemSaveAs );
+	
+	wxMenuItem* m_menuItemClose;
+	m_menuItemClose = new wxMenuItem( m_menu6, wxID_ANY, wxString( wxT("Close") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu6->Append( m_menuItemClose );
+	
+	wxMenuItem* m_separator8;
+	m_separator8 = m_menu6->AppendSeparator();
+	
+	wxMenuItem* m_menuItemExit;
+	m_menuItemExit = new wxMenuItem( m_menu6, wxID_ANY, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu6->Append( m_menuItemExit );
+	
+	m_menubar2->Append( m_menu6, wxT("File") ); 
+	
+	m_menu10 = new wxMenu();
+	m_menubar2->Append( m_menu10, wxT("Edit") ); 
+	
+	m_menu11 = new wxMenu();
+	wxMenuItem* m_menuAssemble;
+	m_menuAssemble = new wxMenuItem( m_menu11, wxID_ANY, wxString( wxT("Assemble") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuAssemble );
+	
+	wxMenuItem* m_menuItem58;
+	m_menuItem58 = new wxMenuItem( m_menu11, wxID_ANY, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuItem58 );
+	
+	wxMenuItem* m_separator9;
+	m_separator9 = m_menu11->AppendSeparator();
+	
+	wxMenuItem* m_menuItem59;
+	m_menuItem59 = new wxMenuItem( m_menu11, wxID_ANY, wxString( wxT("Symbols") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu11->Append( m_menuItem59 );
+	
+	m_menubar2->Append( m_menu11, wxT("Assemble") ); 
+	
+	this->SetMenuBar( m_menubar2 );
+	
+	m_statusBar1 = this->CreateStatusBar( 1, wxST_SIZEGRIP, wxID_ANY );
+	
+	this->Centre( wxBOTH );
+	
+	// Connect Events
+	this->Connect( m_menuItemNew->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnNew ) );
+	this->Connect( m_menuItemOpen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onOpen ) );
+	this->Connect( m_menuItemSave->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSave ) );
+	this->Connect( m_menuItemSaveAs->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSaveAs ) );
+	this->Connect( m_menuItemClose->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onClose ) );
+	this->Connect( m_menuItemExit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onExit ) );
+	this->Connect( m_menuAssemble->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnAssemble ) );
+}
+
+CapriceIDE::~CapriceIDE()
+{
+	// Disconnect Events
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnNew ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onOpen ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSave ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSaveAs ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onClose ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onExit ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnAssemble ) );
 	
 }

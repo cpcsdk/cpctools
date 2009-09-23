@@ -8,7 +8,11 @@ caprice_SOURCES = gui/video.cpp core/emulator.cpp
 caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) \
                 -L/usr/local/lib \
-                gui/libcapricewx.a gui/libfoo.a core/libcapricecore.a core/libdisass.a
+                gui/libcapricewx.a \
+                gui/libfoo.a \
+                core/libcapricecore.a  \
+                core/libdisass.a \
+                gui/IDE/libcapricewxide.a 
 
 #Add CLI files if activate
 if CLI

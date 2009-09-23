@@ -21,6 +21,7 @@
 
 
 #include "CapriceWindowImpl.h"
+#include "CapriceIDE.h"
 #include "snapshot.h"
 #include "video.h"
 #include "CapriceInputSettingsImpl.h"
@@ -36,7 +37,7 @@
 #include <cstdlib>
 #include <iostream>
 
-CapriceWindowImpl::CapriceWindowImpl(Emulator* emu) 
+CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu) 
 	: CapriceWindow(NULL)
 {
 	emulator = emu ;
@@ -262,6 +263,12 @@ void CapriceWindowImpl::OnDebugMemory( wxCommandEvent& event )
 	MemoryDialog -> Show(true);
 }
 
+void CapriceWindowImpl::OnShowAssembler( wxCommandEvent& event)
+{
+  CapriceIDEImpl* ide = new CapriceIDEImpl(this, emulator);
+  ide->Show(true);
+}
+
 void CapriceWindowImpl::OnAbout( wxCommandEvent& event)
 {
     CapriceAboutImpl *AboutDialog = new CapriceAboutImpl();
@@ -330,7 +337,7 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
 
 #if ENABLE_FILEDROP
 // ============== DND ===================
-CapriceDNDHandler::CapriceDNDHandler(Emulator* emu)
+CapriceDNDHandler::CapriceDNDHandler(WXEmulator* emu)
 	: wxFileDropTarget()
 {
 	emulator=emu;

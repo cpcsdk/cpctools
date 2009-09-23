@@ -46,7 +46,7 @@ public:
 	CapriceWindowImpl 	*frame ;
 
 private:
-	Emulator			*emulator ;
+	WXEmulator			*emulator ;
 
 	//params
 	bool		fullscreen ;

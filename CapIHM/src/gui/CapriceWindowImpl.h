@@ -14,11 +14,11 @@
 class CapriceDNDHandler : public wxFileDropTarget
 {
 	public:
-		CapriceDNDHandler(Emulator* emu);
+		CapriceDNDHandler(WXEmulator* emu);
 	protected:
     	bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString& filenames);
 	private:
-		Emulator* emulator;
+		WXEmulator* emulator;
 };
 #endif
 
@@ -26,10 +26,10 @@ class CapriceWindowImpl : public CapriceWindow
 {
   public:
 
-	CapriceWindowImpl(Emulator* emu);
+	CapriceWindowImpl(WXEmulator* emu);
 	virtual ~CapriceWindowImpl();
 
-    void SetEmulator(Emulator *emulator);   
+    void SetEmulator(WXEmulator *emulator);   
     Emulator* GetEmulator() {return emulator;};   
     /**
      * Get the emulator panel
@@ -67,6 +67,10 @@ class CapriceWindowImpl : public CapriceWindow
 
     virtual void OnRegister( wxCommandEvent& event);
     virtual void OnDebugMemory( wxCommandEvent& event );
+    /**
+     * Open the IDE
+     */
+    virtual void OnShowAssembler( wxCommandEvent& event );
 
     virtual void OnAbout( wxCommandEvent& event);
     virtual void onMenuInput( wxCommandEvent& event);
@@ -82,7 +86,7 @@ class CapriceWindowImpl : public CapriceWindow
     /**
      * Pointer to the emu
      */
-    Emulator*   emulator ;
+    WXEmulator*   emulator ;
     /**
      * Pointer to the emu display
      */

@@ -85,7 +85,8 @@ char* CurrentDirectory=NULL;
 
 void (*GetCPUInstruction)(void);
 
-char* ModuleName=NULL, * vorlabp=NULL, * macrolabp=NULL, * LastParsedLabel=NULL;
+char* ModuleName=NULL, * macrolabp=NULL, * LastParsedLabel=NULL;
+char* vorlabp= NULL;
 stack<SRepeatStack> RepeatStack; /* added */
 CStringsList* lijstp = 0;
 CLabelTable LabelTable;
@@ -129,6 +130,11 @@ void InitPass(int p) {
 		delete[] LastParsedLabel;
 	}
 	LastParsedLabel = NULL;
+  if (vorlabp == NULL)
+  {
+    //TODO verify if correct allocation and remove allocation after
+    vorlabp = (char *) malloc( sizeof(char) * 2);
+  }
 	strcpy(vorlabp, "_");
 	macrolabp = NULL;
 	listmacro = 0;
@@ -182,7 +188,7 @@ void CapASM::Run()
   emulator->GoTo(runAddress);
 }
 
-void CapASM::Compile(char * filename)
+void CapASM::Compile(const char * filename)
 {
   std::cout << "&Compilation of " << string(filename).c_str() << endl ;
 

@@ -41,7 +41,7 @@ class CapASM
      * Compile the source file and inject result in emu memory
      * @param filename Name of the z80 source file
      */
-    void Compile(char * filename);
+    void Compile(const char * filename);
 
     /**
      * Launch the last compiled code

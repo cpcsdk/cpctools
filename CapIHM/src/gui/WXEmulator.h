@@ -32,6 +32,7 @@
  */
 class WXEmulator : public Emulator {
 
+  public:
   /**
    * Specific code with this GUI
    */

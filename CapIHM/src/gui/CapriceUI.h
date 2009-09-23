@@ -42,6 +42,7 @@
 #include <wx/grid.h>
 #include <wx/checklst.h>
 #include <wx/scrolbar.h>
+#include <wx/statusbr.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -567,6 +568,37 @@ class Memory : public wxDialog
 		
 		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~Memory();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class CapriceIDE
+///////////////////////////////////////////////////////////////////////////////
+class CapriceIDE : public wxFrame 
+{
+	private:
+	
+	protected:
+		wxMenuBar* m_menubar2;
+		wxMenu* m_menu6;
+		wxMenu* m_menu10;
+		wxMenu* m_menu11;
+		wxStatusBar* m_statusBar1;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnNew( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onOpen( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSave( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSaveAs( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onClose( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onExit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnAssemble( wxCommandEvent& event ) { event.Skip(); }
+		
+	
+	public:
+		
+		CapriceIDE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Caprice Z80 Assembler"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		~CapriceIDE();
 	
 };
 
