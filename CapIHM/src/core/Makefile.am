@@ -64,11 +64,7 @@ IMG_savepng.cpp
 #TODO: change that
 libdisass_a_SOURCES = \
 Desass.cpp \
-Desass.h \
-Outils.h \
-Outils.cpp \
-Itoa.h \
-Itoa.cpp
+Desass.h
 
 if LIB765
   libcapricecore_a_LIBADD += /usr/local/lib/lib765.a /usr/local/lib/libdsk.a
