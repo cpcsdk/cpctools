@@ -116,8 +116,8 @@ if test "$enable_debug" = yes ; then
 	CXXFLAGS="-O0 -Wall -Werror -g -DDEBUG -pg"
 	CFLAGS="-O0 -Wall  -Werror -g -DDEBUG -pg"
 else
-  CXXFLAGS="-Wall -Werror -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
-  CFLAGS="-Wall -Werror -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
+  CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
+  CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
 fi
 AM_CONDITIONAL([RELEASE], [test  "enable_debug" = "no"])
 

@@ -66,6 +66,8 @@ dword dwDebugFlag = 0;
 FILE *pfoDebug;
 #endif
 
+Emulator* Emulator::theEmulator = NULL;
+
 void InitDebug()
 {
 #ifdef USE_DEBUGGER
@@ -250,10 +252,11 @@ Emulator::Emulator():
 	_renderer(this),
 	FPSDisplay(true)
 {
+	// Set ourself as the only static instance everyone can get
+	theEmulator = this;
+
 	// retrieve the emulator configuration
 	_config.loadConfiguration(*this);
-
-
 }
 
 Emulator::~Emulator()

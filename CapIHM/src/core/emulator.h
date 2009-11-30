@@ -77,6 +77,7 @@ protected:
 	int goToAddress ;
 
 public:
+	static Emulator* theEmulator;
 	Emulator();
 	~Emulator();
 

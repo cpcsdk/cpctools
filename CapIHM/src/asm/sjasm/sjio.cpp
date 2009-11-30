@@ -33,12 +33,11 @@
 //{{{Caprice
 #include "emulator.h"
 #include "memory.h"
-extern Emulator *emulatorClone;
 
 //Store byte in buffer and emu
 #define STORE_BYTE(byte)			{ \
         *(MemoryPointer++) = (char) byte; \
-        emulatorClone->GetMemory().GetRAM()[CurAddress] = (char) byte ; \
+        Emulator::theEmulator->GetMemory().GetRAM()[CurAddress] = (char) byte ; \
       	_COUT " (" _CMDL CurAddress _CMDL ") = " _CMDL byte _ENDL; \
         } 
 //}}}
