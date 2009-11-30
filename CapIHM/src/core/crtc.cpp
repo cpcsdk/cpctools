@@ -38,6 +38,7 @@ based on the CRTC emulation of WinAPE32 v2.0a5b by Richard Wilson
 
 #include <math.h>
 #include <memory.h>
+#include <iostream>
 
 #include "crtc.h"
 
@@ -230,7 +231,7 @@ void t_CRTC::Emulate(int repeat_count)
 			if (_inVSync)
 			{
 				_vswCount++; // update counter
-				_vswCount &= 15; // limit to 4 bits
+				_vswCount &= 31; // limit to 5 bits (to handle "double vbl" case)
 				// matches vertical sync width?
 				if (_vswCount == _vsw)
 				{
@@ -375,9 +376,7 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 			_registers[2] = val;
 			break;
 		case 3: // sync width
-			_registers[3] = val;
-			_hsw = val & 0x0f; // isolate horizontal sync width
-			_vsw = val >> 4; // isolate vertical sync width
+			setReg3(val);
 			break;
 		case 4: // vertical total
 			{
@@ -507,6 +506,15 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 			break;
 		}
 	}
+}
+
+void t_CRTC::setReg3(unsigned char val)
+{
+	_registers[3] = val;
+	_hsw = val & 0x0f; // isolate horizontal sync width
+	_vsw = val >> 4; // isolate vertical sync width
+	if(_vsw==0) _vsw = 16;
+	std::cout << std::hex << (int)val;
 }
 
 void t_CRTC::WriteData(unsigned char val)

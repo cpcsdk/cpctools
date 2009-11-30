@@ -26,6 +26,7 @@
 #include "emulator.h"
 
 #include "crtc.h"
+#include "crtc1.h"
 #include "tape.h"
 #include "video.h"
 #include "z80.h"

@@ -80,7 +80,8 @@ byte IOPort::z80_IN_handler(reg_pair port)
 		if ((port.b.h & 3) == 3) 
 		{
 			ret_val = CRTC.ReadData();
-		}
+		} else if ((port.b.h & 3) == 2)
+			ret_val = CRTC.ReadStatus();
 	}
 	
 	// PPI ------------------------------------------------------------------------

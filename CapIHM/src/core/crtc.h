@@ -25,6 +25,16 @@
 
 class t_CRTC
 {
+	protected:
+		unsigned char	_regSelect;
+		unsigned char	_registers[18];
+
+		virtual void setReg3(unsigned char val);
+		unsigned int	_hsw;
+		unsigned int	_vsw;
+
+		bool			_inVSync;
+
 private:
 	// The next 4 bytes must remain together
 	typedef union 
@@ -64,8 +74,6 @@ private:
 	t_flags1		_flags1;
 	t_new_dt		_newDT;
 	
-	unsigned char	_regSelect;
-	unsigned char	_registers[18];
 	unsigned int	_requestedAddr;
 	unsigned int	_nextAddr;
 	unsigned int	_addr;
@@ -74,13 +82,10 @@ private:
 	unsigned int	_charCount;
 	unsigned int	_lineCount;
 	unsigned int	_rasterCount;
-	unsigned int	_hsw;
 	unsigned int	_hswCount;
-	unsigned int	_vsw;
 	unsigned int	_vswCount;
 	bool			_hadHSync;
 	bool			_inMonHSync;
-	bool			_inVSync;
 	bool			_inVerticalTotalAdjust;
 	bool			_newScan;
 	bool			_resChar;
@@ -112,7 +117,9 @@ public:
 	unsigned char GetRegisterSelect() const;
 	
 	void WriteData(unsigned char val);
-	unsigned char ReadData() const;
+
+	virtual unsigned char ReadData() const;
+	virtual unsigned char ReadStatus() const {return 255;}; //Hi-Z, should be random
 	
 	unsigned char GetRegisterValue(unsigned char reg) const;
 	void SetRegisterValue(unsigned char reg, unsigned char val);

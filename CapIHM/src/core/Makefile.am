@@ -14,6 +14,8 @@ config.cpp\
 config.h\
 crtc.cpp\
 crtc.h\
+crtc1.cpp\
+crtc1.h\
 debug.h\
 dsk.cpp\
 dsk.h\
