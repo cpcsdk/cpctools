@@ -85,18 +85,29 @@ public:
 	void Loop();
 	void Emulate();
 
+	// These are events sent from the GUI to the emulator
 	/**
 	 * Operate the keyboard emulation
-   * Specific of the GUI.
+   	 * Specific of the GUI.
 	 */
 	virtual void PressKey(uint32_t key, uint32_t mod) = 0;
 	virtual void ReleaseKey(uint32_t key, uint32_t mod) = 0;
 
 
+	// These are events sent from the emulator to the GUI
+	// screen update every 50Hz (do we want that ?)
+	// fdc led status
+	// This way the GUI does not have to poll the emu to know these things
+
+	// (nothing in this area yet)
+
+	// These are "internal" methods.
+	// They still may be overriden from the gui to do some things more.
 	/**
 	 * Pause the emulator
 	 */
-	inline void Pause() { GetConfig().paused = 1; }
+	virtual inline void Pause() { GetConfig().paused = 1; }
+
 	/**
 	 * Pause the emulator due to a breakpoint
 	 */
@@ -105,6 +116,7 @@ public:
 		Pause();
 		GetConfig().breakpoint = 1 ;
 	}
+	
 	/**
 	 * Run the emulator
 	 */

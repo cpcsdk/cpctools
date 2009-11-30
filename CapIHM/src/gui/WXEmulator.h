@@ -22,22 +22,33 @@
 #define __EMULATOR_WX__
 
 #include "emulator.h"
+class CapriceWindowImpl;
 
 /**
  * Emulator class specific for the wxWidget Implementation.
  * Maybe it would be better to use adaptor pattern instead of this heritage
  * (cf. difference between fullscreen in SDL and window in wxwidget).
  * Or maybe it would be a good idea to have an instance of SDL, and an instance of wxwidget
- * and swap betwee, them on demand.
+ * and swap between them on demand.
  */
 class WXEmulator : public Emulator {
 
+  private:
+	  CapriceWindowImpl* win;
+
   public:
+	  void setWindow(CapriceWindowImpl* w) { win = w; }
   /**
    * Specific code with this GUI
    */
   virtual void PressKey(uint32_t key, uint32_t mod) ;
-	virtual void ReleaseKey(uint32_t key, uint32_t mod);
+  virtual void ReleaseKey(uint32_t key, uint32_t mod);
+
+  // TODO : remove everything from window idle loop and do everything with callbacks
+  // FDC Led status
+  // Emulator->Emulate() (?)
+  // "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
+  inline void Pause();
 } ;
 
 #endif

@@ -43,6 +43,8 @@ class CapriceWindowImpl : public CapriceWindow
       this->image = img ;
     };
 
+	void Pause();
+
     protected:
 
     virtual void onExit1( wxCloseEvent& );

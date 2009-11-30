@@ -41,7 +41,8 @@ CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu)
 	: CapriceWindow(NULL)
 {
 	emulator = emu ;
-  m_panel4->SetFocus();
+	emulator->setWindow(this);
+    m_panel4->SetFocus();
 #if ENABLE_FILLDROP
 	dndhandler= new CapriceDNDHandler(emulator);
 	this->SetDropTarget(dndhandler);
@@ -94,25 +95,22 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
       }
       else
       {
-        //Pause mode
-        //
-        //TODO: use listeners to do that only when emulator is paused 
-        //(due to pause not controlled by ihm)
-        m_menuItem_pause->Enable(false) ;
-        m_menuItem_run->Enable(true);
-
-
-        //TODO: modify to do that only one time
-        wxBitmap bitmap;
-	      if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
-        {
-          wxClientDC dc(getPanel());
-			    dc.DrawBitmap(bitmap,0,0,false);
-        //    event.RequestMore(false);
-        }
       }
 
     }
+}
+
+void CapriceWindowImpl::Pause() {
+        //Pause mode
+        m_menuItem_pause->Enable(false) ;
+        m_menuItem_run->Enable(true);
+
+        wxBitmap bitmap;
+	    if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
+        {
+          wxClientDC dc(getPanel());
+		  dc.DrawBitmap(bitmap,0,0,false);
+        }
 }
 
 // =============================== Menus Event ===============================================

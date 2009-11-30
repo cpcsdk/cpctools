@@ -21,6 +21,7 @@
 
 
 #include "WXEmulator.h"
+#include "CapriceWindowImpl.h"
 #include <wx/defs.h>
 
 byte *pbTapeImage = NULL;
@@ -227,3 +228,7 @@ void WXEmulator::ReleaseKey(uint32_t key, uint32_t mod)
 }
 
 
+void WXEmulator::Pause() {
+	  Emulator::Pause();
+	  win->Pause();
+}
