@@ -9,9 +9,7 @@ unsigned char t_CRTC1::ReadData() const
 	} else if (_regSelect == 31)
 		return 255; // Hi-Z state! (should be random, but well...)
 	else
-	{
 		return 0; // write only _registers return 0
-	}
 }
 
 void t_CRTC1::setReg3(unsigned char val)
@@ -33,7 +31,7 @@ unsigned char t_CRTC1::ReadStatus() const {
 	// Bit 5 = VBL
 	// 1 = VBL is running now
 	// 0 = no VBL is running
-	return 0 + 0 + (_inVSync << 5);
+	return (1<<7) + 0 + (_inVSync << 5);
 };
 
 // TODO
