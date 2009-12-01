@@ -379,21 +379,7 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 			setReg3(val);
 			break;
 		case 4: // vertical total
-			{
-				_registers[4] = val & 0x7f;
-				if (_charInstMR == (void(*)(t_CRTC &CRTC))CharMR2)
-				{
-					// matches vertical total?
-					if (_lineCount == _registers[4])
-					{
-						// matches maximum raster address?
-						if (_rasterCount == _registers[9])
-						{
-							_startVerticalTotalAdjust = true;
-						}
-					}
-				}
-			}
+			setReg4(val);
 			break;
 		case 5: // vertical total adjust
 			_registers[5] = val & 0x1f;
@@ -439,50 +425,7 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 			UpdateSkew();
 			break;
 		case 9: // maximum raster count
-			{
-				_registers[9] = val & 0x1f;
-
-				register dword temp = 0;
-				// matches maximum raster address?
-				if (_rasterCount == _registers[9])
-				{
-					temp = 1;
-					_resScan = true; // request a raster counter reset
-				}
-				if (_r9Match != temp)
-				{
-					_r9Match = temp;
-					if (temp)
-					{
-						_charInstMR = (void(*)(t_CRTC &CRTC))CharMR1;
-					}
-				}
-				// matches maximum raster address?
-				if (_rasterCount == _registers[9])
-				{
-					if (_charCount == _registers[1])
-					{
-						_nextAddr = _addr + _charCount;
-					}
-					// matches horizontal total?
-					if (_charCount == _registers[0])
-					{
-						_resChar = true; // request a line count update
-					}
-					if (!_startVerticalTotalAdjust)
-					{
-						_resScan = true;
-					}
-				}
-				else
-				{
-					// not in vertical total adjust?
-					if (!_inVerticalTotalAdjust)
-					{
-						_resScan = false;
-					}
-				}
-			}
+			setReg9(val);
 			break;
 		case 10: // cursor start raster
 			_registers[10] = val & 0x7f;
@@ -491,12 +434,10 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 			_registers[11] = val & 0x1f;
 			break;
 		case 12: // start address high byte
-			_registers[12] = val & 0x3f;
-			_requestedAddr = _registers[13] + (_registers[12] << 8);
+			setReg12(val);
 			break;
 		case 13: // start address low byte
-			_registers[13] = val;
-			_requestedAddr = _registers[13] + (_registers[12] << 8);
+			setReg13(val);
 			break;
 		case 14: // cursor address high byte
 			_registers[14] = val & 0x3f;
@@ -506,6 +447,81 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 			break;
 		}
 	}
+}
+
+void t_CRTC::setReg9(unsigned char val)
+{
+	_registers[9] = val & 0x1f;
+
+	register dword temp = 0;
+	// matches maximum raster address?
+	if (_rasterCount == _registers[9])
+	{
+		temp = 1;
+		_resScan = true; // request a raster counter reset
+	}
+	if (_r9Match != temp)
+	{
+		_r9Match = temp;
+		if (temp)
+		{
+			_charInstMR = (void(*)(t_CRTC &CRTC))CharMR1;
+		}
+	}
+	// matches maximum raster address?
+	if (_rasterCount == _registers[9])
+	{
+		if (_charCount == _registers[1])
+		{
+			_nextAddr = _addr + _charCount;
+		}
+		// matches horizontal total?
+		if (_charCount == _registers[0])
+		{
+			_resChar = true; // request a line count update
+		}
+		if (!_startVerticalTotalAdjust)
+		{
+			_resScan = true;
+		}
+	}
+	else
+	{
+		// not in vertical total adjust?
+		if (!_inVerticalTotalAdjust)
+		{
+			_resScan = false;
+		}
+	}
+}
+
+void t_CRTC::setReg4(unsigned char val)
+{
+	_registers[4] = val & 0x7f;
+	if (_charInstMR == (void(*)(t_CRTC &CRTC))CharMR2)
+	{
+		// matches vertical total?
+		if (_lineCount == _registers[4])
+		{
+			// matches maximum raster address?
+			if (_rasterCount == _registers[9])
+			{
+				_startVerticalTotalAdjust = true;
+			}
+		}
+	}
+}
+
+void t_CRTC::setReg12(unsigned char val)
+{
+	_registers[12] = val & 0x3f;
+	_requestedAddr = _registers[13] + (_registers[12] << 8);
+}
+
+void t_CRTC::setReg13(unsigned char val)
+{
+	_registers[13] = val;
+	_requestedAddr = _registers[13] + (_registers[12] << 8);
 }
 
 void t_CRTC::setReg3(unsigned char val)
@@ -524,6 +540,7 @@ void t_CRTC::WriteData(unsigned char val)
 
 unsigned char t_CRTC::ReadData() const
 {
+	std::cout << "CRTC Get " << (int)_regSelect << ">" << std::hex << (int)_registers[_regSelect] << std::endl;
 	if ((_regSelect > 11) && (_regSelect < 18))
 	{ // valid range?
 		return _registers[_regSelect];

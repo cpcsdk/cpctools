@@ -7,5 +7,9 @@ class t_CRTC1: public t_CRTC {
 
 	protected:
 		void setReg3(unsigned char val);
+		void setReg4(unsigned char val);
+		void setReg9(unsigned char val);
 		unsigned char ReadStatus() const;
+		void setReg12(unsigned char val);
+		void setReg13(unsigned char val);
 };

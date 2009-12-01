@@ -26,14 +26,36 @@
 class t_CRTC
 {
 	protected:
-		unsigned char	_regSelect;
-		unsigned char	_registers[18];
+		unsigned char	_regSelect; // Selected register
+		unsigned char	_registers[18]; // Register file
 
+		// Crtc1 VBL duration
 		virtual void setReg3(unsigned char val);
-		unsigned int	_hsw;
-		unsigned int	_vsw;
+		unsigned int	_hsw; // HSync width
+		unsigned int	_vsw; // VSync width
 
-		bool			_inVSync;
+		bool			_inVSync; // True if we are inside the VSync
+
+		// Crtc1 unbuffered R12 and 13 during 1st block
+		virtual void setReg12(unsigned char val);
+		virtual void setReg13(unsigned char val);
+		unsigned int	_lineCount;
+		unsigned int	_requestedAddr;
+		unsigned int	_nextAddr;
+		unsigned int	_addr;
+
+		// Crtc1 unbuffered R4
+		virtual void setReg4(unsigned char val);
+		bool		_startVerticalTotalAdjust;
+
+		virtual void setReg9(unsigned char val);
+		unsigned int	_rasterCount;
+		unsigned int	_r9Match;
+		bool			_resScan;
+		unsigned int	_charCount;
+		void			(*_charInstMR)(t_CRTC &CRTC);
+		bool			_resChar;
+		bool			_inVerticalTotalAdjust;
 
 private:
 	// The next 4 bytes must remain together
@@ -74,34 +96,22 @@ private:
 	t_flags1		_flags1;
 	t_new_dt		_newDT;
 	
-	unsigned int	_requestedAddr;
-	unsigned int	_nextAddr;
-	unsigned int	_addr;
 	unsigned int	_nextAddress;
 	unsigned int	_scrBase;
-	unsigned int	_charCount;
-	unsigned int	_lineCount;
-	unsigned int	_rasterCount;
 	unsigned int	_hswCount;
 	unsigned int	_vswCount;
 	bool			_hadHSync;
 	bool			_inMonHSync;
-	bool			_inVerticalTotalAdjust;
 	bool			_newScan;
-	bool			_resChar;
 	bool			_resFrame;
 	bool			_resNext;
-	bool			_resScan;
 	bool			_resVSync;
-	bool			_startVerticalTotalAdjust;
 	unsigned int	_lastHEnd;
 	unsigned int	_reg5;
 	unsigned int	_r7Match;
-	unsigned int	_r9Match;
 	unsigned int	_hStart;
 	unsigned int	_hEnd;
 	
-	void			(*_charInstMR)(t_CRTC &CRTC);
 	void			(*_charInstSL)(t_CRTC &CRTC);
 
 	word			_maxLate[0x7400];
