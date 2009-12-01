@@ -1,17 +1,16 @@
 Important :
 - Fenetre de configuration
-- Gestion du clavier (voire idÃ©e longshot)
+- Gestion du clavier (voire idée longshot)
 - Ajout registre Gate Array
-- Ajout fenetre deassemblage
-- Ajout Breakpoint
 - Optimisation emulation video
+- Faire emulation autres CRTC
 
 Mineur :
 - Gestion Cassette
 - Gestion correcte volume son
-- PossibilitÃ© correction des niveaux de mixage son
-- PossibilitÃ© modifier palette 27 couleurs et faire des presets
+- Possibilité correction des niveaux de mixage son
+- Possibilité modifier palette 27 couleurs et faire des presets (manque presets et fenetre configuration)
 - Ajustement de la taille du buffer de son par l'utilisateur (Buffer SDL et buffer local)
 
 Urgent :
-- PossibilitÃ© de compilation CrossDev windows
+- Possibilité de compilation CrossDev windows

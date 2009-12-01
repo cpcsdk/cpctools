@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cstdio>
 
 // Returns a vector containing the names of the files in the specified directory
 std::vector<std::string> listDirectory(std::string sDirectory) {

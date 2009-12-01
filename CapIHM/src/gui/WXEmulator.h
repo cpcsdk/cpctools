@@ -48,7 +48,7 @@ class WXEmulator : public Emulator {
   // FDC Led status
   // Emulator->Emulate() (?)
   // "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
-  inline void Pause();
+  void Pause();
 } ;
 
 #endif
