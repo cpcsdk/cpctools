@@ -31,38 +31,33 @@
  */
 extern CapASM * capAsm ;
 
-/**
- * Reference to the Emulator
- */
-extern Emulator *emulatorClone;
-
 extern "C" void caprice_cli_show_registers()
 {
   {
     std::cout << "Z80 Registers :" << std::endl ;
-    std::cout << "AF : 0X" <<  uppercase << hex << emulatorClone->GetZ80().AF.w.l 
-      << "\t\tAF' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().AFx.w.l 
+    std::cout << "AF : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().AF.w.l 
+      << "\t\tAF' : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().AFx.w.l 
       << std::endl ;
-    std::cout << "BC : 0X" <<  uppercase << hex << emulatorClone->GetZ80().BC.w.l 
-      << "\t\tBC' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().BCx.w.l 
+    std::cout << "BC : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().BC.w.l 
+      << "\t\tBC' : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().BCx.w.l 
       << std::endl ;
-    std::cout << "DE : 0X" <<  uppercase << hex << emulatorClone->GetZ80().DE.w.l 
-      << "\t\tDE' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().DEx.w.l 
+    std::cout << "DE : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().DE.w.l 
+      << "\t\tDE' : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().DEx.w.l 
       << std::endl ;
-    std::cout << "HL : 0x" <<  uppercase << hex << emulatorClone->GetZ80().HL.w.l 
-      << "\t\tHL' : 0X" <<  uppercase << hex << emulatorClone->GetZ80().HLx.w.l 
-      << std::endl ;
-
-    std::cout << "PC : 0x" <<  uppercase << hex << emulatorClone->GetZ80().PC.w.l 
-      << "\t\tSP : 0X" <<  uppercase << hex << emulatorClone->GetZ80().SP.w.l 
+    std::cout << "HL : 0x" <<  uppercase << hex << Emulator::getInstance()->GetZ80().HL.w.l 
+      << "\t\tHL' : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().HLx.w.l 
       << std::endl ;
 
-    std::cout << "IX  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().IX.w.l 
-      << "\t\tIY  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().IY.w.l 
+    std::cout << "PC : 0x" <<  uppercase << hex << Emulator::getInstance()->GetZ80().PC.w.l 
+      << "\t\tSP : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().SP.w.l 
+      << std::endl ;
+
+    std::cout << "IX  : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().IX.w.l 
+      << "\t\tIY  : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().IY.w.l 
       << std::endl ;
  
-    std::cout << "I  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().I 
-      << "\t\tR  : 0X" <<  uppercase << hex << emulatorClone->GetZ80().R 
+    std::cout << "I  : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().I 
+      << "\t\tR  : 0X" <<  uppercase << hex << Emulator::getInstance()->GetZ80().R 
       << std::endl ;
 
   }
@@ -70,26 +65,26 @@ extern "C" void caprice_cli_show_registers()
 
 extern "C" void caprice_cli_emu_reset()
 {
-  emulatorClone->emulator_reset(true);
+  Emulator::getInstance()->emulator_reset(true);
 }
 
 extern "C" void caprice_cli_add_breakpoint(int adress)
 {
   std::cout << "# Add breakpoint :" << adress << endl ;
-  emulatorClone->GetZ80().add_break_point(adress);
+  Emulator::getInstance()->GetZ80().add_break_point(adress);
 }
 
 extern "C" void caprice_cli_remove_breakpoint(int adress)
 {
   std::cout << "# Remove breakpoint :" << adress << endl ;
-  emulatorClone->GetZ80().remove_break_point(adress);
+  Emulator::getInstance()->GetZ80().remove_break_point(adress);
 }
 
 
 extern "C" void caprice_cli_show_breakpoints()
 {
   std::cout << "List of breakpoints :" << std::endl ;
-  std::set<dword>  breakpoints = emulatorClone->GetZ80().GetBreakpoints() ;
+  std::set<dword>  breakpoints = Emulator::getInstance()->GetZ80().GetBreakpoints() ;
 
   std::set<dword>::const_iterator iter;
   int i = 0 ;
@@ -104,10 +99,10 @@ extern "C" void caprice_cli_show_breakpoints()
 extern "C"
 void caprice_cli_continue()
 {
-  if (emulatorClone->GetConfig().breakpoint)
+  if (Emulator::getInstance()->GetConfig().breakpoint)
   {
     std::cout << "# Continue execution flow" << std::endl ;
-    emulatorClone->Run();
+    Emulator::getInstance()->Run();
   }
   else
   {
@@ -119,10 +114,10 @@ void caprice_cli_continue()
 extern "C"
 void caprice_cli_step()
 {
-  if (emulatorClone->GetConfig().breakpoint)
+  if (Emulator::getInstance()->GetConfig().breakpoint)
   {
     std::cout << "# Continue execution flow step by step" << std::endl ;
-    emulatorClone->Step();
+    Emulator::getInstance()->Step();
   }
   else
   {
@@ -136,24 +131,24 @@ void caprice_cli_video_color(int mode)
   if (mode == 1)
   {
     std::cout << "# Set color screen" << endl;
-    emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::ColoursMode);
+    Emulator::getInstance()->GetRenderer().SetMonitorColorTube(Renderer::ColoursMode);
   }
   else if (mode == 2)
   {
     std::cout << "# Set grey screen" << endl;
-    emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::GreyMode);
+    Emulator::getInstance()->GetRenderer().SetMonitorColorTube(Renderer::GreyMode);
   }
   else if (mode == 3)
   {
     std::cout << "# Set green screen" << endl;
-    emulatorClone->GetRenderer().SetMonitorColorTube(Renderer::GreenMode);
+    Emulator::getInstance()->GetRenderer().SetMonitorColorTube(Renderer::GreenMode);
   }
 }
 
 extern "C"
 void caprice_cli_memory_peek(int address)
 {
-  byte * ram = emulatorClone->GetMemory().GetRAM();
+  byte * ram = Emulator::getInstance()->GetMemory().GetRAM();
   int value = ram[address];
 
   std::cout << std::hex << value << endl ;
@@ -164,7 +159,7 @@ void caprice_cli_memory_peek(int address)
 extern "C"
 void caprice_cli_memory_poke(int address, int value)
 {
-  byte * ram = emulatorClone->GetMemory().GetRAM();
+  byte * ram = Emulator::getInstance()->GetMemory().GetRAM();
 
   if (value>255)
   {
@@ -188,7 +183,7 @@ void caprice_cli_memory_disasm_quantity(int address, int size)
 {
    std::cout << address << "\t" << size << endl;
   Desass(
-      emulatorClone->GetMemory(),
+      Emulator::getInstance()->GetMemory(),
       (std::ostream &) std::cout,
       address,
       size);
@@ -209,7 +204,7 @@ extern "C"
 void caprice_cli_memory_disasm_pc(int size)
 {
   caprice_cli_memory_disasm_quantity( 
-      emulatorClone->GetZ80().PC.w.l , 
+      Emulator::getInstance()->GetZ80().PC.w.l , 
       size) ;
 }
 
@@ -229,7 +224,7 @@ void  caprice_cli_asm_launch(int address)
   }
   else
   {
-    emulatorClone->GoTo(address);
+    Emulator::getInstance()->GoTo(address);
   }
 }
 
@@ -237,5 +232,5 @@ void  caprice_cli_asm_launch(int address)
 extern "C"
 void caprice_cli_screenshot_save()
 {
-  emulatorClone->SaveScreenshot("caprice.png");
+  Emulator::getInstance()->SaveScreenshot("caprice.png");
 }

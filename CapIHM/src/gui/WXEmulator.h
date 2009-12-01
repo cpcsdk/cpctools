@@ -37,6 +37,13 @@ class WXEmulator : public Emulator {
 	  CapriceWindowImpl* win;
 
   public:
+	  static inline WXEmulator* getInstance()
+	  {
+		  if(!instance) instance = (Emulator*)(new WXEmulator());
+		  std::cout << "[DEBUG] Get WXEmulator at " << instance << endl;
+		  return (WXEmulator*)instance;
+	  }
+
 	  void setWindow(CapriceWindowImpl* w) { win = w; }
   /**
    * Specific code with this GUI

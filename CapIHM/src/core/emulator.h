@@ -75,11 +75,13 @@ protected:
 	 * Address to jump if required
 	 */
 	int goToAddress ;
-
-public:
-	static Emulator* theEmulator;
+	
 	Emulator();
 	~Emulator();
+	static Emulator* instance;
+
+public:
+	static Emulator* getInstance();
 
 	bool Init();
 	void Loop();

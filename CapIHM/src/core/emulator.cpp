@@ -67,7 +67,7 @@ dword dwDebugFlag = 0;
 FILE *pfoDebug;
 #endif
 
-Emulator* Emulator::theEmulator = NULL;
+Emulator* Emulator::instance = NULL;
 
 void InitDebug()
 {
@@ -147,7 +147,7 @@ bool Emulator::MF2Init()
 			{
 			    delete [] pbMF2ROM;
 			    delete [] pbMF2ROMbackup;
-			    std::cerr << "Out of memroy ! " << std::endl;
+			    std::cerr << "Out of memory ! " << std::endl;
 				return false;
 			}
 
@@ -253,9 +253,6 @@ Emulator::Emulator():
 	_renderer(this),
 	FPSDisplay(true)
 {
-	// Set ourself as the only static instance everyone can get
-	theEmulator = this;
-
 	// retrieve the emulator configuration
 	_config.loadConfiguration(*this);
 }
@@ -622,4 +619,11 @@ void Emulator::SaveScreenshot(string filename)
 			filename.c_str(),
 			GetRenderer().GetVideoPlugin()->_publicVideo,
 			9);
+}
+
+Emulator* Emulator::getInstance()
+{
+	//if(!instance) instance = new Emulator();	
+	std::cout << "[DEBUG] Get Emulator at " << instance << endl;
+	return instance;
 }

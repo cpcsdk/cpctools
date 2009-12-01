@@ -46,7 +46,8 @@ class CapriceInputSettingsImpl : public InputSettings
 			int ctrlKeyCode;
 		} CPC_Key;
 
-		typedef std::map<uint16_t, CPC_Key> CPC_Keymap;
+		//typedef std::map<uint16_t, CPC_Key> CPC_Keymap;
+		typedef std::map<unsigned short, CPC_Key> CPC_Keymap;
 		CPC_Keymap keymap;
 		CPC_Keymap::iterator iter;
 

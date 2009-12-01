@@ -27,6 +27,7 @@
 byte *pbTapeImage = NULL;
 byte *pbTapeImageEnd = NULL;
 
+//Emulator* WXEmulator::instance = NULL;
 
 void WXEmulator::PressKey(uint32_t key, uint32_t mod)
 {

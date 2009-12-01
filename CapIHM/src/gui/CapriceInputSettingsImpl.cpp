@@ -22,7 +22,8 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	// input
 	std::ifstream file;
 	CPC_Key tmpk;
-	uint16_t kid;
+	//uint16_t kid;
+	unsigned short kid;
 	std::string line;
 	std::istringstream iss;
 

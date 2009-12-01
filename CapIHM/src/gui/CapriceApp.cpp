@@ -91,16 +91,17 @@ bool CapriceApp::OnInit()
 
 
 	//Create emulator and IHM
-	emulator = new WXEmulator();
-  capAsm = new CapASM(emulator);
+	emulator = WXEmulator::getInstance();
+	Emulator::getInstance();
+	
+	capAsm = new CapASM(emulator);
 
 	frame = new CapriceWindowImpl(emulator);
 	frame->Show(true);
-  frame->Raise();
+	frame->Raise();
 
   #if CLI
     frameClone = frame ;
-    emulatorClone = emulator ;
   #endif
 	return true ; 
 }
