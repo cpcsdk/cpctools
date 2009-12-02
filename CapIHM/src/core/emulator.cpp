@@ -45,7 +45,6 @@
 #include "error.h"
 
 //#include "filetools.h"
-#include <SDL.h>
 
 #include <IMG_savepng.h>
 
@@ -146,7 +145,9 @@ bool Emulator::MF2Init()
 			if ((!pbMF2ROM) || (!pbMF2ROMbackup))
 			{
 			    delete [] pbMF2ROM;
+			    pbMF2ROM = NULL;
 			    delete [] pbMF2ROMbackup;
+			    pbMF2ROMbackup = NULL;
 			    std::cerr << "Out of memory ! " << std::endl;
 				return false;
 			}
@@ -168,6 +169,7 @@ bool Emulator::MF2Init()
 				{
 					fprintf(stderr, "ERROR: The file selected as the MF2 ROM is either corrupt or invalid.\n");
 					delete [] pbMF2ROMbackup;
+					pbMF2ROMbackup = NULL;
 					delete [] pbMF2ROM;
 					pbMF2ROM = NULL;
 					_config.rom_mf2[0] = 0;
@@ -181,6 +183,7 @@ bool Emulator::MF2Init()
 				// error opening file
 				fprintf(stderr, "ERROR: The file selected as the MF2 ROM is either corrupt or invalid.\n");
 				delete [] pbMF2ROMbackup;
+				pbMF2ROMbackup = NULL;
 				delete [] pbMF2ROM;
 				pbMF2ROM = NULL;
 				_config.rom_mf2[0] = 0;
@@ -255,6 +258,10 @@ Emulator::Emulator():
 {
 	// retrieve the emulator configuration
 	_config.loadConfiguration(*this);
+	
+	timer.start();
+	
+	std::cout << "[DEBUG] Construct Emulator" << endl;
 }
 
 Emulator::~Emulator()
@@ -274,6 +281,7 @@ Emulator::~Emulator()
 #ifdef USE_DEBUGGER
 	fclose(pfoDebug);
 #endif
+	std::cout << "[DEBUG] Destruct Emulator" << endl;
 }
 
 bool Emulator::Init()
@@ -361,7 +369,7 @@ bool Emulator::Init()
 	dwFrameCount = 0;
 
 	dwTicksOffset = (int)(20.0 / (double)((_config.speed * 25) / 100.0));
-	dwTicksTarget = SDL_GetTicks();
+	dwTicksTarget = timer.getTime();
 	dwTicksTargetFPS = dwTicksTarget;
 
 
@@ -385,7 +393,7 @@ void Emulator::Emulate()
 			ExecGoTo();
 		}
 
-		dwTicks = SDL_GetTicks();
+		dwTicks = timer.getTime();
 		// update FPS counter?
 		if (dwTicks >= dwTicksTargetFPS)
 		{
@@ -429,7 +437,7 @@ void Emulator::Emulate()
 		}
 		else if (iExitCondition == EC_CYCLE_COUNT)
 		{
-		dwTicks = SDL_GetTicks();
+		dwTicks = timer.getTime();
 		// limit speed?
 		if (dwTicks < dwTicksTarget)
 		{
@@ -501,7 +509,7 @@ void Emulator::Loop()
 	dword dwFrameCount = 0;
 
 	dword dwTicksOffset = (int)(20.0 / (double)((_config.speed * 25) / 100.0));
-	dword dwTicksTarget = SDL_GetTicks();
+	dword dwTicksTarget = timer.getTime();
 	dword dwTicksTargetFPS = dwTicksTarget;
 	dwTicksTarget += dwTicksOffset;
 
@@ -517,7 +525,7 @@ void Emulator::Loop()
 		// run the emulation, as long as the user doesn't pause it
 		if (!_config.paused)
 		{
-			dwTicks = SDL_GetTicks();
+			dwTicks = timer.getTime();
 			// update FPS counter?
 			if (dwTicks >= dwTicksTargetFPS)
 			{
@@ -554,7 +562,7 @@ void Emulator::Loop()
 			}
 			else if (iExitCondition == EC_CYCLE_COUNT)
 			{
-			dwTicks = SDL_GetTicks();
+			dwTicks = timer.getTime();
 			// limit speed?
 			if (dwTicks < dwTicksTarget)
 			{
@@ -611,7 +619,7 @@ void Emulator::Loop()
 }
 #endif
 
-
+// TODO: Autoconf: Make conditional on libpng presence
 void Emulator::SaveScreenshot(string filename)
 {
 	std::cout << "[DEBUG] Save screenshot in " << filename << endl ;

@@ -21,6 +21,12 @@
 
 //TODO: Move in the core this file in order to be also used by gui
 
+#ifndef __CAPRICE_CLI_ROUTS_H__
+#define __CAPRICE_CLI_ROUTS_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  * Give informations about registers
  */
@@ -81,3 +87,8 @@ void caprice_cli_asm_launch(int address);
  * Save screenshot
  */
 void caprice_cli_screenshot_save();
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __CAPRICE_CLI_ROUTS_H__ */

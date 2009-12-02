@@ -32,6 +32,7 @@
 #include "fdc.h"
 #include "z80.h"
 #include "audio.h"
+#include "timer.h"
 
 #include <iostream>
 class t_z80regs;
@@ -77,7 +78,7 @@ protected:
 	int goToAddress ;
 	
 	Emulator();
-	~Emulator();
+	virtual ~Emulator();
 	static Emulator* instance;
 
 public:
@@ -108,7 +109,7 @@ public:
 	/**
 	 * Pause the emulator
 	 */
-	virtual inline void Pause() { GetConfig().paused = 1; }
+	virtual inline void Pause() { GetConfig().paused = 1; timer.pause();}
 
 	/**
 	 * Pause the emulator due to a breakpoint
@@ -244,6 +245,7 @@ protected:
 	bool FPSDisplay;
 	bool exitRequested;
 
+	Timer timer;
 
 	dword dwTicks ;
 	dword dwFPS ;

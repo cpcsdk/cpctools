@@ -26,12 +26,14 @@
 
 #include "../asm/CapASM.h"
 
+#include "caprice_cli_routs.h"
+
 /**
  * Reference to the compilator
  */
 extern CapASM * capAsm ;
 
-extern "C" void caprice_cli_show_registers()
+void caprice_cli_show_registers()
 {
   {
     std::cout << "Z80 Registers :" << std::endl ;
@@ -63,25 +65,24 @@ extern "C" void caprice_cli_show_registers()
   }
 }
 
-extern "C" void caprice_cli_emu_reset()
+void caprice_cli_emu_reset()
 {
   Emulator::getInstance()->emulator_reset(true);
 }
 
-extern "C" void caprice_cli_add_breakpoint(int adress)
+void caprice_cli_add_breakpoint(int adress)
 {
   std::cout << "# Add breakpoint :" << adress << endl ;
   Emulator::getInstance()->GetZ80().add_break_point(adress);
 }
 
-extern "C" void caprice_cli_remove_breakpoint(int adress)
+void caprice_cli_remove_breakpoint(int adress)
 {
   std::cout << "# Remove breakpoint :" << adress << endl ;
   Emulator::getInstance()->GetZ80().remove_break_point(adress);
 }
 
-
-extern "C" void caprice_cli_show_breakpoints()
+void caprice_cli_show_breakpoints()
 {
   std::cout << "List of breakpoints :" << std::endl ;
   std::set<dword>  breakpoints = Emulator::getInstance()->GetZ80().GetBreakpoints() ;
@@ -95,8 +96,6 @@ extern "C" void caprice_cli_show_breakpoints()
   }
 }
 
-
-extern "C"
 void caprice_cli_continue()
 {
   if (Emulator::getInstance()->GetConfig().breakpoint)
@@ -110,8 +109,6 @@ void caprice_cli_continue()
   }
 }
 
-
-extern "C"
 void caprice_cli_step()
 {
   if (Emulator::getInstance()->GetConfig().breakpoint)
@@ -125,7 +122,7 @@ void caprice_cli_step()
   }
 
 }
-extern "C" 
+
 void caprice_cli_video_color(int mode)
 {
   if (mode == 1)
@@ -145,7 +142,6 @@ void caprice_cli_video_color(int mode)
   }
 }
 
-extern "C"
 void caprice_cli_memory_peek(int address)
 {
   byte * ram = Emulator::getInstance()->GetMemory().GetRAM();
@@ -154,9 +150,7 @@ void caprice_cli_memory_peek(int address)
   std::cout << std::hex << value << endl ;
 }
 
-
 //TODO verify in order to avoid memory leaks
-extern "C"
 void caprice_cli_memory_poke(int address, int value)
 {
   byte * ram = Emulator::getInstance()->GetMemory().GetRAM();
@@ -178,7 +172,6 @@ void caprice_cli_memory_poke(int address, int value)
   
 }
 
-extern "C"
 void caprice_cli_memory_disasm_quantity(int address, int size)
 {
    std::cout << address << "\t" << size << endl;
@@ -190,7 +183,6 @@ void caprice_cli_memory_disasm_quantity(int address, int size)
 
 }
 
-extern "C"
 void caprice_cli_memory_disasm(int address)
 {
   int size ;
@@ -199,8 +191,6 @@ void caprice_cli_memory_disasm(int address)
   caprice_cli_memory_disasm_quantity( address, size) ;
 }
 
-
-extern "C"
 void caprice_cli_memory_disasm_pc(int size)
 {
   caprice_cli_memory_disasm_quantity( 
@@ -208,14 +198,12 @@ void caprice_cli_memory_disasm_pc(int size)
       size) ;
 }
 
-extern "C"
 void caprice_cli_asm_compile_file(char *filename)
 {
 
   capAsm->Compile(filename);
 }
 
-extern "C"
 void  caprice_cli_asm_launch(int address)
 {
   if (address == -1)
@@ -228,8 +216,7 @@ void  caprice_cli_asm_launch(int address)
   }
 }
 
-
-extern "C"
+// TODO: Autoconf: Make conditional on libpng presence
 void caprice_cli_screenshot_save()
 {
   Emulator::getInstance()->SaveScreenshot("caprice.png");
