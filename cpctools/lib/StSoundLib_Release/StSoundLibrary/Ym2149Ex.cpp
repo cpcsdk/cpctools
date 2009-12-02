@@ -184,7 +184,7 @@ ymu32 CYm2149Ex::noiseStepCompute(ymu8 rNoise)
 
 
 	ymint per = (rNoise&0x1f);
-	if (per<3)
+	if (per == 0)
 		return 0;
 
 #ifdef YM_INTEGER_ONLY
@@ -193,8 +193,11 @@ ymu32 CYm2149Ex::noiseStepCompute(ymu8 rNoise)
 	step /= (per * replayFrequency);
 #else
 	ymfloat step = internalClock;
+	step = (step * 4096.0) / ((ymfloat)per * (ymfloat)replayFrequency);
+	/*
 	step /= ((ymfloat)per*8.0*(ymfloat)replayFrequency);
 	step *= 65536.0/2.0;
+	*/
 #endif
 
 	return (ymu32)step;
@@ -202,9 +205,15 @@ ymu32 CYm2149Ex::noiseStepCompute(ymu8 rNoise)
 
 ymu32	CYm2149Ex::rndCompute(void)
 {
+	/*
 		ymint	rBit = (rndRack&1) ^ ((rndRack>>2)&1);
 		rndRack = (rndRack>>1) | (rBit<<16);
 		return (rBit ? 0 : 0xffff);
+*/
+		ymint ret = rndRack & 1;
+    	rndRack >>= 1;
+	    rndRack ^= (ret ? 0x02000 : 0x10000);
+		return ret? 0:0xFFFF;
 }
 
 ymu32 CYm2149Ex::envStepCompute(ymu8 rHigh,ymu8 rLow)
@@ -246,7 +255,7 @@ void	CYm2149Ex::reset(void)
 	writeRegister(7,0xff);
 
 	currentNoise = 0xffff;
-	rndRack = 1;
+	rndRack = 0;
 	sidStop(0);
 	sidStop(1);
 	sidStop(2);
@@ -330,7 +339,7 @@ ymint bt,bn;
 
 		if (noisePos&0xffff0000)
 		{
-			currentNoise ^= rndCompute();
+			currentNoise = rndCompute();
 			noisePos &= 0xffff;
 		}
 		bn = currentNoise;
@@ -391,7 +400,7 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 {
 		if (noisePos&0xffff0000)
 		{
-			currentNoise ^= rndCompute();
+			currentNoise = rndCompute();
 			noisePos &= 0xffff;
 		}
 		ymint bn = currentNoise;

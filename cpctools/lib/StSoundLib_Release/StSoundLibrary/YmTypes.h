@@ -33,7 +33,7 @@
 #ifndef __YMTYPES__
 #define __YMTYPES__
 
-#define YM_INTEGER_ONLY
+//#define YM_INTEGER_ONLY
 
 //-----------------------------------------------------------
 // Platform specific stuff
