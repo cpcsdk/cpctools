@@ -210,10 +210,8 @@ ymu32	CYm2149Ex::rndCompute(void)
 		rndRack = (rndRack>>1) | (rBit<<16);
 		return (rBit ? 0 : 0xffff);
 */
-		ymint ret = rndRack & 1;
-    	rndRack >>= 1;
-	    rndRack ^= (ret ? 0x02000 : 0x10000);
-		return ret? 0:0xFFFF;
+		rndRack = ( ( ((rndRack & 1)>0) ^ ((rndRack & 8)>0)) ? 0x10000 : 0) | (rndRack >> 1);
+		return rndRack & 1 ? 0xFFFF:0;
 }
 
 ymu32 CYm2149Ex::envStepCompute(ymu8 rHigh,ymu8 rLow)
@@ -255,7 +253,7 @@ void	CYm2149Ex::reset(void)
 	writeRegister(7,0xff);
 
 	currentNoise = 0xffff;
-	rndRack = 0;
+	rndRack = 1;
 	sidStop(0);
 	sidStop(1);
 	sidStop(2);
