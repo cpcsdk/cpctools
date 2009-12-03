@@ -259,8 +259,6 @@ Emulator::Emulator():
 	// retrieve the emulator configuration
 	_config.loadConfiguration(*this);
 	
-	timer.start();
-	
 	std::cout << "[DEBUG] Construct Emulator" << endl;
 }
 
@@ -286,6 +284,8 @@ Emulator::~Emulator()
 
 bool Emulator::Init()
 {
+	timer.start();
+	
 	// attempt to allocate the general purpose buffer
 	pbGPBuffer = new byte [128*1024];
 

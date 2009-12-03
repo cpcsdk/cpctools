@@ -11,6 +11,8 @@
 #pragma message "Use sdltimer"
 #endif
 
+#include <iostream>
+
 class Timer
 {
 	private:
@@ -39,6 +41,7 @@ class Timer
 			{
 				started = true;
 				paused = false;
+				std::cout << "workingTime: " << workingTime << " startTime: " << startTime << " currentTime(): " << currentTime() << endl;
 				startTime = currentTime();
 			}
 		}
@@ -65,10 +68,13 @@ class Timer
 		{
 			if(paused == true)
 			{
+				std::cout << "getTime(), paused = true: " << workingTime << std::endl;
 				return workingTime;
 			}
 			else
 			{
+				std::cout << "getTime(), paused = false: " << workingTime + currentTime() - startTime << std::endl;
+				std::cout << "workingTime: " << workingTime << " startTime: " << startTime << " currentTime(): " << currentTime() << endl;
 				return workingTime + currentTime() - startTime;
 			}
 		}
@@ -80,7 +86,6 @@ class Timer
 			#else
 			struct timespec t;
 			clock_gettime(CLOCK_REALTIME, &t);
-			refTime = t.tv_sec;
 			return 1000*(t.tv_sec - refTime) + t.tv_nsec/1000000;
 			#endif
 		}

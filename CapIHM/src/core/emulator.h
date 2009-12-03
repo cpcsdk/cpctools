@@ -127,6 +127,7 @@ public:
 	{
 		GetConfig().paused = 0;
 		GetConfig().breakpoint = 0;
+		timer.start();
 	}
 	/**
 	 * Run the emulator step by step
@@ -134,6 +135,7 @@ public:
 	inline void Step()
 	{
 		GetConfig().paused = 0 ;
+		timer.start();
 	}
 
 
