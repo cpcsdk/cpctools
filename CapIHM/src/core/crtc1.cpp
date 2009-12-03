@@ -39,7 +39,8 @@ void t_CRTC1::setReg9(unsigned char val)
 
 	register dword temp = 0;
 	// matches maximum raster address?
-	if (_rasterCount == _registers[9])
+	// (also allow changes when in first line)
+	if (_rasterCount == _registers[9] || _rasterCount == 0)
 	{
 		temp = 1;
 		_resScan = true; // request a raster counter reset
@@ -53,7 +54,7 @@ void t_CRTC1::setReg9(unsigned char val)
 		}
 	}
 	// matches maximum raster address?
-	if (_rasterCount == _registers[9])
+	if (_rasterCount == _registers[9] || _rasterCount == 0)
 	{
 		if (_charCount == _registers[1])
 		{

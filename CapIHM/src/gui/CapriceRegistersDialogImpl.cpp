@@ -125,6 +125,12 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
         m_cB_NFlagsShadow->SetValue((bool)(((emulator->GetZ80().AFx.b.l) >> 1 ) & 1));
         m_cB_CFlags->SetValue((bool)((emulator->GetZ80().AF.b.l) & 1));
         m_cB_CFlagsShadow->SetValue((bool)((emulator->GetZ80().AFx.b.l) & 1));
+
+		// Z80 interrupt flags
+		m_cb_interruptenabled->SetValue(emulator->GetZ80().IFF1);
+		m_c_interruptMode->Select(emulator->GetZ80().IM);
+		m_cb_interruptpending->SetValue(emulator->GetZ80().int_pending);
+		// TODO : NMI ? (seems not handled by our z80!! it does a RST(0x66) on MF2 button)
     }
 
 //     CRTC Register

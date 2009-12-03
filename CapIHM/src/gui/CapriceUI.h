@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Sep 20 2009)
+// C++ code generated with wxFormBuilder (version Dec  3 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -338,7 +338,7 @@ class RegistersStates : public wxDialog
 	
 	protected:
 		wxNotebook* m_nb_Register;
-		wxPanel* m_panel4;
+		wxPanel* z80_tab;
 		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText10;
 		wxStaticText* m_staticText11;
@@ -368,10 +368,10 @@ class RegistersStates : public wxDialog
 		wxTextCtrl* m_tCrLx;
 		wxStaticText* m_staticText31;
 		wxTextCtrl* m_tCrI;
-		wxStaticText* m_staticText32;
+		
 		wxStaticText* m_staticText33;
 		wxTextCtrl* m_tCrR;
-		wxStaticText* m_staticText21;
+		
 		wxStaticText* m_staticText22;
 		wxStaticText* m_staticText23;
 		wxStaticText* m_staticText24;
@@ -385,16 +385,16 @@ class RegistersStates : public wxDialog
 		wxTextCtrl* m_tCrHLx;
 		wxStaticText* m_staticText27;
 		wxTextCtrl* m_tCrIX;
-		wxStaticText* m_staticText45;
+		
 		wxStaticText* m_staticText28;
 		wxTextCtrl* m_tCrIY;
-		wxStaticText* m_staticText44;
+		
 		wxStaticText* m_staticText29;
 		wxTextCtrl* m_tCrPC;
-		wxStaticText* m_staticText43;
+		
 		wxStaticText* m_staticText30;
 		wxTextCtrl* m_tCrSP;
-		wxStaticText* m_staticText34;
+		
 		wxStaticText* m_staticText35;
 		wxStaticText* m_staticText36;
 		wxStaticText* m_staticText37;
@@ -417,7 +417,11 @@ class RegistersStates : public wxDialog
 		wxCheckBox* m_cB_CFlagsShadow;
 		wxCheckBox* m_checkBox15;
 		wxCheckBox* m_checkBox16;
-		wxPanel* m_panel8;
+		wxCheckBox* m_cb_interruptenabled;
+		wxChoice* m_c_interruptMode;
+		wxCheckBox* m_cb_interruptpending;
+		wxCheckBox* m_cb_nmipending;
+		wxPanel* crtc_tab;
 		wxStaticText* m_staticText46;
 		wxTextCtrl* m_tCcHCC;
 		wxStaticText* m_staticText47;
@@ -450,7 +454,7 @@ class RegistersStates : public wxDialog
 		wxStaticText* m_staticText61;
 		wxStaticText* m_sT_VFrameLength;
 		wxCheckBox* m_cB_VFrameLengthIsOk;
-		wxPanel* m_panel9;
+		wxPanel* ga_tab;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseR( wxCloseEvent& event ) { event.Skip(); }
@@ -492,6 +496,10 @@ class RegistersStates : public wxDialog
 		virtual void OnSetFocusI( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnKillFocusR( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSetFocusR( wxFocusEvent& event ) { event.Skip(); }
+		virtual void onInterruptToggle( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onInterruptModeChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onInterruptSend( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onNMISend( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnKillFocusHCC( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSetFocusHCC( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnKillFocusVCC( wxFocusEvent& event ) { event.Skip(); }
