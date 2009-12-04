@@ -49,6 +49,17 @@ public:
 
 	char* GetROMFile(unsigned int idx) const;
 
+	int getTypeForAddress(word adr)
+	{
+		if(membank_read[adr>>14] == pbROMlo)
+			return 1;
+		else if(membank_read[adr>>14] == pbROMhi)
+			return 2;
+		else if(membank_read[adr>>14] == pbExpansionROM)
+			return 4;
+		return 0;
+	}
+
   /**
    * Return the RAM pointer
    */

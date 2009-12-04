@@ -59,16 +59,36 @@ MemoryImpl::~MemoryImpl()
 void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 {
 	wxClientDC drawContext(overviewPanel);
-	for (int x = 0; x < 256; x++)
-		for (int y = 0; y < 256; y++)
+	for (int y = 0; y < 256; y++)
+	{
+		wxPen p;
+		switch(_emulator->GetMemory().getTypeForAddress(y<<8))
+		{
+			case 1:
+				p.SetColour(*wxRED);
+				break;
+			case 2:
+				p.SetColour(*wxGREEN);
+				break;
+			case 3:
+				p.SetColour(*wxBLUE);
+				break;
+			default:
+				p.SetColour(*wxWHITE);
+				break;
+		}
+		for (int x = 0; x < 256; x++)
 		{
 			// TODO change colors when displaying bank or rom
 			if (_emulator->GetMemory().Read(y * 256 + x) == 0)
-				drawContext.SetPen(*wxWHITE_PEN);
+			{
+				drawContext.SetPen(p);
+			}
 			else
 				drawContext.SetPen(*wxBLACK_PEN);
 			drawContext.DrawPoint(x, y);
 		}
+	}
 
 	drawContext.DrawText(_T("&0000"),258,0);
 	drawContext.DrawText(_T("&4000"),258,64);
