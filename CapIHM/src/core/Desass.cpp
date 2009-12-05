@@ -104,35 +104,35 @@ const char * TabInstrCB[ 256 ] =
 
 const char * TabInstrED[ 256 ] =
 {
+	0,0,0,0, // 0
+	0,0,0,0, // 4
+	0,0,0,0, // 8
+	0,0,0,0, // C
+	0,0,0,0, // 10
+	0,0,0,0, // 14
+	0,0,0,0, // 18
+	0,0,0,0, // 1C
+	0,0,0,0, // 20
 	0,0,0,0,
 	0,0,0,0,
 	0,0,0,0,
+	0,0,0,0, // 30
 	0,0,0,0,
 	0,0,0,0,
 	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	"IN B,(C)","OUT (C),B","SBC HL,BC","LD (0x%04X),BC",
+	"IN B,(C)","OUT (C),B","SBC HL,BC","LD (0x%04X),BC", // 40
 	"NEG","RETN","IM 0","LD I,A",
 	"IN C,(C)","OUT (C),C","ADC HL,BC","LD BC,(0x%04X)",
 	0,"RETI",0,"LD R,A",
-	"IN D,(C)","OUT (C),D","SBC HL,DE","LD (0x%04X),DE",
+	"IN D,(C)","OUT (C),D","SBC HL,DE","LD (0x%04X),DE", // 50
 	0,0,"IM 1","LD A,I",
 	"IN E,(C)","OUT (C),E","ADC HL,DE","LD DE,(0x%04X)",
 	0,0,"IM 2","LD A,R",
-	"IN H,(C)","OUT (C),H","SBC HL,HL",0,
+	"IN H,(C)","OUT (C),H","SBC HL,HL",0, // 60
 	0,0,0,"RRD",
 	"IN L,(C)","OUT (C),L","ADC HL,HL",0,
 	0,0,0,"RLD",
-	0,"OUT (C),0","SBC HL,SP","LD (0x%04X),SP",
+	0,"OUT (C),0","SBC HL,SP","LD (0x%04X),SP", // 70
 	0,0,0,0,
 	"IN A,(C)","OUT (C),A","ADC HL,SP","LD SP,(0x%04X)",
 	0,0,0,0,
@@ -353,63 +353,63 @@ const char * TabInstrFDCB[ 256 ] =
 
 const char * TabInstr[ 256 ] =
 {
-	"NOP","LD BC,0x%04X","LD (BC),A","INC BC",
-	"INC B","DEC B","LD B,0x%02X","RLCA",
+	"NOP","LD BC,0x%04X","LD (BC),A","INC BC", // 0
+	"INC B","DEC B","LD B,0x%02X","RLCA", // 4
 	"EX AF,AF","ADD HL,BC","LD A,(BC)","DEC BC",
 	"INC C","DEC C","LD C,0x%02X","RRCA",
-	"DJNZ 0xeeee ","LD DE,0x%04X","LD (DE),A","INC DE",
+	"DJNZ 0xeeee ","LD DE,0x%04X","LD (DE),A","INC DE", // 10
 	"INC D","DEC D","LD D,0x%02X","RLA",
 	"JR 0xeeee ","ADD HL,DE","LD A,(DE)","DEC DE",
 	"INC E","DEC E","LD E,0x%02X","RRA",
-	"JR NZ,0xeeee ","LD HL,0x%04X","LD (0x%04X),HL","INC HL",
+	"JR NZ,0xeeee ","LD HL,0x%04X","LD (0x%04X),HL","INC HL", // 20
 	"INC H","DEC H","LD H,0x%02X","DAA",
 	"JR Z,0xeeee ","ADD HL,HL","LD HL,(0x%04X)","DEC HL",
 	"INC L","DEC L","LD L,0x%02X","CPL",
-	"JR NC,0xeeee ","LD SP,0x%04X","LD (0x%04X),A","INC SP",
+	"JR NC,0xeeee ","LD SP,0x%04X","LD (0x%04X),A","INC SP", // 30
 	"INC (HL)","DEC (HL)","LD (HL),0x%02X","SCF",
 	"JR C,0xeeee ","ADD HL,SP","LD A,(0x%04X)","DEC SP",
 	"INC A","DEC A","LD A,0x%02X","CCF",
-	"LD B,B","LD B,C","LD B,D","LD B,E",
+	"LD B,B","LD B,C","LD B,D","LD B,E", // 40
 	"LD B,H","LD B,L","LD B,(HL)","LD B,A",
 	"LD C,B","LD C,C","LD C,D","LD C,E",
 	"LD C,H","LD C,L","LD C,(HL)","LD C,A",
-	"LD D,B","LD D,C","LD D,D","LD D,E",
+	"LD D,B","LD D,C","LD D,D","LD D,E", // 50
 	"LD D,H","LD D,L","LD D,(HL)","LD D,A",
 	"LD E,B","LD E,C","LD E,D","LD E,E",
 	"LD E,H","LD E,L","LD E,(HL)","LD E,A",
-	"LD H,B","LD H,C","LD H,D","LD H,E",
+	"LD H,B","LD H,C","LD H,D","LD H,E", // 60
 	"LD H,H","LD H,L","LD H,(HL)","LD H,A",
 	"LD L,B","LD L,C","LD L,D","LD L,E",
 	"LD L,H","LD L,L","LD L,(HL)","LD L,A",
-	"LD (HL),B","LD (HL),C","LD (HL),D","LD (HL),E",
+	"LD (HL),B","LD (HL),C","LD (HL),D","LD (HL),E", // 70
 	"LD (HL),H","LD (HL),L","HALT","LD (HL),A",
 	"LD A,B","LD A,C","LD A,D","LD A,E",
 	"LD A,H","LD A,L","LD A,(HL)","LD A,A",
-	"ADD A,B","ADD A,C","ADD A,D","ADD A,E",
+	"ADD A,B","ADD A,C","ADD A,D","ADD A,E", // 80
 	"ADD A,H","ADD A,L","ADD A,(HL)","ADD A,A",
 	"ADC A,B","ADC A,C","ADC A,D","ADC A,E",
 	"ADC A,H","ADC A,L","ADC A,(HL)","ADC A,A",
-	"SUB B","SUB C","SUB D","SUB E",
+	"SUB B","SUB C","SUB D","SUB E", // 90
 	"SUB H","SUB L","SUB (HL)","SUB A",
 	"SBC A,B","SBC A,C","SBC A,D","SBC A,E",
 	"SBC A,H","SBC A,L","SBC A,(HL)","SBC A,A",
-	"AND B","AND C","AND D","AND E",
+	"AND B","AND C","AND D","AND E", // A0
 	"AND H","AND L","AND (HL)","AND A",
 	"XOR B","XOR C","XOR D","XOR E",
 	"XOR H","XOR L","XOR (HL)","XOR A",
-	"OR B","OR C","OR D","OR E",
+	"OR B","OR C","OR D","OR E", // B0
 	"OR H","OR L","OR (HL)","OR A",
 	"CP B","CP C","CP D","CP E",
 	"CP H","CP L","CP (HL)","CP A",
-	"RET NZ","POP BC","JP NZ,0x%04X","JP 0x%04X",
+	"RET NZ","POP BC","JP NZ,0x%04X","JP 0x%04X", // C0
 	"CALL NZ,0x%04X","PUSH BC","ADD A,0x%02X","RST 00",
 	"RET Z","RET","JP Z,0x%04X",0,
 	"CALL Z,0x%04X","CALL 0x%04X","ADC A,0x%02X","RST 08",
-	"RET NC","POP DE","JP NC,0x%04X","OUT (0x%02X),A",
+	"RET NC","POP DE","JP NC,0x%04X","OUT (0x%02X),A", // D0
 	"CALL NC,0x%04X","PUSH DE","SUB 0x%02X","RST 10",
 	"RET C","EXX","JP C,0x%04X","IN A,(0x%02X)",
 	"CALL C,0x%04X",0,"SBC A,0x%02X","RST 18",
-	"RET PE","POP HL","JP PE,0x%04X","EX (SP),HL",
+	"RET PE","POP HL","JP PE,0x%04X","EX (SP),HL", // E0
 	"CALL PE,0x%04X","PUSH HL","AND 0x%02X","RST 20",
 	"RET PO","JP (HL)","JP PO,0x%04X","EX DE,HL",
 	"CALL PO,0x%04X",0,"XOR 0x%02X","RST 28",
@@ -442,67 +442,80 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 	{
 		OldAdr = Adr;
 		Instr = mem.Read(Adr++);
+
+		// No prefix
 		Chaine = TabInstr[ Instr ];
-		if ( Instr == 0xCB )
+
+		if (Chaine)
+		{
+			
+		}
+		// CB-Prefix
+		else if ( Instr == 0xCB )
 		{
 			Inst2 = mem.Read(Adr++);
 			Chaine = TabInstrCB[ Inst2 ];
 		}
-		else
-			if ( Instr == 0xDD )
+		// DD-Prefix
+		else if ( Instr == 0xDD )
+		{
+			Inst2 = mem.Read(Adr++);
+			// DDCB-Prefix
+			if ( Inst2 == 0xCB )
 			{
-				Inst2 = mem.Read(Adr++);
-				if ( Inst2 == 0xCB )
+				Inst3 = mem.Read(Adr++);
+				Inst4 = mem.Read(Adr++);
+				Chaine = TabInstrDDCB[ Inst4 ];
+				strcpy( Inst, Chaine );
+				p = strstr( Inst, "nn" );
+				if ( p )
 				{
-					Inst3 = mem.Read(Adr++);
-					Inst4 = mem.Read(Adr++);
-					Chaine = TabInstrDDCB[ Inst4 ];
-					strcpy( Inst, Chaine );
-					p = strstr( Inst, "nn" );
-					if ( p )
+					if ( Inst3 < 0x80 )
+						Hex( p, Inst3, 2 );
+					else
 					{
-						if ( Inst3 < 0x80 )
-							Hex( p, Inst3, 2 );
-						else
-						{
-							Hex( p, -Inst3, 2 );
-							p[ -1 ] = '-';
-						}
+						Hex( p, -Inst3, 2 );
+						p[ -1 ] = '-';
 					}
-					Chaine = Inst;
 				}
-				else
-					Chaine = TabInstrDD[ Inst2 ];
+				Chaine = Inst;
 			}
 			else
-				if ( Instr == 0xED )
+				Chaine = TabInstrDD[ Inst2 ];
+		}
+		// ED-Prefix
+		else if ( Instr == 0xED )
+		{
+			Inst2 = mem.Read(Adr++);
+			Chaine = TabInstrED[ Inst2 ];
+		}
+		// FD-Prefix
+		else if ( Instr == 0xFD )
+		{
+			Inst2 = mem.Read(Adr++);
+			// FDCB-Prefix
+			if ( Inst2 == 0xCB )
+			{
+				Ad8 = mem.Read(Adr++);
+				Inst3 = mem.Read(Adr++);
+				Chaine = TabInstrFDCB[ Inst3 ];
+				if ( Chaine )
 				{
-					Inst2 = mem.Read(Adr++);
-					Chaine = TabInstrED[ Inst2 ];
+					strcpy( Inst, Chaine );
+					Chaine = Inst;
+					p = strstr( Inst, "%02X" );
+					if ( p )
+						sprintf(Inst, Inst, Ad8);
 				}
-				else
-					if ( Instr == 0xFD )
-					{
-						Inst2 = mem.Read(Adr++);
-						if ( Inst2 == 0xCB )
-						{
-							Ad8 = mem.Read(Adr++);
-							Inst3 = mem.Read(Adr++);
-							Chaine = TabInstrFDCB[ Inst3 ];
-							if ( Chaine )
-							{
-								strcpy( Inst, Chaine );
-								Chaine = Inst;
-								p = strstr( Inst, "%02X" );
-								if ( p )
-									sprintf(Inst, Inst, Ad8);
-							}
-						}
-						else
-							Chaine = TabInstrFD[ Inst2 ];
-					}
+			}
+			else
+				Chaine = TabInstrFD[ Inst2 ];
+		}
+
+
 		if ( Chaine )
 		{
+			if(Instr==6) std::cout << Chaine ;
 			strcpy( Inst, Chaine );
 			p = strstr( Inst, "%04X" );
 			Ad16 = mem.Read(Adr++);
@@ -510,7 +523,7 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 			Ad8 = ( char ) Ad16;
 			if ( p )
 			{
-				sprintf(Inst, Inst, Ad16);
+				sprintf(Inst, Chaine, Ad16);
 				Adr++;
 			}
 			else
@@ -518,11 +531,11 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 				p = strstr( Inst, "%02X" );
 				if ( p )
 				{
-					sprintf(Inst, Inst, Ad16);
+					sprintf(Inst, Chaine, Ad8);
 					p = strstr( Inst, "%02X" );
 					if ( p )
 					{
-						sprintf(Inst, Inst, Ad16 >> 8);
+						sprintf(Inst, Chaine, Ad16 >> 8);
 					}
 				}
 				else
@@ -540,23 +553,19 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 		else
 			sprintf( Inst, "%02X %02X %02X ????", Instr, Inst2, Inst3 );
 
-
 		//Memory adress part
 		Listing.width(4);
 		Listing << std::hex << OldAdr ;
 		Listing << "\t" ;
-
 		//Memory content part
 		// Hex dump
 		for ( i = OldAdr; i < Adr; i++ )
 		{
 			int val = mem.Read(i);
-
 			Listing.width(2);
 			Listing << val ;
 			Listing << ' ' ;
 		}
-
 		Listing << "\t" ;
 		if (Adr - OldAdr < 3)
 			Listing << "\t" ;
@@ -565,7 +574,6 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 		for ( i = OldAdr; i < Adr; i++ )
 		{
 			int val = mem.Read(i);
-
 			// 127 is DEL. Not printable.
 			if (val > 32 && val < 127)
 			{
