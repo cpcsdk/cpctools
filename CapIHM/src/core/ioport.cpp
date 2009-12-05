@@ -240,6 +240,29 @@ byte IOPort::z80_IN_handler(reg_pair port)
 void IOPort::z80_OUT_handler(reg_pair port, byte val)
 {
 	// Gate Array -----------------------------------------------------------------
+	// Memory PAL
+	if ((port.b.h & 0x80) == 0)
+	{
+		// set memory configuration
+		if(val>>6 == 3)
+		{
+#ifdef USE_DEBUGGER_GA
+			if (dwDebugFlag) 
+			{
+				fprintf(pfoDebug, "IOGA : mem 0x%02x\r\n", val);
+			}
+#endif
+			Memory.SetRAMConfig( val );
+			Memory.ga_memory_manager();
+
+			// MF2 enabled?
+			if (CPC.mf2) 
+			{
+				*(pbMF2ROM + 0x03fff) = val;
+			}
+		}
+	}
+
 	// GA chip select?
 	if ((port.b.h & 0xc0) == 0x40) 
 	{
@@ -311,25 +334,6 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 				if (CPC.mf2) 
 				{
 					*(pbMF2ROM + 0x03fef) = val;
-				}
-				break;
-			}
-			// set memory configuration
-		case 3:
-			{
-#ifdef USE_DEBUGGER_GA
-				if (dwDebugFlag) 
-				{
-					fprintf(pfoDebug, "IOGA : mem 0x%02x\r\n", val);
-				}
-#endif
-				Memory.SetRAMConfig( val );
-				Memory.ga_memory_manager();
-				
-				// MF2 enabled?
-				if (CPC.mf2) 
-				{
-					*(pbMF2ROM + 0x03fff) = val;
 				}
 				break;
 			}
