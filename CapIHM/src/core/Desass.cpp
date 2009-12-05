@@ -515,7 +515,6 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 
 		if ( Chaine )
 		{
-			if(Instr==6) std::cout << Chaine ;
 			strcpy( Inst, Chaine );
 			p = strstr( Inst, "%04X" );
 			Ad16 = mem.Read(Adr++);
