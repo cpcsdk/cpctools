@@ -64,13 +64,13 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 		wxPen p;
 		switch(_emulator->GetMemory().getTypeForAddress(y<<8))
 		{
-			case 1:
+			case 1: // Low ROM
 				p.SetColour(*wxRED);
 				break;
-			case 2:
+			case 2: // Hi ROM
 				p.SetColour(*wxGREEN);
 				break;
-			case 3:
+			case 4: // Exp. RAM
 				p.SetColour(*wxBLUE);
 				break;
 			default:

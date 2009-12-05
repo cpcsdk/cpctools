@@ -55,9 +55,14 @@ public:
 			return 1;
 		else if(membank_read[adr>>14] == pbROMhi)
 			return 2;
-		else if(membank_read[adr>>14] == pbExpansionROM)
-			return 4;
-		return 0;
+		else if(
+				membank_read[adr>>14] == pbRAM ||
+				membank_read[adr>>14] == pbRAM+0x4000 ||
+				membank_read[adr>>14] == pbRAM+0x8000 ||
+				membank_read[adr>>14] == pbRAM+0xC000 
+				)
+			return 0;
+		return 4;
 	}
 
   /**
