@@ -1,13 +1,7 @@
-DIST_SUBDIRS = IDE
-SUBDIRS = IDE
-
-
-
 noinst_LIBRARIES = libcapricewx.a libfoo.a
 
 libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) \
                           -I@top_srcdir@/src/core \
-                          -I@top_srcdir@/src/gui/IDE \
                           -I@top_srcdir@/src/asm \
                           -DDATA_PATH=\"$(pkgdatadir)//\"
 libcapricewx_a_SOURCES = \
@@ -25,9 +19,7 @@ CapriceInputSettingsImpl.h\
 CapriceInputSettingsImpl.cpp\
 CPCKeyDefs.h \
 WXEmulator.h \
-WXEmulator.cpp \
-CapriceIDE.h \
-CapriceIDE.cpp
+WXEmulator.cpp
 
 #video.cpp \
 #input.cpp
@@ -36,6 +28,15 @@ libcapricewx_a_LIBADD = libfoo.a
 # Ces deux fichiers ont besoin de CPCKeyDefs.h, mais pas les autres. On est obligé de bricoler parce que ces fichiers sont générés par wxFormBuilder...
 libfoo_a_SOURCES = CapriceUI.cpp CapriceUI.h
 libfoo_a_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\" -include ../core/CPCKeyDefs.h 
+
+if WITH_IDE
+  DIST_SUBDIRS = IDE
+  SUBDIRS = IDE
+  libcapricewx_a_SOURCES += \
+  CapriceIDE.h \
+  CapriceIDE.cpp
+  libcapricewx_a_CPPFLAGS += -I@top_srcdir@/src/gui/IDE
+endif
 
 if CLI
   libcapricewx_a_CPPFLAGS += -I@top_srcdir@/src/cli 

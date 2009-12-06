@@ -70,11 +70,12 @@ AM_PROG_CC_C_O
 
 #ARGS
 
+# With
+
 AC_ARG_WITH(	stsound,
 		[  --with-stsound	  use St Sound backend [default=yes]],
-                 with_stsound=no,
-		 with_stsound=yes)
-	   
+		with_stsound=no,
+		with_stsound=yes)	   
 
 AC_ARG_WITH(	aylet,
 		[  --with-aylet		  use Aylet backend [default=no]],
@@ -86,16 +87,25 @@ AC_ARG_WITH(	ayemu,
 		with_ayemu=yes,
 		with_ayemu=no)
 
-
 AC_ARG_WITH(	lib765,
-		[  --with-lib765		  use lib765 backend associate with libdsk for fdc emulation [default=yes]],
-		with_lib765=no,
-		with_lib765=yes)
+		[  --with-lib765		  use lib765 backend associate with libdsk for fdc emulation [default=no]],
+		with_lib765=yes,
+		with_lib765=no)
 
 AC_ARG_WITH(	wxwidget,
 		[  --with-wxwidget	  use wxWidget as a gui [default=yes]],
 		with_wxwidget=no,
 		with_wxwidget=yes)
+		
+AC_ARG_WITH(	cli,
+		[  --with-cli		  turn on cli interface [default=no]],
+		with_cli=yes,
+		with_cli=no)
+
+if test "$with_cli" = "yes" ; then
+    AC_DEFINE(CLI,1,[Use a command line interface])
+fi
+AM_CONDITIONAL([CLI], [test "$with_cli" = "yes"])
 
 AC_ARG_WITH(	debugger,
 		[  --with-debugger	  use the internal debugger [default=yes]],
@@ -106,20 +116,31 @@ if test "$with_debugger" = "yes" ; then
 	AC_DEFINE(USE_DEBUGGER,1,[Activate the internal debugger])
 fi
 
+AC_ARG_WITH(	ide,
+		[  --with-ide		  turn on ide (Integrated Development Environment) [default=yes]],
+		with_ide=no,
+		with_ide=yes)
+
+if test "$with_ide" = "yes" ; then
+    AC_DEFINE(WITH_IDE,1,[Activate Integrated Development Environment])
+fi
+AM_CONDITIONAL([WITH_IDE], [test "$with_ide" = "yes"])
+
+# Enable
+
 AC_MSG_CHECKING(for debugging environment)
 AC_ARG_ENABLE(	debug,
-		[  --enable-debug	  turn on debug compiler [default=yes]],
-		enable_debug=no,
-		enable_debug=yes)
+		[  --enable-debug	  turn on debug compiler [default=no]],
+		enable_debug=yes,
+		enable_debug=no)
 
 if test "$enable_debug" = yes ; then
-	CXXFLAGS="-O0 -Wall -Werror -g -DDEBUG -pg"
-	CFLAGS="-O0 -Wall  -Werror -g -DDEBUG -pg"
+	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg"
+	CFLAGS="-O0 -Wall -g -DDEBUG -pg"
 else
   CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
   CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
 fi
-AM_CONDITIONAL([RELEASE], [test  "enable_debug" = "no"])
 
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 
@@ -142,16 +163,6 @@ AC_ARG_ENABLE(  opengl,
 if test "$enable_opengl" = "yes" ;  then
 	AC_DEFINE(USE_OPENGL,1,[Activate OpenGL support])
 fi
-
-AC_ARG_ENABLE(	cli,
-		[  --enable-cli		  turn on cli interface [default=no]],
-		enable_cli=yes,
-		enable_cli=no)
-
-if test "$enable_cli" = "yes" ; then
-    AC_DEFINE(CLI,1,[Use a command line interface])
-fi
-AM_CONDITIONAL([CLI], [test "$enable_cli" = "yes"])
 
 # GUI
 if test "$with_wxwidget" = "yes" ; then
@@ -252,21 +263,18 @@ AC_CONFIG_FILES([
 
 AC_OUTPUT
 
-
 AC_MSG_CHECKING([
-
-
 
 CapriceReloaded compilation option :
 
     Use lib765 ................... ${with_lib765}
     Sound Backend ................ ${sound_backend}
 
-    Cli interface ................ ${enable_cli}
-    OpenGL ....................... ${enable_opengl}
+    Cli interface ................ ${with_cli}
     Debugger ..................... ${with_debugger}
+    IDE .......................... ${with_ide}
+    OpenGL ....................... ${enable_opengl}
 
     Debug mode ................... ${enable_debug}
 
 ])
-

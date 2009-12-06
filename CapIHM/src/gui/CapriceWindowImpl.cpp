@@ -21,11 +21,14 @@
 
 
 #include "CapriceWindowImpl.h"
-#include "CapriceIDE.h"
 #include "snapshot.h"
 #include "video.h"
 #include "CapriceInputSettingsImpl.h"
 #include "MemoryImpl.h"
+
+#ifdef WITH_IDE
+#include "CapriceIDE.h"
+#endif
 
 #include <wx/filedlg.h>
 #include <wx/filename.h>
@@ -263,8 +266,12 @@ void CapriceWindowImpl::OnDebugMemory( wxCommandEvent& event )
 
 void CapriceWindowImpl::OnShowAssembler( wxCommandEvent& event)
 {
-  CapriceIDEImpl* ide = new CapriceIDEImpl(this, emulator);
-  ide->Show(true);
+	#ifdef WITH_IDE
+	CapriceIDEImpl* ide = new CapriceIDEImpl(this, emulator);
+	ide->Show(true);
+	#else
+	wxMessageBox(wxT("The Integrated Development Environment wasn't enable in this build"), wxT("IDE not enable"), wxOK, this);
+	#endif
 }
 
 void CapriceWindowImpl::OnAbout( wxCommandEvent& event)

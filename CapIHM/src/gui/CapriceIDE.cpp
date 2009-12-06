@@ -61,8 +61,10 @@ CapriceIDEImpl::CapriceIDEImpl(wxWindow* parent, WXEmulator* emulator) :
  */
 CapriceIDEImpl::~CapriceIDEImpl()
 {
-  delete m_mainSplitter ;
-  delete m_steNotebook ;
+	delete m_steNotebook;
+	m_steNotebook = NULL;
+	delete m_mainSplitter;
+	m_mainSplitter = NULL;
 }
 
 
@@ -95,6 +97,7 @@ void CapriceIDEImpl::onClose( wxCommandEvent& event )
 
 void CapriceIDEImpl::onExit( wxCommandEvent& event )
 {
+	this->Close();
 }
 
 /**
