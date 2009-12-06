@@ -88,7 +88,7 @@ public:
 	void Loop();
 	void Emulate();
 
-	// These are events sent from the GUI to the emulator
+	//## These are events sent from the GUI to the emulator
 	/**
 	 * Operate the keyboard emulation
    	 * Specific of the GUI.
@@ -97,14 +97,16 @@ public:
 	virtual void ReleaseKey(uint32_t key, uint32_t mod) = 0;
 
 
-	// These are events sent from the emulator to the GUI
-	// screen update every 50Hz (do we want that ?)
-	// fdc led status
+	//## These are events sent from the emulator to the GUI
 	// This way the GUI does not have to poll the emu to know these things
+	
+	// screen update every 50Hz (do we want that ?)
 
-	// (nothing in this area yet)
+	// fdc led status
+	virtual void fdcLed(bool on) {};
 
-	// These are "internal" methods.
+
+	//## These are "internal" methods.
 	// They still may be overriden from the gui to do some things more.
 	/**
 	 * Pause the emulator

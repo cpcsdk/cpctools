@@ -140,7 +140,7 @@ public:
 	inline int			GetTimeout() const					{ return timeout;		}
 	inline void			SetTimeout(int t)					{ timeout = t;			}
 	inline int			GetMotor() const					{ return motor;			}
-	inline void			SetMotor(int m)						{ motor = m;			}
+	void			SetMotor(int m);
 	inline int			GetFlags() const					{ return flags;			}
 	inline void			SetFlags(int f)						{ flags = f;			}
 	inline int			GetPhase() const					{ return phase;			}

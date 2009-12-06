@@ -57,6 +57,7 @@
 #include "cap32.h"
 #include "config.h"
 #include "debug.h"
+#include "emulator.h"
 
 #include "dsk.h"
 
@@ -1013,6 +1014,13 @@ void t_FDC::insertA(const string filename, const char *type )
 void t_FDC::insertB(const string filename, const char *type )
 {
     dsk_load(filename.c_str(), &driveB, 'B');
+}
+
+
+void t_FDC::SetMotor(int m)
+{
+	motor = m;
+	Emulator::getInstance()->fdcLed(m);
 }
 
 #endif

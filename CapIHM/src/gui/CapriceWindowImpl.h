@@ -45,6 +45,8 @@ class CapriceWindowImpl : public CapriceWindow
 
 	void Pause();
 
+	void fdcLed(bool on);
+
     protected:
 
     virtual void onExit1( wxCloseEvent& );

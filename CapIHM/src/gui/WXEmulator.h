@@ -53,6 +53,7 @@ class WXEmulator : public Emulator {
 
   // TODO : remove everything from window idle loop and do everything with callbacks
   // FDC Led status
+  void fdcLed(bool on);
   // Emulator->Emulate() (?)
   // "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
   void Pause();

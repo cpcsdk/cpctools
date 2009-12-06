@@ -233,3 +233,8 @@ void WXEmulator::Pause() {
 	  Emulator::Pause();
 	  win->Pause();
 }
+
+
+void WXEmulator::fdcLed(bool on) {
+	win->fdcLed(on);
+}
