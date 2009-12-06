@@ -1,22 +1,28 @@
 bin_PROGRAMS = caprice
 
-DIST_SUBDIRS = core gui asm
-SUBDIRS = core gui asm
+DIST_SUBDIRS = core gui
+SUBDIRS = core gui
 
 #TODO : achieve to put the compilation of first 2files in libcapricewx.a and the other in libcapricecore.a
 caprice_SOURCES = gui/video.cpp core/emulator.cpp 
 caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) \
                 -L/usr/local/lib \
+                gui/libcapricewx.a \
+                gui/libfoo.a \
                 core/libcapricecore.a \
-                core/libdisass.a \
-				asm/libsjasm.a \
-				asm/libsjasminternal.a
+                core/libdisass.a
 
-# TODO : clean this up and move it to wx folder
-caprice_LDADD += gui/wx/libfoo.a
-caprice_LDADD += gui/wx/libcapricewx.a
-caprice_LDADD += gui/wx/IDE/libcapricewxide.a
+if WITH_IDE
+caprice_LDADD += gui/IDE/libcapricewxide.a
+endif
+
+if WITH_ASM
+DIST_SUBDIRS += asm
+SUBDIRS += asm
+caprice_LDADD += asm/libsjasm.a \
+				 asm/libsjasminternal.a
+endif
 
 #Add CLI files if activate
 if CLI

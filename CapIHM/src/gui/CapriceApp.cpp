@@ -45,7 +45,7 @@
 #include "configBis.h"
 #include <iostream>
  
-#include "../asm/CapASM.h"
+
 
 #if CLI
 extern "C" {
@@ -61,7 +61,11 @@ extern "C" {
   Emulator *emulatorClone;
 #endif
 
+#if WITH_ASM
+#include "../asm/CapASM.h"
 CapASM *capAsm ;
+#endif
+
 
 //TODO destroy emulator when finishing
 
@@ -94,7 +98,9 @@ bool CapriceApp::OnInit()
 	emulator = WXEmulator::getInstance();
 	Emulator::getInstance();
 	
+	#if WITH_ASM
 	capAsm = new CapASM(emulator);
+	#endif
 
 	frame = new CapriceWindowImpl(emulator);
 	frame->Show(true);

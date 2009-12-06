@@ -101,9 +101,12 @@ AC_ARG_WITH(	cli,
 		[  --with-cli		  turn on cli interface [default=no]],
 		with_cli=yes,
 		with_cli=no)
+		
+with_asm=no
 
 if test "$with_cli" = "yes" ; then
     AC_DEFINE(CLI,1,[Use a command line interface])
+    with_asm=yes
 fi
 AM_CONDITIONAL([CLI], [test "$with_cli" = "yes"])
 
@@ -123,8 +126,14 @@ AC_ARG_WITH(	ide,
 
 if test "$with_ide" = "yes" ; then
     AC_DEFINE(WITH_IDE,1,[Activate Integrated Development Environment])
+    with_asm=yes
 fi
 AM_CONDITIONAL([WITH_IDE], [test "$with_ide" = "yes"])
+
+if test "$with_asm" = "yes" ; then
+    AC_DEFINE(WITH_ASM,1,[Activate integrated assembler])
+fi
+AM_CONDITIONAL([WITH_ASM], [test "$with_asm" = "yes"])
 
 # Enable
 
@@ -273,6 +282,7 @@ CapriceReloaded compilation option :
     Cli interface ................ ${with_cli}
     Debugger ..................... ${with_debugger}
     IDE .......................... ${with_ide}
+    Assembler .................... ${with_asm}
     OpenGL ....................... ${enable_opengl}
 
     Debug mode ................... ${enable_debug}
