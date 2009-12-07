@@ -1071,7 +1071,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="0">
+        <object class="Dialog" expanded="1">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -6868,7 +6868,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -6926,7 +6926,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -6984,7 +6984,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -7042,7 +7042,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -7100,7 +7100,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -7158,7 +7158,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -7216,7 +7216,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -7274,7 +7274,7 @@
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
-                                                    <event name="OnFileChanged"></event>
+                                                    <event name="OnFileChanged">RomChange</event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
                                                     <event name="OnKillFocus"></event>
@@ -7306,7 +7306,7 @@
                             <property name="bitmap"></property>
                             <property name="label">Video</property>
                             <property name="select">0</property>
-                            <object class="wxPanel" expanded="1">
+                            <object class="wxPanel" expanded="0">
                                 <property name="bg"></property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
@@ -10045,7 +10045,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>

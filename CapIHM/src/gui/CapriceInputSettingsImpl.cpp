@@ -44,6 +44,19 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 
 	// video
 	choice_colorPalette->SetSelection((int)(emulator.GetConfig().scr_tube));
+
+	// roms
+	wxString path(emulator.GetConfig().rom_path, wxConvUTF8);
+	path += wxString("/",wxConvUTF8);
+	cout << "rom0 " << path.char_str() << endl;
+	ROM0file->SetPath(path+wxString(emulator.GetConfig().rom_file[0],wxConvUTF8));
+	ROM1file->SetPath(path+wxString(emulator.GetConfig().rom_file[1],wxConvUTF8));
+	ROM2file->SetPath(path+wxString(emulator.GetConfig().rom_file[2],wxConvUTF8));
+	ROM3file->SetPath(path+wxString(emulator.GetConfig().rom_file[3],wxConvUTF8));
+	ROM4file->SetPath(path+wxString(emulator.GetConfig().rom_file[4],wxConvUTF8));
+	ROM5file->SetPath(path+wxString(emulator.GetConfig().rom_file[5],wxConvUTF8));
+	ROM6file->SetPath(path+wxString(emulator.GetConfig().rom_file[6],wxConvUTF8));
+	ROM7file->SetPath(path+wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
 }
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
