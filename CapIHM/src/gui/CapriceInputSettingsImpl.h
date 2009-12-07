@@ -20,6 +20,7 @@ class CapriceInputSettingsImpl : public InputSettings
 		virtual void applySettings(wxCommandEvent& event) { applySettings(); }
 		virtual void changeCRTCType( wxSpinEvent& event );
 		virtual void changeColorPalette( wxCommandEvent& event );
+		virtual void RomChange( wxFileDirPickerEvent& event );
 
 		void saveKeymap();
 

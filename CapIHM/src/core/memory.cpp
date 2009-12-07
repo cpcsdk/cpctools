@@ -128,6 +128,8 @@ void t_Memory::Clean()
 
 void t_Memory::Reset(bool MF2Reset)
 {
+	ROMInit(); // Reload roms (if config changed)
+
 	// memory
 	if (MF2Reset)
 	{
@@ -366,8 +368,9 @@ int t_Memory::ROMInit()
 				// if the checksum matches, we got us an AMSDOS header
 				if (checksum == ((pchRomData[0x43] << 8) + pchRomData[0x44]))
 				{
-					// skip it
+					// skip it (read 128bytes more)
 					fread(pchRomData, 128, 1, pfileObject);
+					fprintf(stderr, "WARNING: %s has an AMSDOS header. Skipping it...\n");
 				}
 
 				// is it a valid CPC ROM image (0 = forground, 1 = background, 2 = extension)?

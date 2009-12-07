@@ -239,6 +239,7 @@ class InputSettings : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void onKeyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onKeyPress( wxKeyEvent& event ) { event.Skip(); }
+		virtual void RomChange( wxFileDirPickerEvent& event ) { event.Skip(); }
 		virtual void changeCRTCType( wxSpinEvent& event ) { event.Skip(); }
 		virtual void changeColorPalette( wxCommandEvent& event ) { event.Skip(); }
 		virtual void applySettings( wxCommandEvent& event ) { event.Skip(); }
