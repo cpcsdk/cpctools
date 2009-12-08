@@ -3,11 +3,11 @@ bin_PROGRAMS = caprice
 DIST_SUBDIRS = core gui
 SUBDIRS = core gui
 
-#TODO : achieve to put the compilation of first 2files in libcapricewx.a and the other in libcapricecore.a
-#caprice_SOURCES = gui/video.cpp core/emulator.cpp 
+#TODO : Build vide and emulator inside libcapricecore
 caprice_SOURCES = core/video.cpp core/emulator.cpp 
 caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) \
+				-lxdg-basedir \
                 -L/usr/local/lib \
                 gui/libcapricewx.a \
                 gui/libfoo.a \

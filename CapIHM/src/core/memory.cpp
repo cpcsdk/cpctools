@@ -370,7 +370,7 @@ int t_Memory::ROMInit()
 				{
 					// skip it (read 128bytes more)
 					fread(pchRomData, 128, 1, pfileObject);
-					fprintf(stderr, "WARNING: %s has an AMSDOS header. Skipping it...\n");
+					fprintf(stderr, "WARNING: %s has an AMSDOS header. Skipping it...\n", CPC.rom_file[iRomNum]);
 				}
 
 				// is it a valid CPC ROM image (0 = forground, 1 = background, 2 = extension)?

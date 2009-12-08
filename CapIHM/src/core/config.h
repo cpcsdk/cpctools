@@ -85,8 +85,13 @@ public:
     Renderer::MonitorMode scr_tube;
 
 public:
-   void loadConfiguration (Emulator &emulator);
-    t_CPC();
+   void loadConfiguration ();
+   void saveConfiguration();
+    t_CPC(Emulator* emu);
+	~t_CPC();
+
+private:
+	Emulator* emulator;
 };
 
 #endif

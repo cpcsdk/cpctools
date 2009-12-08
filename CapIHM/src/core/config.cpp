@@ -50,8 +50,9 @@
 
 extern t_disk_format disk_format[MAX_DISK_FORMAT];
 
-t_CPC::t_CPC()
+t_CPC::t_CPC(Emulator* emu)
 {
+	emulator = emu;
     model=0;
     jumpers=0;
     ram_size=0;
@@ -99,6 +100,10 @@ t_CPC::t_CPC()
 
 }
 
+t_CPC::~t_CPC() {
+	saveConfiguration();
+}
+
 unsigned int getConfigValueInt (const char* pchFileName, const char* pchSection, const char* pchKey, unsigned int iDefaultValue)
 {
 	C_Inifile_error err = C_INIFILE_NO_ERROR;
@@ -130,13 +135,14 @@ void getConfigValueString (const char* pchFileName, const char* pchSection, cons
 }
 
 
-
-void t_CPC::loadConfiguration (Emulator &emulator)
+void t_CPC::loadConfiguration ()
 {
 	C_Inifile_error err = C_INIFILE_NO_ERROR ;
 
 
-	char chFileName[] = DATA_PATH "cap32.cfg" ;
+	char chFileName[1024];
+	strcpy(chFileName,emulator->getConfigPath());
+	strcat(chFileName,"/cap32.cfg") ;
 
 	c_inifile_init( chFileName,&err);
 
@@ -193,12 +199,12 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    fs = (getConfigValueInt(chFileName, "video", "scr_window", 0) & 1) == 0;
 	    oglfilter = getConfigValueInt(chFileName, "video", "scr_oglfilter", 1) & 1;
 
-	    emulator.GetRenderer().SetOpenGLFilter(oglfilter);
+	    emulator->GetRenderer().SetOpenGLFilter(oglfilter);
 
 
 	    scr_fps = getConfigValueInt(chFileName, "video", "scr_fps", 0) & 1;
-	    emulator.GetRenderer().DisplayFPS(scr_fps);
-            switch (getConfigValueInt(chFileName, "video", "scr_tube", 0))
+	    emulator->GetRenderer().DisplayFPS(scr_fps);
+            switch (getConfigValueInt(chFileName, "video", "scr_tube", 4))
             {
                 case 0:
                     scr_tube = Renderer::GreenMode;
@@ -432,7 +438,7 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 	    {
 			char chRomId[14];
 			sprintf(chRomId, "slot%02d", iRomNum); // build ROM ID
-			getConfigValueString(chFileName, "rom", chRomId, rom_file[iRomNum], "");
+			getConfigValueString(chFileName, "rom", chRomId, rom_file[iRomNum], (iRomNum==7)?"amsdos.rom":"");
 	    }
 	    
 		
@@ -442,17 +448,205 @@ void t_CPC::loadConfiguration (Emulator &emulator)
 			strcpy(rom_path, DATA_PATH "rom");
 	    }
 
-		FILE *pfileObject;
-	    if ((pfileObject = fopen(chFileName, "rt")) == NULL)
-	    {
-		// insert AMSDOS in slot 7 if the config file does not exist yet
-		strcpy(rom_file[7], "amsdos.rom");
-	    }
-	    else
-	    {
-		fclose(pfileObject);
-	    }
 	    getConfigValueString(chFileName, "rom", "rom_mf2", rom_mf2, "");
+
+	    c_inifile_close();
+	}
+}
+
+void printerr(C_Inifile_error err, int line = 0) {
+	if(err == C_INIFILE_NO_ERROR) return;
+	printf("Erreur ligne %d : ",line);
+		switch(err) {
+			
+			case C_INIFILE_MODULE_INIT_ERR:
+				printf("Module deja initialise.\n");
+				break;
+			case C_INIFILE_MODULE_NO_INIT_ERR:
+				printf("Module non initialise.\n");
+				break;
+			case C_INIFILE_OPEN_ERR:           
+				printf("Erreur d'ouverture du fichier.\n");
+				break;
+			case C_INIFILE_READ_ERR:           
+				printf("/* Erreur de lecture du fichier.\n");
+				break;
+			case C_INIFILE_ARG_ERR:            
+				printf("Arguments invalides ou non fournis.\n");
+				break;
+			case C_INIFILE_DYN_ALLOC_ERR:      
+				printf("Erreur d'allocation dynamique.\n");
+				break;
+			case C_INIFILE_NO_SECTION_ERR:     
+				printf("La section n'a pas ete trouvee.\n");
+				break;
+			case C_INIFILE_NO_KEY_ERR:         
+				printf("La cle n'a pas ete trouvee.\n");
+				break;
+			case C_INIFILE_CONVERSION_ERR:     
+				printf("Erreur durant la conversion de la donnee.\n");
+				break;
+		}
+}
+
+void t_CPC::saveConfiguration ()
+{
+	printf("Saving configuration...\n");
+	C_Inifile_error err = C_INIFILE_NO_ERROR ;
+
+
+	char chFileName[1024];
+	strcpy(chFileName,emulator->getConfigPath());
+	strcat(chFileName,"/cap32.cfg") ;
+
+	printf(chFileName);
+
+	if ((!c_inifile_init( chFileName,&err)) || err!=C_INIFILE_NO_ERROR)
+	{
+	    printerr(err,__LINE__);
+		return;
+	}
+	else
+	{
+
+	    // CPC 6128
+	    c_inifile_set_uinteger("system", "model", model,&err);
+		printerr(err,__LINE__);
+
+	    // OEM is Amstrad, video refresh is 50Hz
+	    c_inifile_set_uinteger("system", "jumpers", jumpers,&err);
+		printerr(err,__LINE__);
+
+	    // 128KB RAM
+	    c_inifile_set_uinteger("system", "ram_size", ram_size,&err);
+		printerr(err,__LINE__);
+
+	    // original CPC speed
+	    c_inifile_set_uinteger("system", "speed", speed,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("system", "auto_pause", auto_pause,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("system", "printer", printer,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("system", "mf2", mf2,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("system", "keyboard", keyboard,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("system", "joysticks", joysticks,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("video", "scr_width", vid_w,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("video", "scr_height", vid_h,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("video", "scr_bpp", vid_bpp,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("video", "scr_style", vid_style,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("video", "scr_window", !fs,&err);
+		printerr(err,__LINE__);
+		c_inifile_set_uinteger("video", "scr_oglfilter", oglfilter,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("video", "scr_fps", scr_fps,&err);
+		printerr(err,__LINE__);
+		switch(scr_tube)
+        {
+			case Renderer::GreenMode:
+				c_inifile_set_uinteger("video", "scr_tube", 0,&err);
+                break;
+			case Renderer::ColoursMode:
+				c_inifile_set_uinteger("video", "scr_tube", 1,&err);
+                break;
+			case Renderer::GreyMode:
+				c_inifile_set_uinteger("video", "scr_tube", 2,&err);
+                break;
+			case Renderer::PersonalMode:
+				c_inifile_set_uinteger("video", "scr_tube", 3,&err);
+                break;
+			case Renderer::ColoursHiFiMode:
+			default:
+				c_inifile_set_uinteger("video", "scr_tube", 4,&err);
+                break;
+        }
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("video", "scr_intensity", scr_intensity,&err);
+		printerr(err,__LINE__);
+		c_inifile_set_uinteger("video", "scr_remanency", scr_remanency,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("sound", "enabled", snd_enabled,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("sound", "playback_rate", snd_playback_rate,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("sound", "bits", snd_bits,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("sound", "stereo", snd_stereo,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("sound", "volume", snd_volume,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("sound", "pp_device", snd_pp_device,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("control", "kbd_layout", kbd_layout,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_uinteger("file", "max_track_size", max_tracksize,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_string("file", "snap_path", snap_path,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_string("file", "snap_file", snap_file,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("file", "snap_zip", snap_zip,&err);
+		printerr(err,__LINE__);
+
+	    c_inifile_set_string("file", "drvA_path", drvA_path,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_string("file", "drvA_file", drvA_file,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("file", "drvA_zip", drvA_zip,&err);
+		printerr(err,__LINE__);
+	    c_inifile_set_uinteger("file", "drvA_format", drvA_format,&err);
+		printerr(err);
+	    c_inifile_set_string("file", "drvB_path", drvB_path,&err);
+		printerr(err);
+	    c_inifile_set_string("file", "drvB_file", drvB_file,&err);
+		printerr(err);
+	    c_inifile_set_uinteger("file", "drvB_zip", drvB_zip,&err);
+		printerr(err);
+	    c_inifile_set_uinteger("file", "drvB_format", drvB_format,&err);
+		printerr(err);
+	    
+		c_inifile_set_string("file", "tape_path", tape_path,&err);
+		printerr(err);
+	    c_inifile_set_string("file", "tape_file", tape_file,&err);
+		printerr(err);
+	    c_inifile_set_uinteger("file", "tape_zip", tape_zip,&err);
+		printerr(err);
+
+		// TODO : libDSK settings ?
+	    c_inifile_set_string("file", "printer_file", printer_file,&err);
+		printerr(err);
+
+	    c_inifile_set_string("file", "sdump_file", sdump_file,&err);
+		printerr(err);
+
+	    c_inifile_set_string("rom", "rom_path", rom_path,&err);
+		printerr(err);
+	    // loop for ROMs 0-15
+	    for (int iRomNum = 0; iRomNum < 16; iRomNum++)
+	    {
+			char chRomId[14];
+			sprintf(chRomId, "slot%02d", iRomNum); // build ROM ID
+			c_inifile_set_string("rom", chRomId, rom_file[iRomNum],&err);
+			printerr(err);
+	    }
+
+	    c_inifile_set_string("rom", "rom_mf2", rom_mf2,&err);
+		printerr(err);
 
 	    c_inifile_close();
 	}

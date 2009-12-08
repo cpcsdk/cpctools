@@ -24,6 +24,9 @@
 #include "CapriceWindowImpl.h"
 #include <wx/defs.h>
 
+// TODO : remove this when wxWidgets get support for xdg standard.
+#include <basedir.h>
+
 byte *pbTapeImage = NULL;
 byte *pbTapeImageEnd = NULL;
 
@@ -237,4 +240,13 @@ void WXEmulator::Pause() {
 
 void WXEmulator::fdcLed(bool on) {
 	win->fdcLed(on);
+}
+
+const char * WXEmulator::getConfigPath() {
+	cout << "path le chemin !";
+	xdgHandle* dir;
+	xdgInitHandle(dir);
+	const char* c = xdgConfigHome(dir);
+	xdgWipeHandle(dir);
+	return c;
 }

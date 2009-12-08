@@ -39,24 +39,27 @@ class WXEmulator : public Emulator {
   public:
 	  static inline WXEmulator* getInstance()
 	  {
-		  if(!instance) instance = (Emulator*)(new WXEmulator());
+		  if(!instance) instance = new WXEmulator();
 		  std::cout << "[DEBUG] Get WXEmulator at " << instance << endl;
 		  return (WXEmulator*)instance;
 	  }
 
 	  void setWindow(CapriceWindowImpl* w) { win = w; }
-  /**
-   * Specific code with this GUI
-   */
-  virtual void PressKey(uint32_t key, uint32_t mod) ;
-  virtual void ReleaseKey(uint32_t key, uint32_t mod);
 
-  // TODO : remove everything from window idle loop and do everything with callbacks
-  // FDC Led status
-  void fdcLed(bool on);
-  // Emulator->Emulate() (?)
-  // "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
-  void Pause();
+	  /**
+	   * Specific code with this GUI
+	   */
+	  virtual void PressKey(uint32_t key, uint32_t mod) ;
+	  virtual void ReleaseKey(uint32_t key, uint32_t mod);
+
+	  // FDC Led status
+	  void fdcLed(bool on);
+	  // Emulator->Emulate() (?)
+	  // "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
+	  void Pause();
+
+	  // Return folder where config files should be stored
+	  const char * getConfigPath();
 } ;
 
 #endif

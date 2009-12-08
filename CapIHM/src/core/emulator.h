@@ -114,6 +114,8 @@ public:
 	 * Pause the emulator
 	 */
 	virtual inline void Pause() { GetConfig().paused = 1; timer.pause();}
+	// TODO : should return DATA_PATH but it is not defined when building this file :/
+	virtual const char * getConfigPath() { return "ERROR";}
 
 	/**
 	 * Pause the emulator due to a breakpoint

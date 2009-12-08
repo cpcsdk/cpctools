@@ -102,6 +102,8 @@ AC_ARG_WITH(	cli,
 		with_cli=yes,
 		with_cli=no)
 		
+AC_MSG_CHECKING([ devtools ------------------------------------
+])
 with_asm=no
 
 if test "$with_cli" = "yes" ; then
@@ -155,6 +157,8 @@ AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 
 AC_MSG_RESULT([ $enable_debug ])
 
+AC_MSG_CHECKING([ display and gui options ------------------------------------
+])
 AC_ARG_ENABLE(	filedrop,
 	      	[  --enable-filedrop	  turn on filedrop capacity [default=yes]],
 		enable_filedrop=no,

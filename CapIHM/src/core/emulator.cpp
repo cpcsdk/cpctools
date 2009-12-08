@@ -254,10 +254,11 @@ void Emulator::printer_stop()
 
 Emulator::Emulator():
 	_renderer(this),
+	_config(this),
 	FPSDisplay(true)
 {
 	// retrieve the emulator configuration
-	_config.loadConfiguration(*this);
+	_config.loadConfiguration();
 	
 	std::cout << "[DEBUG] Construct Emulator" << endl;
 }
