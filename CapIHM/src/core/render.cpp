@@ -347,9 +347,25 @@ void Renderer::SetMemory(byte *memory)
 	_preRenderNormalFunc->SetMemory(memory);
 }
 
-void Renderer::SetVideoMode(VideoPlugin::VideoType videoPlugType, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
+/*void Renderer::SetVideoMode(VideoPlugin::VideoType videoPlugType, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
 {
 	_videoPluginType = videoPlugType;
+	_scrFullScreenWidth = fsWidth;
+	_scrFullScreenHeight = fsHeight;
+	_scrFullScreenBPP = fsBPP;
+	_scrFullScreen = fullScreen;
+}*/
+/*void Renderer::SetVideoMode(VideoPlugin* videoPlugin, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
+{
+	_videoPluginPtr = videoPlugin;
+	_scrFullScreenWidth = fsWidth;
+	_scrFullScreenHeight = fsHeight;
+	_scrFullScreenBPP = fsBPP;
+	_scrFullScreen = fullScreen;
+}*/
+void Renderer::SetVideoMode(VideoPlugin* (*videoPlugin)(), unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
+{
+	_videoPluginPtr = videoPlugin;
 	_scrFullScreenWidth = fsWidth;
 	_scrFullScreenHeight = fsHeight;
 	_scrFullScreenBPP = fsBPP;
@@ -394,11 +410,10 @@ bool Renderer::Init()
 	delete _videoPlugin;
 	_videoPlugin = NULL;
 
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) { // initialize the video subsystem
-		return false;
-	}
-	
-	_videoPlugin = VideoPlugin::Create( _videoPluginType );
+	//_videoPlugin = VideoPlugin::Create( _videoPluginType );
+	//_videoPlugin = VideoPlugin::Create(_videoPluginPtr);
+	//_videoPlugin = (VideoPlugin::Create)(_videoPluginPtr);
+	_videoPlugin = (*_videoPluginPtr)();
 	_videoPlugin->SetOption("OpenGLFilter", _videoPluginOpenGLFilter);
 	_videoPlugin->SetOption("Remanency", _monitorRemanency);
 	
@@ -409,7 +424,8 @@ bool Renderer::Init()
 		return false;
 	}
 	
-	Uint8 scrBPP = backSurface->format->BitsPerPixel; // bit depth of the surface
+	//Uint8 scrBPP = backSurface->format->BitsPerPixel; // bit depth of the surface
+	Uint8 scrBPP = _videoPlugin->GetRenderBPP();
 	_renderHalf = _videoPlugin->IsHalfSize();
 
 	if (_renderHalf)
@@ -501,10 +517,13 @@ bool Renderer::Init()
 
 	_videoPlugin->Lock();
 	
+	// TODO, Remove SDL dependancy
 	_scrLineOffset = backSurface->pitch / 4; // rendered screen line length (changing bytes to dwords)
 	_scrPos = _scrBase = 0; // memory address of back buffer
 	
 	_renderFunc->SetBackSurface(backSurface);
+	_renderFunc->SetRenderSurfaceWidth(_videoPlugin->GetRenderSurfaceWidth());
+	_renderFunc->SetRenderSurfaceHeight(_videoPlugin->GetRenderSurfaceHeight());
 	_renderFunc->SetScreenPosition(_scrPos);
 
 	_videoPlugin->Unlock();
@@ -521,8 +540,6 @@ void Renderer::Shutdown ()
 		_videoPlugin->Unlock();
 	}
 	_videoPlugin->Close();
-
-	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
 void Renderer::SetCaption(const char *title, const char *icon)
@@ -789,7 +806,9 @@ void Renderer::Render8BppFunction::Render(void)
 
 void Renderer::Render8BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
 {
-	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//		return;
+	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
 		return;
 
 	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + x;
@@ -810,7 +829,9 @@ void Renderer::Render16BppFunction::Render(void)
 
 void Renderer::Render16BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
 {
-	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//		return;
+	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
 		return;
 
 	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + (x * 2);
@@ -846,7 +867,9 @@ void Renderer::Render24BppFunction::Render(void)
 
 void Renderer::Render24BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
 {
-	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//		return;
+	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
 		return;
 
 	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + (x * 3);
@@ -870,7 +893,9 @@ void Renderer::Render32BppFunction::Render(void)
 
 void Renderer::Render32BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
 {
-	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
+//		return;
+	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
 		return;
 
 	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + (x * 4);

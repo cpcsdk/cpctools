@@ -71,6 +71,7 @@ protected:
 	t_Tape					*_tape;
 	t_Memory				*_cpcMemory;
 	unsigned int			_cycleCount;
+	VideoPlugin*			(*_videoPlugin)();
 
 	/**
 	 * Address to jump if required
@@ -83,7 +84,8 @@ protected:
 
 public:
 	static Emulator* getInstance();
-
+	inline void setVideoPlugin(VideoPlugin* (*videoPlugin)()) {_videoPlugin = videoPlugin;}
+	
 	bool Init();
 	void Loop();
 	void Emulate();
@@ -214,6 +216,7 @@ public:
 	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
 
 protected:
+	
 	bool MF2Init();
 
 	int emulator_init();

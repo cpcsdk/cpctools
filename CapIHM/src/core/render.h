@@ -37,6 +37,11 @@ class Renderer
 
 		//! SDL back surface
 		SDL_Surface		*_backSurface;
+		
+		//! Renderer surface width
+		int				_renderSurfaceWidth;
+		//! Renderer surface height
+		int				_renderSurfaceHeight;
 
 		//! Screen Position (pointer to SDL surface)
 		unsigned int	*_scrPos;
@@ -59,6 +64,9 @@ class Renderer
 		}
 
 		virtual ~RenderFunction() { }
+
+		inline void SetRenderSurfaceWidth(int width) { _renderSurfaceWidth = width; }
+		inline void SetRenderSurfaceHeight(int height) { _renderSurfaceHeight = height; }
 
 		inline void SetBackSurface(SDL_Surface *surface)		{ _backSurface = surface;		}
 		inline SDL_Surface * GetBackSurface() const				{ return _backSurface;			}
@@ -295,6 +303,7 @@ class Renderer
 	bool				_scrFullScreen;
 	//! Video plugin index
 	VideoPlugin::VideoType	_videoPluginType;
+	VideoPlugin*			(*_videoPluginPtr)();
 	//! Use OpenGL filter for video
 	bool				_videoPluginOpenGLFilter;
 
@@ -334,7 +343,9 @@ class Renderer
 	inline VideoPlugin* GetVideoPlugin() const { return _videoPlugin; }
 
 	void SetMemory(byte *memory);
-	void SetVideoMode(VideoPlugin::VideoType type, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
+	//void SetVideoMode(VideoPlugin::VideoType type, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
+	//void SetVideoMode(VideoPlugin* ptr, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
+	void SetVideoMode(VideoPlugin* (*videoPlugin)(), unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
 	void SetOpenGLFilter(bool val);
 	void SetMonitor(MonitorMode mode, unsigned int intensity, bool remanency);
 	

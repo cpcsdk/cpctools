@@ -66,6 +66,7 @@ extern "C" {
 CapASM *capAsm ;
 #endif
 
+#include "WXVideo.cpp"
 
 //TODO destroy emulator when finishing
 
@@ -96,6 +97,7 @@ bool CapriceApp::OnInit()
 
 	//Create emulator and IHM
 	emulator = WXEmulator::getInstance();
+	emulator->setVideoPlugin(&WXDoublePlugin::Create);
 	Emulator::getInstance();
 	
 	#if WITH_ASM

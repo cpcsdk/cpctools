@@ -19,10 +19,9 @@ CapriceInputSettingsImpl.h\
 CapriceInputSettingsImpl.cpp\
 CPCKeyDefs.h \
 WXEmulator.h \
-WXEmulator.cpp
+WXEmulator.cpp \
+WXVideo.cpp
 
-#video.cpp \
-#input.cpp
 libcapricewx_a_LIBADD = libfoo.a 
 
 # Ces deux fichiers ont besoin de CPCKeyDefs.h, mais pas les autres. On est obligé de bricoler parce que ces fichiers sont générés par wxFormBuilder...

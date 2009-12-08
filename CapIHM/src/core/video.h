@@ -99,6 +99,12 @@ public:
 	inline int GetWidth() const { return _video->w; }
 	//! Return current surface width
 	inline int GetHeight() const { return _video->h; }
+	
+	inline int GetRenderSurfaceWidth() const { return _publicVideo->w; }
+	inline int GetRenderSurfaceHeight() const { return _publicVideo->h; }
+	
+	inline int GetRenderBPP() const { return _publicVideo->format->BitsPerPixel; }
+	
 	//! locks the surface if needed
 	virtual bool Lock() = 0;
 	//! unlocks the surface if needed
@@ -121,7 +127,9 @@ protected:
 	//! computes the clipping of two rectangles and changes src and dst accordingly
 	void ComputeRects(SDL_Rect* src, SDL_Rect* dst);
 public:
-	static VideoPlugin* Create(VideoType type);
+	//static VideoPlugin* Create(VideoType type);
+	//static VideoPlugin* Create(VideoPlugin *ptr);
+	static VideoPlugin* Create();
 
 	virtual ~VideoPlugin();
 
