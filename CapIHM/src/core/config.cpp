@@ -46,7 +46,7 @@
 
 #define MIN_SPEED_SETTING 2
 #define MAX_SPEED_SETTING 32
-#define DEF_SPEED_SETTING 4
+#define DEF_SPEED_SETTING 8
 
 extern t_disk_format disk_format[MAX_DISK_FORMAT];
 
