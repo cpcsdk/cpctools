@@ -49,6 +49,12 @@ extern dword dwDebugFlag;
 extern FILE *pfoDebug;
 #endif
 
+void t_CRTC::dispRegs() {
+	for(int i = 0; i < 14; i++)
+		cout << hex << _registers[i] << "\t";
+	cout << endl;
+}
+
 t_CRTC::t_CRTC(t_GateArray &ga, t_VDU &vdu) :
 _vdu(vdu),
 _gateArray(ga)

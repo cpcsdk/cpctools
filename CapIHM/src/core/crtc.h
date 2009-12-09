@@ -88,8 +88,9 @@ private:
 			byte NewHDSPTIMG;
 		};
 	} t_new_dt;
+
+	void dispRegs();
 	
-private:
 	t_VDU			&_vdu;
 	t_GateArray		&_gateArray;
 	
