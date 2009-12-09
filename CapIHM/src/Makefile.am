@@ -7,7 +7,6 @@ SUBDIRS = core gui
 caprice_SOURCES = core/video.cpp core/emulator.cpp 
 caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
 caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) \
-				-lxdg-basedir \
                 -L/usr/local/lib \
                 gui/libcapricewx.a \
                 gui/libfoo.a \
