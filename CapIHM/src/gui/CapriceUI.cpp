@@ -309,6 +309,7 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Connect( m_menu_miscsettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
 	this->Connect( m_menuItem49->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
 	this->Connect( m_menuItem50->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
+	this->Connect( m_menuItem52->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
 	this->Connect( m_menuItem_run->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
 	this->Connect( m_menuItem_step->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
 	this->Connect( m_menuItem_pause->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
@@ -339,6 +340,7 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );

@@ -21,7 +21,7 @@
         <property name="skip_python_events">1</property>
         <property name="use_enum">2</property>
         <property name="use_microsoft_bom">0</property>
-        <object class="Frame" expanded="0">
+        <object class="Frame" expanded="1">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>
@@ -79,7 +79,7 @@
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI"></event>
-            <object class="wxMenuBar" expanded="0">
+            <object class="wxMenuBar" expanded="1">
                 <property name="bg"></property>
                 <property name="context_help"></property>
                 <property name="context_menu">1</property>
@@ -128,11 +128,11 @@
                 <event name="OnSetFocus"></event>
                 <event name="OnSize"></event>
                 <event name="OnUpdateUI"></event>
-                <object class="wxMenu" expanded="1">
+                <object class="wxMenu" expanded="0">
                     <property name="label">File</property>
                     <property name="name">m_menu_file</property>
                     <property name="permission">protected</property>
-                    <object class="submenu" expanded="1">
+                    <object class="submenu" expanded="0">
                         <property name="label">Drive A:</property>
                         <property name="name">m_menu_drivea</property>
                         <property name="permission">protected</property>
@@ -822,7 +822,7 @@
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
                         <property name="unchecked_bitmap"></property>
-                        <event name="OnMenuSelection"></event>
+                        <event name="OnMenuSelection">onMultifaceStop</event>
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
@@ -1071,7 +1071,7 @@
                 </object>
             </object>
         </object>
-        <object class="Dialog" expanded="1">
+        <object class="Dialog" expanded="0">
             <property name="bg"></property>
             <property name="center"></property>
             <property name="context_help"></property>

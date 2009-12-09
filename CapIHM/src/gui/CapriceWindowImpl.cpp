@@ -307,6 +307,11 @@ void CapriceWindowImpl::onMenuMisc(wxCommandEvent& event)
 	InputSettingsWindow->Show(true);
 }
 
+void CapriceWindowImpl::onMultifaceStop( wxCommandEvent& event )
+{
+	emulator->GetZ80().z80_mf2stop();
+}
+
 // ============================= Various functions
 
 /**

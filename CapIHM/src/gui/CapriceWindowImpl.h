@@ -82,6 +82,7 @@ class CapriceWindowImpl : public CapriceWindow
     virtual void onMenuVideo( wxCommandEvent& event);
     virtual void onMenuSound( wxCommandEvent& event);
     virtual void onMenuMisc( wxCommandEvent& event);
+	virtual void onMultifaceStop( wxCommandEvent& event );
 
     virtual void windowKeyDown( wxKeyEvent& event);
     virtual void windowKeyUp( wxKeyEvent& event );
