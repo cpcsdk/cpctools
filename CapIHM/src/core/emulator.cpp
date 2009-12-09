@@ -373,7 +373,7 @@ bool Emulator::Init()
 	dwFPS = 0;
 	dwFrameCount = 0;
 
-	dwTicksOffset = (int)(20.0 / (double)((_config.speed * 25) / 100.0));
+	dwTicksOffset = 80 / _config.speed;
 	dwTicksTarget = timer.getTime();
 	dwTicksTargetFPS = dwTicksTarget;
 
