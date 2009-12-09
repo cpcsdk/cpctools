@@ -241,7 +241,8 @@ void WXEmulator::fdcLed(bool on) {
 }
 
 const char * WXEmulator::getConfigPath() {
-	cout << "path le chemin !";
+	static char p[1024];
 	wxString s = wxStandardPaths::Get().GetUserDataDir();
-	return s.mb_str();
+	strcpy(p,s.mb_str());
+	return p;
 }

@@ -84,40 +84,18 @@ void CapriceInputSettingsImpl::applySettings()
 
 const char * CapriceInputSettingsImpl::getKeymapFileNameLoad()
 {
-
-	return DATA_PATH "Keymap.cfg" ;
+	static char str[1024];
+	strcpy(str,emulator.getConfigPath());
+	strcat(str,"/Keymap.cfg");
+	return str;
 }
 
 const char * CapriceInputSettingsImpl::getKeymapFileNameSave()
 {
-	/*	
-		const char * a = ( const char * ) wxStandardPaths::Get().GetDocumentsDir().c_str() ;
-		const char * b = ( const char * ) wxStandardPaths::Get().GetUserConfigDir().c_str() ;
-		const char * c = ( const char * ) wxStandardPaths::Get().GetExecutablePath().c_str() ;
-		const char * d = ( const char * ) wxStandardPaths::Get().GetConfigDir().c_str() ;
-
-
-		std::cout << a << endl
-		<< b << endl
-		<< c << endl
-		<< d << endl
-		<< (wxChar *)sPath.c_str() << endl ;
-		*/
-
-	wxStandardPathsBase &stdPth = wxStandardPaths::Get();
-	wxString sPath = stdPth.GetExecutablePath();
-
-	std::cout << wxDir::Exists(wxStandardPaths::Get().GetUserDataDir()) << endl;
-
-	wxFileName name = wxFileName(wxStandardPaths::Get().GetExecutablePath());
-	//name.RemoveLastDir();
-
-	cout << name.DirExists() << endl ;
-
-	name.SetName(wxT( "Keymap.cfg"));
-	cout << name.FileExists() << endl ;
-
-	return DATA_PATH "Keymap.cfg" ;
+	static char str[1024];
+	strcpy(str,emulator.getConfigPath());
+	strcat(str,"/Keymap.cfg");
+	return str;
 }
 
 
@@ -163,7 +141,6 @@ void CapriceInputSettingsImpl::onKeyPress(wxKeyEvent& event)
  */
 void CapriceInputSettingsImpl::saveKeymap()
 {
-	std::cout << "SAVING THE KEYMAP " << getKeymapFileNameSave() << std::endl;
 	std::ofstream file;
 	file.open(getKeymapFileNameSave());
 
