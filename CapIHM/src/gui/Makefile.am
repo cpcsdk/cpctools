@@ -20,6 +20,8 @@ CapriceInputSettingsImpl.cpp\
 CPCKeyDefs.h \
 WXEmulator.h \
 WXEmulator.cpp \
+DiscEditor.h \
+DiscEditor.cpp \
 WXVideo.cpp
 
 libcapricewx_a_LIBADD = libfoo.a 

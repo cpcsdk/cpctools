@@ -24,6 +24,7 @@
 #include "snapshot.h"
 #include "video.h"
 #include "CapriceInputSettingsImpl.h"
+#include "DiscEditor.h"
 #include "MemoryImpl.h"
 
 #ifdef WITH_IDE
@@ -131,6 +132,11 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
         emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
     }
 
+}
+
+void CapriceWindowImpl::menu_editDiskA( wxCommandEvent& event ) {
+	DiscEditorImpl* de = new DiscEditorImpl(this);
+	de->Show(true);
 }
 
 /*

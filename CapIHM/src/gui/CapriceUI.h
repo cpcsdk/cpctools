@@ -33,16 +33,16 @@
 #include <wx/spinctrl.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
-#include <wx/toolbar.h>
-#include <wx/listbook.h>
-#include <wx/listctrl.h>
-#include <wx/listbox.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
 #include <wx/grid.h>
 #include <wx/checklst.h>
 #include <wx/scrolbar.h>
 #include <wx/statusbr.h>
+#include <wx/toolbar.h>
+#include <wx/listbook.h>
+#include <wx/listctrl.h>
+#include <wx/listbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -72,6 +72,7 @@ class CapriceWindow : public wxFrame
 		virtual void onExit1( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void onInsertDiscA( wxCommandEvent& event ) { event.Skip(); }
+		virtual void menu_editDiskA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onInsertDiscB( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLoadSNA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSaveSNA( wxCommandEvent& event ) { event.Skip(); }
@@ -252,35 +253,6 @@ class InputSettings : public wxDialog
 		
 		InputSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Caprice Reloaded Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );
 		~InputSettings();
-	
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// Class DiscEditor
-///////////////////////////////////////////////////////////////////////////////
-class DiscEditor : public wxDialog 
-{
-	private:
-	
-	protected:
-		wxNotebook* DiskEd_Mode_Tabs;
-		wxPanel* m_panel1;
-		wxToolBar* m_toolBar1;
-		wxCheckBox* m_checkBox1;
-		wxCheckBox* m_checkBox2;
-		wxListbook* m_listbook1;
-		wxPanel* m_panel2;
-		wxToolBar* m_toolBar3;
-		wxStaticText* m_staticText23;
-		wxSpinCtrl* m_spinCtrl1;
-		wxStaticText* m_staticText24;
-		wxListBox* m_listBox1;
-		wxTextCtrl* m_textCtrl78;
-	
-	public:
-		
-		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 643,345 ), long style = wxDEFAULT_DIALOG_STYLE );
-		~DiscEditor();
 	
 };
 
@@ -655,6 +627,40 @@ class CapriceIDE : public wxFrame
 		
 		CapriceIDE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Caprice Z80 Assembler"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~CapriceIDE();
+	
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class DiscEditor
+///////////////////////////////////////////////////////////////////////////////
+class DiscEditor : public wxFrame 
+{
+	private:
+	
+	protected:
+		wxStaticText* m_staticText97;
+		wxTextCtrl* trackCount;
+		wxStaticText* m_staticText98;
+		wxTextCtrl* sideCount;
+		wxNotebook* DiskEd_Mode_Tabs;
+		wxPanel* m_panel17;
+		wxGridBagSizer* diskOverview;
+		wxPanel* m_panel1;
+		wxToolBar* m_toolBar1;
+		wxCheckBox* m_checkBox1;
+		wxCheckBox* m_checkBox2;
+		wxListbook* m_listbook1;
+		wxPanel* m_panel2;
+		wxStaticText* Track;
+		wxSpinCtrl* spinTrack;
+		wxStaticText* m_staticText96;
+		wxListBox* m_listBox2;
+		wxTextCtrl* m_textCtrl70;
+	
+	public:
+		
+		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		~DiscEditor();
 	
 };
 

@@ -128,7 +128,7 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 					drive->tracks = DSK_TRACKMAX;
 				}
 				drive->random_DEs = *(pbPtr + 0x31) & 0x80; // simulate random Data Errors?
-				drive->sides = *(pbPtr + 0x31) & 3; // number of sides
+				drive->sides = *(pbPtr + 0x31) & 3; // number of sides (0..3)
 				if (drive->sides > DSK_SIDEMAX) { // abort if more than maximum
 					iRetCode = ERR_DSK_SIDES;
 					goto exit;

@@ -34,7 +34,6 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	wxMenuItem* m_menuItem5;
 	m_menuItem5 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_drivea->Append( m_menuItem5 );
-	m_menuItem5->Enable( false );
 	
 	wxMenuItem* m_menuItem7;
 	m_menuItem7 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Remove Disc") ) , wxEmptyString, wxITEM_NORMAL );
@@ -296,6 +295,7 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
 	this->Connect( wxEVT_IDLE, wxIdleEventHandler( CapriceWindow::OnIdle ) );
 	this->Connect( m_menu_insertDiscA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
+	this->Connect( m_menuItem5->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
 	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
 	this->Connect( m_mI_LoadSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
 	this->Connect( m_mI_SaveSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
@@ -327,6 +327,7 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
 	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( CapriceWindow::OnIdle ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
@@ -1030,89 +1031,6 @@ InputSettings::~InputSettings()
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
 	
-}
-
-DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
-{
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-	
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxVERTICAL );
-	
-	DiskEd_Mode_Tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_panel1 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer4;
-	bSizer4 = new wxBoxSizer( wxVERTICAL );
-	
-	m_toolBar1 = new wxToolBar( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_checkBox1 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Show System files"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toolBar1->AddControl( m_checkBox1 );
-	m_checkBox2 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Add/Remove Amsdos Header"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toolBar1->AddControl( m_checkBox2 );
-	m_toolBar1->Realize();
-	
-	bSizer4->Add( m_toolBar1, 0, wxEXPAND, 5 );
-	
-	m_listbook1 = new wxListbook( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLB_DEFAULT );
-	#ifndef __WXGTK__ // Small icon style not supported in GTK
-	wxListView* m_listbook1ListView = m_listbook1->GetListView();
-	long m_listbook1Flags = m_listbook1ListView->GetWindowStyleFlag();
-	m_listbook1Flags = ( m_listbook1Flags & ~wxLC_ICON ) | wxLC_SMALL_ICON;
-	m_listbook1ListView->SetWindowStyleFlag( m_listbook1Flags );
-	#endif
-	
-	bSizer4->Add( m_listbook1, 1, wxEXPAND | wxALL, 5 );
-	
-	m_panel1->SetSizer( bSizer4 );
-	m_panel1->Layout();
-	bSizer4->Fit( m_panel1 );
-	DiskEd_Mode_Tabs->AddPage( m_panel1, wxT("File System"), true );
-	m_panel2 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
-	
-	m_toolBar3 = new wxToolBar( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_staticText23 = new wxStaticText( m_toolBar3, wxID_ANY, wxT("Track:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText23->Wrap( -1 );
-	m_toolBar3->AddControl( m_staticText23 );
-	m_spinCtrl1 = new wxSpinCtrl( m_toolBar3, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
-	m_toolBar3->AddControl( m_spinCtrl1 );
-	m_staticText24 = new wxStaticText( m_toolBar3, wxID_ANY, wxT("Sector:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText24->Wrap( -1 );
-	m_toolBar3->AddControl( m_staticText24 );
-	m_listBox1 = new wxListBox( m_toolBar3, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_ALWAYS_SB|wxLB_SINGLE );
-	m_listBox1->Append( wxT("C1") );
-	m_listBox1->Append( wxT("C2") );
-	m_listBox1->Append( wxT("C3") );
-	m_listBox1->Append( wxT("C4") );
-	m_listBox1->Append( wxT("C5") );
-	m_listBox1->Append( wxT("C6") );
-	m_listBox1->Append( wxT("C7") );
-	m_listBox1->Append( wxT("C8") );
-	m_listBox1->Append( wxT("C9") );
-	m_toolBar3->AddControl( m_listBox1 );
-	m_toolBar3->Realize();
-	
-	bSizer5->Add( m_toolBar3, 0, wxEXPAND, 5 );
-	
-	m_textCtrl78 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	m_textCtrl78->Enable( false );
-	
-	bSizer5->Add( m_textCtrl78, 0, wxALL, 5 );
-	
-	m_panel2->SetSizer( bSizer5 );
-	m_panel2->Layout();
-	bSizer5->Fit( m_panel2 );
-	DiskEd_Mode_Tabs->AddPage( m_panel2, wxT("Sector Editor"), false );
-	
-	bSizer2->Add( DiskEd_Mode_Tabs, 1, wxEXPAND | wxALL, 5 );
-	
-	this->SetSizer( bSizer2 );
-	this->Layout();
-}
-
-DiscEditor::~DiscEditor()
-{
 }
 
 FileProperties::FileProperties( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
@@ -2437,4 +2355,129 @@ CapriceIDE::~CapriceIDE()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onExit ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnAssemble ) );
 	
+}
+
+DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxVERTICAL );
+	
+	wxBoxSizer* bSizer45;
+	bSizer45 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_staticText97 = new wxStaticText( this, wxID_ANY, wxT("Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText97->Wrap( -1 );
+	bSizer45->Add( m_staticText97, 0, wxALL, 5 );
+	
+	trackCount = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	trackCount->Enable( false );
+	
+	bSizer45->Add( trackCount, 0, wxALL, 5 );
+	
+	m_staticText98 = new wxStaticText( this, wxID_ANY, wxT("Sides"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText98->Wrap( -1 );
+	bSizer45->Add( m_staticText98, 0, wxALL, 5 );
+	
+	sideCount = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	sideCount->Enable( false );
+	
+	bSizer45->Add( sideCount, 0, wxALL, 5 );
+	
+	bSizer2->Add( bSizer45, 0, 0, 5 );
+	
+	DiskEd_Mode_Tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panel17 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer44;
+	bSizer44 = new wxBoxSizer( wxVERTICAL );
+	
+	diskOverview = new wxGridBagSizer( 0, 0 );
+	diskOverview->SetFlexibleDirection( wxBOTH );
+	diskOverview->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
+	diskOverview->SetEmptyCellSize( wxSize( 8,8 ) );
+	
+	bSizer44->Add( diskOverview, 1, wxEXPAND, 5 );
+	
+	m_panel17->SetSizer( bSizer44 );
+	m_panel17->Layout();
+	bSizer44->Fit( m_panel17 );
+	DiskEd_Mode_Tabs->AddPage( m_panel17, wxT("Explorer"), true );
+	m_panel1 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+	
+	m_toolBar1 = new wxToolBar( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
+	m_checkBox1 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Show System files"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_checkBox1 );
+	m_checkBox2 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Add/Remove Amsdos Header"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_toolBar1->AddControl( m_checkBox2 );
+	m_toolBar1->Realize();
+	
+	bSizer4->Add( m_toolBar1, 0, wxEXPAND, 5 );
+	
+	m_listbook1 = new wxListbook( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLB_DEFAULT );
+	#ifndef __WXGTK__ // Small icon style not supported in GTK
+	wxListView* m_listbook1ListView = m_listbook1->GetListView();
+	long m_listbook1Flags = m_listbook1ListView->GetWindowStyleFlag();
+	m_listbook1Flags = ( m_listbook1Flags & ~wxLC_ICON ) | wxLC_SMALL_ICON;
+	m_listbook1ListView->SetWindowStyleFlag( m_listbook1Flags );
+	#endif
+	
+	bSizer4->Add( m_listbook1, 1, wxEXPAND | wxALL, 5 );
+	
+	m_panel1->SetSizer( bSizer4 );
+	m_panel1->Layout();
+	bSizer4->Fit( m_panel1 );
+	DiskEd_Mode_Tabs->AddPage( m_panel1, wxT("File System"), false );
+	m_panel2 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxBoxSizer* bSizer43;
+	bSizer43 = new wxBoxSizer( wxVERTICAL );
+	
+	Track = new wxStaticText( m_panel2, wxID_ANY, wxT("Track"), wxDefaultPosition, wxDefaultSize, 0 );
+	Track->Wrap( -1 );
+	bSizer43->Add( Track, 0, wxALL, 5 );
+	
+	spinTrack = new wxSpinCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 255, 0 );
+	bSizer43->Add( spinTrack, 0, wxALL, 5 );
+	
+	m_staticText96 = new wxStaticText( m_panel2, wxID_ANY, wxT("Sector"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText96->Wrap( -1 );
+	bSizer43->Add( m_staticText96, 0, wxALL, 5 );
+	
+	m_listBox2 = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_listBox2->Append( wxT("0xC1") );
+	m_listBox2->Append( wxT("0xC2") );
+	m_listBox2->Append( wxT("0xC3") );
+	m_listBox2->Append( wxT("0xC4") );
+	m_listBox2->Append( wxT("0xC5") );
+	m_listBox2->Append( wxT("0xC6") );
+	m_listBox2->Append( wxT("0xC7") );
+	m_listBox2->Append( wxT("0xC8") );
+	m_listBox2->Append( wxT("0xC9") );
+	bSizer43->Add( m_listBox2, 0, wxALL|wxEXPAND, 5 );
+	
+	bSizer5->Add( bSizer43, 1, wxEXPAND, 5 );
+	
+	m_textCtrl70 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	bSizer5->Add( m_textCtrl70, 4, wxALL|wxEXPAND, 5 );
+	
+	m_panel2->SetSizer( bSizer5 );
+	m_panel2->Layout();
+	bSizer5->Fit( m_panel2 );
+	DiskEd_Mode_Tabs->AddPage( m_panel2, wxT("Sector Editor"), false );
+	
+	bSizer2->Add( DiskEd_Mode_Tabs, 1, wxEXPAND | wxALL, 5 );
+	
+	this->SetSizer( bSizer2 );
+	this->Layout();
+	
+	this->Centre( wxBOTH );
+}
+
+DiscEditor::~DiscEditor()
+{
 }
