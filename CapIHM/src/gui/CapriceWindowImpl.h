@@ -61,6 +61,9 @@ class CapriceWindowImpl : public CapriceWindow
     virtual void onSaveSNA( wxCommandEvent& event );
     virtual void onSaveScreen( wxCommandEvent& event );
 
+	virtual void insertTape( wxCommandEvent& event );
+	virtual void pressPlayOnTape( wxCommandEvent& event );
+
     virtual void onExit2( wxCommandEvent& );
     
     

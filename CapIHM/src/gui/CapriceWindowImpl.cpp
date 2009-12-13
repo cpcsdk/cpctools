@@ -26,6 +26,7 @@
 #include "CapriceInputSettingsImpl.h"
 #include "DiscEditor.h"
 #include "MemoryImpl.h"
+#include "tape.h"
 
 #ifdef WITH_IDE
 #include "CapriceIDE.h"
@@ -153,7 +154,7 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
     if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
     {
         wxString CurrentDocPath = OpenDialog->GetPath();
-        SetTitle(wxString( wxT("Edit - ")) << 
+        SetTitle(wxString( wxT("Caprice - ")) << 
             OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
         emulator->GetFDC().insertB(std::string(CurrentDocPath.mb_str()));
@@ -174,7 +175,7 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
   if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
   {
     wxString CurrentDocPath = OpenDialog->GetPath();
-    SetTitle(wxString( wxT("Edit - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
+    SetTitle(wxString( wxT("Caprice - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
     snapshot_load(*emulator, CurrentDocPath.mb_str());
   }
@@ -316,6 +317,28 @@ void CapriceWindowImpl::onMenuMisc(wxCommandEvent& event)
 void CapriceWindowImpl::onMultifaceStop( wxCommandEvent& event )
 {
 	emulator->GetZ80().z80_mf2stop();
+}
+
+void CapriceWindowImpl::insertTape( wxCommandEvent& event ) {
+    wxFileDialog* OpenDialog = new wxFileDialog(
+        this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
+        wxT("*CDT files (*.cdt)|*.cdt|All files|*.*"),
+        wxOPEN, wxDefaultPosition);
+ 
+    // Creates a "open file" dialog with 4 file types
+    if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+    {
+        wxString CurrentDocPath = OpenDialog->GetPath();
+        SetTitle(wxString( wxT("Caprice - ")) << 
+            OpenDialog->GetFilename()); // Set the Title to reflect the file open
+
+		emulator->GetTape().tape_insert(CurrentDocPath.mb_str());
+    }
+}
+
+
+void CapriceWindowImpl::pressPlayOnTape( wxCommandEvent& event ) {
+	emulator->GetConfig().tape_play_button = 1;
 }
 
 // ============================= Various functions

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  3 2009)
+// C++ code generated with wxFormBuilder (version Dec 13 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -102,7 +102,6 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	wxMenuItem* m_menuItem29;
 	m_menuItem29 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Press Play") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem29 );
-	m_menuItem29->Enable( false );
 	
 	wxMenuItem* m_menuItem30;
 	m_menuItem30 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Press Record") ) , wxEmptyString, wxITEM_NORMAL );
@@ -297,6 +296,8 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	this->Connect( m_menu_insertDiscA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
 	this->Connect( m_menuItem5->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
 	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
+	this->Connect( m_menuItem26->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
+	this->Connect( m_menuItem29->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
 	this->Connect( m_mI_LoadSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
 	this->Connect( m_mI_SaveSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
 	this->Connect( m_mI_SaveSCR->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
@@ -329,6 +330,8 @@ CapriceWindow::~CapriceWindow()
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
 	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
