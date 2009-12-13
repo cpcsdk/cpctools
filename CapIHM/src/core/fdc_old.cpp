@@ -292,7 +292,19 @@ loop:
 				sector_size = 128 << command[CMD_N]; // determine number of bytes from N value
 			}
 			buffer_count = sector_size; // init number of bytes to transfer
-			buffer_ptr = sector->data; // pointer to sector data
+			int versions_count = 1;
+			if(sector->declared_size != 0)
+				versions_count = sector->size/sector->declared_size;
+			int offset;
+			if(versions_count > 1)
+			{
+				static int weak_counter;
+				weak_counter = (weak_counter+1)%versions_count;
+				offset = weak_counter;
+			}
+			else
+				offset = 0;
+			buffer_ptr = sector->data + sector->declared_size*offset; // pointer to sector data
 			buffer_endptr = active_track->data + active_track->size; // pointer beyond end of track data
 			timeout = INITIAL_TIMEOUT;
 			read_status_delay = 1;

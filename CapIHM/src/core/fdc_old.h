@@ -67,6 +67,7 @@ typedef struct {
    unsigned char flags[4]; // ST1 and ST2 - reflects any possible error conditions
    unsigned int size; // sector size in bytes
    unsigned char *data; // pointer to sector data
+   unsigned int declared_size; // most of the time equals size, except for "weak" sectors
 } t_sector;
 
 typedef struct {
@@ -168,7 +169,7 @@ private:
 	void cmd_scan(void);
 
 
-	inline void LOAD_RESULT_WITH_STATUS() 
+	inline void LOAD_RESULT_WITH_STATUS()
 	{
 		// AT
 		result[RES_ST0] |= 0x40;
@@ -176,22 +177,22 @@ private:
 		result[RES_ST1] |= 0x80;
 
 		// continue only if not a read track command
-		if (command[CMD_CODE] != 0x42) 
-		{ 
+		if (command[CMD_CODE] != 0x42)
+		{
 			// any 'error bits' set?
-			if ((result[RES_ST1] & 0x7f) || (result[RES_ST2] & 0x7f)) 
+			if ((result[RES_ST1] & 0x7f) || (result[RES_ST2] & 0x7f))
 			{
 				// mask out End of Cylinder
 				result[RES_ST1] &= 0x7f;
 
 				// DE and/or DD?
-				if ((result[RES_ST1] & 0x20) || (result[RES_ST2] & 0x20)) 
+				if ((result[RES_ST1] & 0x20) || (result[RES_ST2] & 0x20))
 				{
 					// mask out Control Mark
 					result[RES_ST2] &= 0xbf;
 				}
 				// Control Mark?
-				else if (result[RES_ST2] & 0x40) 
+				else if (result[RES_ST2] & 0x40)
 				{
 					// mask out AT
 					result[RES_ST0] &= 0x3f;

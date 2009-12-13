@@ -16,7 +16,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- */  
+ */
 
 
 // Caprice32 DSK manager
@@ -30,6 +30,8 @@
 #include <stdio.h>
 #include "cap32type.h"
 #include "error.h"
+
+#include <iostream>
 
 #ifndef HAVE_LIB765_H
 extern byte *pbGPBuffer;
@@ -110,6 +112,7 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 						memcpy(drive->track[track][side].sector[sector].CHRN, (pbPtr + 0x18), 4); // copy CHRN
 						memcpy(drive->track[track][side].sector[sector].flags, (pbPtr + 0x1c), 2); // copy ST1 & ST2
 						drive->track[track][side].sector[sector].size = dwSectorSize;
+						drive->track[track][side].sector[sector].declared_size = dwSectorSize;
 						drive->track[track][side].sector[sector].data = pbDataPtr; // store pointer to sector data
 						pbDataPtr += dwSectorSize;
 						pbPtr += 8;
@@ -163,8 +166,11 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 							for (sector = 0; sector < dwSectors; sector++) { // loop for all sectors
 								memcpy(drive->track[track][side].sector[sector].CHRN, (pbPtr + 0x18), 4); // copy CHRN
 								memcpy(drive->track[track][side].sector[sector].flags, (pbPtr + 0x1c), 2); // copy ST1 & ST2
-								dwSectorSize = *(pbPtr + 0x1e) + (*(pbPtr + 0x1f) << 8); // sector size in bytes
+								dwSectorSize = *(pbPtr + 0x1e) + (*(pbPtr + 0x1f) << 8);
+									// sector size in bytes
 								drive->track[track][side].sector[sector].size = dwSectorSize;
+								unsigned char dwSectorType = *(pbPtr + 0x1B);
+								drive->track[track][side].sector[sector].declared_size = 128 << dwSectorType;
 								drive->track[track][side].sector[sector].data = pbDataPtr; // store pointer to sector data
 								pbDataPtr += dwSectorSize;
 								pbPtr += 8;
@@ -189,7 +195,7 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 		snprintf(pchTmpBuffer, _MAX_PATH-1, chMsgBuffer, chID, chID == 'A' ? CPC.drvA_file : CPC.drvB_file);
 		add_message(pchTmpBuffer);
 		delete [] pchTmpBuffer;
-      } */
+	  } */
 exit:
 		fclose(pDSKfileObject);
    } else {

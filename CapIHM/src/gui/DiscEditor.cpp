@@ -19,7 +19,6 @@ DiscEditor( parent )
 	wxColour c;
 
 	for(int side = 0; side <= FloppyImage.sides; side++) {
-		c.Set(255,255,side*255);
 		for(int row = 0; row < FloppyImage.tracks; row++) {
 			t_track* currentTrack = &FloppyImage.track[row][side];
 			int pos = 0;
@@ -29,12 +28,16 @@ DiscEditor( parent )
 				s << row << _(":") << col;
 				wxGBPosition p(row,pos + side*40);
 				wxButton* b = new wxButton(m_panel17, wxID_ANY, s);
+				if(currentTrack->sector[col].size != currentTrack->sector[col].declared_size)
+					c.Set(255,0,0); // Red : weak sector
+				else
+					c.Set(255,255,255); // White : ok
 				b->SetBackgroundColour(c);
-				wxSize k(currentTrack->sector[col].size/16,8);
+				wxSize k(currentTrack->sector[col].declared_size/16,8);
 				b->SetMinSize(k);
 				b->SetMaxSize(k);
-				diskOverview->Add(b, p, wxGBSpan(1,currentTrack->sector[col].size/128), 0, 0);
-				pos += currentTrack->sector[col].size/128;
+				diskOverview->Add(b, p, wxGBSpan(1,currentTrack->sector[col].declared_size/128), 0, 0);
+				pos += currentTrack->sector[col].declared_size/128;
 			}
 		}
 	}
