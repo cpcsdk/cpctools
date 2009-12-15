@@ -40,13 +40,11 @@
 #include "debug.h"
 
 #define CYCLE_SCALE ((40 << 16) / 35)
-//#define CYCLE_SCALE ((3993600 / 3500000) * 65536)
 #define CYCLE_ADJUST(p) (((dword)(p) * CYCLE_SCALE) >> 16)
 #define MS_TO_CYCLES(p) ((dword)(p) * 4000)
-//#define MS_TO_CYCLES(p) ((dword)(p) * 3994)
 
-extern byte *pbTapeImage;
-extern byte *pbTapeImageEnd;
+byte *pbTapeImage = NULL;
+byte *pbTapeImageEnd = NULL;
 
 extern byte *pbGPBuffer;
 

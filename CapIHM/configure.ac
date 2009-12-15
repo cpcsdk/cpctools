@@ -58,6 +58,8 @@ AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([memchr memset pow strchr strcspn strrchr strstr strtol strtoul])
 
+#Use autotools replacement for missing things
+AC_REPLACE_FUNCS([usleep])
 
 dnl Check for sed
 AC_CHECK_PROGS(regex_cmd, sed)
@@ -186,7 +188,7 @@ if test "$with_wxwidget" = "yes" ; then
 	AM_PATH_WXCONFIG($reqwx, 
                    wxWin=1,
                    wxWin=0,
-                   [stc,adv,core])
+                   [adv,core])
 	if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
 		wxWidgets must be installed on your system.
@@ -200,6 +202,15 @@ if test "$with_wxwidget" = "yes" ; then
 	fi
 fi
 
+m4_include(libpng.m4)
+
+AM_PATH_LIBPNGCONFIG(1,png=1,png=0)
+
+if test "$png" != 1; then
+	AC_MSG_ERROR([
+		libpng not present on your system !
+		])
+fi
 
 # Sound
 

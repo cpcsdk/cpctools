@@ -6,6 +6,7 @@
 #include "CapriceWindowImpl.h"
 #include "input.h"
 #include "CPCKeyDefs.h"
+#include "filetools.h"
 
 #include <wx/filename.h>
 #include <wx/dir.h>
@@ -48,7 +49,6 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	// roms
 	wxString path(emulator.GetConfig().rom_path, wxConvUTF8);
 	path += wxString("/",wxConvUTF8);
-	cout << "rom0 " << path.char_str() << endl;
 	ROM0file->SetPath(path+wxString(emulator.GetConfig().rom_file[0],wxConvUTF8));
 	ROM1file->SetPath(path+wxString(emulator.GetConfig().rom_file[1],wxConvUTF8));
 	ROM2file->SetPath(path+wxString(emulator.GetConfig().rom_file[2],wxConvUTF8));
@@ -253,14 +253,15 @@ void CapriceInputSettingsImpl::changeColorPalette( wxCommandEvent& event )
  ***************/
 void CapriceInputSettingsImpl::RomChange( wxFileDirPickerEvent& event )
 {
-	strcpy(emulator.GetConfig().rom_file[0], basename(ROM0file->GetPath().mb_str()));
-	strcpy(emulator.GetConfig().rom_file[1], basename(ROM1file->GetPath().mb_str()));
-	strcpy(emulator.GetConfig().rom_file[2], basename(ROM2file->GetPath().mb_str()));
-	strcpy(emulator.GetConfig().rom_file[3], basename(ROM3file->GetPath().mb_str()));
-	strcpy(emulator.GetConfig().rom_file[4], basename(ROM4file->GetPath().mb_str()));
-	strcpy(emulator.GetConfig().rom_file[5], basename(ROM5file->GetPath().mb_str()));
-	strcpy(emulator.GetConfig().rom_file[6], basename(ROM6file->GetPath().mb_str()));
-	strcpy(emulator.GetConfig().rom_file[7], basename(ROM7file->GetPath().mb_str()));
+  char path[1024];
+  splitPathFileName(ROM0file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[0]);
+  splitPathFileName(ROM1file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[1]);
+  splitPathFileName(ROM2file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[2]);
+  splitPathFileName(ROM3file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[3]);
+  splitPathFileName(ROM4file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[4]);
+  splitPathFileName(ROM5file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[5]);
+  splitPathFileName(ROM6file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[6]);
+  splitPathFileName(ROM7file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[7]);
 
 }
 

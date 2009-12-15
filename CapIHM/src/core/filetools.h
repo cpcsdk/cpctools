@@ -6,6 +6,6 @@
 #define _FILETOOLS_H_
 
 int file_size (int file_num);
-void splitPathFileName(char *pchCombined, char *pchPath, char *pchFile);
+void splitPathFileName(const char *pchCombined, char *pchPath, char *pchFile);
 
 #endif

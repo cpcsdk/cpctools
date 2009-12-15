@@ -18,11 +18,11 @@ DiscEditor( parent )
 
 	wxColour c;
 
-	for(int side = 0; side <= FloppyImage.sides; side++) {
-		for(int row = 0; row < FloppyImage.tracks; row++) {
+	for(unsigned int side = 0; side <= FloppyImage.sides; side++) {
+		for(unsigned int row = 0; row < FloppyImage.tracks; row++) {
 			t_track* currentTrack = &FloppyImage.track[row][side];
 			int pos = 0;
-			for(int col = 0;col < currentTrack->sectors; col++)
+			for(unsigned int col = 0;col < currentTrack->sectors; col++)
 			{
 				s.Empty();
 				s << row << _(":") << col;

@@ -49,6 +49,7 @@
 #include <IMG_savepng.h>
 
 #include <iostream>
+#include <unistd.h>
 
 #define VERSION_STRING "v5.0.0"
 

@@ -25,10 +25,8 @@
 #include <wx/defs.h>
 #include <wx/stdpaths.h>
 
-byte *pbTapeImage = NULL;
-byte *pbTapeImageEnd = NULL;
-
-//Emulator* WXEmulator::instance = NULL;
+extern byte *pbTapeImage;
+extern byte *pbTapeImageEnd;
 
 void WXEmulator::PressKey(uint32_t key, uint32_t mod)
 {

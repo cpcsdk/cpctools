@@ -29,6 +29,7 @@
 #include <wx/splash.h> 
 #include <zlib.h>
 #include <SDL.h>
+#include <SDL_main.h>
 
 #include "cap32.h"
 #include "config.h"
