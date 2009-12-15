@@ -27,8 +27,6 @@ fdc_765.cpp\
 fdc_765.h\
 filetools.cpp\
 filetools.h\
-fileutils.cpp\
-fileutils.h\
 gatearray.cpp\
 gatearray.h\
 glfunclist.h\

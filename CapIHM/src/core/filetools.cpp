@@ -27,6 +27,36 @@
 #include "filetools.h"
 #include <sys/stat.h>
 #include <string.h>
+#include <dirent.h>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstdio>
+
+// Returns a vector containing the names of the files in the specified directory
+std::vector<std::string> listDirectory(std::string sDirectory) {
+   std::vector<std::string> s;
+
+   if (sDirectory[sDirectory.size() - 1] != '/') {
+      sDirectory += "/";
+   }
+   DIR* pDir;
+   struct dirent *pent;
+   pDir = opendir(sDirectory.c_str());
+   if (!pDir){
+       printf ("opendir(%s) failed; terminating\n", sDirectory.c_str());
+       return s;
+   }
+   while ((pent = readdir(pDir))){
+       std::string fileName = std::string(pent->d_name);
+       if (fileName != ".." and fileName != ".") {
+           s.push_back(fileName);
+       }
+   }
+   closedir(pDir);
+   std::sort(s.begin(), s.end()); // sort elements
+   return s;
+}
 
 int file_size (int file_num)
 {
@@ -36,38 +66,5 @@ int file_size (int file_num)
 		return s.st_size;
 	} else {
 		return 0;
-	}
-}
-
-void splitPathFileName(const char *pchCombined, char *pchPath, char *pchFile)
-{
-	char *pchPtr;
-	
-	pchPtr = strrchr(pchCombined, '/'); // start from the end and find the first path delimiter
-	if (!pchPtr) {
-		pchPtr = strrchr(pchCombined, '\\'); // try again with the alternate form
-	}
-	if (pchPtr) {
-		pchPtr++; // advance the pointer to the next character
-		if (pchFile) {
-			strcpy(pchFile, pchPtr); // copy the filename
-		}
-		char chOld = *pchPtr;
-		*pchPtr = 0; // cut off the filename part
-		if (pchPath != pchCombined) {
-			if (pchPath) {
-				strcpy(pchPath, pchCombined); // copy the path
-			}
-			*pchPtr = chOld; // restore original string
-		}
-	} else {
-		if (pchFile) {
-			*pchFile = 0; // no filename found
-		}
-		if (pchPath != pchCombined) {
-			if (pchPath) {
-				strcpy(pchPath, pchCombined); // copy the path
-			}
-		}
 	}
 }

@@ -103,6 +103,7 @@ AC_ARG_WITH(	cli,
 		[  --with-cli		  turn on cli interface [default=no]],
 		with_cli=yes,
 		with_cli=no)
+
 		
 AC_MSG_CHECKING([ devtools ------------------------------------
 ])
@@ -135,7 +136,7 @@ fi
 AM_CONDITIONAL([WITH_IDE], [test "$with_ide" = "yes"])
 
 if test "$with_asm" = "yes" ; then
-    AC_DEFINE(WITH_ASM,1,[Activate integrated assembler])
+	wxLibs=stc
 fi
 AM_CONDITIONAL([WITH_ASM], [test "$with_asm" = "yes"])
 
@@ -158,6 +159,7 @@ fi
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 
 AC_MSG_RESULT([ $enable_debug ])
+
 
 AC_MSG_CHECKING([ display and gui options ------------------------------------
 ])
@@ -188,7 +190,7 @@ if test "$with_wxwidget" = "yes" ; then
 	AM_PATH_WXCONFIG($reqwx, 
                    wxWin=1,
                    wxWin=0,
-                   [adv,core])
+                   [$wxLibs, adv,core])
 	if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
 		wxWidgets must be installed on your system.
@@ -200,16 +202,6 @@ if test "$with_wxwidget" = "yes" ; then
 		wxWidgets version is $reqwx or above.
 		])
 	fi
-fi
-
-m4_include(libpng.m4)
-
-AM_PATH_LIBPNGCONFIG(1,png=1,png=0)
-
-if test "$png" != 1; then
-	AC_MSG_ERROR([
-		libpng not present on your system !
-		])
 fi
 
 # Sound

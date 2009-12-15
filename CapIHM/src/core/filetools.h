@@ -5,7 +5,11 @@
 #ifndef _FILETOOLS_H_
 #define _FILETOOLS_H_
 
+#include <dirent.h>
+#include <string>
+#include <vector>
+
 int file_size (int file_num);
-void splitPathFileName(const char *pchCombined, char *pchPath, char *pchFile);
+std::vector<std::string> listDirectory(std::string sDirectory);
 
 #endif

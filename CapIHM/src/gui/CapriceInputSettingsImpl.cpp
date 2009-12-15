@@ -253,15 +253,23 @@ void CapriceInputSettingsImpl::changeColorPalette( wxCommandEvent& event )
  ***************/
 void CapriceInputSettingsImpl::RomChange( wxFileDirPickerEvent& event )
 {
-  char path[1024];
-  splitPathFileName(ROM0file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[0]);
-  splitPathFileName(ROM1file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[1]);
-  splitPathFileName(ROM2file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[2]);
-  splitPathFileName(ROM3file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[3]);
-  splitPathFileName(ROM4file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[4]);
-  splitPathFileName(ROM5file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[5]);
-  splitPathFileName(ROM6file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[6]);
-  splitPathFileName(ROM7file->GetPath().mb_str(),path,emulator.GetConfig().rom_file[7]);
+	wxFileName fn;
+	fn = ROM0file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[0],fn.GetFullName().mb_str());
+	fn = ROM1file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[1],fn.GetFullName().mb_str());
+	fn = ROM2file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[2],fn.GetFullName().mb_str());
+	fn = ROM3file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[3],fn.GetFullName().mb_str());
+	fn = ROM4file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[4],fn.GetFullName().mb_str());
+	fn = ROM5file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[5],fn.GetFullName().mb_str());
+	fn = ROM6file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[6],fn.GetFullName().mb_str());
+	fn = ROM7file->GetPath();
+	strcpy(emulator.GetConfig().rom_file[7],fn.GetFullName().mb_str());
 
 }
 
