@@ -91,6 +91,7 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 					pbPtr = pbGPBuffer + 0x100;
 					if (memcmp(pbPtr, "Track-Info", 10) != 0) { // abort if ID does not match
 						iRetCode = ERR_DSK_INVALID;
+						cout << "Track info not found\n";
 						goto exit;
 					}
 					dwSectorSize = 0x80 << *(pbPtr + 0x14); // determine sector size in bytes
@@ -119,6 +120,7 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 					}
 					if (!fread(pbTempPtr, dwTrackSize, 1, pDSKfileObject)) { // read entire track data in one go
 						iRetCode = ERR_DSK_INVALID;
+						cout << "Track not complete or wrong size\n";
 						goto exit;
 					}
 				}
@@ -146,6 +148,7 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 							fread(pbGPBuffer+0x100, 0x100, 1, pDSKfileObject); // read track header
 							pbPtr = pbGPBuffer + 0x100;
 							if (memcmp(pbPtr, "Track-Info", 10) != 0) { // valid track header?
+								cout << "Track info not found\n";
 								iRetCode = ERR_DSK_INVALID;
 								goto exit;
 							}
@@ -170,12 +173,13 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 									// sector size in bytes
 								drive->track[track][side].sector[sector].size = dwSectorSize;
 								unsigned char dwSectorType = *(pbPtr + 0x1B);
-								drive->track[track][side].sector[sector].declared_size = 128 << dwSectorType;
+								drive->track[track][side].sector[sector].declared_size = 128 << (dwSectorType & 7 );
 								drive->track[track][side].sector[sector].data = pbDataPtr; // store pointer to sector data
 								pbDataPtr += dwSectorSize;
 								pbPtr += 8;
 							}
-							if (!fread(pbTempPtr, dwTrackSize, 1, pDSKfileObject)) { // read entire track data in one go
+							if (dwTrackSize != 0 && !fread(pbTempPtr, dwTrackSize, 1, pDSKfileObject)) { // read entire track data in one go
+								cout << "EXT : Track " << track << " not complete or wrong size (" << dwTrackSize << ")\n";
 								iRetCode = ERR_DSK_INVALID;
 								goto exit;
 							}
