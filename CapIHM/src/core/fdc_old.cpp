@@ -259,6 +259,7 @@ void t_FDC::cmd_read(void)
 loop:
 	sector = find_sector(&command[CMD_C]); // locate the requested sector on the current track
 	if (sector) { // sector found
+		cout << "FDC : read side " << driveA.current_side <<" track " << driveA.current_track << " sector " << driveA.current_sector << "\n";
 		result[RES_ST1] = sector->flags[0] & 0x25; // copy ST1 to result, ignoring unused bits
 		result[RES_ST2] = sector->flags[1] & 0x61; // copy ST2 to result, ignoring unused bits
 		if (command[CMD_CODE] == 0x4c) { // read deleted data command?
@@ -312,6 +313,7 @@ loop:
 		}
 	}
 	else { // sector not found
+		cout << "FDC : read NOT EXISTING track " << driveA.current_track << " sector " << &command[CMD_C] << "\n";
 		result[RES_ST0] |= 0x40; // AT
 		result[RES_ST1] |= 0x04; // No Data
 		
