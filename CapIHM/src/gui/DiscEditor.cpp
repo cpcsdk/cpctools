@@ -24,10 +24,10 @@ DiscEditor( parent )
 			int pos = 0;
 			for(unsigned int col = 0;col < currentTrack->sectors; col++)
 			{
-				s.Empty();
-				s << row << _(":") << col;
 				wxGBPosition p(row,pos + side*40);
-				wxButton* b = new wxButton(m_panel17, wxID_ANY, s);
+				wxString v;
+			    v << (int)currentTrack->sector[col].CHRN[2];
+				wxButton* b = new wxButton(m_panel17, wxID_ANY, v);
 				if(currentTrack->sector[col].size != currentTrack->sector[col].declared_size)
 					c.Set(255,0,0); // Red : weak sector
 				else
@@ -41,5 +41,4 @@ DiscEditor( parent )
 			}
 		}
 	}
-	diskOverview->Layout();
 }
