@@ -58,6 +58,7 @@
 #include "config.h"
 #include "debug.h"
 #include "emulator.h"
+#include "error.h"
 
 #include "dsk.h"
 
@@ -1020,7 +1021,31 @@ void t_FDC::fdc_scan(t_FDC &FDC)
 
 void t_FDC::insertA(const string filename, const char *type )
 {
-    dsk_load(filename.c_str(), &driveA, 'A');
+    int errcode = dsk_load(filename.c_str(), &driveA, 'A');
+
+	if (errcode != 0) {
+		cout << "Error loading dsk : ";
+		switch(errcode) {
+			case ERR_DSK_SIDES:
+				cout << "more than 2 sides !\n";
+				break;
+			case ERR_DSK_INVALID:
+				cout << "file is corrupted !\n";
+				break;
+			case ERR_DSK_SECTORS:
+				cout << "too much sectors !\n";
+				break;
+			case ERR_OUT_OF_MEMORY:
+				cout << "not enough memory !\n";
+				break;
+			case ERR_FILE_NOT_FOUND:
+				cout << "file not found !\n";
+				break;
+			default:
+				cout << "unknown error ??!\n";
+				break;
+		}
+	}
 }
 
 void t_FDC::insertB(const string filename, const char *type )
