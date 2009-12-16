@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 13 2009)
+// C++ code generated with wxFormBuilder (version Dec 16 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -656,12 +656,19 @@ class DiscEditor : public wxFrame
 		wxStaticText* Track;
 		wxSpinCtrl* spinTrack;
 		wxStaticText* m_staticText96;
-		wxListBox* m_listBox2;
+		wxListBox* lb_sectors;
+		wxStaticText* st_size;
+		wxStaticText* st_weak;
+		wxStaticText* st_erased;
 		wxTextCtrl* m_textCtrl70;
+		
+		// Virtual event handlers, overide them in your derived class
+		virtual void setTrack( wxSpinEvent& event ) { event.Skip(); }
+		
 	
 	public:
 		
-		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,400 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~DiscEditor();
 	
 };

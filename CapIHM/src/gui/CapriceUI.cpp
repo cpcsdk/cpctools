@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 13 2009)
+// C++ code generated with wxFormBuilder (version Dec 16 2009)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -2451,17 +2451,29 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_staticText96->Wrap( -1 );
 	bSizer43->Add( m_staticText96, 0, wxALL, 5 );
 	
-	m_listBox2 = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_listBox2->Append( wxT("0xC1") );
-	m_listBox2->Append( wxT("0xC2") );
-	m_listBox2->Append( wxT("0xC3") );
-	m_listBox2->Append( wxT("0xC4") );
-	m_listBox2->Append( wxT("0xC5") );
-	m_listBox2->Append( wxT("0xC6") );
-	m_listBox2->Append( wxT("0xC7") );
-	m_listBox2->Append( wxT("0xC8") );
-	m_listBox2->Append( wxT("0xC9") );
-	bSizer43->Add( m_listBox2, 0, wxALL|wxEXPAND, 5 );
+	lb_sectors = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	lb_sectors->Append( wxT("0xC1") );
+	lb_sectors->Append( wxT("0xC2") );
+	lb_sectors->Append( wxT("0xC3") );
+	lb_sectors->Append( wxT("0xC4") );
+	lb_sectors->Append( wxT("0xC5") );
+	lb_sectors->Append( wxT("0xC6") );
+	lb_sectors->Append( wxT("0xC7") );
+	lb_sectors->Append( wxT("0xC8") );
+	lb_sectors->Append( wxT("0xC9") );
+	bSizer43->Add( lb_sectors, 0, wxALL|wxEXPAND, 5 );
+	
+	st_size = new wxStaticText( m_panel2, wxID_ANY, wxT("Sector size"), wxDefaultPosition, wxDefaultSize, 0 );
+	st_size->Wrap( -1 );
+	bSizer43->Add( st_size, 0, wxALL, 5 );
+	
+	st_weak = new wxStaticText( m_panel2, wxID_ANY, wxT("weak  (n copies)"), wxDefaultPosition, wxDefaultSize, 0 );
+	st_weak->Wrap( -1 );
+	bSizer43->Add( st_weak, 0, wxALL, 5 );
+	
+	st_erased = new wxStaticText( m_panel2, wxID_ANY, wxT("erased"), wxDefaultPosition, wxDefaultSize, 0 );
+	st_erased->Wrap( -1 );
+	bSizer43->Add( st_erased, 0, wxALL, 5 );
 	
 	bSizer5->Add( bSizer43, 1, wxEXPAND, 5 );
 	
@@ -2479,8 +2491,14 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Layout();
 	
 	this->Centre( wxBOTH );
+	
+	// Connect Events
+	spinTrack->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DiscEditor::setTrack ), NULL, this );
 }
 
 DiscEditor::~DiscEditor()
 {
+	// Disconnect Events
+	spinTrack->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DiscEditor::setTrack ), NULL, this );
+	
 }

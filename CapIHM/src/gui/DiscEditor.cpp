@@ -7,7 +7,7 @@ DiscEditorImpl::DiscEditorImpl( wxWindow* parent )
 DiscEditor( parent )
 {
 	// Get the disk info.
-	t_drive FloppyImage = Emulator::getInstance()->GetFDC().GetDriveA();
+	FloppyImage = Emulator::getInstance()->GetFDC().GetDriveA();
 	// Fill in the Overview
 	wxString s;
 	s << FloppyImage.tracks;
@@ -18,6 +18,8 @@ DiscEditor( parent )
 
 	wxColour c;
 
+	// TODO : it would probably be faster if we use a wxPanel and draw on it by hand.
+	// All this stuff is taking a lot of time to instanciate and handle.
 	for(unsigned int side = 0; side <= FloppyImage.sides; side++) {
 		for(unsigned int row = 0; row < FloppyImage.tracks; row++) {
 			t_track* currentTrack = &FloppyImage.track[row][side];
@@ -40,5 +42,23 @@ DiscEditor( parent )
 				pos += currentTrack->sector[col].declared_size/128;
 			}
 		}
+	}
+
+	// Fill in the sector editor
+	lb_sectors->Clear();
+	for(unsigned int s = 0;s<FloppyImage.track[0][0].sectors;s++) {
+		wxString sNum;
+		sNum.Printf(_("%x"),(int)FloppyImage.track[0][0].sector[s].CHRN[2]);
+		lb_sectors->Append(sNum);
+	}
+}
+
+void DiscEditorImpl::setTrack( wxSpinEvent& event )
+{
+	lb_sectors->Clear();
+	for(unsigned int s = 0;s<FloppyImage.track[event.GetPosition()][0].sectors;s++) {
+		wxString sNum;
+		sNum.Printf(_("%x"),(int)FloppyImage.track[event.GetPosition()][0].sector[s].CHRN[2]);
+		lb_sectors->Append(sNum);
 	}
 }
