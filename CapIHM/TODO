@@ -6,11 +6,11 @@ Important :
 - Faire emulation autres CRTC
 
 Mineur :
-- Gestion Cassette
 - Gestion correcte volume son
 - Possibilité correction des niveaux de mixage son
 - Possibilité modifier palette 27 couleurs et faire des presets (manque presets et fenetre configuration)
 - Ajustement de la taille du buffer de son par l'utilisateur (Buffer SDL et buffer local)
+- Supprimer la dépendance à SDL dans le core
 
 Urgent :
 - Possibilité de compilation CrossDev windows

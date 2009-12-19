@@ -313,7 +313,7 @@ loop:
 		}
 	}
 	else { // sector not found
-		cout << "FDC : read NOT EXISTING track " << driveA.current_track << " sector " << &command[CMD_C] << "\n";
+		cout << "FDC : read NOT EXISTING track " << driveA.current_track << " sector " << (int)command[CMD_C] << "\n";
 		result[RES_ST0] |= 0x40; // AT
 		result[RES_ST1] |= 0x04; // No Data
 		

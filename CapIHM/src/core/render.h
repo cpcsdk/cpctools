@@ -371,8 +371,6 @@ class Renderer
 	bool SetFullScreen(bool fs);
 	bool ToggleFullScreen();
 
-	void SetCaption(const char *title, const char *icon);
-
 	bool Init();
 
 	bool BeginDisplay(int screenLine);

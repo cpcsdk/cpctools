@@ -542,11 +542,6 @@ void Renderer::Shutdown ()
 	_videoPlugin->Close();
 }
 
-void Renderer::SetCaption(const char *title, const char *icon)
-{
-	SDL_WM_SetCaption(title, icon);
-}
-
 void Renderer::Reset()
 {
 	int pixelWidth;

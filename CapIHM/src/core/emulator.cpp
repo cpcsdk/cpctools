@@ -322,8 +322,6 @@ bool Emulator::Init()
 
 	_renderer.SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
 
-	_renderer.SetCaption("Caprice32 " VERSION_STRING, "Caprice32");
-
 	if (!_renderer.Init()) {
 		fprintf(stderr, "video_init() failed. Aborting.\n");
 		return false;
@@ -638,6 +636,6 @@ void Emulator::SaveScreenshot(string filename)
 Emulator* Emulator::getInstance()
 {
 	//if(!instance) instance = new Emulator();	
-	std::cout << "[DEBUG] Get Emulator at " << instance << endl;
+	//std::cout << "[DEBUG] Get Emulator at " << instance << endl;
 	return instance;
 }
