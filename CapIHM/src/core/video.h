@@ -124,8 +124,6 @@ protected:
 	//! Default constructor
 	VideoPlugin(const string name, const dword format, const byte halfPixels);
 
-	//! computes the clipping of two rectangles and changes src and dst accordingly
-	void ComputeRects(SDL_Rect* src, SDL_Rect* dst);
 public:
 	//static VideoPlugin* Create(VideoType type);
 	//static VideoPlugin* Create(VideoPlugin *ptr);

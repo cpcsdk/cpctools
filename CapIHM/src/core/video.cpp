@@ -64,53 +64,6 @@ VideoPlugin::~VideoPlugin()
 {
 }
 
-// computes the clipping of two rectangles and changes src and dst accordingly
-// dst is the screen
-// src is the internal window
-void VideoPlugin::ComputeRects(SDL_Rect* src, SDL_Rect* dst)
-{
-	/* initialise the source rect to full source */
-	src->x=0;
-	src->y=0;
-	src->w=_publicVideo->w;
-	src->h=_publicVideo->h;
-	
-	dst->x=(_video->w-CPCVisibleSCRWidth*2)/2,
-		dst->y=(_video->h-CPCVisibleSCRHeight*2)/2;
-	dst->w=_video->w;
-	dst->h=_video->h;
-	
-	int dw=src->w*2-dst->w;
-	/* the src width is too big */
-	if (dw>0)
-	{
-		src->w-=dw/2;
-		src->x+=dw/4;
-		
-		dst->x=0;
-		dst->w=_video->w;
-	}
-	else
-	{
-		dst->w=CPCVisibleSCRWidth*2;
-	}
-	int dh=src->h*2-dst->h;
-	/* the src height is too big */
-	if (dh>0)
-	{
-		src->h-=dh/2;
-		src->y+=dh/4;
-		
-		dst->y=0;
-		dst->h=_video->h;
-	}
-	else
-	{
-		src->h-=2*3;
-		dst->h=CPCVisibleSCRHeight*2;
-	}
-}
-
 /*VideoPlugin* VideoPlugin::Create(VideoPlugin *ptr)
 {
 	return ptr;
