@@ -58,7 +58,8 @@ class t_CPC;
 #define RES_N     6
 
 #define OVERRUN_TIMEOUT 128*4
-#define INITIAL_TIMEOUT OVERRUN_TIMEOUT*4
+// #define INITIAL_TIMEOUT OVERRUN_TIMEOUT*4
+#define INITIAL_TIMEOUT OVERRUN_TIMEOUT*10 // This makes Orion Prime work.
 
 #define MAX_CMD_COUNT 15
 
