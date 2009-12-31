@@ -78,10 +78,13 @@ IMPLEMENT_APP(CapriceApp)
 // This is executed upon startup, like 'main()' in non-wxWidgets programs.
 bool CapriceApp::OnInit()
 {
+  
+    
     // call default behaviour (mandatory)
     if (!wxApp::OnInit())
         return false;
 
+    SetAppName(wxT("capricereloaded"));
 	wxImage::AddHandler(new wxPNGHandler);
 
 	//Splash screen managment

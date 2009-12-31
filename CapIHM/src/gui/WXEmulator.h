@@ -21,6 +21,10 @@
 #ifndef __EMULATOR_WX__
 #define __EMULATOR_WX__
 
+#include <wx/stdpaths.h>
+#include <wx/dir.h>
+#include <wx/filefn.h>
+
 #include "emulator.h"
 class CapriceWindowImpl;
 
@@ -37,6 +41,25 @@ class WXEmulator : public Emulator {
 	  CapriceWindowImpl* win;
 
   public:
+    WXEmulator()
+    {
+      //Get path for configuration
+
+      wxString s = wxStandardPaths::Get().GetUserDataDir();
+      wxString s2 = wxStandardPaths::Get().GetDataDir();
+
+      if (!wxDir::Exists(s))
+      {
+        printf("Copy configuration files ");
+        wxMkDir(s.mb_str(), 0700);
+
+        wxCopyFile(s2 + wxT("/cap32.cfg"), s+ wxT("/cap32.cfg"), false);
+        wxCopyFile(s2 + wxT("/Keymap.cfg"), s+ wxT("/Keymap.cfg"), false);
+      }
+	    strcpy(this->_config_path,s.mb_str());
+      
+    }
+
 	  static inline WXEmulator* getInstance()
 	  {
 		  if(!instance) instance = new WXEmulator();
@@ -59,7 +82,7 @@ class WXEmulator : public Emulator {
 	  void Pause();
 
 	  // Return folder where config files should be stored
-	  const char * getConfigPath();
+	//  const char * getConfigPath();
 } ;
 
 #endif

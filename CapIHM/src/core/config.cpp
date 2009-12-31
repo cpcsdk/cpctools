@@ -491,7 +491,7 @@ void printerr(C_Inifile_error err, int line = 0) {
 
 void t_CPC::saveConfiguration ()
 {
-	printf("Saving configuration...\n");
+	printf("Saving configuration... %s\n", emulator->getConfigPath());
 	C_Inifile_error err = C_INIFILE_NO_ERROR ;
 
 

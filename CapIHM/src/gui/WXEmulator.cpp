@@ -238,9 +238,11 @@ void WXEmulator::fdcLed(bool on) {
 	win->fdcLed(on);
 }
 
+/*
 const char * WXEmulator::getConfigPath() {
 	static char p[1024];
 	wxString s = wxStandardPaths::Get().GetUserDataDir();
 	strcpy(p,s.mb_str());
 	return p;
 }
+*/

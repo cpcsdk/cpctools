@@ -115,7 +115,9 @@ public:
 	 */
 	virtual inline void Pause() { GetConfig().paused = 1; timer.pause();}
 	// TODO : should return DATA_PATH but it is not defined when building this file :/
-	virtual const char * getConfigPath() { return "ERROR";}
+	virtual const char * getConfigPath() { 
+      return this->_config_path;
+  }
 
 	/**
 	 * Pause the emulator due to a breakpoint
@@ -217,8 +219,10 @@ public:
 	 */
 	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
 
+	 char _config_path[1024];
 protected:
 	
+
 	bool MF2Init();
 
 	int emulator_init();
