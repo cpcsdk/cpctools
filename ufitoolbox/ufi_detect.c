@@ -1,7 +1,7 @@
 /*
-    ufiformat Version 0.9.4 2007/11/09
+    ufiformat Version 0.9.6 2009/11/02
 
-    Copyright (C) 2005-2007 Kazuhiro Hayashi <tedi@tedi.sakura.ne.jp>
+    Copyright (C) 2005-2009 Kazuhiro Hayashi <tedi@tedi.sakura.ne.jp>
     Copyright (C) 2005 John Floyd <jfloyd@bigpond.net.au>
 
     The method of formatting a floppy on USB-FDD used in this program
@@ -224,6 +224,38 @@ static int is_usb_fdd_for_host(int host_id)
     char path[PATH_MAX];
     char buf[1024];
     FILE *fp;
+    struct stat st;
+
+    if (stat("/sys/class", &st) == 0) {
+	int n;
+
+	sprintf(path, "/sys/class/scsi_host/host%d/device/../driver", host_id);
+	if ((n = readlink(path, buf, sizeof(buf))) < 12 || strncmp(buf + n - 12, "/usb-storage", 12) != 0) {
+	    return 0;
+	}
+
+	sprintf(path, "/sys/class/scsi_host/host%d/device/../bInterfaceClass", host_id);
+	if ((fp = fopen(path, "r")) == NULL) {
+	    return 0;
+	}
+	if (fgets(buf, sizeof(buf), fp) == NULL || strcmp(buf, "08\n") != 0) {
+	    fclose(fp);
+	    return 0;
+	}
+	fclose(fp);
+
+	sprintf(path, "/sys/class/scsi_host/host%d/device/../bInterfaceSubClass", host_id);
+	if ((fp = fopen(path, "r")) == NULL) {
+	    return 0;
+	}
+	if (fgets(buf, sizeof(buf), fp) == NULL || strcmp(buf, "04\n") != 0) {
+	    fclose(fp);
+	    return 0;
+	}
+	fclose(fp);
+
+	return 1;
+    }
 
     sprintf(path, "/proc/scsi/usb-storage/%d", host_id);
     if ((fp = fopen(path, "r")) == NULL) {

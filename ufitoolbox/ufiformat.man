@@ -1,0 +1,128 @@
+."
+."
+."
+.TH ufiformat 8
+.SH NAME
+.ad l
+.hy 0
+.nf
+ufiformat \- Format a USB floppy disk.
+.SH SYNOPSIS
+.B ufiformat
+[ \fB\-hiqv\fP ]
+[ \fB\-f\fR|\fB\-\-format\fP [\fIsize\fP\|]]
+[
+.I devicepath
+]
+.
+.SH OPTIONS
+.TP
+\fB\-f\fP, \fB\-\-format\fP [\fIsize\fP\|]
+Specify format capacity SIZE in KB.
+Without \fB\-f\fP option, the format of the current media will be used.
+.TP
+.BR \-F , \ \-\-force
+Do not perform any safety checks.
+.TP
+.BR \-i , \ \-\-inquire
+Show device information, instead of performing format.
+Without \fIdevicepath\fP argument, list all USB floppy disk devices
+attached to the system.
+.TP
+.BR \-v , \ \-\-verbose
+Be verbose.
+.TP
+.BR \-q , \ \-\-quiet
+Suppress minor diagnostics.
+.TP
+.BR \-h , \ \-\-help
+Show help message.
+.
+.SH DESCRIPTION
+.B ufiformat
+is a raw level formatting disk utility for USB floppy devices.
+.PP
+Raw level format is to write gap,index,sectors to the unformatted disk
+using special commands specific to the disk controller,
+to make the plain magneto-sensitive film into sector-addressable medium.
+Note that raw level format is \fBNOT\fP about creating filesystems
+(\fIfs\fP(5))
+on the disk.
+.PP
+After mid-1990's, floppy disks are sold generally pre-formatted in
+MS-DOS 2HD format:
+80 cylinder, 2 heads, 18 sectors/track, 512 bytes/sector;
+it is seldom in need for raw formatting.
+Nevertheless raw formatting could cure some disk and drive mismatchings.
+.PP
+.I WARNING:
+You will \fBNOT\fP raw format an LS-120 disks or (removable) hard disks;
+they are precision formatted in factory and cannot be raw reformatted.
+.PP
+.B ufiformat
+supports only the following format capacities:
+.RS
+   1440/1232/1200 (for 2HD disk)
+   720/640        (for 2DD disk)
+.RE
+The device should support the capacities also,
+otherwise \fBufiformat\fP shows an error message.
+
+The above format capacities are predefined in the program, but
+each USB floppy device also has a limited set of formats (defined internally)
+that it can format media to.  The allowed format capacities are obtained by
+querying
+.RB ( \-i )
+the device, but this only returns the total format capacity
+and not CHS (cylinder, heads and sectors), hence a mapping is
+required in the program.
+
+."Currently it is known to work under the following environment.
+."  * Plamo Linux 4.0.2(kernel 2.6) + YE-DATA USB-FDU(OEM)
+."  * Plamo Linux 4.0.2(kernel 2.4) + YE-DATA USB-FDU(OEM)
+."  * SuSE-10 + TEAC FD-05PUB(OEM)
+."  * Linux Zaurus SL-C700(kernel 2.4) + REX-CFU1 + YE-DATA USB-FDU
+."    (some kernel modules and recent libext2 are needed)
+.SH EXAMPLES
+.TP
+Inquiry the device for available format:
+.nf
+# modprobe sg
+# ufiformat \-i /dev/sda
+vendor:  Y\-E DATA
+product: USB-FDU
+write protect: off
+media type: 2HD
+status      block size   kb
+formatted    2880  512 1440
+formattable  2880  512 1440
+formattable  1232 1024 1232
+formattable  2400  512 1200
+.fi
+.TP
+Format the floppy disk in 1.44MB, and create a FAT filesystem:
+.nf
+# ufiformat \-f 1440 /dev/sda
+# mkdosfs \-I /dev/sda
+.fi
+.
+.SH PREREQUISTES
+.B ufiformat
+needs
+.BR /dev/sg *
+SCSI pass-thru device to operate.
+If the device does not exist, add the driver by invoking
+\fBmodprobe sg\fP.
+.PP
+You often need to be root to do anything with \fB/dev/sd\fP*.
+.
+.SH "SEE ALSO"
+.IR fdformat (8),
+.IR floppy (8),
+.IR sg (4)
+.PP
+"Universal Serial Bus Mass Storage Class - UFI Command Specification"
+Revision 1.0 December 14 1998
+.br
+http://www.usb.org/developers/devclass_docs/usbmass-ufi10.pdf
+

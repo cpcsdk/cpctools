@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT(ufitoolbox, 0.9.4)
+AC_INIT(ufiformat, 0.9.6)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([ufi_format.c])
 AC_CONFIG_HEADER([config.h])
@@ -10,16 +10,10 @@ AC_CONFIG_HEADER([config.h])
 # Checks for programs.
 AC_PROG_CC
 
-# Checks for libraries.
-# AC_CHECK_LIB(ext2fs, ext2fs_check_if_mounted,,
-#    AC_MSG_ERROR([ext2fs:ext2fs_check_if_mounted not found]))
-
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/param.h unistd.h],,
     AC_MSG_ERROR([system headers not found]))
-#AC_CHECK_HEADER([ext2fs/ext2fs.h],,
-#    AC_MSG_ERROR([ext2fs:ext2fs/ext2fs.h not found]))
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST

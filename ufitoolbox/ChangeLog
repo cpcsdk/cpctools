@@ -1,3 +1,13 @@
+2009-Nov-02  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	Version 0.9.6
+	* bug fix of the method of usb floppy detection with sysfs
+
+2009-Oct-03  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
+
+	Version 0.9.5
+	* use sysfs if it exists
+
 2007-Nov-10  Kazuhiro Hayashi  <tedi@tedi.sakura.ne.jp>
 
 	Version 0.9.4

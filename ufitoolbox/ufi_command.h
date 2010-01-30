@@ -1,7 +1,7 @@
 /*
-    ufiformat Version 0.9.4 2007/11/09
+    ufiformat Version 0.9.6 2009/11/02
 
-    Copyright (C) 2005-2007 Kazuhiro Hayashi <tedi@tedi.sakura.ne.jp>
+    Copyright (C) 2005-2009 Kazuhiro Hayashi <tedi@tedi.sakura.ne.jp>
     Copyright (C) 2005 John Floyd <jfloyd@bigpond.net.au>
 
     The method of formatting a floppy on USB-FDD used in this program
