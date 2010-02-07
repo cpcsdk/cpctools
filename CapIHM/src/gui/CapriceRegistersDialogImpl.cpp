@@ -175,6 +175,51 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
         tmp << dec << ((int)(emulator->GetCRTC().GetRegisterValue(0) + 1)*((emulator->GetCRTC().GetRegisterValue(4) + 1)*(emulator->GetCRTC().GetRegisterValue(9) + 1) + emulator->GetCRTC().GetRegisterValue(5))) << " us";
         m_sT_VFrameLength->SetLabel(wxString::FromAscii((tmp.str()).data()));
     }
+
+	// GA registers
+    if(m_nb_Register->GetSelection() == 2)
+	{
+		m_pen->Clear();
+		*m_pen << emulator->GetGateArray().GetPen();
+
+		m_ink0->Clear();
+		*m_ink0 << emulator->GetGateArray().GetInk(0);
+		m_ink1->Clear();
+		*m_ink1 << emulator->GetGateArray().GetInk(1);
+		m_ink2->Clear();
+		*m_ink2 << emulator->GetGateArray().GetInk(2);
+		m_ink3->Clear();
+		*m_ink3 << emulator->GetGateArray().GetInk(3);
+		m_ink4->Clear();
+		*m_ink4 << emulator->GetGateArray().GetInk(4);
+		m_ink5->Clear();
+		*m_ink5 << emulator->GetGateArray().GetInk(5);
+		m_ink6->Clear();
+		*m_ink6 << emulator->GetGateArray().GetInk(6);
+		m_ink7->Clear();
+		*m_ink7 << emulator->GetGateArray().GetInk(7);
+		m_ink8->Clear();
+		*m_ink8 << emulator->GetGateArray().GetInk(8);
+		m_ink9->Clear();
+		*m_ink9 << emulator->GetGateArray().GetInk(9);
+		m_ink10->Clear();
+		*m_ink10 << emulator->GetGateArray().GetInk(10);
+		m_ink11->Clear();
+		*m_ink11 << emulator->GetGateArray().GetInk(11);
+		m_ink12->Clear();
+		*m_ink12 << emulator->GetGateArray().GetInk(12);
+		m_ink13->Clear();
+		*m_ink13 << emulator->GetGateArray().GetInk(13);
+		m_ink14->Clear();
+		*m_ink14 << emulator->GetGateArray().GetInk(14);
+		m_ink15->Clear();
+		*m_ink15 << emulator->GetGateArray().GetInk(15);
+		m_border->Clear();
+		*m_border << emulator->GetGateArray().GetInk(16);
+
+		m_vmode->Clear();
+		*m_vmode << (int)emulator->GetGateArray().GetMode();
+	}
 }
 
 // Z80 8bits Registers Focus

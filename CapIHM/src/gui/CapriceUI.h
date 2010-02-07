@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 16 2009)
+// C++ code generated with wxFormBuilder (version Feb  7 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -438,43 +438,43 @@ class RegistersStates : public wxDialog
 		wxCheckBox* m_cB_VFrameLengthIsOk;
 		wxPanel* ga_tab;
 		wxStaticText* m_staticText84;
-		wxTextCtrl* m_textCtrl51;
+		wxTextCtrl* m_pen;
 		wxStaticText* m_staticText85;
-		wxTextCtrl* m_textCtrl52;
+		wxTextCtrl* m_vmode;
 		wxStaticText* m_staticText86;
-		wxTextCtrl* m_textCtrl53;
+		wxTextCtrl* m_ink0;
 		wxStaticText* m_staticText87;
-		wxTextCtrl* m_textCtrl54;
+		wxTextCtrl* m_ink1;
 		wxStaticText* m_staticText88;
-		wxTextCtrl* m_textCtrl55;
+		wxTextCtrl* m_ink2;
 		wxStaticText* m_staticText89;
-		wxTextCtrl* m_textCtrl56;
+		wxTextCtrl* m_ink3;
 		wxStaticText* m_staticText90;
-		wxTextCtrl* m_textCtrl57;
+		wxTextCtrl* m_ink4;
 		wxStaticText* m_staticText91;
-		wxTextCtrl* m_textCtrl58;
+		wxTextCtrl* m_ink5;
 		wxStaticText* m_staticText92;
-		wxTextCtrl* m_textCtrl59;
+		wxTextCtrl* m_ink6;
 		wxStaticText* m_staticText93;
-		wxTextCtrl* m_textCtrl60;
+		wxTextCtrl* m_ink7;
 		wxStaticText* m_staticText94;
-		wxTextCtrl* m_textCtrl61;
+		wxTextCtrl* m_ink8;
 		wxStaticText* m_staticText95;
-		wxTextCtrl* m_textCtrl62;
+		wxTextCtrl* m_ink9;
 		wxStaticText* m_staticText96;
-		wxTextCtrl* m_textCtrl63;
+		wxTextCtrl* m_ink10;
 		wxStaticText* m_staticText97;
-		wxTextCtrl* m_textCtrl64;
+		wxTextCtrl* m_ink11;
 		wxStaticText* m_staticText98;
-		wxTextCtrl* m_textCtrl65;
+		wxTextCtrl* m_ink12;
 		wxStaticText* m_staticText99;
-		wxTextCtrl* m_textCtrl66;
+		wxTextCtrl* m_ink13;
 		wxStaticText* m_staticText100;
-		wxTextCtrl* m_textCtrl67;
+		wxTextCtrl* m_ink14;
 		wxStaticText* m_staticText101;
-		wxTextCtrl* m_textCtrl68;
+		wxTextCtrl* m_ink15;
 		wxStaticText* m_staticText102;
-		wxTextCtrl* m_textCtrl69;
+		wxTextCtrl* m_border;
 		wxStaticText* m_staticText103;
 		wxTextCtrl* m_textCtrl70;
 		
