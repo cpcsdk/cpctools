@@ -18,7 +18,8 @@
  *
  */  
 
-
+// TODO: Renderer doesn't support scanline pitch
+// TODO: Renderer doesn't support 8bpp mode
 
 //
 // Render function used by CRTC & GateArray
@@ -34,8 +35,6 @@
 #define FNT_MIN_CHAR 32
 #define FNT_MAX_CHAR FNT_MIN_CHAR+FNT_CHARS
 #define FNT_BAD_CHAR 95
-
-#include <SDL_video.h>
 
 #include <iostream>
 
@@ -137,7 +136,7 @@ void Renderer::EndDisplay(bool frameCompleted)
 }
 
 
-SDL_Surface *Renderer::GetBackSurface()
+void *Renderer::GetBackSurface()
 {
 	return _renderFunc->GetBackSurface();
 }
@@ -169,12 +168,12 @@ void Renderer::AddText(int x, int y, const string &text, bool shadow)
 
 void Renderer::Print(int x, int y, const string &text, bool shadow)
 {
-	SDL_Color white;
+	ColorARGB8888 white;
 	white.r = white.g = white.b = 255;
-	SDL_Color black;
+	ColorARGB8888 black;
 	black.r = black.g = black.b = 0;
 
-	if (x >= _renderFunc->GetBackSurface()->w || y >= _renderFunc->GetBackSurface()->h)
+	if(x >= _renderFunc->GetRenderSurfaceWidth() || y >= _renderFunc->GetRenderSurfaceHeight())
 	{
 		return;
 	}
@@ -224,13 +223,15 @@ void Renderer::Print(int x, int y, const string &text, bool shadow)
 			iIdx += FNT_CHARS; // advance to next row in font data
 		}
 		lineXPos += FNT_CHAR_WIDTH; // set screen address to next character position
-		if (lineXPos >= _renderFunc->GetBackSurface()->w)
+		if (lineXPos >= _renderFunc->GetRenderSurfaceWidth())
 		{
 			lineXPos = 0;
 			lineYPos += FNT_CHAR_HEIGHT;
 			
-			if (y >= _renderFunc->GetBackSurface()->h)
+			if(y >= _renderFunc->GetRenderSurfaceHeight())
+			{
 				return;
+			}
 		}
 	}
 }
@@ -333,7 +334,7 @@ void Renderer::InitPalette()
             _renderFunc->SetPalette(i, _colours[_palette[i]]);
         }
 
-        SDL_Color colour;
+        ColorARGB8888 colour;
         colour.r = ((dword)_colours[_palette[18]].r + (dword)_colours[_palette[19]].r) >> 1;
         colour.g = ((dword)_colours[_palette[18]].g + (dword)_colours[_palette[19]].g) >> 1;
         colour.b = ((dword)_colours[_palette[18]].b + (dword)_colours[_palette[19]].b) >> 1;
@@ -410,22 +411,18 @@ bool Renderer::Init()
 	delete _videoPlugin;
 	_videoPlugin = NULL;
 
-	//_videoPlugin = VideoPlugin::Create( _videoPluginType );
-	//_videoPlugin = VideoPlugin::Create(_videoPluginPtr);
-	//_videoPlugin = (VideoPlugin::Create)(_videoPluginPtr);
 	_videoPlugin = (*_videoPluginPtr)();
 	_videoPlugin->SetOption("OpenGLFilter", _videoPluginOpenGLFilter);
 	_videoPlugin->SetOption("Remanency", _monitorRemanency);
 	
 	// attempt to set the required video mode
-	SDL_Surface *backSurface=_videoPlugin->Init(_scrFullScreenWidth, _scrFullScreenHeight, _scrFullScreenBPP, _scrFullScreen);
-	if (backSurface == NULL)
+	if (!_videoPlugin->Init(_scrFullScreenWidth, _scrFullScreenHeight, _scrFullScreenBPP, _scrFullScreen))
 	{ 
 		return false;
 	}
 	
-	//Uint8 scrBPP = backSurface->format->BitsPerPixel; // bit depth of the surface
-	Uint8 scrBPP = _videoPlugin->GetRenderBPP();
+	void *backSurface = _videoPlugin->GetSurface();
+
 	_renderHalf = _videoPlugin->IsHalfSize();
 
 	if (_renderHalf)
@@ -491,7 +488,7 @@ bool Renderer::Init()
 		_preRenderFunc = _preRenderNormalFunc;
 	}
 	
-	switch(scrBPP)
+	switch(_videoPlugin->GetRenderSurfaceBPP())
 	{
 	case 32:
 		_renderFunc = new Render32BppFunction;
@@ -517,14 +514,15 @@ bool Renderer::Init()
 
 	_videoPlugin->Lock();
 	
-	// TODO, Remove SDL dependancy
-	_scrLineOffset = backSurface->pitch / 4; // rendered screen line length (changing bytes to dwords)
+	_scrLineOffset = _videoPlugin->GetRenderSurfacePitch() / 4;
 	_scrPos = _scrBase = 0; // memory address of back buffer
 	
 	_renderFunc->SetBackSurface(backSurface);
 	_renderFunc->SetRenderSurfaceWidth(_videoPlugin->GetRenderSurfaceWidth());
 	_renderFunc->SetRenderSurfaceHeight(_videoPlugin->GetRenderSurfaceHeight());
 	_renderFunc->SetScreenPosition(_scrPos);
+	_renderFunc->SetRenderSurfacePitch(_videoPlugin->GetRenderSurfacePitch());
+	_renderFunc->SetRenderSurfaceBPP(_videoPlugin->GetRenderSurfaceBPP());
 
 	_videoPlugin->Unlock();
 
@@ -575,17 +573,17 @@ void Renderer::SetMode(unsigned int mode)
 	_preRenderFunc->SetMode(mode);
 }
 
-void Renderer::SetPalette(unsigned int pen, unsigned int colour)
+void Renderer::SetPalette(unsigned int pen, unsigned int ga_colour)
 {
-	_renderFunc->SetPalette(pen, _colours[colour]);
-	_palette[pen] = colour;
+	_renderFunc->SetPalette(pen, _colours[ga_colour]);
+	//_palette[pen] = colour;
 }
 
 void Renderer::SetAntiAliasingColour(unsigned int col0, unsigned int col1)
 {
     if (col0<32 && col1<32)
     {
-	SDL_Color colour;
+    ColorARGB8888 colour;
 	colour.r = ((dword)_colours[col0].r + (dword)_colours[col1].r) >> 1;
 	colour.g = ((dword)_colours[col0].g + (dword)_colours[col1].g) >> 1;
 	colour.b = ((dword)_colours[col0].b + (dword)_colours[col1].b) >> 1;
@@ -777,16 +775,28 @@ void Renderer::PreRenderNormalHalfFunction::PreRender(unsigned int memAddr)
 	_renderPos += 2;
 }
 
-void Renderer::RenderFunction::SetPalette(unsigned int pen, const SDL_Color &colour)
+void Renderer::RenderFunction::SetPalette(unsigned int pen, const ColorARGB8888 &colour)
 {
-	unsigned int palColour = SDL_MapRGB(_backSurface->format, colour.r, colour.g, colour.b);
-	_palette[pen] = palColour;
+	if(_renderSurfaceBPP == 8)
+	{
+		_palette[pen] = pen;
+	}
+	else
+	{
+		_palette[pen] = MapRGB(colour);
+	}
 }
 
-void Renderer::RenderFunction::SetAntiAliasingColour(const SDL_Color &colour)
+void Renderer::RenderFunction::SetAntiAliasingColour(const ColorARGB8888 &colour)
 {
-	unsigned int palColour = SDL_MapRGB(_backSurface->format, colour.r, colour.g, colour.b);
-	_palette[18] = palColour;
+	if(_renderSurfaceBPP == 8)
+	{
+		_palette[18] = 18;
+	}
+	else
+	{
+		_palette[18] = MapRGB(colour);
+	}
 }
 
 void Renderer::Render8BppFunction::Render(void)
@@ -799,16 +809,18 @@ void Renderer::Render8BppFunction::Render(void)
 	_scrPos = (dword *)pbPos;
 }
 
-void Renderer::Render8BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
+void Renderer::Render8BppFunction::PlotPixel(int x, int y, const ColorARGB8888 &colour)
 {
-//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
-//		return;
 	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
+	{
 		return;
+	}
 
-	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + x;
+	//byte* pos = (byte*)_backSurface->pixels + (_renderSurfacePitch * y) + x;
+	byte* pos = (byte*)_backSurface + (_renderSurfacePitch * y) + x;
 
-	dword val = SDL_MapRGB(_backSurface->format, colour.r, colour.g, colour.b);
+	//TODO: Rework 8bpp rendering
+	dword val = MapRGB(colour);
 	*pos = (byte)val;
 }
 
@@ -822,16 +834,17 @@ void Renderer::Render16BppFunction::Render(void)
 	_scrPos = (dword *)pwPos;
 }
 
-void Renderer::Render16BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
+void Renderer::Render16BppFunction::PlotPixel(int x, int y, const ColorARGB8888 &colour)
 {
-//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
-//		return;
 	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
+	{
 		return;
+	}
 
-	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + (x * 2);
+	//byte* pos = (byte*)_backSurface->pixels + (_renderSurfacePitch * y) + (x * 2);
+	byte* pos = (byte*)_backSurface + (_renderSurfacePitch * y) + (x * 2);
 
-	dword val = SDL_MapRGB(_backSurface->format, colour.r, colour.g, colour.b);
+	dword val = MapRGB(colour);
 	*(word *)pos = (word)val;
 }
 
@@ -851,7 +864,7 @@ void Renderer::Render24BppFunction::Render(void)
 		*(dword*)pbPos=val;
 		pbPos += 3;
 	}
-	// On copie le dernier octet avec la méthode lente sinon ça dépasse
+	// On copie le dernier octet avec la mï¿½thode lente sinon ï¿½a dï¿½passe
 	val = _palette[*_renderData++];
 	*(word *)pbPos = (word)val;
 	*(pbPos + 2) = (byte)(val >> 16);
@@ -860,16 +873,17 @@ void Renderer::Render24BppFunction::Render(void)
 	_scrPos = (dword *)pbPos;
 }
 
-void Renderer::Render24BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
+void Renderer::Render24BppFunction::PlotPixel(int x, int y, const ColorARGB8888 &colour)
 {
-//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
-//		return;
 	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
+	{
 		return;
+	}
 
-	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + (x * 3);
+	//byte* pos = (byte*)_backSurface->pixels + (_renderSurfacePitch * y) + (x * 3);
+	byte* pos = (byte*)_backSurface + (_renderSurfacePitch * y) + (x * 3);
 
-	dword val = SDL_MapRGB(_backSurface->format, colour.r, colour.g, colour.b);
+	dword val = MapRGB(colour);
 	*(word *)pos = (word)val;
 	*(pos + 2) = (byte)(val >> 16);
 }
@@ -886,15 +900,17 @@ void Renderer::Render32BppFunction::Render(void)
 	}
 }
 
-void Renderer::Render32BppFunction::PlotPixel(int x, int y, const SDL_Color &colour)
+void Renderer::Render32BppFunction::PlotPixel(int x, int y, const ColorARGB8888 &colour)
 {
-//	if (x<0 || x>=_backSurface->w || y<0 || y>=_backSurface->h)
-//		return;
 	if (x<0 || x>=_renderSurfaceWidth || y<0 || y>=_renderSurfaceHeight)
+	{
 		return;
+	}
 
-	byte* pos = (byte*)_backSurface->pixels + (_backSurface->pitch * y) + (x * 4);
+	//byte* pos = (byte*)_backSurface->pixels + (_renderSurfacePitch * y) + (x * 4);
+	//_backSurface->pitch;
+	byte* pos = (byte*)_backSurface + (_renderSurfacePitch * y) + (x * 4);
 
-	dword val = SDL_MapRGB(_backSurface->format, colour.r, colour.g, colour.b);
+	dword val = MapRGB(colour);
 	*(dword *)pos = val;
 }

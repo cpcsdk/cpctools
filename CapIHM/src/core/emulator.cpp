@@ -623,19 +623,18 @@ void Emulator::Loop()
 }
 #endif
 
-// TODO: Autoconf: Make conditional on libpng presence
+// TODO: Autoconf: Make conditional on libpng presence, remove SDL dependency
 void Emulator::SaveScreenshot(string filename)
 {
+	/*
 	std::cout << "[DEBUG] Save screenshot in " << filename << endl ;
 	IMG_SavePNG( 
 			filename.c_str(),
 			GetRenderer().GetVideoPlugin()->_publicVideo,
-			9);
+			9);*/
 }
 
 Emulator* Emulator::getInstance()
 {
-	//if(!instance) instance = new Emulator();	
-	//std::cout << "[DEBUG] Get Emulator at " << instance << endl;
 	return instance;
 }

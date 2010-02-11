@@ -101,7 +101,7 @@ bool CapriceApp::OnInit()
 
 	//Create emulator and IHM
 	emulator = WXEmulator::getInstance();
-	emulator->setVideoPlugin(&WXDoublePlugin::Create);
+	emulator->setVideoPlugin(&WXDoubleLinePlugin::Create);
 	Emulator::getInstance();
 	
 	#if WITH_ASM

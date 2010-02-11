@@ -32,7 +32,6 @@
 
 #include "video.h"
 #include "WXVideo.h"
-#include <SDL_opengl.h>
 #include "glfuncs.h"
 #include <math.h>
 #include <malloc.h>
@@ -50,88 +49,81 @@
 #define max(a,b) (a>b ? a : b)
 #endif
 
-/* ------------------------------------------------------------------------------------ */
-/* Line doubling video plugin --------------------------------------------------------- */
-/* ------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------ *
+ * wxWidget Line doubling video plugin ------------------------------------------------ *
+ * This plugin is for wxWidget windows output.                                          *
+ * Only support DoubleLine Mode and 24bpp mode.                                         *
+ * ------------------------------------------------------------------------------------ */
 
-SDL_Surface* WXDoublePlugin::Init(int w,int h, int bpp, bool fs)
+void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 {
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) { // initialize the video subsystem
-		//return false;
+	if(bpp != 24)
+	{
+		cerr << "WXDoubleLinePlugin initialization error : Only support 24bpp mode" << endl;
 		return NULL;
 	}
-	
+
 	if (!fs)
 	{
 		w=CPCVisibleSCRWidth*2;
 		h=CPCVisibleSCRHeight*2;
 	}
-//	_video=SDL_SetVideoMode(w,h,bpp,SDL_ANYFORMAT | SDL_HWSURFACE | SDL_HWPALETTE | (fs?SDL_FULLSCREEN:0));
-	_video=SDL_CreateRGBSurface(SDL_SWSURFACE,w,h,bpp,0x0000FF,0x00FF00,0xFF0000,0);
-	if (!_video)
+
+	_outputWidth = w;
+	_outputHeight = h;
+
+	_outputSurface = (unsigned char*)malloc(h*w*3*sizeof(unsigned char));
+	if (!_outputSurface)
+	{
 		return NULL;
-	SDL_FillRect(_video,NULL,SDL_MapRGB(_video->format,0,0,0));
+	}
 
-	img = new wxImage(w,h,(unsigned char*)_video->pixels,true);
+	//_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,bpp,0x0000FF,0x00FF00,0xFF0000,0);
+	_publicVideo = (unsigned char*)malloc(CPCVisibleSCRWidth*2*CPCVisibleSCRHeight*3*sizeof(unsigned char));
+	if (!_publicVideo)
+	{
+		free(_outputSurface);
+		_outputSurface = NULL;
+		return NULL;
+	}
+
+	_publicWidth = CPCVisibleSCRWidth*2;
+	_publicHeight = CPCVisibleSCRHeight;
+	_publicBPP = 24;
+	_publicPitch = CPCVisibleSCRWidth*2*_publicBPP/8;
+
+	img = new wxImage(w,h,(unsigned char*)_outputSurface,true);
+	//img = new wxImage(CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,(unsigned char*)_publicVideo->pixels,true);
 	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
-  f->SetEmuImage(img);
-	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,bpp,0x0000FF,0x00FF00,0xFF0000,0);
-	return _publicVideo;
+	f->SetEmuImage(img);
+
+	return (void*)_publicVideo;
 }
 
-void WXDoublePlugin::SetPalette(SDL_Color* c)
+void WXDoubleLinePlugin::SetPalette(ColorARGB8888* c)
 {
-	SDL_SetPalette(_video, SDL_LOGPAL | SDL_PHYSPAL, c, 0, 32); 
-	SDL_SetPalette(_publicVideo, SDL_LOGPAL | SDL_PHYSPAL, c, 0, 32); 
 }
 
-bool WXDoublePlugin::Lock()
+bool WXDoubleLinePlugin::Lock()
 {
 	return true;
 }
 
-void WXDoublePlugin::Unlock()
+void WXDoubleLinePlugin::Unlock()
 {
 }
 
-void WXDoublePlugin::Flip()
+void WXDoubleLinePlugin::Flip()
 {
 	int line;
-    // As we know both surface have the same format, use memcpy instead of sdl blit. Simpler and faster.
-#ifdef USE_SDL_BLITS
-	SDL_Rect sr,dr;
-	if (CPCVisibleSCRWidth*2>_video->w)
-		sr.x=(CPCVisibleSCRWidth*2-_video->w)/2;
-	else
-		sr.x=0;
-	if (CPCVisibleSCRHeight*2>_video->h)
-		sr.y=(CPCVisibleSCRHeight*2-_video->h)/4;
-	else
-		sr.y=0;
-	sr.w=_publicVideo->w;
-	sr.h=1;
-	dr.x=(_video->w-CPCVisibleSCRWidth*2)/2;
-	dr.y=(_video->h-CPCVisibleSCRHeight*2)/2;
-	dr.w=_publicVideo->w;
-	dr.h=1;
-	for(line=0;line<_publicVideo->h;line++)
-	{
-		SDL_BlitSurface(_publicVideo,&sr,_video,&dr);
-		dr.y++;
-		SDL_BlitSurface(_publicVideo,&sr,_video,&dr);
-		dr.y++;
-		sr.y++;
-	}
-	dr.x=max((_video->w-CPCVisibleSCRWidth*2)/2,0);
-	dr.y=max((_video->h-CPCVisibleSCRHeight*2)/2,0);
-	dr.w=min(_publicVideo->w,_video->w);
-	dr.h=min(_publicVideo->h*2,_video->h);
-	SDL_UpdateRects(_video,1,&dr);
-#else
-	byte* src = (byte*)_publicVideo->pixels;
-	byte* dest = (byte*)_video->pixels;
-	int length = _publicVideo->w * 3;
-	for(line=0;line<_publicVideo->h;line++)
+
+	//byte* src = (byte*)_publicVideo->pixels;
+	byte* src = (byte*)_publicVideo;
+	byte* dest = (byte*)_outputSurface;
+	//int length = _publicVideo->w * 3;
+	int length = _publicWidth * 3;
+	//for(line=0;line<_publicVideo->h;line++)
+	for(line=0;line<_publicHeight;line++)
 	{
 	    memcpy(dest,src,length);
 	    dest+=length;
@@ -144,19 +136,22 @@ void WXDoublePlugin::Flip()
 	if (f->IsShownOnScreen() && !f->IsIconized())
 	{
     	wxBitmap bmp(*img);
+		//wxBitmap bmp(img->Scale(_outputWidth, _outputHeight, wxIMAGE_QUALITY_NORMAL));
+		//wxBitmap bmp(img->Scale(_outputWidth, _outputHeight, wxIMAGE_QUALITY_HIGH));
     	wxClientDC dc(f->getPanel());
 		dc.DrawBitmap(bmp,0,0,false);
 	}
-#endif
 }
 
-void WXDoublePlugin::Close()
+void WXDoubleLinePlugin::Close()
 {
-	if (!_video)
-		return;
-	delete img; 
-	SDL_FreeSurface(_video);
-	SDL_FreeSurface(_publicVideo);
+	delete img;
+	img = NULL;
+	free(_outputSurface);
+	_outputSurface = NULL;
+	//SDL_FreeSurface(_publicVideo);
+	free(_publicVideo);
+	_publicVideo = NULL;
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
@@ -164,6 +159,7 @@ void WXDoublePlugin::Close()
 /* OpenGL video plugin ---------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------ */
 
+#if 0
 SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanline)
 {
 	_GLScanlines = glScanline;
@@ -325,9 +321,9 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 	return _publicVideo;
 }
 
-void OpenGLPlugin::SetPalette(SDL_Color* c)
+void OpenGLPlugin::SetPalette(ColorARGB8888* c)
 {
-	SDL_SetPalette(_publicVideo, SDL_LOGPAL | SDL_PHYSPAL, c, 0, 32);
+	//SDL_SetPalette(_publicVideo, SDL_LOGPAL | SDL_PHYSPAL, c, 0, 32);
 	if (_publicVideo->format->palette)
 	{
 		Uint8* pal=(Uint8*)malloc(sizeof(Uint8)*256*3);
@@ -482,3 +478,4 @@ void OpenGLPlugin::SetOption(const string &optionName, bool val)
 	else if (optName == "remanency")
 		_remanency = val;
 }
+#endif // #if 0

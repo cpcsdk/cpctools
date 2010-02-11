@@ -8,7 +8,6 @@
 #include "video.h"
 //#include "config.h" // Inutil
 #include <string.h>
-#include <SDL_video.h>
 #include <string>
 #include <vector>
 #include <exception>
@@ -35,13 +34,17 @@ class Renderer
 		//! Address of prerenderered data
 		byte			*_renderData;
 
-		//! SDL back surface
-		SDL_Surface		*_backSurface;
+		//! back surface
+		void		*_backSurface;
 		
 		//! Renderer surface width
 		int				_renderSurfaceWidth;
 		//! Renderer surface height
 		int				_renderSurfaceHeight;
+		//! Renderer surface pitch
+		int				_renderSurfacePitch;
+		//! Renderer surface bpp
+		int				_renderSurfaceBPP;
 
 		//! Screen Position (pointer to SDL surface)
 		unsigned int	*_scrPos;
@@ -68,20 +71,59 @@ class Renderer
 		inline void SetRenderSurfaceWidth(int width) { _renderSurfaceWidth = width; }
 		inline void SetRenderSurfaceHeight(int height) { _renderSurfaceHeight = height; }
 
-		inline void SetBackSurface(SDL_Surface *surface)		{ _backSurface = surface;		}
-		inline SDL_Surface * GetBackSurface() const				{ return _backSurface;			}
+		inline int GetRenderSurfaceWidth() const {return _renderSurfaceWidth;}
+		inline int GetRenderSurfaceHeight() const {return _renderSurfaceHeight;}
 
-		void SetPalette(unsigned int pen, const SDL_Color &colour);
-		void SetAntiAliasingColour(const SDL_Color &colour);
+		inline int GetRenderSurfacePitch() const {return _renderSurfacePitch;}
+		inline void SetRenderSurfacePitch(int pitch) {_renderSurfacePitch = pitch;}
 
-		virtual void PlotPixel(int x, int y, const SDL_Color &colour) = 0;
+		inline int GetRenderSurfaceBPP() const {return _renderSurfaceBPP;}
+		inline void SetRenderSurfaceBPP(int BPP) {_renderSurfaceBPP = BPP;}
+
+		inline unsigned int MapRGB(const ColorARGB8888 &colour)
+		{
+			unsigned int palColour = 0;
+			switch(_renderSurfaceBPP)
+			{
+			case 32:
+				palColour = (colour.b << 16) + (colour.g << 8) + (colour.r);
+				break;
+			case 24:
+				palColour = (colour.b << 16) + (colour.g << 8) + (colour.r);
+				break;
+			case 16:
+				palColour = (colour.r & 0xF8) << 8;
+				palColour |= (colour.g & 0xFC) << 3;
+				palColour |= (colour.b & 0xF8) >> 3;
+				break;
+			case 15:
+				palColour = (colour.r & 0xF8) << 7;
+				palColour |= (colour.g & 0xF8) << 2;
+				palColour |= (colour.b & 0xF8) >> 3;
+				break;
+			default:
+				break;
+			}
+			return palColour;
+		}
+
+		inline void SetBackSurface(void *surface)		{ _backSurface = surface;		}
+		inline void * GetBackSurface() const				{ return _backSurface;			}
+
+		void SetPalette(unsigned int pen, const ColorARGB8888 &colour);
+		void SetAntiAliasingColour(const ColorARGB8888 &colour);
+
+		virtual void PlotPixel(int x, int y, const ColorARGB8888 &colour) = 0;
+
 		inline unsigned int GetScreenPosition() const
 		{
-		    return _scrPos - (dword *)_backSurface->pixels;
+		    //return _scrPos - (dword *)_backSurface->pixels;
+			return _scrPos - (dword *)_backSurface;
 		}
 		inline void SetScreenPosition(unsigned int v)
 		{
-		    _scrPos = (dword *)_backSurface->pixels + v;
+		    //_scrPos = (dword *)_backSurface->pixels + v;
+			_scrPos = (dword *)_backSurface + v;
 		}
 
 		virtual void Render() = 0;
@@ -97,7 +139,7 @@ class Renderer
 
             public:
                 virtual void Render();
-                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+                virtual void PlotPixel(int x, int y, const ColorARGB8888 &colour);
         };
         class Render24BppFunction : public RenderFunction
         {
@@ -105,7 +147,7 @@ class Renderer
 
             public:
                 virtual void Render();
-                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+                virtual void PlotPixel(int x, int y, const ColorARGB8888 &colour);
         };
         class Render16BppFunction : public RenderFunction
         {
@@ -113,7 +155,7 @@ class Renderer
 
             public:
                 virtual void Render();
-                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+                virtual void PlotPixel(int x, int y, const ColorARGB8888 &colour);
         };
         class Render8BppFunction : public RenderFunction
         {
@@ -121,7 +163,7 @@ class Renderer
 
             public:
                 virtual void Render();
-                virtual void PlotPixel(int x, int y, const SDL_Color &colour);
+                virtual void PlotPixel(int x, int y, const ColorARGB8888 &colour);
         };
 
 	// Pre render function
@@ -279,15 +321,16 @@ class Renderer
 	//! Current CPC Palette
 	unsigned int		_palette[20];
 
-	// SDL surface properties
-	//! SDL palette
-	SDL_Color			_colours[32];
+	// Output surface properties
+	//! Output surface palette
+	ColorARGB8888		_colours[32];
 
 	//! Video plugin used for rendering
 	VideoPlugin			*_videoPlugin;
 
 	//! Current screen line offset (in DWord)
 	unsigned int		_scrLineOffset;
+	unsigned int		_scrPitch;
 	//! Current screen base rendering
 	unsigned int		_scrBase;
 	//! Current screen position
@@ -339,7 +382,7 @@ class Renderer
 
 
 
-	SDL_Surface * GetBackSurface();
+	void * GetBackSurface();
 	inline VideoPlugin* GetVideoPlugin() const { return _videoPlugin; }
 
 	void SetMemory(byte *memory);
@@ -383,7 +426,7 @@ class Renderer
 	//! Set CPC Mode (update ModeMap pointer)
 	void SetMode(unsigned int mode);
 	//! Set CPC Ink
-	void SetPalette(unsigned int pen, unsigned int colour);
+	void SetPalette(unsigned int pen, unsigned int ga_colour);
 	//! Set CPC antialiasing color
 	void SetAntiAliasingColour(unsigned int col0, unsigned int col1);
 

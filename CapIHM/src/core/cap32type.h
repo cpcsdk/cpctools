@@ -5,9 +5,14 @@
 #ifndef _CAP32TYPES_H_
 #define _CAP32TYPES_H_
 
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef unsigned int dword;
+#include <stdint.h>
+
+//typedef unsigned char byte;
+//typedef unsigned short word;
+//typedef unsigned int dword;
+typedef uint8_t byte;
+typedef uint16_t word;
+typedef uint32_t dword;
 
 typedef union {
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
@@ -19,6 +24,21 @@ typedef union {
 #endif
    dword d;
 }  reg_pair;
+
+// TODO: Byte order
+typedef struct ColorXRGB888 {
+	uint8_t x; // Not used. Only for 32bits size.
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+} ColorXRGB888;
+
+typedef struct ColorARGB8888 {
+	uint8_t a;
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+} ColorARGB8888;
 
 #define MAX_LINE_LEN 256
 

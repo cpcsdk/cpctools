@@ -58,8 +58,8 @@ void InitDebug();
 class Emulator
 {
 protected:
-	t_CPC					_config;
 	Renderer				_renderer;
+	t_CPC					_config;
 	t_Input					_input;
 	t_z80regs				*_z80;
 	t_VDU					*_vdu;

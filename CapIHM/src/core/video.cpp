@@ -1,4 +1,6 @@
-/* Caprice32 - Amstrad CPC Emulator
+/* CapriceReloded an Amstrad CPC emulator
+   (c) Copyright 2008-2009  cpcsdk crew
+   Caprice32 - Amstrad CPC Emulator
    (c) Copyright 1997-2004 Ulrich Doewich
 
    This program is free software; you can redistribute it and/or modify
@@ -16,22 +18,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-/*
-   This file includes video filters from the SMS Plus/SDL 
-   sega master system emulator :
-   (c) Copyright Gregory Montoir
-   http://membres.lycos.fr/cyxdown/smssdl/
-*/
-
-/*
-   This file includes video filters from MAME
-   (Multiple Arcade Machine Emulator) :
-   (c) Copyright The MAME Team
-   http://www.mame.net/
-*/
-
 #include "video.h"
-#include <SDL_opengl.h>
 #include "glfuncs.h"
 #include <math.h>
 #include <malloc.h>
@@ -71,7 +58,7 @@ VideoPlugin::~VideoPlugin()
 
 VideoPlugin* VideoPlugin::Create()
 {
-	cout << "Error: This VideoPlugin doesn't have Create() method" << endl;
+	cerr << "Error: This VideoPlugin doesn't have Create() method" << endl;
 	return NULL;
 }
 

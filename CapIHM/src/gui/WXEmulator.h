@@ -57,7 +57,6 @@ class WXEmulator : public Emulator {
         wxCopyFile(s2 + wxT("/Keymap.cfg"), s+ wxT("/Keymap.cfg"), false);
       }
 	    strcpy(this->_config_path,s.mb_str());
-      
     }
 
 	  static inline WXEmulator* getInstance()
@@ -72,7 +71,7 @@ class WXEmulator : public Emulator {
 	  /**
 	   * Specific code with this GUI
 	   */
-	  virtual void PressKey(uint32_t key, uint32_t mod) ;
+	  virtual void PressKey(uint32_t key, uint32_t mod);
 	  virtual void ReleaseKey(uint32_t key, uint32_t mod);
 
 	  // FDC Led status

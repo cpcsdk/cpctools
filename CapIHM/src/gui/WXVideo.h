@@ -3,14 +3,15 @@
 
 #include <wx/image.h>
 
-class WXDoublePlugin : public VideoPlugin
+class WXDoubleLinePlugin : public VideoPlugin
 {
 public:
-	WXDoublePlugin() : VideoPlugin("Double size", ALL, 0) {}
+	WXDoubleLinePlugin() : VideoPlugin("Double size", ALL, 0) {}
 
-	virtual SDL_Surface* Init(int w,int h,int bpp,bool fs);
-	virtual void SetPalette(SDL_Color* c);
-	
+	virtual void* Init(int w,int h,int bpp,bool fs);
+	//virtual void SetPalette(SDL_Color* c);
+	virtual void SetPalette(ColorARGB8888* c);
+
 	virtual bool Lock();
 	virtual void Unlock();
 	virtual void Flip();
@@ -18,12 +19,13 @@ public:
 	
 	static inline VideoPlugin* Create()
 	{
-		return (VideoPlugin*)(new WXDoublePlugin());
+		return (VideoPlugin*)(new WXDoubleLinePlugin());
 	}
 
 	wxImage* img;
 };
 
+#if 0
 #include "glfuncs.h"
 
 class OpenGLPlugin : public VideoPlugin
@@ -43,7 +45,7 @@ public:
 
 	OpenGLPlugin() : VideoPlugin("OpenGL scaling", ALL, 1) {}
 
-	virtual void SetPalette(SDL_Color* c);
+	virtual void SetPalette(ColorARGB8888* c);
 	virtual bool Lock();
 	virtual void Unlock();
 	virtual void Flip();
@@ -57,10 +59,10 @@ public:
 	virtual void SetOption(const string &optionName, bool val);
 protected:
 	SDL_Surface* OpenGLInit(int w,int h, int bpp, bool fs, int glScanline);
-	inline SDL_Surface* Init(int w,int h, int bpp, bool fs)
+	inline void* Init(int w,int h, int bpp, bool fs)
 	{
 		return OpenGLInit(w,h,bpp,fs,0);
 	}
 };
-
+#endif // #if 0
 #endif
