@@ -858,10 +858,10 @@ void Renderer::Render24BppFunction::Render(void)
 	while (bCount>4) {
 		bCount -= 3;
 
-		*_scrPos++ = (_palette[*_renderData]) | (_palette[*++_renderData]<<24);
+		*_scrPos++ = (_palette[*_renderData]&0xFFFFFF) | (_palette[*++_renderData]<<24);
 		*_scrPos++ = (_palette[*_renderData]>>8) | (_palette[*++_renderData]<<16);
 		*_scrPos++ = (_palette[*_renderData]>>16) | (_palette[*++_renderData]<<8);
-		++_renderData;
+		_renderData++;
 	}
 }
 
