@@ -855,15 +855,12 @@ void Renderer::Render24BppFunction::Render(void)
 	_mm_prefetch(_palette, _MM_HINT_NTA);
 	//_mm_prefetch(_renderData, _MM_HINT_NTA);
 #endif
-	while (bCount>3) {
+	while (bCount>4) {
 		bCount -= 3;
 
 		*_scrPos++ = (_palette[*_renderData]) | (_palette[*++_renderData]<<24);
-
 		*_scrPos++ = (_palette[*_renderData]>>8) | (_palette[*++_renderData]<<16);
-
 		*_scrPos++ = (_palette[*_renderData]>>16) | (_palette[*++_renderData]<<8);
-
 		++_renderData;
 	}
 }

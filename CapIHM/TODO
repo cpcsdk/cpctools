@@ -1,9 +1,9 @@
 Important :
-- Fenetre de configuration
+- Fenetre de configuration (gestion de la sauvegarde des options, du bouton annuler)
 - Gestion du clavier (voire idée longshot)
-- Ajout registre Gate Array
+- Ajout registre Gate Array (manque RMR)
 - Optimisation emulation video
-- Faire emulation autres CRTC
+- Faire emulation autres CRTC (crtc0 ok, crtc1 en cours)
 
 Mineur :
 - Gestion correcte volume son
