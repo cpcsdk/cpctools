@@ -850,27 +850,22 @@ void Renderer::Render16BppFunction::PlotPixel(int x, int y, const ColorARGB8888 
 
 void Renderer::Render24BppFunction::Render(void)
 {
-	register byte *pbPos = (byte *)_scrPos;
 	register byte bCount = *_renderWidth++;
-	register int val;
 #ifdef __SSE__
 	_mm_prefetch(_palette, _MM_HINT_NTA);
 	//_mm_prefetch(_renderData, _MM_HINT_NTA);
 #endif
-	while (--bCount) {
-		val = _palette[*_renderData++];
-//		*(word *)pbPos = (word)val;
-//		*(pbPos + 2) = (byte)(val >> 16);
-		*(dword*)pbPos=val;
-		pbPos += 3;
-	}
-	// On copie le dernier octet avec la m�thode lente sinon �a d�passe
-	val = _palette[*_renderData++];
-	*(word *)pbPos = (word)val;
-	*(pbPos + 2) = (byte)(val >> 16);
-	pbPos += 3;
+	while (bCount>3) {
+		bCount -= 3;
 
-	_scrPos = (dword *)pbPos;
+		*_scrPos++ = (_palette[*_renderData]) | (_palette[*++_renderData]<<24);
+
+		*_scrPos++ = (_palette[*_renderData]>>8) | (_palette[*++_renderData]<<16);
+
+		*_scrPos++ = (_palette[*_renderData]>>16) | (_palette[*++_renderData]<<8);
+
+		++_renderData;
+	}
 }
 
 void Renderer::Render24BppFunction::PlotPixel(int x, int y, const ColorARGB8888 &colour)
