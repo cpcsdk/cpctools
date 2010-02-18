@@ -36,35 +36,125 @@
 
 #define TIME_OUT (100 * 1000)	/* milliseconds */
 
+// Command format
+// Byte 0 : opcode
+// Byte 1 : LUN (bits 7..5) (always 0)
+// Byte 2..5 : LBA
+// Byte 6 : reserved
+// Byte 7..8 : Transfer/Param list/Alloc length
+// Byte 9..11 : reserved
+//
+// Ext. Command Block
+// 0 : opcode
+// 1 : LUN (7..5) (always 0)
+// 2..5 : LBA
+// 6..9 : Transfer/ParamList/AllocLength
+// 10..11 : reserved
+
+// LBA = (((Track*HeadTrk)+Head)*SecTrk)+(Sector-1)
+// HeadTrk = 1 or 2 heads
+// Head : 0 or 1
+// Track : 0..79
+// SecTrk : 256
+// Sector : 1..256
+
+// Sector = LBA%SecTrk +1
+// Head = (LBA/SecTrk)%HeadTrk
+// Track = LBA/SecTrk/HeadTrk
+
+// Error > REQUEST SENSE or SEND DIAG to get out
+// Abort inprogress command : SEND DIAGNOSTICS or USB Reset
+
+// Commands
+// 0x00 Test unit ready
 static const unsigned char TEST_UNIT_READY_CMD[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
+// 0x01 Rezero Unit
+// 0x03	Request sense
+// 0x04	Format unit
+static const unsigned char FORMAT_UNIT_CMD[] = {
+    0x04,  0x17, 	// Command
+	0x00,  			// Trac number
+	0x00, 0x00, 	// Interleave (0 or 1 for 1:1, else ??)
+	0x00, 0x00, 
+	0x00, 0x0C, 	// Param list length
+	0x00, 0x00, 0x00
+};
+static const unsigned char FORMAT_UNIT_DATA[] = {
+    0x00,
+	0xB0, // 101S000s ; S=Single Track ; s = side (0:bottom)
+	0x00, 0x08,
+	0x00, 0x00, 0x00, 0x00, // Num of blocks (should match result of 0x23)
+	0x00, 					// (match 0x23)
+	0x00, 0x00, 0x00 		// block length (match 0x23)
+};
+// Output :
+// If ok, Sense key = NO SENSE
+// Medium Error : SK = 03 > Request snese data to know where (LBA+Valid bit)
 
+// 0x12	Inquiry / get dev info
+static const unsigned char INQUIRY_CMD[] = {
+    0x12, 0x00, 0x00, 0x00, 
+	0x00, // Should be 36
+	0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x00
+};
+// Output :
+// byte 0 : 0 = ok, 0x1F = no drive (wtf)
+// byte 1 : 0x80
+// byte 2 : 0
+// byte 3 : 1
+// byte 4 : 0x1F
+// byte 5..7 : 0
+// byte 8..15 : vendor ID (ASCII)
+// 16..31 : product ASCII
+// 32..35 : ascii rev. num.
+
+// 0x1B	Start/Stop (load/unload media)
+// 0x1D Send diagnostic
+// 0x1E	Prevent/Allow medium removal
+// 0x23 Read format capacity
 static const unsigned char READ_FORMAT_CAPACITIES_CMD[] = {
     0x23, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x40, 0x00, 0x00, 0x00
 };
 
-static const unsigned char INQUIRY_CMD[] = {
-    0x12, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x40, 0x00, 0x00, 0x00
+// 0x25	Read capacity
+// 0x2A Write 10
+// 0x28	Read 10
+// 0x2B Seek 10
+// 0x2E Write and Verify
+// 0x2F Verify
+// 0x55	Mode select
+static const unsigned char MODE_SELECT_CMD[] = {
+    0x55, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 
+	0x00, 0x00, // Adjust ? (Parameter List Length)
+	0x00, 0x00, 0x00
 };
-
+// 0x5A	Mode sense
 static const unsigned char MODE_SENSE_CMD[] = {
-    0x5A, 0x00, 0x05, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x40, 0x00, 0x00, 0x00
+    0x5A, 0x00, 
+	0x05, // bit 7..6: Page Control (0=current, 1=changeable, 2=default) / others : Page Code
+		// 0 : get current values (set by mode sense)
+		// 1 : get mask (what can be changed)
+		// 2 : default values
+	0x00, 0x00, 0x00, 0x00,
+	0x00, 0x40, // PLL
+	0x00, 0x00, 0x00
 };
 
-static const unsigned char FORMAT_UNIT_CMD[] = {
-    0x04, 0x17, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x0C, 0x00, 0x00, 0x00
-};
+// Param for 0x55 and 0x5A
+// Page 0 : 8byte : Media Type and Write Protect
+// 1		12		RW Error recovery
+// 5		32		Flexible Disk
+// 1B		12		Removable Block Access capacities
+// 1C		8		Timer and protect
+// 3F		72		Mode sense : return all pages
 
-static const unsigned char FORMAT_UNIT_DATA[] = {
-    0x00, 0xB0, 0x00, 0x08, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
+// 0xA8	Read 12
+// 0xAA Write 12
+
 
 static int verbose = 0;
 
