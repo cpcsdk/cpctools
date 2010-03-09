@@ -56,9 +56,37 @@ DiscEditor( parent )
 void DiscEditorImpl::setTrack( wxSpinEvent& event )
 {
 	lb_sectors->Clear();
+	currentTrack = event.GetPosition();
 	for(unsigned int s = 0;s<FloppyImage.track[event.GetPosition()][0].sectors;s++) {
 		wxString sNum;
 		sNum.Printf(_("%x"),(int)FloppyImage.track[event.GetPosition()][0].sector[s].CHRN[2]);
 		lb_sectors->Append(sNum);
 	}
+}
+
+void DiscEditorImpl::setSector( wxCommandEvent& event )
+{
+	// Display sector info and data
+	t_sector selectedSector = FloppyImage.track[currentTrack][0].sector[event.GetInt()];
+	if(selectedSector.flags[1] & 0x40)
+		st_erased->SetLabel(_("erased"));
+	else
+		st_erased->SetLabel(_("not erased"));
+
+	wxString txt = _("Size : ");
+	txt << selectedSector.declared_size/128;
+	st_size->SetLabel(txt);
+
+	if(selectedSector.declared_size != selectedSector.size)
+		st_weak->SetLabel(_("weak"));
+	else
+		st_weak->SetLabel(_("sane"));
+
+	// TODO : build a proper hexdump
+	txt.Clear();
+	for(int i=0; i<selectedSector.declared_size; i++) {
+		txt << wxString::Format(_("%02x "),(int)(selectedSector.data[i]));
+		if ((i+1)%16 == 0) txt.Append(_("\n"));
+	}
+	tc_sectordata->SetValue(txt);
 }

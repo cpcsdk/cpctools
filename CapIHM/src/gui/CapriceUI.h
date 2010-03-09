@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  7 2010)
+// C++ code generated with wxFormBuilder (version Mar  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -660,10 +660,11 @@ class DiscEditor : public wxFrame
 		wxStaticText* st_size;
 		wxStaticText* st_weak;
 		wxStaticText* st_erased;
-		wxTextCtrl* m_textCtrl70;
+		wxTextCtrl* tc_sectordata;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void setTrack( wxSpinEvent& event ) { event.Skip(); }
+		virtual void setSector( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

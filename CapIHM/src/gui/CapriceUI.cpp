@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb  7 2010)
+// C++ code generated with wxFormBuilder (version Mar  8 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -2463,22 +2463,24 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	lb_sectors->Append( wxT("0xC9") );
 	bSizer43->Add( lb_sectors, 0, wxALL|wxEXPAND, 5 );
 	
-	st_size = new wxStaticText( m_panel2, wxID_ANY, wxT("Sector size"), wxDefaultPosition, wxDefaultSize, 0 );
+	st_size = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	st_size->Wrap( -1 );
 	bSizer43->Add( st_size, 0, wxALL, 5 );
 	
-	st_weak = new wxStaticText( m_panel2, wxID_ANY, wxT("weak  (n copies)"), wxDefaultPosition, wxDefaultSize, 0 );
+	st_weak = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	st_weak->Wrap( -1 );
 	bSizer43->Add( st_weak, 0, wxALL, 5 );
 	
-	st_erased = new wxStaticText( m_panel2, wxID_ANY, wxT("erased"), wxDefaultPosition, wxDefaultSize, 0 );
+	st_erased = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	st_erased->Wrap( -1 );
 	bSizer43->Add( st_erased, 0, wxALL, 5 );
 	
 	bSizer5->Add( bSizer43, 1, wxEXPAND, 5 );
 	
-	m_textCtrl70 = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-	bSizer5->Add( m_textCtrl70, 4, wxALL|wxEXPAND, 5 );
+	tc_sectordata = new wxTextCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+	tc_sectordata->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
+	
+	bSizer5->Add( tc_sectordata, 4, wxALL|wxEXPAND, 5 );
 	
 	m_panel2->SetSizer( bSizer5 );
 	m_panel2->Layout();
@@ -2494,11 +2496,13 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	
 	// Connect Events
 	spinTrack->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DiscEditor::setTrack ), NULL, this );
+	lb_sectors->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DiscEditor::setSector ), NULL, this );
 }
 
 DiscEditor::~DiscEditor()
 {
 	// Disconnect Events
 	spinTrack->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DiscEditor::setTrack ), NULL, this );
+	lb_sectors->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DiscEditor::setSector ), NULL, this );
 	
 }

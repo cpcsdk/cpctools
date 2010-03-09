@@ -14,10 +14,12 @@ class DiscEditorImpl : public DiscEditor
 {
 	private:
 		t_drive FloppyImage;
+		int currentTrack;
 	public:
 		/** Constructor */
 		DiscEditorImpl( wxWindow* parent );
-		virtual void setTrack( wxSpinEvent& event );
+		void setTrack( wxSpinEvent& event );
+		void setSector( wxCommandEvent& event );
 };
 
 #endif // __DiscEditor__
