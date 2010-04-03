@@ -9,6 +9,7 @@ class t_CRTC1: public t_CRTC {
 		void Emulate(int repeat_count);
 		void setReg3(unsigned char val);
 		void setReg4(unsigned char val);
+		void setReg6(unsigned char val);
 		void setReg9(unsigned char val);
 		unsigned char ReadStatus() const;
 		void setReg12(unsigned char val);

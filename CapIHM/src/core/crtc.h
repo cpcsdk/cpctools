@@ -48,6 +48,9 @@ class t_CRTC
 		virtual void setReg4(unsigned char val);
 		bool		_startVerticalTotalAdjust;
 
+		// Crtc 1 split border
+		virtual void setReg6(unsigned char val);
+
 		virtual void setReg9(unsigned char val);
 		unsigned int	_rasterCount;
 		unsigned int	_r9Match;

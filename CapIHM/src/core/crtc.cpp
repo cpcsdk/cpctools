@@ -366,6 +366,13 @@ unsigned char t_CRTC::GetRegisterValue(unsigned char reg) const
 	return _registers[reg];
 }
 
+void t_CRTC::setReg6(unsigned char val) {
+	_registers[6] = val & 0x7f;
+	if (_lineCount == _registers[6]) { // matches vertical displayed?
+		_newDT.NewDISPTIMG = 0;
+	}
+}
+
 void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 {
 	if (reg < 16)
@@ -391,10 +398,7 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 			_registers[5] = val & 0x1f;
 			break;
 		case 6: // vertical displayed
-			_registers[6] = val & 0x7f;
-			if (_lineCount == _registers[6]) { // matches vertical displayed?
-				_newDT.NewDISPTIMG = 0;
-			}
+			setReg6(val);
 			break;
 		case 7: // vertical sync position
 			_registers[7] = val & 0x7f;

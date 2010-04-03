@@ -33,6 +33,15 @@ void t_CRTC1::setReg4(unsigned char val)
 	}
 }
 
+
+void t_CRTC1::setReg6(unsigned char val) {
+	_registers[6] = val & 0x7f;
+	if (_lineCount >= _registers[6]) { // matches vertical displayed?
+		_newDT.NewDISPTIMG = 0;
+	} else
+		_newDT.NewDISPTIMG = 0xFF;
+}
+
 void t_CRTC1::setReg9(unsigned char val)
 {
 	_registers[9] = val & 0x1f;
