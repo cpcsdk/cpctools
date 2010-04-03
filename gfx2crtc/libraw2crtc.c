@@ -50,7 +50,7 @@ unsigned char mode3interlace(unsigned char *x)
 
 unsigned char (*ptrMode)(unsigned char *x);
 
-unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned short height, unsigned char mode, unsigned char r9, unsigned long *outSize, unsigned char *r1, unsigned char r12, unsigned char r13)
+unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned short height, unsigned char mode, unsigned char r9, unsigned long *outSize, unsigned char *r1, unsigned char r12, unsigned char r13, unsigned char* reg6)
 {
   unsigned char *outBuffer;
   unsigned char *tmpBuffer;
@@ -115,6 +115,7 @@ unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned sho
 
   unsigned char r6;
   r6 = height/(r9+1);
+  *reg6 = r6;
 
   for(unsigned char vcc = 0; vcc < r6; vcc++)
   {
