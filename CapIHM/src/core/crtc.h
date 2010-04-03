@@ -57,7 +57,6 @@ class t_CRTC
 		bool			_resChar;
 		bool			_inVerticalTotalAdjust;
 
-private:
 	// The next 4 bytes must remain together
 	typedef union 
 	{
@@ -89,40 +88,40 @@ private:
 		};
 	} t_new_dt;
 
-	void dispRegs();
-	
 	t_VDU			&_vdu;
-	t_GateArray		&_gateArray;
-	
 	t_flags1		_flags1;
 	t_new_dt		_newDT;
-	
 	unsigned int	_nextAddress;
 	unsigned int	_scrBase;
-	unsigned int	_hswCount;
-	unsigned int	_vswCount;
+	word			_maxLate[0x7400];
+	unsigned int	_lastHEnd;
 	bool			_hadHSync;
-	bool			_inMonHSync;
 	bool			_newScan;
 	bool			_resFrame;
 	bool			_resNext;
 	bool			_resVSync;
-	unsigned int	_lastHEnd;
 	unsigned int	_reg5;
-	unsigned int	_r7Match;
+	unsigned int	_hswCount;
+	unsigned int	_vswCount;
 	unsigned int	_hStart;
 	unsigned int	_hEnd;
-	
-	void			(*_charInstSL)(t_CRTC &CRTC);
 
-	word			_maxLate[0x7400];
+	void			(*_charInstSL)(t_CRTC &CRTC);
+private:
+	void dispRegs();
+	
+	t_GateArray		&_gateArray;
+	
+	
+	bool			_inMonHSync;
+	unsigned int	_r7Match;
 
 public:
 	t_CRTC(t_GateArray &ga, t_VDU &vdu);
 
 	void Reset();
 	
-	void Emulate(int repeat_count);
+	virtual void Emulate(int repeat_count);
 	
 	void RegisterSelect(unsigned char val);
 	unsigned char GetRegisterSelect() const;

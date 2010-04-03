@@ -6,6 +6,7 @@ class t_CRTC1: public t_CRTC {
 		unsigned char ReadData() const;
 
 	protected:
+		void Emulate(int repeat_count);
 		void setReg3(unsigned char val);
 		void setReg4(unsigned char val);
 		void setReg9(unsigned char val);
