@@ -53,7 +53,7 @@ extern dword dwMF2Flags;
 
 IOPort::IOPort(Emulator &emulator) :
 _z80(NULL),
-CRTC(emulator.GetCRTC()),
+CRTC(&(emulator.GetCRTC())),
 GateArray(emulator.GetGateArray()),
 Memory(emulator.GetMemory()),
 FDC(emulator.GetFDC()),
@@ -79,9 +79,9 @@ byte IOPort::z80_IN_handler(reg_pair port)
 		// read CRTC register?
 		if ((port.b.h & 3) == 3) 
 		{
-			ret_val = CRTC.ReadData();
+			ret_val = CRTC->ReadData();
 		} else if ((port.b.h & 3) == 2)
-			ret_val = CRTC.ReadStatus();
+			ret_val = CRTC->ReadStatus();
 	}
 	
 	// PPI ------------------------------------------------------------------------
@@ -157,7 +157,7 @@ byte IOPort::z80_IN_handler(reg_pair port)
 						// manufacturer + 50Hz
 						(CPC.jumpers & 0x7f) |
 						// VSYNC status
-						(CRTC.GetFlagInVSync() ? 1 : 0);
+						(CRTC->GetFlagInVSync() ? 1 : 0);
 					
 				} 
 				else 
@@ -348,7 +348,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 		// CRTC register select?
 		if (crtc_port == 0) 
 		{
-			CRTC.RegisterSelect(val);
+			CRTC->RegisterSelect(val);
 			// MF2 enabled?
 			if (CPC.mf2) 
 			{
@@ -358,7 +358,7 @@ void IOPort::z80_OUT_handler(reg_pair port, byte val)
 		// CRTC write data?
 		else if (crtc_port == 1) 
 		{
-			CRTC.WriteData(val);
+			CRTC->WriteData(val);
 			// MF2 enabled?
 			if (CPC.mf2) 
 			{

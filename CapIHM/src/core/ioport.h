@@ -7,6 +7,8 @@
 
 #include "cap32type.h"
 
+#include "crtc.h"
+
 class t_z80regs;
 class t_CRTC;
 class t_GateArray;
@@ -23,7 +25,7 @@ class IOPort
 {
 private:
 	t_z80regs		*_z80;
-	t_CRTC			&CRTC;
+	t_CRTC			*CRTC;
 	t_GateArray		&GateArray;
 	t_Memory		&Memory;
 	t_FDC			&FDC;
@@ -36,6 +38,7 @@ public:
 	IOPort(Emulator &emulator);
 
 	inline void SetZ80(t_z80regs *z80)					{ _z80 = z80;		}
+	inline void SetCRTC(t_CRTC *crtc)					{ CRTC = crtc;		}
 
 	byte z80_IN_handler(reg_pair port);
 	void z80_OUT_handler(reg_pair port, byte val);

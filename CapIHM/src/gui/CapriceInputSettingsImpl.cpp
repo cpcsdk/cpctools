@@ -6,6 +6,7 @@
 #include "CapriceWindowImpl.h"
 #include "input.h"
 #include "CPCKeyDefs.h"
+#include "crtc1.h"
 #include "filetools.h"
 
 #include <wx/filename.h>
@@ -236,8 +237,18 @@ wxString CapriceInputSettingsImpl::keyCodeToName(int keycode)
 
 void CapriceInputSettingsImpl::changeCRTCType( wxSpinEvent& event )
 {
-	// TODO
-	event.Skip();
+	t_CRTC* newCRTC;
+
+	switch(event.GetPosition()) {
+		case 0:
+		default:
+			newCRTC = new t_CRTC(emulator.GetGateArray(), emulator.GetVDU());
+			break;
+		case 1:
+			newCRTC = new t_CRTC1(emulator.GetGateArray(), emulator.GetVDU());
+			break;
+	}
+	emulator.setCRTC(newCRTC);
 }
 
 void CapriceInputSettingsImpl::changeColorPalette( wxCommandEvent& event )

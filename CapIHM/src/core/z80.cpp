@@ -363,7 +363,7 @@ static const byte cc_ex[256] = {
 
 t_z80regs::t_z80regs(Emulator &emulator) :
 _ioPort(emulator),
-CRTC(emulator.GetCRTC()),
+CRTC(&(emulator.GetCRTC())),
 GateArray(emulator.GetGateArray()),
 VDU(emulator.GetVDU()),
 Memory(emulator.GetMemory()),
@@ -373,6 +373,11 @@ PSG(emulator.GetPSG()),
 Tape(emulator.GetTape())
 {
 	_ioPort.SetZ80(this);
+}
+
+void t_z80regs::setCRTC(t_CRTC* newCRTC) {
+	CRTC = newCRTC;
+	_ioPort.SetCRTC(newCRTC);
 }
 
 void t_z80regs::reset()
@@ -415,7 +420,7 @@ void t_z80regs::reset()
 {																			\
 	if (iCycleCount)														\
 	{																		\
-		CRTC.Emulate(iCycleCount >> 2);										\
+		CRTC->Emulate(iCycleCount >> 2);										\
 		if (CPC.snd_enabled)												\
 		{																	\
 			PSG.Emulate(iCycleCount);										\

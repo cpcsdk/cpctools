@@ -100,7 +100,7 @@ private:
 	int iCycleCount, iWSAdjust;
 
 	IOPort			_ioPort;
-	t_CRTC			&CRTC;
+	t_CRTC			*CRTC;
 	t_GateArray		&GateArray;
 	t_VDU			&VDU;
 	t_Memory		&Memory;
@@ -119,6 +119,7 @@ private:
   bool adressAlreadyBlocked;
 
 public:
+	void setCRTC(t_CRTC* newCRTC);
 	reg_pair AF;
 	reg_pair BC;
 	reg_pair DE;

@@ -33,6 +33,7 @@
 #include "z80.h"
 #include "audio.h"
 #include "timer.h"
+#include "crtc.h"
 
 #include <iostream>
 class t_z80regs;
@@ -85,6 +86,15 @@ protected:
 public:
 	static Emulator* getInstance();
 	inline void setVideoPlugin(VideoPlugin* (*videoPlugin)()) {_videoPlugin = videoPlugin;}
+	void setCRTC(t_CRTC* newCRTC) {
+		this->Pause();
+		delete _crtc;
+		// Todo : init it using copy constructor ?
+		_crtc = newCRTC;
+		_crtc->Reset();
+		this->GetZ80().setCRTC(newCRTC);
+		this->Run();
+	}
 	
 	bool Init();
 	void Loop();
