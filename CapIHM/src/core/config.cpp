@@ -41,7 +41,7 @@
 #ifdef WIN32
 #include <direct.h>
 #else
-#include <linux/unistd.h>
+#include <unistd.h>
 #endif
 
 #define MIN_SPEED_SETTING 2
@@ -485,6 +485,9 @@ void printerr(C_Inifile_error err, int line = 0) {
 				break;
 			case C_INIFILE_CONVERSION_ERR:     
 				printf("Erreur durant la conversion de la donnee.\n");
+				break;
+			default:
+				printf("Erreur inconnue\n");
 				break;
 		}
 }
