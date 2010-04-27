@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 27 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -19,24 +19,24 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_menu_file = new wxMenu();
 	m_menu_drivea = new wxMenu();
 	wxMenuItem* m_menu_insertDiscA;
-	m_menu_insertDiscA = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_insertDiscA = new wxMenuItem( m_menu_drivea, 9999, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_drivea->Append( m_menu_insertDiscA );
 	
 	wxMenuItem* m_menu_insertBlakDiskA;
-	m_menu_insertBlakDiskA = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("New Blank Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_insertBlakDiskA = new wxMenuItem( m_menu_drivea, 9998, wxString( wxT("New Blank Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_drivea->Append( m_menu_insertBlakDiskA );
 	
 	wxMenuItem* m_menu_formatDiscA;
-	m_menu_formatDiscA = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Format Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_formatDiscA = new wxMenuItem( m_menu_drivea, 9997, wxString( wxT("Format Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_drivea->Append( m_menu_formatDiscA );
 	m_menu_formatDiscA->Enable( false );
 	
 	wxMenuItem* m_menuItem5;
-	m_menuItem5 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem5 = new wxMenuItem( m_menu_drivea, 9996, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_drivea->Append( m_menuItem5 );
 	
 	wxMenuItem* m_menuItem7;
-	m_menuItem7 = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Remove Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem7 = new wxMenuItem( m_menu_drivea, 9995, wxString( wxT("Remove Disc") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_drivea->Append( m_menuItem7 );
 	m_menuItem7->Enable( false );
 	
@@ -44,71 +44,71 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	
 	m_menu_driveb = new wxMenu();
 	wxMenuItem* m_menuItem11;
-	m_menuItem11 = new wxMenuItem( m_menu_driveb, wxID_ANY, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem11 = new wxMenuItem( m_menu_driveb, 9994, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_driveb->Append( m_menuItem11 );
 	
 	wxMenuItem* m_menuItem31;
-	m_menuItem31 = new wxMenuItem( m_menu_driveb, wxID_ANY, wxString( wxT("New Blank Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem31 = new wxMenuItem( m_menu_driveb, 9993, wxString( wxT("New Blank Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_driveb->Append( m_menuItem31 );
 	
 	wxMenuItem* m_menuItem41;
-	m_menuItem41 = new wxMenuItem( m_menu_driveb, wxID_ANY, wxString( wxT("Format Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem41 = new wxMenuItem( m_menu_driveb, 9992, wxString( wxT("Format Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_driveb->Append( m_menuItem41 );
 	m_menuItem41->Enable( false );
 	
 	wxMenuItem* m_menuItem51;
-	m_menuItem51 = new wxMenuItem( m_menu_driveb, wxID_ANY, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem51 = new wxMenuItem( m_menu_driveb, 9991, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_driveb->Append( m_menuItem51 );
 	m_menuItem51->Enable( false );
 	
 	wxMenuItem* m_menuItem61;
-	m_menuItem61 = new wxMenuItem( m_menu_driveb, wxID_ANY, wxString( wxT("Flip Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem61 = new wxMenuItem( m_menu_driveb, 9990, wxString( wxT("Flip Disc") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_driveb->Append( m_menuItem61 );
 	
 	wxMenuItem* m_menuItem71;
-	m_menuItem71 = new wxMenuItem( m_menu_driveb, wxID_ANY, wxString( wxT("Remove Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem71 = new wxMenuItem( m_menu_driveb, 9989, wxString( wxT("Remove Disc") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_driveb->Append( m_menuItem71 );
 	m_menuItem71->Enable( false );
 	
 	m_menu_file->Append( -1, wxT("Drive B:"), m_menu_driveb );
 	
 	wxMenuItem* m_menuItem8;
-	m_menuItem8 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Swap Disc A and  B") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem8 = new wxMenuItem( m_menu_file, 9988, wxString( wxT("Swap Disc A and  B") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem8 );
 	
 	wxMenuItem* m_menuItem24;
-	m_menuItem24 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Load Cartridge") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem24 = new wxMenuItem( m_menu_file, 9987, wxString( wxT("Load Cartridge") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem24 );
 	
 	m_Tape = new wxMenu();
 	wxMenuItem* m_menuItem25;
-	m_menuItem25 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Show Tape Controls") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem25 = new wxMenuItem( m_Tape, 9986, wxString( wxT("Show Tape Controls") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem25 );
 	
 	wxMenuItem* m_menuItem26;
-	m_menuItem26 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Insert Tape Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem26 = new wxMenuItem( m_Tape, 9985, wxString( wxT("Insert Tape Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem26 );
 	
 	wxMenuItem* m_menuItem27;
-	m_menuItem27 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Rewind Tape") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem27 = new wxMenuItem( m_Tape, 9984, wxString( wxT("Rewind Tape") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem27 );
 	m_menuItem27->Enable( false );
 	
 	wxMenuItem* m_menuItem28;
-	m_menuItem28 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Remove Tape") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem28 = new wxMenuItem( m_Tape, 9983, wxString( wxT("Remove Tape") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem28 );
 	m_menuItem28->Enable( false );
 	
 	wxMenuItem* m_menuItem29;
-	m_menuItem29 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Press Play") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem29 = new wxMenuItem( m_Tape, 9982, wxString( wxT("Press Play") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem29 );
 	
 	wxMenuItem* m_menuItem30;
-	m_menuItem30 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Press Record") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem30 = new wxMenuItem( m_Tape, 9981, wxString( wxT("Press Record") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem30 );
 	
 	wxMenuItem* m_menuItem6;
-	m_menuItem6 = new wxMenuItem( m_Tape, wxID_ANY, wxString( wxT("Flip Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem6 = new wxMenuItem( m_Tape, 9980, wxString( wxT("Flip Tape") ) , wxEmptyString, wxITEM_NORMAL );
 	m_Tape->Append( m_menuItem6 );
 	
 	m_menu_file->Append( -1, wxT("Tape"), m_Tape );
@@ -117,152 +117,152 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	m_separator1 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_mI_LoadSNA;
-	m_mI_LoadSNA = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Load Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_mI_LoadSNA = new wxMenuItem( m_menu_file, 9979, wxString( wxT("Load Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_mI_LoadSNA );
 	
 	wxMenuItem* m_mI_SaveSNA;
-	m_mI_SaveSNA = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Save Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_mI_SaveSNA = new wxMenuItem( m_menu_file, 9978, wxString( wxT("Save Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_mI_SaveSNA );
 	
 	wxMenuItem* m_menuItem33;
-	m_menuItem33 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Update Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem33 = new wxMenuItem( m_menu_file, 9977, wxString( wxT("Update Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem33 );
 	
 	wxMenuItem* m_separator2;
 	m_separator2 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menuItem34;
-	m_menuItem34 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Playback Session") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem34 = new wxMenuItem( m_menu_file, 9976, wxString( wxT("Playback Session") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem34 );
 	
 	wxMenuItem* m_menuItem35;
-	m_menuItem35 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Record Session") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem35 = new wxMenuItem( m_menu_file, 9975, wxString( wxT("Record Session") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem35 );
 	
 	wxMenuItem* m_separator3;
 	m_separator3 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_mI_SaveSCR;
-	m_mI_SaveSCR = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Save Screenshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_mI_SaveSCR = new wxMenuItem( m_menu_file, 9974, wxString( wxT("Save Screenshot") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_mI_SaveSCR );
 	
 	wxMenuItem* m_menu_insertDiscA1;
-	m_menu_insertDiscA1 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_insertDiscA1 = new wxMenuItem( m_menu_file, 9973, wxString( wxT("Insert Disc Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menu_insertDiscA1 );
 	
 	wxMenuItem* m_menuItem37;
-	m_menuItem37 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Record AVI") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem37 = new wxMenuItem( m_menu_file, 9972, wxString( wxT("Record AVI") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem37 );
 	
 	wxMenuItem* m_menuItem38;
-	m_menuItem38 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Record WAV") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem38 = new wxMenuItem( m_menu_file, 9971, wxString( wxT("Record WAV") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem38 );
 	
 	wxMenuItem* m_menuItem39;
-	m_menuItem39 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Record YM") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem39 = new wxMenuItem( m_menu_file, 9970, wxString( wxT("Record YM") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem39 );
 	
 	wxMenuItem* m_separator4;
 	m_separator4 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menuItem40;
-	m_menuItem40 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Pokes") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem40 = new wxMenuItem( m_menu_file, 9969, wxString( wxT("Pokes") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem40 );
 	
 	wxMenuItem* m_separator5;
 	m_separator5 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menuItem411;
-	m_menuItem411 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Auto Types") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem411 = new wxMenuItem( m_menu_file, 9968, wxString( wxT("Auto Types") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem411 );
 	
 	wxMenuItem* m_menuItem42;
-	m_menuItem42 = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Paste") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem42 = new wxMenuItem( m_menu_file, 9967, wxString( wxT("Paste") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menuItem42 );
 	
 	wxMenuItem* m_separator6;
 	m_separator6 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_menu_exit;
-	m_menu_exit = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_exit = new wxMenuItem( m_menu_file, 9966, wxString( wxT("Exit") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_menu_exit );
 	
 	m_menubar1->Append( m_menu_file, wxT("File") ); 
 	
 	m_menu_settings = new wxMenu();
 	wxMenuItem* m_menu_input;
-	m_menu_input = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Input") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_input = new wxMenuItem( m_menu_settings, 9965, wxString( wxT("Input") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menu_input );
 	
 	wxMenuItem* m_menu_memory;
-	m_menu_memory = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_memory = new wxMenuItem( m_menu_settings, 9964, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menu_memory );
 	
 	wxMenuItem* m_menu_video;
-	m_menu_video = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Video") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_video = new wxMenuItem( m_menu_settings, 9963, wxString( wxT("Video") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menu_video );
 	
 	wxMenuItem* m_menu_sound;
-	m_menu_sound = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Sound") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_sound = new wxMenuItem( m_menu_settings, 9962, wxString( wxT("Sound") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menu_sound );
 	
 	wxMenuItem* m_menu_miscsettings;
-	m_menu_miscsettings = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Other") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_miscsettings = new wxMenuItem( m_menu_settings, 9961, wxString( wxT("Other") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menu_miscsettings );
 	
 	wxMenuItem* m_separator7;
 	m_separator7 = m_menu_settings->AppendSeparator();
 	
 	wxMenuItem* m_menuItem49;
-	m_menuItem49 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Full Screen") ) + wxT('\t') + wxT("F1"), wxEmptyString, wxITEM_NORMAL );
+	m_menuItem49 = new wxMenuItem( m_menu_settings, 9960, wxString( wxT("Full Screen") ) + wxT('\t') + wxT("F1"), wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menuItem49 );
 	
 	wxMenuItem* m_menuItem50;
-	m_menuItem50 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Reset") ) + wxT('\t') + wxT("F5"), wxEmptyString, wxITEM_NORMAL );
+	m_menuItem50 = new wxMenuItem( m_menu_settings, 9959, wxString( wxT("Reset") ) + wxT('\t') + wxT("F5"), wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menuItem50 );
 	
 	wxMenuItem* m_menuItem511;
-	m_menuItem511 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("AMX Mouse") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem511 = new wxMenuItem( m_menu_settings, 9958, wxString( wxT("AMX Mouse") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menuItem511 );
 	
 	wxMenuItem* m_menuItem52;
-	m_menuItem52 = new wxMenuItem( m_menu_settings, wxID_ANY, wxString( wxT("Multiface Stop") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem52 = new wxMenuItem( m_menu_settings, 9957, wxString( wxT("Multiface Stop") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_settings->Append( m_menuItem52 );
 	
 	m_menubar1->Append( m_menu_settings, wxT("Settings") ); 
 	
 	m_menu_debug = new wxMenu();
-	m_menuItem_run = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem_run = new wxMenuItem( m_menu_debug, 9956, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_debug->Append( m_menuItem_run );
 	m_menuItem_run->Enable( false );
 	
 	wxMenuItem* m_menuItem_step;
-	m_menuItem_step = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Step") ) + wxT('\t') + wxT("F7"), wxEmptyString, wxITEM_NORMAL );
+	m_menuItem_step = new wxMenuItem( m_menu_debug, 9955, wxString( wxT("Step") ) + wxT('\t') + wxT("F7"), wxEmptyString, wxITEM_NORMAL );
 	m_menu_debug->Append( m_menuItem_step );
 	
-	m_menuItem_pause = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Pause") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem_pause = new wxMenuItem( m_menu_debug, 9954, wxString( wxT("Pause") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_debug->Append( m_menuItem_pause );
 	
 	wxMenuItem* m_menuItem_registers;
-	m_menuItem_registers = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Register") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem_registers = new wxMenuItem( m_menu_debug, 9953, wxString( wxT("Register") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_debug->Append( m_menuItem_registers );
 	
 	wxMenuItem* m_menuItem_memory;
-	m_menuItem_memory = new wxMenuItem( m_menu_debug, wxID_ANY, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem_memory = new wxMenuItem( m_menu_debug, 9952, wxString( wxT("Memory") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu_debug->Append( m_menuItem_memory );
 	
 	m_menubar1->Append( m_menu_debug, wxT("Debug") ); 
 	
 	m_menu4 = new wxMenu();
 	wxMenuItem* m_menuItem57;
-	m_menuItem57 = new wxMenuItem( m_menu4, wxID_ANY, wxString( wxT("Show Assembler") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem57 = new wxMenuItem( m_menu4, 9951, wxString( wxT("Show Assembler") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu4->Append( m_menuItem57 );
 	
 	m_menubar1->Append( m_menu4, wxT("Assembler") ); 
 	
 	m_menu5 = new wxMenu();
 	wxMenuItem* m_menuItem491;
-	m_menuItem491 = new wxMenuItem( m_menu5, wxID_ANY, wxString( wxT("About") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem491 = new wxMenuItem( m_menu5, 9950, wxString( wxT("About") ) , wxEmptyString, wxITEM_NORMAL );
 	m_menu5->Append( m_menuItem491 );
 	
 	m_menubar1->Append( m_menu5, wxT("Help") ); 
@@ -293,31 +293,31 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
 	this->Connect( wxEVT_IDLE, wxIdleEventHandler( CapriceWindow::OnIdle ) );
-	this->Connect( m_menu_insertDiscA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
-	this->Connect( m_menuItem5->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
-	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
-	this->Connect( m_menuItem26->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
-	this->Connect( m_menuItem29->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
-	this->Connect( m_mI_LoadSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
-	this->Connect( m_mI_SaveSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
-	this->Connect( m_mI_SaveSCR->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
-	this->Connect( m_menu_insertDiscA1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
-	this->Connect( m_menu_exit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
-	this->Connect( m_menu_input->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
-	this->Connect( m_menu_memory->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
-	this->Connect( m_menu_video->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuVideo ) );
-	this->Connect( m_menu_sound->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuSound ) );
-	this->Connect( m_menu_miscsettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
-	this->Connect( m_menuItem49->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
-	this->Connect( m_menuItem50->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
-	this->Connect( m_menuItem52->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
-	this->Connect( m_menuItem_run->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
-	this->Connect( m_menuItem_step->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
-	this->Connect( m_menuItem_pause->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
-	this->Connect( m_menuItem_registers->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
-	this->Connect( m_menuItem_memory->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
-	this->Connect( m_menuItem57->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
-	this->Connect( m_menuItem491->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
+	this->Connect( 9999, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
+	this->Connect( 9996, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
+	this->Connect( 9994, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
+	this->Connect( 9985, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
+	this->Connect( 9982, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
+	this->Connect( 9979, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
+	this->Connect( 9978, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
+	this->Connect( 9974, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
+	this->Connect( 9973, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
+	this->Connect( 9966, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
+	this->Connect( 9965, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
+	this->Connect( 9964, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
+	this->Connect( 9963, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuVideo ) );
+	this->Connect( 9962, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuSound ) );
+	this->Connect( 9961, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
+	this->Connect( 9960, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
+	this->Connect( 9959, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
+	this->Connect( 9957, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
+	this->Connect( 9956, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
+	this->Connect( 9955, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
+	this->Connect( 9954, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
+	this->Connect( 9953, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
+	this->Connect( 9952, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
+	this->Connect( 9951, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
+	this->Connect( 9950, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
 	m_panel4->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
 	m_panel4->Connect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
 }
@@ -327,31 +327,31 @@ CapriceWindow::~CapriceWindow()
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
 	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( CapriceWindow::OnIdle ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuVideo ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuSound ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
+	this->Disconnect( 9999, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
+	this->Disconnect( 9996, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
+	this->Disconnect( 9994, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
+	this->Disconnect( 9985, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
+	this->Disconnect( 9982, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
+	this->Disconnect( 9979, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
+	this->Disconnect( 9978, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
+	this->Disconnect( 9974, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
+	this->Disconnect( 9973, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
+	this->Disconnect( 9966, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
+	this->Disconnect( 9965, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
+	this->Disconnect( 9964, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
+	this->Disconnect( 9963, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuVideo ) );
+	this->Disconnect( 9962, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuSound ) );
+	this->Disconnect( 9961, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
+	this->Disconnect( 9960, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
+	this->Disconnect( 9959, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
+	this->Disconnect( 9957, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
+	this->Disconnect( 9956, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
+	this->Disconnect( 9955, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
+	this->Disconnect( 9954, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
+	this->Disconnect( 9953, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
+	this->Disconnect( 9952, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
+	this->Disconnect( 9951, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
+	this->Disconnect( 9950, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
 	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
 	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
 	
@@ -2213,8 +2213,11 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	bSizer39->Add( m_staticText77, 0, wxALL, 5 );
 	
-	addressSpinBox = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 65535, 0 );
-	bSizer39->Add( addressSpinBox, 0, wxALL, 5 );
+	addressBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer39->Add( addressBox, 0, wxALL, 0 );
+	
+	addressSpin = new wxSpinButton( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer39->Add( addressSpin, 0, wxALL, 0 );
 	
 	m_button76 = new wxButton( this, wxID_ANY, wxT("PC"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer39->Add( m_button76, 0, wxALL, 5 );
@@ -2247,7 +2250,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	scrollRAM->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	addressSpinBox->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
+	addressBox->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( Memory::AddressEntered ), NULL, this );
+	addressSpin->Connect( wxEVT_SCROLL_THUMBTRACK, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
 	m_button76->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
 	m_button77->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
 	ChoiceLabels->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::JumpToSymbol ), NULL, this );
@@ -2268,7 +2272,8 @@ Memory::~Memory()
 	scrollRAM->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
-	addressSpinBox->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
+	addressBox->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( Memory::AddressEntered ), NULL, this );
+	addressSpin->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxSpinEventHandler( Memory::JumpToAddress ), NULL, this );
 	m_button76->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToPC ), NULL, this );
 	m_button77->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::JumpToSP ), NULL, this );
 	ChoiceLabels->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::JumpToSymbol ), NULL, this );
@@ -2338,13 +2343,13 @@ CapriceIDE::CapriceIDE( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( m_menuItemNew->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnNew ) );
-	this->Connect( m_menuItemOpen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onOpen ) );
-	this->Connect( m_menuItemSave->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSave ) );
-	this->Connect( m_menuItemSaveAs->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSaveAs ) );
-	this->Connect( m_menuItemClose->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onClose ) );
-	this->Connect( m_menuItemExit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onExit ) );
-	this->Connect( m_menuAssemble->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnAssemble ) );
+	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnNew ) );
+	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onOpen ) );
+	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSave ) );
+	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSaveAs ) );
+	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onClose ) );
+	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onExit ) );
+	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnAssemble ) );
 }
 
 CapriceIDE::~CapriceIDE()

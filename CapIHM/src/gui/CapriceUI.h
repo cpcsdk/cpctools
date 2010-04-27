@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar  8 2010)
+// C++ code generated with wxFormBuilder (version Apr 27 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -38,6 +38,7 @@
 #include <wx/grid.h>
 #include <wx/checklst.h>
 #include <wx/scrolbar.h>
+#include <wx/spinbutt.h>
 #include <wx/statusbr.h>
 #include <wx/toolbar.h>
 #include <wx/listbook.h>
@@ -578,7 +579,8 @@ class Memory : public wxDialog
 		wxCheckListBox* m_checkList1;
 		wxScrollBar* scrollRAM;
 		wxStaticText* m_staticText77;
-		wxSpinCtrl* addressSpinBox;
+		wxTextCtrl* addressBox;
+		wxSpinButton* addressSpin;
 		wxButton* m_button76;
 		wxButton* m_button77;
 		wxChoice* ChoiceLabels;
@@ -588,6 +590,7 @@ class Memory : public wxDialog
 		virtual void LoadSymbolTable( wxFileDirPickerEvent& event ) { event.Skip(); }
 		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
+		virtual void AddressEntered( wxCommandEvent& event ) { event.Skip(); }
 		virtual void JumpToAddress( wxSpinEvent& event ) { event.Skip(); }
 		virtual void JumpToPC( wxCommandEvent& event ) { event.Skip(); }
 		virtual void JumpToSP( wxCommandEvent& event ) { event.Skip(); }

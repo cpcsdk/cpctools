@@ -1,7 +1,7 @@
 /**
  *   $Id$
  *	 CapriceReloded an Amstrad CPC emulator
- *   Copyright (C) 2009  cpcsdk crew
+ *   Copyright (C) 2009,2010 cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -47,8 +47,7 @@ MemoryImpl::MemoryImpl(wxWindow* parent, Emulator* emulator)
 	// This way we can adjust it depending to the actual memory (64 or 128k)
 	scrollRAM-> SetScrollbar(0, 0x200 / 16,
 		64 * 1024 / 16, 0x200 / 16);
-	// TODO make the spinbox use hexadecimal
-	addressSpinBox->SetValue(_emulator->GetZ80().PC.w.l);
+	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().PC.w.l));
 	scrollRAM->SetThumbPosition(_emulator->GetZ80().PC.w.l / 16);
 }
 
@@ -120,30 +119,43 @@ void MemoryImpl::onBreakpoint(wxCommandEvent& event)
 	}
 }
 
+
+void MemoryImpl::AddressEntered( wxCommandEvent& event )
+{
+	long int destination;
+	event.GetString().ToLong(&destination, 16);
+	RefreshMem(destination);
+	scrollRAM->SetThumbPosition(destination / 16);
+}
+
+
 void MemoryImpl::JumpToAddress( wxSpinEvent& event )
 {
 	RefreshMem(event.GetPosition());
+	addressBox->SetValue(wxString::Format(_("%X"),event.GetPosition()));
 	scrollRAM->SetThumbPosition(event.GetPosition() / 16);
 }
+
 
 void MemoryImpl::JumpToPC( wxCommandEvent& event )
 {
 	RefreshMem( _emulator ->GetZ80().PC.w.l);
-	addressSpinBox->SetValue(_emulator->GetZ80().PC.w.l);
+	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().PC.w.l));
 	scrollRAM->SetThumbPosition(_emulator->GetZ80().PC.w.l / 16);
 }
+
 
 void MemoryImpl::JumpToSP( wxCommandEvent& event )
 {
 	RefreshMem( _emulator ->GetZ80().SP.w.l);
-	addressSpinBox->SetValue(_emulator->GetZ80().SP.w.l);
+	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().SP.w.l));
 	scrollRAM->SetThumbPosition(_emulator->GetZ80().SP.w.l / 16);
 }
 
 void MemoryImpl::RefreshMem(wxScrollEvent& event)
 {
 	RefreshMem(event.GetPosition() * 16);
-	addressSpinBox->SetValue(event.GetPosition() * 16);
+	addressBox->SetValue(wxString::Format(_("%X"),event.GetPosition() * 16));
 }
 
 void MemoryImpl::RefreshMem(int startAddress)
@@ -213,7 +225,7 @@ void MemoryImpl::JumpToSymbol( wxCommandEvent& event )
 {
 	// Lookup the text in a hashmap
 	RefreshMem( lhm[event.GetString()]);
-	addressSpinBox->SetValue(lhm[event.GetString()]);
+	addressBox->SetValue(wxString::Format(_("%X"),lhm[event.GetString()]));
 	scrollRAM->SetThumbPosition(lhm[event.GetString()] / 16);
 }
 
