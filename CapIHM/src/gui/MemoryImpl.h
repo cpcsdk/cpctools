@@ -13,6 +13,8 @@ class MemoryImpl: public Memory
 
 		LabelsHashMap lhm;
 
+		void ChangeAddress(int addr);
+
 	protected:
 		void RefreshMem (wxScrollEvent& event);
 		void UpdateOverview( wxPaintEvent& event );

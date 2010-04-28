@@ -35,6 +35,14 @@
 // TODO proper handling of BANKS and ROM mapping. Now you see the z80 view and
 // there is no way to get out of it
 
+void MemoryImpl::ChangeAddress(int addr)
+{
+	scrollRAM->SetThumbPosition(addr/16);
+	addressBox->SetValue(wxString::Format(_("%X"),addr));
+	addressSpin->SetValue(addr);
+}
+
+
 MemoryImpl::MemoryImpl(wxWindow* parent, Emulator* emulator)
 	: Memory(parent)
 {
@@ -47,8 +55,8 @@ MemoryImpl::MemoryImpl(wxWindow* parent, Emulator* emulator)
 	// This way we can adjust it depending to the actual memory (64 or 128k)
 	scrollRAM-> SetScrollbar(0, 0x200 / 16,
 		64 * 1024 / 16, 0x200 / 16);
-	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().PC.w.l));
-	scrollRAM->SetThumbPosition(_emulator->GetZ80().PC.w.l / 16);
+	addressSpin->SetRange(0,0xFFFF);
+	ChangeAddress(emulator->GetZ80().PC.w.l);
 }
 
 MemoryImpl::~MemoryImpl()
@@ -125,31 +133,35 @@ void MemoryImpl::AddressEntered( wxCommandEvent& event )
 	long int destination;
 	event.GetString().ToLong(&destination, 16);
 	RefreshMem(destination);
-	scrollRAM->SetThumbPosition(destination / 16);
+//	scrollRAM->SetThumbPosition(destination / 16);
+	ChangeAddress(destination);
 }
 
 
 void MemoryImpl::JumpToAddress( wxSpinEvent& event )
 {
 	RefreshMem(event.GetPosition());
-	addressBox->SetValue(wxString::Format(_("%X"),event.GetPosition()));
-	scrollRAM->SetThumbPosition(event.GetPosition() / 16);
+//	addressBox->SetValue(wxString::Format(_("%X"),event.GetPosition()));
+//	scrollRAM->SetThumbPosition(event.GetPosition() / 16);
+	ChangeAddress(event.GetPosition());
 }
 
 
 void MemoryImpl::JumpToPC( wxCommandEvent& event )
 {
 	RefreshMem( _emulator ->GetZ80().PC.w.l);
-	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().PC.w.l));
-	scrollRAM->SetThumbPosition(_emulator->GetZ80().PC.w.l / 16);
+//	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().PC.w.l));
+//	scrollRAM->SetThumbPosition(_emulator->GetZ80().PC.w.l / 16);
+	ChangeAddress(_emulator->GetZ80().PC.w.l);
 }
 
 
 void MemoryImpl::JumpToSP( wxCommandEvent& event )
 {
 	RefreshMem( _emulator ->GetZ80().SP.w.l);
-	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().SP.w.l));
-	scrollRAM->SetThumbPosition(_emulator->GetZ80().SP.w.l / 16);
+//	addressBox->SetValue(wxString::Format(_("%X"),_emulator->GetZ80().SP.w.l));
+//	scrollRAM->SetThumbPosition(_emulator->GetZ80().SP.w.l / 16);
+	ChangeAddress(_emulator->GetZ80().SP.w.l);
 }
 
 void MemoryImpl::RefreshMem(wxScrollEvent& event)
@@ -225,7 +237,8 @@ void MemoryImpl::JumpToSymbol( wxCommandEvent& event )
 {
 	// Lookup the text in a hashmap
 	RefreshMem( lhm[event.GetString()]);
-	addressBox->SetValue(wxString::Format(_("%X"),lhm[event.GetString()]));
-	scrollRAM->SetThumbPosition(lhm[event.GetString()] / 16);
+//	addressBox->SetValue(wxString::Format(_("%X"),lhm[event.GetString()]));
+//	scrollRAM->SetThumbPosition(lhm[event.GetString()] / 16);
+	ChangeAddress(lhm[event.GetString()]);
 }
 
