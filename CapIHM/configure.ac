@@ -29,10 +29,9 @@ AC_CHECK_HEADERS([malloc.h])
 AC_CHECK_HEADERS([memory.h])
 AC_CHECK_HEADERS([stdlib.h])
 AC_CHECK_HEADERS([string.h])
-AC_CHECK_HEADERS([zlib.h])
 AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS([fcntl.h limits.h malloc.h memory.h stdlib.h string.h sys/ioctl.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h limits.h sys/ioctl.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -41,9 +40,6 @@ AC_C_INLINE
 AC_TYPE_SIZE_T
 AC_C_CONST
 AC_C_INLINE
-AC_FUNC_MALLOC
-AC_FUNC_MEMCMP
-AC_HEADER_STDBOOL
 AC_HEADER_STDC
 AC_PROG_CC
 AC_TYPE_INT64_T
@@ -202,7 +198,16 @@ if test "$with_wxwidget" = "yes" ; then
 		wxWidgets version is $reqwx or above.
 		])
 	fi
+
 fi
+
+#png.h is needed for saving screenshots. Is it really useful ?
+AC_CHECK_HEADER( [png.h],AC_DEFINE(HAVE_LIBPNG,1,[Use libpng to save screenshots]),AC_MSG_CHECKING([libpng not found ! Saving screenshots will not work]))
+
+#	AC_SUBST([PNG_LIB], [-lpng])
+
+#zlib is required for ?
+AC_CHECK_HEADER( [zlib.h],AC_DEFINE(HAVE_ZLIB,1,[Use zlib]),AC_MSG_CHECKING([zlib not found ! Something may not work]))
 
 # Sound
 

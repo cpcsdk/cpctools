@@ -27,7 +27,9 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_byteorder.h>
+#ifdef HAVE_LIBPNG
 #include <png.h>
+#endif
 #include "IMG_savepng.h"
 
 int IMG_SavePNG(const char *file, SDL_Surface *surf,int compression){
@@ -45,12 +47,15 @@ int IMG_SavePNG(const char *file, SDL_Surface *surf,int compression){
 	return ret;
 }
 
+#ifdef HAVE_LIBPNG
 static void png_write_data(png_structp png_ptr,png_bytep data, png_size_t length){
 	SDL_RWops *rp = (SDL_RWops*) png_get_io_ptr(png_ptr);
 	SDL_RWwrite(rp,data,1,length);
 }
+#endif
 
 int IMG_SavePNG_RW(SDL_RWops *src, SDL_Surface *surf,int compression){
+	#ifdef HAVE_LIBPNG
 	png_structp png_ptr;
 	png_infop info_ptr;
 	SDL_PixelFormat *fmt=NULL;
@@ -286,5 +291,8 @@ savedone: /* clean up and return */
 		free(row_pointers);
 	}
 	return ret;
+#else
+	return -1;
+#endif
 }
 

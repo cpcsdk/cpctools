@@ -51,7 +51,11 @@ class WXEmulator : public Emulator {
       if (!wxDir::Exists(s))
       {
         printf("Copy configuration files ");
+#if defined(__WXMSW__)
+        wxMkDir(s.mb_str());
+#else
         wxMkDir(s.mb_str(), 0700);
+#endif
 
         wxCopyFile(s2 + wxT("/cap32.cfg"), s+ wxT("/cap32.cfg"), false);
         wxCopyFile(s2 + wxT("/Keymap.cfg"), s+ wxT("/Keymap.cfg"), false);
