@@ -69,13 +69,7 @@ CapASM *capAsm ;
 
 //TODO destroy emulator when finishing
 
-IMPLEMENT_APP_NO_MAIN(CapriceApp)
-IMPLEMENT_WX_THEME_SUPPORT
-#ifdef __WXMSW__
-extern "C" int main(int argc, char*argv[]) {return wxEntry(argc,argv);}
-#else
-	IMPLEMENT_WXWIN_MAIN
-#endif
+IMPLEMENT_APP(CapriceApp)
 
 	wxSplashScreen* splash ;
 
