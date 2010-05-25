@@ -147,7 +147,6 @@ void WXEmulator::ReleaseKey(uint32_t key, uint32_t mod)
 			case CAP32_FULLSCRN:
 				{
 					audio_pause(_config);
-					SDL_Delay(20);
 
 					if (!_renderer.ToggleFullScreen())
 					{

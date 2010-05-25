@@ -9,7 +9,7 @@
 
 #include "cap32type.h"
 
-#include <SDL.h>
+#include <SDL_audio.h>
 
 class t_CPC;
 class t_PSG;

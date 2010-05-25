@@ -20,7 +20,7 @@
 #ifndef GLFUNCS_H
 #define GLFUNCS_H
 
-#include <SDL.h>
+#include <SDL_video.h>
 #include <SDL_opengl.h>
 
 #ifdef __cplusplus

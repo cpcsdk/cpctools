@@ -29,7 +29,6 @@
 #include <SDL_audio.h>
 #include "config.h"
 #include "psg.h"
-#include <SDL.h>
 
 #include <iostream>
 

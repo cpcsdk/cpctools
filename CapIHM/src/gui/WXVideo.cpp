@@ -30,6 +30,9 @@
    http://www.mame.net/
 */
 
+
+#include <SDL.h>
+
 #include "video.h"
 #include "WXVideo.h"
 #include "glfuncs.h"

@@ -23,6 +23,7 @@
 #define __IMG_SAVETOPNG_H__
 
 /* #include <SDL/begin_code.h> */
+#include <SDL_video.h>
 
 #ifdef __cplusplus
 extern "C" {
