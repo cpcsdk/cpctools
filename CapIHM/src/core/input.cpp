@@ -123,12 +123,12 @@ dword t_Input::cpc_kbd[86] =
 
 int t_Input::joy_layout[12][2] =
 {
-	{ CPC_J0_UP,		SDLK_UP },
-	{ CPC_J0_DOWN,		SDLK_DOWN },
-	{ CPC_J0_LEFT,		SDLK_LEFT },
-	{ CPC_J0_RIGHT,		SDLK_RIGHT },
-	{ CPC_J0_FIRE1,		SDLK_z },
-	{ CPC_J0_FIRE2,		SDLK_x },
+	{ CPC_J0_UP,		1 /*UP*/ },
+	{ CPC_J0_DOWN,		2 /*DOWN*/ },
+	{ CPC_J0_LEFT,		3 /*LEFT*/ },
+	{ CPC_J0_RIGHT,		4 /*RIGHT*/ },
+	{ CPC_J0_FIRE1,		'z' },
+	{ CPC_J0_FIRE2,		'x' },
 	{ CPC_J1_UP,		0 },
 	{ CPC_J1_DOWN,		0 },
 	{ CPC_J1_LEFT,		0 },

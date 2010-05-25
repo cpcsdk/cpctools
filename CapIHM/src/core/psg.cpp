@@ -82,14 +82,14 @@ void t_PSG::Emulate(int iCycleCount)
 	//	    std::cout << "Adding sample at : " << cycle_count << ", with snd_cycle_count : " << snd_cycle_count << std::endl;
 	cycle_count -= snd_cycle_count;
 
-	SDL_LockAudio();
+	//SDL_LockAudio();
 
 	m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
 	for(int k = 0; k<sizeof(ymsample)*2; k++)
 		*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel() /32;
 	pbSndBufferPtr += sizeof(ymsample)*2;
 	
-	SDL_UnlockAudio();
+	//SDL_UnlockAudio();
 
 	if (pbSndBufferPtr >= pbSndBufferEnd)
 	{
@@ -131,7 +131,7 @@ void t_PSG::Init(int enableSound)
 #endif
 
 #ifdef ST_SOUND
-    m_Ym2149=new CYm2149Ex(AMSTRAD_CLOCK, 1, audio_spec==NULL?44100:audio_spec->freq);
+    m_Ym2149=new CYm2149Ex(AMSTRAD_CLOCK, 1, CPC.snd_playback_rate);
     m_Ym2149->reset();
 #endif
     InitAYCounterVars();
@@ -301,6 +301,6 @@ void t_PSG::Reset()
 void t_PSG::InitAYCounterVars()
 {
     cycle_count = 0;
-    snd_cycle_count = (4000000.0/(double)(audio_spec==NULL?44100:audio_spec->freq)); // number of Z80 cycles per sample
+    snd_cycle_count = (4000000.0/(double)(CPC.snd_playback_rate)); // number of Z80 cycles per sample
     std::cout << "Audio cycle count : " << snd_cycle_count << std::endl;
 }

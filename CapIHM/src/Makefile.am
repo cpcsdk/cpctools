@@ -5,8 +5,8 @@ SUBDIRS = core gui
 
 #TODO : Build video and emulator inside libcapricecore
 caprice_SOURCES = core/video.cpp core/emulator.cpp 
-caprice_CPPFLAGS = $(WX_CPPFLAGS) $(SDL_CFLAGS) -Icore -Igui
-caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) $(PNG_LIB) \
+caprice_CPPFLAGS = $(WX_CPPFLAGS) -Icore -Igui
+caprice_LDADD = -lportaudio $(SOUNDLIB) $(LIB765) $(WX_LIBS) $(PNG_LIB) \
                 -L/usr/local/lib \
                 -L/local/lib \
                 -L/lib \
@@ -14,7 +14,6 @@ caprice_LDADD = $(SDL_LIBS) $(SOUNDLIB) $(LIB765) $(WX_LIBS) $(PNG_LIB) \
                 gui/libfoo.a \
                 core/libcapricecore.a \
 				/local/lib/libstsound.a \
-				/lib/libSDL.dll.a \
                 core/libdisass.a
 
 if WITH_IDE

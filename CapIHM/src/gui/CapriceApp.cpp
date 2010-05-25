@@ -27,7 +27,6 @@
 #include <pthread.h>
 
 #include <wx/splash.h> 
-#include <SDL.h>
 
 #include "cap32.h"
 #include "config.h"
@@ -122,7 +121,6 @@ int CapriceApp::OnExit()
 	delete emulator;
 	emulator = NULL;
 	//delete frame;
-	SDL_Quit();
   	cout << "Quit" << endl ;
 #if CLI
   	if (cli)
@@ -137,12 +135,6 @@ int CapriceApp::OnExit()
 
 int CapriceApp::OnRun()
 {
-    // initialize SDL
-    if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_TIMER | SDL_INIT_NOPARACHUTE) < 0)
-    {
-        std::cerr << "unable to init SDL: " << SDL_GetError() << '\n';
-        return -1;
-    }
 
     //Set command line options
     if (greenscreen) emulator->GetConfig().scr_tube = Renderer::GreenMode;

@@ -26,10 +26,10 @@
 
 #include "audio.h"
 #include <string.h>
-#include <SDL_audio.h>
 #include "config.h"
 #include "psg.h"
 
+#include <portaudio.h>
 #include <iostream>
 
 byte *pbSndBuffer = NULL;
@@ -38,10 +38,9 @@ byte *pbSndBufferCurrent = NULL;    // current position in the reading sample
 byte *pbSndBufferPtr = NULL;    // current position in the writing sample
 dword dwSndBufferCopied;
 
-SDL_AudioSpec *audio_spec = NULL;
-
-void audio_update (void *userdata, Uint8 *stream, int len)
+int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaStreamCallbackTimeInfo* sci, PaStreamCallbackFlags scf, void *userdata)
 {
+	int16_t* stream = (int16_t*)outbuf;
 #ifdef AYEMU
     ayemu_gen_sound ( (ayemu_ay_t*)userdata, stream, len);
     return;
@@ -68,7 +67,6 @@ void audio_update (void *userdata, Uint8 *stream, int len)
     memcpy(stream, pbSndBuffer, len);
     dwSndBufferCopied = 1;
 #else
-//    std::cout << "Reading sample of length : " << len/4 << " at " << SDL_GetTicks() << std::endl;
     if (pbSndBufferCurrent+len<pbSndBufferEnd)
     {
         if (pbSndBufferCurrent+len>pbSndBufferPtr && pbSndBufferCurrent<pbSndBufferPtr)
@@ -96,6 +94,7 @@ void audio_update (void *userdata, Uint8 *stream, int len)
         }
     }
 #endif
+	return paContinue;
 }
 
 int audio_align_samples (int given)
@@ -112,35 +111,33 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	if (!CPC.snd_enabled) {
 		return 0;
 	}
-	
-	SDL_AudioSpec *desired = (SDL_AudioSpec *)malloc(sizeof(SDL_AudioSpec));
-	SDL_AudioSpec *obtained = (SDL_AudioSpec *)malloc(sizeof(SDL_AudioSpec));
-	
-	desired->freq = CPC.snd_playback_rate;
-	desired->format = AUDIO_S16LSB;
-	desired->channels = 2;
-	desired->samples = audio_align_samples(desired->freq / 75 /*50*/); // desired is 10 /*20*/ ms at the given frequency // Try to do less than 1VBL as the SDL+OS will add more latency
-	desired->callback = audio_update;
-	desired->userdata = &psg;
-	
-	if (SDL_OpenAudio(desired, obtained) < 0)
+
+	if (Pa_Initialize() != paNoError) return -1;
+	PaStreamParameters psp;
+
+	psp.device = Pa_GetDefaultOutputDevice();
+	if (psp.device == paNoDevice) return -2;
+
+	psp.channelCount = 2;
+	psp.suggestedLatency = Pa_GetDeviceInfo(psp.device)->defaultLowOutputLatency;
+	psp.hostApiSpecificStreamInfo = NULL;
+	psp.sampleFormat = paInt16;
+
+	PaStream* stream;
+	if (Pa_OpenStream(&stream, NULL /* no input */, &psp, CPC.snd_playback_rate, CPC.snd_playback_rate/50, paClipOff, audio_update, &psg) != paNoError)
 	{
-		fprintf(stderr, "Could not open audio: %s\n", SDL_GetError());
+		fprintf(stderr, "Could not open audio\n");
 		return 1;
 	}
-
-	printf("Audio rate obtained : %d\n",obtained->freq);
-	
-	free(desired);
-	audio_spec = obtained;
 	
 //	CPC.snd_buffersize = (audio_spec->size/audio_spec->channels)/2; // size in samples : desired number of sample per 20ms
 	// The multiplicator here (3) defines the latency. Lower is better. Best should be 1
 #define SND_LATENCY 3
-	pbSndBuffer = (byte *)malloc(audio_spec->size*SND_LATENCY); // allocate the sound data buffer
-	pbSndBufferEnd = pbSndBuffer + audio_spec->size*SND_LATENCY;
-	memset(pbSndBuffer, audio_spec->silence, audio_spec->size*SND_LATENCY);
-	pbSndBufferPtr = pbSndBuffer+audio_spec->size; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
+#define SAMPLECOUNT CPC.snd_playback_rate*SND_LATENCY/50
+	pbSndBuffer = (byte *)malloc(SAMPLECOUNT); // allocate the sound data buffer
+	pbSndBufferEnd = pbSndBuffer + SAMPLECOUNT;
+	memset(pbSndBuffer, 0, SAMPLECOUNT);
+	pbSndBufferPtr = pbSndBuffer+CPC.snd_playback_rate/50; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
 	pbSndBufferCurrent = pbSndBuffer;   // init read cursor
 
     //std::cout << "Audio_spec size : " << audio_spec->size << std::endl;
@@ -151,22 +148,23 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 
 void audio_shutdown (void)
 {
-	SDL_CloseAudio();
+	Pa_Terminate();
 
-	free(audio_spec);
 	free(pbSndBuffer);
 }
 
 void audio_pause (t_CPC &CPC)
 {
+	// TODO ...
 	if (CPC.snd_enabled) {
-		SDL_PauseAudio(1);
+		//SDL_PauseAudio(1);
 	}
 }
 
 void audio_resume (t_CPC &CPC)
 {
+	// TODO ...
 	if (CPC.snd_enabled) {
-		SDL_PauseAudio(0);
+		//SDL_PauseAudio(0);
 	}
 }

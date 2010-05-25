@@ -3,11 +3,6 @@ AC_INIT([CapriceReloaded], [5], [ramlaid@cpcscene.com])
 AM_INIT_AUTOMAKE([ -Wall ])
 #AC_CONFIG_SRCDIR(core/cap32.cpp)
 
-# Stupid SDL test failing when done after AC_LANG([C++]) if using -Werror
-SDL_VERSION=1.2.5
-AM_PATH_SDL($SDL_VERSION, :,
-		AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
-
 # Check for programs
 AC_PROG_CXX
 AC_LANG([C++])

@@ -31,7 +31,6 @@
 */
 
 
-#include <SDL.h>
 
 #include "video.h"
 #include "WXVideo.h"
@@ -155,7 +154,6 @@ void WXDoubleLinePlugin::Close()
 	//SDL_FreeSurface(_publicVideo);
 	free(_publicVideo);
 	_publicVideo = NULL;
-	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
 /* ------------------------------------------------------------------------------------ */
@@ -320,7 +318,7 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 	eglMatrixMode(GL_MODELVIEW);
 	eglLoadIdentity();
 	
-	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth,CPCVisibleSCRHeight,surface_bpp,0,0,0,0);
+//	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth,CPCVisibleSCRHeight,surface_bpp,0,0,0,0);
 	return _publicVideo;
 }
 
@@ -457,14 +455,14 @@ void OpenGLPlugin::Flip()
 	if (_postRenderCallBack != NULL)
 		_postRenderCallBack();
 	
-	SDL_GL_SwapBuffers();
+	//SDL_GL_SwapBuffers();
 }
 
 void OpenGLPlugin::Close()
 {
 	if (!_video)
 		return;
-	SDL_FreeSurface(_publicVideo);
+	//SDL_FreeSurface(_publicVideo);
 	if (eglIsTexture(_screenTexnum))
 		eglDeleteTextures(1,&_screenTexnum);
 	if (eglIsTexture(_modulateTexnum))

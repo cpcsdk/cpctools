@@ -8,7 +8,6 @@
 #include <map>
 
 #include "cap32type.h"
-#include <SDL_keysym.h>
 class t_CPC;
 
 #define MOD_CPC_SHIFT   (0x01 << 8)
