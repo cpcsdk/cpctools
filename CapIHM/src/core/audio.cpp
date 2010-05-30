@@ -67,32 +67,44 @@ int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaSt
     memcpy(stream, pbSndBuffer, len);
     dwSndBufferCopied = 1;
 #else
-    if (pbSndBufferCurrent+len<pbSndBufferEnd)
+	// StSound
+    memcpy(stream, pbSndBuffer, 4*len);
+
+	if(pbSndBufferPtr>pbSndBuffer+4*len)
+	{
+		// StSound generated more than expected !
+		// Copy the excedental data to the beginning of buffer
+		memcpy(pbSndBuffer, pbSndBuffer+4*len, pbSndBufferPtr - pbSndBuffer+4*len);
+		pbSndBufferPtr -= 4*len;	
+	} else {
+		// StSound is late ! align it back for the next round
+		pbSndBufferPtr = pbSndBuffer;
+	}
+
+	// TODO : the code below should be more efficient (avoids memcpying), but it makes the sound crackle and pop a lot more...
+	/*
+    if (pbSndBufferCurrent+4*len<pbSndBufferEnd)
     {
-        if (pbSndBufferCurrent+len>pbSndBufferPtr && pbSndBufferCurrent<pbSndBufferPtr)
+        if (pbSndBufferCurrent+4*len>pbSndBufferPtr && pbSndBufferCurrent<pbSndBufferPtr)
         {
-//            std::cout << "Sound buffer reading overflow ! Available " << ((int)(pbSndBufferCurrent-pbSndBufferPtr)+len) << ", expecting " << len << std::endl;
-	    pbSndBufferCurrent -= len; // Better make a big desync than many little clicks
-	    // This adds latency (space between reader and writer) but it will max out at the buffer size
-	    if(pbSndBufferCurrent < pbSndBuffer) pbSndBufferCurrent = pbSndBuffer;
+			// A read overflow occured : the emu was too slow and didn't generate enough samples
+	    	pbSndBufferCurrent -= 4*len; // Better make a big desync than many little clicks
+	    	// This adds latency (space between reader and writer) but it will max out at the buffer size
+	    	if(pbSndBufferCurrent < pbSndBuffer) pbSndBufferCurrent = pbSndBuffer;
         }
 
-        memcpy(stream, pbSndBufferCurrent, len);
-        pbSndBufferCurrent = pbSndBufferCurrent+len;
+        memcpy(stream, pbSndBufferCurrent, 4*len);
+        pbSndBufferCurrent = pbSndBufferCurrent+4*len;
     }
     else
     {
         int rest = pbSndBufferEnd - pbSndBufferCurrent;
         memcpy(stream, pbSndBufferCurrent, rest);
         pbSndBufferCurrent = pbSndBuffer;
-        memcpy(stream+rest, pbSndBufferCurrent, len-rest);
-        pbSndBufferCurrent+=len-rest;
-
-        if (pbSndBufferCurrent>pbSndBufferPtr)
-        {
-            std::cout << "Sound buffer reading overflow (Cycling) ! Available " << (pbSndBufferCurrent-pbSndBufferPtr)/4 << ", expecting " << len/4 << std::endl;
-        }
-    }
+        memcpy(stream+rest, pbSndBufferCurrent, 4*len-rest);
+        pbSndBufferCurrent+=4*len-rest;
+	}
+	*/
 #endif
 	return paContinue;
 }
@@ -106,42 +118,39 @@ int audio_align_samples (int given)
 	return actual; // return the closest match as 2^n
 }
 
+
 int audio_init (t_CPC &CPC, t_PSG* psg)
 {
 	if (!CPC.snd_enabled) {
+		fprintf(stderr, "Not opening audio because it is disabled in the config\n");
 		return 0;
 	}
 
-	if (Pa_Initialize() != paNoError) return -1;
-	PaStreamParameters psp;
-
-	psp.device = Pa_GetDefaultOutputDevice();
-	if (psp.device == paNoDevice) return -2;
-
-	psp.channelCount = 2;
-	psp.suggestedLatency = Pa_GetDeviceInfo(psp.device)->defaultLowOutputLatency;
-	psp.hostApiSpecificStreamInfo = NULL;
-	psp.sampleFormat = paInt16;
-
+	if (Pa_Initialize() != paNoError) {
+		fprintf(stderr, "Failed to initialize portaudio\n");
+		return -1;
+	}
 	PaStream* stream;
-	if (Pa_OpenStream(&stream, NULL /* no input */, &psp, CPC.snd_playback_rate, CPC.snd_playback_rate/50, paClipOff, audio_update, &psg) != paNoError)
+	if (Pa_OpenDefaultStream(&stream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 0, audio_update, &psg) != paNoError)
 	{
 		fprintf(stderr, "Could not open audio\n");
 		return 1;
 	}
 	
-//	CPC.snd_buffersize = (audio_spec->size/audio_spec->channels)/2; // size in samples : desired number of sample per 20ms
 	// The multiplicator here (3) defines the latency. Lower is better. Best should be 1
-#define SND_LATENCY 3
-#define SAMPLECOUNT CPC.snd_playback_rate*SND_LATENCY/50
+#define SAMPLECOUNT CPC.snd_playback_rate * 2
 	pbSndBuffer = (byte *)malloc(SAMPLECOUNT); // allocate the sound data buffer
 	pbSndBufferEnd = pbSndBuffer + SAMPLECOUNT;
 	memset(pbSndBuffer, 0, SAMPLECOUNT);
 	pbSndBufferPtr = pbSndBuffer+CPC.snd_playback_rate/50; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
 	pbSndBufferCurrent = pbSndBuffer;   // init read cursor
 
-    //std::cout << "Audio_spec size : " << audio_spec->size << std::endl;
+	if(Pa_StartStream(stream) != paNoError) {
+		fprintf(stderr, "Could not start stream\n");
+		return 1;
+	}
 	
+	fprintf(stderr, "Audio init ok..\n");
 	return 0;
 }
 

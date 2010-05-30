@@ -79,22 +79,17 @@ void t_PSG::Emulate(int iCycleCount)
 
     if (cycle_count >= snd_cycle_count)
     {
-	//	    std::cout << "Adding sample at : " << cycle_count << ", with snd_cycle_count : " << snd_cycle_count << std::endl;
+		//    std::cout << "Adding sample at : " << cycle_count << ", with snd_cycle_count : " << snd_cycle_count << std::endl;
 	cycle_count -= snd_cycle_count;
-
-	//SDL_LockAudio();
 
 	m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
 	for(int k = 0; k<sizeof(ymsample)*2; k++)
 		*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel() /32;
 	pbSndBufferPtr += sizeof(ymsample)*2;
 	
-	//SDL_UnlockAudio();
-
 	if (pbSndBufferPtr >= pbSndBufferEnd)
 	{
 	    pbSndBufferPtr = pbSndBuffer;
-	 //   std::cout << "Audio buffer overflow !" << std::endl;
 	}
 
 
