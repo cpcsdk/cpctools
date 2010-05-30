@@ -39,7 +39,7 @@
 int VideoPlugin::CPCVisibleSCRWidth = 384; // visible width: 4+40+4 * 8
 int VideoPlugin::CPCVisibleSCRHeight = 270;
 
-VideoPlugin::VideoPlugin(const string name, const Uint32 format, const Uint8 halfPixels) :
+VideoPlugin::VideoPlugin(const string name, const uint32_t format, const uint8_t halfPixels) :
 _name(name),
 _formats(format),
 _halfPixels(halfPixels),
@@ -65,6 +65,7 @@ VideoPlugin* VideoPlugin::Create()
 // checks for an OpenGL extension
 bool VideoPlugin::HaveOpenGLExtension(const string &name_ext)
 {
+#ifdef USE_OPENGL
 	const char *ext;
 	ext = (const char *) (eglGetString (GL_EXTENSIONS));
 	const char *f;
@@ -78,6 +79,7 @@ bool VideoPlugin::HaveOpenGLExtension(const string &name_ext)
 			return true;
 		ext += (n + 1);
 	}
+#endif
 	return false;
 }
 

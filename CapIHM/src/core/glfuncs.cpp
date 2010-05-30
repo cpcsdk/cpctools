@@ -16,6 +16,7 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifdef USE_OPENGL
 
 #include "glfuncs.h"
 
@@ -49,3 +50,4 @@ int init_glfuncs()
 #undef GL_FUNC
 #undef GL_FUNC_OPTIONAL
 
+#endif

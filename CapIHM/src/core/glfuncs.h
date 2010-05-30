@@ -20,6 +20,7 @@
 #ifndef GLFUNCS_H
 #define GLFUNCS_H
 
+#ifdef USE_OPENGL
 #include <SDL_video.h>
 #include <SDL_opengl.h>
 
@@ -48,3 +49,4 @@ extern int init_glfuncs();
 
 #endif
 
+#endif

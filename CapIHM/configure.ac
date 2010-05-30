@@ -201,9 +201,6 @@ AC_CHECK_HEADER( [png.h],AC_DEFINE(HAVE_LIBPNG,1,[Use libpng to save screenshots
 
 #	AC_SUBST([PNG_LIB], [-lpng])
 
-#zlib is required for ?
-AC_CHECK_HEADER( [zlib.h],AC_DEFINE(HAVE_ZLIB,1,[Use zlib]),AC_MSG_CHECKING([zlib not found ! Something may not work]))
-
 # Sound
 
 AC_MSG_CHECKING([ sound options ----------------------------------------------

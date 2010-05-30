@@ -1,4 +1,4 @@
-
+#ifdef USE_OPENGL
 GL_FUNC(void,glBegin,(GLenum))
 GL_FUNC(void,glBindTexture,(GLenum,GLuint))
 GL_FUNC(void,glBlendFunc,(GLenum,GLenum))
@@ -24,3 +24,4 @@ GL_FUNC(void,glTexEnvf,(GLenum, GLenum, GLfloat))
 GL_FUNC_OPTIONAL(void,glColorTableEXT, (GLenum, GLenum, GLsizei, GLenum, GLenum, const GLvoid *))
 GL_FUNC_OPTIONAL(void,glActiveTextureARB, (GLenum))
 GL_FUNC_OPTIONAL(void,glMultiTexCoord2fARB, (GLenum,GLfloat,GLfloat))
+#endif

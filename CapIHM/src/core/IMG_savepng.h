@@ -22,8 +22,10 @@
 #ifndef __IMG_SAVETOPNG_H__
 #define __IMG_SAVETOPNG_H__
 
+#ifdef HAVE_LIBPNG
+
 /* #include <SDL/begin_code.h> */
-#include <SDL_video.h>
+//#include <SDL_video.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,19 +39,19 @@ extern "C" {
  * Takes a filename, a surface to save, and a compression level.  The
  * compression level can be 0(min) through 9(max), or -1(default).
  */
-DECLSPEC int SDLCALL    IMG_SavePNG(const char  *file,
-                                    SDL_Surface *surf,
+int IMG_SavePNG(const char  *file,
+                                    void *surf,
                                     int          compression);
 /**
  * Takes a SDL_RWops pointer, a surface to save, and a compression level.
  * compression can be 0(min) through 9(max), or -1(default).
  */
-DECLSPEC int SDLCALL IMG_SavePNG_RW(SDL_RWops   *src,
-                                    SDL_Surface *surf,
+int IMG_SavePNG_RW(void   *src,
+                                    void *surf,
                                     int          compression);
 #ifdef __cplusplus
 }
 #endif
-
+#endif
 #endif/*__IMG_SAVETOPNG_H__*/
 

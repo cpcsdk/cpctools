@@ -24,11 +24,11 @@
  * 4/17/04 - IMG_SavePNG & IMG_SavePNG_RW - Philip D. Bober
  * 11/08/2004 - Compr fix, levels -1,1-7 now work - Tyler Montbriand
  */
+
 #include <stdlib.h>
 #include <SDL/SDL_byteorder.h>
 #ifdef HAVE_LIBPNG
 #include <png.h>
-#endif
 #include "IMG_savepng.h"
 
 int IMG_SavePNG(const char *file, SDL_Surface *surf,int compression){
@@ -295,3 +295,4 @@ savedone: /* clean up and return */
 #endif
 }
 
+#endif
