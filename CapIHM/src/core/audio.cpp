@@ -68,6 +68,8 @@ int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaSt
     dwSndBufferCopied = 1;
 #else
 	// StSound
+	// len unit is 'frame'. A frame is 2 channels * 2 bytes = 4 bytes.
+	// hence the 4*len in this copy (because our buffers are byte-sized)
     memcpy(stream, pbSndBuffer, 4*len);
 
 	if(pbSndBufferPtr>pbSndBuffer+4*len)
