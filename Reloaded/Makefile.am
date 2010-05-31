@@ -5,11 +5,11 @@ IMGS = logo.png pause.png
 
 EXTRA_DIST = rom $(IMGS) cap32.cfg.tpl Keymap.cfg
 
-capricedir = $(pkgdatadir)
-caprice_DATA = $(IMGS) cap32.cfg Keymap.cfg
+reloadeddir = $(pkgdatadir)
+reloaded_DATA = $(IMGS) cap32.cfg Keymap.cfg
 
-capriceromdir = $(pkgdatadir)/rom
-capricerom_DATA = rom/*
+reloadedromdir = $(pkgdatadir)/rom
+reloadedrom_DATA = rom/*
 
 
 cap32.cfg: cap32.cfg.tpl

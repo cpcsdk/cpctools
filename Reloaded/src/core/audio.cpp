@@ -38,6 +38,8 @@ byte *pbSndBufferCurrent = NULL;    // current position in the reading sample
 byte *pbSndBufferPtr = NULL;    // current position in the writing sample
 dword dwSndBufferCopied;
 
+PaStream* audioStream = NULL;
+
 int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaStreamCallbackTimeInfo* sci, PaStreamCallbackFlags scf, void *userdata)
 {
 	int16_t* stream = (int16_t*)outbuf;
@@ -70,7 +72,7 @@ int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaSt
 	// StSound
 	// len unit is 'frame'. A frame is 2 channels * 2 bytes = 4 bytes.
 	// hence the 4*len in this copy (because our buffers are byte-sized)
-    memcpy(stream, pbSndBuffer, 4*len);
+        memcpy(stream, pbSndBuffer, 4*len);
 
 	if(pbSndBufferPtr>pbSndBuffer+4*len)
 	{
@@ -132,8 +134,7 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 		fprintf(stderr, "Failed to initialize portaudio\n");
 		return -1;
 	}
-	PaStream* stream;
-	if (Pa_OpenDefaultStream(&stream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 0, audio_update, &psg) != paNoError)
+        if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 0, audio_update, &psg) != paNoError)
 	{
 		fprintf(stderr, "Could not open audio\n");
 		return 1;
@@ -147,7 +148,7 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	pbSndBufferPtr = pbSndBuffer+CPC.snd_playback_rate/50; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
 	pbSndBufferCurrent = pbSndBuffer;   // init read cursor
 
-	if(Pa_StartStream(stream) != paNoError) {
+        if(Pa_StartStream(audioStream) != paNoError) {
 		fprintf(stderr, "Could not start stream\n");
 		return 1;
 	}
@@ -159,9 +160,10 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 
 void audio_shutdown (void)
 {
-	Pa_Terminate();
+    Pa_StopStream(audioStream);
+    Pa_Terminate();
 
-	free(pbSndBuffer);
+    free(pbSndBuffer);
 }
 
 void audio_pause (t_CPC &CPC)

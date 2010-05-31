@@ -1,33 +1,36 @@
-Caprice32 - Amstrad CPC Emulator
+Reloaded - Amstrad CPC Emulator
 (c) Copyright 1997-2004 Ulrich Doewich
+(c) Copyright 2008-2010 the cpcdsk crew (Cloudstrife, Krusty, PulkoMandy)
 
-http://sourceforge.net/projects/caprice32/
+http://cpcsdk.googlecode.com
 
 ..........................................................................
 
 WHAT IS IT?
 ~~~~~~~~~~~
 
-Caprice32 is a software emulator of the Amstrad CPC 8bit home computer
+Reloaded is a software emulator of the Amstrad CPC 8bit home computer
 series. The emulator faithfully imitates the CPC464, CPC664, and CPC6128
 models. By recreating the operations of all hardware components at a low
 level, the emulator achieves a high degree of compatibility with original
 CPC software. These programs or games can be run unmodified at real-time
 or higher speeds, depending on the emulator host environment.
 
+Reloaded is based on a fork of Caprice32, but nearly every part was
+rewritten from scratch.
 
 ..........................................................................
 
 USING THE SOURCE
 ~~~~~~~~~~~~~~~~
 
-The source for Caprice32 is distributed under the terms of the GNU
+The source for Reloaded is distributed under the terms of the GNU
 General Public License (GNU GPL), which is included in this archive as
 COPYING.txt. Please make sure that you understand the terms and
 conditions of the license before using the source.
 
-I encourage you to get involved in the project - please see the Caprice32
-pages on SourceForge.net for contact details.
+I encourage you to get involved in the project - please see the Reloaded
+pages on Google Code for contact details.
 
 
 ..........................................................................
@@ -38,8 +41,9 @@ REQUIREMENTS
 You will need the following to successfully compile an executable:
 
 MinGW (only for Windows) - http://sourceforge.net/projects/mingw/
-SDL - http://www.libsdl.org/index.php
-zLib - http://www.gzip.org/zlib/
+Portaudio - http://portaudio.com
+wxWidgets - http://www.wxwidgets.org
+libpng - http://www.libpng.org
 
 
 ..........................................................................
@@ -47,33 +51,9 @@ zLib - http://www.gzip.org/zlib/
 COMPILING
 ~~~~~~~~~
 
-Windows target:
-
-Edit the makefile to update the IPATHS directive with the correct location
-of the SDL include and library files.
-
-use:
-
-make (or mingw32-make, depending on how you have your MinGW installed)
-
-to compile a developer build, or use:
-
-make RELEASE=TRUE
-
-for an optimized executable.
-
-
-Linux target:
-
-use:
-
-make -f makefile.unix
-
-to compile a developer build, or use:
-
-make -f makefile.unix RELEASE=TRUE
-
-for an optimized executable.
+Run ./configure --help to see the available options.
+Run ./ configure ; make ; make install to get the program ready (the install
+step is needed, it it not possible to run it from the source directory).
 
 
 ..........................................................................
@@ -83,5 +63,8 @@ COMMENTS OR READY TO CONTRIBUTE?
 
 If you have suggestions, a bug report or even want to join the
 development team, please feel free to use one of the many contact methods
-presented on the Caprice32 project page on SourceForge.net - see the URL
+presented on the Caprice32 project page on google code - see the URL
 at the top.
+
+Development is done at your request, if we don't know about bugs, we can't
+fix them!

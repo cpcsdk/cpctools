@@ -1,3 +1,8 @@
+2010-05-31 PulkoMandy/Shinra <pulkomandy@pulkomandy.ath.cx>
+	* CORE : Remove SDL for audio and use Portaudio instead. It is now
+	possible to run the emulator under windows again, with the wxwidgets GUI.
+	Name changed to "Reloaded" as there is nothing left from Caprice.
+	
 2009-09-20 Krusty/Benediction <krusty@cpcscene.com>
 	* GUI : Add the ability to save screenshots
 	

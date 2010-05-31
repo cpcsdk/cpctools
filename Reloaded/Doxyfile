@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = CapriceReloaded
+PROJECT_NAME           = Reloaded
 PROJECT_NUMBER         = 1
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO

@@ -1,6 +1,6 @@
 /**
  *   $Id$
- *	 CapriceReloded an Amstrad CPC emulator
+ *	 Reloded an Amstrad CPC emulator
  *   Copyright (C) 2009  cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #include "emulator.h"
 
 /**
- * Wrapper between Caprice and SjasmPLUS
+ * Wrapper between Reloaded and SjasmPLUS
  */
 class CapASM
 {
