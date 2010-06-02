@@ -23,6 +23,7 @@
 // Caprice32 GateArray memory emulator
 //
 
+#include "emulator.h"
 #include "memory.h"
 #include "cap32.h"
 #include "cap32type.h"
@@ -304,6 +305,7 @@ void t_Memory::ga_memory_manager (void)
 	}
 }
 
+
 int t_Memory::RAMInit()
 {
 	// allocate memory for desired amount of RAM
@@ -323,10 +325,53 @@ int t_Memory::RAMInit()
 	return ERR_OK;
 }
 
-int t_Memory::ROMInit()
+
+// Try to load a rom from thegiven filepath
+int t_Memory::LoadOneRom(char* path, char* pchRomData)
 {
 	FILE* pfileObject;
+	if ((pfileObject = fopen(path, "rb")) != NULL)
+	{
+		// read 128 bytes of ROM data
+		fread(pchRomData, 128, 1, pfileObject);
+		word checksum = 0;
+		for (int n = 0; n < 0x43; n++)
+		{
+			checksum += pchRomData[n];
+		}
 
+		// if the checksum matches, we got us an AMSDOS header
+		if (checksum == ((pchRomData[0x43] << 8) + pchRomData[0x44]))
+		{
+			// skip it (read 128bytes more)
+			fread(pchRomData, 128, 1, pfileObject);
+			fprintf(stderr, "WARNING: %s has an AMSDOS header. Skipping it...\n", path);
+		}
+
+		// is it a valid CPC ROM image (0 = forground, 1 = background, 2 = extension)?
+		if (!(pchRomData[0] & 0xfc))
+		{
+			// read the rest of the ROM file
+			fread(pchRomData+128, 16384-128, 1, pfileObject);
+		}
+		else
+		{
+			// not a valid ROM file
+			return -1;
+		}
+		fclose(pfileObject);
+	}
+	else
+	{
+		// file not found
+		return -2;
+	}
+	return 0;
+}
+
+
+int t_Memory::ROMInit()
+{
 	int iErr, iRomNum;
 	char chPath[_MAX_PATH + 1];
 	char *pchRomData;
@@ -336,7 +381,7 @@ int t_Memory::ROMInit()
 
 	if ((iErr = emulator_patch_ROM()))
 	{
-	    printf("Error patching roms !\n");
+		printf("Error patching roms !\n");
 		return iErr;
 	}
 
@@ -355,50 +400,23 @@ int t_Memory::ROMInit()
 			strncat(chPath, CPC.rom_file[iRomNum], sizeof(chPath)-1 - strlen(chPath));
 
 			// attempt to open the ROM image
-			if ((pfileObject = fopen(chPath, "rb")) != NULL)
-			{
-				// read 128 bytes of ROM data
-				fread(pchRomData, 128, 1, pfileObject);
-				word checksum = 0;
-				for (int n = 0; n < 0x43; n++)
-				{
-					checksum += pchRomData[n];
-				}
-
-				// if the checksum matches, we got us an AMSDOS header
-				if (checksum == ((pchRomData[0x43] << 8) + pchRomData[0x44]))
-				{
-					// skip it (read 128bytes more)
-					fread(pchRomData, 128, 1, pfileObject);
-					fprintf(stderr, "WARNING: %s has an AMSDOS header. Skipping it...\n", CPC.rom_file[iRomNum]);
-				}
-
-				// is it a valid CPC ROM image (0 = forground, 1 = background, 2 = extension)?
-				if (!(pchRomData[0] & 0xfc))
-				{
-					// read the rest of the ROM file
-					fread(pchRomData+128, 16384-128, 1, pfileObject);
-					// update the ROM map
-					memmap_ROM[iRomNum] = (byte *)pchRomData;
-				}
-				else
-				{
-					// not a valid ROM file
-					fprintf(stderr, "ERROR: %s is not a CPC ROM file - clearing ROM slot %d.\n", CPC.rom_file[iRomNum], iRomNum);
+			if(LoadOneRom(chPath, pchRomData) != 0) {
+				// Try another path - The user's settings
+				const char* exepath = Emulator::getInstance()->getConfigPath();
+				strncpy(chPath, exepath, sizeof(chPath)-2);
+				strcat(chPath, "/roms/");
+				strncat(chPath, CPC.rom_file[iRomNum], sizeof(chPath)-1 - strlen(chPath));
+				if(LoadOneRom(chPath, pchRomData) != 0) {
+					fprintf(stderr, "ERROR: The %s file is missing - clearing ROM slot %d.\n",
+						CPC.rom_file[iRomNum], iRomNum);
 					// free memory on error
 					delete [] pchRomData;
 					CPC.rom_file[iRomNum][0] = 0;
-				}
-				fclose(pfileObject);
-			}
-			else
-			{
-				// file not found
-				fprintf(stderr, "ERROR: The %s file is missing - clearing ROM slot %d.\n", CPC.rom_file[iRomNum], iRomNum);
-				// free memory on error
-				delete [] pchRomData;
-				CPC.rom_file[iRomNum][0] = 0;
-			}
+				} else
+				memmap_ROM[iRomNum] = (byte *)pchRomData;
+			} else
+			// update the ROM map
+			memmap_ROM[iRomNum] = (byte *)pchRomData;
 		}
 	}
 
@@ -425,6 +443,19 @@ int t_Memory::emulator_patch_ROM (void)
 	}
 	else
 	{
+		strncpy(chPath, Emulator::getInstance()->getConfigPath(), sizeof(chPath)-2);
+		strcat(chPath, "/roms/");
+
+		// determine the ROM image name for the selected model
+		strncat(chPath, chROMFile[CPC.model], sizeof(chPath)-1 - strlen(chPath));
+
+		// load CPC OS + Basic
+		if ((pfileObject = fopen(chPath, "rb")) != NULL)
+		{
+			fread(pbROMlo, 2*16384, 1, pfileObject);
+			fclose(pfileObject);
+			return 0;
+		}
 	    printf("UNABLE TO FIND SYSTEM ROM ! CHECK CONFIGURATION ! FATAL ERROR ! Should be at %s\n",chPath);
 		return ERR_CPC_ROM_MISSING;
 	}

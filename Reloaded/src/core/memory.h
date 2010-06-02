@@ -107,5 +107,7 @@ protected:
 
 	int RAMInit();
 	int ROMInit();
+
+	int LoadOneRom(char* path, char* pchRomData);
 };
 #endif
