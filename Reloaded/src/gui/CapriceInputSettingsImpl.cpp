@@ -18,7 +18,7 @@
 ******************************************************************************/
 
 CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
-	InputSettings(WinID),
+	Settings(WinID),
 	emulator(*(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator())),
 	lastClickedButton(NULL)
 {
@@ -57,11 +57,11 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	wxString userpath = emulator.getConfigPath();
 	userpath.append("/roms/");
 	wxDir::GetAllFiles(userpath,&uromlist);
-	for (int i=0;i<uromlist.GetCount(); i++) {
+	for (unsigned int i=0;i<uromlist.GetCount(); i++) {
 		realromlist.Add(wxFileName(uromlist[i]).GetFullName());
 	}
 	realromlist.Add(wxEmptyString); // Acts both as separator between user and sys and the "no rom" item
-	for (int i=0;i<sysromlist.GetCount(); i++) {
+	for (unsigned int i=0;i<sysromlist.GetCount(); i++) {
 		realromlist.Add(wxFileName(uromlist[i]).GetFullName());
 	}
 
@@ -82,6 +82,12 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	ROM5file->SetStringSelection(wxString(emulator.GetConfig().rom_file[5],wxConvUTF8));
 	ROM6file->SetStringSelection(wxString(emulator.GetConfig().rom_file[6],wxConvUTF8));
 	ROM7file->SetStringSelection(wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
+
+	manufacturerName->SetSelection(~((emulator.GetConfig().jumpers>>1) & 7));
+	if (emulator.GetConfig().jumpers & 0x10)
+		radio50->SetValue(true);
+	else
+		radio60->SetValue(true);
 }
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
@@ -306,3 +312,20 @@ void CapriceInputSettingsImpl::RomChanged( wxCommandEvent& event )
 }
 
 
+void CapriceInputSettingsImpl::SelectManufacturer(wxCommandEvent& event)
+{
+	emulator.GetConfig().jumpers = (emulator.GetConfig().jumpers & 0x10) 
+		| (((~event.GetSelection())&0x07) <<1);
+}
+
+
+void CapriceInputSettingsImpl::Select50HZ(wxCommandEvent& event)
+{
+	emulator.GetConfig().jumpers = (emulator.GetConfig().jumpers & 0xE) | 1;
+}
+
+
+void CapriceInputSettingsImpl::Select60HZ(wxCommandEvent& event)
+{
+	emulator.GetConfig().jumpers = emulator.GetConfig().jumpers & 0xE;
+}

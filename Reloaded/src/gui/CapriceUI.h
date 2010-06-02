@@ -78,7 +78,9 @@ class EmulatorWindow : public wxFrame
 		virtual void insertTape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void pressPlayOnTape( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onLoadSNA( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onReloadSNA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSaveSNA( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateSNA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSaveScreen( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSaveScreenshot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onExit2( wxCommandEvent& event ) { event.Skip(); }
@@ -109,9 +111,9 @@ class EmulatorWindow : public wxFrame
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class InputSettings
+/// Class Settings
 ///////////////////////////////////////////////////////////////////////////////
-class InputSettings : public wxDialog 
+class Settings : public wxDialog 
 {
 	private:
 	
@@ -218,6 +220,11 @@ class InputSettings : public wxDialog
 		wxChoice* ROM5file;
 		wxChoice* ROM6file;
 		wxChoice* ROM7file;
+		wxStaticLine* m_staticline31;
+		wxStaticText* LKs;
+		wxChoice* manufacturerName;
+		wxRadioButton* radio50;
+		wxRadioButton* radio60;
 		wxPanel* m_panel_video;
 		wxCheckBox* check_OpenGL;
 		wxStaticText* m_staticText76;
@@ -243,6 +250,9 @@ class InputSettings : public wxDialog
 		virtual void onKeyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onKeyPress( wxKeyEvent& event ) { event.Skip(); }
 		virtual void RomChanged( wxCommandEvent& event ) { event.Skip(); }
+		virtual void SelectManufacturer( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Select50HZ( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Select60HZ( wxCommandEvent& event ) { event.Skip(); }
 		virtual void changeCRTCType( wxSpinEvent& event ) { event.Skip(); }
 		virtual void changeColorPalette( wxCommandEvent& event ) { event.Skip(); }
 		virtual void applySettings( wxCommandEvent& event ) { event.Skip(); }
@@ -254,8 +264,8 @@ class InputSettings : public wxDialog
 	public:
 		wxNotebook* m_notebook4;
 		
-		InputSettings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Caprice Reloaded Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );
-		~InputSettings();
+		Settings( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Caprice Reloaded Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS );
+		~Settings();
 	
 };
 

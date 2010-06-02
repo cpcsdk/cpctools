@@ -6,7 +6,7 @@
 
 class Emulator;
 
-class CapriceInputSettingsImpl : public InputSettings
+class CapriceInputSettingsImpl : public Settings
 {
 	public:
 		CapriceInputSettingsImpl(wxWindow* WinID);
@@ -21,6 +21,9 @@ class CapriceInputSettingsImpl : public InputSettings
 		virtual void changeCRTCType( wxSpinEvent& event );
 		virtual void changeColorPalette( wxCommandEvent& event );
 		virtual void RomChanged( wxCommandEvent& event );
+		virtual void SelectManufacturer( wxCommandEvent& event );
+		virtual void Select50HZ( wxCommandEvent& event );
+		virtual void Select60HZ( wxCommandEvent& event );
 
 		void saveKeymap();
 
