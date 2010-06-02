@@ -9,6 +9,7 @@
 #include "crtc1.h"
 #include "filetools.h"
 
+#include <wx/event.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
 
@@ -48,16 +49,39 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	choice_colorPalette->SetSelection((int)(emulator.GetConfig().scr_tube));
 
 	// roms
-	wxString path(emulator.GetConfig().rom_path, wxConvUTF8);
-	path += wxString("/",wxConvUTF8);
-	ROM0file->SetPath(path+wxString(emulator.GetConfig().rom_file[0],wxConvUTF8));
-	ROM1file->SetPath(path+wxString(emulator.GetConfig().rom_file[1],wxConvUTF8));
-	ROM2file->SetPath(path+wxString(emulator.GetConfig().rom_file[2],wxConvUTF8));
-	ROM3file->SetPath(path+wxString(emulator.GetConfig().rom_file[3],wxConvUTF8));
-	ROM4file->SetPath(path+wxString(emulator.GetConfig().rom_file[4],wxConvUTF8));
-	ROM5file->SetPath(path+wxString(emulator.GetConfig().rom_file[5],wxConvUTF8));
-	ROM6file->SetPath(path+wxString(emulator.GetConfig().rom_file[6],wxConvUTF8));
-	ROM7file->SetPath(path+wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
+	t_CPC _config = emulator.GetConfig();
+	wxArrayString sysromlist;
+	wxArrayString uromlist;
+	wxArrayString realromlist;
+	wxDir::GetAllFiles(_config.rom_path,&sysromlist);
+	wxString userpath = emulator.getConfigPath();
+	userpath.append("/roms/");
+	wxDir::GetAllFiles(userpath,&uromlist);
+	for (int i=0;i<uromlist.GetCount(); i++) {
+		realromlist.Add(wxFileName(uromlist[i]).GetFullName());
+	}
+	realromlist.Add(wxEmptyString); // Acts both as separator between user and sys and the "no rom" item
+	for (int i=0;i<sysromlist.GetCount(); i++) {
+		realromlist.Add(wxFileName(uromlist[i]).GetFullName());
+	}
+
+	ROM0file->Append(realromlist);
+	ROM1file->Append(realromlist);
+	ROM2file->Append(realromlist);
+	ROM3file->Append(realromlist);
+	ROM4file->Append(realromlist);
+	ROM5file->Append(realromlist);
+	ROM6file->Append(realromlist);
+	ROM7file->Append(realromlist);
+
+	ROM0file->SetStringSelection(wxString(emulator.GetConfig().rom_file[0],wxConvUTF8));
+	ROM1file->SetStringSelection(wxString(emulator.GetConfig().rom_file[1],wxConvUTF8));
+	ROM2file->SetStringSelection(wxString(emulator.GetConfig().rom_file[2],wxConvUTF8));
+	ROM3file->SetStringSelection(wxString(emulator.GetConfig().rom_file[3],wxConvUTF8));
+	ROM4file->SetStringSelection(wxString(emulator.GetConfig().rom_file[4],wxConvUTF8));
+	ROM5file->SetStringSelection(wxString(emulator.GetConfig().rom_file[5],wxConvUTF8));
+	ROM6file->SetStringSelection(wxString(emulator.GetConfig().rom_file[6],wxConvUTF8));
+	ROM7file->SetStringSelection(wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
 }
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
@@ -137,9 +161,7 @@ void CapriceInputSettingsImpl::onKeyPress(wxKeyEvent& event)
 	iter->second.stdKeyCode = event.GetKeyCode();
 }
 
-/**
- * @TODO save the keymap at the right place (not in share, but user home)
- */
+
 void CapriceInputSettingsImpl::saveKeymap()
 {
 	std::ofstream file;
@@ -262,26 +284,25 @@ void CapriceInputSettingsImpl::changeColorPalette( wxCommandEvent& event )
 /***************
  * ROMS
  ***************/
-void CapriceInputSettingsImpl::RomChange( wxFileDirPickerEvent& event )
+void CapriceInputSettingsImpl::RomChanged( wxCommandEvent& event )
 {
-	wxFileName fn;
-	fn = ROM0file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[0],fn.GetFullName().mb_str());
-	fn = ROM1file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[1],fn.GetFullName().mb_str());
-	fn = ROM2file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[2],fn.GetFullName().mb_str());
-	fn = ROM3file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[3],fn.GetFullName().mb_str());
-	fn = ROM4file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[4],fn.GetFullName().mb_str());
-	fn = ROM5file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[5],fn.GetFullName().mb_str());
-	fn = ROM6file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[6],fn.GetFullName().mb_str());
-	fn = ROM7file->GetPath();
-	strcpy(emulator.GetConfig().rom_file[7],fn.GetFullName().mb_str());
-
+	wxString fn;
+	fn = ROM0file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[0],fn.mb_str());
+	fn = ROM1file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[1],fn.mb_str());
+	fn = ROM2file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[2],fn.mb_str());
+	fn = ROM3file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[3],fn.mb_str());
+	fn = ROM4file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[4],fn.mb_str());
+	fn = ROM5file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[5],fn.mb_str());
+	fn = ROM6file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[6],fn.mb_str());
+	fn = ROM7file->GetStringSelection();
+	strcpy(emulator.GetConfig().rom_file[7],fn.mb_str());
 }
 
 

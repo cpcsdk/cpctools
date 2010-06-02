@@ -28,13 +28,13 @@
 #include <wx/textctrl.h>
 #include <wx/radiobut.h>
 #include <wx/statline.h>
-#include <wx/filepicker.h>
 #include <wx/checkbox.h>
 #include <wx/spinctrl.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
+#include <wx/filepicker.h>
 #include <wx/grid.h>
 #include <wx/checklst.h>
 #include <wx/scrolbar.h>
@@ -210,14 +210,14 @@ class InputSettings : public wxDialog
 		wxRadioButton* RAMSize576;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_staticText71;
-		wxFilePickerCtrl* ROM0file;
-		wxFilePickerCtrl* ROM1file;
-		wxFilePickerCtrl* ROM2file;
-		wxFilePickerCtrl* ROM3file;
-		wxFilePickerCtrl* ROM4file;
-		wxFilePickerCtrl* ROM5file;
-		wxFilePickerCtrl* ROM6file;
-		wxFilePickerCtrl* ROM7file;
+		wxChoice* ROM0file;
+		wxChoice* ROM1file;
+		wxChoice* ROM2file;
+		wxChoice* ROM3file;
+		wxChoice* ROM4file;
+		wxChoice* ROM5file;
+		wxChoice* ROM6file;
+		wxChoice* ROM7file;
 		wxPanel* m_panel_video;
 		wxCheckBox* check_OpenGL;
 		wxStaticText* m_staticText76;
@@ -232,23 +232,23 @@ class InputSettings : public wxDialog
 		wxSpinCtrl* m_spinCtrl3;
 		wxRadioButton* m_radioBtn111;
 		wxRadioButton* m_radioBtn121;
-		wxPanel* m_panel_misc;
-		wxStaticText* m_staticText79;
-		wxChoice* m_choice5;
-		wxStaticText* m_staticText80;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1Save;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
+		wxComboBox* m_comboBox2;
+		wxButton* m_button78;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onKeyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onKeyPress( wxKeyEvent& event ) { event.Skip(); }
-		virtual void RomChange( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void RomChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void changeCRTCType( wxSpinEvent& event ) { event.Skip(); }
 		virtual void changeColorPalette( wxCommandEvent& event ) { event.Skip(); }
 		virtual void applySettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSave( wxCommandEvent& event ) { event.Skip(); }
+		virtual void LoadPreset( wxCommandEvent& event ) { event.Skip(); }
+		virtual void SavePreset( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

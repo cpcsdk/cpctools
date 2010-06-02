@@ -117,16 +117,20 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	m_separator1 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_mI_LoadSNA;
-	m_mI_LoadSNA = new wxMenuItem( m_menu_file, 9979, wxString( wxT("Load Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_mI_LoadSNA = new wxMenuItem( m_menu_file, 9979, wxString( wxT("Load Snapshot") ) + wxT('\t') + wxT("F3"), wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_mI_LoadSNA );
 	
+	wxMenuItem* m_ml_ReloadSNA;
+	m_ml_ReloadSNA = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Reload Snapshot") ) + wxT('\t') + wxT("CTRL+F3"), wxEmptyString, wxITEM_NORMAL );
+	m_menu_file->Append( m_ml_ReloadSNA );
+	
 	wxMenuItem* m_mI_SaveSNA;
-	m_mI_SaveSNA = new wxMenuItem( m_menu_file, 9978, wxString( wxT("Save Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_mI_SaveSNA = new wxMenuItem( m_menu_file, 9978, wxString( wxT("Save Snapshot") ) + wxT('\t') + wxT("F2"), wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_mI_SaveSNA );
 	
-	wxMenuItem* m_menuItem33;
-	m_menuItem33 = new wxMenuItem( m_menu_file, 9977, wxString( wxT("Update Snapshot") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu_file->Append( m_menuItem33 );
+	wxMenuItem* m_ml_UpdateSNA;
+	m_ml_UpdateSNA = new wxMenuItem( m_menu_file, wxID_ANY, wxString( wxT("Update Snapshot") ) + wxT('\t') + wxT("CTRL+F2"), wxEmptyString, wxITEM_NORMAL );
+	m_menu_file->Append( m_ml_UpdateSNA );
 	
 	wxMenuItem* m_separator2;
 	m_separator2 = m_menu_file->AppendSeparator();
@@ -374,22 +378,22 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	
 	m_staticText63 = new wxStaticText( m_panel_input, wxID_ANY, wxT("Preset"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText63->Wrap( -1 );
-	gSizer1->Add( m_staticText63, 0, 0, 5 );
+	gSizer1->Add( m_staticText63, 0, wxFIXED_MINSIZE, 5 );
 	
 	m_comboBox1 = new wxComboBox( m_panel_input, wxID_ANY, wxT("FR-FR"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	gSizer1->Add( m_comboBox1, 0, 0, 5 );
+	gSizer1->Add( m_comboBox1, 1, 0, 5 );
 	
 	m_staticText64 = new wxStaticText( m_panel_input, wxID_ANY, wxT("CPC Layout"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText64->Wrap( -1 );
-	gSizer1->Add( m_staticText64, 0, 0, 5 );
+	gSizer1->Add( m_staticText64, 0, wxFIXED_MINSIZE, 5 );
 	
 	wxString m_choice1Choices[] = { wxT("English 6128"), wxT("French 6128"), wxT("Spanish 6128"), wxT("English 464"), wxT("French 464"), wxT("Spanish 464") };
 	int m_choice1NChoices = sizeof( m_choice1Choices ) / sizeof( wxString );
 	m_choice1 = new wxChoice( m_panel_input, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice1NChoices, m_choice1Choices, 0 );
 	m_choice1->SetSelection( 1 );
-	gSizer1->Add( m_choice1, 0, 0, 5 );
+	gSizer1->Add( m_choice1, 1, 0, 5 );
 	
-	bSizer26->Add( gSizer1, 0, wxEXPAND, 5 );
+	bSizer26->Add( gSizer1, 0, 0, 5 );
 	
 	wxGridBagSizer* gbSizer1;
 	gbSizer1 = new wxGridBagSizer( 0, 0 );
@@ -435,7 +439,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_TAB12 = new wxButton( m_panel_input, CPC_LBRACKET, wxT("<*"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB12, wxGBPosition( 1, 13 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_TAB13 = new wxButton( m_panel_input, CPC_RETURN, wxT("↵"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_TAB13 = new wxButton( m_panel_input, CPC_RETURN, wxT("RET"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_TAB13, wxGBPosition( 1, 14 ), wxGBSpan( 2, 1 ), wxEXPAND, 5 );
 	
 	k_TAB14 = new wxButton( m_panel_input, CPC_F4, wxT("F4"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -480,7 +484,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_CAPS10 = new wxButton( m_panel_input, CPC_COLON, wxT("M"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS10, wxGBPosition( 2, 11 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CAPS11 = new wxButton( m_panel_input, CPC_SEMICOLON, wxT("%ù"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CAPS11 = new wxButton( m_panel_input, CPC_SEMICOLON, wxT("%"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CAPS11, wxGBPosition( 2, 12 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_CAPS12 = new wxButton( m_panel_input, CPC_RBRACKET, wxT(">#"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -537,7 +541,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_LSHIFT13 = new wxButton( m_panel_input, CPC_F0, wxT("F0"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT13, wxGBPosition( 3, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_LSHIFT14 = new wxButton( m_panel_input, CPC_CUR_UP, wxT("↑"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_LSHIFT14 = new wxButton( m_panel_input, CPC_CUR_UP, wxT("^^"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_LSHIFT14, wxGBPosition( 3, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_LSHIFT15 = new wxButton( m_panel_input, CPC_FPERIOD, wxT("."), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -555,13 +559,13 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_CONTROL3 = new wxButton( m_panel_input, CPC_ENTER, wxT("ENTER"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL3, wxGBPosition( 4, 12 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
 	
-	k_CONTROL4 = new wxButton( m_panel_input, CPC_CUR_LEFT, wxT("←"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL4 = new wxButton( m_panel_input, CPC_CUR_LEFT, wxT("<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL4, wxGBPosition( 4, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CONTROL5 = new wxButton( m_panel_input, CPC_CUR_DOWN, wxT("↓"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL5 = new wxButton( m_panel_input, CPC_CUR_DOWN, wxT("vv"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL5, wxGBPosition( 4, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CONTROL6 = new wxButton( m_panel_input, CPC_CUR_RIGHT, wxT("→"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL6 = new wxButton( m_panel_input, CPC_CUR_RIGHT, wxT(">>"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL6, wxGBPosition( 4, 17 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_ESC = new wxButton( m_panel_input, CPC_ESC, wxT("ESC"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -570,7 +574,7 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_ESC1 = new wxButton( m_panel_input, CPC_1, wxT("1&&"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC1, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC2 = new wxButton( m_panel_input, CPC_2, wxT("2é"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC2 = new wxButton( m_panel_input, CPC_2, wxT("2"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC2, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_ESC3 = new wxButton( m_panel_input, CPC_3, wxT("3\""), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -585,16 +589,16 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	k_ESC6 = new wxButton( m_panel_input, CPC_6, wxT("6]"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC6, wxGBPosition( 0, 6 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC7 = new wxButton( m_panel_input, CPC_7, wxT("7è"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC7 = new wxButton( m_panel_input, CPC_7, wxT("7"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC7, wxGBPosition( 0, 7 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_ESC8 = new wxButton( m_panel_input, CPC_8, wxT("8!"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC8, wxGBPosition( 0, 8 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC9 = new wxButton( m_panel_input, CPC_9, wxT("9ç"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC9 = new wxButton( m_panel_input, CPC_9, wxT("9"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC9, wxGBPosition( 0, 9 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_ESC10 = new wxButton( m_panel_input, CPC_0, wxT("0à"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_ESC10 = new wxButton( m_panel_input, CPC_0, wxT("0"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_ESC10, wxGBPosition( 0, 10 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_ESC11 = new wxButton( m_panel_input, CPC_MINUS, wxT("[)"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -652,12 +656,12 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_ctrlKey = new wxTextCtrl( m_panel_input, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB|wxTE_READONLY|wxWANTS_CHARS );
 	gSizer2->Add( m_ctrlKey, 0, 0, 5 );
 	
-	bSizer26->Add( gSizer2, 1, wxEXPAND, 0 );
+	bSizer26->Add( gSizer2, 1, wxFIXED_MINSIZE, 0 );
 	
 	m_panel_input->SetSizer( bSizer26 );
 	m_panel_input->Layout();
 	bSizer26->Fit( m_panel_input );
-	m_notebook4->AddPage( m_panel_input, wxT("Input"), false );
+	m_notebook4->AddPage( m_panel_input, wxT("Input"), true );
 	m_panel_memory = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer28;
 	bSizer28 = new wxBoxSizer( wxHORIZONTAL );
@@ -667,18 +671,18 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	
 	m_staticText62 = new wxStaticText( m_panel_memory, wxID_ANY, wxT("RAM"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText62->Wrap( -1 );
-	bSizer23->Add( m_staticText62, 0, wxALL, 5 );
+	bSizer23->Add( m_staticText62, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
 	RAMSize64 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("64k"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer23->Add( RAMSize64, 0, wxALL, 5 );
+	bSizer23->Add( RAMSize64, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
 	RAMSize128 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("128k"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer23->Add( RAMSize128, 0, wxALL, 5 );
+	bSizer23->Add( RAMSize128, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
 	RAMSize576 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("576k"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer23->Add( RAMSize576, 0, wxALL, 5 );
+	bSizer23->Add( RAMSize576, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
-	bSizer28->Add( bSizer23, 1, wxEXPAND, 5 );
+	bSizer28->Add( bSizer23, 0, wxFIXED_MINSIZE, 5 );
 	
 	m_staticline3 = new wxStaticLine( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer28->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
@@ -690,28 +694,44 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_staticText71->Wrap( -1 );
 	bSizer31->Add( m_staticText71, 0, wxALL, 5 );
 	
-	ROM0file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM0fileChoices;
+	ROM0file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM0fileChoices, 0 );
+	ROM0file->SetSelection( 0 );
 	bSizer31->Add( ROM0file, 0, wxALL, 5 );
 	
-	ROM1file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM1fileChoices;
+	ROM1file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM1fileChoices, 0 );
+	ROM1file->SetSelection( 0 );
 	bSizer31->Add( ROM1file, 0, wxALL, 5 );
 	
-	ROM2file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM2fileChoices;
+	ROM2file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM2fileChoices, 0 );
+	ROM2file->SetSelection( 0 );
 	bSizer31->Add( ROM2file, 0, wxALL, 5 );
 	
-	ROM3file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM3fileChoices;
+	ROM3file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM3fileChoices, 0 );
+	ROM3file->SetSelection( 0 );
 	bSizer31->Add( ROM3file, 0, wxALL, 5 );
 	
-	ROM4file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM4fileChoices;
+	ROM4file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM4fileChoices, 0 );
+	ROM4file->SetSelection( 0 );
 	bSizer31->Add( ROM4file, 0, wxALL, 5 );
 	
-	ROM5file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM5fileChoices;
+	ROM5file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM5fileChoices, 0 );
+	ROM5file->SetSelection( 0 );
 	bSizer31->Add( ROM5file, 0, wxALL, 5 );
 	
-	ROM6file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM6fileChoices;
+	ROM6file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM6fileChoices, 0 );
+	ROM6file->SetSelection( 0 );
 	bSizer31->Add( ROM6file, 0, wxALL, 5 );
 	
-	ROM7file = new wxFilePickerCtrl( m_panel_memory, wxID_ANY, wxEmptyString, wxT("Select a file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE );
+	wxArrayString ROM7fileChoices;
+	ROM7file = new wxChoice( m_panel_memory, wxID_ANY, wxDefaultPosition, wxDefaultSize, ROM7fileChoices, 0 );
+	ROM7file->SetSelection( 0 );
 	bSizer31->Add( ROM7file, 0, wxALL, 5 );
 	
 	bSizer28->Add( bSizer31, 1, wxEXPAND, 5 );
@@ -805,35 +825,11 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_panel_sound->Layout();
 	bSizer34->Fit( m_panel_sound );
 	m_notebook4->AddPage( m_panel_sound, wxT("Sound"), false );
-	m_panel_misc = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer40;
-	bSizer40 = new wxBoxSizer( wxVERTICAL );
-	
-	wxBoxSizer* bSizer41;
-	bSizer41 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_staticText79 = new wxStaticText( m_panel_misc, wxID_ANY, wxT("Machine"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText79->Wrap( -1 );
-	bSizer41->Add( m_staticText79, 0, wxALL, 5 );
-	
-	wxString m_choice5Choices[] = { wxT("464"), wxT("664"), wxT("6128"), wxT("464+"), wxT("6128+"), wxT("GX4000"), wxT("KC Compact") };
-	int m_choice5NChoices = sizeof( m_choice5Choices ) / sizeof( wxString );
-	m_choice5 = new wxChoice( m_panel_misc, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice5NChoices, m_choice5Choices, 0 );
-	m_choice5->SetSelection( 0 );
-	bSizer41->Add( m_choice5, 0, wxALL, 5 );
-	
-	m_staticText80 = new wxStaticText( m_panel_misc, wxID_ANY, wxT("Select system ROM and enable or disable ASIC emulation.\nAdjust expansion roms, memory and CRTC in the other tabs."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText80->Wrap( -1 );
-	bSizer41->Add( m_staticText80, 0, wxALL, 5 );
-	
-	bSizer40->Add( bSizer41, 1, wxEXPAND, 5 );
-	
-	m_panel_misc->SetSizer( bSizer40 );
-	m_panel_misc->Layout();
-	bSizer40->Fit( m_panel_misc );
-	m_notebook4->AddPage( m_panel_misc, wxT("Misc."), true );
 	
 	bSizer24->Add( m_notebook4, 0, 0, 5 );
+	
+	wxBoxSizer* bSizer46;
+	bSizer46 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1Save = new wxButton( this, wxID_SAVE );
@@ -843,7 +839,20 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
 	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
 	m_sdbSizer1->Realize();
-	bSizer24->Add( m_sdbSizer1, 0, wxALL, 5 );
+	bSizer46->Add( m_sdbSizer1, 0, wxALL, 5 );
+	
+	m_comboBox2 = new wxComboBox( this, wxID_ANY, wxT("CPC 6128"), wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
+	m_comboBox2->Append( wxT("CPC 464") );
+	m_comboBox2->Append( wxT("CPC 664") );
+	m_comboBox2->Append( wxT("CPC 6128") );
+	m_comboBox2->Append( wxT("464 Plus") );
+	m_comboBox2->Append( wxT("6128 Plus") );
+	bSizer46->Add( m_comboBox2, 0, wxALL, 5 );
+	
+	m_button78 = new wxButton( this, wxID_ANY, wxT("Save profile"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer46->Add( m_button78, 0, wxALL, 5 );
+	
+	bSizer24->Add( bSizer46, 1, wxEXPAND, 0 );
 	
 	this->SetSizer( bSizer24 );
 	this->Layout();
@@ -927,18 +936,20 @@ InputSettings::InputSettings( wxWindow* parent, wxWindowID id, const wxString& t
 	m_regularKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
-	ROM0file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM1file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM2file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM3file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM4file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM5file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM6file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM7file->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
+	ROM0file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM1file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM2file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM3file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM4file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM5file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM6file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM7file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
 	spin_CRTC->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( InputSettings::changeCRTCType ), NULL, this );
 	choice_colorPalette->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::changeColorPalette ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
+	m_comboBox2->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( InputSettings::LoadPreset ), NULL, this );
+	m_button78->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::SavePreset ), NULL, this );
 }
 
 InputSettings::~InputSettings()
@@ -1021,18 +1032,20 @@ InputSettings::~InputSettings()
 	m_regularKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_shiftKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
 	m_ctrlKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( InputSettings::onKeyPress ), NULL, this );
-	ROM0file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM1file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM2file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM3file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM4file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM5file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM6file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
-	ROM7file->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( InputSettings::RomChange ), NULL, this );
+	ROM0file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM1file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM2file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM3file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM4file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM5file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM6file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
+	ROM7file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::RomChanged ), NULL, this );
 	spin_CRTC->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( InputSettings::changeCRTCType ), NULL, this );
 	choice_colorPalette->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( InputSettings::changeColorPalette ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::applySettings ), NULL, this );
 	m_sdbSizer1Save->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::onSave ), NULL, this );
+	m_comboBox2->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( InputSettings::LoadPreset ), NULL, this );
+	m_button78->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( InputSettings::SavePreset ), NULL, this );
 	
 }
 
