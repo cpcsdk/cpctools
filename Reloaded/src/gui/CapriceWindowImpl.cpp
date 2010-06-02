@@ -1,6 +1,6 @@
 /**
  *   $Id: CapriceWindowImpl.cpp 60 2008-11-25 17:08:52Z giot.romain $
- *   CapriceReloded an Amstrad CPC emulator
+ *   Reloded an Amstrad CPC emulator
  *   Copyright (C) 2008  cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@
 #include <iostream>
 
 CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu) 
-	: CapriceWindow(NULL)
+	: EmulatorWindow(NULL)
 {
 	emulator = emu ;
 	emulator->setWindow(this);

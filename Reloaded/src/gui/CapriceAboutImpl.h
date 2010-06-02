@@ -3,10 +3,10 @@
 
 #include "CapriceUI.h"
 
-class CapriceAboutImpl : public CapriceAbout
+class CapriceAboutImpl : public About
 {
 	public:
-	CapriceAboutImpl() : CapriceAbout(NULL)
+	CapriceAboutImpl() : About(NULL)
 	{
 
 	}

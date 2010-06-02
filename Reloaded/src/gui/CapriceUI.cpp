@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 27 2010)
+// C++ code generated with wxFormBuilder (version Jun  2 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -11,7 +11,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxFrame( parent, id, title, pos, size, style, name )
+EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxFrame( parent, id, title, pos, size, style, name )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -291,69 +291,69 @@ CapriceWindow::CapriceWindow( wxWindow* parent, wxWindowID id, const wxString& t
 	bSizer12->Fit( this );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
-	this->Connect( wxEVT_IDLE, wxIdleEventHandler( CapriceWindow::OnIdle ) );
-	this->Connect( 9999, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
-	this->Connect( 9996, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
-	this->Connect( 9994, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
-	this->Connect( 9985, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
-	this->Connect( 9982, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
-	this->Connect( 9979, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
-	this->Connect( 9978, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
-	this->Connect( 9974, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
-	this->Connect( 9973, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
-	this->Connect( 9966, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
-	this->Connect( 9965, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
-	this->Connect( 9964, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
-	this->Connect( 9963, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuVideo ) );
-	this->Connect( 9962, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuSound ) );
-	this->Connect( 9961, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
-	this->Connect( 9960, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
-	this->Connect( 9959, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
-	this->Connect( 9957, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
-	this->Connect( 9956, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
-	this->Connect( 9955, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
-	this->Connect( 9954, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
-	this->Connect( 9953, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
-	this->Connect( 9952, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
-	this->Connect( 9951, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
-	this->Connect( 9950, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
-	m_panel4->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
-	m_panel4->Connect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EmulatorWindow::onExit1 ) );
+	this->Connect( wxEVT_IDLE, wxIdleEventHandler( EmulatorWindow::OnIdle ) );
+	this->Connect( m_menu_insertDiscA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscA ) );
+	this->Connect( m_menuItem5->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskA ) );
+	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscB ) );
+	this->Connect( m_menuItem26->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::insertTape ) );
+	this->Connect( m_menuItem29->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::pressPlayOnTape ) );
+	this->Connect( m_mI_LoadSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onLoadSNA ) );
+	this->Connect( m_mI_SaveSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onSaveSNA ) );
+	this->Connect( m_mI_SaveSCR->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onSaveScreen ) );
+	this->Connect( m_menu_insertDiscA1->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onSaveScreenshot ) );
+	this->Connect( m_menu_exit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onExit2 ) );
+	this->Connect( m_menu_input->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuInput ) );
+	this->Connect( m_menu_memory->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuMemory ) );
+	this->Connect( m_menu_video->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuVideo ) );
+	this->Connect( m_menu_sound->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuSound ) );
+	this->Connect( m_menu_miscsettings->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuMisc ) );
+	this->Connect( m_menuItem49->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnFullScreen ) );
+	this->Connect( m_menuItem50->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnReset ) );
+	this->Connect( m_menuItem52->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMultifaceStop ) );
+	this->Connect( m_menuItem_run->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnRun ) );
+	this->Connect( m_menuItem_step->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnStep ) );
+	this->Connect( m_menuItem_pause->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnPause ) );
+	this->Connect( m_menuItem_registers->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnRegister ) );
+	this->Connect( m_menuItem_memory->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnDebugMemory ) );
+	this->Connect( m_menuItem57->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnShowAssembler ) );
+	this->Connect( m_menuItem491->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnAbout ) );
+	m_panel4->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ), NULL, this );
+	m_panel4->Connect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ), NULL, this );
 }
 
-CapriceWindow::~CapriceWindow()
+EmulatorWindow::~EmulatorWindow()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceWindow::onExit1 ) );
-	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( CapriceWindow::OnIdle ) );
-	this->Disconnect( 9999, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscA ) );
-	this->Disconnect( 9996, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::menu_editDiskA ) );
-	this->Disconnect( 9994, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onInsertDiscB ) );
-	this->Disconnect( 9985, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::insertTape ) );
-	this->Disconnect( 9982, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::pressPlayOnTape ) );
-	this->Disconnect( 9979, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onLoadSNA ) );
-	this->Disconnect( 9978, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveSNA ) );
-	this->Disconnect( 9974, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreen ) );
-	this->Disconnect( 9973, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onSaveScreenshot ) );
-	this->Disconnect( 9966, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onExit2 ) );
-	this->Disconnect( 9965, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuInput ) );
-	this->Disconnect( 9964, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMemory ) );
-	this->Disconnect( 9963, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuVideo ) );
-	this->Disconnect( 9962, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuSound ) );
-	this->Disconnect( 9961, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMenuMisc ) );
-	this->Disconnect( 9960, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnFullScreen ) );
-	this->Disconnect( 9959, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnReset ) );
-	this->Disconnect( 9957, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::onMultifaceStop ) );
-	this->Disconnect( 9956, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRun ) );
-	this->Disconnect( 9955, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnStep ) );
-	this->Disconnect( 9954, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnPause ) );
-	this->Disconnect( 9953, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnRegister ) );
-	this->Disconnect( 9952, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnDebugMemory ) );
-	this->Disconnect( 9951, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnShowAssembler ) );
-	this->Disconnect( 9950, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceWindow::OnAbout ) );
-	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( CapriceWindow::windowKeyDown ), NULL, this );
-	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( CapriceWindow::windowKeyUp ), NULL, this );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( EmulatorWindow::onExit1 ) );
+	this->Disconnect( wxEVT_IDLE, wxIdleEventHandler( EmulatorWindow::OnIdle ) );
+	this->Disconnect( 9999, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscA ) );
+	this->Disconnect( 9996, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskA ) );
+	this->Disconnect( 9994, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscB ) );
+	this->Disconnect( 9985, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::insertTape ) );
+	this->Disconnect( 9982, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::pressPlayOnTape ) );
+	this->Disconnect( 9979, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onLoadSNA ) );
+	this->Disconnect( 9978, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onSaveSNA ) );
+	this->Disconnect( 9974, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onSaveScreen ) );
+	this->Disconnect( 9973, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onSaveScreenshot ) );
+	this->Disconnect( 9966, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onExit2 ) );
+	this->Disconnect( 9965, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuInput ) );
+	this->Disconnect( 9964, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuMemory ) );
+	this->Disconnect( 9963, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuVideo ) );
+	this->Disconnect( 9962, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuSound ) );
+	this->Disconnect( 9961, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMenuMisc ) );
+	this->Disconnect( 9960, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnFullScreen ) );
+	this->Disconnect( 9959, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnReset ) );
+	this->Disconnect( 9957, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onMultifaceStop ) );
+	this->Disconnect( 9956, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnRun ) );
+	this->Disconnect( 9955, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnStep ) );
+	this->Disconnect( 9954, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnPause ) );
+	this->Disconnect( 9953, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnRegister ) );
+	this->Disconnect( 9952, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnDebugMemory ) );
+	this->Disconnect( 9951, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnShowAssembler ) );
+	this->Disconnect( 9950, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnAbout ) );
+	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ), NULL, this );
+	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ), NULL, this );
 	
 }
 
@@ -1086,7 +1086,7 @@ FileProperties::~FileProperties()
 {
 }
 
-CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
+About::About( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -1107,7 +1107,7 @@ CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer15;
 	bSizer15 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Caprice Reloaded"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Reloaded"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText8->Wrap( -1 );
 	m_staticText8->SetFont( wxFont( 18, 74, 90, 90, false, wxT("Sans") ) );
 	
@@ -1126,7 +1126,7 @@ CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& tit
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("The Original Caprice is :\n(c) 1997 - 2005 Ulrich Doewich\n\nCaprice Reloaded is :\n(c) 1997 - 2009 The Caprice Reloaded Author's"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
+	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Based on sourcecode from Caprice 32 :\n(c) 1997 - 2005 Ulrich Doewich\n\nReloaded is :\n(c) 1997 - 2010 The Reloaded Author's"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText5->Wrap( -1 );
 	bSizer10->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
@@ -1146,13 +1146,13 @@ CapriceAbout::CapriceAbout( wxWindow* parent, wxWindowID id, const wxString& tit
 	bSizer8->Fit( this );
 	
 	// Connect Events
-	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceAbout::OnAboutClose ) );
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( About::OnAboutClose ) );
 }
 
-CapriceAbout::~CapriceAbout()
+About::~About()
 {
 	// Disconnect Events
-	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( CapriceAbout::OnAboutClose ) );
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( About::OnAboutClose ) );
 	
 }
 
@@ -2280,7 +2280,7 @@ Memory::~Memory()
 	
 }
 
-CapriceIDE::CapriceIDE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+IDE::IDE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -2343,25 +2343,25 @@ CapriceIDE::CapriceIDE( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnNew ) );
-	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onOpen ) );
-	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSave ) );
-	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSaveAs ) );
-	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onClose ) );
-	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onExit ) );
-	this->Connect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnAssemble ) );
+	this->Connect( m_menuItemNew->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::OnNew ) );
+	this->Connect( m_menuItemOpen->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onOpen ) );
+	this->Connect( m_menuItemSave->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onSave ) );
+	this->Connect( m_menuItemSaveAs->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onSaveAs ) );
+	this->Connect( m_menuItemClose->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onClose ) );
+	this->Connect( m_menuItemExit->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onExit ) );
+	this->Connect( m_menuAssemble->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::OnAssemble ) );
 }
 
-CapriceIDE::~CapriceIDE()
+IDE::~IDE()
 {
 	// Disconnect Events
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnNew ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onOpen ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSave ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onSaveAs ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onClose ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::onExit ) );
-	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( CapriceIDE::OnAssemble ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::OnNew ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onOpen ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onSave ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onSaveAs ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onClose ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::onExit ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( IDE::OnAssemble ) );
 	
 }
 

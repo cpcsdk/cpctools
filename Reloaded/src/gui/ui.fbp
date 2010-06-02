@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="ISO-8859-13" standalone="yes" ?>
 <wxFormBuilder_Project>
     <FileVersion major="1" minor="10" />
     <object class="Project" expanded="1">
@@ -35,12 +35,12 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">CapriceWindow</property>
+            <property name="name">EmulatorWindow</property>
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU</property>
             <property name="subclass"></property>
-            <property name="title">CapriceReloaded</property>
+            <property name="title">Reloaded</property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
@@ -8875,12 +8875,12 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">CapriceAbout</property>
+            <property name="name">About</property>
             <property name="pos"></property>
             <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>
             <property name="subclass"></property>
-            <property name="title">About CapriceReloaded</property>
+            <property name="title">About Reloaded</property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>
@@ -9020,7 +9020,7 @@
                                         <property name="font">Sans,90,90,18,74,0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="label">Caprice Reloaded</property>
+                                        <property name="label">Reloaded</property>
                                         <property name="maximum_size"></property>
                                         <property name="minimum_size"></property>
                                         <property name="name">m_staticText8</property>
@@ -9145,7 +9145,7 @@
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">The Original Caprice is :&#x0A;(c) 1997 - 2005 Ulrich Doewich&#x0A;&#x0A;Caprice Reloaded is :&#x0A;(c) 1997 - 2009 The Caprice Reloaded Author&apos;s</property>
+                                <property name="label">Based on sourcecode from Caprice 32 :&#x0A;(c) 1997 - 2005 Ulrich Doewich&#x0A;&#x0A;Reloaded is :&#x0A;(c) 1997 - 2010 The Reloaded Author&apos;s</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">m_staticText5</property>
@@ -20027,12 +20027,12 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">CapriceIDE</property>
+            <property name="name">IDE</property>
             <property name="pos"></property>
             <property name="size">500,300</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
-            <property name="title">Caprice Z80 Assembler</property>
+            <property name="title">Z80 Assembler</property>
             <property name="tooltip"></property>
             <property name="validator_data_type"></property>
             <property name="validator_style">wxFILTER_NONE</property>

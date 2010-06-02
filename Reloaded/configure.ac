@@ -1,5 +1,5 @@
 # Init
-AC_INIT([CapriceReloaded], [5], [ramlaid@cpcscene.com])
+AC_INIT([Reloaded], [5], [krusty@cpcscene.com])
 AM_INIT_AUTOMAKE([ -Wall ])
 #AC_CONFIG_SRCDIR(core/cap32.cpp)
 
@@ -278,7 +278,7 @@ AC_OUTPUT
 
 AC_MSG_CHECKING([
 
-CapriceReloaded compilation option :
+Reloaded compilation options :
 
     Use lib765 ................... ${with_lib765}
     Sound Backend ................ ${sound_backend}

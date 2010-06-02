@@ -22,7 +22,7 @@ class CapriceDNDHandler : public wxFileDropTarget
 };
 #endif
 
-class CapriceWindowImpl : public CapriceWindow
+class CapriceWindowImpl : public EmulatorWindow
 {
   public:
 

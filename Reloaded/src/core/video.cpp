@@ -1,4 +1,4 @@
-/* CapriceReloded an Amstrad CPC emulator
+/* Reloded an Amstrad CPC emulator
    (c) Copyright 2008-2009  cpcsdk crew
    Caprice32 - Amstrad CPC Emulator
    (c) Copyright 1997-2004 Ulrich Doewich

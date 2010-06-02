@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 27 2010)
+// C++ code generated with wxFormBuilder (version Jun  2 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -48,9 +48,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class CapriceWindow
+/// Class EmulatorWindow
 ///////////////////////////////////////////////////////////////////////////////
-class CapriceWindow : public wxFrame 
+class EmulatorWindow : public wxFrame 
 {
 	private:
 	
@@ -103,8 +103,8 @@ class CapriceWindow : public wxFrame
 	
 	public:
 		
-		CapriceWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("CapriceReloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxTAB_TRAVERSAL, const wxString& name = wxT("CapriceMainWindow") );
-		~CapriceWindow();
+		EmulatorWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Reloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxTAB_TRAVERSAL, const wxString& name = wxT("CapriceMainWindow") );
+		~EmulatorWindow();
 	
 };
 
@@ -282,9 +282,9 @@ class FileProperties : public wxDialog
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class CapriceAbout
+/// Class About
 ///////////////////////////////////////////////////////////////////////////////
-class CapriceAbout : public wxDialog 
+class About : public wxDialog 
 {
 	private:
 	
@@ -301,8 +301,8 @@ class CapriceAbout : public wxDialog
 	
 	public:
 		
-		CapriceAbout( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("About CapriceReloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
-		~CapriceAbout();
+		About( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("About Reloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
+		~About();
 	
 };
 
@@ -605,9 +605,9 @@ class Memory : public wxDialog
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class CapriceIDE
+/// Class IDE
 ///////////////////////////////////////////////////////////////////////////////
-class CapriceIDE : public wxFrame 
+class IDE : public wxFrame 
 {
 	private:
 	
@@ -630,8 +630,8 @@ class CapriceIDE : public wxFrame
 	
 	public:
 		
-		CapriceIDE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Caprice Z80 Assembler"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-		~CapriceIDE();
+		IDE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Z80 Assembler"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		~IDE();
 	
 };
 

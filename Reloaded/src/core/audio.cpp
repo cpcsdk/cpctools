@@ -1,6 +1,6 @@
 /**
  *   $Id$
- *	 CapriceReloded an Amstrad CPC emulator
+ *	 Reloded an Amstrad CPC emulator
  *   Copyright (C) 2008  cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify

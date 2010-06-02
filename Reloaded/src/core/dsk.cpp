@@ -1,6 +1,6 @@
 /*
  *   $Id: dsk.cpp 60 2008-11-25 17:08:52Z giot.romain $
- *	 CapriceReloded an Amstrad CPC emulator
+ *	 Reloded an Amstrad CPC emulator
  *   Copyright (C) 2008  cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -223,7 +223,7 @@ int dsk_save (const char *pchFileName, t_drive *drive, char /*chID*/)
 	if ((pDSKfileObject = fopen(pchFileName, "wb")) != NULL) {
 		memset(&dh, 0, sizeof(dh));
 		strcpy(dh.id, "EXTENDED CPC DSK File\r\nDisk-Info\r\n");
-		strcpy(dh.unused1, "Caprice32\r\n");
+		strcpy(dh.unused1, "Reloaded!\r\n");
 		dh.tracks = drive->tracks;
 		dh.sides = (drive->sides+1) | (drive->random_DEs); // correct side count and indicate random DEs, if necessary
 		pos = 0;
