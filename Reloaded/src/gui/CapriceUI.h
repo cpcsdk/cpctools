@@ -256,6 +256,7 @@ class Settings : public wxDialog
 		virtual void changeCRTCType( wxSpinEvent& event ) { event.Skip(); }
 		virtual void changeColorPalette( wxCommandEvent& event ) { event.Skip(); }
 		virtual void applySettings( wxCommandEvent& event ) { event.Skip(); }
+		virtual void restoreSettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSave( wxCommandEvent& event ) { event.Skip(); }
 		virtual void LoadPreset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SavePreset( wxCommandEvent& event ) { event.Skip(); }

@@ -97,7 +97,9 @@ CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
 
 void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
 {
+	std::cout << "SAVE CFG !!!\n";
 	saveKeymap();
+	emulator.GetConfig().saveConfiguration();
 }
 
 void CapriceInputSettingsImpl::applySettings()

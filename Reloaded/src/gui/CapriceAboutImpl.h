@@ -17,6 +17,5 @@ class CapriceAboutImpl : public About
 	virtual void OnAboutClose( wxCloseEvent& event );
 
 	private:
-
 };
 #endif

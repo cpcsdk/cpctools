@@ -162,6 +162,7 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
 
 }
 
+
 /*
  * Ask from the menu to load a snapshot
  */
@@ -174,12 +175,19 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
 
   if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
   {
-    wxString CurrentDocPath = OpenDialog->GetPath();
+    snapshotdir = OpenDialog->GetPath();
     SetTitle(wxString( wxT("Caprice - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-    snapshot_load(*emulator, CurrentDocPath.mb_str());
+    snapshot_load(*emulator, snapshotdir.mb_str());
   }
 }
+
+
+void CapriceWindowImpl::onReloadSNA( wxCommandEvent& event )
+{
+    snapshot_load(*emulator, snapshotdir.mb_str());
+}
+
 
 /*
  * Ask from the menu to save a snapshot
@@ -201,9 +209,16 @@ void CapriceWindowImpl::onSaveSNA( wxCommandEvent& event )
     }
 
     snapshot_save(*emulator, FileName.GetFullPath().mb_str());
+	snapshotdir = FileName.GetFullPath();
   }
 
   delete SaveDialog;
+}
+
+
+void CapriceWindowImpl::onUpdateSNA( wxCommandEvent& event )
+{
+    snapshot_save(*emulator, snapshotdir.mb_str());
 }
 
 

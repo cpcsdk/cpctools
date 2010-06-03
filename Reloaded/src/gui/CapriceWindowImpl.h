@@ -59,6 +59,8 @@ class CapriceWindowImpl : public EmulatorWindow
 
     virtual void onLoadSNA( wxCommandEvent& event );
     virtual void onSaveSNA( wxCommandEvent& event );
+    virtual void onReloadSNA( wxCommandEvent& event );
+    virtual void onUpdateSNA( wxCommandEvent& event );
     virtual void onSaveScreen( wxCommandEvent& event );
 
 	virtual void insertTape( wxCommandEvent& event );
@@ -101,6 +103,7 @@ class CapriceWindowImpl : public EmulatorWindow
      * Pointer to the emu display
      */
     wxImage*    image;
+	wxString snapshotdir;
 
 #if ENABLE_FILEDROP
 	CapriceDNDHandler* dndhandler;

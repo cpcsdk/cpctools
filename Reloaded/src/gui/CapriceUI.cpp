@@ -879,7 +879,7 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_comboBox2->Append( wxT("6128 Plus") );
 	bSizer46->Add( m_comboBox2, 0, wxALL, 5 );
 	
-	m_button78 = new wxButton( this, wxID_ANY, wxT("Save profile"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_button78 = new wxButton( this, wxID_ANY, wxT("Save as profile"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer46->Add( m_button78, 0, wxALL, 5 );
 	
 	bSizer24->Add( bSizer46, 1, wxEXPAND, 0 );
@@ -980,6 +980,7 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	spin_CRTC->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Settings::changeCRTCType ), NULL, this );
 	choice_colorPalette->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::changeColorPalette ), NULL, this );
 	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::applySettings ), NULL, this );
+	m_sdbSizer1Cancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::restoreSettings ), NULL, this );
 	m_sdbSizer1Save->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::onSave ), NULL, this );
 	m_comboBox2->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( Settings::LoadPreset ), NULL, this );
 	m_button78->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::SavePreset ), NULL, this );
@@ -1079,6 +1080,7 @@ Settings::~Settings()
 	spin_CRTC->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( Settings::changeCRTCType ), NULL, this );
 	choice_colorPalette->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::changeColorPalette ), NULL, this );
 	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::applySettings ), NULL, this );
+	m_sdbSizer1Cancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::restoreSettings ), NULL, this );
 	m_sdbSizer1Save->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::onSave ), NULL, this );
 	m_comboBox2->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( Settings::LoadPreset ), NULL, this );
 	m_button78->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Settings::SavePreset ), NULL, this );
