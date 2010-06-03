@@ -79,7 +79,7 @@ bool CapriceApp::OnInit()
     if (!wxApp::OnInit())
         return false;
 
-    SetAppName(wxT("capricereloaded"));
+    SetAppName(wxT("reloaded"));
 	wxImage::AddHandler(new wxPNGHandler);
 
 	//Splash screen managment

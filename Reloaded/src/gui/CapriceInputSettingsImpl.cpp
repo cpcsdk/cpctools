@@ -50,11 +50,15 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 
 	// roms
 	t_CPC _config = emulator.GetConfig();
+
+	// TODO - the code bellow takes a lot of time to browse the disk. Can we improve it ?
 	wxArrayString sysromlist;
 	wxArrayString uromlist;
 	wxArrayString realromlist;
 	wxDir::GetAllFiles(_config.rom_path,&sysromlist);
-	wxString userpath = emulator.getConfigPath();
+	char thepath[1024];
+	emulator.getConfigPath(thepath);
+	wxString userpath(thepath);
 	userpath.append("/roms/");
 	wxDir::GetAllFiles(userpath,&uromlist);
 	for (unsigned int i=0;i<uromlist.GetCount(); i++) {
@@ -97,7 +101,6 @@ CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
 
 void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
 {
-	std::cout << "SAVE CFG !!!\n";
 	saveKeymap();
 	emulator.GetConfig().saveConfiguration();
 }
@@ -118,7 +121,7 @@ void CapriceInputSettingsImpl::applySettings()
 const char * CapriceInputSettingsImpl::getKeymapFileNameLoad()
 {
 	static char str[1024];
-	strcpy(str,emulator.getConfigPath());
+	emulator.getConfigPath(str);
 	strcat(str,"/Keymap.cfg");
 	return str;
 }
@@ -126,7 +129,7 @@ const char * CapriceInputSettingsImpl::getKeymapFileNameLoad()
 const char * CapriceInputSettingsImpl::getKeymapFileNameSave()
 {
 	static char str[1024];
-	strcpy(str,emulator.getConfigPath());
+	emulator.getConfigPath(str);
 	strcat(str,"/Keymap.cfg");
 	return str;
 }

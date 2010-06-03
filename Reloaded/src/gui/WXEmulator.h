@@ -24,6 +24,7 @@
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
 #include <wx/filefn.h>
+#include <wx/log.h>
 
 #include "emulator.h"
 class CapriceWindowImpl;
@@ -40,29 +41,10 @@ class WXEmulator : public Emulator {
   private:
 	  CapriceWindowImpl* win;
 
+  protected:
+	  WXEmulator();
+
   public:
-    WXEmulator()
-    {
-      //Get path for configuration
-
-      wxString s = wxStandardPaths::Get().GetUserDataDir();
-      wxString s2 = wxStandardPaths::Get().GetDataDir();
-
-      if (!wxDir::Exists(s))
-      {
-        printf("Copy configuration files ");
-#if defined(__WXMSW__)
-        wxMkDir(s.mb_str());
-#else
-        wxMkDir(s.mb_str(), 0700);
-#endif
-
-        wxCopyFile(s2 + wxT("/cap32.cfg"), s+ wxT("/cap32.cfg"), false);
-        wxCopyFile(s2 + wxT("/Keymap.cfg"), s+ wxT("/Keymap.cfg"), false);
-      }
-	    strcpy(this->_config_path,s.mb_str());
-    }
-
 	  static inline WXEmulator* getInstance()
 	  {
 		  if(!instance) instance = new WXEmulator();
@@ -78,14 +60,18 @@ class WXEmulator : public Emulator {
 	  virtual void PressKey(uint32_t key, uint32_t mod);
 	  virtual void ReleaseKey(uint32_t key, uint32_t mod);
 
+	  void logMessage(const char* message) {
+		  wxLogWarning(message);
+      }
+
 	  // FDC Led status
 	  void fdcLed(bool on);
 	  // Emulator->Emulate() (?)
 	  // "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
 	  void Pause();
 
-	  // Return folder where config files should be stored
-	//  const char * getConfigPath();
+	  //Return folder where config files should be stored
+	  void getConfigPath(char* buf);
 } ;
 
 #endif

@@ -125,9 +125,13 @@ public:
 	 */
 	virtual inline void Pause() { GetConfig().paused = 1; timer.pause();}
 	// TODO : should return DATA_PATH but it is not defined when building this file :/
-	virtual const char * getConfigPath() { 
-      return this->_config_path;
-  }
+	virtual void getConfigPath(char* buf) { 
+      strcpy(buf,_config_path);
+  	}
+
+	virtual void logMessage(const char* message) {
+		printf(message);
+	}
 
 	/**
 	 * Pause the emulator due to a breakpoint

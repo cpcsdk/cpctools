@@ -28,6 +28,32 @@
 extern byte *pbTapeImage;
 extern byte *pbTapeImageEnd;
 
+
+WXEmulator::WXEmulator()
+	: Emulator()
+{
+	//Get path for configuration
+
+	wxString s = wxStandardPaths::Get().GetUserDataDir();
+	wxString s2 = wxStandardPaths::Get().GetDataDir();
+
+	if (!wxDir::Exists(s))
+	{
+#if defined(__WXMSW__)
+		wxMkDir(s.mb_str());
+#else
+		wxMkDir(s.mb_str(), 0700);
+#endif
+
+		wxCopyFile(s2 + wxT("/cap32.cfg"), s+ wxT("/cap32.cfg"), false);
+		wxCopyFile(s2 + wxT("/Keymap.cfg"), s+ wxT("/Keymap.cfg"), false);
+	}
+	strcpy(this->_config_path,s.mb_str());
+	// Now we need to reload the config with the correct path...
+	_config.loadConfiguration();
+}
+
+
 void WXEmulator::PressKey(uint32_t key, uint32_t mod)
 {
 	dword cpc_key;
@@ -36,25 +62,25 @@ void WXEmulator::PressKey(uint32_t key, uint32_t mod)
 	// PC SHIFT key held down?
 	if (mod & wxMOD_SHIFT)
 	{
-		// consult the SHIFT table
-		cpc_key = _input.keyboard_shift[key];
+	// consult the SHIFT table
+	cpc_key = _input.keyboard_shift[key];
 	}
 	// PC CTRL key held down?
 	else if (mod & wxMOD_CONTROL)
 	{
-		// consult the CTRL table
-		cpc_key = _input.keyboard_ctrl[key];
+	// consult the CTRL table
+	cpc_key = _input.keyboard_ctrl[key];
 	}
 	// PC AltGr key held down?
 	else if (mod & wxMOD_ALT)
 	{
-		// consult the AltGr table
-		cpc_key = _input.keyboard_mode[key];
+	// consult the AltGr table
+	cpc_key = _input.keyboard_mode[key];
 	}
 	else
 	{
-		// consult the normal table
-		cpc_key = _input.keyboard_normal[key];
+	// consult the normal table
+	cpc_key = _input.keyboard_normal[key];
 	}
 	*/
 
@@ -102,8 +128,8 @@ void WXEmulator::ReleaseKey(uint32_t key, uint32_t mod)
 	// PC SHIFT key held down?
 	if (mod & wxMOD_SHIFT)
 	{
-		// consult the SHIFT table
-		cpc_key = _input.keyboard_shift[key];
+	// consult the SHIFT table
+	cpc_key = _input.keyboard_shift[key];
 	}
 	// PC CTRL key held down?
 	else if (mod & wxMOD_CONTROL)
@@ -149,11 +175,7 @@ void WXEmulator::fdcLed(bool on) {
 	win->fdcLed(on);
 }
 
-/*
-const char * WXEmulator::getConfigPath() {
-	static char p[1024];
+void WXEmulator::getConfigPath(char* buf) {
 	wxString s = wxStandardPaths::Get().GetUserDataDir();
-	strcpy(p,s.mb_str());
-	return p;
+	strcpy(buf,s.mb_str());
 }
-*/

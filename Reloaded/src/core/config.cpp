@@ -141,14 +141,14 @@ void t_CPC::loadConfiguration ()
 
 
 	char chFileName[1024];
-	strcpy(chFileName,emulator->getConfigPath());
+	emulator->getConfigPath(chFileName);
 	strcat(chFileName,"/cap32.cfg") ;
 
 	c_inifile_init( chFileName,&err);
 
 	if(err!=C_INIFILE_NO_ERROR)
 	{
-	    printf("Error opening configfile !\n");
+	    emulator->logMessage("Error opening configfile !\n");
 		exit(-1);
 	}
 	else
@@ -163,6 +163,8 @@ void t_CPC::loadConfiguration ()
 
 	    // OEM is Amstrad, video refresh is 50Hz
 	    jumpers = getConfigValueInt(chFileName, "system", "jumpers", 0x1e) & 0x1e;
+		char j[42];
+		sprintf(j,"%x",jumpers);
 
 	    // 128KB RAM
 	    ram_size = getConfigValueInt(chFileName, "system", "ram_size", 128) & 0x02c0;
@@ -494,15 +496,12 @@ void printerr(C_Inifile_error err, int line = 0) {
 
 void t_CPC::saveConfiguration ()
 {
-	printf("Saving configuration... %s\n", emulator->getConfigPath());
 	C_Inifile_error err = C_INIFILE_NO_ERROR ;
 
 
 	char chFileName[1024];
-	strcpy(chFileName,emulator->getConfigPath());
+	emulator->getConfigPath(chFileName);
 	strcat(chFileName,"/cap32.cfg") ;
-
-	printf(chFileName);
 
 	if ((!c_inifile_init( chFileName,&err)) || err!=C_INIFILE_NO_ERROR)
 	{

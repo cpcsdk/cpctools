@@ -260,8 +260,6 @@ Emulator::Emulator():
 {
 	// retrieve the emulator configuration
 	_config.loadConfiguration();
-	
-	std::cout << "[DEBUG] Construct Emulator" << endl;
 }
 
 Emulator::~Emulator()

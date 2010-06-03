@@ -402,8 +402,7 @@ int t_Memory::ROMInit()
 			// attempt to open the ROM image
 			if(LoadOneRom(chPath, pchRomData) != 0) {
 				// Try another path - The user's settings
-				const char* exepath = Emulator::getInstance()->getConfigPath();
-				strncpy(chPath, exepath, sizeof(chPath)-2);
+				Emulator::getInstance()->getConfigPath(chPath);
 				strcat(chPath, "/roms/");
 				strncat(chPath, CPC.rom_file[iRomNum], sizeof(chPath)-1 - strlen(chPath));
 				if(LoadOneRom(chPath, pchRomData) != 0) {
@@ -443,7 +442,7 @@ int t_Memory::emulator_patch_ROM (void)
 	}
 	else
 	{
-		strncpy(chPath, Emulator::getInstance()->getConfigPath(), sizeof(chPath)-2);
+		Emulator::getInstance()->getConfigPath(chPath);
 		strcat(chPath, "/roms/");
 
 		// determine the ROM image name for the selected model
