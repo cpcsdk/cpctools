@@ -2613,10 +2613,61 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	wxBoxSizer* bSizer46;
 	bSizer46 = new wxBoxSizer( wxHORIZONTAL );
 	
-	overviewPanel = new wxPanel( m_panel16, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	overviewPanel = new wxPanel( m_panel16, wxID_ANY, wxDefaultPosition, wxSize( 256,256 ), 0 );
 	overviewPanel->SetMinSize( wxSize( 256,256 ) );
+	overviewPanel->SetMaxSize( wxSize( 256,256 ) );
 	
-	bSizer46->Add( overviewPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizer46->Add( overviewPanel, 0, wxALL|wxFIXED_MINSIZE, 5 );
+	
+	wxBoxSizer* bSizer47;
+	bSizer47 = new wxBoxSizer( wxVERTICAL );
+	
+	bSizer47->SetMinSize( wxSize( -1,256 ) ); 
+	m_staticText107 = new wxStaticText( m_panel16, wxID_ANY, wxT("&&0000"), wxDefaultPosition, wxSize( -1,64 ), wxST_NO_AUTORESIZE );
+	m_staticText107->Wrap( -1 );
+	m_staticText107->SetMinSize( wxSize( -1,64 ) );
+	m_staticText107->SetMaxSize( wxSize( -1,64 ) );
+	
+	bSizer47->Add( m_staticText107, 0, wxFIXED_MINSIZE|wxLEFT, 5 );
+	
+	m_staticText108 = new wxStaticText( m_panel16, wxID_ANY, wxT("&&4000"), wxDefaultPosition, wxSize( -1,64 ), 0 );
+	m_staticText108->Wrap( -1 );
+	bSizer47->Add( m_staticText108, 0, wxLEFT, 5 );
+	
+	m_staticText109 = new wxStaticText( m_panel16, wxID_ANY, wxT("&&8000"), wxDefaultPosition, wxSize( -1,64 ), 0 );
+	m_staticText109->Wrap( -1 );
+	bSizer47->Add( m_staticText109, 0, wxLEFT, 5 );
+	
+	m_staticText110 = new wxStaticText( m_panel16, wxID_ANY, wxT("&&C000"), wxDefaultPosition, wxSize( -1,64 ), 0 );
+	m_staticText110->Wrap( -1 );
+	bSizer47->Add( m_staticText110, 0, wxLEFT, 5 );
+	
+	bSizer46->Add( bSizer47, 0, wxFIXED_MINSIZE, 5 );
+	
+	wxBoxSizer* bSizer48;
+	bSizer48 = new wxBoxSizer( wxVERTICAL );
+	
+	bSizer48->SetMinSize( wxSize( -1,256 ) ); 
+	
+	bSizer48->Add( 0, 32, 1, wxFIXED_MINSIZE|wxLEFT, 5 );
+	
+	zone0 = new wxStaticText( m_panel16, wxID_ANY, wxT("Central RAM"), wxDefaultPosition, wxSize( -1,64 ), wxST_NO_AUTORESIZE );
+	zone0->Wrap( -1 );
+	bSizer48->Add( zone0, 0, wxEXPAND|wxLEFT, 5 );
+	
+	zone1 = new wxStaticText( m_panel16, wxID_ANY, wxT("Central RAM"), wxDefaultPosition, wxSize( -1,64 ), wxST_NO_AUTORESIZE );
+	zone1->Wrap( -1 );
+	bSizer48->Add( zone1, 0, wxEXPAND|wxLEFT, 5 );
+	
+	zone2 = new wxStaticText( m_panel16, wxID_ANY, wxT("Central RAM"), wxDefaultPosition, wxSize( -1,64 ), wxST_NO_AUTORESIZE );
+	zone2->Wrap( -1 );
+	bSizer48->Add( zone2, 0, wxEXPAND|wxLEFT, 5 );
+	
+	zone3 = new wxStaticText( m_panel16, wxID_ANY, wxT("Central RAM"), wxDefaultPosition, wxSize( -1,32 ), wxST_NO_AUTORESIZE );
+	zone3->Wrap( -1 );
+	bSizer48->Add( zone3, 0, wxEXPAND|wxLEFT, 5 );
+	
+	bSizer46->Add( bSizer48, 1, wxFIXED_MINSIZE, 5 );
 	
 	wxFlexGridSizer* fgSizer12;
 	fgSizer12 = new wxFlexGridSizer( 2, 2, 0, 0 );
@@ -2710,8 +2761,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	// Grid
 	m_grid1->CreateGrid( 32, 16 );
-	m_grid1->EnableEditing( false );
-	m_grid1->EnableGridLines( true );
+	m_grid1->EnableEditing( true );
+	m_grid1->EnableGridLines( false );
 	m_grid1->EnableDragGridSize( false );
 	m_grid1->SetMargins( 0, 0 );
 	
@@ -2732,6 +2783,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_grid1->SetColSize( 13, 40 );
 	m_grid1->SetColSize( 14, 40 );
 	m_grid1->SetColSize( 15, 40 );
+	m_grid1->AutoSizeColumns();
 	m_grid1->EnableDragColMove( false );
 	m_grid1->EnableDragColSize( false );
 	m_grid1->SetColLabelSize( 20 );
@@ -2764,7 +2816,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	// Cell Defaults
 	m_grid1->SetDefaultCellFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	m_grid1->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer38->Add( m_grid1, 1, wxBOTTOM|wxLEFT|wxTOP, 5 );
+	bSizer38->Add( m_grid1, 1, wxEXPAND, 5 );
 	
 	m_panel12->SetSizer( bSizer38 );
 	m_panel12->Layout();
@@ -2823,7 +2875,6 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	this->SetSizer( bSizer26 );
 	this->Layout();
-	bSizer26->Fit( this );
 	
 	// Connect Events
 	overviewPanel->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( Memory::onOverviewLeftDClick ), NULL, this );

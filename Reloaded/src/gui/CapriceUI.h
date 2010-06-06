@@ -583,6 +583,15 @@ class Memory : public wxDialog
 		wxNotebook* m_notebook4;
 		wxPanel* m_panel16;
 		wxPanel* overviewPanel;
+		wxStaticText* m_staticText107;
+		wxStaticText* m_staticText108;
+		wxStaticText* m_staticText109;
+		wxStaticText* m_staticText110;
+		
+		wxStaticText* zone0;
+		wxStaticText* zone1;
+		wxStaticText* zone2;
+		wxStaticText* zone3;
 		wxStaticText* m_staticText102;
 		wxChoice* m_choice14;
 		wxColourPickerCtrl* centralColor;
@@ -631,7 +640,7 @@ class Memory : public wxDialog
 	
 	public:
 		
-		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
+		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 612,676 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~Memory();
 	
 };

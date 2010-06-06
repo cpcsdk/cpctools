@@ -63,6 +63,39 @@ MemoryImpl::~MemoryImpl()
 {
 }
 
+void MemoryImpl::setZoneInfo(int addr)
+{
+	wxString s;
+	switch(_emulator->GetMemory().getTypeForAddress(addr<<8)) {
+		case 1:
+			s = _("System ROM");
+			break;
+		case 2:
+			s = _("Ext. ROM "); // TODO : rom ID
+			break;
+		case 4:
+			s = _("Bank "); // TODO : bank number
+			break;
+		default:
+			s = _("Central RAM");
+			break;
+	}
+	switch(addr) {
+		case 0x00:
+			zone0->SetLabel(s);
+			break;
+		case 0x40:
+			zone1->SetLabel(s);
+			break;
+		case 0x80:
+			zone2->SetLabel(s);
+			break;
+		case 0xC0:
+			zone3->SetLabel(s);
+			break;
+	}
+}
+
 void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 {
 	// TODO : it is possible to improve this by only redrawing the invalidated area
@@ -75,6 +108,7 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 	{
 		if(y==0 || y==0x40 || y==0x80 || y==0xC0)
 		{
+			setZoneInfo(y);
 			switch(_emulator->GetMemory().getTypeForAddress(y<<8))
 			{
 				case 1: // Low ROM
@@ -107,12 +141,6 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 			drawContext.DrawPoint(x, y);
 		}
 	}
-
-	drawContext.DrawText(_T("&0000"),258,0);
-	drawContext.DrawText(_T("&4000"),258,64);
-	drawContext.DrawText(_T("&8000"),258,128);
-	drawContext.DrawText(_T("&C000"),258,196);
-	drawContext.DrawText(_T("&FFFF"),258,246);
 }
 
 void MemoryImpl::onBreakpoint(wxCommandEvent& event)

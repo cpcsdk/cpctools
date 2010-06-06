@@ -14,6 +14,7 @@ class MemoryImpl: public Memory
 		LabelsHashMap lhm;
 
 		void ChangeAddress(int addr);
+		void setZoneInfo(int);
 
 	protected:
 		void RefreshMem (wxScrollEvent& event);
