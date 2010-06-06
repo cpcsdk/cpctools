@@ -34,6 +34,7 @@
 #include <wx/dialog.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
+#include <wx/clrpicker.h>
 #include <wx/filepicker.h>
 #include <wx/grid.h>
 #include <wx/checklst.h>
@@ -582,8 +583,24 @@ class Memory : public wxDialog
 		wxNotebook* m_notebook4;
 		wxPanel* m_panel16;
 		wxPanel* overviewPanel;
+		wxStaticText* m_staticText102;
+		wxChoice* m_choice14;
+		wxColourPickerCtrl* centralColor;
+		wxStaticText* x;
+		wxColourPickerCtrl* bankColor;
+		wxStaticText* y;
+		wxColourPickerCtrl* romColor;
+		wxStaticText* z;
+		wxStaticText* m_staticText106;
+		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticText771;
 		wxFilePickerCtrl* m_filePicker9;
+		
+		wxStaticText* m_staticText100;
+		wxTextCtrl* m_textCtrl73;
+		wxCheckBox* m_checkBox23;
+		wxStaticText* m_staticText101;
+		wxTextCtrl* m_textCtrl74;
 		wxPanel* m_panel12;
 		wxGrid* m_grid1;
 		wxPanel* m_panel13;
@@ -597,8 +614,12 @@ class Memory : public wxDialog
 		wxChoice* ChoiceLabels;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void onOverviewLeftDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void UpdateOverview( wxPaintEvent& event ) { event.Skip(); }
+		virtual void onChangeView( wxCommandEvent& event ) { event.Skip(); }
 		virtual void LoadSymbolTable( wxFileDirPickerEvent& event ) { event.Skip(); }
+		virtual void onSearchASCII( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSearchNumber( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
 		virtual void AddressEntered( wxCommandEvent& event ) { event.Skip(); }

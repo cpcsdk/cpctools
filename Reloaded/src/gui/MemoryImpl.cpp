@@ -65,34 +65,45 @@ MemoryImpl::~MemoryImpl()
 
 void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 {
-	wxClientDC drawContext(overviewPanel);
+	// TODO : it is possible to improve this by only redrawing the invalidated area
+	// (wich may not even touch the pixeled zone)
+	wxPaintDC drawContext(overviewPanel);
+	wxPen p;
+	wxColour baseColor;
+	wxColour darkColor;
 	for (int y = 0; y < 256; y++)
 	{
-		wxPen p;
-		switch(_emulator->GetMemory().getTypeForAddress(y<<8))
+		if(y==0 || y==0x40 || y==0x80 || y==0xC0)
 		{
-			case 1: // Low ROM
-				p.SetColour(*wxRED);
-				break;
-			case 2: // Hi ROM
-				p.SetColour(*wxGREEN);
-				break;
-			case 4: // Exp. RAM
-				p.SetColour(*wxBLUE);
-				break;
-			default:
-				p.SetColour(*wxWHITE);
-				break;
+			switch(_emulator->GetMemory().getTypeForAddress(y<<8))
+			{
+				case 1: // Low ROM
+				case 2: // Hi ROM
+					baseColor = romColor->GetColour();
+					break;
+				case 4: // Exp. RAM
+					baseColor = bankColor->GetColour();
+					break;
+				default: // Case 3 : main RAM
+					baseColor = centralColor->GetColour();
+					break;
+			}
+			darkColor.Set(max((unsigned char)120,baseColor.Red()) - 120,
+				max((unsigned char)120,baseColor.Green()) - 120,
+				max((unsigned char)120,baseColor.Blue()) - 120);
 		}
+
 		for (int x = 0; x < 256; x++)
 		{
-			// TODO change colors when displaying bank or rom
-			if (_emulator->GetMemory().Read(y * 256 + x) == 0)
+			if (_emulator->GetMemory().Read((y << 8) + x) == 0)
 			{
-				drawContext.SetPen(p);
+				p.SetColour(baseColor);
 			}
 			else
-				drawContext.SetPen(*wxBLACK_PEN);
+			{
+				p.SetColour(darkColor);
+			}
+			drawContext.SetPen(p);
 			drawContext.DrawPoint(x, y);
 		}
 	}
@@ -100,7 +111,7 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 	drawContext.DrawText(_T("&0000"),258,0);
 	drawContext.DrawText(_T("&4000"),258,64);
 	drawContext.DrawText(_T("&8000"),258,128);
-	drawContext.DrawText(_T("&C000"),258,128+64);
+	drawContext.DrawText(_T("&C000"),258,196);
 	drawContext.DrawText(_T("&FFFF"),258,246);
 }
 
