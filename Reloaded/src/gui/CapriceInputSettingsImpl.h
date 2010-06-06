@@ -4,6 +4,8 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
+#include "config.h"
+
 class Emulator;
 
 class CapriceInputSettingsImpl : public Settings
@@ -17,6 +19,7 @@ class CapriceInputSettingsImpl : public Settings
 		virtual void onKeyClick(wxCommandEvent& event);
 		virtual void onKeyPress(wxKeyEvent& event);
 		virtual void onSave(wxCommandEvent& event);
+		virtual void restoreSettings(wxCommandEvent& event);
 		virtual void applySettings(wxCommandEvent& event) { applySettings(); }
 		virtual void changeCRTCType( wxSpinEvent& event );
 		virtual void changeColorPalette( wxCommandEvent& event );
@@ -33,8 +36,8 @@ class CapriceInputSettingsImpl : public Settings
 		 * Returns the name of the keyboard configuration file
 		 * @TODO Find the real file to use between share directory or user
 		 */
-
 		const char * getKeymapFileNameLoad();
+
 		/**
 		 * Returns the name of the keyboard configuration file
 		 * @TODO Find the real file to use between directory or user
@@ -56,4 +59,6 @@ class CapriceInputSettingsImpl : public Settings
 		CPC_Keymap::iterator iter;
 
 		wxButton* lastClickedButton;
+
+		t_CPC old_cfg;
 };

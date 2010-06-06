@@ -2,15 +2,15 @@ noinst_LIBRARIES = libsjasm.a \
                    libsjasminternal.a
 
 
-
-libsjasm_a_CPPFLAGS = -O2 -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX -Ilua5.1 -Itolua++ -Isjasm -I../core $(SDL_CFLAGS) 
-libsjasminternal_a_CPPFLAGS = -O2 -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX -Ilua5.1 -Itolua++ -Isjasm $(SDL_CFLAGS) 
+#Under linux one needs -DLUA_USE_LINUX and -DMAX_PATH=PATH_MAX
+libsjasm_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm -I../core $(SDL_CFLAGS) 
+libsjasminternal_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm $(SDL_CFLAGS) 
 
 SJASMSRC=sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
 sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp 
 
 
-
+# TODO : likely we could use a regular lua install (wit a .so instead of building our own
 LUASRC= lua5.1/lapi.c lua5.1/lauxlib.c lua5.1/lbaselib.c lua5.1/lcode.c lua5.1/ldblib.c \
 lua5.1/ldebug.c lua5.1/ldo.c lua5.1/ldump.c lua5.1/lfunc.c lua5.1/lgc.c lua5.1/linit.c \
 lua5.1/liolib.c lua5.1/llex.c lua5.1/lmathlib.c lua5.1/lmem.c lua5.1/loadlib.c \

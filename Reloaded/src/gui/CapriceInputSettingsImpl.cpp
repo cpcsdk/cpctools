@@ -20,7 +20,8 @@
 CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	Settings(WinID),
 	emulator(*(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator())),
-	lastClickedButton(NULL)
+	lastClickedButton(NULL),
+	old_cfg(emulator.GetConfig())
 {
 	// input
 	std::ifstream file;
@@ -105,6 +106,13 @@ void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
 	emulator.GetConfig().saveConfiguration();
 }
 
+
+void CapriceInputSettingsImpl::restoreSettings(wxCommandEvent& event)
+{
+	emulator.GetConfig() = old_cfg;
+}
+
+
 void CapriceInputSettingsImpl::applySettings()
 {
 	for (CPC_Keymap::iterator iter = keymap.begin();iter!=keymap.end();iter++)
@@ -168,7 +176,7 @@ void CapriceInputSettingsImpl::onKeyClick(wxCommandEvent& event)
 
 void CapriceInputSettingsImpl::onKeyPress(wxKeyEvent& event)
 {
-	m_regularKey->SetValue(wxChar(event.GetKeyCode()));
+	m_regularKey->SetValue(keyCodeToName(event.GetKeyCode()));
 	iter->second.stdKeyCode = event.GetKeyCode();
 }
 

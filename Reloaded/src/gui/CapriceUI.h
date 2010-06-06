@@ -18,9 +18,9 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/panel.h>
+#include <wx/stattext.h>
 #include <wx/sizer.h>
 #include <wx/frame.h>
-#include <wx/stattext.h>
 #include <wx/combobox.h>
 #include <wx/choice.h>
 #include <wx/button.h>
@@ -68,10 +68,13 @@ class EmulatorWindow : public wxFrame
 		wxMenu* m_menu5;
 		wxPanel* m_panel4;
 		wxPanel* DriveActivity;
+		wxStaticText* m_statusText;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void onExit1( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
+		virtual void windowKeyDown( wxKeyEvent& event ) { event.Skip(); }
+		virtual void windowKeyUp( wxKeyEvent& event ) { event.Skip(); }
 		virtual void onInsertDiscA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menu_editDiskA( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onInsertDiscB( wxCommandEvent& event ) { event.Skip(); }
@@ -99,13 +102,11 @@ class EmulatorWindow : public wxFrame
 		virtual void OnDebugMemory( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowAssembler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
-		virtual void windowKeyDown( wxKeyEvent& event ) { event.Skip(); }
-		virtual void windowKeyUp( wxKeyEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		EmulatorWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Reloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxTAB_TRAVERSAL, const wxString& name = wxT("CapriceMainWindow") );
+		EmulatorWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Reloaded"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxCAPTION|wxCLOSE_BOX|wxMINIMIZE_BOX|wxSYSTEM_MENU|wxWANTS_CHARS, const wxString& name = wxT("CapriceMainWindow") );
 		~EmulatorWindow();
 	
 };
@@ -239,24 +240,23 @@ class Settings : public wxDialog
 		wxSpinCtrl* m_spinCtrl3;
 		wxRadioButton* m_radioBtn111;
 		wxRadioButton* m_radioBtn121;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1Save;
-		wxButton* m_sdbSizer1Apply;
-		wxButton* m_sdbSizer1Cancel;
+		wxButton* m_button80;
+		wxButton* m_button81;
+		wxButton* m_button79;
 		wxComboBox* m_comboBox2;
 		wxButton* m_button78;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void onKeyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onKeyPress( wxKeyEvent& event ) { event.Skip(); }
+		virtual void onKeyClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RomChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SelectManufacturer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Select50HZ( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Select60HZ( wxCommandEvent& event ) { event.Skip(); }
 		virtual void changeCRTCType( wxSpinEvent& event ) { event.Skip(); }
 		virtual void changeColorPalette( wxCommandEvent& event ) { event.Skip(); }
-		virtual void applySettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void restoreSettings( wxCommandEvent& event ) { event.Skip(); }
+		virtual void applySettings( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSave( wxCommandEvent& event ) { event.Skip(); }
 		virtual void LoadPreset( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SavePreset( wxCommandEvent& event ) { event.Skip(); }
