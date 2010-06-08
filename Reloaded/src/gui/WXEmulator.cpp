@@ -54,6 +54,12 @@ WXEmulator::WXEmulator()
 }
 
 
+void WXEmulator::logMessage(const char* message) {
+	//wxLogWarning(message);
+	win->setStatus(message);
+}
+
+
 void WXEmulator::PressKey(uint32_t key, uint32_t mod)
 {
 	dword cpc_key;

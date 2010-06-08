@@ -60,9 +60,7 @@ class WXEmulator : public Emulator {
 	  virtual void PressKey(uint32_t key, uint32_t mod);
 	  virtual void ReleaseKey(uint32_t key, uint32_t mod);
 
-	  void logMessage(const char* message) {
-		  wxLogWarning(message);
-      }
+	  void logMessage(const char* message);
 
 	  // FDC Led status
 	  void fdcLed(bool on);

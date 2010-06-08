@@ -47,6 +47,10 @@ class CapriceWindowImpl : public EmulatorWindow
 
 	void fdcLed(bool on);
 
+	void setStatus(const char * message) {
+		m_statusText->SetLabel(_(message));
+	}
+
     protected:
 
     virtual void onExit1( wxCloseEvent& );

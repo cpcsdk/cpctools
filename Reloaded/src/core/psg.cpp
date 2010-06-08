@@ -65,7 +65,6 @@ t_PSG::t_PSG(t_CPC &cpc, t_Tape &tape)
  : CPC(cpc)
  , Tape(tape)
 {
-	isInit = false;
 }
 
 t_PSG::~t_PSG()
@@ -79,7 +78,6 @@ extern PaStream* audioStream;
 
 void t_PSG::Emulate(int iCycleCount)
 {
-	if(isInit == false) Emulator::getInstance()->logMessage("emulating with psg not inited!");
 #ifdef ST_SOUND
     cycle_count += iCycleCount;
 
@@ -91,23 +89,21 @@ void t_PSG::Emulate(int iCycleCount)
 		for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
 			*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel() /32;
 
-		pbSndBufferPtr += sizeof(ymsample)*2;
+	//	pbSndBufferPtr += sizeof(ymsample)*2;
+		Pa_WriteStream(audioStream,pbSndBuffer,1);
 
+#if 0 // Synchronous audio
 		if (pbSndBufferPtr >= pbSndBufferEnd)
 		{
-#if 0 // Synchronous audio... not working... (buffer is always 0 sized ?)
 			int nbFrames = (pbSndBufferEnd-pbSndBuffer+1)/4;
 			if(nbFrames <0) nbFrames = 0;
-			char msg[1024];
-			sprintf(msg,"rendering %d frames in %d buffer",nbFrames,Pa_GetStreamWriteAvailable(audioStream));
+//			char msg[1024];
+//			sprintf(msg,"rendering %d frames in %d buffer",nbFrames,Pa_GetStreamWriteAvailable(audioStream));
 
-			Emulator::getInstance()->logMessage(msg);
+//			Emulator::getInstance()->logMessage(msg);
 			pbSndBufferPtr -= nbFrames*4;
-			Pa_WriteStream(audioStream,pbSndBuffer,nbFrames);
-#else
-			pbSndBufferPtr = pbSndBuffer;
-#endif
 		}
+#endif
 	}
 #endif
 }
@@ -145,8 +141,6 @@ void t_PSG::Init(int enableSound)
     m_Ym2149->reset();
 #endif
     InitAYCounterVars();
-
-	isInit=true;
 }
 
 unsigned char t_PSG::GetAYRegister(int Num)

@@ -28,18 +28,20 @@
 #include <string.h>
 #include "config.h"
 #include "psg.h"
+#include "emulator.h"
 
 #include <portaudio.h>
 #include <iostream>
 
 byte *pbSndBuffer = NULL;
-byte *pbSndBufferEnd = NULL;
-byte *pbSndBufferCurrent = NULL;    // current position in the reading sample
+// byte *pbSndBufferEnd = NULL;
+// byte *pbSndBufferCurrent = NULL;    // current position in the reading sample
 byte *pbSndBufferPtr = NULL;    // current position in the writing sample
-dword dwSndBufferCopied;
+// dword dwSndBufferCopied;
 
 PaStream* audioStream = NULL;
 
+#if 0
 int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaStreamCallbackTimeInfo* sci, PaStreamCallbackFlags scf, void *userdata)
 {
 	int16_t* stream = (int16_t*)outbuf;
@@ -124,39 +126,38 @@ int audio_align_samples (int given)
 	}
 	return actual; // return the closest match as 2^n
 }
-
+#endif
 
 int audio_init (t_CPC &CPC, t_PSG* psg)
 {
 	if (!CPC.snd_enabled) {
-		fprintf(stderr, "Not opening audio because it is disabled in the config\n");
+		Emulator::getInstance()->logMessage("Not opening audio because it is disabled in the config");
 		return 0;
 	}
 
 	if (Pa_Initialize() != paNoError) {
-		fprintf(stderr, "Failed to initialize portaudio\n");
+		Emulator::getInstance()->logMessage("Failed to initialize portaudio");
 		return -1;
 	}
-#define SAMPLECOUNT 4096*4 /*CPC.snd_playback_rate * 2*/
-	if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, SAMPLECOUNT/8, audio_update, &psg) != paNoError)
-//    if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 0, NULL, &psg) != paNoError)
+#define SAMPLECOUNT 1 /*CPC.snd_playback_rate * 2*/
+//	if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, SAMPLECOUNT/8, audio_update, NULL) != paNoError)
+    if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 1, NULL, NULL) != paNoError)
 	{
-		fprintf(stderr, "Could not open audio\n");
+		Emulator::getInstance()->logMessage("Could not open audio");
 		return 1;
 	}
 	
 	pbSndBuffer = (byte *)malloc(SAMPLECOUNT); // allocate the sound data buffer
-	pbSndBufferEnd = pbSndBuffer + SAMPLECOUNT;
-	memset(pbSndBuffer, 0, SAMPLECOUNT);
+//	pbSndBufferEnd = pbSndBuffer + SAMPLECOUNT;
+//	memset(pbSndBuffer, 0, SAMPLECOUNT);
 	pbSndBufferPtr = pbSndBuffer; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
-	pbSndBufferCurrent = pbSndBuffer + SAMPLECOUNT/2;   // init read cursor
+//	pbSndBufferCurrent = pbSndBuffer + SAMPLECOUNT/2;   // init read cursor
 
         if(Pa_StartStream(audioStream) != paNoError) {
-		fprintf(stderr, "Could not start stream\n");
+			Emulator::getInstance()->logMessage("Could not start stream");
 		return 1;
 	}
 	
-	fprintf(stderr, "Audio init ok..\n");
 	return 0;
 }
 

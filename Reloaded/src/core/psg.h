@@ -28,8 +28,6 @@ private:
 	unsigned char reg_select;
 	unsigned char control;
 
-	bool isInit;
-
 #ifdef ST_SOUND
     CYm2149Ex* m_Ym2149;
 #endif

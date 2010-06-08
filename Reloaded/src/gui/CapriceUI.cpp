@@ -1650,7 +1650,7 @@ About::About( wxWindow* parent, wxWindowID id, const wxString& title, const wxPo
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Credits :\nWritten by :\nUlrich Doewich\nRamlaid/Arkos <contact@ramlaid.com>\nRomain Giot  - Krusty/Benediction <krusty@cpcscene.com>\nPulkoMandy/Shinra <pulkomandy@gmail.com>\nContributors :\nCloudStrife/Shinra <cloudstrife@cpcscene.com>\nAnd a lot of other contributors\nStSound - LibDSK - Lib765 - SDL - wxWidgets - Sjasmplus"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Credits :\nWritten by :\nUlrich Doewich\nRamlaid/Arkos <contact@ramlaid.com>\nRomain Giot  - Krusty/Benediction <krusty@cpcscene.com>\nAdrien Destugues - PulkoMandy/Shinra <pulkomandy@pulkomandy.ath.cx>\nCloudStrife/Shinra <cloudstrife@cpcscene.com>\nContributors :\nStSound library by Leonard/Oxygene\nwith finetuning by Targhan/Arkos\nSDL - wxWidgets - Sjasmplus\nand a lot of other contributors\n"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	bSizer11->Add( m_staticText10, 0, wxALL|wxEXPAND, 5 );
 	
