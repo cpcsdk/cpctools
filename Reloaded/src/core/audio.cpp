@@ -72,8 +72,10 @@ int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaSt
 	// StSound
 	// len unit is 'frame'. A frame is 2 channels * 2 bytes = 4 bytes.
 	// hence the 4*len in this copy (because our buffers are byte-sized)
-        memcpy(stream, pbSndBuffer, 4*len);
-
+// Dummy way
+	// memcpy(stream, pbSndBuffer, 4*len);
+// A bit more clever
+#if 0
 	if(pbSndBufferPtr>pbSndBuffer+4*len)
 	{
 		// StSound generated more than expected !
@@ -84,11 +86,12 @@ int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaSt
 		// StSound is late ! align it back for the next round
 		pbSndBufferPtr = pbSndBuffer;
 	}
-
+#else
+//The best one
 	// TODO : the code below should be more efficient (avoids memcpying), but it makes the sound crackle and pop a lot more...
-	/*
     if (pbSndBufferCurrent+4*len<pbSndBufferEnd)
     {
+		// The data we need is between pbSndBufferCurrent and +4*len, fine
         if (pbSndBufferCurrent+4*len>pbSndBufferPtr && pbSndBufferCurrent<pbSndBufferPtr)
         {
 			// A read overflow occured : the emu was too slow and didn't generate enough samples
@@ -96,19 +99,19 @@ int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaSt
 	    	// This adds latency (space between reader and writer) but it will max out at the buffer size
 	    	if(pbSndBufferCurrent < pbSndBuffer) pbSndBufferCurrent = pbSndBuffer;
         }
-
         memcpy(stream, pbSndBufferCurrent, 4*len);
         pbSndBufferCurrent = pbSndBufferCurrent+4*len;
     }
     else
     {
+		// We are looping the buffer
         int rest = pbSndBufferEnd - pbSndBufferCurrent;
         memcpy(stream, pbSndBufferCurrent, rest);
         pbSndBufferCurrent = pbSndBuffer;
         memcpy(stream+rest, pbSndBufferCurrent, 4*len-rest);
         pbSndBufferCurrent+=4*len-rest;
 	}
-	*/
+#endif
 #endif
 	return paContinue;
 }
@@ -134,19 +137,19 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 		fprintf(stderr, "Failed to initialize portaudio\n");
 		return -1;
 	}
-        if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 0, audio_update, &psg) != paNoError)
+#define SAMPLECOUNT 4096*4 /*CPC.snd_playback_rate * 2*/
+	if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, SAMPLECOUNT/8, audio_update, &psg) != paNoError)
+//    if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 0, NULL, &psg) != paNoError)
 	{
 		fprintf(stderr, "Could not open audio\n");
 		return 1;
 	}
 	
-	// The multiplicator here (3) defines the latency. Lower is better. Best should be 1
-#define SAMPLECOUNT CPC.snd_playback_rate * 2
 	pbSndBuffer = (byte *)malloc(SAMPLECOUNT); // allocate the sound data buffer
 	pbSndBufferEnd = pbSndBuffer + SAMPLECOUNT;
 	memset(pbSndBuffer, 0, SAMPLECOUNT);
-	pbSndBufferPtr = pbSndBuffer+CPC.snd_playback_rate/50; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
-	pbSndBufferCurrent = pbSndBuffer;   // init read cursor
+	pbSndBufferPtr = pbSndBuffer; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
+	pbSndBufferCurrent = pbSndBuffer + SAMPLECOUNT/2;   // init read cursor
 
         if(Pa_StartStream(audioStream) != paNoError) {
 		fprintf(stderr, "Could not start stream\n");
