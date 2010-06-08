@@ -226,7 +226,7 @@ ymint	vblNbSample;
 				}
 				if (sampleToCompute>0)
 				{
-					ymChip.update(pOut,sampleToCompute);	// YM Emulation.
+//					ymChip.update(pOut,sampleToCompute);	// YM Emulation.
 					pOut += sampleToCompute;
 				}
 				nbs -= sampleToCompute;
@@ -266,10 +266,11 @@ ymint ndrum;
 					if (prediv)
 					{
 						tmpFreq = 2457600L / prediv;
-						if ((code&0xc0)==0x00)
+						/*if ((code&0xc0)==0x00)
 							ymChip.sidStart(voice,tmpFreq,pReg[voice+8]&15);
 						else
 							ymChip.sidSinStart(voice,tmpFreq,pReg[voice+8]&15);
+							*/
 					}
 					break;
 
@@ -282,7 +283,7 @@ ymint ndrum;
 						if (prediv>0)
 						{
 							tmpFreq = 2457600L / prediv;
-							ymChip.drumStart(voice,pDrumTab[ndrum].pData,pDrumTab[ndrum].size,tmpFreq);
+						//	ymChip.drumStart(voice,pDrumTab[ndrum].pData,pDrumTab[ndrum].size,tmpFreq);
 						}
 					}
 					break;
@@ -295,7 +296,7 @@ ymint ndrum;
 					if (prediv)
 					{
 						tmpFreq = 2457600L / prediv;
-						ymChip.syncBuzzerStart(tmpFreq,pReg[voice+8]&15);
+					//	ymChip.syncBuzzerStart(tmpFreq,pReg[voice+8]&15);
 					}
 					break;
 
@@ -339,11 +340,11 @@ void	CYmMusic::player(void)
 	for (ymint i=0;i<=10;i++)
 		ymChip.writeRegister(i,ptr[i]);
 
-	ymChip.sidStop(0);
+/*	ymChip.sidStop(0);
 	ymChip.sidStop(1);
 	ymChip.sidStop(2);
 	ymChip.syncBuzzerStop();
-
+*/
 	//---------------------------------------------
 	// Check digi-drum
 	//---------------------------------------------
@@ -365,10 +366,11 @@ void	CYmMusic::player(void)
 			if (ptr[12])
 			{
 				sampleFrq = (MFP_CLOCK / ptr[12]);
-				ymChip.drumStart(	2,							// Voice C
+/*				ymChip.drumStart(	2,							// Voice C
 									sampleAdress[sampleNum],
 									sampleLen[sampleNum],
 									sampleFrq);
+*/
 			}
 		}
 	}
@@ -407,7 +409,7 @@ void	CYmMusic::player(void)
 					if (prediv)
 					{
 						tmpFreq = 2457600L / prediv;
-						ymChip.sidStart(voice,tmpFreq,ptr[voice+8]&15);
+//						ymChip.sidStart(voice,tmpFreq,ptr[voice+8]&15);
 					}
 				}
 
@@ -427,7 +429,7 @@ void	CYmMusic::player(void)
 						if (prediv)
 						{
 							sampleFrq = MFP_CLOCK / prediv;
-							ymChip.drumStart(voice,pDrumTab[ndrum].pData,pDrumTab[ndrum].size,sampleFrq);
+//							ymChip.drumStart(voice,pDrumTab[ndrum].pData,pDrumTab[ndrum].size,sampleFrq);
 						}
 					}
 				}

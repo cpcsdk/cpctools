@@ -93,12 +93,13 @@ public:
 		~CYm2149Ex();
 
 		void	reset(void);
-		void	update(ymsample *pSampleBuffer,ymint nbSample);
+//		void	update(ymsample *pSampleBuffer,ymint nbSample);
 		void	updateStereo(ymsample *pSampleBuffer,ymint nbSample);
 
 		void	setClock(ymu32 _clock);
 		void	writeRegister(ymint reg,ymint value);
 		ymint	readRegister(ymint reg);
+/*
 		void	drumStart(ymint voice,ymu8 *drumBuffer,ymu32 drumSize,ymint drumFreq);
 		void	drumStop(ymint voice);
 		void	sidStart(ymint voice,ymint freq,ymint vol);
@@ -106,6 +107,7 @@ public:
 		void	sidStop(ymint voice);
 		void	syncBuzzerStart(ymint freq,ymint envShape);
 		void	syncBuzzerStop(void);
+*/
 
 
 private:
@@ -116,7 +118,7 @@ private:
 
 		ymu32	frameCycle;
 		ymu32	cyclePerSample;
-		inline	ymsample nextSample(void);
+//		inline	ymsample nextSample(void);
 		inline	void nextSampleStereo(ymsample& left, ymsample& right);
 		ymu32 toneStepCompute(ymu8 rHigh,ymu8 rLow);
 		ymu32 noiseStepCompute(ymu8 rNoise);
@@ -126,8 +128,8 @@ private:
 		void	updateToneGen(ymint voice,ymint nbSample);
 		ymu32	rndCompute(void);
 
-		void	sidVolumeCompute(ymint voice,ymint *pVol);
-		inline int		LowPassFilter(int in);
+//		void	sidVolumeCompute(ymint voice,ymint *pVol);
+		inline int		LowPassFilter(int in, int channel);
 
 		ymint	replayFrequency;
 		ymu32	internalClock;
@@ -136,7 +138,7 @@ private:
 		ymu32	cycleSample;
 		ymu32	stepA,stepB,stepC;
 		ymu32	posA,posB,posC;
-		ymint				volA,volB,volC,volE;
+		ymint				volA,volB,volC,volEA, volEB, volEC;
 		ymu32	mixerTA,mixerTB,mixerTC;
 		ymu32	mixerNA,mixerNB,mixerNC;
 		ymint				*pVolA,*pVolB,*pVolC;
@@ -153,14 +155,15 @@ private:
 		ymint		envShape;
 		ymu8	envData[16][2][16*2];
 		ymint	globalVolume;
-
+/*
 		struct	YmSpecialEffect	specialEffect[3];
 		ymbool	bSyncBuzzer;
 		ymu32	syncBuzzerStep;
 		ymu32	syncBuzzerPhase;
 		ymint	syncBuzzerShape;
-
-		int		m_lowPassFilter[2];
+*/
+		// Delay lines for low pass filtering. 2 lines of 2 samples.
+		int		m_lowPassFilter[2][2];
 
 };
 
