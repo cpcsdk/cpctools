@@ -118,7 +118,7 @@ private:
 
 		ymu32	frameCycle;
 		ymu32	cyclePerSample;
-//		inline	ymsample nextSample(void);
+		inline	ymsample nextSample(void);
 		inline	void nextSampleStereo(ymsample& left, ymsample& right);
 		ymu32 toneStepCompute(ymu8 rHigh,ymu8 rLow);
 		ymu32 noiseStepCompute(ymu8 rNoise);
