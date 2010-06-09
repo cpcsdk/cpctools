@@ -132,6 +132,7 @@ public:
 	reg_pair HLx;
 	reg_pair IX;
 	reg_pair IY;
+	reg_pair MEMPTR;
 
 	byte I;
 	byte R;

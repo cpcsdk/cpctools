@@ -457,6 +457,7 @@ void t_z80regs::reset()
 
 #define ADD16(dest, src) \
 { \
+	MEMPTR.d = dest.d+1; \
 	dword res = dest.d + src.d; \
 	_rF = (_rF & (Sflag | Zflag | Vflag)) | (((dest.d ^ res ^ src.d) >> 8) & Hflag) | \
 	((res >> 16) & Cflag) | ((res >> 8) & Xflags); \
@@ -471,12 +472,9 @@ void t_z80regs::reset()
 
 #define CALL \
 { \
-	reg_pair dest; \
-	dest.b.l = read_mem(_rPC++); /* subroutine address low byte */ \
-	dest.b.h = read_mem(_rPC++); /* subroutine address high byte */ \
 	write_mem(--_rSP, PC.b.h); /* store high byte of current PC */ \
 	write_mem(--_rSP, PC.b.l); /* store low byte of current PC */ \
-	_rPC = dest.w.l; /* continue execution at subroutine */ \
+	_rPC = MEMPTR.w.l; /* continue execution at subroutine */ \
 }
 
 #define CP(value) \
@@ -510,6 +508,7 @@ void t_z80regs::reset()
 	signed char offset; \
 	offset = (signed char)(read_mem(_rPC)); /* grab signed jump offset */ \
 	_rPC += offset + 1; /* add offset & correct PC */ \
+	MEMPTR.w.l = _rPC; \
 }
 
 #define EXX \
@@ -536,12 +535,11 @@ void t_z80regs::reset()
 
 #define EX_SP(reg) \
 { \
-	reg_pair temp; \
-	temp.b.l = read_mem(_rSP++); \
-	temp.b.h = read_mem(_rSP); \
+	MEMPTR.b.l = read_mem(_rSP++); \
+	MEMPTR.b.h = read_mem(_rSP); \
 	write_mem(_rSP--, reg.b.h); \
 	write_mem(_rSP, reg.b.l); \
-	reg.w.l = temp.w.l; \
+	reg.w.l = MEMPTR.w.l; \
 }
 
 #define INC(reg) \
@@ -550,30 +548,31 @@ void t_z80regs::reset()
 	_rF = (_rF & Cflag) | SZHV_inc[reg]; \
 }
 
+#define GET_ADDR \
+{ \
+	MEMPTR.b.l = read_mem(_rPC++); \
+	MEMPTR.b.h = read_mem(_rPC++); \
+}
+
 #define JP \
 { \
-	reg_pair addr; \
-	addr.b.l = read_mem(_rPC++); \
-	addr.b.h = read_mem(_rPC); \
-	_rPC = addr.w.l; \
+	_rPC = MEMPTR.w.l; \
 }
 
 #define LD16_MEM(reg) \
 { \
-	reg_pair addr; \
-	addr.b.l = read_mem(_rPC++); \
-	addr.b.h = read_mem(_rPC++); \
-	reg.b.l = read_mem(addr.w.l); \
-	reg.b.h = read_mem(addr.w.l+1); \
+	MEMPTR.b.l = read_mem(_rPC++); \
+	MEMPTR.b.h = read_mem(_rPC++); \
+	reg.b.l = read_mem(MEMPTR.w.l); \
+	reg.b.h = read_mem(++MEMPTR.w.l); \
 }
 
 #define LDMEM_16(reg) \
 { \
-	reg_pair addr; \
-	addr.b.l = read_mem(_rPC++); \
-	addr.b.h = read_mem(_rPC++); \
-	write_mem(addr.w.l, reg.b.l); \
-	write_mem(addr.w.l+1, reg.b.h); \
+	MEMPTR.b.l = read_mem(_rPC++); \
+	MEMPTR.b.h = read_mem(_rPC++); \
+	write_mem(MEMPTR.w.l, reg.b.l); \
+	write_mem(++MEMPTR.w.l, reg.b.h); \
 }
 
 #define OR(val) \
@@ -598,6 +597,7 @@ void t_z80regs::reset()
 { \
 	PC.b.l = read_mem(_rSP++); \
 	PC.b.h = read_mem(_rSP++); \
+	MEMPTR.w.l = _rPC;\
 }
 
 #define RLA \
@@ -667,6 +667,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 
 #define ADC16(reg) \
 { \
+	MEMPTR.d = _rHL+1; \
 	dword res = _rHLdword + reg.d + (_rF & Cflag); \
 	_rF = (((_rHLdword ^ res ^ reg.d) >> 8) & Hflag) | \
 	((res >> 16) & Cflag) | \
@@ -687,6 +688,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 	if(res & 0x02) _rF |= 0x20; \
 	if(res & 0x08) _rF |= 0x08; \
 	if(_rBC) _rF |= Vflag; \
+	MEMPTR.w.l--;\
 }
 
 #define CPDR \
@@ -696,6 +698,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 	iCycleCount += cc_ex[bOpCode]; \
 	_rPC -= 2; \
 	iWSAdjust++; \
+	MEMPTR.w.l = _rPC+1;\
 }
 
 #define CPI \
@@ -709,6 +712,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 	if(res & 0x02) _rF |= 0x20; \
 	if(res & 0x08) _rF |= 0x08; \
 	if(_rBC) _rF |= Vflag; \
+	MEMPTR.w.l++;\
 }
 
 #define CPIR \
@@ -718,11 +722,13 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 	iCycleCount += cc_ex[bOpCode]; \
 	_rPC -= 2; \
 	iWSAdjust++; \
+	MEMPTR.w.l = _rPC+1;\
 }
 
 #define IND \
 { \
 	byte io = z80_IN_handler(BC); \
+	MEMPTR.w.l = _rBC-1;\
 	_rB--; \
 	write_mem(_rHL, io); \
 	_rHL--; \
@@ -744,6 +750,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 #define INI \
 { \
 	byte io = z80_IN_handler(BC); \
+	MEMPTR.w.l = _rBC+1;\
 	_rB--; \
 	write_mem(_rHL, io); \
 	_rHL++; \
@@ -781,7 +788,8 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
    { \
    iCycleCount += cc_ex[bOpCode]; \
    _rPC -= 2; \
-   }
+   } \
+   MEMPTR.w.l = _rPC+1;
 
 #define LDI \
 { \
@@ -802,7 +810,8 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
    { \
    iCycleCount += cc_ex[bOpCode]; \
    _rPC -= 2; \
-   }
+   } \
+   MEMPTR.w.l = _rPC+1;
 
 #define NEG \
 { \
@@ -814,6 +823,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 #define OUTD \
 { \
 	byte io = read_mem(_rHL); \
+	MEMPTR.w.l = _rBC-1;\
 	_rB--; \
 	z80_OUT_handler(BC, io); \
 	_rHL--; \
@@ -835,6 +845,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 #define OUTI \
 { \
 	byte io = read_mem(_rHL); \
+	MEMPTR.w.l = _rBC+1;\
 	_rB--; \
 	z80_OUT_handler(BC, io); \
 	_rHL++; \
@@ -855,6 +866,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 
 #define RLD \
 { \
+	MEMPTR.w.l = _rHL + 1; \
 	byte n = read_mem(_rHL); \
 	write_mem(_rHL, (n << 4) | (_rA & 0x0f)); \
 	_rA = (_rA & 0xf0) | (n >> 4); \
@@ -863,6 +875,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 
 #define RRD \
 { \
+	MEMPTR.w.l = _rHL + 1; \
 	byte n = read_mem(_rHL); \
 	write_mem(_rHL, (n >> 4) | (_rA << 4)); \
 	_rA = (_rA & 0xf0) | (n & 0x0f); \
@@ -871,6 +884,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 
 #define SBC16(reg) \
 { \
+	MEMPTR.d = _rHLdword+1;\
 	dword res = _rHLdword - reg.d - (_rF & Cflag); \
 	_rF = (((_rHLdword ^ res ^ reg.d) >> 8) & Hflag) | Nflag | \
 	((res >> 16) & Cflag) | \
@@ -913,6 +927,7 @@ _rF = (_rF & Cflag) | Hflag | SZ_BIT[reg & (1 << bit)]
 	addr.b.h = _rI; \
 	PC.b.l = read_mem(addr.w.l); /* retrieve low byte of vector */ \
 	PC.b.h = read_mem(addr.w.l+1); /* retrieve high byte of vector */ \
+	MEMPTR.w.l=PC.w.l;\
 	z80_wait_states \
       } \
 	} \
@@ -1035,15 +1050,15 @@ int t_z80regs::z80_execute(void)
 		case and_h:       AND(_rH); break;
 		case and_l:       AND(_rL); break;
 		case and_mhl:     AND(read_mem(_rHL)); break;
-		case call:        CALL; break;
-		case call_c:      if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-		case call_m:      if (_rF & Sflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-		case call_nc:     if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-		case call_nz:     if (!(_rF & Zflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-		case call_p:      if (!(_rF & Sflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-		case call_pe:     if (_rF & Pflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-		case call_po:     if (!(_rF & Pflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-		case call_z:      if (_rF & Zflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
+		case call:        GET_ADDR; CALL; break;
+		case call_c:      GET_ADDR; if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+		case call_m:      GET_ADDR; if (_rF & Sflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+		case call_nc:     GET_ADDR; if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+		case call_nz:     GET_ADDR; if (!(_rF & Zflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+		case call_p:      GET_ADDR; if (!(_rF & Sflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+		case call_pe:     GET_ADDR; if (_rF & Pflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+		case call_po:     GET_ADDR; if (!(_rF & Pflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+		case call_z:      GET_ADDR; if (_rF & Zflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
 		case ccf:         _rF = ((_rF & (Sflag | Zflag | Pflag | Cflag)) | ((_rF & CF) << 4) | (_rA & Xflags)) ^ CF; break;
 		case cpl:         _rA ^= 0xff; _rF = (_rF & (Sflag | Zflag | Pflag | Cflag)) | Hflag | Nflag | (_rA & Xflags); break;
 		case cp_a:        CP(_rA); break;
@@ -1076,7 +1091,7 @@ int t_z80regs::z80_execute(void)
 		case ex_de_hl:    EX(DE, HL); break;
 		case ex_msp_hl:   EX_SP(HL); iWSAdjust++; break;
 		case halt:        _rHALT = 1; _rPC--; break;
-		case ina:         { z80_wait_states iCycleCount = Ia_;} { reg_pair p; p.b.l = read_mem(_rPC++); p.b.h = _rA; _rA = z80_IN_handler(p); } break;
+		case ina:         { z80_wait_states iCycleCount = Ia_;} { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = _rA; _rA = z80_IN_handler(MEMPTR); MEMPTR.w.l++;} break;
 		case inc_a:       INC(_rA); break;
 		case inc_b:       INC(_rB); break;
 		case inc_bc:      _rBC++; iWSAdjust++; break;
@@ -1089,15 +1104,15 @@ int t_z80regs::z80_execute(void)
 		case inc_l:       INC(_rL); break;
 		case inc_mhl:     { byte b = read_mem(_rHL); INC(b); write_mem(_rHL, b); } break;
 		case inc_sp:      _rSP++; iWSAdjust++; break;
-		case jp:          JP; break;
-		case jp_c:        if (_rF & Cflag) { JP } else { _rPC += 2; }; break;
-		case jp_m:        if (_rF & Sflag) { JP } else { _rPC += 2; }; break;
-		case jp_nc:       if (!(_rF & Cflag)) { JP } else { _rPC += 2; }; break;
-		case jp_nz:       if (!(_rF & Zflag)) { JP } else { _rPC += 2; }; break;
-		case jp_p:        if (!(_rF & Sflag)) { JP } else { _rPC += 2; }; break;
-		case jp_pe:       if (_rF & Pflag) { JP } else { _rPC += 2; }; break;
-		case jp_po:       if (!(_rF & Pflag)) { JP } else { _rPC += 2; }; break;
-		case jp_z:        if (_rF & Zflag) { JP } else { _rPC += 2; }; break;
+		case jp:          GET_ADDR; JP; break;
+		case jp_c:        GET_ADDR; if (_rF & Cflag) { JP } break;
+		case jp_m:        GET_ADDR; if (_rF & Sflag) { JP } break;
+		case jp_nc:       GET_ADDR; if (!(_rF & Cflag)) { JP } break;
+		case jp_nz:       GET_ADDR; if (!(_rF & Zflag)) { JP } break;
+		case jp_p:        GET_ADDR; if (!(_rF & Sflag)) { JP } break;
+		case jp_pe:       GET_ADDR; if (_rF & Pflag) { JP } break;
+		case jp_po:       GET_ADDR; if (!(_rF & Pflag)) { JP } break;
+		case jp_z:        GET_ADDR; if (_rF & Zflag) { JP } break;
 		case jr:          JR; break;
 		case jr_c:        if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; }; break;
 		case jr_nc:       if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; }; break;
@@ -1111,10 +1126,10 @@ int t_z80regs::z80_execute(void)
 		case ld_a_e:      _rA = _rE; break;
 		case ld_a_h:      _rA = _rH; break;
 		case ld_a_l:      _rA = _rL; break;
-		case ld_a_mbc:    _rA = read_mem(_rBC); break;
-		case ld_a_mde:    _rA = read_mem(_rDE); break;
+		case ld_a_mbc:    _rA = read_mem(_rBC); MEMPTR.w.l = _rBC+1; break;
+		case ld_a_mde:    _rA = read_mem(_rDE); MEMPTR.w.l = _rDE+1; break;
 		case ld_a_mhl:    _rA = read_mem(_rHL); break;
-		case ld_a_mword:  { reg_pair addr; addr.b.l = read_mem(_rPC++); addr.b.h = read_mem(_rPC++); _rA = read_mem(addr.w.l); } break;
+		case ld_a_mword:  { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = read_mem(_rPC++); _rA = read_mem(MEMPTR.w.l); MEMPTR.w.l++;} break;
 		case ld_bc_word:  BC.b.l = read_mem(_rPC++); BC.b.h = read_mem(_rPC++); break;
 		case ld_b_a:      _rB = _rA; break;
 		case ld_b_b:      break;
@@ -1173,7 +1188,7 @@ int t_z80regs::z80_execute(void)
 		case ld_l_h:      _rL = _rH; break;
 		case ld_l_l:      break;
 		case ld_l_mhl:    _rL = read_mem(_rHL); break;
-		case ld_mbc_a:    write_mem(_rBC, _rA); break;
+		case ld_mbc_a:    write_mem(_rBC, _rA); MEMPTR.w.l=_rBC+1; MEMPTR.b.h=_rA; break;
 		case ld_mde_a:    write_mem(_rDE, _rA); break;
 		case ld_mhl_a:    write_mem(_rHL, _rA); break;
 		case ld_mhl_b:    write_mem(_rHL, _rB); break;
@@ -1183,7 +1198,7 @@ int t_z80regs::z80_execute(void)
 		case ld_mhl_e:    write_mem(_rHL, _rE); break;
 		case ld_mhl_h:    write_mem(_rHL, _rH); break;
 		case ld_mhl_l:    write_mem(_rHL, _rL); break;
-		case ld_mword_a:  { reg_pair addr; addr.b.l = read_mem(_rPC++); addr.b.h = read_mem(_rPC++); write_mem(addr.w.l, _rA); } break;
+		case ld_mword_a:  { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = read_mem(_rPC++); write_mem(MEMPTR.w.l, _rA); MEMPTR.w.l++; MEMPTR.b.h = _rA;} break;
 		case ld_mword_hl: LDMEM_16(HL); break;
 		case ld_pc_hl:    _rPC = _rHL; break;
 		case ld_sp_hl:    _rSP = _rHL; iWSAdjust++; break;
@@ -1198,7 +1213,7 @@ int t_z80regs::z80_execute(void)
 		case or_h:        OR(_rH); break;
 		case or_l:        OR(_rL); break;
 		case or_mhl:      OR(read_mem(_rHL)); break;
-		case outa:        { z80_wait_states iCycleCount = Oa_;} { reg_pair p; p.b.l = read_mem(_rPC++); p.b.h = _rA; z80_OUT_handler(p, _rA); } break;
+		case outa:        { z80_wait_states iCycleCount = Oa_;} { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = _rA; z80_OUT_handler(MEMPTR, _rA); } break;
 		case pfx_cb:      z80_pfx_cb(); break;
 		case pfx_dd:      z80_pfx_dd(); break;
 		case pfx_ed:      z80_pfx_ed(); break;
@@ -1592,7 +1607,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case adc_e:       ADC(_rE); break;
 	case adc_h:       ADC(_rIXh); break;
 	case adc_l:       ADC(_rIXl); break;
-	case adc_mhl:     { signed char o = read_mem(_rPC++); ADC(read_mem(_rIX+o)); } break;
+	case adc_mhl:     { signed char o = read_mem(_rPC++); ADC(read_mem(_rIX+o)); MEMPTR.w.l=_rIX+o; } break;
 	case add_a:       ADD(_rA); break;
 	case add_b:       ADD(_rB); break;
 	case add_byte:    ADD(read_mem(_rPC++)); break;
@@ -1605,7 +1620,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case add_hl_hl:   ADD16(IX, IX); break;
 	case add_hl_sp:   ADD16(IX, SP); break;
 	case add_l:       ADD(_rIXl); break;
-	case add_mhl:     { signed char o = read_mem(_rPC++); ADD(read_mem(_rIX+o)); } break;
+	case add_mhl:     { signed char o = read_mem(_rPC++); ADD(read_mem(_rIX+o)); MEMPTR.w.l=_rIX+o;} break;
 	case and_a:       AND(_rA); break;
 	case and_b:       AND(_rB); break;
 	case and_byte:    AND(read_mem(_rPC++)); break;
@@ -1614,16 +1629,16 @@ void t_z80regs::z80_pfx_dd(void)
 	case and_e:       AND(_rE); break;
 	case and_h:       AND(_rIXh); break;
 	case and_l:       AND(_rIXl); break;
-	case and_mhl:     { signed char o = read_mem(_rPC++); AND(read_mem(_rIX+o)); } break;
-	case call:        CALL; break;
-	case call_c:      if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_m:      if (_rF & Sflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_nc:     if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_nz:     if (!(_rF & Zflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_p:      if (!(_rF & Sflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_pe:     if (_rF & Pflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_po:     if (!(_rF & Pflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_z:      if (_rF & Zflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
+	case and_mhl:     { signed char o = read_mem(_rPC++); AND(read_mem(_rIX+o)); MEMPTR.w.l=_rIX+o; } break;
+	case call:        GET_ADDR; CALL; break;
+	case call_c:      GET_ADDR; if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_m:      GET_ADDR; if (_rF & Sflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_nc:     GET_ADDR; if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_nz:     GET_ADDR; if (!(_rF & Zflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_p:      GET_ADDR; if (!(_rF & Sflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_pe:     GET_ADDR; if (_rF & Pflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_po:     GET_ADDR; if (!(_rF & Pflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_z:      GET_ADDR; if (_rF & Zflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
 	case ccf:         _rF = ((_rF & (Sflag | Zflag | Pflag | Cflag)) | ((_rF & CF) << 4) | (_rA & Xflags)) ^ CF; break;
 	case cpl:         _rA ^= 0xff; _rF = (_rF & (Sflag | Zflag | Pflag | Cflag)) | Hflag | Nflag | (_rA & Xflags); break;
 	case cp_a:        CP(_rA); break;
@@ -1634,7 +1649,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case cp_e:        CP(_rE); break;
 	case cp_h:        CP(_rIXh); break;
 	case cp_l:        CP(_rIXl); break;
-	case cp_mhl:      { signed char o = read_mem(_rPC++); CP(read_mem(_rIX+o)); } break;
+	case cp_mhl:      { signed char o = read_mem(_rPC++); CP(read_mem(_rIX+o)); MEMPTR.w.l = _rIX+o; } break;
 	case daa:         DAA; break;
 	case dec_a:       DEC(_rA); break;
 	case dec_b:       DEC(_rB); break;
@@ -1646,7 +1661,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case dec_h:       DEC(_rIXh); break;
 	case dec_hl:      _rIX--; iWSAdjust++; break;
 	case dec_l:       DEC(_rIXl); break;
-	case dec_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIX+o); DEC(b); write_mem(_rIX+o, b); } break;
+	case dec_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIX+o); DEC(b); write_mem(_rIX+o, b); MEMPTR.w.l=_rIX+o;} break;
 	case dec_sp:      _rSP--; iWSAdjust++; break;
 	case di:          _rIFF1 = _rIFF2 = 0; EI_issued = 0; break;
 	case djnz:        if (--_rB) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; } break;
@@ -1656,7 +1671,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case ex_de_hl:    EX(DE, HL); break;
 	case ex_msp_hl:   EX_SP(IX); iWSAdjust++; break;
 	case halt:        _rHALT = 1; _rPC--; break;
-	case ina:         { z80_wait_states iCycleCount = Ia_;} { reg_pair p; p.b.l = read_mem(_rPC++); p.b.h = _rA; _rA = z80_IN_handler(p); } break;
+	case ina:         { z80_wait_states iCycleCount = Ia_;} { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = _rA; _rA = z80_IN_handler(MEMPTR); MEMPTR.w.l++;} break;
 	case inc_a:       INC(_rA); break;
 	case inc_b:       INC(_rB); break;
 	case inc_bc:      _rBC++; iWSAdjust++; break;
@@ -1667,17 +1682,17 @@ void t_z80regs::z80_pfx_dd(void)
 	case inc_h:       INC(_rIXh); break;
 	case inc_hl:      _rIX++; iWSAdjust++; break;
 	case inc_l:       INC(_rIXl); break;
-	case inc_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIX+o); INC(b); write_mem(_rIX+o, b); } break;
+	case inc_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIX+o); INC(b); write_mem(_rIX+o, b); MEMPTR.w.l = _rIX+o;} break;
 	case inc_sp:      _rSP++; iWSAdjust++; break;
-	case jp:          JP; break;
-	case jp_c:        if (_rF & Cflag) { JP } else { _rPC += 2; }; break;
-	case jp_m:        if (_rF & Sflag) { JP } else { _rPC += 2; }; break;
-	case jp_nc:       if (!(_rF & Cflag)) { JP } else { _rPC += 2; }; break;
-	case jp_nz:       if (!(_rF & Zflag)) { JP } else { _rPC += 2; }; break;
-	case jp_p:        if (!(_rF & Sflag)) { JP } else { _rPC += 2; }; break;
-	case jp_pe:       if (_rF & Pflag) { JP } else { _rPC += 2; }; break;
-	case jp_po:       if (!(_rF & Pflag)) { JP } else { _rPC += 2; }; break;
-	case jp_z:        if (_rF & Zflag) { JP } else { _rPC += 2; }; break;
+	case jp:          GET_ADDR; JP; break;
+	case jp_c:        GET_ADDR; if (_rF & Cflag) { JP } break;
+	case jp_m:        GET_ADDR; if (_rF & Sflag) { JP } break;
+	case jp_nc:       GET_ADDR; if (!(_rF & Cflag)) { JP } break;
+	case jp_nz:       GET_ADDR; if (!(_rF & Zflag)) { JP } break;
+	case jp_p:        GET_ADDR; if (!(_rF & Sflag)) { JP } break;
+	case jp_pe:       GET_ADDR; if (_rF & Pflag) { JP } break;
+	case jp_po:       GET_ADDR; if (!(_rF & Pflag)) { JP } break;
+	case jp_z:        GET_ADDR; if (_rF & Zflag) { JP } break;
 	case jr:          JR; break;
 	case jr_c:        if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; }; break;
 	case jr_nc:       if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; }; break;
@@ -1693,8 +1708,8 @@ void t_z80regs::z80_pfx_dd(void)
 	case ld_a_l:      _rA = _rIXl; break;
 	case ld_a_mbc:    _rA = read_mem(_rBC); break;
 	case ld_a_mde:    _rA = read_mem(_rDE); break;
-	case ld_a_mhl:    { signed char o = read_mem(_rPC++); _rA = read_mem(_rIX+o); } break;
-	case ld_a_mword:  { reg_pair addr; addr.b.l = read_mem(_rPC++); addr.b.h = read_mem(_rPC++); _rA = read_mem(addr.w.l); } break;
+	case ld_a_mhl:    { signed char o = read_mem(_rPC++); _rA = read_mem(_rIX+o); MEMPTR.w.l=_rIX+o; } break;
+	case ld_a_mword:  { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = read_mem(_rPC++); _rA = read_mem(MEMPTR.w.l); MEMPTR.w.l++;} break;
 	case ld_bc_word:  BC.b.l = read_mem(_rPC++); BC.b.h = read_mem(_rPC++); break;
 	case ld_b_a:      _rB = _rA; break;
 	case ld_b_b:      break;
@@ -1704,7 +1719,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case ld_b_e:      _rB = _rE; break;
 	case ld_b_h:      _rB = _rIXh; break;
 	case ld_b_l:      _rB = _rIXl; break;
-	case ld_b_mhl:    { signed char o = read_mem(_rPC++); _rB = read_mem(_rIX+o); } break;
+	case ld_b_mhl:    { signed char o = read_mem(_rPC++); _rB = read_mem(_rIX+o); MEMPTR.w.l=_rIX+o;} break;
 	case ld_c_a:      _rC = _rA; break;
 	case ld_c_b:      _rC = _rB; break;
 	case ld_c_byte:   _rC = read_mem(_rPC++); break;
@@ -1713,7 +1728,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case ld_c_e:      _rC = _rE; break;
 	case ld_c_h:      _rC = _rIXh; break;
 	case ld_c_l:      _rC = _rIXl; break;
-	case ld_c_mhl:    { signed char o = read_mem(_rPC++); _rC = read_mem(_rIX+o); } break;
+	case ld_c_mhl:    { signed char o = read_mem(_rPC++); _rC = read_mem(_rIX+o); MEMPTR.w.l=_rIX+o;} break;
 	case ld_de_word:  DE.b.l = read_mem(_rPC++); DE.b.h = read_mem(_rPC++); break;
 	case ld_d_a:      _rD = _rA; break;
 	case ld_d_b:      _rD = _rB; break;
@@ -1723,7 +1738,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case ld_d_e:      _rD = _rE; break;
 	case ld_d_h:      _rD = _rIXh; break;
 	case ld_d_l:      _rD = _rIXl; break;
-	case ld_d_mhl:    { signed char o = read_mem(_rPC++); _rD = read_mem(_rIX+o); } break;
+	case ld_d_mhl:    { signed char o = read_mem(_rPC++); _rD = read_mem(_rIX+o); MEMPTR.w.l=_rIX+o;} break;
 	case ld_e_a:      _rE = _rA; break;
 	case ld_e_b:      _rE = _rB; break;
 	case ld_e_byte:   _rE = read_mem(_rPC++); break;
@@ -1732,7 +1747,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case ld_e_e:      break;
 	case ld_e_h:      _rE = _rIXh; break;
 	case ld_e_l:      _rE = _rIXl; break;
-	case ld_e_mhl:    { signed char o = read_mem(_rPC++); _rE = read_mem(_rIX+o); } break;
+	case ld_e_mhl:    { signed char o = read_mem(_rPC++); _rE = read_mem(_rIX+o); MEMPTR.w.l=_rIX+o;} break;
 	case ld_hl_mword: LD16_MEM(IX); break;
 	case ld_hl_word:  IX.b.l = read_mem(_rPC++); IX.b.h = read_mem(_rPC++); break;
 	case ld_h_a:      _rIXh = _rA; break;
@@ -1743,7 +1758,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case ld_h_e:      _rIXh = _rE; break;
 	case ld_h_h:      break;
 	case ld_h_l:      _rIXh = _rIXl; break;
-	case ld_h_mhl:    { signed char o = read_mem(_rPC++); _rH = read_mem(_rIX+o); } break;
+	case ld_h_mhl:    { signed char o = read_mem(_rPC++); _rH = read_mem(_rIX+o); MEMPTR.w.l=_rIX+o;} break;
 	case ld_l_a:      _rIXl = _rA; break;
 	case ld_l_b:      _rIXl = _rB; break;
 	case ld_l_byte:   _rIXl = read_mem(_rPC++); break;
@@ -1752,18 +1767,18 @@ void t_z80regs::z80_pfx_dd(void)
 	case ld_l_e:      _rIXl = _rE; break;
 	case ld_l_h:      _rIXl = _rIXh; break;
 	case ld_l_l:      break;
-	case ld_l_mhl:    { signed char o = read_mem(_rPC++); _rL = read_mem(_rIX+o); } break;
+	case ld_l_mhl:    { signed char o = read_mem(_rPC++); _rL = read_mem(_rIX+o); MEMPTR.w.l=_rIX+o;} break;
 	case ld_mbc_a:    write_mem(_rBC, _rA); break;
 	case ld_mde_a:    write_mem(_rDE, _rA); break;
-	case ld_mhl_a:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rA); } break;
-	case ld_mhl_b:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rB); } break;
-	case ld_mhl_byte: { signed char o = read_mem(_rPC++); byte b = read_mem(_rPC++); write_mem(_rIX+o, b); } break;
-	case ld_mhl_c:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rC); } break;
-	case ld_mhl_d:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rD); } break;
-	case ld_mhl_e:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rE); } break;
-	case ld_mhl_h:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rH); } break;
-	case ld_mhl_l:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rL); } break;
-	case ld_mword_a:  { reg_pair addr; addr.b.l = read_mem(_rPC++); addr.b.h = read_mem(_rPC++); write_mem(addr.w.l, _rA); } break;
+	case ld_mhl_a:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rA); MEMPTR.w.l=_rIX+o;} break;
+	case ld_mhl_b:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rB); MEMPTR.w.l=_rIX+o;} break;
+	case ld_mhl_byte: { signed char o = read_mem(_rPC++); byte b = read_mem(_rPC++); write_mem(_rIX+o, b); MEMPTR.w.l=_rIX+o;} break;
+	case ld_mhl_c:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rC); MEMPTR.w.l=_rIX+o;} break;
+	case ld_mhl_d:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rD); MEMPTR.w.l=_rIX+o; } break;
+	case ld_mhl_e:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rE); MEMPTR.w.l=_rIX+o; } break;
+	case ld_mhl_h:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rH); MEMPTR.w.l=_rIX+o; } break;
+	case ld_mhl_l:    { signed char o = read_mem(_rPC++); write_mem(_rIX+o, _rL); MEMPTR.w.l=_rIX+o; } break;
+	case ld_mword_a:  { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = read_mem(_rPC++); write_mem(MEMPTR.w.l, _rA); MEMPTR.w.l++; MEMPTR.b.h=_rA;} break;
 	case ld_mword_hl: LDMEM_16(IX); break;
 	case ld_pc_hl:    _rPC = _rIX; break;
 	case ld_sp_hl:    _rSP = _rIX; iWSAdjust++; break;
@@ -1777,8 +1792,8 @@ void t_z80regs::z80_pfx_dd(void)
 	case or_e:        OR(_rE); break;
 	case or_h:        OR(_rIXh); break;
 	case or_l:        OR(_rIXl); break;
-	case or_mhl:      { signed char o = read_mem(_rPC++); OR(read_mem(_rIX+o)); } break;
-	case outa:        { z80_wait_states iCycleCount = Oa_;} { reg_pair p; p.b.l = read_mem(_rPC++); p.b.h = _rA; z80_OUT_handler(p, _rA); } break;
+	case or_mhl:      { signed char o = read_mem(_rPC++); OR(read_mem(_rIX+o));  MEMPTR.w.l=_rIX+o;} break;
+	case outa:        { z80_wait_states iCycleCount = Oa_;} { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = _rA; z80_OUT_handler(MEMPTR, _rA); } break;
 	case pfx_cb:      z80_pfx_ddcb(); break;
 	case pfx_dd:      z80_pfx_dd(); break;
 	case pfx_ed:      z80_pfx_ed(); break;
@@ -1820,7 +1835,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case sbc_e:       SBC(_rE); break;
 	case sbc_h:       SBC(_rIXh); break;
 	case sbc_l:       SBC(_rIXl); break;
-	case sbc_mhl:     { signed char o = read_mem(_rPC++); SBC(read_mem(_rIX+o)); } break;
+	case sbc_mhl:     { signed char o = read_mem(_rPC++); SBC(read_mem(_rIX+o)); MEMPTR.w.l=_rIX+o; } break;
 	case scf:         _rF = (_rF & (Sflag | Zflag | Pflag)) | Cflag | (_rA & Xflags); break;
 	case sub_a:       SUB(_rA); break;
 	case sub_b:       SUB(_rB); break;
@@ -1830,7 +1845,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case sub_e:       SUB(_rE); break;
 	case sub_h:       SUB(_rIXh); break;
 	case sub_l:       SUB(_rIXl); break;
-	case sub_mhl:     { signed char o = read_mem(_rPC++); SUB(read_mem(_rIX+o)); } break;
+	case sub_mhl:     { signed char o = read_mem(_rPC++); SUB(read_mem(_rIX+o)); MEMPTR.w.l=_rIX+o; } break;
 	case xor_a:       XOR(_rA); break;
 	case xor_b:       XOR(_rB); break;
 	case xor_byte:    XOR(read_mem(_rPC++)); break;
@@ -1839,7 +1854,7 @@ void t_z80regs::z80_pfx_dd(void)
 	case xor_e:       XOR(_rE); break;
 	case xor_h:       XOR(_rIXh); break;
 	case xor_l:       XOR(_rIXl); break;
-	case xor_mhl:     { signed char o = read_mem(_rPC++); XOR(read_mem(_rIX+o)); } break;
+	case xor_mhl:     { signed char o = read_mem(_rPC++); XOR(read_mem(_rIX+o)); MEMPTR.w.l=_rIX+o; } break;
    }
 }
 
@@ -1853,6 +1868,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	o = read_mem(_rPC++); // offset
 	bOpCode = read_mem(_rPC++);
 	iCycleCount += cc_xycb[bOpCode];
+	MEMPTR.w.l=_rIX+o;
 	switch(bOpCode)
 	{
 	case bit0_a:      BIT_XY(0, read_mem(_rIX+o)); break;
@@ -1862,7 +1878,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit0_e:      BIT_XY(0, read_mem(_rIX+o)); break;
 	case bit0_h:      BIT_XY(0, read_mem(_rIX+o)); break;
 	case bit0_l:      BIT_XY(0, read_mem(_rIX+o)); break;
-	case bit0_mhl:    BIT_XY(0, read_mem(_rIX+o)); break;
+	case bit0_mhl:    BIT_XY(0, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000); break;
 	case bit1_a:      BIT_XY(1, read_mem(_rIX+o)); break;
 	case bit1_b:      BIT_XY(1, read_mem(_rIX+o)); break;
 	case bit1_c:      BIT_XY(1, read_mem(_rIX+o)); break;
@@ -1870,7 +1886,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit1_e:      BIT_XY(1, read_mem(_rIX+o)); break;
 	case bit1_h:      BIT_XY(1, read_mem(_rIX+o)); break;
 	case bit1_l:      BIT_XY(1, read_mem(_rIX+o)); break;
-	case bit1_mhl:    BIT_XY(1, read_mem(_rIX+o)); break;
+	case bit1_mhl:    BIT_XY(1, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000);break;
 	case bit2_a:      BIT_XY(2, read_mem(_rIX+o)); break;
 	case bit2_b:      BIT_XY(2, read_mem(_rIX+o)); break;
 	case bit2_c:      BIT_XY(2, read_mem(_rIX+o)); break;
@@ -1878,7 +1894,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit2_e:      BIT_XY(2, read_mem(_rIX+o)); break;
 	case bit2_h:      BIT_XY(2, read_mem(_rIX+o)); break;
 	case bit2_l:      BIT_XY(2, read_mem(_rIX+o)); break;
-	case bit2_mhl:    BIT_XY(2, read_mem(_rIX+o)); break;
+	case bit2_mhl:    BIT_XY(2, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000);break;
 	case bit3_a:      BIT_XY(3, read_mem(_rIX+o)); break;
 	case bit3_b:      BIT_XY(3, read_mem(_rIX+o)); break;
 	case bit3_c:      BIT_XY(3, read_mem(_rIX+o)); break;
@@ -1886,7 +1902,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit3_e:      BIT_XY(3, read_mem(_rIX+o)); break;
 	case bit3_h:      BIT_XY(3, read_mem(_rIX+o)); break;
 	case bit3_l:      BIT_XY(3, read_mem(_rIX+o)); break;
-	case bit3_mhl:    BIT_XY(3, read_mem(_rIX+o)); break;
+	case bit3_mhl:    BIT_XY(3, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000);break;
 	case bit4_a:      BIT_XY(4, read_mem(_rIX+o)); break;
 	case bit4_b:      BIT_XY(4, read_mem(_rIX+o)); break;
 	case bit4_c:      BIT_XY(4, read_mem(_rIX+o)); break;
@@ -1894,7 +1910,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit4_e:      BIT_XY(4, read_mem(_rIX+o)); break;
 	case bit4_h:      BIT_XY(4, read_mem(_rIX+o)); break;
 	case bit4_l:      BIT_XY(4, read_mem(_rIX+o)); break;
-	case bit4_mhl:    BIT_XY(4, read_mem(_rIX+o)); break;
+	case bit4_mhl:    BIT_XY(4, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000);break;
 	case bit5_a:      BIT_XY(5, read_mem(_rIX+o)); break;
 	case bit5_b:      BIT_XY(5, read_mem(_rIX+o)); break;
 	case bit5_c:      BIT_XY(5, read_mem(_rIX+o)); break;
@@ -1902,7 +1918,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit5_e:      BIT_XY(5, read_mem(_rIX+o)); break;
 	case bit5_h:      BIT_XY(5, read_mem(_rIX+o)); break;
 	case bit5_l:      BIT_XY(5, read_mem(_rIX+o)); break;
-	case bit5_mhl:    BIT_XY(5, read_mem(_rIX+o)); break;
+	case bit5_mhl:    BIT_XY(5, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000);break;
 	case bit6_a:      BIT_XY(6, read_mem(_rIX+o)); break;
 	case bit6_b:      BIT_XY(6, read_mem(_rIX+o)); break;
 	case bit6_c:      BIT_XY(6, read_mem(_rIX+o)); break;
@@ -1910,7 +1926,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit6_e:      BIT_XY(6, read_mem(_rIX+o)); break;
 	case bit6_h:      BIT_XY(6, read_mem(_rIX+o)); break;
 	case bit6_l:      BIT_XY(6, read_mem(_rIX+o)); break;
-	case bit6_mhl:    BIT_XY(6, read_mem(_rIX+o)); break;
+	case bit6_mhl:    BIT_XY(6, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000);break;
 	case bit7_a:      BIT_XY(7, read_mem(_rIX+o)); break;
 	case bit7_b:      BIT_XY(7, read_mem(_rIX+o)); break;
 	case bit7_c:      BIT_XY(7, read_mem(_rIX+o)); break;
@@ -1918,7 +1934,7 @@ void t_z80regs::z80_pfx_ddcb(void)
 	case bit7_e:      BIT_XY(7, read_mem(_rIX+o)); break;
 	case bit7_h:      BIT_XY(7, read_mem(_rIX+o)); break;
 	case bit7_l:      BIT_XY(7, read_mem(_rIX+o)); break;
-	case bit7_mhl:    BIT_XY(7, read_mem(_rIX+o)); break;
+	case bit7_mhl:    BIT_XY(7, read_mem(_rIX+o)); _rF = (_rF & 0b11010111) | (MEMPTR.b.h & 0b00101000);break;
 	case res0_a:      _rA = read_mem(_rIX+o); write_mem(_rIX+o, _rA = RES(0, _rA)); break;
 	case res0_b:      _rB = read_mem(_rIX+o); write_mem(_rIX+o, _rB = RES(0, _rB)); break;
 	case res0_c:      _rC = read_mem(_rIX+o); write_mem(_rIX+o, _rC = RES(0, _rC)); break;
@@ -2324,7 +2340,7 @@ void t_z80regs::z80_pfx_ed(void)
 	case ini:         { z80_wait_states iCycleCount = Iy_;} INI; break;
 	case inir:        { z80_wait_states iCycleCount = Iy_;} INIR; break;
 	case in_0_c:      { z80_wait_states iCycleCount = Ix_;} { byte res = z80_IN_handler(BC); _rF = (_rF & Cflag) | SZP[res]; } break;
-	case in_a_c:      { z80_wait_states iCycleCount = Ix_;} _rA = z80_IN_handler(BC); _rF = (_rF & Cflag) | SZP[_rA]; break;
+	case in_a_c:      { z80_wait_states iCycleCount = Ix_;} _rA = z80_IN_handler(BC); _rF = (_rF & Cflag) | SZP[_rA]; MEMPTR.w.l = _rBC; break;
 	case in_b_c:      { z80_wait_states iCycleCount = Ix_;} _rB = z80_IN_handler(BC); _rF = (_rF & Cflag) | SZP[_rB]; break;
 	case in_c_c:      { z80_wait_states iCycleCount = Ix_;} _rC = z80_IN_handler(BC); _rF = (_rF & Cflag) | SZP[_rC]; break;
 	case in_d_c:      { z80_wait_states iCycleCount = Ix_;} _rD = z80_IN_handler(BC); _rF = (_rF & Cflag) | SZP[_rD]; break;
@@ -2360,7 +2376,7 @@ void t_z80regs::z80_pfx_ed(void)
 	case outd:        { z80_wait_states iCycleCount = Oy_;} OUTD; break;
 	case outi:        { z80_wait_states iCycleCount = Oy_;} OUTI; break;
 	case out_c_0:     { z80_wait_states iCycleCount = Ox_;} z80_OUT_handler(BC, 0); break;
-	case out_c_a:     { z80_wait_states iCycleCount = Ox_;} z80_OUT_handler(BC, _rA); break;
+	case out_c_a:     { z80_wait_states iCycleCount = Ox_;} z80_OUT_handler(BC, _rA); MEMPTR.w.l = _rBC+1; break;
 	case out_c_b:     { z80_wait_states iCycleCount = Ox_;} z80_OUT_handler(BC, _rB); break;
 	case out_c_c:     { z80_wait_states iCycleCount = Ox_;} z80_OUT_handler(BC, _rC); break;
 	case out_c_d:     { z80_wait_states iCycleCount = Ox_;} z80_OUT_handler(BC, _rD); break;
@@ -2403,7 +2419,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case adc_e:       ADC(_rE); break;
 	case adc_h:       ADC(_rIYh); break;
 	case adc_l:       ADC(_rIYl); break;
-	case adc_mhl:     { signed char o = read_mem(_rPC++); ADC(read_mem(_rIY+o)); } break;
+	case adc_mhl:     { signed char o = read_mem(_rPC++); ADC(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o; } break;
 	case add_a:       ADD(_rA); break;
 	case add_b:       ADD(_rB); break;
 	case add_byte:    ADD(read_mem(_rPC++)); break;
@@ -2416,7 +2432,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case add_hl_hl:   ADD16(IY, IY); break;
 	case add_hl_sp:   ADD16(IY, SP); break;
 	case add_l:       ADD(_rIYl); break;
-	case add_mhl:     { signed char o = read_mem(_rPC++); ADD(read_mem(_rIY+o)); } break;
+	case add_mhl:     { signed char o = read_mem(_rPC++); ADD(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o;  } break;
 	case and_a:       AND(_rA); break;
 	case and_b:       AND(_rB); break;
 	case and_byte:    AND(read_mem(_rPC++)); break;
@@ -2425,16 +2441,16 @@ void t_z80regs::z80_pfx_fd(void)
 	case and_e:       AND(_rE); break;
 	case and_h:       AND(_rIYh); break;
 	case and_l:       AND(_rIYl); break;
-	case and_mhl:     { signed char o = read_mem(_rPC++); AND(read_mem(_rIY+o)); } break;
-	case call:        CALL; break;
-	case call_c:      if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_m:      if (_rF & Sflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_nc:     if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_nz:     if (!(_rF & Zflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_p:      if (!(_rF & Sflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_pe:     if (_rF & Pflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_po:     if (!(_rF & Pflag)) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
-	case call_z:      if (_rF & Zflag) { iCycleCount += cc_ex[bOpCode]; CALL } else { _rPC += 2; } break;
+	case and_mhl:     { signed char o = read_mem(_rPC++); AND(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o;  } break;
+	case call:        GET_ADDR; CALL; break;
+	case call_c:      GET_ADDR; if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_m:      GET_ADDR; if (_rF & Sflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_nc:     GET_ADDR; if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_nz:     GET_ADDR; if (!(_rF & Zflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_p:      GET_ADDR; if (!(_rF & Sflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_pe:     GET_ADDR; if (_rF & Pflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_po:     GET_ADDR; if (!(_rF & Pflag)) { iCycleCount += cc_ex[bOpCode]; CALL } break;
+	case call_z:      GET_ADDR; if (_rF & Zflag) { iCycleCount += cc_ex[bOpCode]; CALL } break;
 	case ccf:         _rF = ((_rF & (Sflag | Zflag | Pflag | Cflag)) | ((_rF & CF) << 4) | (_rA & Xflags)) ^ CF; break;
 	case cpl:         _rA ^= 0xff; _rF = (_rF & (Sflag | Zflag | Pflag | Cflag)) | Hflag | Nflag | (_rA & Xflags); break;
 	case cp_a:        CP(_rA); break;
@@ -2445,7 +2461,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case cp_e:        CP(_rE); break;
 	case cp_h:        CP(_rIYh); break;
 	case cp_l:        CP(_rIYl); break;
-	case cp_mhl:      { signed char o = read_mem(_rPC++); CP(read_mem(_rIY+o)); } break;
+	case cp_mhl:      { signed char o = read_mem(_rPC++); CP(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o;  } break;
 	case daa:         DAA; break;
 	case dec_a:       DEC(_rA); break;
 	case dec_b:       DEC(_rB); break;
@@ -2457,7 +2473,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case dec_h:       DEC(_rIYh); break;
 	case dec_hl:      _rIY--; iWSAdjust++; break;
 	case dec_l:       DEC(_rIYl); break;
-	case dec_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIY+o); DEC(b); write_mem(_rIY+o, b); } break;
+	case dec_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIY+o); DEC(b); write_mem(_rIY+o, b); MEMPTR.w.l=_rIY+o;  } break;
 	case dec_sp:      _rSP--; iWSAdjust++; break;
 	case di:          _rIFF1 = _rIFF2 = 0; EI_issued = 0; break;
 	case djnz:        if (--_rB) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; } break;
@@ -2467,7 +2483,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case ex_de_hl:    EX(DE, HL); break;
 	case ex_msp_hl:   EX_SP(IY); iWSAdjust++; break;
 	case halt:        _rHALT = 1; _rPC--; break;
-	case ina:         { z80_wait_states iCycleCount = Ia_;} { reg_pair p; p.b.l = read_mem(_rPC++); p.b.h = _rA; _rA = z80_IN_handler(p); } break;
+	case ina:         { z80_wait_states iCycleCount = Ia_;} { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = _rA; _rA = z80_IN_handler(MEMPTR); MEMPTR.w.l++;} break;
 	case inc_a:       INC(_rA); break;
 	case inc_b:       INC(_rB); break;
 	case inc_bc:      _rBC++; iWSAdjust++; break;
@@ -2478,17 +2494,17 @@ void t_z80regs::z80_pfx_fd(void)
 	case inc_h:       INC(_rIYh); break;
 	case inc_hl:      _rIY++; iWSAdjust++; break;
 	case inc_l:       INC(_rIYl); break;
-	case inc_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIY+o); INC(b); write_mem(_rIY+o, b); } break;
+	case inc_mhl:     { signed char o = read_mem(_rPC++); byte b = read_mem(_rIY+o); INC(b); write_mem(_rIY+o, b); MEMPTR.w.l=_rIY+o;  } break;
 	case inc_sp:      _rSP++; iWSAdjust++; break;
-	case jp:          JP; break;
-	case jp_c:        if (_rF & Cflag) { JP } else { _rPC += 2; }; break;
-	case jp_m:        if (_rF & Sflag) { JP } else { _rPC += 2; }; break;
-	case jp_nc:       if (!(_rF & Cflag)) { JP } else { _rPC += 2; }; break;
-	case jp_nz:       if (!(_rF & Zflag)) { JP } else { _rPC += 2; }; break;
-	case jp_p:        if (!(_rF & Sflag)) { JP } else { _rPC += 2; }; break;
-	case jp_pe:       if (_rF & Pflag) { JP } else { _rPC += 2; }; break;
-	case jp_po:       if (!(_rF & Pflag)) { JP } else { _rPC += 2; }; break;
-	case jp_z:        if (_rF & Zflag) { JP } else { _rPC += 2; }; break;
+	case jp:          GET_ADDR; JP; break;
+	case jp_c:        GET_ADDR; if (_rF & Cflag) { JP } break;
+	case jp_m:        GET_ADDR; if (_rF & Sflag) { JP } break;
+	case jp_nc:       GET_ADDR; if (!(_rF & Cflag)) { JP } break;
+	case jp_nz:       GET_ADDR; if (!(_rF & Zflag)) { JP } break;
+	case jp_p:        GET_ADDR; if (!(_rF & Sflag)) { JP } break;
+	case jp_pe:       GET_ADDR; if (_rF & Pflag) { JP } break;
+	case jp_po:       GET_ADDR; if (!(_rF & Pflag)) { JP } break;
+	case jp_z:        GET_ADDR; if (_rF & Zflag) { JP } break;
 	case jr:          JR; break;
 	case jr_c:        if (_rF & Cflag) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; }; break;
 	case jr_nc:       if (!(_rF & Cflag)) { iCycleCount += cc_ex[bOpCode]; JR } else { _rPC++; }; break;
@@ -2504,8 +2520,8 @@ void t_z80regs::z80_pfx_fd(void)
 	case ld_a_l:      _rA = _rIYl; break;
 	case ld_a_mbc:    _rA = read_mem(_rBC); break;
 	case ld_a_mde:    _rA = read_mem(_rDE); break;
-	case ld_a_mhl:    { signed char o = read_mem(_rPC++); _rA = read_mem(_rIY+o); } break;
-	case ld_a_mword:  { reg_pair addr; addr.b.l = read_mem(_rPC++); addr.b.h = read_mem(_rPC++); _rA = read_mem(addr.w.l); } break;
+	case ld_a_mhl:    { signed char o = read_mem(_rPC++); _rA = read_mem(_rIY+o); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_a_mword:  { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = read_mem(_rPC++); _rA = read_mem(MEMPTR.w.l); MEMPTR.w.l++;} break;
 	case ld_bc_word:  BC.b.l = read_mem(_rPC++); BC.b.h = read_mem(_rPC++); break;
 	case ld_b_a:      _rB = _rA; break;
 	case ld_b_b:      break;
@@ -2515,7 +2531,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case ld_b_e:      _rB = _rE; break;
 	case ld_b_h:      _rB = _rIYh; break;
 	case ld_b_l:      _rB = _rIYl; break;
-	case ld_b_mhl:    { signed char o = read_mem(_rPC++); _rB = read_mem(_rIY+o); } break;
+	case ld_b_mhl:    { signed char o = read_mem(_rPC++); _rB = read_mem(_rIY+o); MEMPTR.w.l=_rIY+o;  } break;
 	case ld_c_a:      _rC = _rA; break;
 	case ld_c_b:      _rC = _rB; break;
 	case ld_c_byte:   _rC = read_mem(_rPC++); break;
@@ -2524,7 +2540,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case ld_c_e:      _rC = _rE; break;
 	case ld_c_h:      _rC = _rIYh; break;
 	case ld_c_l:      _rC = _rIYl; break;
-	case ld_c_mhl:    { signed char o = read_mem(_rPC++); _rC = read_mem(_rIY+o); } break;
+	case ld_c_mhl:    { signed char o = read_mem(_rPC++); _rC = read_mem(_rIY+o); MEMPTR.w.l=_rIY+o;  } break;
 	case ld_de_word:  DE.b.l = read_mem(_rPC++); DE.b.h = read_mem(_rPC++); break;
 	case ld_d_a:      _rD = _rA; break;
 	case ld_d_b:      _rD = _rB; break;
@@ -2534,7 +2550,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case ld_d_e:      _rD = _rE; break;
 	case ld_d_h:      _rD = _rIYh; break;
 	case ld_d_l:      _rD = _rIYl; break;
-	case ld_d_mhl:    { signed char o = read_mem(_rPC++); _rD = read_mem(_rIY+o); } break;
+	case ld_d_mhl:    { signed char o = read_mem(_rPC++); _rD = read_mem(_rIY+o); MEMPTR.w.l=_rIY+o;  } break;
 	case ld_e_a:      _rE = _rA; break;
 	case ld_e_b:      _rE = _rB; break;
 	case ld_e_byte:   _rE = read_mem(_rPC++); break;
@@ -2543,7 +2559,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case ld_e_e:      break;
 	case ld_e_h:      _rE = _rIYh; break;
 	case ld_e_l:      _rE = _rIYl; break;
-	case ld_e_mhl:    { signed char o = read_mem(_rPC++); _rE = read_mem(_rIY+o); } break;
+	case ld_e_mhl:    { signed char o = read_mem(_rPC++); _rE = read_mem(_rIY+o); MEMPTR.w.l=_rIY+o;  } break;
 	case ld_hl_mword: LD16_MEM(IY); break;
 	case ld_hl_word:  IY.b.l = read_mem(_rPC++); IY.b.h = read_mem(_rPC++); break;
 	case ld_h_a:      _rIYh = _rA; break;
@@ -2554,7 +2570,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case ld_h_e:      _rIYh = _rE; break;
 	case ld_h_h:      break;
 	case ld_h_l:      _rIYh = _rIYl; break;
-	case ld_h_mhl:    { signed char o = read_mem(_rPC++); _rH = read_mem(_rIY+o); } break;
+	case ld_h_mhl:    { signed char o = read_mem(_rPC++); _rH = read_mem(_rIY+o); MEMPTR.w.l=_rIY+o;  } break;
 	case ld_l_a:      _rIYl = _rA; break;
 	case ld_l_b:      _rIYl = _rB; break;
 	case ld_l_byte:   _rIYl = read_mem(_rPC++); break;
@@ -2563,18 +2579,18 @@ void t_z80regs::z80_pfx_fd(void)
 	case ld_l_e:      _rIYl = _rE; break;
 	case ld_l_h:      _rIYl = _rIYh; break;
 	case ld_l_l:      break;
-	case ld_l_mhl:    { signed char o = read_mem(_rPC++); _rL = read_mem(_rIY+o); } break;
+	case ld_l_mhl:    { signed char o = read_mem(_rPC++); _rL = read_mem(_rIY+o); MEMPTR.w.l=_rIY+o;  } break;
 	case ld_mbc_a:    write_mem(_rBC, _rA); break;
 	case ld_mde_a:    write_mem(_rDE, _rA); break;
-	case ld_mhl_a:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rA); } break;
-	case ld_mhl_b:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rB); } break;
-	case ld_mhl_byte: { signed char o = read_mem(_rPC++); byte b = read_mem(_rPC++); write_mem(_rIY+o, b); } break;
-	case ld_mhl_c:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rC); } break;
-	case ld_mhl_d:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rD); } break;
-	case ld_mhl_e:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rE); } break;
-	case ld_mhl_h:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rH); } break;
-	case ld_mhl_l:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rL); } break;
-	case ld_mword_a:  { reg_pair addr; addr.b.l = read_mem(_rPC++); addr.b.h = read_mem(_rPC++); write_mem(addr.w.l, _rA); } break;
+	case ld_mhl_a:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rA); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mhl_b:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rB); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mhl_byte: { signed char o = read_mem(_rPC++); byte b = read_mem(_rPC++); write_mem(_rIY+o, b); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mhl_c:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rC); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mhl_d:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rD); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mhl_e:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rE); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mhl_h:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rH); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mhl_l:    { signed char o = read_mem(_rPC++); write_mem(_rIY+o, _rL); MEMPTR.w.l=_rIY+o;  } break;
+	case ld_mword_a:  { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = read_mem(_rPC++); write_mem(MEMPTR.w.l, _rA); MEMPTR.w.l++; MEMPTR.b.h=_rA;} break;
 	case ld_mword_hl: LDMEM_16(IY); break;
 	case ld_pc_hl:    _rPC = _rIY; break;
 	case ld_sp_hl:    _rSP = _rIY; iWSAdjust++; break;
@@ -2588,8 +2604,8 @@ void t_z80regs::z80_pfx_fd(void)
 	case or_e:        OR(_rE); break;
 	case or_h:        OR(_rIYh); break;
 	case or_l:        OR(_rIYl); break;
-	case or_mhl:      { signed char o = read_mem(_rPC++); OR(read_mem(_rIY+o)); } break;
-	case outa:        { z80_wait_states iCycleCount = Oa_;} { reg_pair p; p.b.l = read_mem(_rPC++); p.b.h = _rA; z80_OUT_handler(p, _rA); } break;
+	case or_mhl:      { signed char o = read_mem(_rPC++); OR(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o;  } break;
+	case outa:        { z80_wait_states iCycleCount = Oa_;} { MEMPTR.b.l = read_mem(_rPC++); MEMPTR.b.h = _rA; z80_OUT_handler(MEMPTR, _rA); MEMPTR.b.l++; } break;
 	case pfx_cb:      z80_pfx_fdcb(); break;
 	case pfx_dd:      z80_pfx_dd(); break;
 	case pfx_ed:      z80_pfx_ed(); break;
@@ -2631,7 +2647,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case sbc_e:       SBC(_rE); break;
 	case sbc_h:       SBC(_rIYh); break;
 	case sbc_l:       SBC(_rIYl); break;
-	case sbc_mhl:     { signed char o = read_mem(_rPC++); SBC(read_mem(_rIY+o)); } break;
+	case sbc_mhl:     { signed char o = read_mem(_rPC++); SBC(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o;  } break;
 	case scf:         _rF = (_rF & (Sflag | Zflag | Pflag)) | Cflag | (_rA & Xflags); break;
 	case sub_a:       SUB(_rA); break;
 	case sub_b:       SUB(_rB); break;
@@ -2641,7 +2657,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case sub_e:       SUB(_rE); break;
 	case sub_h:       SUB(_rIYh); break;
 	case sub_l:       SUB(_rIYl); break;
-	case sub_mhl:     { signed char o = read_mem(_rPC++); SUB(read_mem(_rIY+o)); } break;
+	case sub_mhl:     { signed char o = read_mem(_rPC++); SUB(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o;  } break;
 	case xor_a:       XOR(_rA); break;
 	case xor_b:       XOR(_rB); break;
 	case xor_byte:    XOR(read_mem(_rPC++)); break;
@@ -2650,7 +2666,7 @@ void t_z80regs::z80_pfx_fd(void)
 	case xor_e:       XOR(_rE); break;
 	case xor_h:       XOR(_rIYh); break;
 	case xor_l:       XOR(_rIYl); break;
-	case xor_mhl:     { signed char o = read_mem(_rPC++); XOR(read_mem(_rIY+o)); } break;
+	case xor_mhl:     { signed char o = read_mem(_rPC++); XOR(read_mem(_rIY+o)); MEMPTR.w.l=_rIY+o;  } break;
    }
 }
 
@@ -2664,6 +2680,7 @@ void t_z80regs::z80_pfx_fdcb(void)
 	o = read_mem(_rPC++); // offset
 	bOpCode = read_mem(_rPC++);
 	iCycleCount += cc_xycb[bOpCode];
+	 MEMPTR.w.l=_rIY+o; 
 	switch(bOpCode)
 	{
 	case bit0_a:      BIT_XY(0, read_mem(_rIY+o)); break;
