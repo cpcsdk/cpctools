@@ -2752,7 +2752,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel16->SetSizer( bSizer41 );
 	m_panel16->Layout();
 	bSizer41->Fit( m_panel16 );
-	m_notebook4->AddPage( m_panel16, wxT("Overview"), true );
+	m_notebook4->AddPage( m_panel16, wxT("Overview"), false );
 	m_panel12 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer38;
 	bSizer38 = new wxBoxSizer( wxVERTICAL );
@@ -2828,14 +2828,14 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	wxArrayString m_checkList1Choices;
 	m_checkList1 = new wxCheckListBox( m_panel13, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_checkList1Choices, 0 );
-	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
+	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxT("Courier") ) );
 	
 	bSizer391->Add( m_checkList1, 1, wxALL|wxEXPAND, 5 );
 	
 	m_panel13->SetSizer( bSizer391 );
 	m_panel13->Layout();
 	bSizer391->Fit( m_panel13 );
-	m_notebook4->AddPage( m_panel13, wxT("Asm view"), false );
+	m_notebook4->AddPage( m_panel13, wxT("Asm view"), true );
 	
 	bSizer29->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
 	

@@ -239,6 +239,8 @@ void MemoryImpl::RefreshMem(int startAddress)
 	}
 
 	m_checkList1 -> Set(a, 0);
+	// Work around a bug in wx...
+	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxT("Courier") ) );
 
 }
 

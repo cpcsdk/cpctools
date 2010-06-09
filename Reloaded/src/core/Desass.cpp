@@ -555,7 +555,7 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 		//Memory adress part
 		Listing.width(4);
 		Listing << std::hex << OldAdr ;
-		Listing << "\t" ;
+		Listing << "    " ;
 		//Memory content part
 		// Hex dump
 		for ( i = OldAdr; i < Adr; i++ )
@@ -564,10 +564,10 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 			Listing.width(2);
 			Listing << val ;
 			Listing << ' ' ;
+			
 		}
-		Listing << "\t" ;
-		if (Adr - OldAdr < 3)
-			Listing << "\t" ;
+		for(;i<OldAdr+3;i++) Listing << "   ";
+		Listing << "    " ;
 
 		// ASCII dump
 		for ( i = OldAdr; i < Adr; i++ )
@@ -583,8 +583,8 @@ void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
 				Listing << ".";
 			}
 		}
-
-		Listing << "\t" ;
+		for(;i<OldAdr+3;i++) Listing << " ";
+		Listing << "    " ;
 
 		//Instruction part
 		Listing << Inst ;
