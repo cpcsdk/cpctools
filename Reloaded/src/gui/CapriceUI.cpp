@@ -292,7 +292,7 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	
 	statusBar->Add( DriveActivity, 0, wxALL|wxFIXED_MINSIZE, 1 );
 	
-	m_statusText = new wxStaticText( this, wxID_ANY, wxT("Welcome to Reloaded!"), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
+	m_statusText = new wxStaticText( this, wxID_ANY, wxT("Welcome to Reloaded!"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxSUNKEN_BORDER );
 	m_statusText->Wrap( -1 );
 	m_statusText->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 	
@@ -580,7 +580,7 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	k_CONTROL4 = new wxButton( m_panel_input, CPC_CUR_LEFT, wxT("<<"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
 	gbSizer1->Add( k_CONTROL4, wxGBPosition( 4, 15 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
-	k_CONTROL5 = new wxButton( m_panel_input, CPC_CUR_DOWN, wxT("vv"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
+	k_CONTROL5 = new wxButton( m_panel_input, CPC_CUR_DOWN, wxT("vv"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT|wxWANTS_CHARS );
 	gbSizer1->Add( k_CONTROL5, wxGBPosition( 4, 16 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	k_CONTROL6 = new wxButton( m_panel_input, CPC_CUR_RIGHT, wxT(">>"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT );
@@ -694,7 +694,7 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_staticText62->Wrap( -1 );
 	bSizer23->Add( m_staticText62, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
-	RAMSize64 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("64k"), wxDefaultPosition, wxDefaultSize, 0 );
+	RAMSize64 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("64k"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	bSizer23->Add( RAMSize64, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
 	RAMSize128 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("128k"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -774,7 +774,7 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	manufacturerName->SetSelection( 0 );
 	bSizer45->Add( manufacturerName, 0, wxALL, 5 );
 	
-	radio50 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("50Hz"), wxDefaultPosition, wxDefaultSize, 0 );
+	radio50 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("50Hz"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	radio50->SetValue( true ); 
 	bSizer45->Add( radio50, 0, wxALL, 5 );
 	

@@ -1284,10 +1284,12 @@ int t_z80regs::z80_execute(void)
 		  else if (VDU.IsFrameFinished()) { // video emulation finished building frame?
 			  return EC_FRAME_COMPLETE; // exit emulation loop
 		  }
+		  /*
 		  else if (PSG.GetBufferFull()) { // sound emulation finished filling a buffer?
 			  PSG.SetBufferFull(0);
 			  return EC_SOUND_BUFFER; // exit emulation loop
 		  }
+		  */
 		  else if (CPC.cycle_count <= 0) { // emulation loop ran for one frame?
 			  CPC.cycle_count += CYCLE_COUNT_INIT;
 			  return EC_CYCLE_COUNT; // exit emulation loop

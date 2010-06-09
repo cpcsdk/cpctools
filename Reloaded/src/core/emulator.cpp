@@ -486,13 +486,24 @@ void Emulator::Emulate()
 				_renderer.AddTextLocate(0, 0, chStr);
 			}
 
+			//loopcon=0;
+
 			_renderer.EndDisplay(true);
 			return;
 		}
+		/*
 		else
 		{
-			_renderer.EndDisplay(false);
+			char x[20];
+			sprintf(x,"%d",iExitCondition);
+			logMessage(x);
+			loopcon++;
+			if(loopcon>64*1024) {
+				_renderer.EndDisplay(false);
+				loopcon=0;
+			}
 		}
+	*/
 
 		if (exitRequested)
 		{

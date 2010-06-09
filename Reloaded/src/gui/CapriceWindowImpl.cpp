@@ -87,7 +87,7 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 	    {
     	    wxBitmap bmp( *image);
     	    wxClientDC dc(getPanel());
-		      dc.DrawBitmap(bmp,0,0,false);
+		    dc.DrawBitmap(bmp,0,0,false);
 	    }
     }
 }

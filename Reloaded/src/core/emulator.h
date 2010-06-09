@@ -282,6 +282,8 @@ protected:
 	dword dwTicksTarget ;
 	dword dwTicksTargetFPS ;
 
+	//int loopcon;
+
 };
 
 #endif
