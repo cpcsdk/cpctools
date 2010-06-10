@@ -132,7 +132,7 @@ public:
 	reg_pair HLx;
 	reg_pair IX;
 	reg_pair IY;
-	reg_pair MEMPTR;
+	reg_pair WZ;  // The internal "work" register used by the z80
 
 	byte I;
 	byte R;
