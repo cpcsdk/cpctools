@@ -56,18 +56,37 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	wxArrayString sysromlist;
 	wxArrayString uromlist;
 	wxArrayString realromlist;
-	wxDir::GetAllFiles(_config.rom_path,&sysromlist);
 	char thepath[1024];
 	emulator.getConfigPath(thepath);
-	wxString userpath(thepath);
-	userpath.append("/roms/");
+
+	wxString userpath(wxString(thepath, wxConvUTF8));
+	userpath.append(wxT("/roms/"));
 	wxDir::GetAllFiles(userpath,&uromlist);
-	for (unsigned int i=0;i<uromlist.GetCount(); i++) {
-		realromlist.Add(wxFileName(uromlist[i]).GetFullName());
+	if (uromlist.GetCount() < 1)
+	{
+		std::cerr << "There is no user ROM !!" << endl ;
+		std::cerr << "Search path =" << userpath.mb_str() << endl ;
+ 	}
+	else
+	{
+		for (unsigned int i=0;i<uromlist.GetCount(); i++) {
+			realromlist.Add(wxFileName(uromlist[i]).GetFullName());
+		}
 	}
+
 	realromlist.Add(wxEmptyString); // Acts both as separator between user and sys and the "no rom" item
-	for (unsigned int i=0;i<sysromlist.GetCount(); i++) {
-		realromlist.Add(wxFileName(uromlist[i]).GetFullName());
+	wxDir::GetAllFiles(wxString(_config.rom_path, wxConvUTF8),&sysromlist);
+	if (sysromlist.GetCount() <1)
+	{
+		std::cerr << "There is no system ROM !!" << endl ;
+		std::cerr << "Search path =" << userpath.mb_str() << endl ;
+
+	}
+	else
+	{
+		for (unsigned int i=0;i<sysromlist.GetCount(); i++) {
+			realromlist.Add(wxFileName(sysromlist[i]).GetFullName());
+		}
 	}
 
 	ROM0file->Append(realromlist);
