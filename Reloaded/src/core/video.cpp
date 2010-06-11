@@ -21,7 +21,7 @@
 #include "video.h"
 #include "glfuncs.h"
 #include <math.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <algorithm>
 #include <iostream>
 

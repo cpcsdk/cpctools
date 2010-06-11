@@ -48,7 +48,7 @@ class CapriceWindowImpl : public EmulatorWindow
 	void fdcLed(bool on);
 
 	void setStatus(const char * message) {
-		m_statusText->SetLabel(_(message));
+		m_statusText->SetLabel(wxString((char *) message, wxConvUTF8));
 	}
 
     protected:

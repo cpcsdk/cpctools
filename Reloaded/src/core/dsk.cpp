@@ -23,14 +23,13 @@
 //
 
 
-
-#include "dsk.h"
-#include <malloc.h>
-#include <string.h>
-#include <stdio.h>
 #include "cap32type.h"
 #include "error.h"
+#include "dsk.h"
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include <iostream>
 
 #ifndef HAVE_LIB765_H

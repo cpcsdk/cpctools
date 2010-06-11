@@ -12,5 +12,10 @@ reloadedromdir = $(pkgdatadir)/rom
 reloadedrom_DATA = rom/*
 
 
+if DARWIN
 cap32.cfg: cap32.cfg.tpl
 	@regex_cmd@ $< -e 's;@DATA_DIR@;$(pkgdatadir);' > cap32.cfg	
+else
+cap32.cfg: cap32.cfg.tpl
+	@regex_cmd@  's;@DATA_DIR@;$(pkgdatadir);' $< > cap32.cfg	
+endif

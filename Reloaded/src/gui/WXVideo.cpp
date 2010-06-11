@@ -36,7 +36,7 @@
 #include "WXVideo.h"
 #include "glfuncs.h"
 #include <math.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <algorithm>
 #include <wx/bitmap.h>
 #include <wx/image.h>

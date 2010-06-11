@@ -140,11 +140,11 @@ AC_ARG_ENABLE(	debug,
 		enable_debug=no)
 
 if test "$enable_debug" = yes ; then
-	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg"
-	CFLAGS="-O0 -Wall -g -DDEBUG -pg"
+	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg -m32"
+	CFLAGS="-O0 -Wall -g -DDEBUG -pg -m32"
 else
-  CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
-  CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s"
+  CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
+  CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
 fi
 
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
@@ -230,7 +230,7 @@ else if test "$with_stsound" = "yes" ; then
 	with_ayemu="no";
 	sound_backend="StSound";
 	
-	AC_CHECK_HEADER( [Ym2149Ex.h],AC_DEFINE(ST_SOUND,1,[Use St Sound as a sound backend]),AC_MSG_ERROR([St Sound headers not found !]))
+	AC_CHECK_HEADER( [Ym2149Ex.h],AC_DEFINE(ST_SOUND,1,[Use St Sound as a sound backend]),AC_MSG_ERROR([St Sound headers not found ! Go in ../cpctools/lib/StSoundLib_Release/StSoundLibrary]))
 
 	#TODO debug test library
 	AC_SUBST([SOUNDLIB], [-lstsound])
@@ -252,6 +252,12 @@ if test "$with_lib765" = "yes" ; then
 fi
 AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
 
+#Apple
+UNAME=$(shell uname)
+AM_CONDITIONAL([DARWIN], [test "$UNAME" = "Darwin"])
+if test "$UNAME" = "Darwin" ;  then
+	AC_DEFINE(DARWIN,1,[Darwin platform])
+fi
 
 
 AC_SUBST(CXXFLAGS)

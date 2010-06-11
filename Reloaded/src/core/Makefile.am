@@ -58,7 +58,8 @@ z80daa.h\
 zip.cpp\
 zip.h\
 IMG_savepng.h \
-IMG_savepng.cpp
+IMG_savepng.cpp \
+clock_gettime_stub.cpp clock_gettime_stub.h
 
 #Created due to cross references ...
 #TODO: change that

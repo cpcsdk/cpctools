@@ -1,8 +1,12 @@
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
-#if _POSIX_C_SOURCE >= 199309L
+#if _POSIX_C_SOURCE >= 199309L 
 	#include <time.h>
+	#define _USE_CLOCK_GETTIME
+	#pragma message "Use clock_gettime"
+#elif defined(__APPLE__)
+	#include "clock_gettime_stub.h"
 	#define _USE_CLOCK_GETTIME
 	#pragma message "Use clock_gettime"
 #elif defined(__WIN32__)
