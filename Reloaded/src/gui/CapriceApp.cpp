@@ -66,6 +66,11 @@ CapASM *capAsm ;
 
 #include "WXVideo.cpp"
 
+
+#ifdef __WXMAC__ 
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 //TODO destroy emulator when finishing
 
 IMPLEMENT_APP(CapriceApp)
@@ -103,6 +108,7 @@ bool CapriceApp::OnInit()
 	capAsm = new CapASM(emulator);
 	#endif
 
+	printf("Launch window\n");
 	frame = new CapriceWindowImpl(emulator);
 	frame->Show(true);
 	frame->Raise();
@@ -110,6 +116,7 @@ bool CapriceApp::OnInit()
   #if CLI
     frameClone = frame ;
   #endif
+	printf("Initialization done\n");
 	return true ; 
 }
 
@@ -135,6 +142,11 @@ int CapriceApp::OnExit()
 
 int CapriceApp::OnRun()
 {
+#ifdef __WXMAC__ 
+	ProcessSerialNumber PSN;
+	GetCurrentProcess(&PSN);
+	TransformProcessType(&PSN,kProcessTransformToForegroundApplication);
+#endif
 
     //Set command line options
     if (greenscreen) emulator->GetConfig().scr_tube = Renderer::GreenMode;
