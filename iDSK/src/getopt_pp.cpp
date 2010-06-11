@@ -21,6 +21,9 @@ GetOpt_pp:	Yet another C++ version of getopt.
 #include <unistd.h>
 #include "getopt_pp.h"
 
+#if __APPLE__
+extern char** environ;
+#endif
 
 namespace GetOpt {
 
