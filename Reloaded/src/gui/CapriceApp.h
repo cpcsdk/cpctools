@@ -25,6 +25,7 @@
 #include "configBis.h"
 #include <wx/wxprec.h>
 #include <wx/cmdline.h>
+#include <wx/ipc.h>
 #ifndef WX_PRECOMP
        #include <wx/wx.h>
 #endif
@@ -32,6 +33,41 @@
 #include "CapriceWindowImpl.h"
 #include "CapriceRegistersDialogImpl.h"
 #include "WXEmulator.h"
+#include "snapshot.h"
+
+
+class wxSingleInstanceChecker;
+
+
+class ipcCnx: public wxConnection
+{
+	public:
+		bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format)
+		{
+			switch (item[0]) {
+        		case 'A': 
+				{
+					wxString s("Insert ");
+				   	s << data << " into drive " << item;
+					Emulator::getInstance()->logMessage(s);
+					Emulator::getInstance()->GetFDC().insertA( (const char *) data); break;
+				}
+				case 'B': Emulator::getInstance()->GetFDC().insertB( (const char *) data); break;
+
+				case 'S': snapshot_load(*(Emulator::getInstance()), (const char *)data) ; break;
+			}
+    		return wxConnection::OnPoke(topic, item, data, size, format);
+		}
+};
+
+
+class ipcServer: public wxServer
+{
+	public:
+		wxConnectionBase* OnAcceptConnection(const wxString& topic) {
+			return new ipcCnx();	
+		}
+};
 
 
 class CapriceApp : public wxApp
@@ -59,6 +95,9 @@ private:
 	wxString	driveb ;
 	wxString	tape ;
 	wxString 	snapshot ;	
+
+	wxSingleInstanceChecker* wsic;
+	ipcServer* commServer;
 };
  
 
@@ -84,9 +123,6 @@ static const wxCmdLineEntryDesc g_cmdLineDesc [] =
 
 	{ wxCMD_LINE_NONE }
 };
- 
-
-
 DECLARE_APP(CapriceApp)
  
 #endif // INCLUDED_CAPRICEAPP_H 

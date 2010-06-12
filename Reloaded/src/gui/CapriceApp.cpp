@@ -27,6 +27,8 @@
 #include <pthread.h>
 
 #include <wx/splash.h> 
+#include <wx/snglinst.h>
+#include <wx/utils.h>
 
 #include "cap32.h"
 #include "config.h"
@@ -85,6 +87,30 @@ bool CapriceApp::OnInit()
         return false;
 
     SetAppName(wxT("reloaded"));
+
+	// Check if another instance is running
+	const wxString name = wxString::Format("reloaded-%s", wxGetUserId().mb_str());
+	wsic = new wxSingleInstanceChecker(name);
+	if ( wsic->IsAnotherRunning() )
+	{
+		// Another instance is running - parse CLI and send to it.
+		wxClient wc;
+		ipcCnx* CNX = (ipcCnx*)wc.MakeConnection("localhost","~/.reloadedcommand","loadthings");
+		if(CNX == NULL) {
+			wxLogError("Unable to connect to running instance !");
+			return false;
+		}
+
+		// We have a connexion, send our params
+		if(!drivea.IsEmpty())
+			CNX->Poke("A",(char*)drivea.mb_str());
+		if(!driveb.IsEmpty())
+			CNX->Poke("B",(char*)driveb.mb_str());
+
+		// Exit now.
+		return false;
+	}
+
 	wxImage::AddHandler(new wxPNGHandler);
 
 	//Splash screen managment
@@ -98,6 +124,8 @@ bool CapriceApp::OnInit()
     }
 	wxYield();
 
+	commServer = new ipcServer();
+	commServer->Create("~/.reloadedcommand");
 
 	//Create emulator and IHM
 	emulator = WXEmulator::getInstance();
@@ -125,6 +153,10 @@ bool CapriceApp::OnInit()
  */
 int CapriceApp::OnExit()
 {
+	delete commServer;
+	commServer = NULL;
+	delete wsic;
+	wsic = NULL;
 	delete emulator;
 	emulator = NULL;
 	//delete frame;
