@@ -23,7 +23,7 @@ struct SOption appliOption[]=
 	{0,NULL,0,0,0,NULL}
 };
 
-static const std::string authorName = "Targhan/Ramlaid";
+static const std::string authorName = "Targhan/Ramlaid/Krusty";
 static const std::string authorMail = "cpcTools@ramlaid.com";
 static const std::string appliName = "aft";
 static const std::string appliUsageShort = "";
@@ -34,27 +34,27 @@ int main(int argc, char *argv[])
 {
 	try
 	{
-//		COptionParser optParser(appliOption, appliName, appliUsageShort, appliUsageLong, authorName, authorMail);
+		COptionParser optParser(appliOption, appliName, appliUsageShort, appliUsageLong, authorName, authorMail);
 		
-//		optParser.PrintHeader(std::cout);
-/*
+		optParser.PrintHeader(std::cout);
+
 		if (!optParser.ParseCommandLine(&argc, &argv, 0, false))
 		{
 			optParser.PrintError(std::cout);
 			optParser.PrintUsage(std::cout);
 			return -1;
 		}
-*/
+
 		bool noLoop = false;
 #if _WINDOWS
 		int COMport = 1;
 #else
-		std::string COMport = "/dev/ttyS0" ;
+		std::string COMport = "/dev/ttyUSB0" ;
 #endif
 		std::string filename = "";
 		std::string dir = "";
 
-		/*
+		
 		int i=0;
 		while (optParser.GetOptionI(i) != 0)
 		{
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
 			i++;
 		}
-*/
+
 		std::cout << "COMport " << COMport << endl ;
 		CAksFileTransfert transfert(COMport);
 

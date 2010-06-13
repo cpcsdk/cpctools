@@ -81,7 +81,7 @@ if test "$with_cpcvideo" = "yes" ; then
 	AC_CHECK_HEADER([AntTweakBar.h])
 	AC_CHECK_HEADER([SDL_video.h])
 
-	SDL_VERSION=1.2.5
+	SDL_VERSION=1.2.12
 	AM_PATH_SDL($SDL_VERSION, :,
                         AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
 fi

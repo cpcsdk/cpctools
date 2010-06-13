@@ -25,7 +25,7 @@
 
 float round(float x)
 {
-	if (fmod(x,1.0) < 0.5f)
+	if (fmod((double) x,1.0) < 0.5f)
 		return floor(x);
 	else
 		return ceil(x);
