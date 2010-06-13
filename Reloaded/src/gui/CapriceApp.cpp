@@ -18,33 +18,27 @@
  *
  */  
 
-
-// For compilers that don't support precompilation, include "wx/wx.h"
- 
-#include "CapriceApp.h"
-#include "CapriceWindowImpl.h"
-#include "CapriceInputSettingsImpl.h"
+#include <iostream>
 #include <pthread.h>
 
 #include <wx/splash.h> 
 #include <wx/snglinst.h>
 #include <wx/utils.h>
 
+#include "CapriceApp.h"
+#include "CapriceWindowImpl.h"
+#include "CapriceInputSettingsImpl.h"
+
+
 #include "cap32.h"
 #include "config.h"
 #include "debug.h"
-
-
 #include "fdc.h"
-
 #include "dsk.h"
 #include "snapshot.h"
 #include "tape.h"
-
 #include "filetools.h"
 #include "configBis.h"
-#include <iostream>
- 
 
 
 #if CLI

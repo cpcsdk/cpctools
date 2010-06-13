@@ -42,9 +42,7 @@ AC_TYPE_INT64_T
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_PROG_GCC_TRADITIONAL
-AC_FUNC_MALLOC
 AC_FUNC_MEMCMP
-AC_FUNC_REALLOC
 AC_FUNC_STRTOD
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([memchr memset pow strchr strcspn strrchr strstr strtol strtoul])

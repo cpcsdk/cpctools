@@ -179,43 +179,151 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 	// GA registers
     if(m_nb_Register->GetSelection() == 2)
 	{
+		static const char ink2bas[32] = {13,27,19,25,1,7,10,16,28,29,24,26,6,8,15,17,30,31,18,20,0,2,9,11,4,22,21,23,3,5,12,14};
 		m_pen->Clear();
 		*m_pen << emulator->GetGateArray().GetPen();
 
+		wxColour c;
+		wxString s;
+		int ink;
+
+		ink = emulator->GetGateArray().GetInk(0);
 		m_ink0->Clear();
-		*m_ink0 << emulator->GetGateArray().GetInk(0);
+		*m_ink0 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas0->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		emulator->logMessage(s);
+		m_bas0->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(1);
 		m_ink1->Clear();
-		*m_ink1 << emulator->GetGateArray().GetInk(1);
+		*m_ink1 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas1->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas1->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(2);
 		m_ink2->Clear();
-		*m_ink2 << emulator->GetGateArray().GetInk(2);
+		*m_ink2 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas2->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas2->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(3);
 		m_ink3->Clear();
-		*m_ink3 << emulator->GetGateArray().GetInk(3);
+		*m_ink3 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas3->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas3->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(4);
 		m_ink4->Clear();
-		*m_ink4 << emulator->GetGateArray().GetInk(4);
+		*m_ink4 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas4->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas4->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(5);
 		m_ink5->Clear();
-		*m_ink5 << emulator->GetGateArray().GetInk(5);
+		*m_ink5 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas5->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas5->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(6);
 		m_ink6->Clear();
-		*m_ink6 << emulator->GetGateArray().GetInk(6);
+		*m_ink6 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas6->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas6->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(7);
 		m_ink7->Clear();
-		*m_ink7 << emulator->GetGateArray().GetInk(7);
+		*m_ink7 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas7->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas7->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(8);
 		m_ink8->Clear();
-		*m_ink8 << emulator->GetGateArray().GetInk(8);
+		*m_ink8 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas8->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas8->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(9);
 		m_ink9->Clear();
-		*m_ink9 << emulator->GetGateArray().GetInk(9);
+		*m_ink9 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas9->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas9->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(10);
 		m_ink10->Clear();
-		*m_ink10 << emulator->GetGateArray().GetInk(10);
+		*m_ink10 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas10->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas10->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(11);
 		m_ink11->Clear();
-		*m_ink11 << emulator->GetGateArray().GetInk(11);
+		*m_ink11 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas11->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas11->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(12);
 		m_ink12->Clear();
-		*m_ink12 << emulator->GetGateArray().GetInk(12);
+		*m_ink12 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas12->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas12->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(13);
 		m_ink13->Clear();
-		*m_ink13 << emulator->GetGateArray().GetInk(13);
+		*m_ink13 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas13->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas13->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(14);
 		m_ink14->Clear();
-		*m_ink14 << emulator->GetGateArray().GetInk(14);
+		*m_ink14 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas14->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas14->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(15);
 		m_ink15->Clear();
-		*m_ink15 << emulator->GetGateArray().GetInk(15);
+		*m_ink15 << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas15->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas15->SetValue(s); 
+
+		ink = emulator->GetGateArray().GetInk(16);
 		m_border->Clear();
-		*m_border << emulator->GetGateArray().GetInk(16);
+		*m_border << ink;
+		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
+		m_bas16->SetBackgroundColour(c);
+		s.Printf("%d",ink2bas[ink]);
+		m_bas16->SetValue(s); 
+
 
 		m_vmode->Clear();
 		*m_vmode << (int)emulator->GetGateArray().GetMode();

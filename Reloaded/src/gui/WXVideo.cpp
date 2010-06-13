@@ -31,13 +31,13 @@
 */
 
 
+#include <algorithm>
+#include <math.h>
+#include <stdlib.h>
 
 #include "video.h"
 #include "WXVideo.h"
 #include "glfuncs.h"
-#include <math.h>
-#include <stdlib.h>
-#include <algorithm>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/dcbuffer.h>

@@ -111,6 +111,7 @@ bool Renderer::BeginDisplay(int screenLine)
 	return true;
 }
 
+
 void Renderer::EndDisplay(bool frameCompleted)
 {
     if (frameCompleted)
@@ -141,6 +142,7 @@ void *Renderer::GetBackSurface()
 	return _renderFunc->GetBackSurface();
 }
 
+
 bool Renderer::SetFullScreen(bool fs)
 {
 	if (fs == _scrFullScreen)
@@ -148,6 +150,7 @@ bool Renderer::SetFullScreen(bool fs)
 
 	return ToggleFullScreen();
 }
+
 
 bool Renderer::ToggleFullScreen()
 {
@@ -157,14 +160,18 @@ bool Renderer::ToggleFullScreen()
 	return Init();
 }
 
+
 void Renderer::AddTextLocate(int x, int y, const string &text, bool shadow)
 {
 	_textArray.push_back(TextDisplay(x * FNT_CHAR_WIDTH, (y * FNT_CHAR_HEIGHT) + 1, text, shadow));
 }
+
+
 void Renderer::AddText(int x, int y, const string &text, bool shadow)
 {
 	_textArray.push_back(TextDisplay(x, y, text, shadow));
 }
+
 
 void Renderer::Print(int x, int y, const string &text, bool shadow)
 {
@@ -235,6 +242,7 @@ void Renderer::Print(int x, int y, const string &text, bool shadow)
 		}
 	}
 }
+
 
 void Renderer::InitPalette()
 {
@@ -343,10 +351,12 @@ void Renderer::InitPalette()
     }
 }
 
+
 void Renderer::SetMemory(byte *memory)
 {
 	_preRenderNormalFunc->SetMemory(memory);
 }
+
 
 /*void Renderer::SetVideoMode(VideoPlugin::VideoType videoPlugType, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
 {
@@ -384,6 +394,7 @@ void Renderer::SetMonitor(MonitorMode mode, unsigned int intensity, bool remanen
 	_monitorIntensity = intensity;
 	_monitorRemanency = remanency;
 }
+
 
 bool Renderer::Init()
 {
@@ -531,6 +542,7 @@ bool Renderer::Init()
 	return true;
 }
 
+
 void Renderer::Shutdown ()
 {
 	if (_renderFunc->GetBackSurface() != NULL) 
@@ -539,6 +551,7 @@ void Renderer::Shutdown ()
 	}
 	_videoPlugin->Close();
 }
+
 
 void Renderer::Reset()
 {
@@ -568,16 +581,19 @@ void Renderer::Reset()
 	_horizontalCharMax = 48;
 }
 
+
 void Renderer::SetMode(unsigned int mode)
 {
 	_preRenderFunc->SetMode(mode);
 }
+
 
 void Renderer::SetPalette(unsigned int pen, unsigned int ga_colour)
 {
 	_renderFunc->SetPalette(pen, _colours[ga_colour]);
 	//_palette[pen] = colour;
 }
+
 
 void Renderer::SetAntiAliasingColour(unsigned int col0, unsigned int col1)
 {
@@ -596,6 +612,7 @@ void Renderer::SetAntiAliasingColour(unsigned int col0, unsigned int col1)
     }
 }
 
+
 void Renderer::Render(unsigned int memAddr, dword flags)
 {
 	if (_horizontalCurrentChar < _horizontalCharMax) 
@@ -607,6 +624,7 @@ void Renderer::Render(unsigned int memAddr, dword flags)
 		_renderFunc->Render();
 	}
 }
+
 
 void Renderer::HSyncCycle(int horzPos, unsigned int flag_drawing)
 {
@@ -647,6 +665,7 @@ void Renderer::HSyncCycle(int horzPos, unsigned int flag_drawing)
 	_renderFunc->SetScreenPosition(_scrPos);
 }
 
+
 void Renderer::SetPreRender(dword flags)
 {
 	if (flags == _currentFlagConfig) 
@@ -676,6 +695,7 @@ void Renderer::SetPreRender(dword flags)
 	_preRenderFunc->SetMode( oldMode );
 }
 
+
 void Renderer::PreRenderStandardFunction::UpdateMode()
 {
 	switch (_mode)
@@ -686,6 +706,7 @@ void Renderer::PreRenderStandardFunction::UpdateMode()
 	case 3: _modeMap = M3Map; break;
 	}
 }
+
 
 void Renderer::PreRenderHalfFunction::UpdateMode()
 {

@@ -430,6 +430,11 @@ class Renderer
 	//! Set CPC antialiasing color
 	void SetAntiAliasingColour(unsigned int col0, unsigned int col1);
 
+	int mapGAEntryToRGB(char pal)
+	{
+		return _renderFunc->MapRGB(_colours[pal]);
+	}
+
 	//! Render CPC memory
 	void Render(unsigned int memAddr, dword flags);
 	//! HSync reach
