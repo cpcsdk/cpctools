@@ -20,6 +20,16 @@ class DiscEditorImpl : public DiscEditor
 		DiscEditorImpl( wxWindow* parent );
 		void setTrack( wxSpinEvent& event );
 		void setSector( wxCommandEvent& event );
+		static t_sector* sectorClipboard;
+	protected:
+		void cutSector( wxCommandEvent& event );
+		void copySector( wxCommandEvent& event );
+		void pasteSector( wxCommandEvent& event );
+		void deleteSector( wxCommandEvent& event );
+		void renameSector( wxCommandEvent& event );
+
+		void drawSectorExplorer( wxPaintEvent& event );
+		void sectorLeftClick( wxMouseEvent& event );
 };
 
 #endif // __DiscEditor__

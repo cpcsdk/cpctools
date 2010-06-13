@@ -41,7 +41,6 @@
 #include <wx/scrolbar.h>
 #include <wx/spinbutt.h>
 #include <wx/statusbr.h>
-#include <wx/toolbar.h>
 #include <wx/listbook.h>
 #include <wx/listctrl.h>
 #include <wx/listbox.h>
@@ -509,6 +508,15 @@ class RegistersStates : public wxDialog
 		wxTextCtrl* m_bas16;
 		wxStaticText* m_staticText103;
 		wxTextCtrl* m_textCtrl70;
+		wxPanel* fdc_tab;
+		wxStaticText* m_staticText115;
+		wxTextCtrl* a_track;
+		wxStaticText* m_staticText116;
+		wxTextCtrl* a_sector;
+		wxStaticText* m_staticText117;
+		wxTextCtrl* b_track;
+		wxStaticText* m_staticText118;
+		wxTextCtrl* b_sector;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseR( wxCloseEvent& event ) { event.Skip(); }
@@ -709,9 +717,12 @@ class DiscEditor : public wxFrame
 		wxTextCtrl* sideCount;
 		wxNotebook* DiskEd_Mode_Tabs;
 		wxPanel* m_panel17;
-		wxGridBagSizer* diskOverview;
+		wxChoice* m_choice15;
+		wxStaticText* m_staticText119;
+		wxStaticText* m_staticText120;
+		wxStaticText* m_staticText121;
+		wxPanel* explorerPanel;
 		wxPanel* m_panel1;
-		wxToolBar* m_toolBar1;
 		wxCheckBox* m_checkBox1;
 		wxCheckBox* m_checkBox2;
 		wxListbook* m_listbook1;
@@ -720,20 +731,33 @@ class DiscEditor : public wxFrame
 		wxSpinCtrl* spinTrack;
 		wxStaticText* m_staticText96;
 		wxListBox* lb_sectors;
+		wxMenu* m_menu9;
 		wxStaticText* st_size;
 		wxStaticText* st_weak;
 		wxStaticText* st_erased;
 		wxTextCtrl* tc_sectordata;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void drawSectorExplorer( wxPaintEvent& event ) { event.Skip(); }
 		virtual void setTrack( wxSpinEvent& event ) { event.Skip(); }
 		virtual void setSector( wxCommandEvent& event ) { event.Skip(); }
+		virtual void sectorLeftClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void cutSector( wxCommandEvent& event ) { event.Skip(); }
+		virtual void copySector( wxCommandEvent& event ) { event.Skip(); }
+		virtual void pasteSector( wxCommandEvent& event ) { event.Skip(); }
+		virtual void deleteSector( wxCommandEvent& event ) { event.Skip(); }
+		virtual void renameSector( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,400 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 641,743 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~DiscEditor();
+		
+		void lb_sectorsOnContextMenu( wxMouseEvent &event )
+		{
+			lb_sectors->PopupMenu( m_menu9, event.GetPosition() );
+		}
 	
 };
 

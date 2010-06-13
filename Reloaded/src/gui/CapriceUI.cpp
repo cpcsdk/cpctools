@@ -2025,7 +2025,7 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	z80_tab->SetSizer( bSizer23 );
 	z80_tab->Layout();
 	bSizer23->Fit( z80_tab );
-	m_nb_Register->AddPage( z80_tab, wxT("Z80 Registers"), false );
+	m_nb_Register->AddPage( z80_tab, wxT("Z80"), true );
 	crtc_tab = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
@@ -2266,7 +2266,7 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	crtc_tab->SetSizer( bSizer21 );
 	crtc_tab->Layout();
 	bSizer21->Fit( crtc_tab );
-	m_nb_Register->AddPage( crtc_tab, wxT("CRTC Registers and States"), true );
+	m_nb_Register->AddPage( crtc_tab, wxT("CRTC"), false );
 	ga_tab = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer43;
 	bSizer43 = new wxBoxSizer( wxVERTICAL );
@@ -2501,7 +2501,63 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	ga_tab->SetSizer( bSizer43 );
 	ga_tab->Layout();
 	bSizer43->Fit( ga_tab );
-	m_nb_Register->AddPage( ga_tab, wxT("GateArray States"), false );
+	m_nb_Register->AddPage( ga_tab, wxT("Gate Array"), false );
+	fdc_tab = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT("FDC") );
+	wxBoxSizer* bSizer48;
+	bSizer48 = new wxBoxSizer( wxVERTICAL );
+	
+	wxStaticBoxSizer* sbSizer161;
+	sbSizer161 = new wxStaticBoxSizer( new wxStaticBox( fdc_tab, wxID_ANY, wxT("Drive A") ), wxVERTICAL );
+	
+	wxGridSizer* gSizer4;
+	gSizer4 = new wxGridSizer( 2, 2, 0, 0 );
+	
+	m_staticText115 = new wxStaticText( fdc_tab, wxID_ANY, wxT("Track"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText115->Wrap( -1 );
+	gSizer4->Add( m_staticText115, 0, wxALL, 5 );
+	
+	a_track = new wxTextCtrl( fdc_tab, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer4->Add( a_track, 0, wxALL, 5 );
+	
+	m_staticText116 = new wxStaticText( fdc_tab, wxID_ANY, wxT("Sector"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText116->Wrap( -1 );
+	gSizer4->Add( m_staticText116, 0, wxALL, 5 );
+	
+	a_sector = new wxTextCtrl( fdc_tab, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer4->Add( a_sector, 0, wxALL, 5 );
+	
+	sbSizer161->Add( gSizer4, 1, wxEXPAND, 5 );
+	
+	bSizer48->Add( sbSizer161, 1, wxEXPAND, 5 );
+	
+	wxStaticBoxSizer* sbSizer17;
+	sbSizer17 = new wxStaticBoxSizer( new wxStaticBox( fdc_tab, wxID_ANY, wxT("Drive B") ), wxVERTICAL );
+	
+	wxGridSizer* gSizer5;
+	gSizer5 = new wxGridSizer( 2, 2, 0, 0 );
+	
+	m_staticText117 = new wxStaticText( fdc_tab, wxID_ANY, wxT("Track"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText117->Wrap( -1 );
+	gSizer5->Add( m_staticText117, 0, wxALL, 5 );
+	
+	b_track = new wxTextCtrl( fdc_tab, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer5->Add( b_track, 0, wxALL, 5 );
+	
+	m_staticText118 = new wxStaticText( fdc_tab, wxID_ANY, wxT("Sector"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText118->Wrap( -1 );
+	gSizer5->Add( m_staticText118, 0, wxALL, 5 );
+	
+	b_sector = new wxTextCtrl( fdc_tab, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gSizer5->Add( b_sector, 0, wxALL, 5 );
+	
+	sbSizer17->Add( gSizer5, 1, wxEXPAND, 5 );
+	
+	bSizer48->Add( sbSizer17, 1, wxEXPAND, 5 );
+	
+	fdc_tab->SetSizer( bSizer48 );
+	fdc_tab->Layout();
+	bSizer48->Fit( fdc_tab );
+	m_nb_Register->AddPage( fdc_tab, wxT("FDC"), false );
 	
 	bSizer16->Add( m_nb_Register, 1, wxALL, 5 );
 	
@@ -3112,12 +3168,39 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	wxBoxSizer* bSizer44;
 	bSizer44 = new wxBoxSizer( wxVERTICAL );
 	
-	diskOverview = new wxGridBagSizer( 0, 0 );
-	diskOverview->SetFlexibleDirection( wxBOTH );
-	diskOverview->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
-	diskOverview->SetEmptyCellSize( wxSize( 8,8 ) );
+	wxBoxSizer* bSizer49;
+	bSizer49 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer44->Add( diskOverview, 1, wxEXPAND, 5 );
+	wxString m_choice15Choices[] = { wxT("Side A"), wxT("Side B") };
+	int m_choice15NChoices = sizeof( m_choice15Choices ) / sizeof( wxString );
+	m_choice15 = new wxChoice( m_panel17, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice15NChoices, m_choice15Choices, 0 );
+	m_choice15->SetSelection( 0 );
+	bSizer49->Add( m_choice15, 0, wxALL, 5 );
+	
+	m_staticText119 = new wxStaticText( m_panel17, wxID_ANY, wxT(" Normal sector "), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
+	m_staticText119->Wrap( -1 );
+	m_staticText119->SetBackgroundColour( wxColour( 255, 255, 255 ) );
+	
+	bSizer49->Add( m_staticText119, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticText120 = new wxStaticText( m_panel17, wxID_ANY, wxT(" Weak "), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
+	m_staticText120->Wrap( -1 );
+	m_staticText120->SetBackgroundColour( wxColour( 255, 0, 0 ) );
+	
+	bSizer49->Add( m_staticText120, 0, wxALL|wxEXPAND, 5 );
+	
+	m_staticText121 = new wxStaticText( m_panel17, wxID_ANY, wxT(" Erased "), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
+	m_staticText121->Wrap( -1 );
+	m_staticText121->SetBackgroundColour( wxColour( 0, 0, 255 ) );
+	
+	bSizer49->Add( m_staticText121, 0, wxALL|wxEXPAND, 5 );
+	
+	bSizer44->Add( bSizer49, 0, wxEXPAND, 5 );
+	
+	explorerPanel = new wxPanel( m_panel17, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	explorerPanel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 91, false, wxT("Tahoma") ) );
+	
+	bSizer44->Add( explorerPanel, 1, wxEXPAND | wxALL, 5 );
 	
 	m_panel17->SetSizer( bSizer44 );
 	m_panel17->Layout();
@@ -3127,14 +3210,16 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 	
-	m_toolBar1 = new wxToolBar( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL ); 
-	m_checkBox1 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Show System files"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toolBar1->AddControl( m_checkBox1 );
-	m_checkBox2 = new wxCheckBox( m_toolBar1, wxID_ANY, wxT("Add/Remove Amsdos Header"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_toolBar1->AddControl( m_checkBox2 );
-	m_toolBar1->Realize();
+	wxBoxSizer* bSizer50;
+	bSizer50 = new wxBoxSizer( wxHORIZONTAL );
 	
-	bSizer4->Add( m_toolBar1, 0, wxEXPAND, 5 );
+	m_checkBox1 = new wxCheckBox( m_panel1, wxID_ANY, wxT("Show System files"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer50->Add( m_checkBox1, 0, wxALL, 5 );
+	
+	m_checkBox2 = new wxCheckBox( m_panel1, wxID_ANY, wxT("Add/Remove Amsdos Header"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer50->Add( m_checkBox2, 0, wxALL, 5 );
+	
+	bSizer4->Add( bSizer50, 0, wxEXPAND, 5 );
 	
 	m_listbook1 = new wxListbook( m_panel1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLB_DEFAULT );
 	#ifndef __WXGTK__ // Small icon style not supported in GTK
@@ -3161,34 +3246,48 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	Track->Wrap( -1 );
 	bSizer43->Add( Track, 0, wxALL, 5 );
 	
-	spinTrack = new wxSpinCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 255, 0 );
-	bSizer43->Add( spinTrack, 0, wxALL, 5 );
+	spinTrack = new wxSpinCtrl( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( -1,-1 ), wxSP_ARROW_KEYS, 0, 255, 0 );
+	bSizer43->Add( spinTrack, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticText96 = new wxStaticText( m_panel2, wxID_ANY, wxT("Sector"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText96->Wrap( -1 );
 	bSizer43->Add( m_staticText96, 0, wxALL, 5 );
 	
-	lb_sectors = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	lb_sectors->Append( wxT("0xC1") );
-	lb_sectors->Append( wxT("0xC2") );
-	lb_sectors->Append( wxT("0xC3") );
-	lb_sectors->Append( wxT("0xC4") );
-	lb_sectors->Append( wxT("0xC5") );
-	lb_sectors->Append( wxT("0xC6") );
-	lb_sectors->Append( wxT("0xC7") );
-	lb_sectors->Append( wxT("0xC8") );
-	lb_sectors->Append( wxT("0xC9") );
-	bSizer43->Add( lb_sectors, 0, wxALL|wxEXPAND, 5 );
+	lb_sectors = new wxListBox( m_panel2, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, 0 ); 
+	m_menu9 = new wxMenu();
+	wxMenuItem* m_menuItem61;
+	m_menuItem61 = new wxMenuItem( m_menu9, wxID_ANY, wxString( wxT("Cut") ) + wxT('\t') + wxT("CTRL+X"), wxEmptyString, wxITEM_NORMAL );
+	m_menu9->Append( m_menuItem61 );
 	
-	st_size = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	wxMenuItem* m_menuItem62;
+	m_menuItem62 = new wxMenuItem( m_menu9, wxID_ANY, wxString( wxT("Copy") ) + wxT('\t') + wxT("CTRL+C"), wxEmptyString, wxITEM_NORMAL );
+	m_menu9->Append( m_menuItem62 );
+	
+	wxMenuItem* m_menuItem63;
+	m_menuItem63 = new wxMenuItem( m_menu9, wxID_ANY, wxString( wxT("Paste") ) + wxT('\t') + wxT("CTRL+V"), wxEmptyString, wxITEM_NORMAL );
+	m_menu9->Append( m_menuItem63 );
+	
+	wxMenuItem* m_menuItem64;
+	m_menuItem64 = new wxMenuItem( m_menu9, wxID_ANY, wxString( wxT("MyMenuItem") ) + wxT('\t') + wxT("Delete"), wxT("DEL"), wxITEM_NORMAL );
+	m_menu9->Append( m_menuItem64 );
+	
+	wxMenuItem* m_menuItem65;
+	m_menuItem65 = new wxMenuItem( m_menu9, wxID_ANY, wxString( wxT("Change ID") ) + wxT('\t') + wxT("CTRL+I"), wxEmptyString, wxITEM_NORMAL );
+	m_menu9->Append( m_menuItem65 );
+	
+	lb_sectors->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DiscEditor::lb_sectorsOnContextMenu ), NULL, this ); 
+	
+	bSizer43->Add( lb_sectors, 1, wxALL|wxEXPAND, 5 );
+	
+	st_size = new wxStaticText( m_panel2, wxID_ANY, wxT("Size"), wxDefaultPosition, wxDefaultSize, 0 );
 	st_size->Wrap( -1 );
-	bSizer43->Add( st_size, 0, wxALL, 5 );
+	bSizer43->Add( st_size, 0, wxLEFT|wxTOP, 5 );
 	
-	st_weak = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	st_weak = new wxStaticText( m_panel2, wxID_ANY, wxT("sane"), wxDefaultPosition, wxDefaultSize, 0 );
 	st_weak->Wrap( -1 );
-	bSizer43->Add( st_weak, 0, wxALL, 5 );
+	bSizer43->Add( st_weak, 0, wxLEFT|wxTOP, 5 );
 	
-	st_erased = new wxStaticText( m_panel2, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	st_erased = new wxStaticText( m_panel2, wxID_ANY, wxT("erased"), wxDefaultPosition, wxDefaultSize, 0 );
 	st_erased->Wrap( -1 );
 	bSizer43->Add( st_erased, 0, wxALL, 5 );
 	
@@ -3212,14 +3311,29 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	explorerPanel->Connect( wxEVT_PAINT, wxPaintEventHandler( DiscEditor::drawSectorExplorer ), NULL, this );
 	spinTrack->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DiscEditor::setTrack ), NULL, this );
 	lb_sectors->Connect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DiscEditor::setSector ), NULL, this );
+	lb_sectors->Connect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DiscEditor::sectorLeftClick ), NULL, this );
+	this->Connect( m_menuItem61->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::cutSector ) );
+	this->Connect( m_menuItem62->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::copySector ) );
+	this->Connect( m_menuItem63->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::pasteSector ) );
+	this->Connect( m_menuItem64->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::deleteSector ) );
+	this->Connect( m_menuItem65->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::renameSector ) );
 }
 
 DiscEditor::~DiscEditor()
 {
 	// Disconnect Events
+	explorerPanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( DiscEditor::drawSectorExplorer ), NULL, this );
 	spinTrack->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DiscEditor::setTrack ), NULL, this );
 	lb_sectors->Disconnect( wxEVT_COMMAND_LISTBOX_SELECTED, wxCommandEventHandler( DiscEditor::setSector ), NULL, this );
+	lb_sectors->Disconnect( wxEVT_RIGHT_DOWN, wxMouseEventHandler( DiscEditor::sectorLeftClick ), NULL, this );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::cutSector ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::copySector ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::pasteSector ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::deleteSector ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( DiscEditor::renameSector ) );
 	
+	delete m_menu9; 
 }

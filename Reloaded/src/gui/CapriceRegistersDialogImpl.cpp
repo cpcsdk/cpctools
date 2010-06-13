@@ -328,6 +328,15 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		m_vmode->Clear();
 		*m_vmode << (int)emulator->GetGateArray().GetMode();
 	}
+
+	// FDC
+    if(m_nb_Register->GetSelection() == 3)
+	{
+		a_track->SetValue(wxString::Format("%d",emulator->GetDriveA().current_track));
+		a_sector->SetValue(wxString::Format("%d",emulator->GetDriveA().current_sector));
+		b_track->SetValue(wxString::Format("%d",emulator->GetDriveB().current_track));
+		b_sector->SetValue(wxString::Format("%d",emulator->GetDriveB().current_sector));
+	}
 }
 
 // Z80 8bits Registers Focus
