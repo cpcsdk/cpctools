@@ -2,18 +2,56 @@ Source: cpctools
 Section: dev 
 Priority: extra
 Maintainer: Romain GIOT <giot.romain@gmail.com>
-Build-Depends: debhelper (>= 5), autotools-dev
+Build-Depends: cdbs (>= 0.4.23-1.1), autotools-dev, debhelper (>= 5),
+ autotools-dev,
+ bison (>= 2.2),
+ libsdl1.2-dev,
+ libxxf86vm-dev | xlibs-static-dev (<< 4.4),
+ libglfw-dev,
+ libanttweakbar1.0-dev,
+ libdsk3-dev | libdsk-dev,
+ lib765-dev,
+ libserial-dev (>= 0.5.2)
 Standards-Version: 3.7.2
 
 Package: cpctools
 Architecture: any
-Depends:  
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Cross Dev Tools for developping Amstrad CPC ASM applications
  cpctools contains a lot of cross-dev applications.
  These application help you to create proggys for your Amtrad CPC.
  Most of these tools were written by Ramlaid <ramlaid@cpcscene.com>.
 
+Package: cpctools-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, cpctools (= ${Source-Version}),
+ libsdl1.2-dev,
+ libxxf86vm-dev | xlibs-static-dev (<< 4.4),
+ libglfw-dev,
+ libanttweakbar1.0-dev,
+ libdsk3-dev | libdsk-dev,
+ lib765-dev,
+ libserial-dev (>= 0.5.2)
+
 Package: cpctools-doc
 Architecture: all
 Description: Documentation for cpctools
- <insert long description, indented with spaces>
+
+Package: libstsound-cpc1
+Architecture: any
+Conflicts: libstsound1
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: StSound, a general "Nostalgic" Computer Sound Emulator
+ Patched to sound closer to an Amstrad CPC. Shared library.
+
+Package: libstsound-cpc-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libstsound-cpc1 (= ${Source-Version})
+Conflicts: libstsound-dev
+Description: StSound, a general "Nostalgic" Computer Sound Emulator
+ Patched to sound closer to an Amstrad CPC. Development files.
+
+Package: zmac
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: zmac 2.0b2, a Z80 macro cross-assembler

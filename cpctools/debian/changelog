@@ -1,3 +1,12 @@
+cpctools (1.1-simon1) unstable; urgency=low
+
+  * Shangis iomete debian/: cdbs, dependencies.
+  * 2 flikazhoj : gxx ansi kaj sdl 1.2.4 ok
+  * Compiles ankaw libstsound kaj zasm
+  * bezonas bison 2 por zasm 
+
+ -- Simon Adda-Reyss <simon.addareyss@libertysurf.fr>  Wed,  9 Jun 2010 23:40:01 +0200
+
 cpctools (1.1) unstable; urgency=low
 
   * Initial Release.
