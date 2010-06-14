@@ -38,7 +38,7 @@
 #include "WXEmulator.h"
 #include "snapshot.h"
 
-#if IPC
+#if defined(IPC)
 //We have compilation problems under Linux. Need to check
 class wxSingleInstanceChecker;
 
@@ -101,7 +101,7 @@ private:
 	wxString	tape ;
 	wxString 	snapshot ;	
 
-#if IPC
+#if defined(IPC)
 	wxSingleInstanceChecker* wsic;
 	ipcServer* commServer;
 #endif

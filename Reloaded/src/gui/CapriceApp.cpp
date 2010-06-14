@@ -83,7 +83,7 @@ bool CapriceApp::OnInit()
 
     SetAppName(wxT("reloaded"));
 
-#if IPC
+#if defined(IPC)
 	// Check if another instance is running
 	const wxString name = wxString::Format("reloaded-%s", wxGetUserId().mb_str());
 	wsic = new wxSingleInstanceChecker(name);
@@ -121,7 +121,7 @@ bool CapriceApp::OnInit()
     }
 	wxYield();
 
-#if IPC
+#if defined(IPC)
 	commServer = new ipcServer();
 	commServer->Create("~/.reloadedcommand");
 #endif
@@ -152,7 +152,7 @@ bool CapriceApp::OnInit()
  */
 int CapriceApp::OnExit()
 {
-#if IPC
+#if defined(IPC)
 	delete commServer;
 	commServer = NULL;
 	delete wsic;
