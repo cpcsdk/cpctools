@@ -461,7 +461,7 @@ void t_z80regs::reset()
 
 #define ADD16(dest, src) \
 { \
-	dword res = dest.d + src.d; \
+	dword res = dest.w.l + src.w.l; \
 	WZ.d = dest.d+1; \
 	_rF = (_rF & (Sflag | Zflag | Vflag)) | (((dest.d ^ res ^ src.d) >> 8) & Hflag) | \
 	((res >> 16) & Cflag) | ((res >> 8) & Xflags); \

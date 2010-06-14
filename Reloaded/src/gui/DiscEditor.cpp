@@ -163,7 +163,8 @@ void DiscEditorImpl::pasteSector( wxCommandEvent& event )
 	int sect_id = lb_sectors->GetSelection();
 	int track_id = spinTrack->GetValue();
 
-	FloppyImage.track[track_id].sectors++;
+	// TODO : handle side 1
+	FloppyImage.track[track_id][0].sectors++;
 	// dwTrackSize
 	// data (realloc)
 	// sector[] itself
