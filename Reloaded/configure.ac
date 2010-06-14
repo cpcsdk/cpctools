@@ -1,7 +1,9 @@
 # Init
 AC_INIT([Reloaded], [5], [krusty@cpcscene.com])
-AM_INIT_AUTOMAKE([ -Wall ])
+#AM_INIT_AUTOMAKE([ -Wall ])
+AM_INIT_AUTOMAKE([  ])
 #AC_CONFIG_SRCDIR(core/cap32.cpp)
+AC_CANONICAL_HOST
 
 # Check for programs
 AC_PROG_CXX
@@ -93,7 +95,9 @@ AC_ARG_WITH(	cli,
 		with_cli=yes,
 		with_cli=no)
 
-		
+
+
+
 AC_MSG_CHECKING([ devtools ------------------------------------
 ])
 with_asm=no
@@ -138,12 +142,74 @@ AC_ARG_ENABLE(	debug,
 		enable_debug=no)
 
 if test "$enable_debug" = yes ; then
-	CXXFLAGS="-O0 -Wall -g -DDEBUG -pg -m32"
-	CFLAGS="-O0 -Wall -g -DDEBUG -pg -m32"
+	CXXFLAGS="-O0  -g -DDEBUG -pg -m32"
+	CFLAGS="-O0  -g -DDEBUG -pg -m32"
 else
   CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
   CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
 fi
+
+
+
+		
+
+# Check system type
+case "$host_os" in
+*darwin* | *rhapsody* | *macosx*)
+     AC_DEFINE_UNQUOTED(DARWIN,1,[This is an Apple Darwin system])
+     CPPFLAGS="-D_APPLE_C_SOURCE $CPPFLAGS"
+     build_target="darwin"
+     ;;
+linux*)
+     AC_DEFINE_UNQUOTED(LINUX,1,[This is a Linux system])
+     build_target="linux"
+     ;;
+freebsd*)
+     AC_DEFINE_UNQUOTED(SOMEBSD,1,[This is a BSD system])
+     AC_DEFINE_UNQUOTED(FREEBSD,1,[This is a FreeBSD system])
+     build_target="freebsd"
+     ;;
+openbsd*)
+     AC_DEFINE_UNQUOTED(SOMEBSD,1,[This is a BSD system])
+     AC_DEFINE_UNQUOTED(OPENBSD,1,[This is an OpenBSD system])
+     build_target="openbsd"
+     ;;
+netbsd*)
+     AC_DEFINE_UNQUOTED(SOMEBSD,1,[This is a BSD system])
+     AC_DEFINE_UNQUOTED(NETBSD,1,[This is a NetBSD system])
+     ;;
+*solaris*)
+     AC_DEFINE_UNQUOTED(SOLARIS,1,[This is a Solaris system])
+     AC_DEFINE_UNQUOTED(_REENTRANT,1,[Need with solaris or errno doesnt work])
+     build_target="solaris"
+     ;;
+*cygwin*)
+     AC_DEFINE_UNQUOTED(CYGWIN,1,[This is a Cygwin system])
+     AC_DEFINE_UNQUOTED(WINDOWS,1,[This is a Windows system])
+     build_target="cygwin"
+     ;;
+*mingw*)
+     AC_DEFINE_UNQUOTED(MINGW,1,[This is a MinGW system])
+     AC_DEFINE_UNQUOTED(WINDOWS,1,[This is a Windows system])
+     AC_DEFINE_UNQUOTED(_WIN32,1,[This is a Windows system])
+     build_target="mingw"
+     ;;
+*)
+     AC_MSG_RESULT(Unrecognised OS $host_os)
+     AC_DEFINE_UNQUOTED(OTHEROS,1,[Some strange OS])
+;;
+esac
+
+AC_MSG_CHECKING([for build target])
+AM_CONDITIONAL(DARWIN,  test "$build_target" = "darwin")
+AM_CONDITIONAL(CYGWIN,  test "$build_target" = "cygwin")
+AM_CONDITIONAL(MINGW,   test "$build_target" = "mingw")
+AM_CONDITIONAL(SOLARIS, test "$build_target" = "solaris")
+AM_CONDITIONAL(XFREEBSD, test "$build_target" = "freebsd")
+AM_CONDITIONAL(OPENBSD, test "$build_target" = "openbsd")
+AM_CONDITIONAL(LINUX, test "$build_target" = "linux")
+AC_MSG_RESULT([$build_target])
+
 
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 
@@ -279,7 +345,6 @@ AC_CONFIG_FILES([
 ])
 
 AC_OUTPUT
-
 AC_MSG_CHECKING([
 
 Reloaded compilation options :
@@ -295,4 +360,5 @@ Reloaded compilation options :
 
     Debug mode ................... ${enable_debug}
 
+    host ......................... ${host}
 ])
