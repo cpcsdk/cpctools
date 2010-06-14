@@ -2417,7 +2417,7 @@ namespace Z80 {
 																							 	e[0] = 0xdd;
 																							 } break;
 					}
-					if ((beginhaakje = oparen(lp, '('))) {
+					if (beginhaakje = oparen(lp, '(')) {
 						olp = --lp;
 					}
 					b = GetWord(lp);
@@ -2451,7 +2451,7 @@ namespace Z80 {
 																							 	e[0] = 0xfd;
 																							 } break;
 					}
-					if ((beginhaakje = oparen(lp, '('))) {
+					if (beginhaakje = oparen(lp, '(')) {
 						olp = --lp;
 					}
 					b = GetWord(lp);
@@ -2672,7 +2672,7 @@ namespace Z80 {
 	/* modified */
 	void OpCode_LDD() {
 		Z80Reg reg, reg2;
-		int e[7], b = -1;
+		int e[7], b=-1;
 		do {
 			/* modified */
 			e[0] = e[1] = e[2] = e[3] = e[4] = e[5] = e[6] = -1;
@@ -2810,7 +2810,7 @@ namespace Z80 {
 	/* modified */
 	void OpCode_LDI() {
 		Z80Reg reg, reg2;
-		int e[11], b = -1;
+		int e[11], b=-1;
 		do {
 			/* modified */
 			e[0] = e[1] = e[2] = e[3] = e[4] = e[5] = e[6] = e[10] = -1;
@@ -4244,8 +4244,9 @@ namespace Z80 {
 					e[0] = 0xb7; e[1] = 0xed; e[2] = 0x62; break;
 				case Z80_SP:
 					e[0] = 0xb7; e[1] = 0xed; e[2] = 0x72; break;
-				default:
+        default:
 					Error("Unhandled register", lp);
+
 				}
 				break;
 			case Z80_A:

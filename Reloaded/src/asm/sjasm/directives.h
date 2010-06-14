@@ -28,6 +28,9 @@
 
 // direct.h
 
+#include <stdlib.h>
+#include <stdio.h>
+
 extern CFunctionTable DirectivesTable;
 void InsertDirectives();
 

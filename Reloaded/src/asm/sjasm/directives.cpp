@@ -33,7 +33,9 @@
 CFunctionTable DirectivesTable;
 CFunctionTable DirectivesTable_dup;
 
+#if EMBEDED_IN_CAPRICE
 int runAddress ;
+#endif
 
 /* modified */
 int ParseDirective(bool bol) {
@@ -178,7 +180,7 @@ void dirABYTE() {
 	}
 }
 
-
+#if EMBEDED_IN_CAPRICE
 void dirRUN() {
   aint address ;
   if (ParseExpression(lp, address)) {
@@ -188,6 +190,8 @@ void dirRUN() {
     Error("RUN with no arguments", 0); return;
   }
 }
+#endif
+
 void dirABYTEC() {
 	aint add;
 	int teller = 0,e[129];
@@ -481,9 +485,7 @@ void dirMODULE() {
 	if (ModuleName != NULL) {
 		delete[] ModuleName;
 	}
-
-	n = GetID(lp);
-	if (n != NULL) {
+	if (n = GetID(lp)) {
 		ModuleName = STRDUP(n);
 		if (ModuleName == NULL) {
 			Error("No enough memory!", 0, FATAL);
@@ -541,7 +543,7 @@ void dirSIZE() {
 	if (pass == LASTPASS) {
 		return;
 	}
-	if (size != -1) {
+	if (size != (aint) - 1) {
 		Error("[SIZE] Multiple sizes?", 0); return;
 	}
 	size = val;
@@ -633,9 +635,10 @@ void dirINCHOB() {
 /* added */
 void dirINCTRD() {
 	aint val;
-	char* fnaam = NULL;
+  char* fnaam = NULL;
 	char* fnaamh = NULL;
 	char* fnaamh2 = NULL;
+
 	char hobeta[12], hdr[17];
 	int offset = -1,length = -1,res,i;
 	FILE* ff;
@@ -833,8 +836,9 @@ void dirSAVEBIN() {
 /* added */
 void dirSAVEHOB() {
 	aint val;
-	char* fnaam = NULL;
+  char* fnaam = NULL;
 	char* fnaamh = NULL;
+
 	int start = -1,length = -1;
 	bool exec = true;
 
@@ -922,9 +926,10 @@ void dirSAVETRD() {
 	}
 
 	aint val;
-	char* fnaam = NULL;
+  char* fnaam = NULL;
 	char* fnaamh = NULL;
-	int start = -1, length = -1;
+
+	int start = -1,length = -1;
 
 	fnaam = GetFileName(lp);
 	if (comma(lp)) {
@@ -1916,7 +1921,7 @@ void _lua_showerror() {
 
 	// print error and other actions
 	err = ErrorLine;
-	SPRINTF3(err, LINEMAX2, "%s(%d): error: [LUA]%s", filename, ln, pos);
+	SPRINTF3(err, LINEMAX2, "%s(%lu): error: [LUA]%s", filename, ln, pos);
 
 	if (!strchr(err, '\n')) {
 		STRCAT(err, LINEMAX2, "\n");
@@ -1932,7 +1937,7 @@ void _lua_showerror() {
 	ErrorCount++;
 
 	char count[25];
-	SPRINTF1(count, 25, "%d", ErrorCount);
+	SPRINTF1(count, 25, "%lu", ErrorCount);
 	DefineTable.Replace("_ERRORS", count);
 	// end Error(...)
 
@@ -1968,7 +1973,7 @@ void dirLUA() {
 	char *rp, *id;
 	char *buff = new char[32768];
 	char *bp=buff;
-	//char size=0;
+	char size=0;
 	int ln=0;
 	bool execute=false;
 
@@ -2054,11 +2059,9 @@ void dirLUA() {
 	delete[] buff;
 }
 
-
 void dirENDLUA() {
 	Error("[ENDLUA] End of lua script without script", 0);
 }
-
 
 /* modified */
 void dirINCLUDELUA() {
@@ -2087,7 +2090,6 @@ void dirINCLUDELUA() {
 	delete[] fnaam;
 }
 
-
 void dirDEVICE() {
 	char* id = GetID(lp);
 	if (id != NULL) {
@@ -2097,8 +2099,9 @@ void dirDEVICE() {
 	} else {
 		Error("[DEVICE] Syntax error", 0, CATCHALL);
 	}
-}
 
+
+}
 
 /* modified */
 void InsertDirectives() {
@@ -2115,7 +2118,6 @@ void InsertDirectives() {
 	DirectivesTable.insertd("fpos",dirFORG);
 	DirectivesTable.insertd("map", dirMAP);
 	DirectivesTable.insertd("align", dirALIGN);
-  DirectivesTable.insertd("run", dirRUN);
 	DirectivesTable.insertd("module", dirMODULE);
 	//DirectivesTable.insertd("z80", dirZ80);
 	DirectivesTable.insertd("size", dirSIZE);
@@ -2127,7 +2129,6 @@ void InsertDirectives() {
 	DirectivesTable.insertd("display", dirDISPLAY); /* added */
 	DirectivesTable.insertd("end", dirEND);
 	DirectivesTable.insertd("include", dirINCLUDE);
-	DirectivesTable.insertd("read", dirINCLUDE);  /* Caprice added */
 	DirectivesTable.insertd("incbin", dirINCBIN);
 	DirectivesTable.insertd("binary", dirINCBIN); /* added */
 	DirectivesTable.insertd("inchob", dirINCHOB); /* added */
@@ -2200,6 +2201,11 @@ void InsertDirectives() {
 	DirectivesTable_dup.insertd("endm", dirENDM); /* added */
 	DirectivesTable_dup.insertd("endr", dirEDUP); /* added */
 	DirectivesTable_dup.insertd("rept", dirDUP); /* added */
+
+#ifdef EMBEDED_IN_CAPRICE
+  DirectivesTable.insertd("run", dirRUN);
+  DirectivesTable.insertd("read", dirINCLUDE);  /* Caprice added */
+#endif
 }
 
 bool LuaSetPage(aint n) {

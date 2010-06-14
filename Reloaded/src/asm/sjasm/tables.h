@@ -137,10 +137,10 @@ public:
 class CDefineTableEntry {
 public:
 	char* name;
-	char* value;
+  char* value;
 	CStringsList* nss; /* added */
 	CDefineTableEntry* next;
-	CDefineTableEntry(const char*, const char*, CStringsList* /*added*/, CDefineTableEntry*);
+	CDefineTableEntry(const char*,const char*, CStringsList* /*added*/, CDefineTableEntry*);
 };
 
 class CMacroDefineTable {

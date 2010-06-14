@@ -100,7 +100,6 @@ void SkipBlanks(char*& p) {
 		++p;
 	}
 }
-
 void SkipBlanks(const char*& p) {
 	while (*p && *p <= ' ') {
 		++p;
@@ -375,7 +374,7 @@ int GetConstant(char*& op, aint& val) {
 	switch (*p) {
 	case '#':
 	case '$':
-  case '&':
+  case '&': //hex
 		++p;
 		while (isalnum((unsigned char) * p)) {
 			if ((v = getval(*p)) >= 16) {

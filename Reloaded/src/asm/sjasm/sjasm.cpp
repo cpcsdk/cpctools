@@ -132,7 +132,7 @@ void InitPass(int p) {
 		delete[] LastParsedLabel;
 	}
 	LastParsedLabel = NULL;
-	strcpy(vorlabp, "_");
+	vorlabp = "_";
 	macrolabp = NULL;
 	listmacro = 0;
 	pass = p;
@@ -286,7 +286,7 @@ int main(int argc, char **argv) {
 	char buf[MAX_PATH];
 	int base_encoding; /* added */
 	char* p;
-	const char* logo = "SjASMPlus Z80 Cross-Assembler v1.07 RC7 + CPCSDK patches";
+	const char* logo = "SjASMPlus Z80 Cross-Assembler v1.07 RC7 - + CPCSDK patches";
 	int i = 1;
 
 	if (argc == 1) {

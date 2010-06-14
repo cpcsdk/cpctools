@@ -30,22 +30,10 @@
 
 #include "sjdefs.h"
 
-//{{{Caprice
-#include "emulator.h"
-#include "memory.h"
-
-//Store byte in buffer and emu
-#define STORE_BYTE(byte)			{ \
-        *(MemoryPointer++) = (char) byte; \
-        Emulator::getInstance()->GetMemory().GetRAM()[CurAddress] = (char) byte ; \
-      	_COUT " (" _CMDL CurAddress _CMDL ") = " _CMDL byte _ENDL; \
-        } 
-//}}}
-
-
 #ifndef UNDER_CE
 #include <fcntl.h>
 #else
+
 //******************************************************************************
 //***** FCNTL.H functions
 //******************************************************************************
@@ -88,6 +76,23 @@
 #endif
 //#include <sys/types.h>
 //#include <sys/stat.h>
+
+#if EMBEDED_IN_CAPRICE
+  #include "emulator.h"
+  #include "memory.h"
+
+  //Store byte in buffer and emu
+  #define STORE_BYTE(byte)			{ \
+        *(MemoryPointer++) = (char) byte; \
+        Emulator::getInstance()->GetMemory().GetRAM()[CurAddress] = (char) byte ; \
+        _COUT " (" _CMDL CurAddress _CMDL ") = " _CMDL byte _ENDL; \
+        } 
+#else
+  #define STORE_BYTE(byte)			{ \
+   *(MemoryPointer++) = (char) byte;  \
+  }
+#endif
+
 
 #define DESTBUFLEN 8192
 
@@ -500,7 +505,7 @@ void CheckPage() {
 	MemoryPointer = MemoryRAM + addadr;*/
 
 	CDeviceSlot* S;
-	for (unsigned int i = 0; i<Device->SlotsCount; i++) {
+	for (unsigned int i=0 ; i<Device->SlotsCount ; i++) {
 		S = Device->GetSlot(i);
 		if (CurAddress >= S->Address && ((CurAddress < 65536 && CurAddress < S->Address + S->Size) || (CurAddress >= 65536 && CurAddress <= S->Address + S->Size))) {
 			if (PseudoORG) {
@@ -535,7 +540,7 @@ void Emit(int byte) {
 					SPRINTF1(buf, 1024, "RAM limit exceeded %lu", CurAddress);
 					Error(buf, 0, FATAL);
 				}
-        STORE_BYTE(byte)
+        STORE_BYTE(byte);
 				if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 					++adrdisp; ++CurAddress;
 					CheckPage();
@@ -549,7 +554,7 @@ void Emit(int byte) {
 				}
 
 				//if (!nulled) {
-        STORE_BYTE(byte)
+        STORE_BYTE(byte);
 				//} else {
 				//	MemoryPointer++;
 				//}
@@ -629,12 +634,11 @@ void EmitBlock(aint byte, aint len, bool nulled) {
 						Error(buf, 0, FATAL);
 					}
 					if (!nulled) {
-						//*(MemoryPointer++) = (char) byte;
             STORE_BYTE(byte)
 					} else {
 						MemoryPointer++;
 					}
-					if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
+					if ((MemoryPointer - Page->RAM) >= Page->Size) {
 						++adrdisp; ++CurAddress;
 						CheckPage(); continue;
 					}
@@ -645,7 +649,6 @@ void EmitBlock(aint byte, aint len, bool nulled) {
 						Error(buf, 0, FATAL);
 					}
 					if (!nulled) {
-						//*(MemoryPointer++) = (char) byte;
             STORE_BYTE(byte)
 					} else {
 						MemoryPointer++;
@@ -750,7 +753,8 @@ void BinIncFile(char* fname, int offset, int len) {
 							SPRINTF1(buf, 1024, "RAM limit exceeded %lu", CurAddress);
 							Error(buf, 0, FATAL);
 						}
-						*(MemoryPointer++) = *bp;
+            char byte = (char) *bp ;
+            STORE_BYTE(byte)
 						if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 							++adrdisp; ++CurAddress;
 							CheckPage(); continue;
@@ -761,7 +765,8 @@ void BinIncFile(char* fname, int offset, int len) {
 							SPRINTF1(buf, 1024, "RAM limit exceeded %lu", CurAddress);
 							Error(buf, 0, FATAL);
 						}
-						*(MemoryPointer++) = *bp;
+            char byte = (char) *bp;
+            STORE_BYTE(byte)
 						if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 							++CurAddress;
 							CheckPage(); continue;
@@ -798,7 +803,9 @@ void BinIncFile(char* fname, int offset, int len) {
 							if (CurAddress >= 0x10000) {
 								Error("RAM limit exceeded", 0, FATAL);
 							}
-							*(MemoryPointer++) = (char) WriteBuffer[leng++];
+//							*(MemoryPointer++) = (char) WriteBuffer[leng++];
+  						char byte = (char) WriteBuffer[leng++];
+  						STORE_BYTE(byte)
 							if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 								++adrdisp; ++CurAddress;
 								CheckPage();
@@ -809,7 +816,8 @@ void BinIncFile(char* fname, int offset, int len) {
 							if (CurAddress >= 0x10000) {
 								Error("RAM limit exceeded", 0, FATAL);
 							}
-							*(MemoryPointer++) = (char) WriteBuffer[leng++];
+  						char byte = (char) WriteBuffer[leng++];
+              STORE_BYTE(byte)
 							if ((unsigned)(MemoryPointer - Page->RAM) >= Page->Size) {
 								++CurAddress;
 								CheckPage();
@@ -1033,7 +1041,7 @@ void ReadBufLine(bool Parse, bool SplitByColon) {
 		rlpbuf = rlbuf;
 	}
 	//for end line
-	if (feof(FP_Input) && RL_Readed <= 0) {
+	if (feof(FP_Input) && RL_Readed <= 0 /*&& line*/) {
 		if (rlnewline) {
 			CurrentLocalLine++;
 			CompiledCurrentLine++;
@@ -1186,10 +1194,10 @@ int SaveRAM(FILE* ff, unsigned int start, unsigned int length) {
 	}
 
 	CDeviceSlot* S;
-	for (unsigned int i = 0; i<Device->SlotsCount; i++) {
+	for (unsigned int i=0;i<Device->SlotsCount;i++) {
 		S = Device->GetSlot(i);
-		if (start >= S->Address && start < S->Address + S->Size) {
-			if (length < S->Size + S->Address - start) {
+		if (start >= S->Address  && start < S->Address + S->Size) {
+			if (length < S->Size - (start - S->Address)) {
 				save = length;
 			} else {
 				save = S->Size - (start - S->Address);
@@ -1292,7 +1300,7 @@ unsigned char MemGetByte(unsigned int address) {
 	}
 
 	CDeviceSlot* S;
-	for (unsigned int i = 0; i<Device->SlotsCount; i++) {
+	for (unsigned int i=0;i<Device->SlotsCount;i++) {
 		S = Device->GetSlot(i);
 		if (address >= S->Address  && address < S->Address + S->Size) {
 			return S->Page->RAM[address - S->Address];
@@ -1363,7 +1371,7 @@ int SaveBinary(char* fname, int start, int length) {
 		length = 0x10000 - start;
 	}
 	//_COUT "Start: " _CMDL start _CMDL " Length: " _CMDL length _ENDL;
-	if (!SaveRAM(ff, (unsigned)start, (unsigned)length)) {
+	if (!SaveRAM(ff, (unsigned) start, (unsigned) length)) {
 		fclose(ff);return 0;
 	}
 
@@ -1438,7 +1446,7 @@ int SaveHobeta(char* fname, char* fhobname, int start, int length) {
 		fclose(ff);return 0;
 	}
 
-	if (!SaveRAM(ff, (unsigned)start, (unsigned)length)) {
+	if (!SaveRAM(ff, (unsigned) start, (unsigned) length)) {
 		fclose(ff);return 0;
 	}
 
