@@ -192,8 +192,8 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink0 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas0->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
-		emulator->logMessage(s);
+		s.Printf(wxT("%d"),ink2bas[ink]);
+		emulator->logMessage(s.mb_str());
 		m_bas0->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(1);
@@ -201,7 +201,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink1 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas1->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas1->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(2);
@@ -209,7 +209,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink2 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas2->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas2->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(3);
@@ -217,7 +217,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink3 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas3->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas3->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(4);
@@ -225,7 +225,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink4 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas4->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas4->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(5);
@@ -233,7 +233,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink5 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas5->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas5->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(6);
@@ -241,7 +241,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink6 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas6->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas6->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(7);
@@ -249,7 +249,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink7 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas7->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas7->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(8);
@@ -257,7 +257,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink8 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas8->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas8->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(9);
@@ -265,7 +265,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink9 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas9->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas9->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(10);
@@ -273,7 +273,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink10 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas10->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas10->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(11);
@@ -281,7 +281,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink11 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas11->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas11->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(12);
@@ -289,7 +289,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink12 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas12->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas12->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(13);
@@ -297,7 +297,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink13 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas13->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas13->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(14);
@@ -305,7 +305,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink14 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas14->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas14->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(15);
@@ -313,7 +313,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_ink15 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas15->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas15->SetValue(s); 
 
 		ink = emulator->GetGateArray().GetInk(16);
@@ -321,7 +321,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		*m_border << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
 		m_bas16->SetBackgroundColour(c);
-		s.Printf("%d",ink2bas[ink]);
+		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas16->SetValue(s); 
 
 
@@ -332,10 +332,10 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 	// FDC
     if(m_nb_Register->GetSelection() == 3)
 	{
-		a_track->SetValue(wxString::Format("%d",emulator->GetDriveA().current_track));
-		a_sector->SetValue(wxString::Format("%d",emulator->GetDriveA().current_sector));
-		b_track->SetValue(wxString::Format("%d",emulator->GetDriveB().current_track));
-		b_sector->SetValue(wxString::Format("%d",emulator->GetDriveB().current_sector));
+		a_track->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveA().current_track));
+		a_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveA().current_sector));
+		b_track->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_track));
+		b_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_sector));
 	}
 }
 

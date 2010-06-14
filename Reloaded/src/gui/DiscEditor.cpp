@@ -25,7 +25,7 @@ DiscEditor( parent )
 	lb_sectors->Clear();
 	for(unsigned int s = 0;s<FloppyImage.track[0][0].sectors;s++) {
 		wxString sNum;
-		sNum.Printf(_("%x"),(int)FloppyImage.track[0][0].sector[s].CHRN[2]);
+		sNum.Printf(wxT("%x"),(int)FloppyImage.track[0][0].sector[s].CHRN[2]);
 		lb_sectors->Append(sNum);
 	}
 }
@@ -52,7 +52,7 @@ void DiscEditorImpl::drawSectorExplorer( wxPaintEvent& event )
 			int pos = 0;
 			for(unsigned int col = 0;col < currentTrack->sectors; col++)
 			{
-			    v.Printf("%2.2X",(unsigned char)currentTrack->sector[col].CHRN[2]);
+			    v.Printf(wxT("%2.2X"),(unsigned char)currentTrack->sector[col].CHRN[2]);
 				if(currentTrack->sector[col].size != currentTrack->sector[col].declared_size)
 				{
 					if(currentTrack->sector[col].flags[1] &0x40)

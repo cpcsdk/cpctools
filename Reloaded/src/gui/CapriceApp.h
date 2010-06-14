@@ -25,7 +25,10 @@
 #include "configBis.h"
 #include <wx/wxprec.h>
 #include <wx/cmdline.h>
-#include <wx/ipc.h>
+#ifdef WINDOWS
+  #define IPC
+  #include <wx/ipc.h>
+#endif
 #ifndef WX_PRECOMP
        #include <wx/wx.h>
 #endif
@@ -35,7 +38,8 @@
 #include "WXEmulator.h"
 #include "snapshot.h"
 
-
+#if IPC
+//We have compilation problems under Linux. Need to check
 class wxSingleInstanceChecker;
 
 
@@ -47,9 +51,9 @@ class ipcCnx: public wxConnection
 			switch (item[0]) {
         		case 'A': 
 				{
-					wxString s("Insert ");
-				   	s << data << " into drive " << item;
-					Emulator::getInstance()->logMessage(s);
+					wxString s(wxT("Insert "));
+				   	s << data << wxT(" into drive ") << item;
+					Emulator::getInstance()->logMessage(s.mb_str());
 					Emulator::getInstance()->GetFDC().insertA( (const char *) data); break;
 				}
 				case 'B': Emulator::getInstance()->GetFDC().insertB( (const char *) data); break;
@@ -68,6 +72,7 @@ class ipcServer: public wxServer
 			return new ipcCnx();	
 		}
 };
+#endif
 
 
 class CapriceApp : public wxApp
@@ -96,8 +101,10 @@ private:
 	wxString	tape ;
 	wxString 	snapshot ;	
 
+#if IPC
 	wxSingleInstanceChecker* wsic;
 	ipcServer* commServer;
+#endif
 };
  
 

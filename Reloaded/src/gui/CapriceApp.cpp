@@ -83,6 +83,7 @@ bool CapriceApp::OnInit()
 
     SetAppName(wxT("reloaded"));
 
+#if IPC
 	// Check if another instance is running
 	const wxString name = wxString::Format("reloaded-%s", wxGetUserId().mb_str());
 	wsic = new wxSingleInstanceChecker(name);
@@ -105,6 +106,7 @@ bool CapriceApp::OnInit()
 		// Exit now.
 		return false;
 	}
+#endif
 
 	wxImage::AddHandler(new wxPNGHandler);
 
@@ -119,8 +121,10 @@ bool CapriceApp::OnInit()
     }
 	wxYield();
 
+#if IPC
 	commServer = new ipcServer();
 	commServer->Create("~/.reloadedcommand");
+#endif
 
 	//Create emulator and IHM
 	emulator = WXEmulator::getInstance();
@@ -148,10 +152,12 @@ bool CapriceApp::OnInit()
  */
 int CapriceApp::OnExit()
 {
+#if IPC
 	delete commServer;
 	commServer = NULL;
 	delete wsic;
 	wsic = NULL;
+#endif
 	delete DiscEditorImpl::sectorClipboard;
 	delete emulator;
 	emulator = NULL;
