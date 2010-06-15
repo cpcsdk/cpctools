@@ -36,6 +36,8 @@
 #include "crtc.h"
 
 #include <iostream>
+#include <pthread.h>
+
 class t_z80regs;
 class t_VDU;
 class t_GateArray;
@@ -73,6 +75,7 @@ protected:
 	t_Memory				*_cpcMemory;
 	unsigned int			_cycleCount;
 	VideoPlugin*			(*_videoPlugin)();
+	pthread_t emuthread;
 
 	/**
 	 * Address to jump if required

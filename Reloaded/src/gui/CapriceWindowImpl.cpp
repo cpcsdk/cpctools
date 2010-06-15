@@ -69,6 +69,8 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
+	event.Skip();
+	/*
 	if (emulator && ! emulator->GetConfig().paused)
 	{
         emulator->Emulate();
@@ -90,6 +92,7 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 		    dc.DrawBitmap(bmp,0,0,false);
 	    }
     }
+	*/
 }
 
 void CapriceWindowImpl::Pause() {
