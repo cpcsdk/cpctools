@@ -29,7 +29,7 @@
 /**
  * Window allowing the editing, compilation of assembly files
  */
-class CapriceIDEImpl : public CapriceIDE 
+class CapriceIDEImpl : public IDE
 {
   public:
     CapriceIDEImpl(wxWindow* parent, WXEmulator *emulator);

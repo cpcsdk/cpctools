@@ -28,7 +28,7 @@
  * then add specific code editor, htanks to wxstedit
  */
 CapriceIDEImpl::CapriceIDEImpl(wxWindow* parent, WXEmulator* emulator) : 
-  CapriceIDE(parent),
+  IDE(parent),
   emulator(emulator)
 {
 
