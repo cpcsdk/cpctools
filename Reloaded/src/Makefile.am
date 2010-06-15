@@ -2,8 +2,13 @@ bin_PROGRAMS = caprice
 
 DIST_SUBDIRS = core gui
 SUBDIRS = core gui
+
+
+if MINGW
 MINGW=-lmingw32
-#MINGW=
+else
+MINGW=
+endif
 
 #TODO : Build video and emulator inside libcapricecore
 caprice_SOURCES = core/video.cpp core/emulator.cpp 
