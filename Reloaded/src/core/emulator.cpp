@@ -264,8 +264,10 @@ Emulator::Emulator():
 
 Emulator::~Emulator()
 {
+#ifdef WINDOWS
 	exitRequested=1;
 	pthread_join(emuthread, NULL);
+#endif
 
 	printer_stop();
 	//TODO use lib765 for ejecting floppies
@@ -285,12 +287,15 @@ Emulator::~Emulator()
 	std::cout << "[DEBUG] Destruct Emulator" << endl;
 }
 
+
+#ifdef WINDOWS
 void* runEmulation(void* theEmu)
 {
 	Emulator* theRealEmu = (Emulator*)theEmu;
 	theRealEmu->Emulate();
 	return NULL;
 }
+#endif
 
 bool Emulator::Init()
 {
@@ -388,8 +393,10 @@ bool Emulator::Init()
 
 	goToAddress = -1 ;
 
+#ifdef WINDOWS
 	// Spawn a thread for emulating (this way we do not freeze the window)
 	pthread_create(&emuthread,NULL,runEmulation,this);
+#endif
 
 	return true;
 }
@@ -402,8 +409,11 @@ void Emulator::Emulate()
 	iExitCondition = EC_FRAME_COMPLETE;
 	bolDone = false;
 
-	// for (int i = 0; i<100000; i++)
+#ifdef WINDOWS
 	while(1)
+#else
+	for (int i = 0; i<100000; i++)
+#endif
 	{
 		//Do the goto if needed
 		if ( goToAddress != -1 )
@@ -484,7 +494,9 @@ void Emulator::Emulate()
 		if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
 		{
 			this->Breakpoint();
-			//return;
+#ifndef WINDOWS
+		  return;
+#endif
 		}
 
 
@@ -504,7 +516,9 @@ void Emulator::Emulate()
 			//loopcon=0;
 
 			_renderer.EndDisplay(true);
-			//return;
+#ifndef WINDOWS
+			return;
+#endif
 		}
 		/*
 		else
@@ -522,7 +536,11 @@ void Emulator::Emulate()
 
 		if (exitRequested)
 		{
+#ifdef WINDOWS
 			return;
+#else
+      break;
+#endif
 		}
 	}
 }

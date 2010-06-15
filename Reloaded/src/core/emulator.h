@@ -36,7 +36,10 @@
 #include "crtc.h"
 
 #include <iostream>
+
+#ifdef WINDOWS
 #include <pthread.h>
+#endif
 
 class t_z80regs;
 class t_VDU;
@@ -75,7 +78,10 @@ protected:
 	t_Memory				*_cpcMemory;
 	unsigned int			_cycleCount;
 	VideoPlugin*			(*_videoPlugin)();
+
+#ifdef WINDOWS
 	pthread_t emuthread;
+#endif
 
 	/**
 	 * Address to jump if required
