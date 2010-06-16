@@ -238,7 +238,7 @@ void t_CPC::loadConfiguration ()
 	    //renderer.scr_led = getConfigValueInt(chFileName, "video", "scr_led", 1) & 1;
 
 	    snd_enabled = getConfigValueInt(chFileName, "sound", "enabled", 1) & 1;
-	    snd_playback_rate = getConfigValueInt(chFileName, "sound", "playback_rate", 44100);
+	    snd_playback_rate = getConfigValueInt(chFileName, "sound", "playback_rate", 48000);
 	    snd_bits = getConfigValueInt(chFileName, "sound", "bits", 16);
 	    snd_stereo = getConfigValueInt(chFileName, "sound", "stereo", 1) & 1;
 	    snd_volume = getConfigValueInt(chFileName, "sound", "volume", 100);
