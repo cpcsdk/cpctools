@@ -14,12 +14,7 @@ AC_PROG_MAKE_SET
 m4_pattern_allow([^AC])
 
 # Check for functions
-AC_CHECK_FUNCS([getcwd])
-AC_CHECK_FUNCS([memset])
-AC_CHECK_FUNCS([pow])
-AC_CHECK_FUNCS([strcspn])
-AC_CHECK_FUNCS([strrchr])
-AC_CHECK_FUNCS([strtoul])
+AC_CHECK_FUNCS([memchr memset pow strchr strcspn strrchr strstr strtol strtoul])
 
 # Check for headers
 AC_CHECK_HEADERS([malloc.h])
@@ -35,9 +30,6 @@ AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
 AC_TYPE_SIZE_T
-AC_C_CONST
-AC_C_INLINE
-AC_HEADER_STDC
 AC_PROG_CC
 AC_TYPE_INT64_T
 
@@ -46,8 +38,6 @@ AC_FUNC_CLOSEDIR_VOID
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_FUNC_STRTOD
-AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([memchr memset pow strchr strcspn strrchr strstr strtol strtoul])
 
 #Use autotools replacement for missing things
 AC_REPLACE_FUNCS([usleep])
@@ -65,41 +55,42 @@ AM_PROG_CC_C_O
 
 # With
 
-AC_ARG_WITH(	stsound,
-		[  --with-stsound	  use St Sound backend [default=yes]],
-		with_stsound=no,
-		with_stsound=yes)	   
+AC_ARG_WITH(stsound,
+        [  --with-stsound          use St Sound backend [default=yes]],
+        with_stsound=no,
+        with_stsound=yes)
 
-AC_ARG_WITH(	aylet,
-		[  --with-aylet		  use Aylet backend [default=no]],
-		with_aylet=yes,
-		with_aylet=no)
+AC_ARG_WITH(aylet,
+        [  --with-aylet            use Aylet backend [default=no]],
+        with_aylet=yes,
+        with_aylet=no)
 
-AC_ARG_WITH(	ayemu,
-		[  --with-ayemu		  use LibAYEmul [default=no]],
-		with_ayemu=yes,
-		with_ayemu=no)
+AC_ARG_WITH(ayemu,
+        [  --with-ayemu            use LibAYEmul [default=no]],
+        with_ayemu=yes,
+        with_ayemu=no)
 
-AC_ARG_WITH(	lib765,
-		[  --with-lib765		  use lib765 backend associate with libdsk for fdc emulation [default=no]],
-		with_lib765=yes,
-		with_lib765=no)
+AC_ARG_WITH(lib765,
+        [  --with-lib765           use lib765 backend associate with libdsk for fdc emulation [default=no]],
+        with_lib765=yes,
+        with_lib765=no)
 
-AC_ARG_WITH(	wxwidget,
-		[  --with-wxwidget	  use wxWidget as a gui [default=yes]],
-		with_wxwidget=no,
-		with_wxwidget=yes)
-		
-AC_ARG_WITH(	cli,
-		[  --with-cli		  turn on cli interface [default=no]],
-		with_cli=yes,
-		with_cli=no)
+AC_ARG_WITH(wxwidget,
+        [  --with-wxwidget         use wxWidget as a gui [default=yes]],
+        with_wxwidget=no,
+        with_wxwidget=yes)
 
+AC_ARG_WITH(cli,
+        [  --with-cli              turn on cli interface [default=no]],
+        with_cli=yes,
+        with_cli=no)
 
+AC_ARG_WITH(socket,
+        [  --with-socket           turn on control thru socket [default=no]],
+        with_socket=yes,
+        with_socket=no)
 
-
-AC_MSG_CHECKING([ devtools ------------------------------------
-])
+AC_MSG_NOTICE([devtools ---------------------------------------------------])
 with_asm=no
 
 if test "$with_cli" = "yes" ; then
@@ -107,6 +98,11 @@ if test "$with_cli" = "yes" ; then
     with_asm=yes
 fi
 AM_CONDITIONAL([CLI], [test "$with_cli" = "yes"])
+
+if test "$with_socket" = "yes" ; then
+    AC_DEFINE(SOCKET_CONTROL,1,[Activate control thru socket])
+fi
+AM_CONDITIONAL([USE_SOCKET], [test "$with_socket" = "yes"])
 
 AC_ARG_WITH(	debugger,
 		[  --with-debugger	  use the internal debugger [default=yes]],
@@ -135,25 +131,28 @@ AM_CONDITIONAL([WITH_ASM], [test "$with_asm" = "yes"])
 
 # Enable
 
-AC_MSG_CHECKING(for debugging environment)
-AC_ARG_ENABLE(	debug,
-		[  --enable-debug	  turn on debug compiler [default=no]],
-		enable_debug=yes,
-		enable_debug=no)
+AC_ARG_ENABLE(debug,
+        [  --enable-debug          turn on debug compiler [default=no]],
+        enable_debug=yes,
+        enable_debug=no)
 
+AC_MSG_NOTICE([platform and operating system ------------------------------])
+
+AC_MSG_CHECKING(for debugging mode)
 if test "$enable_debug" = yes ; then
-	CXXFLAGS="-O0  -g -DDEBUG -pg -m32"
-	CFLAGS="-O0  -g -DDEBUG -pg -m32"
+    CXXFLAGS="-O0 -g -DDEBUG -pg -m32"
+    CFLAGS="-O0 -g -DDEBUG -pg -m32"
 else
-  CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
-  CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
+    CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
+    CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
 fi
+AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
+AC_MSG_RESULT([$enable_debug])
 
 
-
-		
-
-# Check system type
+#####################
+# Check system type #
+#####################
 case "$host_os" in
 *darwin* | *rhapsody* | *macosx*)
      AC_DEFINE_UNQUOTED(DARWIN,1,[This is an Apple Darwin system])
@@ -210,30 +209,23 @@ AM_CONDITIONAL(OPENBSD, test "$build_target" = "openbsd")
 AM_CONDITIONAL(LINUX, test "$build_target" = "linux")
 AC_MSG_RESULT([$build_target])
 
-
-AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
-
-AC_MSG_RESULT([ $enable_debug ])
-
-
-AC_MSG_CHECKING([ display and gui options ------------------------------------
-])
-AC_ARG_ENABLE(	filedrop,
-	      	[  --enable-filedrop	  turn on filedrop capacity [default=yes]],
-		enable_filedrop=no,
-		enable_filedrop=yes)
+AC_MSG_NOTICE([display and gui options ------------------------------------])
+AC_ARG_ENABLE(filedrop,
+        [  --enable-filedrop       turn on filedrop capacity [default=yes]],
+        enable_filedrop=no,
+        enable_filedrop=yes)
 
 if test "$enable_filedrop" = "yes" ; then
-	AC_DEFINE(ENABLE_FILEDROP,1,[Activate FileDrop ability])
+    AC_DEFINE(ENABLE_FILEDROP,1,[Activate FileDrop ability])
 fi
 
-AC_ARG_ENABLE(  opengl,
-	        [  --enable-opengl	  turn on opengl support [default=no]],
-		enable_opengl=yes,
-		enable_opengl=no)
+AC_ARG_ENABLE(opengl,
+        [  --enable-opengl         turn on opengl support [default=no]],
+        enable_opengl=yes,
+        enable_opengl=no)
 
 if test "$enable_opengl" = "yes" ;  then
-	AC_DEFINE(USE_OPENGL,1,[Activate OpenGL support])
+    AC_DEFINE(USE_OPENGL,1,[Activate OpenGL support])
 fi
 
 # GUI
@@ -267,8 +259,7 @@ AC_CHECK_HEADER( [png.h],AC_DEFINE(HAVE_LIBPNG,1,[Use libpng to save screenshots
 
 # Sound
 
-AC_MSG_CHECKING([ sound options ----------------------------------------------
-])
+AC_MSG_NOTICE([sound options ----------------------------------------------])
 if test "$with_aylet" = "yes" ; then
     with_stsound="no";
     with_ayemu="no" ;
@@ -305,48 +296,45 @@ fi
 fi
 AM_CONDITIONAL([AYLET], [test "$with_aylet" = "yes"])
 
-
-# Dsk
-AC_MSG_CHECKING([ disk management options ------------------------------------
-])
+#TODO: See for a clean fallback mode
+#Dsk
+AC_MSG_NOTICE([disk management options ------------------------------------])
 if test "$with_lib765" = "yes" ; then
-	AC_CHECK_LIB([dsk], [dsk_open], LIB765="-l765 -ldsk")
-	AC_CHECK_HEADER( 765.h, AC_DEFINE(HAVE_LIB765_H,1,[Use lib765 for FDC emulation]), AC_MSG_ERROR([lib765 not found ! look at http://www.seasip.demon.co.uk/Unix/LibDsk ]))
-	AC_SUBST(LIB765)
+    AC_CHECK_LIB([dsk], [dsk_open], LIB765="-l765 -ldsk")
+    AC_CHECK_HEADER([765.h], AC_DEFINE(HAVE_LIB765_H,1,[Use lib765 for FDC emulation]), AC_MSG_ERROR([lib765 not found ! look at http://www.seasip.demon.co.uk/Unix/LibDsk ]))
+    AC_SUBST(LIB765)
 fi
 AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
 
+#TODO: Regroup with other OS detection
 #Apple
 UNAME=$(shell uname)
 AM_CONDITIONAL([DARWIN], [test "$UNAME" = "Darwin"])
 if test "$UNAME" = "Darwin" ;  then
-	AC_DEFINE(DARWIN,1,[Darwin platform])
+    AC_DEFINE(DARWIN,1,[Darwin platform])
 fi
 
 
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)
 
-
-
+#TODO: See if really need
 AC_CHECK_HEADER([SDL/SDL_opengl.h], , AC_MSG_ERROR([SDL_opengl.h not found !]))
-
 
 #Output file
 AC_CONFIG_HEADERS([configBis.h])
 AC_CONFIG_FILES([
         Makefile
-		src/Makefile
-		src/gui/Makefile
-    src/gui/IDE/Makefile
-		src/core/Makefile
-    src/cli/Makefile
-    src/asm/Makefile
+        src/Makefile
+        src/gui/Makefile
+        src/gui/IDE/Makefile
+        src/core/Makefile
+        src/cli/Makefile
+        src/asm/Makefile
 ])
 
 AC_OUTPUT
-AC_MSG_CHECKING([
-
+AC_MSG_NOTICE([
 Reloaded compilation options :
 
     Use lib765 ................... ${with_lib765}
@@ -360,5 +348,5 @@ Reloaded compilation options :
 
     Debug mode ................... ${enable_debug}
 
-    host ......................... ${host}
+    Host system .................. ${host}
 ])
