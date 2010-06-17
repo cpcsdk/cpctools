@@ -59,7 +59,8 @@ zip.cpp\
 zip.h\
 IMG_savepng.h \
 IMG_savepng.cpp \
-clock_gettime_stub.cpp clock_gettime_stub.h
+clock_gettime_stub.cpp clock_gettime_stub.h \
+synchro.cpp synchro.h
 
 #Created due to cross references ...
 #TODO: change that

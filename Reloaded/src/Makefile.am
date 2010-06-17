@@ -5,19 +5,18 @@ SUBDIRS = core gui
 MINGW_LIB=-lmingw32
 
 #TODO : Build video and emulator inside libcapricecore
-caprice_SOURCES = core/video.cpp core/emulator.cpp 
+caprice_SOURCES = core/video.cpp core/emulator.cpp
 caprice_CPPFLAGS = $(WX_CPPFLAGS) -Icore -Igui -DUNICODE
-#caprice core needs to be before portaudio and soundli
+#caprice core needs to be before portaudio and soundlib
 #caprice wx needs to be after mingw32 so we can find WinMain ?
 caprice_LDADD =
 if MINGW
 caprice_LDADD += $(MINGW_LIB)
 endif
-caprice_LDADD += -lpthread \
-                 gui/libcapricewx.a gui/libfoo.a $(WX_LIBS) \
+caprice_LDADD += gui/libcapricewx.a gui/libfoo.a $(WX_LIBS) \
                  core/libcapricecore.a \
                  core/libdisass.a \
-                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) -lportaudio
+                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) -lportaudio -lpthread
 
 
 if WITH_IDE
