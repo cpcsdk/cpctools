@@ -52,6 +52,7 @@ pbROMlo(NULL),
 pbROMhi(NULL),
 pbExpansionROM(NULL)
 {
+    memSync.lock();
 	int i,j;
 	for (i = 0 ; i<8 ; i++)
 	{
@@ -71,10 +72,12 @@ pbExpansionROM(NULL)
 	{
 		memmap_ROM[i] = NULL;
 	}
+    memSync.unlock();
 }
 
 int t_Memory::Init()
 {
+    memSync.lock();
 	int iErr;
 
 	if ((iErr = RAMInit()) != ERR_OK)
@@ -89,6 +92,7 @@ int t_Memory::Init()
 		return iErr;
 	}
 
+    memSync.unlock();
 	return ERR_OK;
 }
 

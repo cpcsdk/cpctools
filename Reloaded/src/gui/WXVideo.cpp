@@ -59,6 +59,8 @@
 
 void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 {
+    publicSurfaceSync.lock();
+    outputSurfaceSync.lock();
 	if(bpp != 24)
 	{
 		cerr << "WXDoubleLinePlugin initialization error : Only support 24bpp mode" << endl;
@@ -77,6 +79,8 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 	_outputSurface = (unsigned char*)malloc(h*w*3*sizeof(unsigned char));
 	if (!_outputSurface)
 	{
+        publicSurfaceSync.unlock();
+        outputSurfaceSync.unlock();
 		return NULL;
 	}
 
@@ -86,6 +90,8 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 	{
 		free(_outputSurface);
 		_outputSurface = NULL;
+        publicSurfaceSync.unlock();
+        outputSurfaceSync.unlock();
 		return NULL;
 	}
 
@@ -99,6 +105,8 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
 	f->SetEmuImage(img);
 
+    publicSurfaceSync.unlock();
+    outputSurfaceSync.unlock();
 	return (void*)_publicVideo;
 }
 
@@ -108,17 +116,23 @@ void WXDoubleLinePlugin::SetPalette(ColorARGB8888* c)
 
 bool WXDoubleLinePlugin::Lock()
 {
-	return true;
+//    std::cerr << "[DEBUG] WXDoubleLinePlugin::Lock()" << std::endl;
+    return publicSurfaceSync.tryLock();
+//    return true;
 }
 
 void WXDoubleLinePlugin::Unlock()
 {
+//    std::cerr << "[DEBUG] WXDoubleLinePlugin::Unlock()" << std::endl;
+    publicSurfaceSync.unlock();
 }
 
 void WXDoubleLinePlugin::Flip()
 {
 	int line;
 
+    publicSurfaceSync.lock();
+    outputSurfaceSync.lock();
 	//byte* src = (byte*)_publicVideo->pixels;
 	byte* src = (byte*)_publicVideo;
 	byte* dest = (byte*)_outputSurface;
@@ -133,6 +147,7 @@ void WXDoubleLinePlugin::Flip()
 	    dest+=length;
 	    src+=length;
 	}
+    publicSurfaceSync.unlock();
 
 	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
 	if (f->IsShownOnScreen() && !f->IsIconized())
@@ -143,17 +158,21 @@ void WXDoubleLinePlugin::Flip()
     	wxClientDC dc(f->getPanel());
 		dc.DrawBitmap(bmp,0,0,false);
 	}
+    outputSurfaceSync.unlock();
 }
 
 void WXDoubleLinePlugin::Close()
 {
+    publicSurfaceSync.lock();
+    outputSurfaceSync.lock();
 	delete img;
 	img = NULL;
 	free(_outputSurface);
 	_outputSurface = NULL;
-	//SDL_FreeSurface(_publicVideo);
 	free(_publicVideo);
 	_publicVideo = NULL;
+    publicSurfaceSync.unlock();
+    outputSurfaceSync.unlock();
 }
 
 /* ------------------------------------------------------------------------------------ */

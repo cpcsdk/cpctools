@@ -24,6 +24,8 @@
 #include <string>
 #include "cap32type.h"
 
+#include "synchro.h"
+
 using namespace std;
 
 class VideoPlugin
@@ -85,6 +87,7 @@ protected:
 public:
 
 	//! The video surface shown by the plugin to the renderer function.
+    SysSync publicSurfaceSync;
 	void* _publicVideo;
 	int _publicHeight;
 	int _publicWidth;
@@ -92,6 +95,7 @@ public:
 	int _publicPitch;
 
 	//! The real video surface
+    SysSync outputSurfaceSync;
 	void* _outputSurface;
 	int _outputHeight;
 	int _outputWidth;

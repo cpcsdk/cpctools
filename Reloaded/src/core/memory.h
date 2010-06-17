@@ -8,11 +8,14 @@
 
 #include "cap32type.h"
 
+#include "synchro.h"
+
 class t_CPC;
 
 class t_Memory
 {
 private:
+    SysSync memSync;
 	t_CPC&			CPC;
 	
 	unsigned char	ROM_config;
@@ -93,12 +96,17 @@ public:
 
 	inline byte Read(word addr) 
 	{
-		return (*(membank_read[addr >> 14] + (addr & 0x3fff))); // returns a byte from a 16KB memory bank
+//        memSync.lock(); //TODO: Lock only if Write.
+		byte m = (*(membank_read[addr >> 14] + (addr & 0x3fff))); // returns a byte from a 16KB memory bank
+//        memSync.unlock();
+        return m;
 	}
 
 	inline void Write(word addr, byte val) 
 	{
+//        memSync.lock();
 		*(membank_write[addr >> 14] + (addr & 0x3fff)) = val; // writes a byte to a 16KB memory bank
+//        memSync.unlock();
 	}
 
 

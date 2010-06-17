@@ -37,6 +37,8 @@
 
 #include <iostream>
 
+#include "synchro.h"
+
 #ifdef WINDOWS
 #include <pthread.h>
 #endif
@@ -293,6 +295,7 @@ protected:
 
 	//int loopcon;
 
+    SysSync emuSync;
 };
 
 #endif

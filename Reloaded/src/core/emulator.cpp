@@ -197,6 +197,7 @@ bool Emulator::MF2Init()
 	return true;
 }
 
+// Non Thread Safe
 void Emulator::emulator_shutdown()
 {
 	delete [] pbMF2ROMbackup;
@@ -228,8 +229,6 @@ void Emulator::emulator_shutdown()
 	_z80 = NULL;
 }
 
-
-
 int Emulator::printer_start()
 {
 	if (!pfoPrinter)
@@ -258,12 +257,15 @@ Emulator::Emulator():
 	_config(this),
 	FPSDisplay(true)
 {
+    emuSync.lock();
 	// retrieve the emulator configuration
 	_config.loadConfiguration();
+    emuSync.unlock();
 }
 
 Emulator::~Emulator()
 {
+    emuSync.lock();
 #ifdef WINDOWS
 	exitRequested=1;
 	pthread_join(emuthread, NULL);
@@ -285,6 +287,7 @@ Emulator::~Emulator()
 	fclose(pfoDebug);
 #endif
 	std::cout << "[DEBUG] Destruct Emulator" << endl;
+    emuSync.unlock();
 }
 
 
@@ -299,6 +302,7 @@ void* runEmulation(void* theEmu)
 
 bool Emulator::Init()
 {
+    emuSync.lock();
 	timer.start();
 	
 	// attempt to allocate the general purpose buffer
@@ -398,6 +402,7 @@ bool Emulator::Init()
 	pthread_create(&emuthread,NULL,runEmulation,this);
 #endif
 
+    emuSync.unlock();
 	return true;
 }
 
@@ -423,7 +428,7 @@ void Emulator::Emulate()
 
 		dwTicks = timer.getTime();
 		// update FPS counter?
-		if (dwTicks >= dwTicksTargetFPS)
+		if(dwTicks >= dwTicksTargetFPS)
 		{
 			dwFPS = dwFrameCount;
 			dwFrameCount = 0;
@@ -441,8 +446,16 @@ void Emulator::Emulate()
 				{
 					usleep(((dwTicksTarget - dwTicks)*950));
 				}
-				continue;
+                do
+                {
+                } while(timer.getTime() < dwTicksTarget);
 			}
+            /*
+            else
+            {
+                std::cerr << "[DEBUG] Delay after target: " << dwTicks - dwTicksTarget << "ms" << std::endl;
+            }
+            */
 			// prep counter for the next run
 			dwTicksTarget = dwTicksTarget + dwTicksOffset;
 		}
@@ -477,9 +490,9 @@ void Emulator::Emulate()
 		}
 		}
 		*/
-		if (! _renderer.BeginDisplay(_vdu->GetScrLn()))
+		if (!_renderer.BeginDisplay(_vdu->GetScrLn()))
 		{
-			continue;
+//			continue;
 		}
 
 		//active if necessary trace mode
