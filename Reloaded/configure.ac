@@ -156,7 +156,7 @@ AC_MSG_RESULT([$enable_debug])
 case "$host_os" in
 *darwin* | *rhapsody* | *macosx*)
      AC_DEFINE_UNQUOTED(DARWIN,1,[This is an Apple Darwin system])
-     CPPFLAGS="-D_APPLE_C_SOURCE $CPPFLAGS"
+     CPPFLAGS="-DMAX_PATH=PATH_MAX -D_APPLE_C_SOURCE $CPPFLAGS"
      build_target="darwin"
      ;;
 linux*)

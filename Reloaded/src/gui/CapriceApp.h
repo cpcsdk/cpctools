@@ -1,6 +1,6 @@
 /**
  *   $Id: CapriceApp.h 60 2008-11-25 17:08:52Z giot.romain $
- *	 CapriceReloded an Amstrad CPC emulator
+ *   CapriceReloded an Amstrad CPC emulator
  *   Copyright (C) 2008  cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -78,28 +78,29 @@ class ipcServer: public wxServer
 class CapriceApp : public wxApp
 {
 public:
-	virtual bool OnInit();
-	virtual int  OnRun();
-	virtual int  OnExit();
+    virtual bool OnInit();
+    virtual int  OnRun();
+    virtual int  OnExit();
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
 
-	CapriceWindowImpl 	*frame ;
+
+    CapriceWindowImpl   *frame ;
 
 private:
-	WXEmulator			*emulator ;
+    WXEmulator          *emulator ;
 
-	//params
-	bool		fullscreen ;
-	bool		greenscreen ;
-	bool		remanency ;
-	long		intensity;
+    //params
+    bool        fullscreen ;
+    bool        greenscreen ;
+    bool        remanency ;
+    long        intensity;
   bool    cli;
 
-	wxString	drivea ;
-	wxString	driveb ;
-	wxString	tape ;
-	wxString 	snapshot ;	
+    wxString    drivea ;
+    wxString    driveb ;
+    wxString    tape ;
+    wxString    snapshot ;  
 
 #if defined(IPC)
 	wxSingleInstanceChecker* wsic;
@@ -119,16 +120,16 @@ static const wxCmdLineEntryDesc g_cmdLineDesc [] =
 
     { wxCMD_LINE_SWITCH, wxT("f"), wxT("fullscreen"), wxT("display Reloaded in full screen") },
     { wxCMD_LINE_SWITCH, wxT("g"), wxT("greenscreen"), wxT("display Reloaded with a green screen") },
-	{ wxCMD_LINE_SWITCH, wxT("r"), wxT("remanancy"), wxT("use remanancy") },
-	{ wxCMD_LINE_OPTION, wxT("i"), wxT("intensity"), wxT("set intensity screen"), wxCMD_LINE_VAL_NUMBER, wxCMD_LINE_PARAM_OPTIONAL  },
+    { wxCMD_LINE_SWITCH, wxT("r"), wxT("remanancy"), wxT("use remanancy") },
+    { wxCMD_LINE_OPTION, wxT("i"), wxT("intensity"), wxT("set intensity screen"), wxCMD_LINE_VAL_NUMBER, wxCMD_LINE_PARAM_OPTIONAL  },
     
-	{ wxCMD_LINE_OPTION, wxT("a"), wxT("drivea"), wxT("specify disk image to insert into drive A"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
+    { wxCMD_LINE_OPTION, wxT("a"), wxT("drivea"), wxT("specify disk image to insert into drive A"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
     { wxCMD_LINE_OPTION, wxT("b"), wxT("driveb"), wxT("specify disk image to insert into drive B"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
      
     { wxCMD_LINE_OPTION, wxT("t"), wxT("tape"), wxT("specify tape image "), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
     { wxCMD_LINE_OPTION, wxT("s"), wxT("snapshot"), wxT("specify snapshot image "), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
 
-	{ wxCMD_LINE_NONE }
+    { wxCMD_LINE_NONE }
 };
 DECLARE_APP(CapriceApp)
  

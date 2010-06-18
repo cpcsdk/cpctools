@@ -52,6 +52,12 @@ CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu)
 	dndhandler= new CapriceDNDHandler(emulator);
 	this->SetDropTarget(dndhandler);
 #endif
+
+#if __WXMAC__
+	wxApp::s_macAboutMenuItemId = wxID_ABOUT; //TODO Need to correctly specify this id
+	//wxApp::s_macPreferencesMenuItemId = PreferencesID;
+
+#endif
 }
 
 CapriceWindowImpl::~CapriceWindowImpl()

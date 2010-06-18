@@ -1,15 +1,22 @@
+#TODO cleanup this file
+# - do not write two times the name of the files
+# - include the headers
+
 noinst_LIBRARIES = libsjasm.a \
                    libsjasminternal.a
 
 bin_PROGRAMS = sjasmplus2
 
 #Under linux one needs -DLUA_USE_LINUX and -DMAX_PATH=PATH_MAX
-if LINUX
-LINUX_EXTRA_FLAGS = -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX
+if LINUX 
+SJASM_EXTRA_FLAGS = -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX
+endif
+if DARWIN 
+SJASM_EXTRA_FLAGS = -DMAX_PATH=PATH_MAX
 endif
 
-libsjasm_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm -I../core $(SDL_CFLAGS) $(LINUX_EXTRA_FLAGS) -DEMBEDED_IN_CAPRICE
-libsjasminternal_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm $(SDL_CFLAGS) $(LINUX_EXTRA_FLAGS)
+libsjasm_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm -I../core $(SDL_CFLAGS) $(SJASM_EXTRA_FLAGS) -DEMBEDED_IN_CAPRICE
+libsjasminternal_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm $(SDL_CFLAGS) $(SJASM_EXTRA_FLAGS)
 
 SJASMSRC=sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
 sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp 
@@ -41,7 +48,7 @@ libsjasm_a_SOURCES = \
 libsjasminternal_a_SOURCES = \
                              sjasm/z80.cpp
 
-sjasmplus2_CPPFLAGS = -Isjasm -Ilua5.1 -Itolua++ $(LINUX_EXTRA_FLAGS)
+sjasmplus2_CPPFLAGS = -Isjasm -Ilua5.1 -Itolua++ $(SJASM_EXTRA_FLAGS)
 sjasmplus2_SOURCES = sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
 sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp sjasm/z80.cpp \
 lua5.1/lapi.c lua5.1/lauxlib.c lua5.1/lbaselib.c lua5.1/lcode.c lua5.1/ldblib.c \
