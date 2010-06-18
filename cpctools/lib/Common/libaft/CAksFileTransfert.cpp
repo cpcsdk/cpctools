@@ -8,6 +8,7 @@
 
 #include "CAksFileTransfert.h"
 
+#include <cstring>
 #include <iostream>
 
 char* CAksFileTransfert::AksCommandShortDesc[] = 

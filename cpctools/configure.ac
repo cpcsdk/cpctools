@@ -12,8 +12,6 @@ AC_PROG_CC
 AC_PROG_LIBTOOL
 
 
-AC_LANG([C++])
-AC_CHECK_HEADERS(sstream strstream cassert)
 
 
 #Args
@@ -60,7 +58,17 @@ AC_ARG_WITH(    datalinker,
                 ,
                 with_datalinker=yes)
 
+if test "$with_cpcvideo" = "yes" ; then
+	AC_CHECK_HEADER([AntTweakBar.h])
+	AC_CHECK_HEADER([SDL_video.h])
 
+	SDL_VERSION=1.2.4
+#	AM_PATH_SDL($SDL_VERSION, :,
+#                        AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
+fi
+
+AC_LANG([C++])
+AC_CHECK_HEADERS(sstream strstream cassert)
 
 if (test "$with_cpcfs" = "yes") || (test "$with_cpcdskmanager" = "yes"); then
 	AC_CHECK_LIB([dsk], [dsk_map_delete])
@@ -77,14 +85,6 @@ if test "$with_cpcdskmanager" = "yes" ; then
 fi
 
 
-if test "$with_cpcvideo" = "yes" ; then
-	AC_CHECK_HEADER([AntTweakBar.h])
-	AC_CHECK_HEADER([SDL_video.h])
-
-	SDL_VERSION=1.2.4
-	AM_PATH_SDL($SDL_VERSION, :,
-                        AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
-fi
 
 #Output file
 AC_CONFIG_HEADERS([config.h])
