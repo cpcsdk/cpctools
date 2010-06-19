@@ -26,7 +26,7 @@
 
 #include "input.h"
 #include "cap32type.h"
-#include "config.h"
+#include "config_manager.h"
 #include "CPCKeyDefs.h"
 #include <iostream>
 

@@ -322,7 +322,7 @@ AC_SUBST(CFLAGS)
 AC_CHECK_HEADER([SDL/SDL_opengl.h], , AC_MSG_ERROR([SDL_opengl.h not found !]))
 
 #Output file
-AC_CONFIG_HEADERS([configBis.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
         Makefile
         src/Makefile

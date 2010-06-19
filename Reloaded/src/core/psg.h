@@ -5,7 +5,7 @@
 #ifndef _PSG_H_
 #define _PSG_H_
 
-#include "configBis.h"
+#include "config.h"
 
 #include "cap32type.h"
 

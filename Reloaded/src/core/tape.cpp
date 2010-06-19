@@ -31,9 +31,11 @@
    Jan 29, 2003 - 19:14 fixed CDT loading: the pause-after-block value was read from the wrong location!
 */
 
+#include <new>
+
 #include "cap32.h"
 #include "tape.h"
-#include "config.h"
+#include "config_manager.h"
 #include "error.h"
 #include "filetools.h"
 

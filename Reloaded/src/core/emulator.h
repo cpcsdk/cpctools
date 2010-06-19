@@ -27,7 +27,7 @@
 
 #include "cap32type.h"
 #include "render.h"
-#include "config.h"
+#include "config_manager.h"
 #include "input.h"
 #include "fdc.h"
 #include "z80.h"

@@ -18,6 +18,8 @@
  *
  */
 
+#include "MemoryImpl.h"
+
 #include <sstream>
 #include <string>
 
@@ -26,10 +28,9 @@
 #include <wx/string.h>
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
+
 #include "Desass.h"
 #include "z80.h"
-
-#include "MemoryImpl.h"
 #include "memory.h"
 
 // TODO proper handling of BANKS and ROM mapping. Now you see the z80 view and

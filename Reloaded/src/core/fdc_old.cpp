@@ -1044,7 +1044,7 @@ void t_FDC::insertA(const string filename, const char *type )
 				cout << "file not found !\n";
 				break;
 			default:
-				cout << "unknown error ??!\n";
+				cout << "unknown error ?!\n";
 				break;
 		}
 	}

@@ -9,7 +9,7 @@
 #define _FDC_OLD_H_
 
 #include "cap32type.h"
-#include "configBis.h"
+#include "config.h"
 
 #include <string>
 

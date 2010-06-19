@@ -2,7 +2,7 @@
 // Caprice32 FDC emulator
 //
 
-#include "configBis.h"
+#include "config.h"
 
 #ifdef HAVE_LIB765_H
 #include "fdc_765.h"

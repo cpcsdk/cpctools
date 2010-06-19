@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <errno.h>
 
+
 class Sync
 {
     public:
@@ -11,6 +12,7 @@ class Sync
         virtual void unlock() = 0;
         virtual bool tryLock() = 0;
 };
+
 
 // TODO: Write
 // SpinLock
@@ -22,6 +24,7 @@ class SpinSync : public Sync
         SpinSync(): flag(0) {}
         ~SpinSync();
 };
+
 
 class SysSync : public Sync
 {

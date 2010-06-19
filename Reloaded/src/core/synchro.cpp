@@ -26,7 +26,7 @@ SysSync::SysSync()
 SysSync::~SysSync()
 {
 #if defined _WIN32
-    DeleteCriticalSection(&this->lock);
+    DeleteCriticalSection(&this->mlock);
 #else
     if(int r = pthread_cond_destroy(&this->cond))
     {

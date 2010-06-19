@@ -432,7 +432,7 @@ class Renderer
 
 	int mapGAEntryToRGB(char pal)
 	{
-		return _renderFunc->MapRGB(_colours[pal]);
+		return _renderFunc->MapRGB(_colours[(int)pal]);
 	}
 
 	//! Render CPC memory

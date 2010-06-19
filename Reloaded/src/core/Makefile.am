@@ -10,8 +10,8 @@ c_inifile.cpp\
 c_inifile.h\
 cap32.h\
 cap32type.h\
-config.cpp\
-config.h\
+config_manager.cpp\
+config_manager.h\
 crtc.cpp\
 crtc.h\
 crtc1.cpp\

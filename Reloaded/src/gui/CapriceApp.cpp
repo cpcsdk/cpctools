@@ -18,6 +18,7 @@
  *
  */  
 
+#include "config.h"
 #include <iostream>
 #include <pthread.h>
 
@@ -32,14 +33,12 @@
 
 
 #include "cap32.h"
-#include "config.h"
 #include "debug.h"
 #include "fdc.h"
 #include "dsk.h"
 #include "snapshot.h"
 #include "tape.h"
 #include "filetools.h"
-#include "configBis.h"
 
 
 #if CLI
