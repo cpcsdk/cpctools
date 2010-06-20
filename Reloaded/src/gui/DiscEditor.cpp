@@ -33,6 +33,7 @@ DiscEditor( parent )
 
 void DiscEditorImpl::drawSectorExplorer( wxPaintEvent& event )
 {
+	const int offset = 20;
 	wxPaintDC drawContext(explorerPanel);
 	wxFont f(8,wxDEFAULT,wxNORMAL,wxNORMAL);
 
@@ -47,9 +48,16 @@ void DiscEditorImpl::drawSectorExplorer( wxPaintEvent& event )
 	drawContext.SetPen(p);
 
 	for(unsigned int side = 0; side <= FloppyImage.sides; side++) {
-		for(unsigned int row = 0; row < FloppyImage.tracks; row++) {
+		for(unsigned int row = 0; row < FloppyImage.tracks; row++)
+		{
 			t_track* currentTrack = &FloppyImage.track[row][side];
 			int pos = 0;
+
+			// Draw track number
+			v.Printf(wxT("%2d"),row);
+			wxPoint l(0, row*12);
+			drawContext.DrawText(v,l);
+
 			for(unsigned int col = 0;col < currentTrack->sectors; col++)
 			{
 			    v.Printf(wxT("%2.2X"),(unsigned char)currentTrack->sector[col].CHRN[2]);
@@ -68,7 +76,7 @@ void DiscEditorImpl::drawSectorExplorer( wxPaintEvent& event )
 				fill.SetColour(c);
 				drawContext.SetBrush(fill);
 				wxSize k(currentTrack->sector[col].declared_size/16,12);
-				wxPoint l(pos,row*12);
+				wxPoint l(offset+pos,row*12);
 				drawContext.DrawRectangle(l,k);
 				drawContext.DrawText(v,l);
 				pos += currentTrack->sector[col].declared_size/16;
@@ -82,6 +90,8 @@ void DiscEditorImpl::setTrack( wxSpinEvent& event )
 {
 	lb_sectors->Clear();
 	currentTrack = event.GetPosition();
+
+	// Add all sectors to the list
 	for(unsigned int s = 0;s<FloppyImage.track[event.GetPosition()][0].sectors;s++) {
 		wxString sNum;
 		sNum.Printf(_("%x"),(int)FloppyImage.track[event.GetPosition()][0].sector[s].CHRN[2]);
@@ -99,7 +109,14 @@ void DiscEditorImpl::setSector( wxCommandEvent& event )
 		st_erased->SetLabel(_("not erased"));
 
 	wxString txt = _("Size : ");
-	txt << selectedSector.declared_size/128;
+
+	int size = selectedSector.declared_size/128;
+	int i = 0;
+	while( size >>= 1) {
+		i++;
+	}
+
+	txt << i;
 	st_size->SetLabel(txt);
 
 	if(selectedSector.declared_size > selectedSector.size)
@@ -127,7 +144,7 @@ void DiscEditorImpl::setSector( wxCommandEvent& event )
 void DiscEditorImpl::sectorLeftClick( wxMouseEvent& event )
 {
 	int itemID;
-	if(itemID = lb_sectors->HitTest(event.GetPosition()))
+	if((itemID = lb_sectors->HitTest(event.GetPosition())))
 	{
 		lb_sectors->SetSelection(itemID);
 	}

@@ -219,12 +219,14 @@ void MemoryImpl::RefreshMem(int startAddress)
 	for (int i = 0; i < 32; i++)
 	{
 		str.Printf(_("%04X"),startAddress + (i * 0x10));
-		m_grid1 -> SetRowLabelValue(i, str);
-	}
-	for (int i = 0; i < 0x200; i++)
-	{
-		str.Printf(_("%02X"),emu_mem.Read(startAddress + i));
-		m_grid1 -> SetCellValue(i>>4, i&0xF, str);	
+		*hexView << str << _("  ");
+
+		for (int j = 0; j < 16; j++)
+		{
+			str.Printf(_("%02X"),emu_mem.Read(startAddress + i*16+j));
+			*hexView << str << _(" ");
+		}
+		*hexView << _("\n");
 	}
 
 	// Disassembly view

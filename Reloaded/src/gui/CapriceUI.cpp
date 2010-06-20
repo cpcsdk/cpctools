@@ -2875,74 +2875,24 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	bSizer41->Fit( m_panel16 );
 	m_notebook4->AddPage( m_panel16, wxT("Overview"), false );
 	m_panel12 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizer38;
-	bSizer38 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizer51;
+	bSizer51 = new wxBoxSizer( wxVERTICAL );
 	
-	m_grid1 = new wxGrid( m_panel12, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_staticText125 = new wxStaticText( m_panel12, wxID_ANY, wxT("       00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText125->Wrap( -1 );
+	m_staticText125->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
-	// Grid
-	m_grid1->CreateGrid( 32, 16 );
-	m_grid1->EnableEditing( true );
-	m_grid1->EnableGridLines( false );
-	m_grid1->EnableDragGridSize( false );
-	m_grid1->SetMargins( 0, 0 );
+	bSizer51->Add( m_staticText125, 0, wxBOTTOM|wxTOP, 5 );
 	
-	// Columns
-	m_grid1->SetColSize( 0, 40 );
-	m_grid1->SetColSize( 1, 40 );
-	m_grid1->SetColSize( 2, 40 );
-	m_grid1->SetColSize( 3, 40 );
-	m_grid1->SetColSize( 4, 40 );
-	m_grid1->SetColSize( 5, 40 );
-	m_grid1->SetColSize( 6, 40 );
-	m_grid1->SetColSize( 7, 40 );
-	m_grid1->SetColSize( 8, 40 );
-	m_grid1->SetColSize( 9, 40 );
-	m_grid1->SetColSize( 10, 40 );
-	m_grid1->SetColSize( 11, 40 );
-	m_grid1->SetColSize( 12, 40 );
-	m_grid1->SetColSize( 13, 40 );
-	m_grid1->SetColSize( 14, 40 );
-	m_grid1->SetColSize( 15, 40 );
-	m_grid1->AutoSizeColumns();
-	m_grid1->EnableDragColMove( false );
-	m_grid1->EnableDragColSize( false );
-	m_grid1->SetColLabelSize( 20 );
-	m_grid1->SetColLabelValue( 0, wxT("0") );
-	m_grid1->SetColLabelValue( 1, wxT("1") );
-	m_grid1->SetColLabelValue( 2, wxT("2") );
-	m_grid1->SetColLabelValue( 3, wxT("3") );
-	m_grid1->SetColLabelValue( 4, wxT("4") );
-	m_grid1->SetColLabelValue( 5, wxT("5") );
-	m_grid1->SetColLabelValue( 6, wxT("6") );
-	m_grid1->SetColLabelValue( 7, wxT("7") );
-	m_grid1->SetColLabelValue( 8, wxT("8") );
-	m_grid1->SetColLabelValue( 9, wxT("9") );
-	m_grid1->SetColLabelValue( 10, wxT("A") );
-	m_grid1->SetColLabelValue( 11, wxT("B") );
-	m_grid1->SetColLabelValue( 12, wxT("C") );
-	m_grid1->SetColLabelValue( 13, wxT("D") );
-	m_grid1->SetColLabelValue( 14, wxT("E") );
-	m_grid1->SetColLabelValue( 15, wxT("F") );
-	m_grid1->SetColLabelAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	hexView = new wxTextCtrl( m_panel12, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_DONTWRAP|wxTE_MULTILINE|wxTE_READONLY );
+	hexView->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
-	// Rows
-	m_grid1->EnableDragRowSize( false );
-	m_grid1->SetRowLabelSize( 60 );
-	m_grid1->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	bSizer51->Add( hexView, 1, wxEXPAND, 5 );
 	
-	// Label Appearance
-	m_grid1->SetLabelFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
-	
-	// Cell Defaults
-	m_grid1->SetDefaultCellFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
-	m_grid1->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	bSizer38->Add( m_grid1, 1, wxEXPAND, 5 );
-	
-	m_panel12->SetSizer( bSizer38 );
+	m_panel12->SetSizer( bSizer51 );
 	m_panel12->Layout();
-	bSizer38->Fit( m_panel12 );
-	m_notebook4->AddPage( m_panel12, wxT("Hex view"), false );
+	bSizer51->Fit( m_panel12 );
+	m_notebook4->AddPage( m_panel12, wxT("Hex view"), true );
 	m_panel13 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer391;
 	bSizer391 = new wxBoxSizer( wxVERTICAL );
@@ -2956,7 +2906,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel13->SetSizer( bSizer391 );
 	m_panel13->Layout();
 	bSizer391->Fit( m_panel13 );
-	m_notebook4->AddPage( m_panel13, wxT("Asm view"), true );
+	m_notebook4->AddPage( m_panel13, wxT("Asm view"), false );
 	
 	bSizer29->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
 	
@@ -3175,25 +3125,31 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	int m_choice15NChoices = sizeof( m_choice15Choices ) / sizeof( wxString );
 	m_choice15 = new wxChoice( m_panel17, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice15NChoices, m_choice15Choices, 0 );
 	m_choice15->SetSelection( 0 );
-	bSizer49->Add( m_choice15, 0, wxALL, 5 );
+	bSizer49->Add( m_choice15, 0, wxRIGHT, 5 );
 	
 	m_staticText119 = new wxStaticText( m_panel17, wxID_ANY, wxT(" Normal sector "), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
 	m_staticText119->Wrap( -1 );
 	m_staticText119->SetBackgroundColour( wxColour( 255, 255, 255 ) );
 	
-	bSizer49->Add( m_staticText119, 0, wxALL|wxEXPAND, 5 );
+	bSizer49->Add( m_staticText119, 0, wxEXPAND, 5 );
 	
 	m_staticText120 = new wxStaticText( m_panel17, wxID_ANY, wxT(" Weak "), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
 	m_staticText120->Wrap( -1 );
 	m_staticText120->SetBackgroundColour( wxColour( 255, 0, 0 ) );
 	
-	bSizer49->Add( m_staticText120, 0, wxALL|wxEXPAND, 5 );
+	bSizer49->Add( m_staticText120, 0, wxEXPAND, 5 );
 	
 	m_staticText121 = new wxStaticText( m_panel17, wxID_ANY, wxT(" Erased "), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
 	m_staticText121->Wrap( -1 );
 	m_staticText121->SetBackgroundColour( wxColour( 0, 0, 255 ) );
 	
-	bSizer49->Add( m_staticText121, 0, wxALL|wxEXPAND, 5 );
+	bSizer49->Add( m_staticText121, 0, wxEXPAND, 5 );
+	
+	m_staticText1211 = new wxStaticText( m_panel17, wxID_ANY, wxT(" Weak and erased "), wxDefaultPosition, wxDefaultSize, 0|wxSIMPLE_BORDER );
+	m_staticText1211->Wrap( -1 );
+	m_staticText1211->SetBackgroundColour( wxColour( 255, 0, 255 ) );
+	
+	bSizer49->Add( m_staticText1211, 0, wxEXPAND, 5 );
 	
 	bSizer44->Add( bSizer49, 0, wxEXPAND, 5 );
 	

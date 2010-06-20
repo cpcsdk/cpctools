@@ -36,7 +36,6 @@
 #include <wx/statbox.h>
 #include <wx/clrpicker.h>
 #include <wx/filepicker.h>
-#include <wx/grid.h>
 #include <wx/checklst.h>
 #include <wx/scrolbar.h>
 #include <wx/spinbutt.h>
@@ -638,7 +637,8 @@ class Memory : public wxDialog
 		wxStaticText* m_staticText101;
 		wxTextCtrl* m_textCtrl74;
 		wxPanel* m_panel12;
-		wxGrid* m_grid1;
+		wxStaticText* m_staticText125;
+		wxTextCtrl* hexView;
 		wxPanel* m_panel13;
 		wxCheckListBox* m_checkList1;
 		wxScrollBar* scrollRAM;
@@ -721,6 +721,7 @@ class DiscEditor : public wxFrame
 		wxStaticText* m_staticText119;
 		wxStaticText* m_staticText120;
 		wxStaticText* m_staticText121;
+		wxStaticText* m_staticText1211;
 		wxPanel* explorerPanel;
 		wxPanel* m_panel1;
 		wxCheckBox* m_checkBox1;
