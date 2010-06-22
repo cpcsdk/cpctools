@@ -296,6 +296,24 @@ fi
 fi
 AM_CONDITIONAL([AYLET], [test "$with_aylet" = "yes"])
 
+
+AC_MSG_CHECKING([portaudio : >= 19?])
+AC_TRY_COMPILE([#include <portaudio.h>
+  #include <stdio.h>
+  ],
+ [
+PaStream* audioStream = NULL;
+Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, 0/*CPC.snd_playback_rate*/, 1, NULL, NULL);
+],
+AC_MSG_RESULT(yes),
+AC_MSG_RESULT(no)
+AC_MSG_ERROR(You need portaudio >= 19.1)
+)
+
+
+
+
+
 #TODO: See for a clean fallback mode
 #Dsk
 AC_MSG_NOTICE([disk management options ------------------------------------])
