@@ -106,7 +106,7 @@ void CapriceIDEImpl::onExit( wxCommandEvent& event )
  */
 void CapriceIDEImpl::OnAssemble( wxCommandEvent& event)
 {
-  CapASM capAsm((Emulator*) emulator);
+  CapASM capAsm(emulator);
   std::string filename =  std::string(GetNotebook()->GetEditor()->GetFileName().mb_str());
   capAsm.Compile( filename.c_str());
 

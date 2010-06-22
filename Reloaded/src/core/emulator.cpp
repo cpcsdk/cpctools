@@ -51,6 +51,7 @@
 #include <iostream>
 #include <unistd.h>
 
+
 #define VERSION_STRING "v5.0.0"
 
 dword dwMF2ExitAddr;
@@ -68,6 +69,7 @@ FILE *pfoDebug;
 #endif
 
 Emulator* Emulator::instance = NULL;
+
 
 void InitDebug()
 {

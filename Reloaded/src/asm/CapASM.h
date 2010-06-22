@@ -18,6 +18,9 @@
  *
  */  
 
+#ifndef __CAPASM__H__
+#define __CAPASM__H__
+
 #include "emulator.h"
 
 /**
@@ -49,3 +52,4 @@ class CapASM
     void Run();
 
 };
+#endif

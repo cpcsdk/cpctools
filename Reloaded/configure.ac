@@ -125,6 +125,7 @@ fi
 AM_CONDITIONAL([WITH_IDE], [test "$with_ide" = "yes"])
 
 if test "$with_asm" = "yes" ; then
+    AC_DEFINE(WITH_ASM,1,[Allow the compilation of programs in caprice])
 	wxLibs=stc
 fi
 AM_CONDITIONAL([WITH_ASM], [test "$with_asm" = "yes"])

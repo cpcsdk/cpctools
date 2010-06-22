@@ -52,6 +52,10 @@ class t_PPI;
 class t_Tape;
 class t_Memory;
 
+#ifdef WITH_ASM
+#include <../asm/CapASM.h>
+#endif
+
 #ifdef USE_DEBUGGER
 extern dword dwDebugFlag;
 extern FILE *pfoDebug;
@@ -78,6 +82,7 @@ protected:
 	t_PPI					*_ppi;
 	t_Tape					*_tape;
 	t_Memory				*_cpcMemory;
+
 	unsigned int			_cycleCount;
 	VideoPlugin*			(*_videoPlugin)();
 
@@ -243,6 +248,7 @@ public:
 	 * Get drive b
 	 */
 	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
+
 
 	 char _config_path[1024];
 protected:

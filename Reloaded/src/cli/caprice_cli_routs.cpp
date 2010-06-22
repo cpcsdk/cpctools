@@ -1,6 +1,6 @@
 /**
  *   $Id$
- *	 CapriceReloded an Amstrad CPC emulator
+ *   CapriceReloded an Amstrad CPC emulator
  *   Copyright (C) 2009  cpcsdk crew
  *
  *   This program is free software: you can redistribute it and/or modify
@@ -24,14 +24,11 @@
 #include "render.h"
 #include "Desass.h"
 
+#if WITH_ASM
 #include "../asm/CapASM.h"
+#endif
 
 #include "caprice_cli_routs.h"
-
-/**
- * Reference to the compilator
- */
-extern CapASM * capAsm ;
 
 void caprice_cli_show_registers()
 {
@@ -198,22 +195,39 @@ void caprice_cli_memory_disasm_pc(int size)
       size) ;
 }
 
+//Todo destroy it at the end
+CapASM * capASM = NULL ;
+
 void caprice_cli_asm_compile_file(char *filename)
 {
+#if WITH_ASM
+  if (capASM != NULL)
+  {
+    delete capASM;
+    capASM = NULL;
+  }
 
-  capAsm->Compile(filename);
+  capASM - new CapASM(Emulator::getInstance());
+  capASM->Compile(filename);
+#else
+  std::cout << "Assembler not enabled in this binary !" << endl;
+#endif
 }
 
 void  caprice_cli_asm_launch(int address)
 {
+#if WITH_ASM
   if (address == -1)
   {
-    capAsm->Run();
+    if (capASM != NULL ){capASM->Run();}
   }
   else
   {
     Emulator::getInstance()->GoTo(address);
   }
+#else
+  std::cout << "Assembler not enabled in this binary !" << endl;
+#endif
 }
 
 // TODO: Autoconf: Make conditional on libpng presence
