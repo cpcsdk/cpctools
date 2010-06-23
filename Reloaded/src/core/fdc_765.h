@@ -19,16 +19,16 @@
  */
 
 
-#include <errno.h>
-#include <limits.h>
-#include <stdarg.h>
-#include <string.h>
-#include <unistd.h>
 #ifdef HAVE_LIB765_H
 
 
 #ifndef _FDC_H_
 #define _FDC_H_
+
+#include <cerrno>
+#include <climits>
+#include <cstdarg>
+#include <unistd.h>
 
 #include "cap32type.h"
 #include "configBis.h"

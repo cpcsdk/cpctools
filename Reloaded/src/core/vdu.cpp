@@ -27,7 +27,7 @@
 #include "vdu.h"
 #include "debug.h"
 
-#include <math.h>
+#include <cmath>
 #include <memory.h>
 
 #ifdef USE_DEBUGGER_CRTC

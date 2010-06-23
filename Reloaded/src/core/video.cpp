@@ -20,8 +20,8 @@
 
 #include "video.h"
 #include "glfuncs.h"
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 #include <algorithm>
 #include <iostream>
 

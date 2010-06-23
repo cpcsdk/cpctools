@@ -36,7 +36,7 @@ based on the CRTC emulation of WinAPE32 v2.0a5b by Richard Wilson
 	  Jul 08, 2004 - 16:58 started implementing Richard's assembly CRTC emulation in C
 */
 
-#include <math.h>
+#include <cmath>
 #include <memory.h>
 #include <iostream>
 

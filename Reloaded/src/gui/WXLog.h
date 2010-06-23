@@ -2,9 +2,9 @@
 #define _WXLOG_H_
 
 #include "log.h"
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdarg>
+#include <cstdlib>
 
 #include "emulator.h"
 
@@ -21,14 +21,29 @@ class WXLog: public Log
 #if _GNU_SOURCE //TODO: BSD have the same fonctionality
             char* buffer;
             int r = vasprintf(&buffer, format, args);
-#else
-            char* buffer = new char[2048];
-            int r = vsprintf(buffer, format, args);
-#endif
             if(r != -1)
             {
                 Emulator::getInstance()->logMessage(buffer);
             }
+            else
+            {
+                buffer = NULL; // glibc vasprintf set buffer in an indefined stat if error, force to NULL pointer for not made a corrupt freeing.
+            }
+#else
+            char* buffer = NULL;
+            int bufferSize = 256 < strlen(format) ? 256 + strlen(format) : 256;
+            int r = 0;
+            do {
+                delete buffer;
+                buffer = new char[bufferSize];
+                r = vsnprintf(buffer, bufferSize, format, args);
+                if(r != -1 && r < bufferSize)
+                {
+                    Emulator::getInstance()->logMessage(buffer);
+                }
+                bufferSize *= 2;
+            } while((r >= bufferSize) && (bufferSize <= 16384));
+#endif
             delete buffer;
             buffer = NULL;
         }

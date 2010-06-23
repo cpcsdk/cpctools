@@ -2,7 +2,7 @@
 #define _SYNCHRO_H_
 
 #include <pthread.h>
-#include <errno.h>
+#include <cerrno>
 
 
 class Sync

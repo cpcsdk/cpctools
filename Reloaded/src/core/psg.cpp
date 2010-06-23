@@ -42,7 +42,7 @@
    Jun 04, 2003 - 19:37 added support for Digiblaster/Soundplayer on the printer port
 */
 
-#include <math.h>
+#include <cmath>
 
 #include "cap32.h"
 #include "psg.h"

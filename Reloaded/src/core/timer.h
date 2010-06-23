@@ -2,7 +2,7 @@
 #define __TIMER_H__
 
 #if _POSIX_C_SOURCE >= 199309L 
-	#include <time.h>
+	#include <ctime>
 	#define _USE_CLOCK_GETTIME
 //	#pragma message "Use clock_gettime"
 #elif defined(__APPLE__)

@@ -7,7 +7,7 @@
 #include "cap32type.h"
 #include "video.h"
 //#include "config.h" // Inutil
-#include <string.h>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <exception>

@@ -27,9 +27,9 @@
 #include "error.h"
 #include "dsk.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
 #include <iostream>
 
 #ifndef HAVE_LIB765_H
