@@ -43,6 +43,8 @@ void CapASM::Compile(const char * filename)
   int i = 1;
 
 
+  CleanUP();
+
     // init LUA
   LUA = lua_open();
   lua_atpanic(LUA, (lua_CFunction)LuaFatalError);
@@ -162,7 +164,7 @@ void CapASM::Compile(const char * filename)
 #endif
 
   // free RAM
-  delete Devices;
+  delete Devices; Devices = 0;
 
   // close Lua
   lua_close(LUA);

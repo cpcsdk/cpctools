@@ -103,6 +103,111 @@ CStringsList* ModuleList = 0;
 lua_State *LUA;
 int LuaLine=-1;
 
+
+
+/**
+ * Cleanup the variaous instancied objects
+ * @todo Correct memory leaks
+ */
+void CleanUP()
+{
+  if (Devices) {
+   // delete Devices;
+    Devices = 0;
+  }
+
+  if (Device) {
+   // delete Device;
+    Device = 0;
+  }
+
+
+  if (Slot) {
+   // delete Slot;
+    Slot = 0;
+  }
+
+  if (Page) {
+   // delete Page;
+    Page = 0;
+  }
+
+
+  if (DeviceID) {
+   // delete DeviceID;
+    DeviceID = 0;
+  }
+
+//  filename[LINEMAX], * lp, line[LINEMAX], temp[LINEMAX], * tp, pline[LINEMAX2], ErrorLine[LINEMAX2], * bp;
+//char mline[LINEMAX2], sline[LINEMAX2], sline2[LINEMAX2];
+
+  for (int i=0 ;i<128 ; i++) {
+    SourceFNames[i][0] = 0;
+  }
+
+ CurrentSourceFName = 0;
+ SourceFNamesCount = 0;
+
+ displayinprocces = 0;
+ ConvertEncoding = ENCWIN; /* added */
+
+ pass = 0; IsLabelNotFound = 0; ErrorCount = 0; WarningCount = 0; IncludeLevel = -1;
+ IsRunning = 0; IsListingFileOpened = 1; donotlist = 0;listdata  = 0;listmacro  = 0;
+ adrdisp = 0;PseudoORG = 0; /* added for spectrum ram */
+ if (MemoryRAM){
+  delete MemoryRAM;
+  MemoryRAM=NULL;
+  }
+ if (MemoryPointer){
+  delete MemoryPointer;
+  MemoryPointer=NULL;
+  }
+
+ MemoryCPage = 0; MemoryPagesCount = 0; StartAddress = 0;
+ MemorySize = 0;
+ macronummer = 0; lijst = 0; reglenwidth = 0; synerr = 1;
+ CurAddress = 0; AddressOfMAP = 0; CurrentGlobalLine = 0; CurrentLocalLine = 0; CompiledCurrentLine = 0;
+ PreviousErrorLine = (aint)-1; maxlin = 0; comlin = 0;
+ size = -1;
+ destlen = 0;
+ CurrentDirectory=NULL;
+
+  //Need to track if we have to freem memory
+ ModuleName=NULL ; vorlabp=NULL ; macrolabp=NULL ; LastParsedLabel=NULL;
+
+  while(!RepeatStack.empty())
+  {
+    RepeatStack.pop();
+  }
+
+  if (lijstp)
+  {
+    delete lijstp;
+    lijstp = 0;
+  }
+
+  LabelTable.RemoveAll();
+  LocalLabelTable.RemoveAll();
+  DefineTable.RemoveAll();
+  MacroDefineTable.Init();
+  MacroTable.Init();
+  StructureTable.Init();
+
+  if (AddressList){
+    delete AddressList;
+    AddressList = 0; /* from SjASM 0.39g */
+  }
+  if (ModuleList){
+    delete ModuleList;
+    ModuleList = 0; /* from SjASM 0.39g */
+  }
+
+
+  LuaLine=-1;
+
+}
+
+
 /* modified */
 void InitPass(int p) {
 	reglenwidth = 1;

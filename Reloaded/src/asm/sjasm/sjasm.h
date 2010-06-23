@@ -100,6 +100,7 @@ extern CStringsList* ModuleList;
 extern lua_State *LUA;
 extern int LuaLine;
 
+void CleanUP();
 void InitPass(int p) ;
 void LuaFatalError(lua_State *L);
 

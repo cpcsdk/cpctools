@@ -797,7 +797,7 @@ void CLocalLabelTable::Insert(aint nnummer, aint nvalue) {
  * Free the table in order to be able to use it one more time
  */
  
-void CLocalLabelTable::Free() {
+void CLocalLabelTable::RemoveAll() {
   CLocalLabelTableEntry *tmp;
   if (first == NULL)
   {

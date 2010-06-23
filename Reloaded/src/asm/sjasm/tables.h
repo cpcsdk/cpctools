@@ -102,7 +102,7 @@ public:
 	aint zoekf(aint);
 	aint zoekb(aint);
 	void Insert(aint, aint);
-  void Free();
+  void RemoveAll();
 private:
 	CLocalLabelTableEntry* first, * last;
 };
