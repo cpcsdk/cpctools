@@ -22,7 +22,8 @@ WXEmulator.h \
 WXEmulator.cpp \
 DiscEditor.h \
 DiscEditor.cpp \
-WXVideo.cpp
+WXVideo.cpp \
+WXLog.h
 
 libcapricewx_a_LIBADD = libfoo.a 
 

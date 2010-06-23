@@ -27,6 +27,8 @@
 #include <wx/log.h>
 
 #include "emulator.h"
+
+#include "log.h"
 class CapriceWindowImpl;
 
 /**
@@ -48,7 +50,7 @@ class WXEmulator : public Emulator {
 	  static inline WXEmulator* getInstance()
 	  {
 		  if(!instance) instance = new WXEmulator();
-		  std::cout << "[DEBUG] Get WXEmulator at " << instance << endl;
+		  DebugLogMessage("Get WXEmulator at %p",instance);
 		  return (WXEmulator*)instance;
 	  }
 

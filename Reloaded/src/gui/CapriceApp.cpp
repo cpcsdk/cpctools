@@ -67,6 +67,8 @@ CapASM *capAsm ;
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 
+#include "WXLog.h"
+
 //TODO destroy emulator when finishing
 
 IMPLEMENT_APP(CapriceApp)
@@ -79,6 +81,8 @@ bool CapriceApp::OnInit()
     // call default behaviour (mandatory)
     if (!wxApp::OnInit())
         return false;
+
+    WXLog::init();
 
     SetAppName(wxT("reloaded"));
 

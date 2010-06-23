@@ -56,7 +56,15 @@ WXEmulator::WXEmulator()
 
 void WXEmulator::logMessage(const char* message) {
 	//wxLogWarning(message);
-	win->setStatus(message);
+    if(win)
+    {
+        win->setStatus(message);
+    }
+    else // If no window print in stderr
+    {
+        fprintf(stderr, message);
+        fprintf(stderr, "\n");
+    }
 }
 
 
