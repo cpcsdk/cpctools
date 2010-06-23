@@ -44,6 +44,8 @@
 
 #include "error.h"
 
+#include "log.h"
+
 //#include "filetools.h"
 
 #include <IMG_savepng.h>
@@ -269,8 +271,8 @@ Emulator::~Emulator()
 {
     emuSync.lock();
 #ifdef WINDOWS
-	exitRequested=1;
-	pthread_join(emuthread, NULL);
+    exitRequested=1;
+    pthread_join(emuthread, NULL);
 #endif
 
 	printer_stop();
@@ -288,7 +290,7 @@ Emulator::~Emulator()
 #ifdef USE_DEBUGGER
 	fclose(pfoDebug);
 #endif
-	std::cout << "[DEBUG] Destruct Emulator" << endl;
+    DebugLogMessage("Destruct Emulator");
     emuSync.unlock();
 }
 
@@ -296,9 +298,11 @@ Emulator::~Emulator()
 #ifdef WINDOWS
 void* runEmulation(void* theEmu)
 {
-	Emulator* theRealEmu = (Emulator*)theEmu;
-	theRealEmu->Emulate();
-	return NULL;
+    Emulator* theRealEmu = (Emulator*)theEmu;
+    theRealEmu->emuSync.lock();
+    theRealEmu->Emulate();
+    theRealEmu->emuSync.unlock();
+    return NULL;
 }
 #endif
 
@@ -438,29 +442,29 @@ void Emulator::Emulate()
 			dwTicksTargetFPS = dwTicks + 1000;
 		}
 
-		// limit speed !
-		if(_config.limit_speed)
-		{
-			if (dwTicks < dwTicksTarget)
-			{
-				// delay emulation
-				if((dwTicksTarget - dwTicks) > 1)
-				{
-					usleep(((dwTicksTarget - dwTicks)*950));
-				}
+        // limit speed !
+        if(_config.limit_speed)
+        {
+            if (dwTicks < dwTicksTarget)
+            {
+                // delay emulation
+                if((dwTicksTarget - dwTicks) > 5) // if next frame in more than 5ms use passive wait
+                {
+                    usleep((dwTicksTarget - dwTicks)*900);
+//                    DebugLogMessage("usleep");
+                    //continue;
+                }
                 do
                 {
                 } while(timer.getTime() < dwTicksTarget);
-			}
-            /*
+            }
             else
             {
-                std::cerr << "[DEBUG] Delay after target: " << dwTicks - dwTicksTarget << "ms" << std::endl;
+//                DebugLogMessage("Delay after target: %d ms",dwTicks - dwTicksTarget);
             }
-            */
-			// prep counter for the next run
-			dwTicksTarget = dwTicksTarget + dwTicksOffset;
-		}
+            // prep counter for the next run
+            dwTicksTarget = dwTicks + dwTicksOffset;
+        }
 		/*
 		// limit to original CPC speed?
 		if (_config.limit_speed)
@@ -492,49 +496,49 @@ void Emulator::Emulate()
 		}
 		}
 		*/
-		if (!_renderer.BeginDisplay(_vdu->GetScrLn()))
-		{
-//			continue;
-		}
+        if (!_renderer.BeginDisplay(_vdu->GetScrLn()))
+        {
+//            continue;
+        }
 
-		//active if necessary trace mode
-		if (GetConfig().breakpoint)
-		{
-			_z80->trace = 1 ;
-		}
-		// run the emulation until an exit condition is met
-		iExitCondition = _z80->z80_execute();
+        //active if necessary trace mode
+        if (GetConfig().breakpoint)
+        {
+            _z80->trace = 1 ;
+        }
+        // run the emulation until an exit condition is met
+        iExitCondition = _z80->z80_execute();
 
-		//We have meet a breakpoint
-		if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
-		{
-			this->Breakpoint();
+        //We have meet a breakpoint
+        if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
+        {
+            this->Breakpoint();
 #ifndef WINDOWS
-		  return;
+            return;
 #endif
-		}
+        }
 
 
 
-		// emulation finished rendering a complete frame?
-		if (iExitCondition == EC_FRAME_COMPLETE)
-		{
-			dwFrameCount++;
+        // emulation finished rendering a complete frame?
+        if (iExitCondition == EC_FRAME_COMPLETE)
+        {
+            dwFrameCount++;
 
-			if (FPSDisplay)
-			{
-				char chStr[15];
-				sprintf(chStr, "%3dFPS %3d%%", (int)dwFPS, (int)dwFPS * 100 / 50);
-				_renderer.AddTextLocate(0, 0, chStr);
-			}
+            if (FPSDisplay)
+            {
+                char chStr[15];
+                sprintf(chStr, "%3dFPS %3d%%", (int)dwFPS, (int)dwFPS * 100 / 50);
+                _renderer.AddTextLocate(0, 0, chStr);
+            }
 
-			//loopcon=0;
+            //loopcon=0;
 
-			_renderer.EndDisplay(true);
+            _renderer.EndDisplay(true);
 #ifndef WINDOWS
-			return;
+            return;
 #endif
-		}
+        }
 		/*
 		else
 		{
@@ -549,15 +553,15 @@ void Emulator::Emulate()
 		}
 	*/
 
-		if (exitRequested)
-		{
+        if (exitRequested)
+        {
 #ifdef WINDOWS
-			return;
+            return;
 #else
-      break;
+            break;
 #endif
-		}
-	}
+        }
+    }
 }
 
 #if 0
@@ -685,7 +689,7 @@ void Emulator::Loop()
 void Emulator::SaveScreenshot(string filename)
 {
 	/*
-	std::cout << "[DEBUG] Save screenshot in " << filename << endl ;
+	DebugLogMessage("Save screenshot in %s",filename.c_str());
 	IMG_SavePNG( 
 			filename.c_str(),
 			GetRenderer().GetVideoPlugin()->_publicVideo,

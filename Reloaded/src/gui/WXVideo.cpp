@@ -43,6 +43,8 @@
 #include <wx/dcbuffer.h>
 #include "CapriceApp.h"
 
+#include "log.h"
+
 #ifndef min
 #define min(a,b) (a<b ? a : b)
 #endif
@@ -63,7 +65,7 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
     outputSurfaceSync.lock();
 	if(bpp != 24)
 	{
-		cerr << "WXDoubleLinePlugin initialization error : Only support 24bpp mode" << endl;
+		ErrorLogMessage("WXDoubleLinePlugin initialization error : Only support 24bpp mode");
 		return NULL;
 	}
 

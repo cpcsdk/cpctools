@@ -300,7 +300,7 @@ protected:
 	dword dwTicksTargetFPS ;
 
 	//int loopcon;
-
+public:
     SysSync emuSync;
 };
 

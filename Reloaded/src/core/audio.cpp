@@ -29,6 +29,7 @@
 #include "config.h"
 #include "psg.h"
 #include "emulator.h"
+#include "log.h"
 
 #include <portaudio.h>
 #include <iostream>
@@ -131,19 +132,19 @@ int audio_align_samples (int given)
 int audio_init (t_CPC &CPC, t_PSG* psg)
 {
 	if (!CPC.snd_enabled) {
-		Emulator::getInstance()->logMessage("Not opening audio because it is disabled in the config");
+		ErrorLogMessage("Not opening audio because it is disabled in the config");
 		return 0;
 	}
 
 	if (Pa_Initialize() != paNoError) {
-		Emulator::getInstance()->logMessage("Failed to initialize portaudio");
+		ErrorLogMessage("Failed to initialize portaudio");
 		return -1;
 	}
 #define SAMPLECOUNT 1 /*CPC.snd_playback_rate * 2*/
 //	if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, SAMPLECOUNT/8, audio_update, NULL) != paNoError)
     if (Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, CPC.snd_playback_rate, 1, NULL, NULL) != paNoError)
 	{
-		Emulator::getInstance()->logMessage("Could not open audio");
+		ErrorLogMessage("Could not open audio");
 		return 1;
 	}
 	
@@ -154,7 +155,7 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 //	pbSndBufferCurrent = pbSndBuffer + SAMPLECOUNT/2;   // init read cursor
 
         if(Pa_StartStream(audioStream) != paNoError) {
-			Emulator::getInstance()->logMessage("Could not start stream");
+			ErrorLogMessage("Could not start stream");
 		return 1;
 	}
 	
