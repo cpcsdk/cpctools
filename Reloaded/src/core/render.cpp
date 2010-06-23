@@ -29,6 +29,8 @@
 #include "video.h"
 #include "emulator.h"
 
+#include "log.h"
+
 #define FNT_CHAR_WIDTH 8
 #define FNT_CHAR_HEIGHT 8
 #define FNT_CHARS 96
@@ -444,7 +446,7 @@ bool Renderer::Init()
 		}
 		catch(bad_alloc&)
 		{
-			cerr << "Error, can't alloc _preRenderSyncFunc" << endl;
+			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderSyncFunc");
 			throw RendererEx;
 		}
 		try
@@ -453,7 +455,7 @@ bool Renderer::Init()
 		}
 		catch(bad_alloc&)
 		{
-			cerr << "Error, can't alloc _preRenderBorderFunc" << endl;
+			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderBorderFunc");
 			throw RendererEx;
 		}
 		try
@@ -462,7 +464,7 @@ bool Renderer::Init()
 		}
 		catch(bad_alloc&)
 		{
-			cerr << "Error, can't alloc _preRenderNormalFunc" << endl;
+			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderNormalFunc");
 			throw RendererEx;
 		}
 		_preRenderFunc = _preRenderNormalFunc;
@@ -475,7 +477,7 @@ bool Renderer::Init()
 		}
 		catch(bad_alloc&)
 		{
-			cerr << "Error, can't alloc _preRenderSyncFunc" << endl;
+			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderSyncFunc");
 			throw RendererEx;
 		}
 		try
@@ -484,7 +486,7 @@ bool Renderer::Init()
 		}
 		catch(bad_alloc&)
 		{
-			cerr << "Error, can't alloc _preRenderBorderFunc" << endl;
+			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderBorderFunc");
 			throw RendererEx;
 		}
 		try
@@ -493,7 +495,7 @@ bool Renderer::Init()
 		}
 		catch(bad_alloc&)
 		{
-			cerr << "Error, can't alloc _preRenderNormalFunc" << endl;
+			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderNormalFunc");
 			throw RendererEx;
 		}
 		_preRenderFunc = _preRenderNormalFunc;
@@ -608,7 +610,7 @@ void Renderer::SetAntiAliasingColour(unsigned int col0, unsigned int col1)
 }
     else
     {
-        std::cerr << "SetAntiAliasingColour : color index overflow !" << std::endl;
+        ErrorLogMessage("Renderer::SetAntiAliasingColour : color index overflow !");
     }
 }
 

@@ -53,7 +53,6 @@
 #include <iostream>
 #include <unistd.h>
 
-
 #define VERSION_STRING "v5.0.0"
 
 dword dwMF2ExitAddr;
@@ -153,7 +152,7 @@ bool Emulator::MF2Init()
 			    pbMF2ROM = NULL;
 			    delete [] pbMF2ROMbackup;
 			    pbMF2ROMbackup = NULL;
-			    std::cerr << "Out of memory ! " << std::endl;
+			    ErrorLogMessage("Emulator::MF2Init(): Out of memory !");
 				return false;
 			}
 
@@ -172,7 +171,7 @@ bool Emulator::MF2Init()
 				// does it have the required signature?
 				if (memcmp(pbMF2ROMbackup+0x0d32, "MULTIFACE 2", 11) != 0)
 				{
-					fprintf(stderr, "ERROR: The file selected as the MF2 ROM is either corrupt or invalid.\n");
+					ErrorLogMessage("ERROR: The file selected as the MF2 ROM is either corrupt or invalid.");
 					delete [] pbMF2ROMbackup;
 					pbMF2ROMbackup = NULL;
 					delete [] pbMF2ROM;
@@ -186,7 +185,7 @@ bool Emulator::MF2Init()
 			else
 			{
 				// error opening file
-				fprintf(stderr, "ERROR: The file selected as the MF2 ROM is either corrupt or invalid.\n");
+				ErrorLogMessage("ERROR: The file selected as the MF2 ROM is either corrupt or invalid.");
 				delete [] pbMF2ROMbackup;
 				pbMF2ROMbackup = NULL;
 				delete [] pbMF2ROM;
@@ -328,7 +327,7 @@ bool Emulator::Init()
 
 	if (_input.input_init(_config))
 	{
-		fprintf(stderr, "input_init() failed. Aborting.\n");
+		CriticalLogMessage("input_init() failed. Aborting.");
 		return false;
 	}
 
@@ -346,7 +345,7 @@ bool Emulator::Init()
 	_renderer.SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
 
 	if (!_renderer.Init()) {
-		fprintf(stderr, "video_init() failed. Aborting.\n");
+        CriticalLogMessage("video_init() failed. Aborting.");
 		return false;
 	}
 
@@ -372,7 +371,7 @@ bool Emulator::Init()
 
 	if (audio_init(_config, _psg))
 	{
-		fprintf(stderr, "audio_init() failed. Disabling sound.\n");
+        ErrorLogMessage("audio_init() failed. Disabling sound.");
 		// disable sound emulation
 		_config.snd_enabled = 0;
 	}

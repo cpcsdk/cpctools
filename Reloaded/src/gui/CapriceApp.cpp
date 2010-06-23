@@ -146,7 +146,7 @@ bool CapriceApp::OnInit()
   #if CLI
     frameClone = frame ;
   #endif
-	printf("Initialization done\n");
+	InfoLogMessage("Initialization done\n");
 	return true ; 
 }
 

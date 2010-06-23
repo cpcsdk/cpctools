@@ -9,6 +9,8 @@
 #include "crtc1.h"
 #include "filetools.h"
 
+#include "log.h"
+
 #include <wx/event.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
@@ -64,8 +66,8 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	wxDir::GetAllFiles(userpath,&uromlist);
 	if (uromlist.GetCount() < 1)
 	{
-		std::cerr << "There is no user ROM !!" << endl ;
-		std::cerr << "Search path =" << userpath.mb_str() << endl ;
+		ErrorLogMessage("There is no user ROM !!");
+		ErrorLogMessage("Search path = %s", userpath.c_str());
  	}
 	else
 	{
@@ -78,9 +80,8 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	wxDir::GetAllFiles(wxString(_config.rom_path, wxConvUTF8),&sysromlist);
 	if (sysromlist.GetCount() <1)
 	{
-		std::cerr << "There is no system ROM !!" << endl ;
-		std::cerr << "Search path =" << userpath.mb_str() << endl ;
-
+		ErrorLogMessage("There is no system ROM !!");
+		ErrorLogMessage("Search path = %s", userpath.c_str());
 	}
 	else
 	{
@@ -180,7 +181,7 @@ void CapriceInputSettingsImpl::onKeyClick(wxCommandEvent& event)
 	}
 	else
 	{
-		std::cout << "Warning : key not found in keymap ! Adding it ..." << std::endl;
+		WarningLogMessage("Warning : key not found in keymap ! Adding it ...");
 		CPC_Key tmpk;
 
 		tmpk.stdKeyCode = 0;

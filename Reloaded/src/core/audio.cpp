@@ -132,7 +132,7 @@ int audio_align_samples (int given)
 int audio_init (t_CPC &CPC, t_PSG* psg)
 {
 	if (!CPC.snd_enabled) {
-		ErrorLogMessage("Not opening audio because it is disabled in the config");
+		InfoLogMessage("Not opening audio because it is disabled in the config");
 		return 0;
 	}
 
