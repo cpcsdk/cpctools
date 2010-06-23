@@ -179,6 +179,9 @@ void ExitASM(int p) {
 	exit(p);
 }
 
+
+#ifndef EMBEDED_IN_CAPRICE
+
 namespace Options {
 #ifdef UNDER_CE
 	void GetOptions(_TCHAR* argv[], int& i) {
@@ -268,11 +271,15 @@ namespace Options {
 		}
 	}
 }
+#endif
+
 
 void LuaFatalError(lua_State *L) {
 	Error((char *)lua_tostring(L, -1), 0, FATAL);
 }
 
+
+#ifndef EMBEDED_IN_CAPRICE
 
 #ifdef UNDER_CE
 int main(int argc, _TCHAR* argv[]) {
@@ -467,4 +474,5 @@ int main(int argc, char **argv) {
 
 	return (ErrorCount != 0);
 }
+#endif
 //eof sjasm.cpp

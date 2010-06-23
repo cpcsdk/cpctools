@@ -793,6 +793,28 @@ void CLocalLabelTable::Insert(aint nnummer, aint nvalue) {
 	}
 }
 
+/**
+ * Free the table in order to be able to use it one more time
+ */
+ 
+void CLocalLabelTable::Free() {
+  CLocalLabelTableEntry *tmp;
+  if (first == NULL)
+  {
+    return ; //already empty
+  }
+  while(first->next != last)
+  {
+    tmp = first->next;
+    delete first;
+    first = tmp;
+  }
+
+  delete last;
+  first = last = NULL;
+  
+}
+
 /* modified */
 aint CLocalLabelTable::zoekf(aint nnum) {
 	CLocalLabelTableEntry* l = first;
@@ -1554,7 +1576,10 @@ CDevice::~CDevice() {
 	//while (Slot != NULL) {
 	//	Slot = Slots->Next;
 	for (int i=0;i<256;i++) {
-		if (Slots[i]) delete Slots[i];
+		if (Slots[i]) {
+      delete Slots[i];
+      Slots[i] = NULL ;
+    }
 	}
 	//}
 
@@ -1562,12 +1587,16 @@ CDevice::~CDevice() {
 	//while (Page != NULL) {
 	//	Page = Pages->Next;
 	for (int i=0;i<256;i++) {
-		if (Pages[i]) delete Pages[i];
+		if (Pages[i]) {
+      delete Pages[i];
+      Pages[i] = NULL;
+    }
 	}
 	//}
 
 	if (Next) {
 		delete Next;
+    Next = NULL;
 	}
 }
 

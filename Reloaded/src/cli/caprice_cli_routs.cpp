@@ -201,11 +201,11 @@ CapASM * capASM = NULL ;
 void caprice_cli_asm_compile_file(char *filename)
 {
 #if WITH_ASM
-  if (capASM != NULL)
-  {
-    delete capASM;
-    capASM = NULL;
-  }
+//  if (capASM != NULL)
+//  {
+//    delete capASM;
+//    capASM = NULL;
+//  }
 
   capASM - new CapASM(Emulator::getInstance());
   capASM->Compile(filename);

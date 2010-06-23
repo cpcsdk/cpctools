@@ -64,6 +64,7 @@ extern char mline[LINEMAX2], sline[LINEMAX2], sline2[LINEMAX2];
 
 extern char SourceFNames[128][MAX_PATH];
 extern int CurrentSourceFName;
+extern int SourceFNamesCount;
 
 extern bool displayinprocces, displayerror; /* added */
 extern int ConvertEncoding; /* added */
@@ -99,8 +100,13 @@ extern CStringsList* ModuleList;
 extern lua_State *LUA;
 extern int LuaLine;
 
+void InitPass(int p) ;
+void LuaFatalError(lua_State *L);
+
+#ifndef EMBEDED_IN_CAPRICE
 #ifdef UNDER_CE
 int main(int argc, _TCHAR* argv[]);
+#endif
 #endif
 
 #endif

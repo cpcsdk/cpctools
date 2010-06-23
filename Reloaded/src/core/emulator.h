@@ -39,7 +39,7 @@
 
 #include "synchro.h"
 
-#ifdef WINDOWS
+#ifdef USE_PTHREAD
 #include <pthread.h>
 #endif
 
@@ -86,7 +86,7 @@ protected:
 	unsigned int			_cycleCount;
 	VideoPlugin*			(*_videoPlugin)();
 
-#ifdef WINDOWS
+#ifdef USE_PTHREAD
 	pthread_t emuthread;
 #endif
 

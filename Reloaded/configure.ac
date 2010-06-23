@@ -1,7 +1,6 @@
 # Init
 AC_INIT([Reloaded], [5], [krusty@cpcscene.com])
-#AM_INIT_AUTOMAKE([ -Wall ])
-AM_INIT_AUTOMAKE([  ])
+AM_INIT_AUTOMAKE([ -Wall ])
 #AC_CONFIG_SRCDIR(core/cap32.cpp)
 AC_CANONICAL_HOST
 
@@ -157,6 +156,7 @@ AC_MSG_RESULT([$enable_debug])
 case "$host_os" in
 *darwin* | *rhapsody* | *macosx*)
      AC_DEFINE_UNQUOTED(DARWIN,1,[This is an Apple Darwin system])
+#     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system to use emulator in background])
      CPPFLAGS="-DMAX_PATH=PATH_MAX -D_APPLE_C_SOURCE $CPPFLAGS"
      build_target="darwin"
      ;;
@@ -192,6 +192,7 @@ netbsd*)
      AC_DEFINE_UNQUOTED(MINGW,1,[This is a MinGW system])
      AC_DEFINE_UNQUOTED(WINDOWS,1,[This is a Windows system])
      AC_DEFINE_UNQUOTED(_WIN32,1,[This is a Windows system])
+     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
      build_target="mingw"
      ;;
 *)
@@ -324,14 +325,6 @@ if test "$with_lib765" = "yes" ; then
     AC_SUBST(LIB765)
 fi
 AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
-
-#TODO: Regroup with other OS detection
-#Apple
-UNAME=$(shell uname)
-AM_CONDITIONAL([DARWIN], [test "$UNAME" = "Darwin"])
-if test "$UNAME" = "Darwin" ;  then
-    AC_DEFINE(DARWIN,1,[Darwin platform])
-fi
 
 
 AC_SUBST(CXXFLAGS)

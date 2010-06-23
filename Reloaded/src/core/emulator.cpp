@@ -269,7 +269,7 @@ Emulator::Emulator():
 Emulator::~Emulator()
 {
     emuSync.lock();
-#ifdef WINDOWS
+#ifdef USE_PTHREAD
     exitRequested=1;
     pthread_join(emuthread, NULL);
 #endif
@@ -294,7 +294,7 @@ Emulator::~Emulator()
 }
 
 
-#ifdef WINDOWS
+#ifdef USE_PTHREAD
 void* runEmulation(void* theEmu)
 {
     Emulator* theRealEmu = (Emulator*)theEmu;
@@ -402,7 +402,7 @@ bool Emulator::Init()
 
 	goToAddress = -1 ;
 
-#ifdef WINDOWS
+#ifdef USE_PTHREAD
 	// Spawn a thread for emulating (this way we do not freeze the window)
 	pthread_create(&emuthread,NULL,runEmulation,this);
 #endif
@@ -419,7 +419,7 @@ void Emulator::Emulate()
 	iExitCondition = EC_FRAME_COMPLETE;
 	bolDone = false;
 
-#ifdef WINDOWS
+#ifdef USE_PTHREAD
 	while(1)
 #else
 	for (int i = 0; i<100000; i++)
@@ -512,7 +512,7 @@ void Emulator::Emulate()
         if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
         {
             this->Breakpoint();
-#ifndef WINDOWS
+#ifndef USE_PTHREAD
             return;
 #endif
         }
@@ -534,7 +534,7 @@ void Emulator::Emulate()
             //loopcon=0;
 
             _renderer.EndDisplay(true);
-#ifndef WINDOWS
+#ifndef USE_PTHREAD
             return;
 #endif
         }
@@ -554,7 +554,7 @@ void Emulator::Emulate()
 
         if (exitRequested)
         {
-#ifdef WINDOWS
+#ifdef USE_PTHREAD
             return;
 #else
             break;
