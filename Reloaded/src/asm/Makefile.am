@@ -15,8 +15,8 @@ if DARWIN
 SJASM_EXTRA_FLAGS = -DMAX_PATH=PATH_MAX
 endif
 
-libsjasm_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm -I../core $(SDL_CFLAGS) $(SJASM_EXTRA_FLAGS) -DEMBEDED_IN_CAPRICE
-libsjasminternal_a_CPPFLAGS = -O2 -Ilua5.1 -Itolua++ -Isjasm $(SDL_CFLAGS) $(SJASM_EXTRA_FLAGS)
+libsjasm_a_CPPFLAGS = -O2 -I$(srcdir)/lua5.1 -I$(srcdir)/tolua++ -I$(srcdir)/sjasm -I$(top_srcdir)/src/core $(SDL_CFLAGS) $(SJASM_EXTRA_FLAGS) -DEMBEDED_IN_CAPRICE
+libsjasminternal_a_CPPFLAGS = -O2 -I$(srcdir)/lua5.1 -I$(srcdir)/tolua++ -I$(srcdir)/sjasm $(SDL_CFLAGS) $(SJASM_EXTRA_FLAGS)
 
 SJASMSRC=sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
 sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp 
@@ -48,7 +48,7 @@ libsjasm_a_SOURCES = \
 libsjasminternal_a_SOURCES = \
                              sjasm/z80.cpp
 
-sjasmplus2_CPPFLAGS = -Isjasm -Ilua5.1 -Itolua++ $(SJASM_EXTRA_FLAGS)
+sjasmplus2_CPPFLAGS = -I$(srcdir)/sjasm -I$(srcdir)/lua5.1 -I$(srcdir)/tolua++ $(SJASM_EXTRA_FLAGS)
 sjasmplus2_SOURCES = sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
 sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp sjasm/z80.cpp \
 lua5.1/lapi.c lua5.1/lauxlib.c lua5.1/lbaselib.c lua5.1/lcode.c lua5.1/ldblib.c \

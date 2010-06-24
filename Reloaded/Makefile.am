@@ -9,7 +9,7 @@ reloadeddir = $(pkgdatadir)
 reloaded_DATA = $(IMGS) cap32.cfg Keymap.cfg
 
 reloadedromdir = $(pkgdatadir)/rom
-reloadedrom_DATA = rom/*
+reloadedrom_DATA = rom/amsdos.rom rom/cpc464.rom rom/cpc6128.rom rom/cpc664.rom
 
 
 if DARWIN
