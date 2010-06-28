@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
   inFile = fopen(argv[1],"rb");
 
-  if(argc >= 4) 
+  if(argc >= 4)
   {sscanf(argv[3],"%hhud",&r9);}
   else
   {r9 = 7;}
