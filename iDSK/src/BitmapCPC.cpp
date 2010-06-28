@@ -146,7 +146,7 @@ bool LireImage( char * Nom, StRVB * Bitmap )
     FILE* hFile;
     
     
-    if ( (hFile=fopen(Nom,"r"))!=NULL )
+    if ( (hFile=fopen(Nom,"rb"))!=NULL )
         {
 	  fread(Entete,sizeof(Entete),1,hFile);
 	  //        ReadFile( hFile, Entete, sizeof( Entete ), &Nb, NULL );

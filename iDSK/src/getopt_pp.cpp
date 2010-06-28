@@ -90,7 +90,7 @@ GETOPT_INLINE void GetOpt_pp::_parse_env()
 	size_t var=0;
 	std::string::size_type pos;
 	OptionData* data;
-	
+#if 0
 	while (environ[var] != NULL)
 	{
 		var_name = environ[var];
@@ -113,6 +113,7 @@ GETOPT_INLINE void GetOpt_pp::_parse_env()
 			
 		var++;
 	}
+#endif
 }
 
 GETOPT_INLINE GetOpt_pp::GetOpt_pp(int argc, char* argv[])

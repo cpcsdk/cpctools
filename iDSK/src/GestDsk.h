@@ -11,7 +11,7 @@ extern unsigned char BufFile[ 0x10000 ];
 
 extern int TailleFic, CurLigne;
 
-#pragma pack(push,1) //évite le padding des structures qui sont utilisées dans des memcpy par la suite
+#pragma pack(1) //évite le padding des structures qui sont utilisées dans des memcpy par la suite
 
 //
 // Structure d'une entrï¿½e AMSDOS
@@ -41,11 +41,11 @@ typedef struct
 
 typedef struct
     {
-    char        debut[ 0x30 ];  // "MV - CPCEMU Disk-File\r\nDisk-Info\r\n"
-    unsigned char        NbTracks;
-    unsigned char        NbHeads;
-    short       DataSize;       // 0x1300 = 256 + ( 512 * nbsecteurs )
-    unsigned char        Unused[ 0xCC ];
+    char         debut[ 0x30 ];  // "MV - CPCEMU Disk-File\r\nDisk-Info\r\n"
+    uint8_t        NbTracks;
+    uint8_t        NbHeads;
+    uint16_t       DataSize;       // 0x1300 = 256 + ( 512 * nbsecteurs )
+    uint8_t        Unused[ 0xCC ];
     } CPCEMUEnt;
 
 
@@ -85,7 +85,7 @@ typedef struct __attribute__ ((__packed__))
     unsigned char        Blocks[ 16 ];
     } StDirEntry;
 
-#pragma pop
+#pragma pack()
 
 enum { ERR_NO_ERR = 0, ERR_NO_DIRENTRY, ERR_NO_BLOCK, ERR_FILE_EXIST };
 

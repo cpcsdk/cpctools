@@ -539,7 +539,10 @@ bool DSK::CheckDsk( void ) {
     if ( Infos->NbHeads == 1 ) {
         int MinSectFirst = GetMinSect();
         if ( MinSectFirst != 0x41 && MinSectFirst != 0xC1 && MinSectFirst != 0x01 )
+		{
+			cout << "DSK has wrong sector number!" << endl;
             return( false );
+		}
 		
        
         if ( Infos->NbTracks > 42 )
@@ -552,7 +555,10 @@ bool DSK::CheckDsk( void ) {
 			
             int MinSect = 0xFF, MaxSect = 0;
             if ( tr->NbSect != 9 )
+			{
+				cout << "Track has too many sectors !" << endl;
                 return( false );
+			}
             for ( int s = 0; s < (int)tr->NbSect; s++ ) {
                 if ( MinSect > tr->Sect[ s ].R )
                     MinSect = tr->Sect[ s ].R;
@@ -561,12 +567,19 @@ bool DSK::CheckDsk( void ) {
                     MaxSect = tr->Sect[ s ].R;
 			}
             if ( MaxSect - MinSect != 8 )
+			{
+				cout << "Strange sector numbering !" << endl;
                 return( false );
+			}
             if ( MinSect != MinSectFirst )
+			{
+				cout << "Incoherent secor numbering accross tracks !" << endl;
                 return( false );
+			}
 		}
         return( true );
 	}
+	cout << "Multi-side dsk ! Expected 1 head, got " << (int)Infos->NbHeads << endl;
     return( false );
 }
 
@@ -577,9 +590,10 @@ bool DSK::CheckDsk( void ) {
 bool DSK::ReadDsk( std::string NomFic ) {
     bool Ret = false;
     CPCEMUEnt * Infos;
+	if(sizeof(CPCEMUEnt) != 0x100) cout << "INVALID DSK BUILD" << endl;
     FILE* fp ;
 	
-    if ( (fp=fopen(NomFic.c_str(),"r"))!=NULL ) {
+    if ( (fp=fopen(NomFic.c_str(),"rb"))!=NULL ) {
 		fread(ImgDsk,sizeof(ImgDsk),1,fp);
 		Infos = ( CPCEMUEnt * )ImgDsk;
 		if ( isBigEndian( ) ) FixEndianDsk( false ); // fix endian for Big endianness machines (PPC)
@@ -667,7 +681,7 @@ bool DSK::WriteDsk( string NomDsk ) {
     int Taille,Copie;
     
     
-    if ( (fp=fopen(NomDsk.c_str(),"w+")) != NULL) {
+    if ( (fp=fopen(NomDsk.c_str(),"wb+")) != NULL) {
 		if ( ! Infos->DataSize ) Infos->DataSize = 0x100 + SECTSIZE * 9;
         Taille = Infos->NbTracks * Infos->DataSize + sizeof( * Infos );
 		if ( isBigEndian() ) FixEndianDsk( true ) ; // Fix endianness for Big endian machines (PPC)
@@ -819,7 +833,7 @@ bool DSK::GetFileInDsk( char* path, int Indice ){
 	FILE* f;
 	StDirEntry TabDir[ 64 ];
 	
-	if ( (f=fopen(path,"w"))==NULL )
+	if ( (f=fopen(path,"wb"))==NULL )
 		return false;
 	
 	for ( int i = 0; i < 64; i++ )
@@ -866,7 +880,7 @@ bool DSK::PutFileInDsk( string Masque ,int TypeModeImport ,int loadAdress, int e
 		return false;
 	
 	cFileName = GetNomAmsdos((char *)Masque.c_str());
-	if ((  Hfile = fopen(Masque.c_str(),"r")) == NULL ) return false;
+	if ((  Hfile = fopen(Masque.c_str(),"rb")) == NULL ) return false;
         Lg=fread(Buff,1, 0x20000 ,Hfile);
 	fclose( Hfile );
         bool AjouteEntete = false;
