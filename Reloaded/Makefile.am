@@ -1,7 +1,7 @@
 SUBDIRS = src
 
 
-IMGS = logo.png pause.png
+IMGS = logo.png
 
 EXTRA_DIST = rom $(IMGS) cap32.cfg.tpl Keymap.cfg
 

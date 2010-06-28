@@ -1,5 +1,7 @@
 #include <iostream>
+#include <libgen.h>
 #include <string.h>
+#include <cstdio>
 using namespace std;
 #include "Itoa.h"
 #include "Outils.h"

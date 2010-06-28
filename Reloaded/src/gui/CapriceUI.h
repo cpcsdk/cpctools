@@ -101,6 +101,7 @@ class EmulatorWindow : public wxFrame
 		virtual void OnDebugMemory( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowAssembler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
+		virtual void paintDisplay( wxPaintEvent& event ) { event.Skip(); }
 		
 	
 	public:
@@ -639,6 +640,9 @@ class Memory : public wxDialog
 		wxPanel* m_panel12;
 		wxStaticText* m_staticText125;
 		wxTextCtrl* hexView;
+		wxRadioButton* m_radioBtn10;
+		wxRadioButton* m_radioBtn11;
+		wxButton* m_button82;
 		wxPanel* m_panel13;
 		wxCheckListBox* m_checkList1;
 		wxScrollBar* scrollRAM;

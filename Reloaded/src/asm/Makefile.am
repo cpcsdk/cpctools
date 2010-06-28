@@ -59,7 +59,7 @@ lua5.1/lstring.c lua5.1/lstrlib.c lua5.1/ltable.c lua5.1/ltablib.c lua5.1/ltm.c 
 lua5.1/lundump.c lua5.1/lvm.c lua5.1/lzio.c \
 tolua++/tolua_event.c tolua++/tolua_is.c tolua++/tolua_map.c \
 tolua++/tolua_push.c tolua++/tolua_to.c
-sjasmplus2_LDADD = -ldl
+sjasmplus2_LDADD =
 
 if RELEASE
 	libsjasminternal_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  

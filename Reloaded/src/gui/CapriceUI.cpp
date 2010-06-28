@@ -338,6 +338,7 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	this->Connect( m_menuItem491->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnAbout ) );
 	m_panel4->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ), NULL, this );
 	m_panel4->Connect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ), NULL, this );
+	m_panel4->Connect( wxEVT_PAINT, wxPaintEventHandler( EmulatorWindow::paintDisplay ), NULL, this );
 }
 
 EmulatorWindow::~EmulatorWindow()
@@ -376,6 +377,7 @@ EmulatorWindow::~EmulatorWindow()
 	this->Disconnect( 9950, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnAbout ) );
 	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ), NULL, this );
 	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ), NULL, this );
+	m_panel4->Disconnect( wxEVT_PAINT, wxPaintEventHandler( EmulatorWindow::paintDisplay ), NULL, this );
 	
 }
 
@@ -2888,6 +2890,21 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	hexView->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxEmptyString ) );
 	
 	bSizer51->Add( hexView, 1, wxEXPAND, 5 );
+	
+	wxBoxSizer* bSizer52;
+	bSizer52 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_radioBtn10 = new wxRadioButton( m_panel12, wxID_ANY, wxT("hex"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_radioBtn10->SetValue( true ); 
+	bSizer52->Add( m_radioBtn10, 0, wxALL, 5 );
+	
+	m_radioBtn11 = new wxRadioButton( m_panel12, wxID_ANY, wxT("dec"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer52->Add( m_radioBtn11, 0, wxALL, 5 );
+	
+	m_button82 = new wxButton( m_panel12, wxID_ANY, wxT("Export..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer52->Add( m_button82, 0, wxALL, 5 );
+	
+	bSizer51->Add( bSizer52, 0, wxEXPAND, 5 );
 	
 	m_panel12->SetSizer( bSizer51 );
 	m_panel12->Layout();

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 #include "MyType.h"
 #include "BitmapCPC.h"
 #include "GestDsk.h"

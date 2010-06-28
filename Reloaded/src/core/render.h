@@ -430,10 +430,14 @@ class Renderer
 	//! Set CPC antialiasing color
 	void SetAntiAliasingColour(unsigned int col0, unsigned int col1);
 
+	/* RenderFunc accessors */
 	int mapGAEntryToRGB(char pal)
 	{
 		return _renderFunc->MapRGB(_colours[(int)pal]);
 	}
+
+	int GetScreenPosition() { return _renderFunc->GetScreenPosition();}
+
 
 	//! Render CPC memory
 	void Render(unsigned int memAddr, dword flags);

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
+#include <cstdio>
 #include "MyType.h"
 #include "GestDsk.h"
 #include "Itoa.h"

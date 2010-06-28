@@ -12,6 +12,6 @@ clear :
 raw2crtc : raw2crtc.o libraw2crtc.o
 	$(CC) $(CCFLAGS) raw2crtc.o libraw2crtc.o -o raw2crtc
 png2crtc : png2crtc.o libraw2crtc.o
-	$(CC) $(CCFLAGS) png2crtc.o libraw2crtc.o -o png2crtc -lpng
+	$(CC) $(CCFLAGS) png2crtc.o libraw2crtc.o -o png2crtc -lpng -lz
 .c.o :
 	$(CC) $(CCFLAGS) -c $<

@@ -98,6 +98,8 @@ class CapriceWindowImpl : public EmulatorWindow
     virtual void windowKeyDown( wxKeyEvent& event);
     virtual void windowKeyUp( wxKeyEvent& event );
 
+	//void paintDisplay( wxPaintEvent& event );
+
     private:
     /**
      * Pointer to the emu

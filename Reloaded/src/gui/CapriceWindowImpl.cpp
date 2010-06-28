@@ -108,12 +108,17 @@ void CapriceWindowImpl::Pause() {
         m_menuItem_pause->Enable(false) ;
         m_menuItem_run->Enable(true);
 
-        wxBitmap bitmap;
-	    if (bitmap.LoadFile( wxT( DATA_PATH "pause.png"), wxBITMAP_TYPE_PNG))
-        {
-          wxClientDC dc(getPanel());
-		  dc.DrawBitmap(bitmap,0,0,false);
-        }
+        wxClientDC dc(getPanel());
+		//dc.DrawBitmap(bitmap,0,0,false);
+		int scrpos = emulator->GetRenderer().GetScreenPosition();
+		const int width = 1024;
+		int y = scrpos/width;
+		scrpos -= y*width;
+		dc.CrossHair(scrpos, y);
+
+		dc.DrawCircle(100,100,50);
+
+		emulator->logMessage("Paused!");
 }
 
 // =============================== Menus Event ===============================================
