@@ -36,6 +36,11 @@ int main(int argc, char **argv)
 
   png_bytep * ptrRow;
 
+  // We have to use this temporary variable insted of scanning directly into
+  // 8 bit integers using %hhu because mingW, relying on MSVCRT, is not C99
+  // compliant and can't handle this "modern" stuff.
+  unsigned int stupid_mingw_isnt_c99;
+
   if((argc != 3) && (argc != 4) && (argc != 5) && (argc != 6) && (argc != 7))
   {
     printf("Utilisation : %s input_filename output_filename [registre9] [mode] [r12] [r13]\n",argv[0]);
@@ -45,12 +50,14 @@ int main(int argc, char **argv)
   inFile = fopen(argv[1],"rb");
 
   if(argc >= 4)
-  {sscanf(argv[3],"%hhud",&r9);}
+  /*{sscanf(argv[3],"%hhu",&r9);}*/
+  {sscanf(argv[3],"%u",&stupid_mingw_isnt_c99); r9=stupid_mingw_isnt_c99;}
   else
   {r9 = 7;}
   if(argc >= 5)
   {
-    sscanf(argv[4],"%hhud",&mode);
+    // sscanf(argv[4],"%hhu",&mode);
+    sscanf(argv[4],"%u",&stupid_mingw_isnt_c99); mode = stupid_mingw_isnt_c99;
     forcemode = 1;
     if(mode > 3) puts("mode doit être compris entre 0 et 3");
     mode = mode & 3;
@@ -62,12 +69,14 @@ int main(int argc, char **argv)
 
   if(argc >= 6)
   {
-    sscanf(argv[5],"%hhud",&r12);
+    // sscanf(argv[5],"%hhu",&r12);
+    sscanf(argv[5],"%u",&stupid_mingw_isnt_c99); r12 = stupid_mingw_isnt_c99;
     forcer12 = 1;
   }
   if(argc >= 7)
   {
-    sscanf(argv[6],"%hhud",&r13);
+    // sscanf(argv[6],"%hhu",&r13);
+    sscanf(argv[6],"%u",&stupid_mingw_isnt_c99); r13=stupid_mingw_isnt_c99;
     forcer13 = 1;
   }
 
