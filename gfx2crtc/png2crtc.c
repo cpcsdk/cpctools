@@ -102,14 +102,13 @@ int main(int argc, char **argv)
     return (ERROR);
   }
 
-  /*
   if (setjmp(png_jmpbuf(png_ptr)))
   {
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     fclose(inFile);
     return (ERROR);
   }
- */
+
   png_init_io(png_ptr, inFile);
   png_set_sig_bytes(png_ptr, 8);
 
