@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 #include <cstdio>
 
 #include "MyType.h"

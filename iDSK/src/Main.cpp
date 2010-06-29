@@ -1,5 +1,5 @@
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <cstring>
 #include <algorithm> // pour contourner un bug de std::vector ...
 #include <libgen.h>

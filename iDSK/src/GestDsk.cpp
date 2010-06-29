@@ -1,13 +1,13 @@
 #include <iostream>
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 #include <cstdio>
 #include "MyType.h"
 #include "GestDsk.h"
 #include "Itoa.h"
 #include "endianPPC.h"
 #include "Outils.h"
-#include <errno.h>
+#include <cerrno>
 #include <libgen.h>
 
 

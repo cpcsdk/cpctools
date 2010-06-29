@@ -1,14 +1,10 @@
 #include <iostream>
 #include <libgen.h>
-#include <string.h>
+#include <cstring>
 #include <cstdio>
 using namespace std;
 #include "Itoa.h"
 #include "Outils.h"
-
-#if __APPLE__
-#include <libgen.h>
-#endif
 
 //
 // Initialise une chaine au format hexad�cimal en fonction de la valeur d'entr�e

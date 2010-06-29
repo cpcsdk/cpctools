@@ -4,7 +4,7 @@
 #include "BitmapCPC.h"
 #include "GestDsk.h"
 #include <string>
-#include <string.h>
+#include <cstring>
 using namespace std;
 
 
