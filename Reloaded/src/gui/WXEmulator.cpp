@@ -55,6 +55,7 @@ WXEmulator::WXEmulator()
 
 
 void WXEmulator::logMessage(const char* message) {
+    logSync.lock();
 	//wxLogWarning(message);
     if(win)
     {
@@ -65,6 +66,7 @@ void WXEmulator::logMessage(const char* message) {
         fprintf(stderr, message);
         fprintf(stderr, "\n");
     }
+    logSync.unlock();
 }
 
 

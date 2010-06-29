@@ -301,7 +301,7 @@ protected:
 
 	//int loopcon;
 public:
-    SysSync emuSync;
+    SysSync emuSync; // Global sync on Emulator object
 };
 
 #endif

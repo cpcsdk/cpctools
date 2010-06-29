@@ -22,7 +22,7 @@
 #include <iostream>
 #include <pthread.h>
 
-#include <wx/splash.h> 
+#include <wx/splash.h>
 #include <wx/snglinst.h>
 #include <wx/utils.h>
 
@@ -63,7 +63,7 @@ CapASM *capAsm ;
 #include "WXVideo.cpp"
 
 
-#ifdef __WXMAC__ 
+#ifdef __WXMAC__
 #include <ApplicationServices/ApplicationServices.h>
 #endif
 

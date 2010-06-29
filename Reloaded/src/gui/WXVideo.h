@@ -32,10 +32,17 @@ public:
 	//virtual void SetPalette(SDL_Color* c);
 	virtual void SetPalette(ColorARGB8888* c);
 
-	virtual bool Lock();
+	virtual bool TryLock();
 	virtual void Unlock();
 	virtual void Flip();
 	virtual void Close();
+
+    virtual bool LockOutput();
+    virtual bool TryLockOutput();
+    virtual void UnlockOutput();
+
+    // Detect if output have been updated since last IsUpdate call
+    virtual bool IsUpdate();
 	
 	static inline VideoPlugin* Create()
 	{
@@ -43,6 +50,7 @@ public:
 	}
 
 	wxImage* img;
+    wxBitmap* bmp;
 };
 
 #if 0

@@ -28,6 +28,8 @@
 
 #include "emulator.h"
 
+#include "synchro.h"
+
 #include "log.h"
 class CapriceWindowImpl;
 
@@ -42,6 +44,7 @@ class WXEmulator : public Emulator {
 
   private:
 	  CapriceWindowImpl* win;
+      SysSync logSync;
 
   protected:
 	  WXEmulator();

@@ -297,9 +297,13 @@ Emulator::~Emulator()
 #ifdef USE_PTHREAD
 void* runEmulation(void* theEmu)
 {
+    DebugLogMessage("runEmulation");
     Emulator* theRealEmu = (Emulator*)theEmu;
+    DebugLogMessage("runEmulation lock");
     theRealEmu->emuSync.lock();
+    DebugLogMessage("runEmulation Emulate");
     theRealEmu->Emulate();
+    DebugLogMessage("runEmulation unlock");
     theRealEmu->emuSync.unlock();
     return NULL;
 }
@@ -403,6 +407,7 @@ bool Emulator::Init()
 	goToAddress = -1 ;
 
 #ifdef USE_PTHREAD
+    InfoLogMessage("Use Thread");
 	// Spawn a thread for emulating (this way we do not freeze the window)
 	pthread_create(&emuthread,NULL,runEmulation,this);
 #endif

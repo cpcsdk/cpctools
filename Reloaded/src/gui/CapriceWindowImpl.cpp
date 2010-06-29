@@ -23,6 +23,7 @@
 #include "CapriceWindowImpl.h"
 #include "snapshot.h"
 #include "video.h"
+#include "WXVideo.h"
 #include "CapriceInputSettingsImpl.h"
 #include "DiscEditor.h"
 #include "MemoryImpl.h"
@@ -75,30 +76,43 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
-#ifdef WINDOWS
-	event.Skip();
+#ifdef USE_PTHREAD
+    if(emulator->GetRenderer().GetVideoPlugin()->IsUpdate())
+    {
+        DebugLogMessage("TryLockOutput succes");
+        emulator->GetRenderer().GetVideoPlugin()->LockOutput();
+        wxImage *imgPlugin;
+        imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+        wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
+        wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
+        wxClientDC dc(getPanel());
+        dc.DrawBitmap(bmp,0,0,false);
+        emulator->GetRenderer().GetVideoPlugin()->UnlockOutput();
+        DebugLogMessage("Finish diplaying");
+    }
+    event.RequestMore(true);
+//    event.Skip();
 #else
-	
-	if (emulator && ! emulator->GetConfig().paused)
-	{
+    if (emulator && ! emulator->GetConfig().paused)
+    {
         emulator->Emulate();
         //Ask to continue idle things
         event.RequestMore(true);
     }
     else if (emulator->GetConfig().breakpoint)
     {
-         //TODO: use listeners to do that only when emulator is paused 
+        //TODO: use listeners to do that only when emulator is paused 
         //(due to pause not controlled by ihm)
         m_menuItem_pause->Enable(false) ;
         m_menuItem_run->Enable(true);
 
-       //Breakpoint mode
-       	if (IsShownOnScreen() && !IsIconized())
-	    {
-    	    wxBitmap bmp( *image);
-    	    wxClientDC dc(getPanel());
-		    dc.DrawBitmap(bmp,0,0,false);
-	    }
+        //Breakpoint mode
+        if (IsShownOnScreen() && !IsIconized())
+        {
+            wxBitmap bmp( *image);
+            wxClientDC dc(getPanel());
+            dc.DrawBitmap(bmp,0,0,false);
+        }
     }
 #endif
 }
@@ -118,7 +132,7 @@ void CapriceWindowImpl::Pause() {
 
 		dc.DrawCircle(100,100,50);
 
-		emulator->logMessage("Paused!");
+		InfoLogMessage("Paused!");
 }
 
 // =============================== Menus Event ===============================================
@@ -135,15 +149,15 @@ void CapriceWindowImpl::onExit2( wxCommandEvent& event )
 void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 {
     wxFileDialog* OpenDialog = new wxFileDialog(
-        this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
+        this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
         wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
         wxOPEN, wxDefaultPosition);
- 
+
     // Creates a "open file" dialog with 4 file types
     if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
     {
         wxString CurrentDocPath = OpenDialog->GetPath();
-        SetTitle(wxString( wxT("Edit - ")) << 
+        SetTitle(wxString( wxT("Edit - ")) <<
             OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
         emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
@@ -393,12 +407,14 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
 }
 
 void CapriceWindowImpl::fdcLed(bool on) {
+#if 0
 	wxClientDC dc(DriveActivity);
 	if (on)
 		dc.SetBrush(*wxRED_BRUSH);
 	else
 		dc.SetBrush(wxBrush(wxColor(127,0,0), wxSOLID));
 	dc.FloodFill(3, 3, *wxWHITE, wxFLOOD_BORDER);
+#endif
 }
 
 #if ENABLE_FILEDROP

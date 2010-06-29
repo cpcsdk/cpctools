@@ -8,10 +8,10 @@ noinst_LIBRARIES = libsjasm.a \
 bin_PROGRAMS = sjasmplus2
 
 #Under linux one needs -DLUA_USE_LINUX and -DMAX_PATH=PATH_MAX
-if LINUX 
+if LINUX
 SJASM_EXTRA_FLAGS = -DLUA_USE_LINUX -DMAX_PATH=PATH_MAX
 endif
-if DARWIN 
+if DARWIN
 SJASM_EXTRA_FLAGS = -DMAX_PATH=PATH_MAX
 endif
 
@@ -19,7 +19,7 @@ libsjasm_a_CPPFLAGS = -O2 -I$(srcdir)/lua5.1 -I$(srcdir)/tolua++ -I$(srcdir)/sja
 libsjasminternal_a_CPPFLAGS = -O2 -I$(srcdir)/lua5.1 -I$(srcdir)/tolua++ -I$(srcdir)/sjasm $(SDL_CFLAGS) $(SJASM_EXTRA_FLAGS)
 
 SJASMSRC=sjasm/devices.cpp sjasm/directives.cpp sjasm/io_snapshots.cpp sjasm/io_trd.cpp sjasm/lua_lpack.c sjasm/lua_sjasm.cpp \
-sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp 
+sjasm/parser.cpp sjasm/reader.cpp sjasm/sjasm.cpp sjasm/sjio.cpp sjasm/support.cpp sjasm/tables.cpp
 
 
 # TODO : likely we could use a regular lua install (wit a .so instead of building our own
@@ -42,7 +42,7 @@ libsjasm_a_SOURCES = \
   $(LUASRC) \
   $(TOLUASRC) \
   CapASM.h \
-  CapASM.cpp 
+  CapASM.cpp
 
 #Code without no link to emu
 libsjasminternal_a_SOURCES = \
@@ -59,9 +59,9 @@ lua5.1/lstring.c lua5.1/lstrlib.c lua5.1/ltable.c lua5.1/ltablib.c lua5.1/ltm.c 
 lua5.1/lundump.c lua5.1/lvm.c lua5.1/lzio.c \
 tolua++/tolua_event.c tolua++/tolua_is.c tolua++/tolua_map.c \
 tolua++/tolua_push.c tolua++/tolua_to.c
-sjasmplus2_LDADD =
+sjasmplus2_LDADD = -ldl
 
 if RELEASE
-	libsjasminternal_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
-	libsjasm_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+libsjasminternal_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s
+libsjasm_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s
 endif

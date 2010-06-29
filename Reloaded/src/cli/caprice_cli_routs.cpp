@@ -207,7 +207,7 @@ void caprice_cli_asm_compile_file(char *filename)
 //    capASM = NULL;
 //  }
 
-  capASM - new CapASM(Emulator::getInstance());
+  capASM = new CapASM(Emulator::getInstance());
   capASM->Compile(filename);
 #else
   std::cout << "Assembler not enabled in this binary !" << endl;

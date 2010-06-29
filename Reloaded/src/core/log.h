@@ -24,6 +24,8 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <pthread.h>
+
 #define ErrorLogMessage Log::log
 
 #define CriticalLogMessage Log::log
@@ -46,7 +48,13 @@ class Log
             if(!instance) init();
             va_list args;
             va_start(args,format);
+#if 1
             instance->errLogMsg(format,args);
+#else
+            fprintf(stderr, "Thread ID: %lu [LOG] ", pthread_self());
+            vfprintf(stderr, format, args);
+            fprintf(stderr, "\n");
+#endif
             va_end(args);
         }
         static inline void debugLog(const char *formatIn, ...)
@@ -59,7 +67,13 @@ class Log
             va_start(args,formatIn);
             sprintf(formatOut, "[DEBUG] ");
             strcat(formatOut, formatIn);
+#if 1
             instance->errLogMsg(formatOut,args);
+#else
+            fprintf(stderr, "Thread ID: %lu [LOG] ", pthread_self());
+            vfprintf(stderr, formatOut, args);
+            fprintf(stderr, "\n");
+#endif
             va_end(args);
 
             delete formatOut;
@@ -71,7 +85,13 @@ class Log
             if(!instance) init();
             va_list args;
             va_start(args,format);
+#if 1
             instance->infoLogMsg(format,args);
+#else
+            fprintf(stderr, "Thread ID: %lu [LOG] ", pthread_self());
+            vfprintf(stderr, format, args);
+            fprintf(stderr, "\n");
+#endif
             va_end(args);
         }
     protected:

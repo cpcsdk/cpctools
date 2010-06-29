@@ -139,7 +139,7 @@ AC_ARG_ENABLE(debug,
 AC_MSG_NOTICE([platform and operating system ------------------------------])
 
 AC_MSG_CHECKING(for debugging mode)
-if test "$enable_debug" = yes ; then
+if test "$enable_debug" = "yes" ; then
     CXXFLAGS="-O0 -g -DDEBUG -pg -m32"
     CFLAGS="-O0 -g -DDEBUG -pg -m32"
 else
@@ -162,6 +162,7 @@ case "$host_os" in
      ;;
 linux*)
      AC_DEFINE_UNQUOTED(LINUX,1,[This is a Linux system])
+#     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
      build_target="linux"
      ;;
 freebsd*)

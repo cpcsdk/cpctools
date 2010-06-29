@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <cerrno>
 
-
+// Interface of synchronization object
 class Sync
 {
     public:
@@ -14,18 +14,21 @@ class Sync
 };
 
 
-// TODO: Write
 // SpinLock
+// Simple lock object with active waiting and no priority
 class SpinSync : public Sync
 {
-    private:
-        volatile unsigned int flag;
     public:
         SpinSync(): flag(0) {}
-        ~SpinSync();
+        void lock();
+        void unlock();
+        bool tryLock();
+    private:
+        volatile unsigned int flag;
 };
 
-
+// SysSync
+// Use of system sync object
 class SysSync : public Sync
 {
     public:
@@ -35,12 +38,12 @@ class SysSync : public Sync
         void unlock();
         bool tryLock();
     private:
-#if defined _WIN32
+#if defined _WIN32 // Use native object on Windows
         CRITICAL_SECTION mlock;
-# if defined VISTA_AND_HIGHER
+# if defined VISTA_AND_HIGHER //TODO: See how to detect VISTA and higher system
         CONDITION_VARIABLE cond;
 # endif
-#else
+#else // Use pthread on other system
         pthread_mutex_t mlock;
         pthread_cond_t cond;
 #endif

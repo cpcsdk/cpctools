@@ -91,6 +91,7 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 
 	img = new wxImage(w,h,(unsigned char*)_outputSurface,true);
 	//img = new wxImage(CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,(unsigned char*)_publicVideo->pixels,true);
+    bmp = new wxBitmap(*img);
 	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
 	f->SetEmuImage(img);
 
@@ -103,23 +104,45 @@ void WXDoubleLinePlugin::SetPalette(ColorARGB8888* c)
 {
 }
 
-bool WXDoubleLinePlugin::Lock()
+bool WXDoubleLinePlugin::TryLock()
 {
-//    std::cerr << "[DEBUG] WXDoubleLinePlugin::Lock()" << std::endl;
+//    DebugLogMessage("WXDoubleLinePlugin::TryLock()");
     return publicSurfaceSync.tryLock();
 //    return true;
 }
 
 void WXDoubleLinePlugin::Unlock()
 {
-//    std::cerr << "[DEBUG] WXDoubleLinePlugin::Unlock()" << std::endl;
+//    DebugLogMessage("WXDoubleLinePlugin::Unlock()");
     publicSurfaceSync.unlock();
+}
+
+bool WXDoubleLinePlugin::TryLockOutput()
+{
+//    DebugLogMessage("WXDoubleLinePlugin::TryLockOutput()");
+    return outputSurfaceSync.tryLock();
+}
+
+bool WXDoubleLinePlugin::LockOutput()
+{
+    outputSurfaceSync.lock();
+    return true;
+}
+
+void WXDoubleLinePlugin::UnlockOutput()
+{
+//    DebugLogMessage("WXDoubleLinePlugin::UnlockOutput()");
+    outputSurfaceSync.unlock();
+}
+
+bool WXDoubleLinePlugin::IsUpdate()
+{
+    return isUpdateSync.tryLock();
 }
 
 void WXDoubleLinePlugin::Flip()
 {
-	int line;
-
+    DebugLogMessage("Flip()");
     publicSurfaceSync.lock();
     outputSurfaceSync.lock();
 	//byte* src = (byte*)_publicVideo->pixels;
@@ -128,7 +151,7 @@ void WXDoubleLinePlugin::Flip()
 	//int length = _publicVideo->w * 3;
 	int length = _publicWidth * 3;
 	//for(line=0;line<_publicVideo->h;line++)
-	for(line=0;line<_publicHeight;line++)
+	for(int line=0;line<_publicHeight;line++)
 	{
 	    memcpy(dest,src,length);
 	    dest+=length;
@@ -138,6 +161,7 @@ void WXDoubleLinePlugin::Flip()
 	}
     publicSurfaceSync.unlock();
 
+#if !USE_PTHREAD
 	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
 	if (f->IsShownOnScreen() && !f->IsIconized())
 	{
@@ -147,7 +171,9 @@ void WXDoubleLinePlugin::Flip()
     	wxClientDC dc(f->getPanel());
 		dc.DrawBitmap(bmp,0,0,false);
 	}
+#endif
     outputSurfaceSync.unlock();
+    isUpdateSync.unlock(); // Indicate update of output
 }
 
 void WXDoubleLinePlugin::Close()

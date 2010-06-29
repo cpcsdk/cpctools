@@ -98,7 +98,7 @@ Renderer::~Renderer()
 
 bool Renderer::BeginDisplay(int screenLine)
 {
-	if (!_videoPlugin->Lock()) { // lock the video buffer
+	if (!_videoPlugin->TryLock()) { // lock the video buffer
 		return false; // skip the emulation if we can't get a lock
 	}
 	_scrPos = _renderFunc->GetScreenPosition();
@@ -525,7 +525,7 @@ bool Renderer::Init()
 	_preRenderFunc->SetMode(oldMode);
 	_preRenderFunc->SetRenderPos(oldRendPos);
 
-	_videoPlugin->Lock();
+	_videoPlugin->TryLock(); // TODO: Seen if need real lock.
 	
 	_scrLineOffset = _videoPlugin->GetRenderSurfacePitch() / 4;
 	_scrPos = _scrBase = 0; // memory address of back buffer

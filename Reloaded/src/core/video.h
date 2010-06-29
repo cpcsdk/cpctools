@@ -87,7 +87,7 @@ protected:
 public:
 
 	//! The video surface shown by the plugin to the renderer function.
-    SysSync publicSurfaceSync;
+    SpinSync publicSurfaceSync;
 	void* _publicVideo;
 	int _publicHeight;
 	int _publicWidth;
@@ -95,7 +95,7 @@ public:
 	int _publicPitch;
 
 	//! The real video surface
-    SysSync outputSurfaceSync;
+    SpinSync outputSurfaceSync;
 	void* _outputSurface;
 	int _outputHeight;
 	int _outputWidth;
@@ -140,14 +140,23 @@ public:
 
 
 
-	//! locks the surface if needed
-	virtual bool Lock() = 0;
-	//! unlocks the surface if needed
+	//! locks the public surface if needed
+	virtual bool TryLock() = 0;
+	//! unlocks the public surface if needed
 	virtual void Unlock() = 0;
+    // TODO locks the output surface if needed
+    virtual bool TryLockOutput() = 0;
+    virtual bool LockOutput() = 0;
+    // TODO unlocks the output surface if needed
+    virtual void UnlockOutput() = 0;
 	//! "flips" the video surface. Note that this might not always do a real flip
 	virtual void Flip() = 0;
 	//! closes the plugin
 	virtual void Close() = 0;
+
+    // TODO Output has been update.
+    virtual bool IsUpdate() = 0;
+    SpinSync isUpdateSync;
 	
 	//! Set generic bool option
 	virtual void SetOption(const string &optionName, bool val);

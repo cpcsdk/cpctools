@@ -19,7 +19,7 @@
 #include "log.h"
 
 Log* Log::instance = NULL;
-        
+
 void Log::errLogMsg(const char *format, va_list args)
 {
     vfprintf(stderr,format,args);
