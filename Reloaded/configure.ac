@@ -138,28 +138,13 @@ AC_ARG_ENABLE(debug,
 
 AC_MSG_NOTICE([platform and operating system ------------------------------])
 
-# Check if compiler support forcing to produce 32 bit binaries
-CFLAGS="-m32"
-CXXFLAGS="-m32"
-AC_MSG_CHECKING([if compiler support forcing to produce 32 bit binaries])
-AC_TRY_COMPILE(, [;],
-        compiler_has_m32=yes,
-        compiler_has_m32=no)
-if test "$compiler_has_m32" == "yes"; then
-    AC_MSG_RESULT([yes])
-    M32="-m32"
-else
-    AC_MSG_RESULT([no])
-    M32=""
-fi
-
 AC_MSG_CHECKING(for debugging mode)
 if test "$enable_debug" = "yes" ; then
-    CXXFLAGS="-O0 -g -DDEBUG -pg ${M32}"
-    CFLAGS="-O0 -g -DDEBUG -pg ${M32}"
+    CXXFLAGS="-O0 -g -DDEBUG -pg -m32"
+    CFLAGS="-O0 -g -DDEBUG -pg -m32"
 else
-    CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions ${M32}"
-    CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions ${M32}"
+    CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
+    CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -m32"
 fi
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 AC_MSG_RESULT([$enable_debug])
@@ -350,9 +335,6 @@ AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
 
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)
-
-#TODO: See if really need
-AC_CHECK_HEADER([SDL/SDL_opengl.h], , AC_MSG_ERROR([SDL_opengl.h not found !]))
 
 #Output file
 AC_CONFIG_HEADERS([config.h])
