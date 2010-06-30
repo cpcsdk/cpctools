@@ -177,7 +177,7 @@ case "$host_os" in
      ;;
 linux*)
      AC_DEFINE_UNQUOTED(LINUX,1,[This is a Linux system])
-#     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
+     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
      build_target="linux"
      ;;
 freebsd*)
@@ -314,22 +314,27 @@ fi
 fi
 AM_CONDITIONAL([AYLET], [test "$with_aylet" = "yes"])
 
+# Sound Output
+AC_DEFINE([SOUND_OUTPUT_None], 0, [Define enum for sound output])
+AC_DEFINE([SOUND_OUTPUT_PortAudio], 1, [Define enum for sound output])
+sound_output="None";
 
 AC_MSG_CHECKING([portaudio : >= 19?])
-AC_TRY_COMPILE([#include <portaudio.h>
-  #include <stdio.h>
-  ],
- [
-PaStream* audioStream = NULL;
-Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, 0/*CPC.snd_playback_rate*/, 1, NULL, NULL);
-],
-AC_MSG_RESULT(yes),
-AC_MSG_RESULT(no)
-AC_MSG_ERROR(You need portaudio >= 19.1)
-)
+AC_TRY_COMPILE(
+        [#include <portaudio.h>
+        #include <stdio.h>
+        ],
+        [
+        PaStream* audioStream = NULL;
+        Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, 0/*CPC.snd_playback_rate*/, 1, NULL, NULL);
+        ],
+        AC_MSG_RESULT(yes)
+        sound_output="PortAudio",
+        AC_MSG_RESULT(no)
+#AC_MSG_ERROR(You need portaudio >= 19.1)
+        )
 
-
-
+AC_DEFINE_UNQUOTED(SOUND_OUTPUT, [SOUND_OUTPUT_${sound_output}], [Sound output library used])
 
 
 #TODO: See for a clean fallback mode
@@ -367,6 +372,7 @@ Reloaded compilation options :
 
     Use lib765 ................... ${with_lib765}
     Sound Backend ................ ${sound_backend}
+    Sound Output ................. ${sound_output}
 
     Cli interface ................ ${with_cli}
     Debugger ..................... ${with_debugger}
@@ -378,3 +384,7 @@ Reloaded compilation options :
 
     Host system .................. ${host}
 ])
+
+if test "$sound_output" = "none" ; then
+    AC_MSG_WARN([/!\ No Sound Output capacity, sound desactivated, please install PortAudio >= 19.1 or an other supported sound library])
+fi

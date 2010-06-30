@@ -30,9 +30,13 @@
 #include "psg.h"
 #include "emulator.h"
 #include "log.h"
-
-#include <portaudio.h>
 #include <iostream>
+
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
+#include <portaudio.h>
+
+PaStream* audioStream = NULL;
+#endif
 
 byte *pbSndBuffer = NULL;
 // byte *pbSndBufferEnd = NULL;
@@ -40,7 +44,6 @@ byte *pbSndBuffer = NULL;
 byte *pbSndBufferPtr = NULL;    // current position in the writing sample
 // dword dwSndBufferCopied;
 
-PaStream* audioStream = NULL;
 
 #if 0
 int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaStreamCallbackTimeInfo* sci, PaStreamCallbackFlags scf, void *userdata)
@@ -131,6 +134,7 @@ int audio_align_samples (int given)
 
 int audio_init (t_CPC &CPC, t_PSG* psg)
 {
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
 	if (!CPC.snd_enabled) {
 		InfoLogMessage("Not opening audio because it is disabled in the config");
 		return 0;
@@ -160,13 +164,19 @@ int audio_init (t_CPC &CPC, t_PSG* psg)
 	}
 	
 	return 0;
+#else
+    InfoLogMessage("Not opening audio because compile with no sound library output");
+    return 0;
+#endif
 }
 
 
 void audio_shutdown (void)
 {
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
     Pa_StopStream(audioStream);
     Pa_Terminate();
+#endif
 
     free(pbSndBuffer);
 }
