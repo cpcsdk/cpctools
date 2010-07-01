@@ -20,11 +20,6 @@ if MINGW
 caprice_LDADD += $(MINGW_LIB)
 endif
 
-
-caprice_LDADD += core/libcapricecore.a \
-                 core/libdisass.a \
-                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB) -lpthread
-
 if WITH_WXWIDGET
 SUBDIRS += gui
 caprice_LDADD += gui/libcapricewx.a gui/libfoo.a $(WX_LIBS)
@@ -32,6 +27,11 @@ if WITH_IDE
 caprice_LDADD += gui/IDE/libcapricewxide.a
 endif
 endif
+
+caprice_LDADD += core/libcapricecore.a \
+                 core/libdisass.a \
+                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB) -lpthread
+
 
 #Add CLI files if activate
 if CLI

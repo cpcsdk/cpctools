@@ -19,6 +19,7 @@ extern byte *pbSndBufferPtr;
 
 // int audio_update (const void* inbuf, void* outbuf, unsigned long len, const PaStreamCallbackTimeInfo* sci, PaStreamCallbackFlags scf, void *userdata);
 // int audio_align_samples (int given);
+int audio_update();
 int audio_init (t_CPC &CPC, t_PSG* psg);
 void audio_shutdown (void);
 void audio_pause (t_CPC &CPC);

@@ -161,6 +161,7 @@ else
     CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions ${M32}"
     CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions ${M32}"
 fi
+AC_SUBST([M32], [${M32}])
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
 AC_MSG_RESULT([$enable_debug])
 
@@ -177,7 +178,7 @@ case "$host_os" in
      ;;
 linux*)
      AC_DEFINE_UNQUOTED(LINUX,1,[This is a Linux system])
-     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
+#     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
      build_target="linux"
      ;;
 freebsd*)

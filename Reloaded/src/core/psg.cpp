@@ -51,11 +51,6 @@
 #include "audio.h"
 #include "emulator.h"
 
-//TODO: Separate sound output from psg emulation
-#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
-#include <portaudio.h>
-#endif
-
 #include <iostream>
 
 #ifdef AYLET
@@ -77,11 +72,6 @@ t_PSG::~t_PSG()
 	#endif
 }
 
-//TODO: Separate sound output from psg emulation
-#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
-extern PaStream* audioStream;
-#endif
-
 void t_PSG::Emulate(int iCycleCount)
 {
 #ifdef ST_SOUND
@@ -89,12 +79,22 @@ void t_PSG::Emulate(int iCycleCount)
 
     if (cycle_count >= snd_cycle_count)
     {
-		cycle_count -= snd_cycle_count;
+        cycle_count -= snd_cycle_count;
 
-		m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
-		for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
-			*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel() /32;
+        m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
+        for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
+        {
+            // Add Tape Sound
+            // TODO: Overflow verification
+            // TODO: Configurable
+            *(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel()/32;
+        }
 
+        audio_update();
+    }
+#endif
+
+#if 0
 //TODO: Separate sound output from psg emulation
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
 	//	pbSndBufferPtr += sizeof(ymsample)*2;

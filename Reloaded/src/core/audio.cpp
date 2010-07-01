@@ -132,6 +132,15 @@ int audio_align_samples (int given)
 }
 #endif
 
+int audio_update()
+{
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
+    return Pa_WriteStream(audioStream,pbSndBuffer,1) == paNoError ? 0 : -1;
+#else
+    return 0
+#endif
+}
+
 int audio_init (t_CPC &CPC, t_PSG* psg)
 {
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio

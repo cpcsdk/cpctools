@@ -25,11 +25,11 @@ DiscEditor.cpp \
 WXVideo.cpp \
 WXLog.h
 
-libcapricewx_a_LIBADD = libfoo.a 
+libcapricewx_a_LIBADD = libfoo.a
 
 # Ces deux fichiers ont besoin de CPCKeyDefs.h, mais pas les autres. On est obligé de bricoler parce que ces fichiers sont générés par wxFormBuilder...
 libfoo_a_SOURCES = CapriceUI.cpp CapriceUI.h
-libfoo_a_CPPFLAGS = $(WX_CPPFLAGS) -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\" -include ../core/CPCKeyDefs.h 
+libfoo_a_CPPFLAGS = $(WX_CPPFLAGS) -I@top_srcdir@/src/core -DDATA_PATH=\"$(pkgdatadir)//\" -include ../core/CPCKeyDefs.h
 
 if WITH_IDE
   DIST_SUBDIRS = IDE
@@ -41,9 +41,9 @@ if WITH_IDE
 endif
 
 if CLI
-  libcapricewx_a_CPPFLAGS += -I@top_srcdir@/src/cli 
+  libcapricewx_a_CPPFLAGS += -I@top_srcdir@/src/cli
 endif
 
 if RELEASE
-  libcapricewx_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+  libcapricewx_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s
 endif
