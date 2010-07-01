@@ -25,9 +25,9 @@
  * 11/08/2004 - Compr fix, levels -1,1-7 now work - Tyler Montbriand
  */
 
+#ifdef HAVE_LIBPNG
 #include <cstdlib>
 #include <SDL/SDL_byteorder.h>
-#ifdef HAVE_LIBPNG
 #include <png.h>
 #include "IMG_savepng.h"
 

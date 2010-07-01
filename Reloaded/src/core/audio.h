@@ -8,7 +8,6 @@
 #define MAX_FREQ_ENTRIES 5
 
 #include "cap32type.h"
-#include <portaudio.h>
 
 class t_CPC;
 class t_PSG;

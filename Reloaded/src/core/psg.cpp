@@ -51,7 +51,10 @@
 #include "audio.h"
 #include "emulator.h"
 
+//TODO: Separate sound output from psg emulation
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
 #include <portaudio.h>
+#endif
 
 #include <iostream>
 
@@ -74,7 +77,10 @@ t_PSG::~t_PSG()
 	#endif
 }
 
+//TODO: Separate sound output from psg emulation
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
 extern PaStream* audioStream;
+#endif
 
 void t_PSG::Emulate(int iCycleCount)
 {
@@ -89,6 +95,8 @@ void t_PSG::Emulate(int iCycleCount)
 		for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
 			*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel() /32;
 
+//TODO: Separate sound output from psg emulation
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
 	//	pbSndBufferPtr += sizeof(ymsample)*2;
 		Pa_WriteStream(audioStream,pbSndBuffer,1);
 
@@ -104,6 +112,7 @@ void t_PSG::Emulate(int iCycleCount)
 			pbSndBufferPtr -= nbFrames*4;
 		}
 #endif
+#endif /* if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio */
 	}
 #endif
 }

@@ -15,7 +15,7 @@
 static inline unsigned int _compareAndExchange32(volatile unsigned int *addr, unsigned int newVal, unsigned int expectedOldVal)
 {
     unsigned int oldVal;
-# if defined __POWERPC__
+#if defined __POWERPC__
     __asm__ __volatile__ ("\n"
             "0:\n\t"
             "   lwarx %0,0,%1\n\t"  // load and reserve
@@ -27,13 +27,68 @@ static inline unsigned int _compareAndExchange32(volatile unsigned int *addr, un
             : "=&r"(oldVal)
             : "r"(addr), "r"(newVal), "r"(expectedOldVal)
             : "cr0", "memory");
-# elif defined __i386__ || defined __x86_64__
+#elif defined __i386__ || defined __x86_64__
     __asm__ __volatile__ ("lock cmpxchgl %2,%1"
             : "=a"(oldVal), "=m"(*addr)
             : "q"(newVal), "0"(expectedOldVal)
             : "memory");
+#elif defined __ARM__ || defined __ARMEL__ || defined __ARMEB__
+    // This code doesn't garanty atomicity on SMP system
+    // and work only on monoprocessor system
+    // TODO: See how to detect ARMv6 to use new atomic system
+    unsigned int tmp, cpsrSave;
+
+    __asm__ __volatile__("\n"
+            "   mrs %[cpsrSave], cpsr\n"
+            "   orr %[tmp], %[cpsrSave], #128\n"
+            "   msr cpsr_c, %[tmp]\n" //desactivate irq and save state
+            "0:\n"
+            "   ldr %[tmp],[%[addr]]\n"
+            "   cmp %[tmp],%[expectedOldVal]\n"
+            "   bne 1f\n"
+            "   swp %[oldVal],%[newVal],[%[addr]]\n"
+            "   cmp %[tmp],%[oldVal]\n"
+            "   swpne %[tmp],%[oldVal],[%[addr]]\n"
+            "   bne 0b\n"
+            "1:\n"
+            "   msr cpsr_c, %[cpsrSave]\n" //restore irq state
+            : [oldVal] "=&r" (oldVal), [tmp] "=&r" (tmp), [cpsrSave] "=&r" (cpsrSave)
+            : [addr] "r" (addr), [newVal] "r" (newVal), [expectedOldVal] "r" (expectedOldVal)
+            : "cc", "memory");
+
+    /*
+    __asm__ __volatile__("\n"
+            "mrs    %0, cpsr        @ local_irq_save\n"
+            "orr    %1, %0, #128\n"
+            "msr    cpsr_c, %1"
+            : "=r" (x), "=r" (temp)
+            :
+            : "memory");
+
+    unsigned long result, tmp;
+    __asm__ __volatile__ ("\n"
+            "0:\n"
+            "   ldr     %1,[%2]\n"
+            "   cmp     %1,%4\n"
+            "   movne   %0,%1\n"
+            "   bne     1f\n"
+            "   swp     %0,%3,[%2]\n"
+            "   cmp     %1,%0\n"
+            "   swpne   %1,%0,[%2]\n"
+            "   bne     0b\n"
+            "1:"
+            : "=&r" (result), "=&r" (tmp)
+            : "r" (mem), "r" (newval), "r" (oldval)
+            : "cc", "memory");
+
+    __asm__ __volatile__("\n"
+            "msr    cpsr_c, %0      @ local_irq_restore\n"
+            :
+            : "r" (x)
+            : "memory");
+            */
 #else
-#error "Currently unsupported architecture"
+# error "Currently unsupported architecture"
 #endif
     return oldVal;
 }
@@ -59,8 +114,10 @@ static inline void _busyPause(unsigned int count)
         __asm__ __volatile__ ("ori r0,r0,0"); // fake nop
 #elif defined __i386__ || defined __x86_64__
         __asm__ __volatile__ ("pause");
+#elif defined __ARM__ || defined __ARMEL__ || defined __ARMEB__
+        __asm__ __volatile__ ("mov r0,r0");
 #else
-#error "Currently unsupported architecture"
+# error "Currently unsupported architecture"
 #endif
     }
 }
@@ -163,6 +220,7 @@ bool SysSync::tryLock()
             return false;
         default:
             std::cerr << "pthread_mutex_trylock() failure: " << r << std::endl;
+            return false;
     }
 #endif
 }

@@ -2,7 +2,7 @@ bin_PROGRAMS = caprice
 
 #Contains all the dirs (even the one which are not compiled !)
 DIST_SUBDIRS = core gui asm cli
-SUBDIRS = core gui
+SUBDIRS = core
 MINGW_LIB=-lmingw32
 
 #TODO : Build video and emulator inside libcapricecore
@@ -19,21 +19,25 @@ caprice_LDADD =
 if MINGW
 caprice_LDADD += $(MINGW_LIB)
 endif
-caprice_LDADD += gui/libcapricewx.a gui/libfoo.a $(WX_LIBS) \
-                 core/libcapricecore.a \
+
+
+caprice_LDADD += core/libcapricecore.a \
                  core/libdisass.a \
-                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) -lportaudio -lpthread
+                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB) -lpthread
 
-
+if WITH_WXWIDGET
+SUBDIRS += gui
+caprice_LDADD += gui/libcapricewx.a gui/libfoo.a $(WX_LIBS)
 if WITH_IDE
 caprice_LDADD += gui/IDE/libcapricewxide.a
+endif
 endif
 
 #Add CLI files if activate
 if CLI
 SUBDIRS += cli
 caprice_CPPFLAGS += -Icli
-caprice_LDADD += cli/libcapricecli.a 
+caprice_LDADD += cli/libcapricecli.a
 endif
 
 

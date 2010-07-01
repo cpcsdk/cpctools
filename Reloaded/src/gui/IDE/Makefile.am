@@ -3,7 +3,7 @@
 noinst_LIBRARIES = libcapricewxide.a 
 
 AM_CXXFLAGS = $(WX_CPPFLAGS) 
-libcapricewxide_a_CPPFLAGS = $(WX_CPPFLAGS) -m32
+libcapricewxide_a_CPPFLAGS = $(WX_CPPFLAGS)
 libcapricewxide_a_SOURCES = \
                             pairarr.h  \
                             stedit.cpp \

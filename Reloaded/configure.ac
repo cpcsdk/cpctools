@@ -267,8 +267,8 @@ if test "$with_wxwidget" = "yes" ; then
 		wxWidgets version is $reqwx or above.
 		])
 	fi
-
 fi
+AM_CONDITIONAL([WITH_WXWIDGET], [test "$with_wxwidget" = "yes"])
 
 #png.h is needed for saving screenshots. Is it really useful ?
 AC_CHECK_HEADER( [png.h],AC_DEFINE(HAVE_LIBPNG,1,[Use libpng to save screenshots]),AC_MSG_CHECKING([libpng not found ! Saving screenshots will not work]))
@@ -335,6 +335,9 @@ AC_TRY_COMPILE(
         )
 
 AC_DEFINE_UNQUOTED(SOUND_OUTPUT, [SOUND_OUTPUT_${sound_output}], [Sound output library used])
+if test "$sound_output" = "PortAudio" ; then
+    AC_SUBST([SOUND_OUTPUT_LIB], [-lportaudio])
+fi
 
 
 #TODO: See for a clean fallback mode
@@ -350,6 +353,9 @@ AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
 
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)
+
+# TODO: Detect timer library
+AC_SUBST([TIMER_LIB], [-lrt])
 
 #Output file
 AC_CONFIG_HEADERS([config.h])
@@ -382,6 +388,6 @@ Reloaded compilation options :
     Host system .................. ${host}
 ])
 
-if test "$sound_output" = "none" ; then
+if test "$sound_output" = "None" ; then
     AC_MSG_WARN([/!\ No Sound Output capacity, sound desactivated, please install PortAudio >= 19.1 or an other supported sound library])
 fi
