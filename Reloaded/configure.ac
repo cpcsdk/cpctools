@@ -355,8 +355,10 @@ AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)
 
-# TODO: Detect timer library
-AC_SUBST([TIMER_LIB], [-lrt])
+# TODO: Detect other timer library
+AC_SEARCH_LIBS([clock_gettime], [rt],
+        AC_SUBST([TIMER_LIB], [-lrt])
+        )
 
 #Output file
 AC_CONFIG_HEADERS([config.h])
