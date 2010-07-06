@@ -1,0 +1,31 @@
+#!/usr/bin/make -f
+
+DEB_AUTO_UPDATE_DEBIAN_CONTROL := yes
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/autotools.mk
+#include /usr/share/cdbs/1/rules/simple-patchsys.mk
+
+
+	### Kial la opcioj ne funkcionas?
+#DEB_CONFIGURE_EXTRA_FLAGS := \
+#    --with-lib765 \
+#    --with-stsound \
+#    --with-aylet \
+#    --with-ayemu \
+#    --with-wxwidget \
+#    --with-cli \
+#    --with-socket \
+#    --with-debugger \
+#    --with-ide \
+#    --with-asm \
+#    --disable-debug \
+#    --enable-filedrop \
+#    --disable-opengl 
+
+
+makebuilddir/caprice-reloaded::
+	test -e configure || sh autogen.sh
+
+install/caprice-reloaded::
+	mv $(CURDIR)/debian/caprice-reloaded/usr/bin/caprice $(CURDIR)/debian/caprice-reloaded/usr/bin/caprice-reloaded

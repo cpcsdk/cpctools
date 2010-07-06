@@ -1,0 +1,11 @@
+caprice-reloaded (0.5+svn20100622-1) unstable; urgency=low
+
+  * Ne uzas lib765, aylet, ayemu.
+  * Initial Release.
+  * @@@AFER: - icone
+     - menu
+     - desktop
+     - page man/info
+
+ -- Simon Adda-Reyss <simon.addareyss@libertysurf.fr>  Tue,  6 Jul 2010 19:45:21 +0200
+
