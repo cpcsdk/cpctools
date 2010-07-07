@@ -1,0 +1,4 @@
+debian/stsound/usr/include/*	usr/include
+debian/stsound/usr/lib/*.a	usr/lib
+debian/stsound/usr/lib/*.so	usr/lib
+
