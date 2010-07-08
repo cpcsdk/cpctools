@@ -63,8 +63,8 @@ if test "$with_cpcvideo" = "yes" ; then
 	AC_CHECK_HEADER([SDL_video.h])
 
 	SDL_VERSION=1.2.4
-#	AM_PATH_SDL($SDL_VERSION, :,
-#                        AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
+	AM_PATH_SDL($SDL_VERSION, :,
+                        AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!]))
 fi
 
 AC_LANG([C++])
