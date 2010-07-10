@@ -139,19 +139,19 @@ AC_ARG_ENABLE(debug,
 AC_MSG_NOTICE([platform and operating system ------------------------------])
 
 # Check if compiler support forcing to produce 32 bit binaries
-CFLAGS="-m32"
-CXXFLAGS="-m32"
-AC_MSG_CHECKING([if compiler support forcing to produce 32 bit binaries])
-AC_TRY_COMPILE(, [;],
-        compiler_has_m32=yes,
-        compiler_has_m32=no)
-if test "$compiler_has_m32" == "yes"; then
-    AC_MSG_RESULT([yes])
-    M32="-m32"
-else
+#CFLAGS="-m32"
+#CXXFLAGS="-m32"
+#AC_MSG_CHECKING([if compiler support forcing to produce 32 bit binaries])
+#AC_TRY_COMPILE(, [;],
+#        compiler_has_m32=yes,
+#        compiler_has_m32=no)
+#if test "$compiler_has_m32" == "yes"; then
+#    AC_MSG_RESULT([yes])
+#    M32="-m32"
+#else
     AC_MSG_RESULT([no])
     M32=""
-fi
+#fi
 
 AC_MSG_CHECKING(for debugging mode)
 if test "$enable_debug" = "yes" ; then
