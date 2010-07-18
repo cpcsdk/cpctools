@@ -130,8 +130,12 @@ CAksCommand CAksFileTransfert::Run(bool wait)
 	return cmd;
 }
 
+/**
+ * Read the command code and verify if it is correct.
+ */
 CAksCommand CAksFileTransfert::GetCommand(bool wait)
 {
+  //Read the command code
 	unsigned char command;
 	bool readed = false;
 	if (wait)
@@ -143,6 +147,7 @@ CAksCommand CAksFileTransfert::GetCommand(bool wait)
 		readed = ReadByte(command);
 	}
 	
+  //Check its validity
 	if (readed)
 	{
 		if (command > AksMinCommand && command < AksMaxCommand)
@@ -153,14 +158,14 @@ CAksCommand CAksFileTransfert::GetCommand(bool wait)
 		}
 		else
 		{
-			//std::cout << "Unknwon command get" << std::endl;
-			printf(" Unknwon command get ($%x)\n", command );
+			std::cout << "Unknwon command get" << std::hex << (int)command << std::endl;
+	//		printf(" Unknown command get ($%x)\n", command );
 			return AksUnknownCommand;
 		}
 	}
 	else
 	{
-		std::cout << "Unknwon command not wait" << std::endl;
+		std::cout << "Unknown command not wait" << std::endl;
 
 		return AksUnknownCommand;
 	}
@@ -397,6 +402,7 @@ bool CAksFileTransfert::InitDSK(const CAksCommand &cmd)
 
 	return true;
 }
+
 bool CAksFileTransfert::WaitTrack(const CAksCommand &cmd)
 {
 	if (cmd != AksWaitTrack)

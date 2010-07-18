@@ -14,6 +14,10 @@
 #include "CCPCBooster.h"
 #include "CDSKFile.h"
 
+
+/**
+ * Enumerate the commands
+ */
 enum CAksCommand
 {
 	AksUnknownCommand	= 0x00,		//!< Unknown command
@@ -35,6 +39,9 @@ enum CAksCommand
 	AksMaxCommand					//!< Min command number
 };
 
+/**
+ * Enumerate the transfert mode
+ */
 enum CAksTransfertMode
 {
 	NoTransfert,
@@ -44,6 +51,9 @@ enum CAksTransfertMode
 	SendDSK
 };
 
+/**
+ * Enumerate the verosity level
+ */
 enum CAksVerboseLevel
 {
 	NoDisplay,
@@ -92,7 +102,7 @@ public:
 #if _WINDOWS
 	CAksFileTransfert(int comNumber = 1);
 #else
-	CAksFileTransfert(std::string comNumber = "/dev/ttyS0");
+	CAksFileTransfert(std::string comNumber = "/dev/ttyUSB0");
 #endif
 	//! Destructor
 	~CAksFileTransfert();

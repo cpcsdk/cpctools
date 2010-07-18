@@ -20,7 +20,7 @@
 CCPCBooster::CCPCBooster(int comNumber) :
 #else
 CCPCBooster::CCPCBooster(std::string comNumber) :
-_COMPortHandle(comNumber),
+_COMPortHandle(comNumber, std::ios::in|std::ios::out),
 #endif
 _COMPortNumber(comNumber),
 _currentState(PortFailed),
@@ -170,6 +170,7 @@ void CCPCBooster::OpenPort()
 	}
 	
 	_COMPortHandle.SetFlowControl( SerialStreamBuf::FLOW_CONTROL_NONE ) ;
+	//_COMPortHandle.SetFlowControl( SerialStreamBuf::FLOW_CONTROL_HARD ) ;
 
 	_COMPortHandle.unsetf( std::ios_base::skipws ) ;
 
@@ -229,18 +230,13 @@ bool CCPCBooster::ReadByte(unsigned char &val)
 #else
 	 unsigned long nbBytesReceived = 1 ;
 
-	 /*
-	 try{
-		 val = _COMPortHandle.ReadByte(); 
-	}catch(SerialPort::ReadTimeout e){
-	    nbBytesReceived = 0 ;
-	}*/
-
 	 _COMPortHandle >> val ;
 	return true;
 #endif
 
 }
+
+
 bool CCPCBooster::WriteByte(const unsigned char val)
 {
 #if _WINDOWS
@@ -251,12 +247,10 @@ bool CCPCBooster::WriteByte(const unsigned char val)
 	return ((nbBytesSend == 1) && fSuccess);
 #else
 	unsigned long nbBytesSend = 1 ;
-//	_COMPortHandle.WriteByte(val);
-//
 
-	_COMPortHandle.write( (const char *)&val,1) ;
-	_COMPortHandle.flush();
-	printf("\tWrite : $%x\n", val);
+  _COMPortHandle << val ;
+  _COMPortHandle.flush();
+
 	return nbBytesSend == 1 ;
 #endif
 }
@@ -301,17 +295,11 @@ bool CCPCBooster::ReadWord(unsigned short &val)
 #else
 	unsigned char byte1, byte2 ;
 
-	if (
-		ReadByte(byte1) &&
-		ReadByte(byte2) 
-	    )
-	{
-	    val = byte1 * 256 + byte2 ;
-	    return 1 == 1 ;
-	}
-	else{
-	    return 1 == 0 ;
-	}
+	ReadByte(byte1);
+	ReadByte(byte2);
+
+	val = byte2 * 256 + byte1 ;
+	return 1 == 1 ;
 
 
 #endif
@@ -325,17 +313,15 @@ bool CCPCBooster::WriteWord(const unsigned short val)
 	
 	return ((nbBytesSend == 2) && fSuccess);
 #else
-/*
+
 	unsigned char byte1, byte2 ;
 
 	byte1 = val % 256 ;
 	byte2 = val / 256 ;
 
-	_COMPortHandle.WriteByte(byte1);
-	_COMPortHandle.WriteByte(byte2) ;
-*/
+	WriteByte(byte1);
+	WriteByte(byte2) ;
 
-	_COMPortHandle << val ;
 	return true ;
 #endif
 }

@@ -73,7 +73,7 @@ public:
 #if _WINDOWS
 	CCPCBooster(int comNumber = 1);
 #else 
-	CCPCBooster(std::string comNumber = "/dev/ttyS0");
+	CCPCBooster(std::string comNumber = "/dev/ttyUSB0");
 #endif
 	//! Destructor, closing opended COM port
 	virtual ~CCPCBooster();
