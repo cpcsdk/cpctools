@@ -109,7 +109,16 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
         wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
         wxClientDC dc(getPanel());
         dc.DrawBitmap(bmp,0,0,false);
+
         emulator->GetRenderer().GetVideoPlugin()->UnlockOutput();
+		if (emulator->GetConfig().paused || emulator->GetConfig().breakpoint) {
+			int scrpos = emulator->GetRenderer().GetScreenPosition();
+			const int width = 1024;
+			int y = scrpos/width;
+			scrpos -= y*width;
+			dc.CrossHair(scrpos, y);
+		}
+
         DebugLogMessage("Finish diplaying");
     }
     event.RequestMore(true);
@@ -144,15 +153,6 @@ void CapriceWindowImpl::Pause() {
         m_menuItem_pause->Enable(false) ;
         m_menuItem_run->Enable(true);
 
-        wxClientDC dc(getPanel());
-		//dc.DrawBitmap(bitmap,0,0,false);
-		int scrpos = emulator->GetRenderer().GetScreenPosition();
-		const int width = 1024;
-		int y = scrpos/width;
-		scrpos -= y*width;
-		dc.CrossHair(scrpos, y);
-
-		dc.DrawCircle(100,100,50);
 
 		InfoLogMessage("Paused!");
 }
