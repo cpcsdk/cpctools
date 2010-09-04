@@ -200,12 +200,15 @@ void DiscEditorImpl::deleteSector( wxCommandEvent& event )
 void DiscEditorImpl::renameSector( wxCommandEvent& event )
 {
 	int sect_id = lb_sectors->GetSelection();
+	if (sect_id == wxNOT_FOUND) return;
 	int track_id = spinTrack->GetValue();
 
 	// Ask for the new ID and change it in the track
 	wxString newId;
-   newId << FloppyImage.track[track_id][0].sector[sect_id].CHRN;
-   	newId = wxGetTextFromUser("Enter new sector number", "Rename sector", newId, this);
+	wxString msg;
+	msg.Printf("Enter new ID for sector %x in track %d",sect_id, track_id);
+	newId.Printf("%x",FloppyImage.track[track_id][0].sector[sect_id].CHRN[2]);
+   	newId = wxGetTextFromUser(msg, "Rename sector", newId, this);
 	long val;
 	if (!newId.IsEmpty() && newId.ToLong(&val, 16)) {
 		FloppyImage.track[track_id][0].sector[sect_id].CHRN[2] = val;

@@ -47,11 +47,11 @@ void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
 	for(unsigned int i = 0; i < t; i++) {
 		WXEmulator::fdcLog l = emulator->fdcAccess.front();
 		if (l.v > 0)
-			text.Printf("Read side %d, track %d, sector %d", l.s, l.t, l.u);
+			text.Printf("Read side %d, track %d, sector %X", l.s, l.t, l.u);
 		else if (l.v < 0)
-			text.Printf("Track read side %d, track %d, starting at sector %d", l.s, l.t, l.u);
+			text.Printf("Track read side %d, track %d, starting at sector %X", l.s, l.t, l.u);
 		else
-			text.Printf("Read error on side %d, track %d, sector %d", l.s, l.t, l.u);
+			text.Printf("Read error on side %d, track %d, sector %X", l.s, l.t, l.u);
 		FDCAccessLog->Append(text);
 		emulator->fdcAccess.pop();
 	}
