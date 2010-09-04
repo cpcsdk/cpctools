@@ -217,7 +217,34 @@ void DiscEditorImpl::pasteSector( wxCommandEvent& event )
 void DiscEditorImpl::deleteSector( wxCommandEvent& event )
 {
 	// Get listbox selection
+	int sect_id = lb_sectors->GetSelection();
+	if (sect_id == wxNOT_FOUND) return;
+	int track_id = spinTrack->GetValue();
+
 	// Remove it from the box and the track itself
+	
+	// We are going to save some info about the sector before we erase it...
+	unsigned int sectSize = TRK.sector[sect_id].size;
+
+	// Move the data in the track Memory
+	if (sect_id < TRK.sectors - 1) {
+		unsigned char* from = TRK.sector[sect_id+1].data;// beginning of next sector
+		unsigned char* to = TRK.sector[sect_id].data;// beginning of this sector
+		size_t size = TRK.sector[TRK.sectors-1].data - TRK.sector[sect_id].data;// from end of this sector to end of track
+		memmove(to, from, size);
+
+		for (int k = sect_id + 1; k < TRK.sectors; k++) {
+			TRK.sector[k].data -= sectSize;
+		}
+	}
+	// Realloc the track Memory
+	TRK.data = (unsigned char*)realloc(TRK.data, TRK.size - sectSize);
+	// decrease the track data size and sector count
+	TRK.size -= sectSize;
+	TRK.sectors --;
+
+	lb_sectors->Delete(sect_id);
+
 	FloppyImage.altered = true;
 }
 
