@@ -10,11 +10,10 @@
 t_sector* DiscEditorImpl::sectorClipboard = NULL;
 
 DiscEditorImpl::DiscEditorImpl( wxWindow* parent )
-:
-DiscEditor( parent )
+	: DiscEditor(parent)
+	, FloppyImage(Emulator::getInstance()->GetDriveA())
 {
 	// Get the disk info.
-	FloppyImage = Emulator::getInstance()->GetFDC().GetDriveA();
 	// Fill in the Overview
 	wxString s;
 	s << FloppyImage.tracks;
