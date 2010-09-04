@@ -101,7 +101,7 @@ class EmulatorWindow : public wxFrame
 		virtual void OnDebugMemory( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnShowAssembler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAbout( wxCommandEvent& event ) { event.Skip(); }
-		virtual void paintDisplay( wxPaintEvent& event ) { event.Skip(); }
+		virtual void paintFDCLed( wxPaintEvent& event ) { event.Skip(); }
 		
 	
 	public:

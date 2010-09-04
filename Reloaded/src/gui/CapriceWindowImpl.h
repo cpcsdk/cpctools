@@ -98,9 +98,8 @@ class CapriceWindowImpl : public EmulatorWindow
     virtual void windowKeyDown( wxKeyEvent& event);
     virtual void windowKeyUp( wxKeyEvent& event );
 
-	//void paintDisplay( wxPaintEvent& event );
-
     private:
+	void paintFDCLed( wxPaintEvent& event );
     /**
      * Pointer to the emu
      */
@@ -110,6 +109,8 @@ class CapriceWindowImpl : public EmulatorWindow
      */
     wxImage*    image;
 	wxString snapshotdir;
+
+	bool fdcActive;
 
 #if ENABLE_FILEDROP
 	CapriceDNDHandler* dndhandler;

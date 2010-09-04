@@ -60,6 +60,8 @@ CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu)
 	//wxApp::s_macPreferencesMenuItemId = PreferencesID;
 
 #endif
+
+	fdcActive = false;
 }
 
 CapriceWindowImpl::~CapriceWindowImpl()
@@ -437,15 +439,26 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
 }
 
 void CapriceWindowImpl::fdcLed(bool on) {
-#if 0
+	fdcActive = on;
+
 	wxClientDC dc(DriveActivity);
 	if (on)
 		dc.SetBrush(*wxRED_BRUSH);
 	else
 		dc.SetBrush(wxBrush(wxColor(127,0,0), wxSOLID));
 	dc.FloodFill(3, 3, *wxWHITE, wxFLOOD_BORDER);
-#endif
 }
+
+
+void CapriceWindowImpl::paintFDCLed( wxPaintEvent& event ) {
+	wxPaintDC dc(DriveActivity);
+	if (fdcActive)
+		dc.SetBrush(*wxRED_BRUSH);
+	else
+		dc.SetBrush(wxBrush(wxColor(127,0,0), wxSOLID));
+	dc.FloodFill(3, 3, *wxWHITE, wxFLOOD_BORDER);
+}
+
 
 #if ENABLE_FILEDROP
 // ============== DND ===================
