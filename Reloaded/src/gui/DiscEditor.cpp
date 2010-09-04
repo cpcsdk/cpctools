@@ -160,6 +160,11 @@ void DiscEditorImpl::sectorLeftClick( wxMouseEvent& event )
 void DiscEditorImpl::cutSector( wxCommandEvent& event )
 {
 	copySector(event);
+
+	static unsigned char dataClip[16*1024];
+	memcpy(dataClip, sectorClipboard->data, sectorClipboard->size);
+	sectorClipboard->data = dataClip;
+
 	deleteSector(event);
 }
 
