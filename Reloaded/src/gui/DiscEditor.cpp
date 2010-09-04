@@ -136,7 +136,10 @@ void DiscEditorImpl::setSector( wxCommandEvent& event )
 			if ((i+1)%16 == 0) txt.Append(_("\n"));
 		}
 	} else {
-		txt << _("This sector is empty or invalid");
+		txt.Printf(_("This sector is empty or invalid\n"
+			"Declared size : %d\nActual size : %d"),
+			selectedSector.declared_size, selectedSector.size
+				);
 	}
 	tc_sectordata->SetValue(txt);
 }
@@ -166,26 +169,48 @@ void DiscEditorImpl::copySector( wxCommandEvent& event )
 	// Get listbox selection
 	// Grab selected sector and copy it to clipboard
 	int sect_id = lb_sectors->GetSelection();
+	if (sect_id == wxNOT_FOUND) return;
 	int track_id = spinTrack->GetValue();
 
-	delete sectorClipboard;
 	// TODO : handle side 1
-	sectorClipboard = new t_sector(
-		FloppyImage.track[track_id][0].sector[sect_id]);
+	if (sectorClipboard == NULL)
+		sectorClipboard = (t_sector*)malloc(sizeof(t_sector));
+
+	memcpy(sectorClipboard, &FloppyImage.track[track_id][0].sector[sect_id], sizeof(t_sector));
 }
 
 
 void DiscEditorImpl::pasteSector( wxCommandEvent& event )
 {
+	if (sectorClipboard == NULL) return;
 	// Copy clipboard to selected track
-	int sect_id = lb_sectors->GetSelection();
+	// int sect_id = lb_sectors->GetSelection();
+		// TODO : paste just below sect_id instead of at sector end
 	int track_id = spinTrack->GetValue();
 
+#define TRK FloppyImage.track[track_id][0]
+
 	// TODO : handle side 1
-	FloppyImage.track[track_id][0].sectors++;
-	// dwTrackSize
-	// data (realloc)
-	// sector[] itself
+	TRK.size += sectorClipboard->size;
+
+	TRK.data = (unsigned char*)realloc(TRK.data, TRK.size);
+	if (TRK.data == NULL) {
+		wxLogError("Memory allocation failed");
+		TRK.size -= sectorClipboard->size;
+		return;
+	}
+
+	memcpy(
+		TRK.data + TRK.size -sectorClipboard->size, sectorClipboard->data, sectorClipboard->size);
+	sectorClipboard->data = 
+		TRK.data + TRK.size -sectorClipboard->size;
+	TRK.sector[TRK.sectors++] = *sectorClipboard;
+
+	FloppyImage.altered = true;
+
+	wxString sNum;
+	sNum.Printf(wxT("%x"),(int)sectorClipboard->CHRN[2]);
+	lb_sectors->Append(sNum);
 }
 
 
@@ -193,6 +218,7 @@ void DiscEditorImpl::deleteSector( wxCommandEvent& event )
 {
 	// Get listbox selection
 	// Remove it from the box and the track itself
+	FloppyImage.altered = true;
 }
 
 
@@ -213,6 +239,8 @@ void DiscEditorImpl::renameSector( wxCommandEvent& event )
 		FloppyImage.track[track_id][0].sector[sect_id].CHRN[2] = val;
 
 		lb_sectors->SetString(sect_id, newId);
+
+		FloppyImage.altered = true;
 	}
 }
 
