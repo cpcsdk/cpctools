@@ -3280,7 +3280,7 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	m_menu9->Append( m_menuItem63 );
 	
 	wxMenuItem* m_menuItem64;
-	m_menuItem64 = new wxMenuItem( m_menu9, wxID_ANY, wxString( wxT("MyMenuItem") ) + wxT('\t') + wxT("Delete"), wxT("DEL"), wxITEM_NORMAL );
+	m_menuItem64 = new wxMenuItem( m_menu9, wxID_ANY, wxString( wxT("Delete") ) + wxT('\t') + wxT("DEL"), wxEmptyString, wxITEM_NORMAL );
 	m_menu9->Append( m_menuItem64 );
 	
 	wxMenuItem* m_menuItem65;

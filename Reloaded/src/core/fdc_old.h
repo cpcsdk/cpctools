@@ -152,8 +152,8 @@ public:
 	inline t_drive&		GetDriveA()							{ return driveA;		}
 	inline t_drive&		GetDriveB()							{ return driveB;		}
 
-	void insertA(const string filename, const char *type = NULL);
-	void insertB(const string filename, const char *type = NULL);
+	int insertA(const string filename, const char *type = NULL);
+	int insertB(const string filename, const char *type = NULL);
 
 	void fdc_write_data(unsigned char val);
 	unsigned char fdc_read_status(void);

@@ -28,6 +28,7 @@
 #include "DiscEditor.h"
 #include "MemoryImpl.h"
 #include "tape.h"
+#include "error.h"
 
 #ifdef WITH_IDE
 #include "CapriceIDE.h"
@@ -157,10 +158,25 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
     if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
     {
         wxString CurrentDocPath = OpenDialog->GetPath();
-        SetTitle(wxString( wxT("Edit - ")) <<
-            OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-        emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+        int error = emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+		switch(error) {
+			case 0:
+        		SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
+				break;
+			case ERR_DSK_INVALID:
+				wxLogError("Invalid DSK file!");
+		   		break;	   
+			case ERR_DSK_SIDES:
+				wxLogError("Wrong side count!");
+				break;
+			case ERR_DSK_SECTORS:
+				wxLogError("Wrong sector count!");
+				break;
+			case ERR_DSK_WRITE:
+				wxLogError("Write error!");
+				break;
+		}
     }
 
 }
@@ -184,10 +200,25 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
     if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
     {
         wxString CurrentDocPath = OpenDialog->GetPath();
-        SetTitle(wxString( wxT("Caprice - ")) << 
-            OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-        emulator->GetFDC().insertB(std::string(CurrentDocPath.mb_str()));
+        int error = emulator->GetFDC().insertB(std::string(CurrentDocPath.mb_str()));
+		switch(error) {
+			case 0:
+        		SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
+				break;
+			case ERR_DSK_INVALID:
+				wxLogError("Invalid DSK file!");
+		   		break;	   
+			case ERR_DSK_SIDES:
+				wxLogError("Wrong side count!");
+				break;
+			case ERR_DSK_SECTORS:
+				wxLogError("Wrong sector count!");
+				break;
+			case ERR_DSK_WRITE:
+				wxLogError("Write error!");
+				break;
+		}
     }
 
 }
