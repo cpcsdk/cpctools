@@ -200,6 +200,10 @@ void WXEmulator::fdcNotifyRead(int side, int track, int sector, int mode) {
 
 
 void WXEmulator::getConfigPath(char* buf) {
+#ifdef __WXMSW__
+	strcpy(buf,"./");
+#else
 	wxString s = wxStandardPaths::Get().GetUserDataDir();
 	strcpy(buf,s.mb_str());
+#endif
 }

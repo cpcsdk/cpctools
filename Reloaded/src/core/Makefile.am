@@ -1,7 +1,6 @@
 noinst_LIBRARIES = libcapricecore.a libdisass.a
 
 libcapricecore_a_LIBADD = 
-libcapricecore_a_CPPFLAGS= -DDATA_PATH=\"$(pkgdatadir)//\" 
 libcapricecore_a_SOURCES = \
 audio.cpp\
 audio.h\
@@ -74,5 +73,5 @@ if LIB765
 endif
 
 if RELEASE
-  libcapricecore_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
+  libcapricecore_a_CPPFLAGS = -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s  
 endif

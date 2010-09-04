@@ -2,8 +2,7 @@ noinst_LIBRARIES = libcapricewx.a libfoo.a
 
 libcapricewx_a_CPPFLAGS = $(WX_CPPFLAGS) \
                           -I@top_srcdir@/src/core \
-                          -I@top_srcdir@/src/asm \
-                          -DDATA_PATH=\"$(pkgdatadir)//\"
+                          -I@top_srcdir@/src/asm 
 libcapricewx_a_SOURCES = \
 CapriceAboutImpl.cpp \
 CapriceAboutImpl.h\

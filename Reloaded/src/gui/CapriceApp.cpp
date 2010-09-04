@@ -115,7 +115,7 @@ bool CapriceApp::OnInit()
 
 	//Splash screen managment
 	wxBitmap bitmap;
-	if (bitmap.LoadFile( wxT( DATA_PATH "logo.png"), wxBITMAP_TYPE_PNG))
+	if (bitmap.LoadFile( wxT("./logo.png"), wxBITMAP_TYPE_PNG))
     {
 		splash = new wxSplashScreen(bitmap,
 		                wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
@@ -132,7 +132,7 @@ bool CapriceApp::OnInit()
 	//Create emulator and IHM
 	emulator = WXEmulator::getInstance();
 	emulator->setVideoPlugin(&WXDoubleLinePlugin::Create);
-	Emulator::getInstance();
+	//Emulator::getInstance();
 	
 	#if WITH_ASM
 	capAsm = new CapASM(emulator);
@@ -162,6 +162,9 @@ int CapriceApp::OnExit()
 	wsic = NULL;
 #endif
 	delete DiscEditorImpl::sectorClipboard;
+
+	
+
 	delete emulator;
 	emulator = NULL;
 	//delete frame;

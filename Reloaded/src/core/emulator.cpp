@@ -70,6 +70,7 @@ FILE *pfoDebug;
 #endif
 
 Emulator* Emulator::instance = NULL;
+bool Emulator::sInitOnce = false;
 
 
 void InitDebug()

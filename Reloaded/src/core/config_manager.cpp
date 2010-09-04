@@ -255,35 +255,35 @@ void t_CPC::loadConfiguration ()
 	    }
 
 	    max_tracksize = getConfigValueInt(chFileName, "file", "max_track_size", 6144-154);
-	    getConfigValueString(chFileName, "file", "snap_path", snap_path, DATA_PATH "snap");
+	    getConfigValueString(chFileName, "file", "snap_path", snap_path, "./snap");
 	    if (snap_path[0] == '\0')
 	    {
-			strcpy(snap_path, DATA_PATH "snap");
+			strcpy(snap_path, "./snap");
 	    }
 	    getConfigValueString(chFileName, "file", "snap_file", snap_file, "");
 	    snap_zip = getConfigValueInt(chFileName, "file", "snap_zip", 0) & 1;
 
-	    getConfigValueString(chFileName, "file", "drvA_path", drvA_path, DATA_PATH "disc");
+	    getConfigValueString(chFileName, "file", "drvA_path", drvA_path, "./disc");
 	    if (drvA_path[0] == '\0')
 	    {
-			strcpy(drvA_path, DATA_PATH "disc");
+			strcpy(drvA_path, "./disc");
 	    }
 	    getConfigValueString(chFileName, "file", "drvA_file", drvA_file, "");
 	    drvA_zip = getConfigValueInt(chFileName, "file", "drvA_zip", 0) & 1;
 	    drvA_format = getConfigValueInt(chFileName, "file", "drvA_format", DEFAULT_DISK_FORMAT);
-	    getConfigValueString(chFileName, "file", "drvB_path", drvB_path, DATA_PATH "disc");
+	    getConfigValueString(chFileName, "file", "drvB_path", drvB_path, "./disc");
 	    if (drvB_path[0] == '\0')
 	    {
-			strcpy(drvB_path, DATA_PATH "disc");
+			strcpy(drvB_path, "./disc");
 	    }
 	    getConfigValueString(chFileName, "file", "drvB_file", drvB_file, "");
 	    drvB_zip = getConfigValueInt(chFileName, "file", "drvB_zip", 0) & 1;
 	    drvB_format = getConfigValueInt(chFileName, "file", "drvB_format", DEFAULT_DISK_FORMAT);
 	    
-		getConfigValueString(chFileName, "file", "tape_path", tape_path, DATA_PATH "tape");
+		getConfigValueString(chFileName, "file", "tape_path", tape_path, "./tape");
 	    if (tape_path[0] == '\0')
 	    {
-			strcpy(tape_path, DATA_PATH "tape");
+			strcpy(tape_path, "./tape");
 	    }
 	    getConfigValueString(chFileName, "file", "tape_file", tape_file, "");
 	    tape_zip = getConfigValueInt(chFileName, "file", "tape_zip", 0) & 1;
@@ -422,19 +422,19 @@ void t_CPC::loadConfiguration ()
 		}
 	    }
 #endif
-	    getConfigValueString(chFileName, "file", "printer_file", printer_file, DATA_PATH "printer.dat");
+	    getConfigValueString(chFileName, "file", "printer_file", printer_file, "./printer.dat");
 	    if (printer_file[0] == '\0')
 	    {
-			strcpy(printer_file, DATA_PATH "printer.dat");
+			strcpy(printer_file, "./printer.dat");
 	    }
 
-	    getConfigValueString(chFileName, "file", "sdump_file", sdump_file, DATA_PATH "screen.png");
+	    getConfigValueString(chFileName, "file", "sdump_file", sdump_file, "./screen.png");
 	    if (sdump_file[0] == '\0')
 	    {
-			strcpy(sdump_file, DATA_PATH "screen.png");
+			strcpy(sdump_file, "./screen.png");
 	    }
 
-	    getConfigValueString(chFileName, "rom", "rom_path", rom_path, DATA_PATH "rom");
+	    getConfigValueString(chFileName, "rom", "rom_path", rom_path, "./rom");
 	    // loop for ROMs 0-15
 	    for (int iRomNum = 0; iRomNum < 16; iRomNum++)
 	    {
@@ -447,7 +447,7 @@ void t_CPC::loadConfiguration ()
 		// if the path is empty, set it to the default
 	    if (rom_path[0] == '\0')
 	    {
-			strcpy(rom_path, DATA_PATH "rom");
+			strcpy(rom_path, "./rom");
 	    }
 
 	    getConfigValueString(chFileName, "rom", "rom_mf2", rom_mf2, "");

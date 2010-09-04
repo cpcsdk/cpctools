@@ -58,7 +58,10 @@ class WXEmulator : public Emulator {
 
 	static inline WXEmulator* getInstance()
 	{
-		if(!instance) instance = new WXEmulator();
+		if(sInitOnce == false) {
+			sInitOnce = true;
+			instance = new WXEmulator();
+		}
 		DebugLogMessage("Get WXEmulator at %p",instance);
 		return (WXEmulator*)instance;
 	}

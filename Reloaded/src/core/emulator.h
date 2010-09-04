@@ -292,6 +292,7 @@ protected:
 
 	bool FPSDisplay;
 	bool exitRequested;
+	static bool sInitOnce;
 
 	Timer timer;
 
