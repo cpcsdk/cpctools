@@ -693,12 +693,7 @@ void Emulator::Loop()
 // TODO: Autoconf: Make conditional on libpng presence, remove SDL dependency
 void Emulator::SaveScreenshot(string filename)
 {
-	/*
-	DebugLogMessage("Save screenshot in %s",filename.c_str());
-	IMG_SavePNG( 
-			filename.c_str(),
-			GetRenderer().GetVideoPlugin()->_publicVideo,
-			9);*/
+	GetRenderer().GetVideoPlugin()->Screenshot(filename);
 }
 
 Emulator* Emulator::getInstance()

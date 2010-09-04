@@ -164,6 +164,8 @@ public:
 	//! Set post render call back
 	inline void SetPostRenderCallBack(int (*cb)()) { _postRenderCallBack = cb;}
 
+	virtual void Screenshot(string filename) = 0;
+
 protected:
 	//! Default constructor
 	VideoPlugin(const string name, const dword format, const byte halfPixels);

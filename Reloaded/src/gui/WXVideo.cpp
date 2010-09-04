@@ -176,6 +176,12 @@ void WXDoubleLinePlugin::Flip()
     isUpdateSync.unlock(); // Indicate update of output
 }
 
+void WXDoubleLinePlugin::Screenshot(string filename)
+{
+	wxBitmap b(*img);
+	b.SaveFile(filename, wxBITMAP_TYPE_PNG);
+}
+
 void WXDoubleLinePlugin::Close()
 {
     publicSurfaceSync.lock();

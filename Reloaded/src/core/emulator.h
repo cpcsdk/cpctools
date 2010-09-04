@@ -206,7 +206,7 @@ public:
 	 */
 	inline	t_Input&		GetInput()					{ return _input;		}
 
-	void SaveScreenshot(string );
+	void SaveScreenshot(string filename);
 
 	/**
 	 * Get the processor

@@ -43,6 +43,8 @@ public:
 
     // Detect if output have been updated since last IsUpdate call
     virtual bool IsUpdate();
+
+	void Screenshot(string filename);
 	
 	static inline VideoPlugin* Create()
 	{
