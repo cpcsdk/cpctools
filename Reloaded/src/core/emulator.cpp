@@ -76,7 +76,7 @@ bool Emulator::sInitOnce = false;
 void InitDebug()
 {
 #ifdef USE_DEBUGGER
-	pfoDebug = fopen("./debugger.txt", "wt");
+	pfoDebug = fopen("./debugger.txt", "w");
 #endif
 }
 

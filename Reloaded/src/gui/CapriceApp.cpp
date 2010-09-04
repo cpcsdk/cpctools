@@ -138,21 +138,11 @@ bool CapriceApp::OnInit()
 	capAsm = new CapASM(emulator);
 	#endif
 
-	printf("Launch window\n");
-	frame = new CapriceWindowImpl(emulator);
-	frame->Show(true);
-	frame->Raise();
-
-  #if CLI
-    frameClone = frame ;
-  #endif
 	InfoLogMessage("Initialization done\n");
 	return true ; 
 }
 
-/**
- * @TODO write the code
- */
+
 int CapriceApp::OnExit()
 {
 #if defined(IPC)
@@ -163,12 +153,11 @@ int CapriceApp::OnExit()
 #endif
 	delete DiscEditorImpl::sectorClipboard;
 
-	
-
 	delete emulator;
 	emulator = NULL;
-	//delete frame;
-  	cout << "Quit" << endl ;
+
+	delete frame;
+	frame = NULL;
 #if CLI
   	if (cli)
   	{
@@ -182,6 +171,16 @@ int CapriceApp::OnExit()
 
 int CapriceApp::OnRun()
 {
+	// Creating the frame must be done here and not in OnInit, or else wxWidgets will not close the app 
+	// with the window. See http://docs.wxwidgets.org/2.8/wx_wxappoverview.html#wxappshutdownoverview
+	frame = new CapriceWindowImpl(emulator);
+	frame->Show(true);
+	frame->Raise();
+
+  #if CLI
+    frameClone = frame ;
+  #endif
+
 #ifdef __WXMAC__ 
 	ProcessSerialNumber PSN;
 	GetCurrentProcess(&PSN);
