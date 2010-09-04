@@ -1026,11 +1026,13 @@ void t_FDC::fdc_scan(t_FDC &FDC)
 
 int t_FDC::insertA(const string filename, const char *type )
 {
+	files[0] = filename;
     return dsk_load(filename.c_str(), &driveA, 'A');
 }
 
 int t_FDC::insertB(const string filename, const char *type )
 {
+	files[1] = filename;
     return dsk_load(filename.c_str(), &driveB, 'B');
 }
 

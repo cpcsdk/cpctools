@@ -213,7 +213,7 @@ exit:
 
 
 
-int dsk_save (const char *pchFileName, t_drive *drive, char /*chID*/)
+int dsk_save (const char *pchFileName, t_drive *drive)
 {
 	t_DSK_header dh;
 	t_track_header th;

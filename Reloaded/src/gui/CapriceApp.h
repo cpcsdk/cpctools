@@ -108,6 +108,7 @@ private:
 #endif
 };
  
+DECLARE_APP(CapriceApp);
 
 static const wxCmdLineEntryDesc g_cmdLineDesc [] =
 {
@@ -131,6 +132,5 @@ static const wxCmdLineEntryDesc g_cmdLineDesc [] =
 
     { wxCMD_LINE_NONE }
 };
-DECLARE_APP(CapriceApp)
  
 #endif // INCLUDED_CAPRICEAPP_H 

@@ -19,16 +19,18 @@
  */  
 
 
-
+#include <wx/app.h>
 #include "CapriceWindowImpl.h"
 #include "snapshot.h"
 #include "video.h"
 #include "WXVideo.h"
 #include "CapriceInputSettingsImpl.h"
+
 #include "DiscEditor.h"
 #include "MemoryImpl.h"
 #include "tape.h"
 #include "error.h"
+#include "dsk.h"
 
 #ifdef WITH_IDE
 #include "CapriceIDE.h"
@@ -71,7 +73,24 @@ CapriceWindowImpl::~CapriceWindowImpl()
 // =============================== Window Event =============================================
 void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 {
-	this->Close();
+	// Check if the DSKs are modified.
+	if (emulator->GetDriveA().altered &&
+		wxMessageBox("DSK in drive A was modified ! Do you want to save before quitting ?",
+			"Save DSK?", wxICON_QUESTION | wxYES_NO, this) == wxYES)
+	{
+		dsk_save(emulator->GetFDC().files[0].c_str(), &emulator->GetDriveA());
+		emulator->GetDriveA().altered = false;
+	}
+
+	if (emulator->GetDriveB().altered &&
+		wxMessageBox("DSK in drive A was modified ! Do you want to save before quitting ?",
+			"Save DSK?", wxICON_QUESTION | wxYES_NO, this) == wxYES)
+	{
+		emulator->GetDriveB().altered = false;
+		dsk_save(emulator->GetFDC().files[1].c_str(), &emulator->GetDriveB());
+	}
+
+	Close(); // This is not the good way, it will recursively call this event. But apparently, it works ?
 }
 
 /**
@@ -142,7 +161,7 @@ void CapriceWindowImpl::Pause() {
 
 void CapriceWindowImpl::onExit2( wxCommandEvent& event )
 {
-  this->Close();
+	this->Close();
 }
 
 

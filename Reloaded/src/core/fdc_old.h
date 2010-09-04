@@ -112,6 +112,7 @@ private:
 	t_drive driveA;
 	t_drive driveB;
 
+
 	t_drive *active_drive; // reference to the currently selected drive
 	t_track *active_track; // reference to the currently selected track, of the active_drive
 	dword read_status_delay;
@@ -159,6 +160,7 @@ public:
 	unsigned char fdc_read_status(void);
 	unsigned char fdc_read_data(void);
 
+	string files[2];
 private:
 	void check_unit(void);
 	int init_status_regs(void);
