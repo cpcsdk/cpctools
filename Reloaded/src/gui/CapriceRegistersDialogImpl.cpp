@@ -20,10 +20,14 @@
 
 
 #include "CapriceRegistersDialogImpl.h"
-#include <wx/textctrl.h>
+
 #include <iostream>
 #include <sstream>
 #include <string>
+
+#include <wx/textctrl.h>
+
+#include "WXEmulator.h"
 
 #define  UpCRTCRegTextControl(X, Y) if(!X->IsModified()){X->Clear();*X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
 #define  ModifCRTCReg(X, Y) {wxString str; long val; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetCRTC().SetRegisterValue(Y, (unsigned char)(val));} X->Clear(); *X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
@@ -35,6 +39,22 @@
 void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
 {
     m_tCrA->Clear();
+
+	// Fill in the FDC access log list
+	wxString text;
+	unsigned int t = emulator->fdcAccess.size();
+		// Saved as a var since we pop the elements so the size changes
+	for(unsigned int i = 0; i < t; i++) {
+		WXEmulator::fdcLog l = emulator->fdcAccess.front();
+		if (l.v > 0)
+			text.Printf("Read side %d, track %d, sector %d", l.s, l.t, l.u);
+		else if (l.v < 0)
+			text.Printf("Track read side %d, track %d, starting at sector %d", l.s, l.t, l.u);
+		else
+			text.Printf("Read error on side %d, track %d, sector %d", l.s, l.t, l.u);
+		FDCAccessLog->Append(text);
+		emulator->fdcAccess.pop();
+	}
 }
 
 void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
@@ -598,11 +618,6 @@ void CapriceRegistersDialogImpl::OnKillFocusR9( wxFocusEvent& event )
 void CapriceRegistersDialogImpl::OnSetFocusR9( wxFocusEvent& event )
 {
     m_tCcR9->MarkDirty();
-}
-
-void CapriceRegistersDialogImpl::SetEmulator(Emulator *emulator)
-{
-	this->emulator = emulator ;
 }
 
 void CapriceRegistersDialogImpl::OnCloseR( wxCloseEvent& event )

@@ -132,6 +132,10 @@ public:
 
 	// fdc led status
 	virtual void fdcLed(bool on) {};
+	virtual void fdcNotifyRead(int side, int track, int sector, int mode) {};
+		// mode > 0 : read sector
+		// mode < 0 : read track
+		// mode = 0 : sector not found
 
 
 	//## These are "internal" methods.

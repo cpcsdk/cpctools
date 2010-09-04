@@ -216,6 +216,8 @@ void MemoryImpl::RefreshMem(int startAddress)
 
 	wxString str;
 
+	hexView->Clear();
+
 	for (int i = 0; i < 32; i++)
 	{
 		str.Printf(_("%04X"),startAddress + (i * 0x10));

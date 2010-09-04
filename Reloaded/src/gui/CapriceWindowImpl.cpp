@@ -36,7 +36,7 @@
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/dcbuffer.h>
-#include "CapriceApp.h"
+#include <wx/msgdlg.h>
 
 #include "Desass.h"
 #include <cstdio>
@@ -294,7 +294,6 @@ void CapriceWindowImpl::OnRegister( wxCommandEvent& event)
 {
     CapriceRegistersDialogImpl *RegistersDialog = new CapriceRegistersDialogImpl();
     RegistersDialog->Show(true);
-    RegistersDialog->SetEmulator(emulator);
 }
 
 void CapriceWindowImpl::OnDebugMemory( wxCommandEvent& event )
@@ -309,7 +308,7 @@ void CapriceWindowImpl::OnShowAssembler( wxCommandEvent& event)
 	CapriceIDEImpl* ide = new CapriceIDEImpl(this, emulator);
 	ide->Show(true);
 	#else
-	wxMessageBox(wxT("The Integrated Development Environment wasn't enable in this build"), wxT("IDE not enable"), wxOK, this);
+	wxMessageDialog(this, wxT("The Integrated Development Environment wasn't enable in this build"), wxT("IDE not compiled!"), wxOK);
 	#endif
 }
 

@@ -3,18 +3,21 @@
 
 
 #include "CapriceUI.h"
-#include "emulator.h"
+#include "WXEmulator.h"
 #include "z80.h"
 #include "crtc.h"
+
 
 class CapriceRegistersDialogImpl : public RegistersStates 
 {
 	public:
-	CapriceRegistersDialogImpl() : RegistersStates(NULL)
+	CapriceRegistersDialogImpl()
+		: RegistersStates(NULL)
+		, emulator(WXEmulator::getInstance())
 	{
 	}
 
-	void SetEmulator(Emulator *emulator);	
+	// void SetEmulator(WXEmulator *emulator);	
 
 	protected:
 	virtual void OnCloseR( wxCloseEvent& event );
@@ -86,6 +89,6 @@ class CapriceRegistersDialogImpl : public RegistersStates
 	virtual void OnSetFocusR9( wxFocusEvent& event );
 
 	private:
-	Emulator* emulator;
+	WXEmulator* emulator;
 };
 #endif

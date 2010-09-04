@@ -21,6 +21,8 @@
 #ifndef __EMULATOR_WX__
 #define __EMULATOR_WX__
 
+#include <queue>
+
 #include <wx/stdpaths.h>
 #include <wx/dir.h>
 #include <wx/filefn.h>
@@ -41,40 +43,45 @@ class CapriceWindowImpl;
  * and swap between them on demand.
  */
 class WXEmulator : public Emulator {
-
   private:
-	  CapriceWindowImpl* win;
-      SysSync logSync;
+	CapriceWindowImpl* win;
+    SysSync logSync;
+
 
   protected:
-	  WXEmulator();
+	WXEmulator();
 
   public:
-	  static inline WXEmulator* getInstance()
-	  {
-		  if(!instance) instance = new WXEmulator();
-		  DebugLogMessage("Get WXEmulator at %p",instance);
-		  return (WXEmulator*)instance;
-	  }
+	// TODO : accessors for this instead
+	struct fdcLog {int s; int t; int u; int v;};
+	std::queue<fdcLog> fdcAccess;
 
-	  void setWindow(CapriceWindowImpl* w) { win = w; }
+	static inline WXEmulator* getInstance()
+	{
+		if(!instance) instance = new WXEmulator();
+		DebugLogMessage("Get WXEmulator at %p",instance);
+		return (WXEmulator*)instance;
+	}
 
-	  /**
-	   * Specific code with this GUI
-	   */
-	  virtual void PressKey(uint32_t key, uint32_t mod);
-	  virtual void ReleaseKey(uint32_t key, uint32_t mod);
+	void setWindow(CapriceWindowImpl* w) { win = w; }
 
-	  void logMessage(const char* message);
+	/**
+	* Specific code with this GUI
+	*/
+	virtual void PressKey(uint32_t key, uint32_t mod);
+	virtual void ReleaseKey(uint32_t key, uint32_t mod);
 
-	  // FDC Led status
-	  void fdcLed(bool on);
-	  // Emulator->Emulate() (?)
-	  // "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
-	  void Pause();
+	void logMessage(const char* message);
 
-	  //Return folder where config files should be stored
-	  void getConfigPath(char* buf);
+	// FDC Led status
+	void fdcLed(bool on);
+	void fdcNotifyRead(int side, int track, int sector, int mode);
+	// Emulator->Emulate() (?)
+	// "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
+	void Pause();
+
+	//Return folder where config files should be stored
+	void getConfigPath(char* buf);
 } ;
 
 #endif

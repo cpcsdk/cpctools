@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  2 2010)
+// C++ code generated with wxFormBuilder (version Sep  4 2010)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -34,6 +34,7 @@
 #include <wx/dialog.h>
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
+#include <wx/listbox.h>
 #include <wx/clrpicker.h>
 #include <wx/filepicker.h>
 #include <wx/checklst.h>
@@ -42,7 +43,6 @@
 #include <wx/statusbr.h>
 #include <wx/listbook.h>
 #include <wx/listctrl.h>
-#include <wx/listbox.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -403,12 +403,12 @@ class RegistersStates : public wxDialog
 		wxCheckBox* m_cB_PFlagsShadow;
 		wxCheckBox* m_cB_NFlagsShadow;
 		wxCheckBox* m_cB_CFlagsShadow;
-		wxCheckBox* m_checkBox15;
-		wxCheckBox* m_checkBox16;
 		wxCheckBox* m_cb_interruptenabled;
 		wxChoice* m_c_interruptMode;
 		wxCheckBox* m_cb_interruptpending;
 		wxCheckBox* m_cb_nmipending;
+		wxCheckBox* m_checkBox15;
+		wxCheckBox* m_checkBox16;
 		wxPanel* crtc_tab;
 		wxStaticText* m_staticText46;
 		wxTextCtrl* m_tCcHCC;
@@ -517,6 +517,12 @@ class RegistersStates : public wxDialog
 		wxTextCtrl* b_track;
 		wxStaticText* m_staticText118;
 		wxTextCtrl* b_sector;
+		wxStaticText* m_staticText125;
+		wxStaticText* m_staticText126;
+		wxStaticText* m_staticText127;
+		wxStaticText* m_staticText124;
+		wxButton* m_button83;
+		wxListBox* FDCAccessLog;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseR( wxCloseEvent& event ) { event.Skip(); }
@@ -590,6 +596,7 @@ class RegistersStates : public wxDialog
 		virtual void OnSetFocusR7( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnKillFocusR9( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnSetFocusR9( wxFocusEvent& event ) { event.Skip(); }
+		virtual void ClearAccessLog( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:
@@ -756,7 +763,7 @@ class DiscEditor : public wxFrame
 	
 	public:
 		
-		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Disc Editor"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 641,743 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		DiscEditor( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("DiskSwissKnife"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 641,743 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~DiscEditor();
 		
 		void lb_sectorsOnContextMenu( wxMouseEvent &event )

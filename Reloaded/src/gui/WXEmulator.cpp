@@ -191,6 +191,14 @@ void WXEmulator::fdcLed(bool on) {
 	win->fdcLed(on);
 }
 
+
+void WXEmulator::fdcNotifyRead(int side, int track, int sector, int mode) {
+	// We store the FDC access list for debuggingin the register window 
+	fdcLog l = {side, track, sector, mode};
+	fdcAccess.push(l);
+}
+
+
 void WXEmulator::getConfigPath(char* buf) {
 	wxString s = wxStandardPaths::Get().GetUserDataDir();
 	strcpy(buf,s.mb_str());
