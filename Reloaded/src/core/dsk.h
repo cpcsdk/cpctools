@@ -14,7 +14,7 @@
 #define DSK_BPTMAX      8192
 #define DSK_TRACKMAX    102   // max amount that fits in a DSK header
 #define DSK_SIDEMAX     2
-#define DSK_SECTORMAX   29    // max amount that fits in a track header
+#define DSK_SECTORMAX   64    // max amount that fits in a track header
 
 #define MAX_DISK_FORMAT 8
 #define DEFAULT_DISK_FORMAT 0

@@ -59,7 +59,7 @@ void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
 
 void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 {
-	if (emulator->Getconfig().paused || emulator->GetConfig().breakpoint)
+	if (emulator->GetConfig().paused || emulator->GetConfig().breakpoint)
 		return;
 
     ostringstream tmp;
