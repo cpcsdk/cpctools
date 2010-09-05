@@ -2795,8 +2795,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	wxBoxSizer* bSizer29;
 	bSizer29 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_notebook4 = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_panel16 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_auinotebook1 = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE );
+	m_panel16 = new wxPanel( m_auinotebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer41;
 	bSizer41 = new wxBoxSizer( wxVERTICAL );
 	
@@ -2946,8 +2946,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel16->SetSizer( bSizer41 );
 	m_panel16->Layout();
 	bSizer41->Fit( m_panel16 );
-	m_notebook4->AddPage( m_panel16, wxT("Overview"), true );
-	m_panel12 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_auinotebook1->AddPage( m_panel16, wxT("Overview"), true, wxNullBitmap );
+	m_panel12 = new wxPanel( m_auinotebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxVERTICAL );
 	
@@ -2980,8 +2980,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel12->SetSizer( bSizer51 );
 	m_panel12->Layout();
 	bSizer51->Fit( m_panel12 );
-	m_notebook4->AddPage( m_panel12, wxT("Hex view"), false );
-	m_panel13 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	m_auinotebook1->AddPage( m_panel12, wxT("Explore"), false, wxNullBitmap );
+	m_panel13 = new wxPanel( m_auinotebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer391;
 	bSizer391 = new wxBoxSizer( wxVERTICAL );
 	
@@ -2994,9 +2994,9 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel13->SetSizer( bSizer391 );
 	m_panel13->Layout();
 	bSizer391->Fit( m_panel13 );
-	m_notebook4->AddPage( m_panel13, wxT("Asm view"), false );
+	m_auinotebook1->AddPage( m_panel13, wxT("Disassemble"), false, wxNullBitmap );
 	
-	bSizer29->Add( m_notebook4, 1, wxEXPAND | wxALL, 5 );
+	bSizer29->Add( m_auinotebook1, 1, wxEXPAND | wxALL, 5 );
 	
 	scrollRAM = new wxScrollBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSB_VERTICAL );
 	bSizer29->Add( scrollRAM, 0, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
@@ -3043,6 +3043,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_button84->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchASCII ), NULL, this );
 	m_button85->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchNumber ), NULL, this );
 	searchResult->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( Memory::searchJump ), NULL, this );
+	m_button82->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::exportHex ), NULL, this );
 	m_checkList1->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
@@ -3070,6 +3071,7 @@ Memory::~Memory()
 	m_button84->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchASCII ), NULL, this );
 	m_button85->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchNumber ), NULL, this );
 	searchResult->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( Memory::searchJump ), NULL, this );
+	m_button82->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::exportHex ), NULL, this );
 	m_checkList1->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );

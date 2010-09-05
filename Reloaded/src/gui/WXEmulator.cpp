@@ -32,6 +32,7 @@ extern byte *pbTapeImageEnd;
 WXEmulator::WXEmulator()
 	: Emulator()
 {
+	win = NULL;
 	//Get path for configuration
 
 	wxString s = wxStandardPaths::Get().GetUserDataDir();

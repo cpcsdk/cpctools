@@ -256,7 +256,7 @@ if test "$with_wxwidget" = "yes" ; then
 	AM_PATH_WXCONFIG($reqwx, 
                    wxWin=1,
                    wxWin=0,
-                   [$wxLibs, adv,core])
+                   [$wxLibs, adv,core,aui])
 	if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
 		wxWidgets must be installed on your system.

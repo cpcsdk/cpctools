@@ -38,6 +38,7 @@
 #include <wx/clrpicker.h>
 #include <wx/filepicker.h>
 #include <wx/checklst.h>
+#include <wx/aui/auibook.h>
 #include <wx/scrolbar.h>
 #include <wx/spinbutt.h>
 #include <wx/statusbr.h>
@@ -621,7 +622,7 @@ class Memory : public wxDialog
 	private:
 	
 	protected:
-		wxNotebook* m_notebook4;
+		wxAuiNotebook* m_auinotebook1;
 		wxPanel* m_panel16;
 		wxPanel* overviewPanel;
 		wxStaticText* m_staticText107;
@@ -676,6 +677,7 @@ class Memory : public wxDialog
 		virtual void searchASCII( wxCommandEvent& event ) { event.Skip(); }
 		virtual void searchNumber( wxCommandEvent& event ) { event.Skip(); }
 		virtual void searchJump( wxCommandEvent& event ) { event.Skip(); }
+		virtual void exportHex( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
 		virtual void AddressEntered( wxCommandEvent& event ) { event.Skip(); }
