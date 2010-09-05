@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <algorithm>
+#include <sstream>
 
 #include "MyType.h"
 #include "GestDsk.h"
@@ -1128,48 +1129,51 @@ std::string DSK::ReadDskDir( void ) {
 	StDirEntry TabDir[ 64 ];
 	string catalogue;
 	for ( int i = 0; i < 64; i++ ) {
-      	memcpy( &TabDir[ i ]
-                , GetInfoDirEntry( i )
-                , sizeof( StDirEntry )
-                );
+		memcpy( &TabDir[ i ]
+				, GetInfoDirEntry( i )
+				, sizeof( StDirEntry )
+			  );
 	}
 	// Trier les fichiers
 	for ( int i = 0; i < 64; i++ ) {
-		SetInfoDirEntry( i, &TabDir[ i ] );
-        //
-        // Afficher les fichiers non effacés
-        //
-        if ( TabDir[ i ].User != USER_DELETED && ! TabDir[ i ].NumPage ) {
-           char Nom[ 13 ];
-           memcpy( Nom, TabDir[ i ].Nom, 8 );
-           memcpy( &Nom[ 9 ], TabDir[ i ].Ext, 3 );
-           Nom[ 8 ] = '.';
-           Nom[ 12 ] = 0;
-           //
-           // Masquer les bits d'attributs
-           //
-           for ( int j = 0; j < 12; j++ )
-	   {
-             Nom[ j ] &= 0x7F;
-           
-             if ( ! isprint( Nom[ j ] ) ) 
-             	Nom[ j ] = '?' ;
-	   }
+		//
+		// Afficher les fichiers non effacés
+		//
+		if ( TabDir[ i ].User != USER_DELETED && ! TabDir[ i ].NumPage ) {
+			char Nom[ 13 ];
+			memcpy( Nom, TabDir[ i ].Nom, 8 );
+			memcpy( &Nom[ 9 ], TabDir[ i ].Ext, 3 );
+			Nom[ 8 ] = '.';
+			Nom[ 12 ] = 0;
+			//
+			// Masquer les bits d'attributs
+			//
+			for ( int j = 0; j < 12; j++ )
+			{
+				Nom[ j ] &= 0x7F;
 
-           catalogue += Nom;
-           //
-           // Calcule la taille du fichier en fonction du nombre de blocs
-           //
-           int p = 0, t = 0;
-           do {
-               if ( TabDir[ p + i ].User == TabDir[ i ].User )
-                 t += TabDir[ p + i ].NbPages;
-               p++;
-           } while( TabDir[ p + i ].NumPage && ( p + i ) < 64  );
-		  string size = GetTaille( ( t + 7 ) >> 3  );
-          catalogue+= " : " + size + "\n";
+				if ( ! isprint( Nom[ j ] ) ) 
+					Nom[ j ] = '?' ;
+			}
 
+			catalogue += Nom;
+			catalogue += " "; 
+			ostringstream c;
+			c << (int)TabDir[i].User;
+			catalogue += c.str();
+			//
+			// Calcule la taille du fichier en fonction du nombre de blocs
+			//
+			int p = 0, t = 0;
+			do {
+				if ( TabDir[ p + i ].User == TabDir[ i ].User )
+					t += TabDir[ p + i ].NbPages;
+				p++;
+			} while( TabDir[ p + i ].NumPage && ( p + i ) < 64  );
+			string size = GetTaille( ( t + 7 ) >> 3  );
+			catalogue+= " : " + size + "\n";
+
+		}
 	}
-	}
-return catalogue;
+	return catalogue;
 }
