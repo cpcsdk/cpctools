@@ -2906,38 +2906,42 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_staticline5 = new wxStaticLine( m_panel16, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer41->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
 	
-	wxGridSizer* gSizer4;
-	gSizer4 = new wxGridSizer( 3, 3, 0, 0 );
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 0, 0 );
+	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
 	
 	m_staticText771 = new wxStaticText( m_panel16, wxID_ANY, wxT("Load symbols from"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText771->Wrap( -1 );
-	gSizer4->Add( m_staticText771, 1, wxALL|wxFIXED_MINSIZE, 5 );
+	gbSizer2->Add( m_staticText771, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
 	m_filePicker9 = new wxFilePickerCtrl( m_panel16, wxID_ANY, wxEmptyString, wxT("Select sjasmplus symbol file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE|wxFLP_FILE_MUST_EXIST|wxFLP_OPEN );
-	gSizer4->Add( m_filePicker9, 0, wxALL, 5 );
-	
-	
-	gSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+	gbSizer2->Add( m_filePicker9, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALL, 0 );
 	
 	m_staticText100 = new wxStaticText( m_panel16, wxID_ANY, wxT("Search (ASCII)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText100->Wrap( -1 );
-	gSizer4->Add( m_staticText100, 0, wxALL, 5 );
+	gbSizer2->Add( m_staticText100, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
 	m_textCtrl73 = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer4->Add( m_textCtrl73, 0, wxALL, 5 );
+	gbSizer2->Add( m_textCtrl73, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
 	
-	m_checkBox23 = new wxCheckBox( m_panel16, wxID_ANY, wxT("in whole RAM"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_checkBox23->SetValue(true); 
-	gSizer4->Add( m_checkBox23, 0, wxALL, 5 );
+	m_button84 = new wxButton( m_panel16, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_button84, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
 	
 	m_staticText101 = new wxStaticText( m_panel16, wxID_ANY, wxT("Search (number)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText101->Wrap( -1 );
-	gSizer4->Add( m_staticText101, 0, wxALL, 5 );
+	gbSizer2->Add( m_staticText101, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
 	m_textCtrl74 = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gSizer4->Add( m_textCtrl74, 0, wxALL, 5 );
+	gbSizer2->Add( m_textCtrl74, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
 	
-	bSizer41->Add( gSizer4, 0, wxFIXED_MINSIZE, 5 );
+	m_button85 = new wxButton( m_panel16, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_button85, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
+	
+	m_listBox3 = new wxListBox( m_panel16, wxID_ANY, wxDefaultPosition, wxSize( 250,-1 ), 0, NULL, 0 ); 
+	gbSizer2->Add( m_listBox3, wxGBPosition( 0, 3 ), wxGBSpan( 10, 1 ), wxALL|wxEXPAND, 5 );
+	
+	bSizer41->Add( gbSizer2, 1, wxEXPAND, 5 );
 	
 	m_panel16->SetSizer( bSizer41 );
 	m_panel16->Layout();

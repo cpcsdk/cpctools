@@ -112,8 +112,11 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 	// (wich may not even touch the pixeled zone)
 	wxPaintDC drawContext(overviewPanel);
 	wxPen p;
+	wxBrush b;
 	wxColour baseColor;
 	wxColour darkColor;
+
+	p.SetStyle(wxTRANSPARENT);
 
 	if(overviewType == 1) // bank ram
 		baseColor = bankColor->GetColour();
@@ -125,27 +128,36 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 
 	for (int y = 0; y < 256; y++)
 	{
-		if(overviewType == 2) // "z80 view"
 		if(y==0 || y==0x40 || y==0x80 || y==0xC0)
 		{
-			setZoneInfo(y);
-			switch(_emulator->GetMemory().getTypeForAddress(y<<8))
-			{
-				case 1: // Low ROM
-				case 2: // Hi ROM
-					baseColor = romColor->GetColour();
-					break;
-				case 4: // Exp. RAM
-					baseColor = bankColor->GetColour();
-					break;
-				default: // Case 3 : main RAM
-					baseColor = centralColor->GetColour();
-					break;
+			if(overviewType == 2) { // "z80 view"
+				setZoneInfo(y);
+				switch(_emulator->GetMemory().getTypeForAddress(y<<8))
+				{
+					case 1: // Low ROM
+					case 2: // Hi ROM
+						baseColor = romColor->GetColour();
+						break;
+					case 4: // Exp. RAM
+						baseColor = bankColor->GetColour();
+						break;
+					default: // Case 3 : main RAM
+						baseColor = centralColor->GetColour();
+						break;
+				}
+				darkColor.Set(max((unsigned char)120,baseColor.Red()) - 120,
+						max((unsigned char)120,baseColor.Green()) - 120,
+						max((unsigned char)120,baseColor.Blue()) - 120);
 			}
-			darkColor.Set(max((unsigned char)120,baseColor.Red()) - 120,
-				max((unsigned char)120,baseColor.Green()) - 120,
-				max((unsigned char)120,baseColor.Blue()) - 120);
+
+			b.SetColour(baseColor);
+			p.SetColour(darkColor);
+			drawContext.SetPen(p);
+			drawContext.SetBrush(b);
+
+			drawContext.DrawRectangle(0, y, 256, 64);
 		}
+
 
 		for (int x = 0; x < 256; x++)
 		{
@@ -158,19 +170,14 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 					val = _emulator->GetMemory().GetRAM()[65536 + (y << 8) + x];
 					break;
 				case 2:
+				default:
 					val = _emulator->GetMemory().Read((y << 8) + x);
 					break;
 			}
-			if (val == 0)
+			if (val != 0)
 			{
-				p.SetColour(baseColor);
+				drawContext.DrawPoint(x, y);
 			}
-			else
-			{
-				p.SetColour(darkColor);
-			}
-			drawContext.SetPen(p);
-			drawContext.DrawPoint(x, y);
 		}
 	}
 }

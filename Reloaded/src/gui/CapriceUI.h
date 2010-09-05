@@ -645,12 +645,13 @@ class Memory : public wxDialog
 		wxStaticLine* m_staticline5;
 		wxStaticText* m_staticText771;
 		wxFilePickerCtrl* m_filePicker9;
-		
 		wxStaticText* m_staticText100;
 		wxTextCtrl* m_textCtrl73;
-		wxCheckBox* m_checkBox23;
+		wxButton* m_button84;
 		wxStaticText* m_staticText101;
 		wxTextCtrl* m_textCtrl74;
+		wxButton* m_button85;
+		wxListBox* m_listBox3;
 		wxPanel* m_panel12;
 		wxStaticText* m_staticText125;
 		wxTextCtrl* hexView;
