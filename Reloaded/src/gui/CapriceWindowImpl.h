@@ -100,6 +100,7 @@ class CapriceWindowImpl : public EmulatorWindow
 
     private:
 	void paintFDCLed( wxPaintEvent& event );
+	void drawPanel( wxPaintEvent& event );
     /**
      * Pointer to the emu
      */

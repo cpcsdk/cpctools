@@ -338,6 +338,7 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	this->Connect( m_menuItem491->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnAbout ) );
 	m_panel4->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ), NULL, this );
 	m_panel4->Connect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ), NULL, this );
+	m_panel4->Connect( wxEVT_PAINT, wxPaintEventHandler( EmulatorWindow::drawPanel ), NULL, this );
 	DriveActivity->Connect( wxEVT_PAINT, wxPaintEventHandler( EmulatorWindow::paintFDCLed ), NULL, this );
 }
 
@@ -377,6 +378,7 @@ EmulatorWindow::~EmulatorWindow()
 	this->Disconnect( 9950, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::OnAbout ) );
 	m_panel4->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ), NULL, this );
 	m_panel4->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ), NULL, this );
+	m_panel4->Disconnect( wxEVT_PAINT, wxPaintEventHandler( EmulatorWindow::drawPanel ), NULL, this );
 	DriveActivity->Disconnect( wxEVT_PAINT, wxPaintEventHandler( EmulatorWindow::paintFDCLed ), NULL, this );
 	
 }

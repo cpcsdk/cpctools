@@ -93,69 +93,113 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 	Close(); // This is not the good way, it will recursively call this event. But apparently, it works ?
 }
 
+
+void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
+	emulator->GetRenderer().GetVideoPlugin()->LockOutput();
+	wxImage *imgPlugin;
+	imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+	wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
+	//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
+	wxPaintDC dc(getPanel());
+	dc.DrawBitmap(bmpPlugin,0,0,false);
+
+	emulator->GetRenderer().GetVideoPlugin()->UnlockOutput();
+
+	// In pause mode, we display a crosshair showing where the electron
+	// beam is.
+	if (emulator->GetConfig().paused || emulator->GetConfig().breakpoint) {
+		wxClientDC dc(getPanel());
+		int scrpos = emulator->GetRenderer().GetScreenPosition();
+		const int width = 1024;
+		int y = scrpos/width;
+		scrpos -= y*width;
+		dc.CrossHair(scrpos, y);
+		dc.SetPen(*wxWHITE_PEN);
+		dc.CrossHair(scrpos-1, y-1);
+	}
+}
+
+
 /**
  * Do the emulation
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
 #ifdef USE_PTHREAD
-    if(emulator->GetRenderer().GetVideoPlugin()->IsUpdate())
-    {
-        DebugLogMessage("TryLockOutput succes");
-        emulator->GetRenderer().GetVideoPlugin()->LockOutput();
-        wxImage *imgPlugin;
-        imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
-        wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
-        wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
-        wxClientDC dc(getPanel());
-        dc.DrawBitmap(bmp,0,0,false);
+	if(emulator->GetRenderer().GetVideoPlugin()->IsUpdate())
+	{
+		DebugLogMessage("TryLockOutput succes");
+		emulator->GetRenderer().GetVideoPlugin()->LockOutput();
+		wxImage *imgPlugin;
+		imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+		wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
+		//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
+		wxClientDC dc(getPanel());
+		dc.DrawBitmap(bmpPlugin,0,0,false);
 
-        emulator->GetRenderer().GetVideoPlugin()->UnlockOutput();
-		if (emulator->GetConfig().paused || emulator->GetConfig().breakpoint) {
-			int scrpos = emulator->GetRenderer().GetScreenPosition();
-			const int width = 1024;
-			int y = scrpos/width;
-			scrpos -= y*width;
-			dc.CrossHair(scrpos, y);
-		}
+		emulator->GetRenderer().GetVideoPlugin()->UnlockOutput();
 
-        DebugLogMessage("Finish diplaying");
-    }
-    event.RequestMore(true);
-//    event.Skip();
+		DebugLogMessage("Finish diplaying");
+	}
+	event.RequestMore(true);
+
+	//    event.Skip();
 #else
-    if (emulator && ! emulator->GetConfig().paused)
-    {
-        emulator->Emulate();
-        //Ask to continue idle things
-        event.RequestMore(true);
-    }
-    else if (emulator->GetConfig().breakpoint)
-    {
-        //TODO: use listeners to do that only when emulator is paused 
-        //(due to pause not controlled by ihm)
-        m_menuItem_pause->Enable(false) ;
-        m_menuItem_run->Enable(true);
+	if (emulator && ! emulator->GetConfig().paused)
+	{
+		emulator->Emulate();
+		//Ask to continue idle things
+		event.RequestMore(true);
+	}
+	else if (emulator->GetConfig().breakpoint)
+	{
+		//TODO: use listeners to do that only when emulator is paused 
+		//(due to pause not controlled by ihm)
+		m_menuItem_pause->Enable(false) ;
+		m_menuItem_run->Enable(true);
 
-        //Breakpoint mode
-        if (IsShownOnScreen() && !IsIconized())
-        {
-            wxBitmap bmp( *image);
-            wxClientDC dc(getPanel());
-            dc.DrawBitmap(bmp,0,0,false);
-        }
-    }
+		//Breakpoint mode
+		if (IsShownOnScreen() && !IsIconized())
+		{
+			wxBitmap bmp( *image);
+			wxClientDC dc(getPanel());
+			dc.DrawBitmap(bmp,0,0,false);
+		}
+	}
 #endif
 }
 
 void CapriceWindowImpl::Pause() {
-        //Pause mode
-        m_menuItem_pause->Enable(false) ;
-        m_menuItem_run->Enable(true);
+	// Pause mode
+	// Note this is called each time the emulator meets a breakpoint, or at each step in step mode.
+	m_menuItem_pause->Enable(false) ;
+	m_menuItem_run->Enable(true);
 
+	InfoLogMessage("Paused!");
 
-		InfoLogMessage("Paused!");
+	// Since the emulator will 'never' reach an end of frame in pause/step mode, ensure the screen
+	// is drawn (this also erases the crosshair from the previous step)
+	emulator->GetRenderer().GetVideoPlugin()->LockOutput();
+	wxImage *imgPlugin;
+	imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+	wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
+	//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
+	wxClientDC dc(getPanel());
+	dc.DrawBitmap(bmpPlugin,0,0,false);
+
+	emulator->GetRenderer().GetVideoPlugin()->UnlockOutput();
+
+	// In pause mode, we display a crosshair showing where the electron
+	// beam is.
+	int scrpos = emulator->GetRenderer().GetScreenPosition();
+	const int width = 1024;
+	int y = scrpos/width;
+	scrpos -= y*width;
+	dc.CrossHair(scrpos, y);
+	dc.SetPen(*wxWHITE_PEN);
+	dc.CrossHair(scrpos-1, y-1);
 }
+
 
 // =============================== Menus Event ===============================================
 
@@ -170,10 +214,10 @@ void CapriceWindowImpl::onExit2( wxCommandEvent& event )
  */
 void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 {
-    wxFileDialog* OpenDialog = new wxFileDialog(
-        this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
-        wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
-        wxOPEN, wxDefaultPosition);
+	wxFileDialog* OpenDialog = new wxFileDialog(
+			this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
+			wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
+			wxOPEN, wxDefaultPosition);
 
     // Creates a "open file" dialog with 4 file types
     if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"

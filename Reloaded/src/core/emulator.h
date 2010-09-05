@@ -36,6 +36,7 @@
 #include "crtc.h"
 
 #include <iostream>
+#include <semaphore.h>
 
 #include "synchro.h"
 
@@ -140,17 +141,24 @@ public:
 
 	//## These are "internal" methods.
 	// They still may be overriden from the gui to do some things more.
-	/**
-	 * Pause the emulator
-	 */
-	virtual inline void Pause() { GetConfig().paused = 1; timer.pause();}
-	// TODO : should return DATA_PATH but it is not defined when building this file :/
+
 	virtual void getConfigPath(char* buf) { 
       strcpy(buf,_config_path);
   	}
 
+
 	virtual void logMessage(const char* message) {
 		printf(message);
+	}
+
+
+	/**
+	 * Pause the emulator
+	 */
+	virtual inline void Pause()
+	{
+		GetConfig().paused = 1;
+		timer.pause();
 	}
 
 	/**
@@ -160,6 +168,7 @@ public:
 	{
 		Pause();
 		GetConfig().breakpoint = 1 ;
+		sem_wait(&breakpointLock);
 	}
 	
 	/**
@@ -170,7 +179,9 @@ public:
 		GetConfig().paused = 0;
 		GetConfig().breakpoint = 0;
 		timer.start();
+		sem_post(&breakpointLock);
 	}
+
 	/**
 	 * Run the emulator step by step
 	 */
@@ -178,6 +189,8 @@ public:
 	{
 		GetConfig().paused = 0 ;
 		timer.start();
+		GetConfig().breakpoint = 1 ;
+		sem_post(&breakpointLock);
 	}
 
 
@@ -307,6 +320,8 @@ protected:
 	//int loopcon;
 public:
     SysSync emuSync; // Global sync on Emulator object
+private:
+	sem_t breakpointLock;
 };
 
 #endif

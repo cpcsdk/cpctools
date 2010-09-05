@@ -265,6 +265,8 @@ Emulator::Emulator():
 	// retrieve the emulator configuration
 	_config.loadConfiguration();
     emuSync.unlock();
+
+	sem_init(&breakpointLock, 0, 0);
 }
 
 Emulator::~Emulator()
@@ -510,6 +512,9 @@ void Emulator::Emulate()
         if (GetConfig().breakpoint)
         {
             _z80->trace = 1 ;
+			logMessage("break.");
+            this->Breakpoint();
+			logMessage("step.");
         }
         // run the emulation until an exit condition is met
         iExitCondition = _z80->z80_execute();
@@ -517,7 +522,6 @@ void Emulator::Emulate()
         //We have meet a breakpoint
         if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
         {
-            this->Breakpoint();
 #ifndef USE_PTHREAD
             return;
 #endif
