@@ -519,8 +519,14 @@ class RegistersStates : public wxDialog
 		wxStaticText* m_staticText118;
 		wxTextCtrl* b_sector;
 		wxStaticText* m_staticText125;
+		wxTextCtrl* t_st0;
+		wxCheckBox* c_motor;
 		wxStaticText* m_staticText126;
+		wxTextCtrl* t_st1;
+		wxStaticText* m_staticText128;
 		wxStaticText* m_staticText127;
+		wxTextCtrl* t_st2;
+		wxTextCtrl* t_st3;
 		wxStaticText* m_staticText124;
 		wxButton* m_button83;
 		wxListBox* FDCAccessLog;

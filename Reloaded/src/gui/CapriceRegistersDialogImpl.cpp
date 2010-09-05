@@ -424,6 +424,13 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		a_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveA().current_sector));
 		b_track->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_track));
 		b_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_sector));
+
+		t_st0->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(0)));
+		t_st1->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(1)));
+		t_st2->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(2)));
+		t_st3->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(3)));
+
+		c_motor->SetValue(emulator->GetFDC().GetMotor());
 	}
 }
 

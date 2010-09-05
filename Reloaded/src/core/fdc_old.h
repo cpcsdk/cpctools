@@ -138,6 +138,11 @@ public:
 
 	void Reset();
 
+	unsigned char getST(int n)
+	{
+		return result[n];
+	}
+
 	void Emulate(int iCycleCount);
 
 	inline int			GetTimeout() const					{ return timeout;		}
