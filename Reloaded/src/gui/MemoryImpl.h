@@ -16,6 +16,8 @@ class MemoryImpl: public Memory
 		void ChangeAddress(int addr);
 		void setZoneInfo(int);
 
+		char overviewType;
+
 	protected:
 		void RefreshMem (wxScrollEvent& event);
 		void UpdateOverview( wxPaintEvent& event );
@@ -27,6 +29,7 @@ class MemoryImpl: public Memory
 		void RefreshMem(int startAddress);
 		void LoadSymbolTable( wxFileDirPickerEvent& event );
 		void JumpToSymbol( wxCommandEvent& event );
+		void onChangeView( wxCommandEvent& event );
 	public:
 		MemoryImpl(wxWindow* parent, Emulator* emulator);
 		~MemoryImpl();

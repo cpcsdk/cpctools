@@ -2871,7 +2871,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	wxString m_choice14Choices[] = { wxT("Central RAM"), wxT("Bank RAM"), wxT("z80 mapping") };
 	int m_choice14NChoices = sizeof( m_choice14Choices ) / sizeof( wxString );
 	m_choice14 = new wxChoice( m_panel16, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choice14NChoices, m_choice14Choices, 0 );
-	m_choice14->SetSelection( 0 );
+	m_choice14->SetSelection( 2 );
 	fgSizer12->Add( m_choice14, 5, wxALL, 5 );
 	
 	centralColor = new wxColourPickerCtrl( m_panel16, wxID_ANY, wxColour( 255, 255, 255 ), wxDefaultPosition, wxDefaultSize, wxCLRP_DEFAULT_STYLE );
@@ -2942,7 +2942,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel16->SetSizer( bSizer41 );
 	m_panel16->Layout();
 	bSizer41->Fit( m_panel16 );
-	m_notebook4->AddPage( m_panel16, wxT("Overview"), false );
+	m_notebook4->AddPage( m_panel16, wxT("Overview"), true );
 	m_panel12 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxVERTICAL );
@@ -2976,7 +2976,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel12->SetSizer( bSizer51 );
 	m_panel12->Layout();
 	bSizer51->Fit( m_panel12 );
-	m_notebook4->AddPage( m_panel12, wxT("Hex view"), true );
+	m_notebook4->AddPage( m_panel12, wxT("Hex view"), false );
 	m_panel13 = new wxPanel( m_notebook4, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer391;
 	bSizer391 = new wxBoxSizer( wxVERTICAL );

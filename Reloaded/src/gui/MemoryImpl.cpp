@@ -58,6 +58,7 @@ MemoryImpl::MemoryImpl(wxWindow* parent, Emulator* emulator)
 		64 * 1024 / 16, 0x200 / 16);
 	addressSpin->SetRange(0,0xFFFF);
 	ChangeAddress(emulator->GetZ80().PC.w.l);
+	overviewType = 2;
 }
 
 MemoryImpl::~MemoryImpl()
@@ -97,6 +98,14 @@ void MemoryImpl::setZoneInfo(int addr)
 	}
 }
 
+
+void MemoryImpl::onChangeView( wxCommandEvent& event )
+{
+	overviewType = event.GetInt();
+	overviewPanel->Refresh();
+}
+
+
 void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 {
 	// TODO : it is possible to improve this by only redrawing the invalidated area
@@ -105,8 +114,18 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 	wxPen p;
 	wxColour baseColor;
 	wxColour darkColor;
+
+	if(overviewType == 1) // bank ram
+		baseColor = bankColor->GetColour();
+	else
+		baseColor = centralColor->GetColour();
+	darkColor.Set(max((unsigned char)120,baseColor.Red()) - 120,
+		max((unsigned char)120,baseColor.Green()) - 120,
+		max((unsigned char)120,baseColor.Blue()) - 120);
+
 	for (int y = 0; y < 256; y++)
 	{
+		if(overviewType == 2) // "z80 view"
 		if(y==0 || y==0x40 || y==0x80 || y==0xC0)
 		{
 			setZoneInfo(y);
@@ -130,7 +149,19 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 
 		for (int x = 0; x < 256; x++)
 		{
-			if (_emulator->GetMemory().Read((y << 8) + x) == 0)
+			int val;
+			switch(overviewType) {
+				case 0:
+					val = _emulator->GetMemory().GetRAM()[(y << 8) + x];
+					break;
+				case 1:
+					val = _emulator->GetMemory().GetRAM()[65536 + (y << 8) + x];
+					break;
+				case 2:
+					val = _emulator->GetMemory().Read((y << 8) + x);
+					break;
+			}
+			if (val == 0)
 			{
 				p.SetColour(baseColor);
 			}
