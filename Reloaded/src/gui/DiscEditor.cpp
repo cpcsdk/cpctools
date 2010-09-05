@@ -129,11 +129,24 @@ void DiscEditorImpl::setSector( wxCommandEvent& event )
 
 	// TODO : build a proper hexdump
 	txt.Clear();
+	wxString txt2;
 	int actualSize = std::min(selectedSector.declared_size, selectedSector.size);
 	if(actualSize) {
-		for(int i=0; i<actualSize; i++) {
-			txt << wxString::Format(_("%02x "),(int)(selectedSector.data[i]));
-			if ((i+1)%16 == 0) txt.Append(_("\n"));
+		int i = 0;
+		for(int k = 0; k < actualSize; k+=16) {
+			txt2.Clear();
+			for(int j=0; j< 16; j++) {
+				txt << wxString::Format(_("%02x "),(int)(selectedSector.data[i]));
+				if (selectedSector.data[i]> 32)
+					txt2 << (wxChar)selectedSector.data[i];
+				else
+					txt2 <<_(".");
+
+				i++;
+			}
+			txt.Append(_("  "));
+		   	txt.Append(txt2);
+			txt.Append(_("\n"));
 		}
 	} else {
 		txt.Printf(_("This sector is empty or invalid\n"

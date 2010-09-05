@@ -1615,41 +1615,26 @@ About::About( wxWindow* parent, wxWindowID id, const wxString& title, const wxPo
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 	
-	wxBoxSizer* bSizer14;
-	bSizer14 = new wxBoxSizer( wxVERTICAL );
-	
 	m_bitmap2 = new wxStaticBitmap( this, wxID_ANY, wxBitmap( wxT("logo.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer14->Add( m_bitmap2, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
-	
-	bSizer9->Add( bSizer14, 1, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer15;
-	bSizer15 = new wxBoxSizer( wxVERTICAL );
+	bSizer9->Add( m_bitmap2, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
 	m_staticText8 = new wxStaticText( this, wxID_ANY, wxT("Reloaded"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText8->Wrap( -1 );
 	m_staticText8->SetFont( wxFont( 18, 74, 90, 90, false, wxT("Sans") ) );
 	
-	bSizer15->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizer9->Add( m_staticText8, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("An OpenSource Amstrad CPC Emulator"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText9->Wrap( -1 );
 	m_staticText9->SetFont( wxFont( 12, 74, 90, 92, false, wxT("Sans") ) );
 	
-	bSizer15->Add( m_staticText9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
-	
-	bSizer9->Add( bSizer15, 0, wxEXPAND, 5 );
-	
-	bSizer8->Add( bSizer9, 0, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizer10;
-	bSizer10 = new wxBoxSizer( wxVERTICAL );
+	bSizer9->Add( m_staticText9, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
 	m_staticText5 = new wxStaticText( this, wxID_ANY, wxT("Based on sourcecode from Caprice 32 :\n(c) 1997 - 2005 Ulrich Doewich\n\nReloaded is :\n(c) 1997 - 2010 The Reloaded Author's"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE );
 	m_staticText5->Wrap( -1 );
-	bSizer10->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
+	bSizer9->Add( m_staticText5, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 5 );
 	
-	bSizer8->Add( bSizer10, 0, wxEXPAND, 5 );
+	bSizer8->Add( bSizer9, 0, wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
@@ -3196,7 +3181,7 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	trackCount = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	trackCount->Enable( false );
 	
-	bSizer45->Add( trackCount, 0, wxALL, 5 );
+	bSizer45->Add( trackCount, 0, wxALL, 0 );
 	
 	m_staticText98 = new wxStaticText( this, wxID_ANY, wxT("Sides"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText98->Wrap( -1 );
@@ -3205,9 +3190,9 @@ DiscEditor::DiscEditor( wxWindow* parent, wxWindowID id, const wxString& title, 
 	sideCount = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	sideCount->Enable( false );
 	
-	bSizer45->Add( sideCount, 0, wxALL, 5 );
+	bSizer45->Add( sideCount, 0, wxALL, 0 );
 	
-	bSizer2->Add( bSizer45, 0, 0, 5 );
+	bSizer2->Add( bSizer45, 0, wxTOP, 5 );
 	
 	DiskEd_Mode_Tabs = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_panel17 = new wxPanel( DiskEd_Mode_Tabs, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
