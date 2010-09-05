@@ -1682,8 +1682,8 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bSizer16;
 	bSizer16 = new wxBoxSizer( wxVERTICAL );
 	
-	m_nb_Register = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	z80_tab = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	tabView = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_DEFAULT_STYLE );
+	z80_tab = new wxPanel( tabView, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer23;
 	bSizer23 = new wxBoxSizer( wxVERTICAL );
 	
@@ -2029,8 +2029,8 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	z80_tab->SetSizer( bSizer23 );
 	z80_tab->Layout();
 	bSizer23->Fit( z80_tab );
-	m_nb_Register->AddPage( z80_tab, wxT("Z80"), false );
-	crtc_tab = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	tabView->AddPage( z80_tab, wxT("z80"), false, wxNullBitmap );
+	crtc_tab = new wxPanel( tabView, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer21;
 	bSizer21 = new wxBoxSizer( wxVERTICAL );
 	
@@ -2270,8 +2270,8 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	crtc_tab->SetSizer( bSizer21 );
 	crtc_tab->Layout();
 	bSizer21->Fit( crtc_tab );
-	m_nb_Register->AddPage( crtc_tab, wxT("CRTC"), false );
-	ga_tab = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	tabView->AddPage( crtc_tab, wxT("CRTC"), false, wxNullBitmap );
+	ga_tab = new wxPanel( tabView, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer43;
 	bSizer43 = new wxBoxSizer( wxVERTICAL );
 	
@@ -2505,8 +2505,8 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	ga_tab->SetSizer( bSizer43 );
 	ga_tab->Layout();
 	bSizer43->Fit( ga_tab );
-	m_nb_Register->AddPage( ga_tab, wxT("Gate Array"), false );
-	fdc_tab = new wxPanel( m_nb_Register, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT("FDC") );
+	tabView->AddPage( ga_tab, wxT("Gate Array"), false, wxNullBitmap );
+	fdc_tab = new wxPanel( tabView, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, wxT("FDC") );
 	wxBoxSizer* bSizer48;
 	bSizer48 = new wxBoxSizer( wxVERTICAL );
 	
@@ -2624,13 +2624,12 @@ RegistersStates::RegistersStates( wxWindow* parent, wxWindowID id, const wxStrin
 	fdc_tab->SetSizer( bSizer48 );
 	fdc_tab->Layout();
 	bSizer48->Fit( fdc_tab );
-	m_nb_Register->AddPage( fdc_tab, wxT("FDC"), true );
+	tabView->AddPage( fdc_tab, wxT("FDC"), false, wxNullBitmap );
 	
-	bSizer16->Add( m_nb_Register, 1, wxALL, 5 );
+	bSizer16->Add( tabView, 1, wxEXPAND | wxALL, 5 );
 	
 	this->SetSizer( bSizer16 );
 	this->Layout();
-	bSizer16->Fit( this );
 	
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( RegistersStates::OnCloseR ) );
@@ -2857,6 +2856,10 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	zone3->Wrap( -1 );
 	bSizer48->Add( zone3, 0, wxEXPAND|wxLEFT, 5 );
 	
+	m_staticText106 = new wxStaticText( m_panel16, wxID_ANY, wxT("Double-click somewhere to jump!"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText106->Wrap( -1 );
+	bSizer48->Add( m_staticText106, 0, wxALL, 5 );
+	
 	bSizer46->Add( bSizer48, 1, wxFIXED_MINSIZE, 5 );
 	
 	wxFlexGridSizer* fgSizer12;
@@ -2899,14 +2902,10 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	
 	bSizer41->Add( bSizer46, 1, wxEXPAND, 5 );
 	
-	m_staticText106 = new wxStaticText( m_panel16, wxID_ANY, wxT("Double-click somewhere to jump!"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText106->Wrap( -1 );
-	bSizer41->Add( m_staticText106, 0, wxALL, 5 );
-	
 	m_panel16->SetSizer( bSizer41 );
 	m_panel16->Layout();
 	bSizer41->Fit( m_panel16 );
-	m_auinotebook1->AddPage( m_panel16, wxT("Overview"), true, wxNullBitmap );
+	m_auinotebook1->AddPage( m_panel16, wxT("Overview"), false, wxNullBitmap );
 	m_panel12 = new wxPanel( m_auinotebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxVERTICAL );
@@ -2999,7 +2998,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel19->SetSizer( bSizer54 );
 	m_panel19->Layout();
 	bSizer54->Fit( m_panel19 );
-	m_auinotebook1->AddPage( m_panel19, wxT("Search"), false, wxNullBitmap );
+	m_auinotebook1->AddPage( m_panel19, wxT("Search"), true, wxNullBitmap );
 	
 	bSizer29->Add( m_auinotebook1, 1, wxEXPAND | wxALL, 5 );
 	

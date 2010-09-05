@@ -63,7 +63,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 
 //Z80 Register
 
-    if(m_nb_Register->GetSelection() == 0)
+    if(z80_tab->IsShownOnScreen())
     {
         UpZ80Reg8bitsTextControl(m_tCrA, AF.b.h);
         UpZ80Reg8bitsTextControl(m_tCrF, AF.b.l);
@@ -155,7 +155,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 
 //     CRTC Register
 
-    if(m_nb_Register->GetSelection() == 1)
+    if(crtc_tab->IsShownOnScreen())
     {
         // Internal Counter
         if(!m_tCcHCC->IsModified())
@@ -197,7 +197,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
     }
 
 	// GA registers
-    if(m_nb_Register->GetSelection() == 2)
+    if(ga_tab->IsShownOnScreen())
 	{
 		static const char ink2bas[32] = {13,27,19,25,1,7,10,16,28,29,24,26,6,8,15,17,30,31,18,20,0,2,9,11,4,22,21,23,3,5,12,14};
 		m_pen->Clear();
@@ -418,7 +418,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 	}
 
 	// FDC
-    if(m_nb_Register->GetSelection() == 3)
+    if(fdc_tab->IsShownOnScreen())
 	{
 		a_track->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveA().current_track));
 		a_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveA().current_sector));

@@ -35,10 +35,10 @@
 #include <wx/statbmp.h>
 #include <wx/statbox.h>
 #include <wx/listbox.h>
+#include <wx/aui/auibook.h>
 #include <wx/clrpicker.h>
 #include <wx/checklst.h>
 #include <wx/filepicker.h>
-#include <wx/aui/auibook.h>
 #include <wx/scrolbar.h>
 #include <wx/spinbutt.h>
 #include <wx/statusbr.h>
@@ -327,7 +327,7 @@ class RegistersStates : public wxDialog
 	private:
 	
 	protected:
-		wxNotebook* m_nb_Register;
+		wxAuiNotebook* tabView;
 		wxPanel* z80_tab;
 		wxStaticText* m_staticText9;
 		wxStaticText* m_staticText10;
@@ -609,7 +609,7 @@ class RegistersStates : public wxDialog
 	
 	public:
 		
-		RegistersStates( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Registers States"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE );
+		RegistersStates( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Registers States"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 374,388 ), long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~RegistersStates();
 	
 };
@@ -634,6 +634,7 @@ class Memory : public wxDialog
 		wxStaticText* zone1;
 		wxStaticText* zone2;
 		wxStaticText* zone3;
+		wxStaticText* m_staticText106;
 		wxStaticText* m_staticText102;
 		wxChoice* m_choice14;
 		wxColourPickerCtrl* centralColor;
@@ -642,7 +643,6 @@ class Memory : public wxDialog
 		wxStaticText* y;
 		wxColourPickerCtrl* romColor;
 		wxStaticText* z;
-		wxStaticText* m_staticText106;
 		wxPanel* m_panel12;
 		wxStaticText* m_staticText125;
 		wxTextCtrl* hexView;
