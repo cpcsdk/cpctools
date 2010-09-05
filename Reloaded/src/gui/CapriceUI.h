@@ -36,8 +36,8 @@
 #include <wx/statbox.h>
 #include <wx/listbox.h>
 #include <wx/clrpicker.h>
-#include <wx/filepicker.h>
 #include <wx/checklst.h>
+#include <wx/filepicker.h>
 #include <wx/aui/auibook.h>
 #include <wx/scrolbar.h>
 #include <wx/spinbutt.h>
@@ -643,7 +643,15 @@ class Memory : public wxDialog
 		wxColourPickerCtrl* romColor;
 		wxStaticText* z;
 		wxStaticText* m_staticText106;
-		wxStaticLine* m_staticline5;
+		wxPanel* m_panel12;
+		wxStaticText* m_staticText125;
+		wxTextCtrl* hexView;
+		wxRadioButton* m_radioBtn10;
+		wxRadioButton* m_radioBtn11;
+		wxButton* m_button82;
+		wxPanel* m_panel13;
+		wxCheckListBox* m_checkList1;
+		wxPanel* m_panel19;
 		wxStaticText* m_staticText771;
 		wxFilePickerCtrl* m_filePicker9;
 		wxStaticText* m_staticText100;
@@ -653,14 +661,6 @@ class Memory : public wxDialog
 		wxTextCtrl* searchBoxN;
 		wxButton* m_button85;
 		wxListBox* searchResult;
-		wxPanel* m_panel12;
-		wxStaticText* m_staticText125;
-		wxTextCtrl* hexView;
-		wxRadioButton* m_radioBtn10;
-		wxRadioButton* m_radioBtn11;
-		wxButton* m_button82;
-		wxPanel* m_panel13;
-		wxCheckListBox* m_checkList1;
 		wxScrollBar* scrollRAM;
 		wxStaticText* m_staticText77;
 		wxTextCtrl* addressBox;
@@ -673,12 +673,12 @@ class Memory : public wxDialog
 		virtual void onOverviewLeftDClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void UpdateOverview( wxPaintEvent& event ) { event.Skip(); }
 		virtual void onChangeView( wxCommandEvent& event ) { event.Skip(); }
+		virtual void exportHex( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void LoadSymbolTable( wxFileDirPickerEvent& event ) { event.Skip(); }
 		virtual void searchASCII( wxCommandEvent& event ) { event.Skip(); }
 		virtual void searchNumber( wxCommandEvent& event ) { event.Skip(); }
 		virtual void searchJump( wxCommandEvent& event ) { event.Skip(); }
-		virtual void exportHex( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
 		virtual void AddressEntered( wxCommandEvent& event ) { event.Skip(); }
 		virtual void JumpToAddress( wxSpinEvent& event ) { event.Skip(); }
@@ -689,7 +689,7 @@ class Memory : public wxDialog
 	
 	public:
 		
-		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 612,676 ), long style = wxDEFAULT_DIALOG_STYLE );
+		Memory( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Memory"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 612,676 ), long style = wxCAPTION|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~Memory();
 	
 };

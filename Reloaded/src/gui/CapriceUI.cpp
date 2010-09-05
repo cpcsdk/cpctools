@@ -2903,46 +2903,6 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_staticText106->Wrap( -1 );
 	bSizer41->Add( m_staticText106, 0, wxALL, 5 );
 	
-	m_staticline5 = new wxStaticLine( m_panel16, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer41->Add( m_staticline5, 0, wxEXPAND | wxALL, 5 );
-	
-	wxGridBagSizer* gbSizer2;
-	gbSizer2 = new wxGridBagSizer( 0, 0 );
-	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
-	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
-	
-	m_staticText771 = new wxStaticText( m_panel16, wxID_ANY, wxT("Load symbols from"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText771->Wrap( -1 );
-	gbSizer2->Add( m_staticText771, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
-	
-	m_filePicker9 = new wxFilePickerCtrl( m_panel16, wxID_ANY, wxEmptyString, wxT("Select sjasmplus symbol file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE|wxFLP_FILE_MUST_EXIST|wxFLP_OPEN );
-	gbSizer2->Add( m_filePicker9, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALL, 0 );
-	
-	m_staticText100 = new wxStaticText( m_panel16, wxID_ANY, wxT("Search (ASCII)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText100->Wrap( -1 );
-	gbSizer2->Add( m_staticText100, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
-	
-	searchBoxA = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( searchBoxA, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
-	
-	m_button84 = new wxButton( m_panel16, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_button84, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
-	
-	m_staticText101 = new wxStaticText( m_panel16, wxID_ANY, wxT("Search (number)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText101->Wrap( -1 );
-	gbSizer2->Add( m_staticText101, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
-	
-	searchBoxN = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( searchBoxN, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
-	
-	m_button85 = new wxButton( m_panel16, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_button85, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
-	
-	searchResult = new wxListBox( m_panel16, wxID_ANY, wxDefaultPosition, wxSize( 250,-1 ), 0, NULL, 0 ); 
-	gbSizer2->Add( searchResult, wxGBPosition( 0, 3 ), wxGBSpan( 10, 1 ), wxALL|wxEXPAND, 5 );
-	
-	bSizer41->Add( gbSizer2, 1, wxEXPAND, 5 );
-	
 	m_panel16->SetSizer( bSizer41 );
 	m_panel16->Layout();
 	bSizer41->Fit( m_panel16 );
@@ -2995,6 +2955,51 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel13->Layout();
 	bSizer391->Fit( m_panel13 );
 	m_auinotebook1->AddPage( m_panel13, wxT("Disassemble"), false, wxNullBitmap );
+	m_panel19 = new wxPanel( m_auinotebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer54;
+	bSizer54 = new wxBoxSizer( wxHORIZONTAL );
+	
+	wxGridBagSizer* gbSizer2;
+	gbSizer2 = new wxGridBagSizer( 0, 0 );
+	gbSizer2->SetFlexibleDirection( wxHORIZONTAL );
+	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_NONE );
+	
+	m_staticText771 = new wxStaticText( m_panel19, wxID_ANY, wxT("Load symbols from"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText771->Wrap( -1 );
+	gbSizer2->Add( m_staticText771, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	m_filePicker9 = new wxFilePickerCtrl( m_panel19, wxID_ANY, wxEmptyString, wxT("Select sjasmplus symbol file"), wxT("*.*"), wxDefaultPosition, wxDefaultSize, wxFLP_DEFAULT_STYLE|wxFLP_FILE_MUST_EXIST|wxFLP_OPEN );
+	gbSizer2->Add( m_filePicker9, wxGBPosition( 0, 1 ), wxGBSpan( 1, 2 ), wxALL, 0 );
+	
+	m_staticText100 = new wxStaticText( m_panel19, wxID_ANY, wxT("Search (ASCII)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText100->Wrap( -1 );
+	gbSizer2->Add( m_staticText100, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	searchBoxA = new wxTextCtrl( m_panel19, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( searchBoxA, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
+	
+	m_button84 = new wxButton( m_panel19, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_button84, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
+	
+	m_staticText101 = new wxStaticText( m_panel19, wxID_ANY, wxT("Search (number)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText101->Wrap( -1 );
+	gbSizer2->Add( m_staticText101, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
+	
+	searchBoxN = new wxTextCtrl( m_panel19, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( searchBoxN, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
+	
+	m_button85 = new wxButton( m_panel19, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( m_button85, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
+	
+	bSizer54->Add( gbSizer2, 0, wxEXPAND, 5 );
+	
+	searchResult = new wxListBox( m_panel19, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0, NULL, 0 ); 
+	bSizer54->Add( searchResult, 1, wxALL|wxEXPAND, 5 );
+	
+	m_panel19->SetSizer( bSizer54 );
+	m_panel19->Layout();
+	bSizer54->Fit( m_panel19 );
+	m_auinotebook1->AddPage( m_panel19, wxT("Search"), false, wxNullBitmap );
 	
 	bSizer29->Add( m_auinotebook1, 1, wxEXPAND | wxALL, 5 );
 	
@@ -3039,12 +3044,12 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	overviewPanel->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( Memory::onOverviewLeftDClick ), NULL, this );
 	overviewPanel->Connect( wxEVT_PAINT, wxPaintEventHandler( Memory::UpdateOverview ), NULL, this );
 	m_choice14->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::onChangeView ), NULL, this );
+	m_button82->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::exportHex ), NULL, this );
+	m_checkList1->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	m_filePicker9->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( Memory::LoadSymbolTable ), NULL, this );
 	m_button84->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchASCII ), NULL, this );
 	m_button85->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchNumber ), NULL, this );
 	searchResult->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( Memory::searchJump ), NULL, this );
-	m_button82->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::exportHex ), NULL, this );
-	m_checkList1->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
@@ -3067,12 +3072,12 @@ Memory::~Memory()
 	overviewPanel->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( Memory::onOverviewLeftDClick ), NULL, this );
 	overviewPanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( Memory::UpdateOverview ), NULL, this );
 	m_choice14->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::onChangeView ), NULL, this );
+	m_button82->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::exportHex ), NULL, this );
+	m_checkList1->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	m_filePicker9->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( Memory::LoadSymbolTable ), NULL, this );
 	m_button84->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchASCII ), NULL, this );
 	m_button85->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchNumber ), NULL, this );
 	searchResult->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( Memory::searchJump ), NULL, this );
-	m_button82->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::exportHex ), NULL, this );
-	m_checkList1->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
