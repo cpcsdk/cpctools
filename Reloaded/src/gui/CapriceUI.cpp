@@ -2922,8 +2922,8 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_staticText100->Wrap( -1 );
 	gbSizer2->Add( m_staticText100, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
-	m_textCtrl73 = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_textCtrl73, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
+	searchBoxA = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( searchBoxA, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
 	
 	m_button84 = new wxButton( m_panel16, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_button84, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
@@ -2932,14 +2932,14 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_staticText101->Wrap( -1 );
 	gbSizer2->Add( m_staticText101, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 	
-	m_textCtrl74 = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer2->Add( m_textCtrl74, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
+	searchBoxN = new wxTextCtrl( m_panel16, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer2->Add( searchBoxN, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 0 );
 	
 	m_button85 = new wxButton( m_panel16, wxID_ANY, wxT("Search"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer2->Add( m_button85, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxLEFT, 5 );
 	
-	m_listBox3 = new wxListBox( m_panel16, wxID_ANY, wxDefaultPosition, wxSize( 250,-1 ), 0, NULL, 0 ); 
-	gbSizer2->Add( m_listBox3, wxGBPosition( 0, 3 ), wxGBSpan( 10, 1 ), wxALL|wxEXPAND, 5 );
+	searchResult = new wxListBox( m_panel16, wxID_ANY, wxDefaultPosition, wxSize( 250,-1 ), 0, NULL, 0 ); 
+	gbSizer2->Add( searchResult, wxGBPosition( 0, 3 ), wxGBSpan( 10, 1 ), wxALL|wxEXPAND, 5 );
 	
 	bSizer41->Add( gbSizer2, 1, wxEXPAND, 5 );
 	
@@ -3040,8 +3040,9 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	overviewPanel->Connect( wxEVT_PAINT, wxPaintEventHandler( Memory::UpdateOverview ), NULL, this );
 	m_choice14->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::onChangeView ), NULL, this );
 	m_filePicker9->Connect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( Memory::LoadSymbolTable ), NULL, this );
-	m_textCtrl73->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( Memory::onSearchASCII ), NULL, this );
-	m_textCtrl74->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( Memory::onSearchNumber ), NULL, this );
+	m_button84->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchASCII ), NULL, this );
+	m_button85->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchNumber ), NULL, this );
+	searchResult->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( Memory::searchJump ), NULL, this );
 	m_checkList1->Connect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
@@ -3066,8 +3067,9 @@ Memory::~Memory()
 	overviewPanel->Disconnect( wxEVT_PAINT, wxPaintEventHandler( Memory::UpdateOverview ), NULL, this );
 	m_choice14->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Memory::onChangeView ), NULL, this );
 	m_filePicker9->Disconnect( wxEVT_COMMAND_FILEPICKER_CHANGED, wxFileDirPickerEventHandler( Memory::LoadSymbolTable ), NULL, this );
-	m_textCtrl73->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( Memory::onSearchASCII ), NULL, this );
-	m_textCtrl74->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( Memory::onSearchNumber ), NULL, this );
+	m_button84->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchASCII ), NULL, this );
+	m_button85->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( Memory::searchNumber ), NULL, this );
+	searchResult->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( Memory::searchJump ), NULL, this );
 	m_checkList1->Disconnect( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, wxCommandEventHandler( Memory::onBreakpoint ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );
 	scrollRAM->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( Memory::RefreshMem ), NULL, this );

@@ -206,6 +206,76 @@ void MemoryImpl::onBreakpoint(wxCommandEvent& event)
 }
 
 
+void MemoryImpl::searchASCII( wxCommandEvent& event ) {
+	searchResult->Freeze();
+	searchResult->Clear();
+	const char* string = searchBoxA->GetValue().c_str();
+	int len = strlen(string);
+
+	char* space = (char*)_emulator->GetMemory().GetRAM();
+
+	wxString res;
+	bool found = false;
+	for(unsigned int i=0; i < 2*65536; i++) {
+		if (strncmp(space+i, string, len) == 0) {
+			if (i < 65536)
+				res.Printf("%4X", i);
+			else
+				res.Printf("%4X in bank", i-65536);
+			searchResult->Append(res);
+			found = true;
+		}
+	}
+
+	if (!found)
+		searchResult->Append("Not found! Sorry!");
+	searchResult->Thaw();
+}
+
+
+void MemoryImpl::searchNumber( wxCommandEvent& event ) {
+	// TODO : allow searching for a string of values
+	searchResult->Clear();
+	long val;
+	if (!searchBoxN->GetValue().ToLong(&val, 16)) {
+		searchResult->Append("Not a valid number.");
+		return;
+	}
+	searchResult->Freeze();
+
+	char* space = (char*)_emulator->GetMemory().GetRAM();
+
+
+	wxString res;
+	bool found = false;
+	for(unsigned int i=0; i < 2*65536; i++) {
+		if (space[i] == val) {
+			if (i < 65536)
+				res.Printf("%4X (8bit)", i);
+			else
+				res.Printf("%4X (8bit) in bank", i-65536);
+			searchResult->Append(res);
+			found = true;
+		}
+
+		uint16_t* ints = (uint16_t*)space;
+		if (ints[i] == val) {
+			if (i < 65536)
+				res.Printf("%4X (16bit)", i);
+			else
+				res.Printf("%4X (16bit) in bank", i-65536);
+			searchResult->Append(res);
+			found = true;
+		}
+
+	}
+
+	if (!found)
+		searchResult->Append("Not found! Sorry!");
+	searchResult->Thaw();
+}
+
+
 void MemoryImpl::AddressEntered( wxCommandEvent& event )
 {
 	long int destination;

@@ -23165,7 +23165,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="maxlength">0</property>
                                                             <property name="minimum_size"></property>
-                                                            <property name="name">m_textCtrl73</property>
+                                                            <property name="name">searchBoxA</property>
                                                             <property name="permission">protected</property>
                                                             <property name="pos"></property>
                                                             <property name="size"></property>
@@ -23203,7 +23203,7 @@
                                                             <event name="OnSetFocus"></event>
                                                             <event name="OnSize"></event>
                                                             <event name="OnText"></event>
-                                                            <event name="OnTextEnter">onSearchASCII</event>
+                                                            <event name="OnTextEnter"></event>
                                                             <event name="OnTextMaxLen"></event>
                                                             <event name="OnTextURL"></event>
                                                             <event name="OnUpdateUI"></event>
@@ -23243,7 +23243,7 @@
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
-                                                            <event name="OnButtonClick"></event>
+                                                            <event name="OnButtonClick">searchASCII</event>
                                                             <event name="OnChar"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
@@ -23347,7 +23347,7 @@
                                                             <property name="maximum_size"></property>
                                                             <property name="maxlength">0</property>
                                                             <property name="minimum_size"></property>
-                                                            <property name="name">m_textCtrl74</property>
+                                                            <property name="name">searchBoxN</property>
                                                             <property name="permission">protected</property>
                                                             <property name="pos"></property>
                                                             <property name="size"></property>
@@ -23385,7 +23385,7 @@
                                                             <event name="OnSetFocus"></event>
                                                             <event name="OnSize"></event>
                                                             <event name="OnText"></event>
-                                                            <event name="OnTextEnter">onSearchNumber</event>
+                                                            <event name="OnTextEnter"></event>
                                                             <event name="OnTextMaxLen"></event>
                                                             <event name="OnTextURL"></event>
                                                             <event name="OnUpdateUI"></event>
@@ -23425,7 +23425,7 @@
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
-                                                            <event name="OnButtonClick"></event>
+                                                            <event name="OnButtonClick">searchNumber</event>
                                                             <event name="OnChar"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
@@ -23470,7 +23470,7 @@
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="maximum_size"></property>
                                                             <property name="minimum_size"></property>
-                                                            <property name="name">m_listBox3</property>
+                                                            <property name="name">searchResult</property>
                                                             <property name="permission">protected</property>
                                                             <property name="pos"></property>
                                                             <property name="size">250,-1</property>
@@ -23495,7 +23495,7 @@
                                                             <event name="OnLeftDown"></event>
                                                             <event name="OnLeftUp"></event>
                                                             <event name="OnListBox"></event>
-                                                            <event name="OnListBoxDClick"></event>
+                                                            <event name="OnListBoxDClick">searchJump</event>
                                                             <event name="OnMiddleDClick"></event>
                                                             <event name="OnMiddleDown"></event>
                                                             <event name="OnMiddleUp"></event>

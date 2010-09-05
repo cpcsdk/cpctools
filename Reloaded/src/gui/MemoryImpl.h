@@ -30,6 +30,9 @@ class MemoryImpl: public Memory
 		void LoadSymbolTable( wxFileDirPickerEvent& event );
 		void JumpToSymbol( wxCommandEvent& event );
 		void onChangeView( wxCommandEvent& event );
+
+		void searchASCII( wxCommandEvent& event );
+		void searchNumber( wxCommandEvent& event );
 	public:
 		MemoryImpl(wxWindow* parent, Emulator* emulator);
 		~MemoryImpl();

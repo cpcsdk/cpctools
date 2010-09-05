@@ -646,12 +646,12 @@ class Memory : public wxDialog
 		wxStaticText* m_staticText771;
 		wxFilePickerCtrl* m_filePicker9;
 		wxStaticText* m_staticText100;
-		wxTextCtrl* m_textCtrl73;
+		wxTextCtrl* searchBoxA;
 		wxButton* m_button84;
 		wxStaticText* m_staticText101;
-		wxTextCtrl* m_textCtrl74;
+		wxTextCtrl* searchBoxN;
 		wxButton* m_button85;
-		wxListBox* m_listBox3;
+		wxListBox* searchResult;
 		wxPanel* m_panel12;
 		wxStaticText* m_staticText125;
 		wxTextCtrl* hexView;
@@ -673,8 +673,9 @@ class Memory : public wxDialog
 		virtual void UpdateOverview( wxPaintEvent& event ) { event.Skip(); }
 		virtual void onChangeView( wxCommandEvent& event ) { event.Skip(); }
 		virtual void LoadSymbolTable( wxFileDirPickerEvent& event ) { event.Skip(); }
-		virtual void onSearchASCII( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onSearchNumber( wxCommandEvent& event ) { event.Skip(); }
+		virtual void searchASCII( wxCommandEvent& event ) { event.Skip(); }
+		virtual void searchNumber( wxCommandEvent& event ) { event.Skip(); }
+		virtual void searchJump( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onBreakpoint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RefreshMem( wxScrollEvent& event ) { event.Skip(); }
 		virtual void AddressEntered( wxCommandEvent& event ) { event.Skip(); }
