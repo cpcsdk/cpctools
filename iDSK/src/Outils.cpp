@@ -3,7 +3,6 @@
 #include <cstring>
 #include <cstdio>
 using namespace std;
-#include "Itoa.h"
 #include "Outils.h"
 
 //
@@ -105,7 +104,7 @@ void SetBuffViewHexa( unsigned char * src, char * Hex, char * Ascii, unsigned sh
 char * GetUser( int u )
 {
     static char User[ 8 ];
-    itoa(u,User,10);
+	sprintf(User, "%d", u);
     return( User);
 }
 

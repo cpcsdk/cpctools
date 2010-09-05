@@ -13,7 +13,6 @@ using namespace std;
 #include "Outils.h"
 #include "Main.h"
 #include "endianPPC.h"
-#include "Itoa.h"
 #include "ViewFile.h"
 
 int main(int argc, char** argv) {

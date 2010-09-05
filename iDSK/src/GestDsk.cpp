@@ -2,9 +2,10 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
+#include <algorithm>
+
 #include "MyType.h"
 #include "GestDsk.h"
-#include "Itoa.h"
 #include "endianPPC.h"
 #include "Outils.h"
 #include <cerrno>
@@ -450,12 +451,12 @@ StDirEntry * DSK::GetNomDir( string NomFic ) {
     size_t p = NomFic.find('.');
     if ( p!=std::string::npos )
     {
-        NomFic.copy( DirLoc.Nom, min(p,8), 0);
+        NomFic.copy( DirLoc.Nom, std::min((int)p,8), 0);
 	p++;
-        NomFic.copy( DirLoc.Ext, min( NomFic.size()-p, 3 ), p );
+        NomFic.copy( DirLoc.Ext, std::min( (int)(NomFic.size()-p), 3 ), p );
     }
     else
-        NomFic.copy( DirLoc.Nom, min(NomFic.size(), 8 ),0);
+        NomFic.copy( DirLoc.Nom, std::min((int)NomFic.size(), 8 ),0);
 	
     for ( i = 0; i < 11; i++ )
         DirLoc.Nom[ i ] = ( unsigned char )toupper( DirLoc.Nom[ i ] );
@@ -556,8 +557,8 @@ bool DSK::CheckDsk( void ) {
             int MinSect = 0xFF, MaxSect = 0;
             if ( tr->NbSect != 9 )
 			{
-				cout << "Track has too many sectors !" << endl;
-                return( false );
+				cout << "Warning : track " << track <<" has "<<tr->NbSect<<" sectors ! (wanted 9)" << endl;
+                // return( false );
 			}
             for ( int s = 0; s < (int)tr->NbSect; s++ ) {
                 if ( MinSect > tr->Sect[ s ].R )
@@ -568,13 +569,13 @@ bool DSK::CheckDsk( void ) {
 			}
             if ( MaxSect - MinSect != 8 )
 			{
-				cout << "Strange sector numbering !" << endl;
-                return( false );
+				cout << "Warning : trange sector numbering in track "<<track<<"!" << endl;
+                // return( false );
 			}
             if ( MinSect != MinSectFirst )
 			{
-				cout << "Incoherent secor numbering accross tracks !" << endl;
-                return( false );
+				cout << "Warning : track "<<track<<" start at sector"<<MinSect<<" while track 0 starts at "<<MinSectFirst << endl;
+                //return( false );
 			}
 		}
         return( true );
@@ -1106,10 +1107,10 @@ void DSK::RenameFile( int item , char *NewName) {
 	if ( p ) {
 		p++;
 		memcpy( DirLoc.Nom, NewName, p - NewName -1);
-		memcpy( DirLoc.Ext, p, min(strlen(p),3) );
+		memcpy( DirLoc.Ext, p, std::min((int)strlen(p),3) );
 	}	
 	else {
-		memcpy( DirLoc.Nom, NewName, min( strlen( NewName) , 8 ) );
+		memcpy( DirLoc.Nom, NewName, min( (int)strlen( NewName) , 8 ) );
 	}
 	strcpy( NomFic, GetNomAmsdos( TabDir[ c ].Nom ));
 	
