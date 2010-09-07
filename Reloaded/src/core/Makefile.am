@@ -1,4 +1,4 @@
-noinst_LIBRARIES = libcapricecore.a libdisass.a
+noinst_LIBRARIES = libcapricecore.a
 
 libcapricecore_a_LIBADD = 
 libcapricecore_a_SOURCES = \
@@ -60,13 +60,8 @@ IMG_savepng.h \
 IMG_savepng.cpp \
 clock_gettime_stub.cpp clock_gettime_stub.h \
 synchro.cpp synchro.h \
-log.cpp log.h
-
-#Created due to cross references ...
-#TODO: change that
-libdisass_a_SOURCES = \
-Desass.cpp \
-Desass.h
+log.cpp log.h \
+Desass.cpp Desass.h
 
 if LIB765
   libcapricecore_a_LIBADD += /usr/local/lib/lib765.a /usr/local/lib/libdsk.a

@@ -11,7 +11,6 @@
  * @param Start Start point
  * @param Size quantity of data to read
  */
-void Desass( t_Memory mem, std::ostream &Listing, int Start=0x0000, int Size=0x10000 );
-
+void Disassemble( t_Memory& mem, std::ostream &Listing, int Start=0x0000, int Size=0x10000 );
 
 #endif

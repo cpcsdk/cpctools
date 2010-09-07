@@ -27,6 +27,7 @@
 #include <cstdio>
 
 #include "memory.h"
+#include "Desass.h"
 using namespace std;
 
 #define Hex(Chaine, Valeur, Digit) snprintf((Chaine), (Digit), "%.*X", (Digit), (Valeur))	
@@ -419,12 +420,11 @@ const char * TabInstr[ 256 ] =
 	"CALL M,#%.4X",0,"CP #%2.2X","RST 38"
 };
 
-
 //
 // Convertir le buffer en listing désassemblé
 // TODO Check size in order to avoid overflow
 //
-void Desass(t_Memory mem, std::ostream &Listing, int Start, int Longueur )
+void Disassemble(t_Memory& mem, std::ostream &Listing, int Start, int Longueur )
 {
 	int i, Instr, Inst2 = 0, Inst3 = 0, Inst4 = 0, Ad16;
 	const char * Chaine;

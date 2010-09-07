@@ -29,7 +29,6 @@ endif
 endif
 
 caprice_LDADD += core/libcapricecore.a \
-                 core/libdisass.a \
                  $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB) -lpthread
 
 

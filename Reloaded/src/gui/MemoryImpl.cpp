@@ -324,6 +324,7 @@ void MemoryImpl::RefreshMem(int startAddress)
 
 	wxString str;
 
+	hexView->Freeze();
 	hexView->Clear();
 
 	for (int i = 0; i < 32; i++)
@@ -338,10 +339,11 @@ void MemoryImpl::RefreshMem(int startAddress)
 		}
 		*hexView << _("\n");
 	}
+	hexView->Thaw();
 
 	// Disassembly view
 	std::stringstream data;
-	Desass(emu_mem, data, startAddress, 0x200);
+	Disassemble(emu_mem, data, startAddress, 0x200);
 
 	char line[256];
 	wxArrayString a;
@@ -354,7 +356,6 @@ void MemoryImpl::RefreshMem(int startAddress)
 	m_checkList1 -> Set(a, 0);
 	// Work around a bug in wx...
 	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxT("Courier") ) );
-
 }
 
 
