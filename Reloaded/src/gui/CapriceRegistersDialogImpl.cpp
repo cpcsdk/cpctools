@@ -59,8 +59,10 @@ void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
 
 void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 {
-	if (emulator->GetConfig().paused || emulator->GetConfig().breakpoint)
+	static uint16_t oldPC;
+	if (emulator->GetZ80()._rPC == oldPC)
 		return;
+	oldPC = emulator->GetZ80()._rPC;
 
     ostringstream tmp;
 

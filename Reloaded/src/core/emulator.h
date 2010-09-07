@@ -167,7 +167,6 @@ public:
 	inline void Breakpoint()
 	{
 		Pause();
-		GetConfig().breakpoint = 1 ;
 		sem_wait(&breakpointLock);
 	}
 	

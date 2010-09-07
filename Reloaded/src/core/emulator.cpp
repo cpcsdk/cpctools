@@ -512,9 +512,6 @@ void Emulator::Emulate()
         if (GetConfig().breakpoint)
         {
             _z80->trace = 1 ;
-			logMessage("break.");
-            this->Breakpoint();
-			logMessage("step.");
         }
         // run the emulation until an exit condition is met
         iExitCondition = _z80->z80_execute();
@@ -525,6 +522,12 @@ void Emulator::Emulate()
 #ifndef USE_PTHREAD
             return;
 #endif
+			if (iExitCondition == EC_BREAKPOINT) {
+				char msg[19] = "Breakpoint at NNNN";
+				sprintf(msg+14, "%.4X", _z80->_rPC);
+				logMessage(msg);
+			}
+			Breakpoint();
         }
 
 
