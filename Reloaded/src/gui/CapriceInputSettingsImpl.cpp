@@ -347,18 +347,64 @@ void CapriceInputSettingsImpl::RomChanged( wxCommandEvent& event )
 
 void CapriceInputSettingsImpl::SelectManufacturer(wxCommandEvent& event)
 {
-	emulator.GetConfig().jumpers = (emulator.GetConfig().jumpers & 0x10) 
-		| (((~event.GetSelection())&0x07) <<1);
+	emulator.GetConfig().jumpers = (emulator.GetConfig().jumpers & 0xF1) 
+		| (~event.GetSelection() <<1);
 }
 
 
 void CapriceInputSettingsImpl::Select50HZ(wxCommandEvent& event)
 {
-	emulator.GetConfig().jumpers = (emulator.GetConfig().jumpers & 0xE) | 1;
+	emulator.GetConfig().jumpers |= 0x10;
 }
 
 
 void CapriceInputSettingsImpl::Select60HZ(wxCommandEvent& event)
 {
-	emulator.GetConfig().jumpers = emulator.GetConfig().jumpers & 0xE;
+	emulator.GetConfig().jumpers &= 0xEF;
 }
+
+
+void CapriceInputSettingsImpl::LoadPreset( wxCommandEvent& event ) {
+	switch(event.GetSelection()) {
+		case 0: // 464
+			emulator.GetConfig().ram_size = 64; 
+			emulator.GetConfig().rom_file[7][0] = '\0';
+			RAMSize64->SetValue(true);
+			break;
+
+		case 1: // 664
+			emulator.GetConfig().ram_size = 64; 
+			strcpy(emulator.GetConfig().rom_file[7],"amsdos.rom");
+			RAMSize64->SetValue(true);
+			break;
+
+		case 2: // 6128
+		default:
+			emulator.GetConfig().ram_size = 128; 
+			strcpy(emulator.GetConfig().rom_file[7],"amsdos.rom");
+			RAMSize128->SetValue(true);
+			break;
+	}
+
+	emulator.GetConfig().model = event.GetSelection();
+
+	ROM7file->SetStringSelection(wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
+}
+
+
+void CapriceInputSettingsImpl::Select64K( wxCommandEvent& event ) {
+	emulator.GetConfig().ram_size = 64; 
+}
+
+
+void CapriceInputSettingsImpl::Select128K( wxCommandEvent& event ) {
+	emulator.GetConfig().ram_size = 128; 
+}
+
+
+void CapriceInputSettingsImpl::Select576K( wxCommandEvent& event ) {
+	emulator.GetConfig().ram_size = 576; 
+}
+
+
+

@@ -251,6 +251,9 @@ class Settings : public wxDialog
 		// Virtual event handlers, overide them in your derived class
 		virtual void onKeyPress( wxKeyEvent& event ) { event.Skip(); }
 		virtual void onKeyClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Select64K( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Select128K( wxCommandEvent& event ) { event.Skip(); }
+		virtual void Select576K( wxCommandEvent& event ) { event.Skip(); }
 		virtual void RomChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void SelectManufacturer( wxCommandEvent& event ) { event.Skip(); }
 		virtual void Select50HZ( wxCommandEvent& event ) { event.Skip(); }

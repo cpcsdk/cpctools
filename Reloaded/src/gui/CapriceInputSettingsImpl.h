@@ -16,17 +16,21 @@ class CapriceInputSettingsImpl : public Settings
 		void applySettings();
 
 	private:
-		virtual void onKeyClick(wxCommandEvent& event);
-		virtual void onKeyPress(wxKeyEvent& event);
-		virtual void onSave(wxCommandEvent& event);
-		virtual void restoreSettings(wxCommandEvent& event);
-		virtual void applySettings(wxCommandEvent& event) { applySettings(); }
-		virtual void changeCRTCType( wxSpinEvent& event );
-		virtual void changeColorPalette( wxCommandEvent& event );
-		virtual void RomChanged( wxCommandEvent& event );
-		virtual void SelectManufacturer( wxCommandEvent& event );
-		virtual void Select50HZ( wxCommandEvent& event );
-		virtual void Select60HZ( wxCommandEvent& event );
+		void onKeyClick(wxCommandEvent& event);
+		void onKeyPress(wxKeyEvent& event);
+		void onSave(wxCommandEvent& event);
+		void restoreSettings(wxCommandEvent& event);
+		void applySettings(wxCommandEvent& event) { applySettings(); }
+		void changeCRTCType( wxSpinEvent& event );
+		void changeColorPalette( wxCommandEvent& event );
+		void RomChanged( wxCommandEvent& event );
+		void SelectManufacturer( wxCommandEvent& event );
+		void Select50HZ( wxCommandEvent& event );
+		void Select60HZ( wxCommandEvent& event );
+		void LoadPreset( wxCommandEvent& event );
+		void Select64K( wxCommandEvent& event );
+		void Select128K( wxCommandEvent& event );
+		void Select576K( wxCommandEvent& event );
 
 		void saveKeymap();
 

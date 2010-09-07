@@ -696,6 +696,8 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_staticText62 = new wxStaticText( m_panel_memory, wxID_ANY, wxT("RAM"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText62->Wrap( -1 );
+	m_staticText62->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
 	bSizer23->Add( m_staticText62, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
 	RAMSize64 = new wxRadioButton( m_panel_memory, wxID_ANY, wxT("64k"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
@@ -718,6 +720,8 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	m_staticText71 = new wxStaticText( m_panel_memory, wxID_ANY, wxT("ROMs"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText71->Wrap( -1 );
+	m_staticText71->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
 	bSizer31->Add( m_staticText71, 0, wxALL|wxFIXED_MINSIZE, 5 );
 	
 	wxArrayString ROM0fileChoices;
@@ -770,6 +774,8 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	
 	LKs = new wxStaticText( m_panel_memory, wxID_ANY, wxT("LKs"), wxDefaultPosition, wxDefaultSize, 0 );
 	LKs->Wrap( -1 );
+	LKs->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 70, 90, 92, false, wxEmptyString ) );
+	
 	bSizer45->Add( LKs, 0, wxALL, 5 );
 	
 	wxString manufacturerNameChoices[] = { wxT("Amstrad"), wxT("Orion"), wxT("Schneider"), wxT("Awa"), wxT("Solavox"), wxT("Saisho"), wxT("Triumph"), wxT("ISP") };
@@ -1210,6 +1216,9 @@ Settings::Settings( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	k_ESC17->Connect( wxEVT_KEY_UP, wxKeyEventHandler( Settings::onKeyPress ), NULL, this );
 	m_shiftKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( Settings::onKeyPress ), NULL, this );
 	m_ctrlKey->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( Settings::onKeyPress ), NULL, this );
+	RAMSize64->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( Settings::Select64K ), NULL, this );
+	RAMSize128->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( Settings::Select128K ), NULL, this );
+	RAMSize576->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( Settings::Select576K ), NULL, this );
 	ROM0file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::RomChanged ), NULL, this );
 	ROM1file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::RomChanged ), NULL, this );
 	ROM2file->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::RomChanged ), NULL, this );
@@ -1534,6 +1543,9 @@ Settings::~Settings()
 	k_ESC17->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( Settings::onKeyPress ), NULL, this );
 	m_shiftKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( Settings::onKeyPress ), NULL, this );
 	m_ctrlKey->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( Settings::onKeyPress ), NULL, this );
+	RAMSize64->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( Settings::Select64K ), NULL, this );
+	RAMSize128->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( Settings::Select128K ), NULL, this );
+	RAMSize576->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( Settings::Select576K ), NULL, this );
 	ROM0file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::RomChanged ), NULL, this );
 	ROM1file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::RomChanged ), NULL, this );
 	ROM2file->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( Settings::RomChanged ), NULL, this );

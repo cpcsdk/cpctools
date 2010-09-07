@@ -144,6 +144,8 @@ void t_CPC::loadConfiguration ()
 	emulator->getConfigPath(chFileName);
 	strcat(chFileName,"/cap32.cfg") ;
 
+	emulator->logMessage(chFileName);
+
 	c_inifile_init( chFileName,&err);
 
 	if(err!=C_INIFILE_NO_ERROR)
@@ -162,9 +164,7 @@ void t_CPC::loadConfiguration ()
 	    }
 
 	    // OEM is Amstrad, video refresh is 50Hz
-	    jumpers = getConfigValueInt(chFileName, "system", "jumpers", 0x1e) & 0x1e;
-		char j[42];
-		sprintf(j,"%x",jumpers);
+	    jumpers = getConfigValueInt(chFileName, "system", "jumpers", 0xFF) & 0xFF;
 
 	    // 128KB RAM
 	    ram_size = getConfigValueInt(chFileName, "system", "ram_size", 128) & 0x02c0;
@@ -502,6 +502,8 @@ void t_CPC::saveConfiguration ()
 	char chFileName[1024];
 	emulator->getConfigPath(chFileName);
 	strcat(chFileName,"/cap32.cfg") ;
+
+	emulator->logMessage(chFileName);
 
 	if ((!c_inifile_init( chFileName,&err)) || err!=C_INIFILE_NO_ERROR)
 	{
