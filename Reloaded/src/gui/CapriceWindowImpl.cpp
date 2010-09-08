@@ -304,7 +304,24 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
     snapshotdir = OpenDialog->GetPath();
     SetTitle(wxString( wxT("Caprice - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-    snapshot_load(*emulator, snapshotdir.mb_str());
+    switch(snapshot_load(*emulator, snapshotdir.mb_str())) {
+		
+		case ERR_SNA_INVALID:
+			wxLogError("Invalid snapshot file !");
+			break;
+		case ERR_SNA_SIZE:
+			wxLogError("Invalid file size !");
+			break;
+		case ERR_SNA_CPC_TYPE:
+			wxLogError("Unknown CPC type !");
+			break;
+		case 0:
+			emulator->logMessage("Snapshot loaded ok.");
+			break;
+		default:
+			wxLogError("Unknown error !");
+			break;
+	}
   }
 }
 

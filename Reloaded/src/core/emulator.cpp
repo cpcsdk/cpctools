@@ -94,10 +94,10 @@ void Emulator::emulator_reset(bool bolMF2Reset)
 	_input.Reset();
 
 	// VDU
-	_vdu->Reset();
+	//_vdu->Reset();
 
 	// CRTC
-	_crtc->Reset();
+	//_crtc->Reset();
 
 	// Gate Array
 	_gateArray->Reset();

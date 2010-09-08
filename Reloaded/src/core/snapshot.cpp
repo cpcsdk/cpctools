@@ -116,11 +116,8 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 		dwSnapSize = sh.ram_size[0] + (sh.ram_size[1] * 256);
 		// limit to multiples of 64
 		dwSnapSize &= ~0x3f;
-		if (!dwSnapSize) 
-		{
-			fclose(pSNAfileObject);
-			return ERR_SNA_SIZE;
-		}
+		if (dwSnapSize == 0)
+			dwSnapSize = 64; // Compatibility with CPCE
 		
 		// memory dump size differs from current RAM size?
 		if (dwSnapSize > CPC.ram_size) 
