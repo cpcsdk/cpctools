@@ -302,7 +302,6 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
   if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
   {
     snapshotdir = OpenDialog->GetPath();
-    SetTitle(wxString( wxT("Caprice - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
     switch(snapshot_load(*emulator, snapshotdir.mb_str())) {
 		
@@ -316,7 +315,8 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
 			wxLogError("Unknown CPC type !");
 			break;
 		case 0:
-			emulator->logMessage("Snapshot loaded ok.");
+			// ok.
+    		SetTitle(wxString( wxT("Caprice - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 			break;
 		default:
 			wxLogError("Unknown error !");

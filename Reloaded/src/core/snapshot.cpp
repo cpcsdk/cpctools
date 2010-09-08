@@ -133,7 +133,8 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 			}
 		}
 
-		emulator.emulator_reset(false);
+		//emulator.emulator_reset(false);
+		emulator.Pause();
 		
 		// read memory dump into CPC RAM
 		n = fread(Memory.GetRAM(), dwSnapSize*1024, 1, pSNAfileObject);
@@ -248,6 +249,9 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 			PSG.SetAYRegister(n, sh.psg_registers[n]);
 		}
 		
+		char msg[19];
+		sprintf(msg,"Snapshot version %d", sh.version);
+		emulator.logMessage(msg);
 		// does the snapshot have version 2 data?
 		if (sh.version > 1) 
 		{
@@ -330,6 +334,8 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 			GateArray.SetSLCount( sh.ga_sl_count );
 			z80.int_pending = sh.z80_int_pending;
 		}
+
+		emulator.Run();
    } 
    else 
    {
