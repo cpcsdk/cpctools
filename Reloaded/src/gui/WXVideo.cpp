@@ -179,7 +179,7 @@ void WXDoubleLinePlugin::Flip()
 void WXDoubleLinePlugin::Screenshot(string filename)
 {
 	wxBitmap b(*img);
-	b.SaveFile(filename, wxBITMAP_TYPE_PNG);
+	b.SaveFile(wxString(filename.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG, NULL);
 }
 
 void WXDoubleLinePlugin::Close()

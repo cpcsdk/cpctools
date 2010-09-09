@@ -75,16 +75,16 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 {
 	// Check if the DSKs are modified.
 	if (emulator->GetDriveA().altered &&
-		wxMessageBox("DSK in drive A was modified ! Do you want to save before quitting ?",
-			"Save DSK?", wxICON_QUESTION | wxYES_NO, this) == wxYES)
+		wxMessageBox(wxT("DSK in drive A was modified ! Do you want to save before quitting ?"),
+			wxT("Save DSK?"), wxICON_QUESTION | wxYES_NO, this) == wxYES)
 	{
 		dsk_save(emulator->GetFDC().files[0].c_str(), &emulator->GetDriveA());
 		emulator->GetDriveA().altered = false;
 	}
 
 	if (emulator->GetDriveB().altered &&
-		wxMessageBox("DSK in drive A was modified ! Do you want to save before quitting ?",
-			"Save DSK?", wxICON_QUESTION | wxYES_NO, this) == wxYES)
+		wxMessageBox(wxT("DSK in drive A was modified ! Do you want to save before quitting ?"),
+			wxT("Save DSK?"), wxICON_QUESTION | wxYES_NO, this) == wxYES)
 	{
 		emulator->GetDriveB().altered = false;
 		dsk_save(emulator->GetFDC().files[1].c_str(), &emulator->GetDriveB());
@@ -215,7 +215,7 @@ void CapriceWindowImpl::onExit2( wxCommandEvent& event )
 void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 {
 	wxFileDialog* OpenDialog = new wxFileDialog(
-			this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
+			this, wxString(wxT("Choose a file to open")), wxEmptyString, wxEmptyString,
 			wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
 			wxOPEN, wxDefaultPosition);
 
@@ -230,16 +230,16 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
         		SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 				break;
 			case ERR_DSK_INVALID:
-				wxLogError("Invalid DSK file!");
+				wxLogError(wxT("Invalid DSK file!"));
 		   		break;	   
 			case ERR_DSK_SIDES:
-				wxLogError("Wrong side count!");
+				wxLogError(wxT("Wrong side count!"));
 				break;
 			case ERR_DSK_SECTORS:
-				wxLogError("Wrong sector count!");
+				wxLogError(wxT("Wrong sector count!"));
 				break;
 			case ERR_DSK_WRITE:
-				wxLogError("Write error!");
+				wxLogError(wxT("Write error!"));
 				break;
 		}
     }
@@ -272,16 +272,16 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
         		SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 				break;
 			case ERR_DSK_INVALID:
-				wxLogError("Invalid DSK file!");
+				wxLogError(wxT("Invalid DSK file!"));
 		   		break;	   
 			case ERR_DSK_SIDES:
-				wxLogError("Wrong side count!");
+				wxLogError(wxT("Wrong side count!"));
 				break;
 			case ERR_DSK_SECTORS:
-				wxLogError("Wrong sector count!");
+				wxLogError(wxT("Wrong sector count!"));
 				break;
 			case ERR_DSK_WRITE:
-				wxLogError("Write error!");
+				wxLogError(wxT("Write error!"));
 				break;
 		}
     }
@@ -306,20 +306,20 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
     switch(snapshot_load(*emulator, snapshotdir.mb_str())) {
 		
 		case ERR_SNA_INVALID:
-			wxLogError("Invalid snapshot file !");
+			wxLogError(wxT("Invalid snapshot file !"));
 			break;
 		case ERR_SNA_SIZE:
-			wxLogError("Invalid file size !");
+			wxLogError(wxT("Invalid file size !"));
 			break;
 		case ERR_SNA_CPC_TYPE:
-			wxLogError("Unknown CPC type !");
+			wxLogError(wxT("Unknown CPC type !"));
 			break;
 		case 0:
 			// ok.
     		SetTitle(wxString( wxT("Caprice - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
 			break;
 		default:
-			wxLogError("Unknown error !");
+			wxLogError(wxT("Unknown error !"));
 			break;
 	}
   }

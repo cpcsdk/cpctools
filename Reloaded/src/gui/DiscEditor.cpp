@@ -213,7 +213,7 @@ void DiscEditorImpl::pasteSector( wxCommandEvent& event )
 
 	TRK.data = (unsigned char*)realloc(TRK.data, TRK.size);
 	if (TRK.data == NULL) {
-		wxLogError("Memory allocation failed");
+		wxLogError(wxT("Memory allocation failed"));
 		TRK.size -= sectorClipboard->size;
 		return;
 	}
@@ -276,9 +276,9 @@ void DiscEditorImpl::renameSector( wxCommandEvent& event )
 	// Ask for the new ID and change it in the track
 	wxString newId;
 	wxString msg;
-	msg.Printf("Enter new ID for sector %x in track %d",sect_id, track_id);
-	newId.Printf("%x",FloppyImage.track[track_id][0].sector[sect_id].CHRN[2]);
-   	newId = wxGetTextFromUser(msg, "Rename sector", newId, this);
+	msg.Printf(wxT("Enter new ID for sector %x in track %d"),sect_id, track_id);
+	newId.Printf(wxT("%x"),FloppyImage.track[track_id][0].sector[sect_id].CHRN[2]);
+   	newId = wxGetTextFromUser(msg, wxT("Rename sector"), newId, this);
 	long val;
 	if (!newId.IsEmpty() && newId.ToLong(&val, 16)) {
 		FloppyImage.track[track_id][0].sector[sect_id].CHRN[2] = val;

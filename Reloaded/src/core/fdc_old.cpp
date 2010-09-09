@@ -259,7 +259,7 @@ void t_FDC::cmd_read(void)
 loop:
 	sector = find_sector(&command[CMD_C]); // locate the requested sector on the current track
 	Emulator::getInstance()->fdcNotifyRead(driveA.current_side, driveA.current_track,
-		sector==NULL?0:sector->CHRN[2], (int)sector);
+		sector==NULL?0:sector->CHRN[2], /*(int)sector*/ 1);
 	if (sector) { // sector found
 		result[RES_ST1] = sector->flags[0] & 0x25; // copy ST1 to result, ignoring unused bits
 		result[RES_ST2] = sector->flags[1] & 0x61; // copy ST2 to result, ignoring unused bits
@@ -353,7 +353,7 @@ void t_FDC::cmd_readtrk(void)
 	read_status_delay = 1;
 
 	Emulator::getInstance()->fdcNotifyRead(driveA.current_side, driveA.current_track,
-		sector->CHRN[2], -(int)sector);
+		sector->CHRN[2], -1 /*-(int)sector*/);
 }
 
 
