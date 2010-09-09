@@ -83,6 +83,7 @@ public:
     int vid_w,vid_h,vid_bpp;
     VideoPlugin::VideoType vid_style;
     Renderer::MonitorMode scr_tube;
+	unsigned int crtc;
 
 public:
    void loadConfiguration ();

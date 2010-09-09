@@ -374,6 +374,7 @@ class Renderer
         ColoursHiFiMode,
         PersonalMode,
     };
+	void InitPalette();
 
 	//! Constructor
 	Renderer(Emulator *emu);
@@ -466,7 +467,6 @@ class Renderer
 
 	void SetPreRender(dword flags);
 
-	void InitPalette();
 	void Shutdown();
 };
 

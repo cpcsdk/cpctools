@@ -369,8 +369,11 @@ bool Emulator::Init()
 
 	_gateArray = new t_GateArray(_renderer);
 	_vdu = new t_VDU(_renderer);
-//	_crtc = new t_CRTC1(*_gateArray, *_vdu);
-	_crtc = new t_CRTC(*_gateArray, *_vdu);
+
+	if(_config.crtc == 1)
+		_crtc = new t_CRTC1(*_gateArray, *_vdu);
+	else
+		_crtc = new t_CRTC(*_gateArray, *_vdu);
 
 	_tape = new t_Tape(_config);
 

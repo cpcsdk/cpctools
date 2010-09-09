@@ -93,6 +93,8 @@ t_CPC::t_CPC(Emulator* emu)
     scr_intensity=0;
     scr_remanency=false;
 
+	crtc = 0;
+
     vid_w=800;
     vid_h=600;
     vid_bpp=24;
@@ -233,6 +235,8 @@ void t_CPC::loadConfiguration ()
 			scr_intensity = 10;
 	    }
 	    //emulator.GetRenderer().SetMonitor(color, intensity, remanency);
+
+		crtc = getConfigValueInt(chFileName, "video", "crtc", 0);
 
 	    //renderer.scr_vsync = getConfigValueInt(chFileName, "video", "scr_vsync", 1) & 1;
 	    //renderer.scr_led = getConfigValueInt(chFileName, "video", "scr_led", 1) & 1;
@@ -575,6 +579,10 @@ void t_CPC::saveConfiguration ()
 				c_inifile_set_uinteger("video", "scr_tube", 4,&err);
                 break;
         }
+		printerr(err,__LINE__);
+
+		c_inifile_set_uinteger("video", "crtc", crtc, &err);
+
 		printerr(err,__LINE__);
 	    c_inifile_set_uinteger("video", "scr_intensity", scr_intensity,&err);
 		printerr(err,__LINE__);

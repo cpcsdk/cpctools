@@ -108,11 +108,27 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	ROM6file->SetStringSelection(wxString(emulator.GetConfig().rom_file[6],wxConvUTF8));
 	ROM7file->SetStringSelection(wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
 
-	manufacturerName->SetSelection(~((emulator.GetConfig().jumpers>>1) & 7));
+	manufacturerName->SetSelection((~emulator.GetConfig().jumpers>>1) & 7);
 	if (emulator.GetConfig().jumpers & 0x10)
 		radio50->SetValue(true);
 	else
 		radio60->SetValue(true);
+
+	switch (emulator.GetConfig().ram_size) {
+		case 576:
+			RAMSize576->SetValue(true);
+			break;
+		case 128:
+		default:
+			RAMSize128->SetValue(true);
+			break;
+		case 64:
+			RAMSize64->SetValue(true);
+			break;
+	}
+
+	choice_colorPalette->SetSelection(emulator.GetConfig().scr_tube);
+	spin_CRTC->SetValue(emulator.GetConfig().crtc);
 }
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
@@ -314,10 +330,11 @@ void CapriceInputSettingsImpl::changeCRTCType( wxSpinEvent& event )
 
 void CapriceInputSettingsImpl::changeColorPalette( wxCommandEvent& event )
 {
-	t_CPC _config = emulator.GetConfig();
-	_config.scr_tube = (Renderer::MonitorMode)(event.GetInt());
+#define _config emulator.GetConfig()
+	emulator.GetConfig().scr_tube = (Renderer::MonitorMode)(event.GetInt());
 	emulator.GetRenderer().SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
-	emulator.GetRenderer().Init();
+	emulator.GetRenderer().InitPalette();
+#undef _config
 }
 
 /***************
