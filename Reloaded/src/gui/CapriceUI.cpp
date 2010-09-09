@@ -148,7 +148,7 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	m_separator3 = m_menu_file->AppendSeparator();
 	
 	wxMenuItem* m_mI_SaveSCR;
-	m_mI_SaveSCR = new wxMenuItem( m_menu_file, 9974, wxString( wxT("Save Screenshot") ) , wxEmptyString, wxITEM_NORMAL );
+	m_mI_SaveSCR = new wxMenuItem( m_menu_file, 9974, wxString( wxT("Save Screenshot") ) + wxT('\t') + wxT("F12"), wxEmptyString, wxITEM_NORMAL );
 	m_menu_file->Append( m_mI_SaveSCR );
 	
 	wxMenuItem* m_menu_insertDiscA1;
@@ -237,7 +237,7 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	m_menubar1->Append( m_menu_settings, wxT("Settings") ); 
 	
 	m_menu_debug = new wxMenu();
-	m_menuItem_run = new wxMenuItem( m_menu_debug, 9956, wxString( wxT("Run") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menuItem_run = new wxMenuItem( m_menu_debug, 9956, wxString( wxT("Run") ) + wxT('\t') + wxT("F6"), wxEmptyString, wxITEM_NORMAL );
 	m_menu_debug->Append( m_menuItem_run );
 	m_menuItem_run->Enable( false );
 	
@@ -2936,7 +2936,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel12->SetSizer( bSizer51 );
 	m_panel12->Layout();
 	bSizer51->Fit( m_panel12 );
-	m_auinotebook1->AddPage( m_panel12, wxT("Explore"), false, wxNullBitmap );
+	m_auinotebook1->AddPage( m_panel12, wxT("Explore"), true, wxNullBitmap );
 	m_panel13 = new wxPanel( m_auinotebook1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer391;
 	bSizer391 = new wxBoxSizer( wxVERTICAL );
@@ -2995,7 +2995,7 @@ Memory::Memory( wxWindow* parent, wxWindowID id, const wxString& title, const wx
 	m_panel19->SetSizer( bSizer54 );
 	m_panel19->Layout();
 	bSizer54->Fit( m_panel19 );
-	m_auinotebook1->AddPage( m_panel19, wxT("Search"), true, wxNullBitmap );
+	m_auinotebook1->AddPage( m_panel19, wxT("Search"), false, wxNullBitmap );
 	
 	bSizer29->Add( m_auinotebook1, 1, wxEXPAND | wxALL, 5 );
 	

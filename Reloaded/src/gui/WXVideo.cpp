@@ -178,8 +178,13 @@ void WXDoubleLinePlugin::Flip()
 
 void WXDoubleLinePlugin::Screenshot(string filename)
 {
-	wxBitmap b(*img);
-	b.SaveFile(wxString(filename.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG, NULL);
+	wxBitmap* b;
+	if (Emulator::getInstance()->GetGateArray().GetMode() != 2)
+		b = new wxBitmap(img->Scale(384,272));
+	else
+		b = new wxBitmap(*img);
+	b->SaveFile(wxString(filename.c_str(), wxConvUTF8), wxBITMAP_TYPE_PNG, NULL);
+	delete b;
 }
 
 void WXDoubleLinePlugin::Close()

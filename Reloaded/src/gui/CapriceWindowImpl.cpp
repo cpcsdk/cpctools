@@ -370,7 +370,10 @@ void CapriceWindowImpl::onUpdateSNA( wxCommandEvent& event )
  */
 void CapriceWindowImpl::onSaveScreen( wxCommandEvent& event)
 {
-  emulator->SaveScreenshot("capture.png");
+	static int i = 0;
+	char filename[16];
+	sprintf(filename,"capture%04d.png",i++);
+  emulator->SaveScreenshot(filename);
 }
 
 void CapriceWindowImpl::OnPause( wxCommandEvent& event)
