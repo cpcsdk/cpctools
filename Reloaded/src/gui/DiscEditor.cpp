@@ -24,9 +24,10 @@ DiscEditorImpl::DiscEditorImpl( wxWindow* parent )
 
 	// Fill in the sector editor
 	lb_sectors->Clear();
+	currentTrack = 0;
 	for(unsigned int s = 0;s<FloppyImage.track[0][0].sectors;s++) {
 		wxString sNum;
-		sNum.Printf(wxT("%x"),(int)FloppyImage.track[0][0].sector[s].CHRN[2]);
+		sNum.Printf(_("%x"),(int)FloppyImage.track[0][0].sector[s].CHRN[2]);
 		lb_sectors->Append(sNum);
 	}
 }
