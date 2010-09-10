@@ -32,9 +32,9 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	m_menu_drivea->Append( m_menu_formatDiscA );
 	m_menu_formatDiscA->Enable( false );
 	
-	wxMenuItem* m_menuItem5;
-	m_menuItem5 = new wxMenuItem( m_menu_drivea, 9996, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu_drivea->Append( m_menuItem5 );
+	wxMenuItem* menu_editDiskA;
+	menu_editDiskA = new wxMenuItem( m_menu_drivea, wxID_ANY, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_drivea->Append( menu_editDiskA );
 	
 	wxMenuItem* m_menuItem7;
 	m_menuItem7 = new wxMenuItem( m_menu_drivea, 9995, wxString( wxT("Remove Disc") ) , wxEmptyString, wxITEM_NORMAL );
@@ -57,10 +57,9 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	m_menu_driveb->Append( m_menuItem41 );
 	m_menuItem41->Enable( false );
 	
-	wxMenuItem* m_menuItem51;
-	m_menuItem51 = new wxMenuItem( m_menu_driveb, 9991, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
-	m_menu_driveb->Append( m_menuItem51 );
-	m_menuItem51->Enable( false );
+	wxMenuItem* menu_editDiskB;
+	menu_editDiskB = new wxMenuItem( m_menu_driveb, wxID_ANY, wxString( wxT("Edit Disc") ) , wxEmptyString, wxITEM_NORMAL );
+	m_menu_driveb->Append( menu_editDiskB );
 	
 	wxMenuItem* m_menuItem61;
 	m_menuItem61 = new wxMenuItem( m_menu_driveb, 9990, wxString( wxT("Flip Disc") ) , wxEmptyString, wxITEM_NORMAL );
@@ -310,8 +309,9 @@ EmulatorWindow::EmulatorWindow( wxWindow* parent, wxWindowID id, const wxString&
 	this->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ) );
 	this->Connect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ) );
 	this->Connect( m_menu_insertDiscA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscA ) );
-	this->Connect( m_menuItem5->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskA ) );
+	this->Connect( menu_editDiskA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskA ) );
 	this->Connect( m_menuItem11->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscB ) );
+	this->Connect( menu_editDiskB->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskB ) );
 	this->Connect( m_menuItem26->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::insertTape ) );
 	this->Connect( m_menuItem29->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::pressPlayOnTape ) );
 	this->Connect( m_mI_LoadSNA->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onLoadSNA ) );
@@ -350,8 +350,9 @@ EmulatorWindow::~EmulatorWindow()
 	this->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( EmulatorWindow::windowKeyDown ) );
 	this->Disconnect( wxEVT_KEY_UP, wxKeyEventHandler( EmulatorWindow::windowKeyUp ) );
 	this->Disconnect( 9999, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscA ) );
-	this->Disconnect( 9996, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskA ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskA ) );
 	this->Disconnect( 9994, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onInsertDiscB ) );
+	this->Disconnect( wxID_ANY, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::menu_editDiskB ) );
 	this->Disconnect( 9985, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::insertTape ) );
 	this->Disconnect( 9982, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::pressPlayOnTape ) );
 	this->Disconnect( 9979, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( EmulatorWindow::onLoadSNA ) );

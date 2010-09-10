@@ -9,9 +9,9 @@
 
 t_sector* DiscEditorImpl::sectorClipboard = NULL;
 
-DiscEditorImpl::DiscEditorImpl( wxWindow* parent )
+DiscEditorImpl::DiscEditorImpl( wxWindow* parent, int drive )
 	: DiscEditor(parent)
-	, FloppyImage(Emulator::getInstance()->GetDriveA())
+	, FloppyImage(drive?Emulator::getInstance()->GetDriveB():Emulator::getInstance()->GetDriveA())
 {
 	// Get the disk info.
 	// Fill in the Overview

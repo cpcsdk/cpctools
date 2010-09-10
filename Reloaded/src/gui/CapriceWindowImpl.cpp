@@ -247,7 +247,12 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 }
 
 void CapriceWindowImpl::menu_editDiskA( wxCommandEvent& event ) {
-	DiscEditorImpl* de = new DiscEditorImpl(this);
+	DiscEditorImpl* de = new DiscEditorImpl(this, 0);
+	de->Show(true);
+}
+
+void CapriceWindowImpl::menu_editDiskB( wxCommandEvent& event ) {
+	DiscEditorImpl* de = new DiscEditorImpl(this, 1);
 	de->Show(true);
 }
 

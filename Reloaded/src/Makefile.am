@@ -13,9 +13,6 @@ caprice_CPPFLAGS = $(WX_CPPFLAGS) -I$(srcdir)/core -I$(srcdir)/gui -DUNICODE
 #caprice wx needs to be after mingw32 so we can find WinMain ?
 caprice_LDADD =
 
-
-
-
 if MINGW
 caprice_LDADD += $(MINGW_LIB)
 endif

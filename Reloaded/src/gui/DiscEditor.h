@@ -17,7 +17,7 @@ class DiscEditorImpl : public DiscEditor
 		int currentTrack;
 	public:
 		/** Constructor */
-		DiscEditorImpl( wxWindow* parent );
+		DiscEditorImpl( wxWindow* parent, int drive );
 		void setTrack( wxSpinEvent& event );
 		void setSector( wxCommandEvent& event );
 		static t_sector* sectorClipboard;
