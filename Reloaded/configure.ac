@@ -172,8 +172,10 @@ AC_MSG_RESULT([$enable_debug])
 case "$host_os" in
 *darwin* | *rhapsody* | *macosx*)
      AC_DEFINE_UNQUOTED(DARWIN,1,[This is an Apple Darwin system])
-#     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system to use emulator in background])
+     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system to use emulator in background])
      CPPFLAGS="-DMAX_PATH=PATH_MAX -D_APPLE_C_SOURCE $CPPFLAGS"
+     CXXFLAGS="$CXXFLAGS -m32"
+     CFLAGS="-m32"
      build_target="darwin"
      ;;
 linux*)
