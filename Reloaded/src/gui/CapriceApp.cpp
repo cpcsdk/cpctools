@@ -152,17 +152,20 @@ int CapriceApp::OnExit()
 	wsic = NULL;
 #endif
 	delete DiscEditorImpl::sectorClipboard;
+	DiscEditorImpl::sectorClipboard = NULL;
 
 	delete emulator;
 	emulator = NULL;
 
-	delete frame;
-	frame = NULL;
+	// The only way to exit the emulator is to delete the window.
+	// So when we get here, the window is already gone.
+	//delete frame;
+	//frame = NULL;
 #if CLI
   	if (cli)
   	{
-    	cout << "Quit parser" << endl ;
-    	cparser_quit(&parser) ;
+		cout << "Quit parser" << endl ;
+		cparser_quit(&parser) ;
   	}
 #endif
 	return 0;

@@ -290,7 +290,10 @@ Emulator::~Emulator()
 	audio_shutdown();
 
 #ifdef USE_DEBUGGER
-	fclose(pfoDebug);
+	if (pfoDebug) {
+		fclose(pfoDebug);
+		pfoDebug = NULL;
+	}
 #endif
     DebugLogMessage("Destruct Emulator");
     emuSync.unlock();

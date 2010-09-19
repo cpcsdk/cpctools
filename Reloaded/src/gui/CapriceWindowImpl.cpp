@@ -90,7 +90,8 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 		dsk_save(emulator->GetFDC().files[1].c_str(), &emulator->GetDriveB());
 	}
 
-	Close(); // This is not the good way, it will recursively call this event. But apparently, it works ?
+	// Close(); // This is not the good way, it will recursively call this event. But apparently, it works ?
+	delete this;
 }
 
 
