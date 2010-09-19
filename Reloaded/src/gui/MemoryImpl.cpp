@@ -116,8 +116,6 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 	wxColour baseColor;
 	wxColour darkColor;
 
-	p.SetStyle(wxTRANSPARENT);
-
 	if(overviewType == 1) // bank ram
 		baseColor = bankColor->GetColour();
 	else
@@ -130,6 +128,8 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 	{
 		if(y==0 || y==0x40 || y==0x80 || y==0xC0)
 		{
+			p.SetStyle(wxTRANSPARENT);
+
 			if(overviewType == 2) { // "z80 view"
 				setZoneInfo(y);
 				switch(_emulator->GetMemory().getTypeForAddress(y<<8))
@@ -156,6 +156,10 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 			drawContext.SetBrush(b);
 
 			drawContext.DrawRectangle(0, y, 256, 64);
+
+			// set the pen to solid again for drawing the dots
+			p.SetStyle(wxSOLID);
+			drawContext.SetPen(p);
 		}
 
 
