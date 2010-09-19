@@ -221,35 +221,41 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 			wxOPEN, wxDefaultPosition);
 
     // Creates a "open file" dialog with 4 file types
-    if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
-    {
-        wxString CurrentDocPath = OpenDialog->GetPath();
+	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
+	{
+			wxString CurrentDocPath = OpenDialog->GetPath();
 
-        int error = emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
-		switch(error) {
-			case 0:
-        		SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
-				break;
-			case ERR_DSK_INVALID:
-				wxLogError(wxT("Invalid DSK file!"));
-		   		break;	   
-			case ERR_DSK_SIDES:
-				wxLogError(wxT("Wrong side count!"));
-				break;
-			case ERR_DSK_SECTORS:
-				wxLogError(wxT("Wrong sector count!"));
-				break;
-			case ERR_DSK_WRITE:
-				wxLogError(wxT("Write error!"));
-				break;
-		}
-    }
+			int error = emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+			switch(error) {
+				case 0:
+					SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
+					break;
+				case ERR_DSK_INVALID:
+					wxLogError(wxT("Invalid DSK file!"));
+					break;	   
+				case ERR_DSK_SIDES:
+					wxLogError(wxT("Wrong side count!"));
+					break;
+				case ERR_DSK_SECTORS:
+					wxLogError(wxT("Wrong sector count!"));
+					break;
+				case ERR_DSK_WRITE:
+					wxLogError(wxT("Write error!"));
+					break;
+				case ERR_FILE_NOT_FOUND:
+					wxLogError(wxT("FIle not found or permission denied"));
+					break;
+				default:
+					wxLogError(wxT("Unknown error while opening file"));
+					break;
+			}
+	}
 
 }
 
 void CapriceWindowImpl::menu_editDiskA( wxCommandEvent& event ) {
-	DiscEditorImpl* de = new DiscEditorImpl(this, 0);
-	de->Show(true);
+		DiscEditorImpl* de = new DiscEditorImpl(this, 0);
+		de->Show(true);
 }
 
 void CapriceWindowImpl::menu_editDiskB( wxCommandEvent& event ) {
@@ -288,6 +294,12 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
 				break;
 			case ERR_DSK_WRITE:
 				wxLogError(wxT("Write error!"));
+				break;
+			case ERR_FILE_NOT_FOUND:
+				wxLogError(wxT("FIle not found or permission denied"));
+				break;
+			default:
+				wxLogError(wxT("Unknown error while opening file"));
 				break;
 		}
     }
