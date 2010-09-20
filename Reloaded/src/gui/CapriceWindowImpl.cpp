@@ -31,6 +31,7 @@
 #include "tape.h"
 #include "error.h"
 #include "dsk.h"
+#include "WXEmulator.h"
 
 #ifdef WITH_IDE
 #include "CapriceIDE.h"
@@ -90,8 +91,16 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 		dsk_save(emulator->GetFDC().files[1].c_str(), &emulator->GetDriveB());
 	}
 
-	// Close(); // This is not the good way, it will recursively call this event. But apparently, it works ?
-	delete this;
+
+	#ifdef __WXWIN32__
+		Close();
+	#else
+		emulator->Pause();
+		delete this;
+		delete emulator;
+	#endif
+
+
 }
 
 

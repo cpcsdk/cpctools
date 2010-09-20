@@ -159,8 +159,10 @@ int CapriceApp::OnExit()
 
 	// The only way to exit the emulator is to delete the window.
 	// So when we get here, the window is already gone.
-	//delete frame;
-	//frame = NULL;
+#ifdef __WXWIN32__
+	delete frame;
+	frame = NULL;
+#endif
 #if CLI
   	if (cli)
   	{

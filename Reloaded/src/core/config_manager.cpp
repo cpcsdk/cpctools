@@ -166,7 +166,7 @@ void t_CPC::loadConfiguration ()
 	    }
 
 	    // OEM is Amstrad, video refresh is 50Hz
-	    jumpers = getConfigValueInt(chFileName, "system", "jumpers", 0xFF) & 0xFF;
+	    jumpers = getConfigValueInt(chFileName, "system", "jumpers", 0x1E) & 0x1E;
 
 	    // 128KB RAM
 	    ram_size = getConfigValueInt(chFileName, "system", "ram_size", 128) & 0x02c0;
@@ -522,7 +522,7 @@ void t_CPC::saveConfiguration ()
 		printerr(err,__LINE__);
 
 	    // OEM is Amstrad, video refresh is 50Hz
-	    c_inifile_set_uinteger("system", "jumpers", jumpers,&err);
+	    c_inifile_set_uinteger("system", "jumpers", jumpers & 0x1E,&err);
 		printerr(err,__LINE__);
 
 	    // 128KB RAM
