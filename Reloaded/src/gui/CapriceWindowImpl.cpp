@@ -92,7 +92,7 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 	}
 
 
-	#ifdef __WXWIN32__
+	#ifdef __WXMSW__
 		Close();
 	#else
 		emulator->Pause();
