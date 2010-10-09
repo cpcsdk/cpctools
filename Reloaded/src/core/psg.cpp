@@ -317,5 +317,5 @@ void t_PSG::InitAYCounterVars()
 {
     cycle_count = 0;
     snd_cycle_count = (4000000.0/(double)(CPC.snd_playback_rate)); // number of Z80 cycles per sample
-    std::cout << "Audio cycle count : " << snd_cycle_count << std::endl;
+    // std::cout << "Audio cycle count : " << snd_cycle_count << std::endl;
 }

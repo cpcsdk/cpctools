@@ -103,7 +103,8 @@ t_CPC::t_CPC(Emulator* emu)
 }
 
 t_CPC::~t_CPC() {
-	saveConfiguration();
+	// saveConfiguration();
+	//	there is an oldCfg object in the settings window that should not save its settings.
 }
 
 unsigned int getConfigValueInt (const char* pchFileName, const char* pchSection, const char* pchKey, unsigned int iDefaultValue)
@@ -145,8 +146,6 @@ void t_CPC::loadConfiguration ()
 	char chFileName[1024];
 	emulator->getConfigPath(chFileName);
 	strcat(chFileName,"/cap32.cfg") ;
-
-	emulator->logMessage(chFileName);
 
 	c_inifile_init( chFileName,&err);
 
@@ -507,11 +506,10 @@ void t_CPC::saveConfiguration ()
 	emulator->getConfigPath(chFileName);
 	strcat(chFileName,"/cap32.cfg") ;
 
-	emulator->logMessage(chFileName);
 
 	if ((!c_inifile_init( chFileName,&err)) || err!=C_INIFILE_NO_ERROR)
 	{
-	    printerr(err,__LINE__);
+	    emulator->logMessage("Error saving configuration");
 		return;
 	}
 	else
@@ -661,5 +659,6 @@ void t_CPC::saveConfiguration ()
 		printerr(err);
 
 	    c_inifile_close();
+		emulator->logMessage("Configuration saved.");
 	}
 }

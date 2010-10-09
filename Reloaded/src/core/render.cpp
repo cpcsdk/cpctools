@@ -424,6 +424,11 @@ bool Renderer::Init()
 	delete _videoPlugin;
 	_videoPlugin = NULL;
 
+	if (_videoPluginPtr == NULL) {
+		CriticalLogMessage("There is no video plugin !\n");
+		return false;
+	}
+
 	_videoPlugin = (*_videoPluginPtr)();
 	_videoPlugin->SetOption("OpenGLFilter", _videoPluginOpenGLFilter);
 	_videoPlugin->SetOption("Remanency", _monitorRemanency);
@@ -433,7 +438,7 @@ bool Renderer::Init()
 	{ 
 		return false;
 	}
-	
+
 	void *backSurface = _videoPlugin->GetSurface();
 
 	_renderHalf = _videoPlugin->IsHalfSize();
@@ -500,7 +505,7 @@ bool Renderer::Init()
 		}
 		_preRenderFunc = _preRenderNormalFunc;
 	}
-	
+
 	switch(_videoPlugin->GetRenderSurfaceBPP())
 	{
 	case 32:
@@ -519,8 +524,11 @@ bool Renderer::Init()
 	case 8:
 		_renderFunc = new Render8BppFunction;
 		break;
+	default:
+		_renderFunc = new Render0BppFunction;
+		break;
 	}
-	
+
 	_preRenderNormalFunc->SetMemory(oldMemory);
 	_preRenderFunc->SetMode(oldMode);
 	_preRenderFunc->SetRenderPos(oldRendPos);

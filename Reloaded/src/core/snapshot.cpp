@@ -249,9 +249,11 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 			PSG.SetAYRegister(n, sh.psg_registers[n]);
 		}
 		
+		/*
 		char msg[19];
 		sprintf(msg,"Snapshot version %d", sh.version);
 		emulator.logMessage(msg);
+		*/
 		// does the snapshot have version 2 data?
 		if (sh.version > 1) 
 		{

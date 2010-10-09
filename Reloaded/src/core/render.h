@@ -165,6 +165,14 @@ class Renderer
                 virtual void Render();
                 virtual void PlotPixel(int x, int y, const ColorARGB8888 &colour);
         };
+		class Render0BppFunction : public RenderFunction
+		{
+			~Render0BppFunction() {};
+
+			public:
+				void Render() {};
+				void PlotPixel(int x, int y, const ColorARGB8888 &colour) {};
+		};
 
 	// Pre render function
 	class PreRenderFunction

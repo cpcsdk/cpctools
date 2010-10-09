@@ -204,6 +204,7 @@ bool Emulator::MF2Init()
 // Non Thread Safe
 void Emulator::emulator_shutdown()
 {
+	logMessage("Shutting down...");
 	delete [] pbMF2ROMbackup;
 	pbMF2ROMbackup = NULL;
 	delete [] pbMF2ROM;
@@ -259,7 +260,9 @@ void Emulator::printer_stop()
 Emulator::Emulator():
 	_renderer(this),
 	_config(this),
-	FPSDisplay(true)
+	_videoPlugin(NULL),
+	FPSDisplay(true),
+	exitRequested(false)
 {
     emuSync.lock();
 	// retrieve the emulator configuration
@@ -271,6 +274,7 @@ Emulator::Emulator():
 
 Emulator::~Emulator()
 {
+	logMessage("Destructing emu!");
     emuSync.lock();
 #ifdef USE_PTHREAD
     exitRequested=1;
@@ -416,12 +420,12 @@ bool Emulator::Init()
 	goToAddress = -1 ;
 
 #ifdef USE_PTHREAD
-    InfoLogMessage("Use Thread");
 	// Spawn a thread for emulating (this way we do not freeze the window)
 	pthread_create(&emuthread,NULL,runEmulation,this);
 #endif
 
     emuSync.unlock();
+
 	return true;
 }
 
@@ -535,8 +539,6 @@ void Emulator::Emulate()
 			}
 			Breakpoint();
         }
-
-
 
         // emulation finished rendering a complete frame?
         if (iExitCondition == EC_FRAME_COMPLETE)

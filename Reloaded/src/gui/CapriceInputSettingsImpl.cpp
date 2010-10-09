@@ -133,7 +133,6 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
 {
-	saveKeymap();
 }
 
 void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)

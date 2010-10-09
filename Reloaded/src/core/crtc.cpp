@@ -51,7 +51,7 @@ extern FILE *pfoDebug;
 
 void t_CRTC::dispRegs() {
 	for(int i = 0; i < 14; i++)
-		cout << hex << _registers[i] << "\t";
+		cout << "crtc reg" << i << " : " << hex << _registers[i] << "\t";
 	cout << endl;
 }
 
@@ -540,7 +540,6 @@ void t_CRTC::setReg3(unsigned char val)
 	_hsw = val & 0x0f; // isolate horizontal sync width
 	_vsw = val >> 4; // isolate vertical sync width
 	if(_vsw==0) _vsw = 16;
-	std::cout << std::hex << (int)val;
 }
 
 void t_CRTC::WriteData(unsigned char val)
