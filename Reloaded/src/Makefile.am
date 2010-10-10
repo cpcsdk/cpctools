@@ -6,7 +6,7 @@ SUBDIRS = core
 MINGW_LIB=-lmingw32
 
 #TODO : Build video and emulator inside libcapricecore
-caprice_SOURCES = core/video.cpp core/emulator.cpp
+caprice_SOURCES = #core/video.cpp core/emulator.cpp
 caprice_CPPFLAGS = $(WX_CPPFLAGS) -I$(srcdir)/core -I$(srcdir)/gui -DUNICODE
 
 #caprice core needs to be before portaudio and soundlib

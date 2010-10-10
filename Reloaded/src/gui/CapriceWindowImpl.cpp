@@ -120,12 +120,13 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
 	if (emulator->GetConfig().paused || emulator->GetConfig().breakpoint) {
 		wxClientDC dc(getPanel());
 		int scrpos = emulator->GetRenderer().GetScreenPosition();
-		const int width = 1024;
+		const int width = 640;
 		int y = scrpos/width;
 		scrpos -= y*width;
-		dc.CrossHair(scrpos, y);
+		dc.CrossHair(scrpos, 2*y+1);
 		dc.SetPen(*wxWHITE_PEN);
-		dc.CrossHair(scrpos-1, y-1);
+		dc.CrossHair(scrpos-1, 2*y);
+
 	}
 }
 
@@ -185,8 +186,6 @@ void CapriceWindowImpl::Pause() {
 	m_menuItem_pause->Enable(false) ;
 	m_menuItem_run->Enable(true);
 
-	InfoLogMessage("Paused!");
-
 	// Since the emulator will 'never' reach an end of frame in pause/step mode, ensure the screen
 	// is drawn (this also erases the crosshair from the previous step)
 	emulator->GetRenderer().GetVideoPlugin()->LockOutput();
@@ -202,12 +201,12 @@ void CapriceWindowImpl::Pause() {
 	// In pause mode, we display a crosshair showing where the electron
 	// beam is.
 	int scrpos = emulator->GetRenderer().GetScreenPosition();
-	const int width = 1024;
+	const int width = 640;
 	int y = scrpos/width;
 	scrpos -= y*width;
-	dc.CrossHair(scrpos, y);
+	dc.CrossHair(scrpos, 2*y+1);
 	dc.SetPen(*wxWHITE_PEN);
-	dc.CrossHair(scrpos-1, y-1);
+	dc.CrossHair(scrpos-1, 2*y);
 }
 
 

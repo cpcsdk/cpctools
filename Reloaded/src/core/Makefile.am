@@ -18,6 +18,7 @@ crtc1.h\
 debug.h\
 dsk.cpp\
 dsk.h\
+emulator.cpp\
 emulator.h\
 error.h\
 fdc.cpp\
@@ -50,6 +51,7 @@ tape.cpp\
 tape.h\
 vdu.cpp\
 vdu.h\
+video.cpp\
 video.h\
 z80.cpp\
 z80.h\
