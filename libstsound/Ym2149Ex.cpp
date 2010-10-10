@@ -35,6 +35,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "Ym2149Ex.h"
+#include "YmProfiles.h"
 
 //-------------------------------------------------------------------
 // env shapes.
@@ -144,31 +145,40 @@ CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
     pVolB = &volB;
     pVolC = &volC;
 
-    // Set default output mixer.
-#if YM_INTEGER_ONLY
-    // Fixed Point Mode: u1.7
-    // Mono Output
-    vOut[0] = vOut[1] = vOut[2] = 128; //TODO
-    // Left Output
-    vLeftOut[0] = 88; // ~0.687*128 (// CPC Mode for the moment, need to see on Atari)
-    vLeftOut[1] = 0;
-    vLeftOut[2] = 40; // ~0.312*128
-    // Right Output
-    vRightOut[0] = 0;
-    vRightOut[1] = 88; // ~ 0.687*128
-    vRightOut[2] = 40; // ~ 0.312*128
-#else
-    // Mono Output
-    vOut[0] = vOut[1] = vOut[2] = 1; //TODO
-    // Left Output
-    vLeftOut[0] = 0.687;
-    vLeftOut[1] = 0;
-    vLeftOut[2] = 0.312;
-    // Right Output
-    vRightOut[0] = 0;
-    vRightOut[1] = 0.687;
-    vRightOut[2] = 0.312;
-#endif
+    setProfile(profileAtari);
+
+    // Reset YM2149
+    reset();
+}
+
+CYm2149Ex::CYm2149Ex(ymProfile profile,ymint prediv,ymu32 playRate)
+{
+    ymint i,env;
+
+    frameCycle = 0;
+    //--------------------------------------------------------
+    // build env shapes.
+    //--------------------------------------------------------
+    ymu8 *pEnv = &envData[0][0][0];
+    for (env=0;env<16;env++)
+    {
+        const ymint *pse = EnvWave[env];
+        for (ymint phase=0;phase<4;phase++)
+        {
+            pEnv = ym2149EnvInit(pEnv,pse[phase*2+0],pse[phase*2+1]);
+        }
+    }
+
+    setProfile(profileAtari);
+
+    internalClock = profile.masterClock/prediv;
+    replayFrequency = playRate;
+    cycleSample = 0;
+
+    // Set volume voice pointers.
+    pVolA = &volA;
+    pVolB = &volB;
+    pVolC = &volC;
 
     // Reset YM2149
     reset();
@@ -470,21 +480,6 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
     // mixerTx = 0xFFFF ou 0
     // bt = 0xFFFF ou 0
 
-#if 0
-    bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-//    volLeft = ((*pVolA)&bt)*11 >> 3;
-    volLeft = ((*pVolA)&bt) * vLeftOut[0] >> 7;
-    volRight = ((*pVolA)&bt) * vRightOut[0] >> 7;
-    bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-//    volRight = ((*pVolB)&bt)*11 >> 3;
-    volLeft += ((*pVolB)&bt) * vLeftOut[1] >> 7;
-    volRight =+ ((*pVolB)&bt) * vRightOut[1] >> 7;
-    bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-//    volLeft += ((*pVolC)&bt)*5 >> 3;
-//    volRight += ((*pVolC)&bt)*5 >> 3;
-    volLeft += ((*pVolC)&bt) * vLeftOut[2] >> 7;
-    volRight =+ ((*pVolC)&bt) * vRightOut[2] >> 7;
-#endif
     bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
     volLeft = ((*pVolA)&bt) * vLeftOut[0];
     volRight = ((*pVolA)&bt) * vRightOut[0];
@@ -502,7 +497,7 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 
     bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
 //    volLeft = ((*pVolA)&bt)*.687*0.66;
-    volLeft = ((*pVolA)&bt)*vLeftOut[0]*0.66;
+    volLeft = ((*pVolA)&bt)*vLeftOut[0]*0.66; // TODO: Why *0.66 ?!? Don't remeber :/
     volRight = ((*pVolA)&bt)*vRightOut[0]*0.66;
     bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
 //    volRight = ((*pVolB)&bt)*.687*0.66;
@@ -794,4 +789,18 @@ void CYm2149Ex::outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3])
     vRightOut[1] = rightOut[1];
     vRightOut[2] = rightOut[2];
 #endif
+}
+
+void CYm2149Ex::setProfile(ymProfile p)
+{
+    outputMixerMono(p.volOut);
+    outputMixerStereo(p.volLeftOut, p.volRightOut);
+
+    for(ymu8 i = 0; i < 5; i++)
+    {
+        for(ymu8 j = 0; j < 16; j++)
+        {
+            ymVolumeTable[i][j] = p.volumeTable[i][j];
+        }
+    }
 }

@@ -44,6 +44,7 @@
 #define	SIDSINPOWER		0.7
 
 #include "YmTypes.h"
+#include "YmProfiles.h"
 
 enum
 {
@@ -89,13 +90,16 @@ private:
 class CYm2149Ex
 {
     public:
-        CYm2149Ex(ymu32 masterClock=ATARI_CLOCK,ymint prediv=1,ymu32 playRate=44100);
+//        CYm2149Ex(ymu32 masterClock=ATARI_CLOCK,ymint prediv=1,ymu32 playRate=44100);
+        CYm2149Ex(ymu32 masterClock=profileAtari.masterClock,ymint prediv=1,ymu32 playRate=44100);
+        CYm2149Ex(ymProfile profile,ymint prediv=1,ymu32 playRate=44100);
         ~CYm2149Ex();
 
         void	reset(void);
 //      void	update(ymsample *pSampleBuffer,ymint nbSample); // TODO: Don't need for Mono mode and compatibility ?
         void	updateStereo(ymsample *pSampleBuffer,ymint nbSample);
 
+        void    setProfile(ymProfile profile);
         void    outputMixerMono(ymfloat out[3]);
         void    outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3]);
 

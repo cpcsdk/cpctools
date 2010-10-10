@@ -1,0 +1,111 @@
+/*-----------------------------------------------------------------------------
+
+	ST-Sound ( YM files player library )
+
+	Copyright (C) 1995-1999 Arnaud Carre ( http://leonard.oxg.free.fr )
+	Copyright (C) 2010 CPC SDK crew ( http://code.google.com/p/cpcsdk/ )
+
+	Define YM Profiles for multiple possible configuration (VolTable, Mixer...)
+	Change that file depending of your platform. Please respect the right size
+	for each type.
+
+-----------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------
+
+	This file is part of ST-Sound
+
+	ST-Sound is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	(at your option) any later version.
+
+	ST-Sound is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with ST-Sound; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+-----------------------------------------------------------------------------*/
+
+#ifndef __YMPROFILES__
+#define __YMPROFILES__
+
+#include "YmTypes.h"
+
+typedef struct _ymProfile
+{
+    ymint volumeTable[5][16];
+    ymfloat volOut[3]; // Mono volume mixer
+    ymfloat volLeftOut[3]; // Left volume mixer
+    ymfloat volRightOut[3]; // Right volume mixer
+    ymu32 masterClock;
+    ymint prediv;
+} ymProfile;
+
+// From Original STSound values
+#define YM_VOL_TABLE \
+    { \
+        {62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767}, \
+        {62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767}, \
+        {62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767}, \
+        {62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767}, \
+        {62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767} \
+    }
+
+// Measurements done on a real CPC by Targhan/Arkos
+// Note : when there is noise, the table is altered. We have 5 different ones
+#define AY_VOL_TABLE \
+    { \
+        {0,116,348,579,1042,1390,2084,3358,4053,6600,9147,12157,16094,20378,26400,32767}, \
+        {0,0,  348,348,1042,1042,2084,2084,4053,4053,9147,12157,16094,16094,26400,32767}, \
+        {0,0,  0,  0,  3358,3358,3358,4053,4053,4053,6600,6600,  6600,32767,32767,32767}, \
+        {0,0,  0,  0,  0,   4053,4053,4053,4053,4053,4053,32767,32767,32767,32767,32767}, \
+        {0,0,  0,  0,  0,   0,  4053,4053,4053,4053,32767,32767,32767,32767,32767,32767} \
+    }
+
+static ymProfile profileAtari =
+{
+    YM_VOL_TABLE,
+    { 1.000, 1.000, 1.000 },
+    { 0.687, 0.000, 0.312 },
+    { 0.000, 0.687, 0.312 },
+    2000000,
+    1
+};
+
+static ymProfile profileCPC =
+{
+    AY_VOL_TABLE,
+    { 1.000, 1.000, 1.000 },
+    { 0.687, 0.000, 0.312 },
+    { 0.000, 0.687, 0.312 },
+    1000000,
+    1
+};
+
+static ymProfile profileSpectrum =
+{
+    AY_VOL_TABLE,
+    { 1.000, 1.000, 1.000 },
+    { 0.687, 0.000, 0.312 },
+    { 0.000, 0.687, 0.312 },
+    1773400,
+    1
+};
+
+static ymProfile profileMFP =
+{
+    AY_VOL_TABLE,
+    { 1.000, 1.000, 1.000 },
+    { 0.687, 0.000, 0.312 },
+    { 0.000, 0.687, 0.312 },
+    2457600,
+    1
+};
+
+#endif
+
