@@ -14,7 +14,20 @@ AC_PROG_LIBTOOL
 #Output file
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
-	Makefile
+        Makefile
 ])
 AC_CONFIG_MACRO_DIR([m4])
 AC_OUTPUT
+
+AC_ARG_ENABLE(integer,
+        [  --enable-integer        Integer emulation mode [default=no]],
+        integer_only=yes,
+        integer_only=no)
+
+AM_CONDITIONAL([YM_INTEGER_ONLY], [test "$integer_only" = "yes"])
+
+AC_MSG_NOTICE([
+libstsound compilation options :
+
+    Use integer only mode.............. ${integer_only}
+])

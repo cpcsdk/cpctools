@@ -119,36 +119,59 @@ ymint d;
 
 CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
 {
-ymint i,env;
+    ymint i,env;
 
+    frameCycle = 0;
+    //--------------------------------------------------------
+    // build env shapes.
+    //--------------------------------------------------------
+    ymu8 *pEnv = &envData[0][0][0];
+    for (env=0;env<16;env++)
+    {
+        const ymint *pse = EnvWave[env];
+        for (ymint phase=0;phase<4;phase++)
+        {
+            pEnv = ym2149EnvInit(pEnv,pse[phase*2+0],pse[phase*2+1]);
+        }
+    }
 
-		frameCycle = 0;
-	//--------------------------------------------------------
-	// build env shapes.
-	//--------------------------------------------------------
-		ymu8 *pEnv = &envData[0][0][0];
-		for (env=0;env<16;env++)
-		{
-			const ymint *pse = EnvWave[env];
-			for (ymint phase=0;phase<4;phase++)
-			{
-				pEnv = ym2149EnvInit(pEnv,pse[phase*2+0],pse[phase*2+1]);
-			}
-		}
+    internalClock = masterClock/prediv;		// YM at 2Mhz on ATARI ST
+    replayFrequency = playRate;				// DAC at 44.1Khz on PC
+    cycleSample = 0;
 
-		internalClock = masterClock/prediv;		// YM at 2Mhz on ATARI ST
-		replayFrequency = playRate;				// DAC at 44.1Khz on PC
-		cycleSample = 0;
+    // Set volume voice pointers.
+    pVolA = &volA;
+    pVolB = &volB;
+    pVolC = &volC;
 
-	// Set volume voice pointers.
-		pVolA = &volA;
-		pVolB = &volB;
-		pVolC = &volC;
+    // Set default output mixer.
+#if YM_INTEGER_ONLY
+    // Fixed Point Mode: u1.7
+    // Mono Output
+    vOut[0] = vOut[1] = vOut[2] = 128; //TODO
+    // Left Output
+    vLeftOut[0] = 88; // ~0.687*128 (// CPC Mode for the moment, need to see on Atari)
+    vLeftOut[1] = 0;
+    vLeftOut[2] = 40; // ~0.312*128
+    // Right Output
+    vRightOut[0] = 0;
+    vRightOut[1] = 88; // ~ 0.687*128
+    vRightOut[2] = 40; // ~ 0.312*128
+#else
+    // Mono Output
+    vOut[0] = vOut[1] = vOut[2] = 1; //TODO
+    // Left Output
+    vLeftOut[0] = 0.687;
+    vLeftOut[1] = 0;
+    vLeftOut[2] = 0.312;
+    // Right Output
+    vRightOut[0] = 0;
+    vRightOut[1] = 0.687;
+    vRightOut[2] = 0.312;
+#endif
 
-	// Reset YM2149
-		reset();
-
-
+    // Reset YM2149
+    reset();
 }
 
 CYm2149Ex::~CYm2149Ex()
@@ -163,7 +186,6 @@ void	CYm2149Ex::setClock(ymu32 _clock)
 
 ymu32 CYm2149Ex::toneStepCompute(ymu8 rHigh,ymu8 rLow)
 {
-
 	ymint per = rHigh&15;
 	per = (per<<8)+rLow;
 	if (per<=5)
@@ -186,8 +208,6 @@ ymu32 CYm2149Ex::toneStepCompute(ymu8 rHigh,ymu8 rLow)
 
 ymu32 CYm2149Ex::noiseStepCompute(ymu8 rNoise)
 {
-
-
 	ymint per = (rNoise&0x1f);
 	if (per == 0)
 		return 0;
@@ -340,8 +360,8 @@ int CYm2149Ex::LowPassFilter(int in, int channel)
 
 ymsample CYm2149Ex::nextSample(void)
 {
-ymint vol;
-ymint bt,bn;
+    ymint vol;
+    ymint bt,bn;
 
 		if (noisePos&0xffff0000)
 		{
@@ -364,12 +384,21 @@ ymint bt,bn;
 	//---------------------------------------------------
 	// Tone+noise+env+DAC for three voices !
 	//---------------------------------------------------
+#ifdef YM_INTEGER_ONLY
 		bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-		vol  = (*pVolA)&bt;
+		vol  = ((*pVolA)&bt * vOut[0] >> 7;
 		bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-		vol += (*pVolB)&bt;
+		vol += ((*pVolB)&bt * vOut[1] >> 7;
 		bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-		vol += (*pVolC)&bt;
+		vol += ((*pVolC)&bt * vOut[2] >> 7;
+#else
+		bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+		vol  = ((*pVolA)&bt) * vOut[0];
+		bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+		vol += ((*pVolB)&bt) * vOut[1];
+		bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+		vol += ((*pVolC)&bt) * vOut[2];
+#endif
 
 	//---------------------------------------------------
 	// Inc
@@ -432,31 +461,59 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 	//---------------------------------------------------
 	// Tone+noise+env+DAC for three voices !
 	//---------------------------------------------------
-        #ifdef YM_INTEGER_ONLY
-        ymint volLeft, volRight;
-        ymint bt;
+#ifdef YM_INTEGER_ONLY
+    ymint volLeft, volRight;
+    ymint bt; // TODO: How many bits is bt ?!?
 
-                bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-                volLeft = ((*pVolA)&bt)*11 >> 3;
-                bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-                volRight = ((*pVolB)&bt)*11 >> 3;
-                bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-                volLeft += ((*pVolC)&bt)*5 >> 3;
-                volRight += ((*pVolC)&bt)*5 >> 3;
+    // bn = 0xFFFF ou 0
+    // mixerNx = 0xFFFF ou 0
+    // mixerTx = 0xFFFF ou 0
+    // bt = 0xFFFF ou 0
 
-        #else
-        ymfloat volLeft, volRight;
-        ymint bt;
-				// bt = enable tone
-                bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-                volLeft = ((*pVolA)&bt)*.687*0.66;
-                bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-                volRight = ((*pVolB)&bt)*.687*0.66;
-                bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-                volLeft += ((*pVolC)&bt)*.312*0.67;
-                volRight += ((*pVolC)&bt)*.312*0.67;
+#if 0
+    bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+//    volLeft = ((*pVolA)&bt)*11 >> 3;
+    volLeft = ((*pVolA)&bt) * vLeftOut[0] >> 7;
+    volRight = ((*pVolA)&bt) * vRightOut[0] >> 7;
+    bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+//    volRight = ((*pVolB)&bt)*11 >> 3;
+    volLeft += ((*pVolB)&bt) * vLeftOut[1] >> 7;
+    volRight =+ ((*pVolB)&bt) * vRightOut[1] >> 7;
+    bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+//    volLeft += ((*pVolC)&bt)*5 >> 3;
+//    volRight += ((*pVolC)&bt)*5 >> 3;
+    volLeft += ((*pVolC)&bt) * vLeftOut[2] >> 7;
+    volRight =+ ((*pVolC)&bt) * vRightOut[2] >> 7;
+#endif
+    bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+    volLeft = ((*pVolA)&bt) * vLeftOut[0];
+    volRight = ((*pVolA)&bt) * vRightOut[0];
+    bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+    volLeft += ((*pVolB)&bt) * vLeftOut[1];
+    volRight =+ ((*pVolB)&bt) * vRightOut[1];
+    bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+    volLeft += ((*pVolC)&bt) * vLeftOut[2];
+    volRight =+ ((*pVolC)&bt) * vRightOut[2];
+    volLeft >>= 7;
+    volRight >>= 7;
+#else
+    ymfloat volLeft, volRight;
+    ymint bt; // bt = enable tone
 
-        #endif
+    bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+//    volLeft = ((*pVolA)&bt)*.687*0.66;
+    volLeft = ((*pVolA)&bt)*vLeftOut[0]*0.66;
+    volRight = ((*pVolA)&bt)*vRightOut[0]*0.66;
+    bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+//    volRight = ((*pVolB)&bt)*.687*0.66;
+    volLeft += ((*pVolB)&bt)*vLeftOut[1]*0.66;
+    volRight += ((*pVolB)&bt)*vRightOut[1]*0.66;
+    bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+//    volLeft += ((*pVolC)&bt)*.312*0.67;
+//    volRight += ((*pVolC)&bt)*.312*0.67;
+    volLeft += ((*pVolC)&bt)*vLeftOut[2]*0.66;
+    volRight += ((*pVolC)&bt)*vRightOut[2]*0.66;
+#endif
 
 	//---------------------------------------------------
 	// Inc
@@ -699,3 +756,42 @@ void	CYm2149Ex::syncBuzzerStop(void)
 		syncBuzzerStep = 0;
 }
 #endif
+
+void CYm2149Ex::outputMixerMono(ymfloat out[3])
+{
+#if YM_INTEGER_ONLY
+    // Fixed Point Mode: u1.7
+    vOut[0] = (ymu8)(out[0] * 128);
+    vOut[1] = (ymu8)(out[1] * 128);
+    vOut[2] = (ymu8)(out[2] * 128);
+#else
+    vOut[0] = out[0];
+    vOut[1] = out[1];
+    vOut[2] = out[2];
+#endif
+}
+
+void CYm2149Ex::outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3])
+{
+    // Set default output mixer.
+#if YM_INTEGER_ONLY
+    // Fixed Point Mode: u1.7
+    // Left Output
+    vLeftOut[0] = (ymu8)(leftOut[0] * 128);
+    vLeftOut[1] = (ymu8)(leftOut[1] * 128);
+    vLeftOut[2] = (ymu8)(leftOut[2] * 128);
+    // Right Output
+    vRightOut[0] = (ymu8)(rightOut[0] * 128);
+    vRightOut[1] = (ymu8)(rightOut[1] * 128);
+    vRightOut[2] = (ymu8)(rightOut[2] * 128);
+#else
+    // Left Output
+    vLeftOut[0] = leftOut[0];
+    vLeftOut[1] = leftOut[1];
+    vLeftOut[2] = leftOut[2];
+    // Right Output
+    vRightOut[0] = rightOut[0];
+    vRightOut[1] = rightOut[1];
+    vRightOut[2] = rightOut[2];
+#endif
+}

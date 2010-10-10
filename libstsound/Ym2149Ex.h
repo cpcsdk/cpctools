@@ -88,13 +88,16 @@ private:
 
 class CYm2149Ex
 {
-public:
-		CYm2149Ex(ymu32 masterClock=ATARI_CLOCK,ymint prediv=1,ymu32 playRate=44100);
-		~CYm2149Ex();
+    public:
+        CYm2149Ex(ymu32 masterClock=ATARI_CLOCK,ymint prediv=1,ymu32 playRate=44100);
+        ~CYm2149Ex();
 
-		void	reset(void);
-//		void	update(ymsample *pSampleBuffer,ymint nbSample);
-		void	updateStereo(ymsample *pSampleBuffer,ymint nbSample);
+        void	reset(void);
+//      void	update(ymsample *pSampleBuffer,ymint nbSample); // TODO: Don't need for Mono mode and compatibility ?
+        void	updateStereo(ymsample *pSampleBuffer,ymint nbSample);
+
+        void    outputMixerMono(ymfloat out[3]);
+        void    outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3]);
 
 		void	setClock(ymu32 _clock);
 		void	writeRegister(ymint reg,ymint value);
@@ -109,9 +112,7 @@ public:
 		void	syncBuzzerStop(void);
 */
 
-
-private:
-
+    private:
 		CDcAdjuster		m_dcAdjust;
 		CDcAdjuster		m_dcAdjustLeft;
 		CDcAdjuster		m_dcAdjustRight;
@@ -138,10 +139,10 @@ private:
 		ymu32	cycleSample;
 		ymu32	stepA,stepB,stepC;
 		ymu32	posA,posB,posC;
-		ymint				volA,volB,volC,volEA, volEB, volEC;
+		ymint	volA,volB,volC,volEA, volEB, volEC;
 		ymu32	mixerTA,mixerTB,mixerTC;
 		ymu32	mixerNA,mixerNB,mixerNC;
-		ymint				*pVolA,*pVolB,*pVolC;
+		ymint	*pVolA,*pVolB,*pVolC;
 
 		ymu32	noiseStep;
 		ymu32 noisePos;
@@ -162,9 +163,19 @@ private:
 		ymu32	syncBuzzerPhase;
 		ymint	syncBuzzerShape;
 */
+
+        // Output Mixer
+#if YM_INTEGER_ONLY
+        ymu8 vOut[3]; // Mono Output
+        ymu8 vLeftOut[3]; // Left Output
+        ymu8 vRightOut[3]; // Right Output
+#else
+        ymfloat vOut[3]; // Mono Output
+        ymfloat vLeftOut[3]; // Left Output
+        ymfloat vRightOut[3]; // Right Output
+#endif
+
 		// Delay lines for low pass filtering. 2 lines of 2 samples.
 		int		m_lowPassFilter[2][2];
-
 };
-
 #endif
