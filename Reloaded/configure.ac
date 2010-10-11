@@ -306,7 +306,7 @@ else if test "$with_stsound" = "yes" ; then
 	with_ayemu="no";
 	sound_backend="StSound";
 	
-	AC_CHECK_HEADER( [Ym2149Ex.h],AC_DEFINE(ST_SOUND,1,[Use St Sound as a sound backend]),AC_MSG_ERROR([St Sound headers not found ! Go in ../cpctools/lib/StSoundLib_Release/StSoundLibrary]))
+	AC_CHECK_HEADER( [Ym2149Ex.h],AC_DEFINE(ST_SOUND,1,[Use St Sound as a sound backend]),AC_MSG_ERROR([St Sound headers not found ! Go in ../libstsound]))
 
 	#TODO debug test library
 	AC_SUBST([SOUNDLIB], [-lstsound])
