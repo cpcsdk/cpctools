@@ -43,7 +43,6 @@ typedef struct _ymProfile
     ymfloat volLeftOut[3]; // Left volume mixer
     ymfloat volRightOut[3]; // Right volume mixer
     ymu32 masterClock;
-    ymint prediv;
 } ymProfile;
 
 // From Original STSound values
@@ -70,41 +69,41 @@ typedef struct _ymProfile
 static ymProfile profileAtari =
 {
     YM_VOL_TABLE,
-    { 1.000, 1.000, 1.000 },
-    { 0.687, 0.000, 0.312 },
-    { 0.000, 0.687, 0.312 },
+    { 0.333, 0.333, 0.333 },
+    { 0.333, 0.333, 0.333 },
+    { 0.333, 0.333, 0.333 },
+    /* TODO: Found good mixer value */
     2000000,
-    1
 };
 
 static ymProfile profileCPC =
 {
     AY_VOL_TABLE,
-    { 1.000, 1.000, 1.000 },
-    { 0.687, 0.000, 0.312 },
-    { 0.000, 0.687, 0.312 },
+    { 0.333, 0.333, 0.333 },
+    { 0.687, 0.312, 0.000 },
+    { 0.000, 0.312, 0.687 },
+    /* Volume Table Calc with component */
     1000000,
-    1
-};
+}; 
 
 static ymProfile profileSpectrum =
 {
     AY_VOL_TABLE,
-    { 1.000, 1.000, 1.000 },
-    { 0.687, 0.000, 0.312 },
-    { 0.000, 0.687, 0.312 },
+    { 0.333, 0.333, 0.333 },
+    { 0.333, 0.333, 0.333 },
+    { 0.333, 0.333, 0.333 },
+    /* TODO: Found good mixer value */
     1773400,
-    1
 };
 
 static ymProfile profileMFP =
 {
     AY_VOL_TABLE,
-    { 1.000, 1.000, 1.000 },
-    { 0.687, 0.000, 0.312 },
-    { 0.000, 0.687, 0.312 },
+    { 0.333, 0.333, 0.333 },
+    { 0.333, 0.333, 0.333 },
+    { 0.333, 0.333, 0.333 },
+    /* TODO: Found good mixer value */
     2457600,
-    1
 };
 
 #endif

@@ -33,10 +33,13 @@
 #ifndef __YM2149EX__
 #define __YM2149EX__
 
+// Keep for compatibility reason, remove in next API (v3)
 #define	AMSTRAD_CLOCK	1000000L
 #define	ATARI_CLOCK		2000000L
 #define	SPECTRUM_CLOCK	1773400L
 #define	MFP_CLOCK		2457600L
+// End
+
 #define	NOISESIZE		16384
 #define	DRUM_PREC		15
 
@@ -45,6 +48,7 @@
 
 #include "YmTypes.h"
 #include "YmProfiles.h"
+#include "YmFilters.h"
 
 enum
 {
@@ -69,30 +73,12 @@ struct	YmSpecialEffect
 
 };
 
-static	const	ymint		DC_ADJUST_BUFFERLEN		=	512;
-
-class	CDcAdjuster
-{
-public:
-	CDcAdjuster();
-
-	void	AddSample(ymint sample);
-	ymint	GetDcLevel(void)			{ return m_sum / DC_ADJUST_BUFFERLEN; }
-	void	Reset(void);
-
-private:
-	ymint	m_buffer[DC_ADJUST_BUFFERLEN];
-	ymint		m_pos;
-	ymint		m_sum;
-};
-
-
 class CYm2149Ex
 {
     public:
 //        CYm2149Ex(ymu32 masterClock=ATARI_CLOCK,ymint prediv=1,ymu32 playRate=44100);
         CYm2149Ex(ymu32 masterClock=profileAtari.masterClock,ymint prediv=1,ymu32 playRate=44100);
-        CYm2149Ex(ymProfile profile,ymint prediv=1,ymu32 playRate=44100);
+        CYm2149Ex(ymProfile profile, ymu32 playRate = 44100);
         ~CYm2149Ex();
 
         void	reset(void);
@@ -117,9 +103,13 @@ class CYm2149Ex
 */
 
     private:
-		CDcAdjuster		m_dcAdjust;
-		CDcAdjuster		m_dcAdjustLeft;
-		CDcAdjuster		m_dcAdjustRight;
+		DCRemover		m_dcAdjust;
+		DCRemover		m_dcAdjustLeft;
+		DCRemover		m_dcAdjustRight;
+
+        SimpleLowPassFilter   f_lowPass;
+        SimpleLowPassFilter   f_lowPassLeft;
+        SimpleLowPassFilter   f_lowPassRight;
 
 		ymu32	frameCycle;
 		ymu32	cyclePerSample;
@@ -134,7 +124,6 @@ class CYm2149Ex
 		ymu32	rndCompute(void);
 
 //		void	sidVolumeCompute(ymint voice,ymint *pVol);
-		inline int		LowPassFilter(int in, int channel);
 
 		ymint	replayFrequency;
 		ymu32	internalClock;
@@ -178,8 +167,5 @@ class CYm2149Ex
         ymfloat vLeftOut[3]; // Left Output
         ymfloat vRightOut[3]; // Right Output
 #endif
-
-		// Delay lines for low pass filtering. 2 lines of 2 samples.
-		int		m_lowPassFilter[2][2];
 };
 #endif

@@ -1,7 +1,7 @@
 # Author Romain Giot <giot.romain@gmail.com>
 
 # Init
-AC_INIT([StSound], [1.1], [krusty@cpcscene.com])
+AC_INIT([StSound], [2.0], [krusty@cpcscene.com])
 AM_INIT_AUTOMAKE([ -Wall -Werror])
 
 # Check programs
@@ -17,17 +17,25 @@ AC_CONFIG_FILES([
         Makefile
 ])
 AC_CONFIG_MACRO_DIR([m4])
-AC_OUTPUT
 
 AC_ARG_ENABLE(integer,
         [  --enable-integer        Integer emulation mode [default=no]],
         integer_only=yes,
         integer_only=no)
 
+AC_ARG_ENABLE(simple-filter,
+        [  --enable-simple-filter  Low computation filter [default=no]],
+        simple_filter=yes,
+        simple_filter=no)
+
 AM_CONDITIONAL([YM_INTEGER_ONLY], [test "$integer_only" = "yes"])
+AM_CONDITIONAL([YM_SIMPLIFIED_FILTER], [test "$simple_filter" = "yes"])
+
+AC_OUTPUT
 
 AC_MSG_NOTICE([
 libstsound compilation options :
 
     Use integer only mode.............. ${integer_only}
+    Use simplified filter.............. ${simple_filter}
 ])

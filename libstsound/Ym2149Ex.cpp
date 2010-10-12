@@ -72,36 +72,6 @@ static	ymint ymVolumeTable[5][16] =
 {0,0,  0,  0,  0,   0,  4053,4053,4053,4053,32767,32767,32767,32767,32767,32767}
 };
 
-//----------------------------------------------------------------------
-// Very cool and fast DC Adjuster ! This is the *new* stuff of that
-// package coz I get that idea working on SainT in 2004 !
-// ( almost everything here is from 1995 !)
-//----------------------------------------------------------------------
-CDcAdjuster::CDcAdjuster()
-{
-	Reset();
-}
-
-void	CDcAdjuster::Reset(void)
-{
-	for (ymint i=0;i<DC_ADJUST_BUFFERLEN;i++)
-		m_buffer[i] = 0;
-
-	m_pos = 0;
-	m_sum = 0;
-}
-
-void	CDcAdjuster::AddSample(ymint sample)
-{
-	m_sum -= m_buffer[m_pos];
-	m_sum += sample;
-
-	m_buffer[m_pos] = sample;
-	m_pos = (m_pos+1)&(DC_ADJUST_BUFFERLEN-1);
-}
-
-
-
 static	ymu8 *ym2149EnvInit(ymu8 *pEnv,ymint a,ymint b)
 {
 ymint i;
@@ -145,13 +115,14 @@ CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
     pVolB = &volB;
     pVolC = &volC;
 
-    setProfile(profileAtari);
+//    setProfile(profileAtari);
+    setProfile(profileCPC);
 
     // Reset YM2149
     reset();
 }
 
-CYm2149Ex::CYm2149Ex(ymProfile profile,ymint prediv,ymu32 playRate)
+CYm2149Ex::CYm2149Ex(ymProfile profile, ymu32 playRate)
 {
     ymint i,env;
 
@@ -169,9 +140,9 @@ CYm2149Ex::CYm2149Ex(ymProfile profile,ymint prediv,ymu32 playRate)
         }
     }
 
-    setProfile(profileAtari);
+    setProfile(profile);
 
-    internalClock = profile.masterClock/prediv;
+    internalClock = profile.masterClock;
     replayFrequency = playRate;
     cycleSample = 0;
 
@@ -305,11 +276,9 @@ void	CYm2149Ex::reset(void)
 
 	syncBuzzerStop();
 */
-	m_lowPassFilter[0][0] = 0;
-	m_lowPassFilter[1][0] = 0;
-	m_lowPassFilter[0][1] = 0;
-	m_lowPassFilter[1][1] = 0;
-
+    f_lowPass.Reset();
+    f_lowPassLeft.Reset();
+    f_lowPassRight.Reset();
 }
 
 /*
@@ -359,14 +328,6 @@ void	CYm2149Ex::sidVolumeCompute(ymint voice,ymint *pVol)
 		}
 }
 */
-int CYm2149Ex::LowPassFilter(int in, int channel)
-{
-	const int out = (m_lowPassFilter[channel][0]>>2) + (m_lowPassFilter[channel][1]>>1) + (in>>2);
-	m_lowPassFilter[channel][0] = m_lowPassFilter[channel][1];
-	m_lowPassFilter[channel][1] = in;
-	return out;
-}
-
 
 ymsample CYm2149Ex::nextSample(void)
 {
@@ -394,20 +355,25 @@ ymsample CYm2149Ex::nextSample(void)
 	//---------------------------------------------------
 	// Tone+noise+env+DAC for three voices !
 	//---------------------------------------------------
+    // bn = 0xFFFF ou 0
+    // mixerNx = 0xFFFF ou 0
+    // mixerTx = 0xFFFF ou 0
+    // bt = 0xFFFF ou 0
 #ifdef YM_INTEGER_ONLY
-		bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-		vol  = ((*pVolA)&bt * vOut[0] >> 7;
-		bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-		vol += ((*pVolB)&bt * vOut[1] >> 7;
-		bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-		vol += ((*pVolC)&bt * vOut[2] >> 7;
+    bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+    vol  = (*pVolA)&bt * vOut[0]; // 16*8 = 24 bits
+    bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+    vol += (*pVolB)&bt * vOut[1];
+    bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+    vol += (*pVolC)&bt * vOut[2];
+    vol >>= 7;
 #else
-		bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-		vol  = ((*pVolA)&bt) * vOut[0];
-		bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-		vol += ((*pVolB)&bt) * vOut[1];
-		bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-		vol += ((*pVolC)&bt) * vOut[2];
+    bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
+    vol  = ((*pVolA)&bt) * vOut[0];
+    bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
+    vol += ((*pVolB)&bt) * vOut[1];
+    bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
+    vol += ((*pVolC)&bt) * vOut[2];
 #endif
 
 	//---------------------------------------------------
@@ -441,9 +407,12 @@ ymsample CYm2149Ex::nextSample(void)
 	//---------------------------------------------------
 	// Normalize process
 	//---------------------------------------------------
-		m_dcAdjust.AddSample(vol);
-		const int in = vol - m_dcAdjust.GetDcLevel();
-		return LowPassFilter(in,0);
+    m_dcAdjust.AddSample(vol);
+//    const int in = vol - m_dcAdjust.GetDcLevel();
+    const int in = m_dcAdjust.GetResult();
+//    return LowPassFilter(in,0);
+    f_lowPass.AddSample(in);
+    return f_lowPass.GetResult();
 }
 
 
@@ -541,18 +510,33 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 	//---------------------------------------------------
 	// Normalize process
 	//---------------------------------------------------
+#if 0
 	{
 		m_dcAdjustLeft.AddSample(volLeft);
-		const int in = volLeft- m_dcAdjustLeft.GetDcLevel();
-		left = LowPassFilter(in,0);
-		//left = in;
+//		const int in = volLeft- m_dcAdjustLeft.GetDcLevel();
+		const int in = m_dcAdjustLeft.GetResult();
+//		left = LowPassFilter(in,0);
+        f_lowPassLeft.AddSample(in);
+        left = f_lowPassLeft.GetResult();
+//		left = in;
 	}
 	{
 		m_dcAdjustRight.AddSample(volRight);
-		const int in = volRight- m_dcAdjustRight.GetDcLevel();
-		right = LowPassFilter(in,1);
-		//right = in;
+//		const int in = volRight- m_dcAdjustRight.GetDcLevel();
+		const int in = m_dcAdjustRight.GetResult();
+		//right = LowPassFilter(in,1);
+        f_lowPassRight.AddSample(in);
+        right = f_lowPassRight.GetResult();
+//		right = in;
 	}
+#else
+    f_lowPassLeft.AddSample(volLeft);
+    f_lowPassRight.AddSample(volRight);
+    m_dcAdjustLeft.AddSample(f_lowPassLeft.GetResult());
+    m_dcAdjustRight.AddSample(f_lowPassRight.GetResult());
+    left = m_dcAdjustLeft.GetResult();
+    right = m_dcAdjustRight.GetResult();
+#endif
 }
 
 ymint		CYm2149Ex::readRegister(ymint reg)
@@ -769,7 +753,7 @@ void CYm2149Ex::outputMixerMono(ymfloat out[3])
 void CYm2149Ex::outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3])
 {
     // Set default output mixer.
-#if YM_INTEGER_ONLY
+#ifdef YM_INTEGER_ONLY
     // Fixed Point Mode: u1.7
     // Left Output
     vLeftOut[0] = (ymu8)(leftOut[0] * 128);

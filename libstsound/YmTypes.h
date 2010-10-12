@@ -49,6 +49,7 @@ typedef 	_int64 				yms64;
 #else
 typedef 	long long 			yms64;
 #endif
+typedef		float				ymfloat; // Float are always need for init, but not for heavy calculation.
 #else
 typedef		float				ymfloat;
 #endif
@@ -69,22 +70,23 @@ typedef		char				ymchar;			// 8 bits char character (used for null terminated st
 
 #include <stdint.h>
 #ifdef YM_INTEGER_ONLY
-typedef		int64_t				yms64;
+typedef int64_t yms64;
+typedef float ymfloat; // Float are always need for init, but not for heavy calculation.
 #else
-typedef		float				ymfloat;
+typedef float ymfloat;
 #endif
 
-typedef		int8_t			yms8;			//  8 bits signed integer
-typedef		int16_t		yms16;			// 16 bits signed integer
-typedef		int32_t			yms32;			// 32 bits signed integer
+typedef int8_t  yms8;  //  8 bits signed integer
+typedef int16_t yms16; // 16 bits signed integer
+typedef int32_t yms32; // 32 bits signed integer
 
-typedef		uint8_t		ymu8;			//  8 bits unsigned integer
-typedef		uint16_t		ymu16;			// 16 bits unsigned integer
-typedef		uint32_t		ymu32;			// 32 bits unsigned integer
+typedef uint8_t  ymu8;  //  8 bits unsigned integer
+typedef uint16_t ymu16; // 16 bits unsigned integer
+typedef uint32_t ymu32; // 32 bits unsigned integer
 
-typedef		int					ymint;			// Native "int" for speed purpose. StSound suppose int is signed and at least 32bits. If not, change it to match to yms32
+typedef int_fast32_t ymint; // The fastest type of at least 32 bits and signed.
 
-typedef		char				ymchar;			// 8 bits char character (used for null terminated strings)
+typedef char ymchar; // 8 bits char character (used for null terminated strings)
 
 #endif
 
