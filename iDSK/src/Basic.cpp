@@ -270,7 +270,7 @@ void Basic( BYTE * BufFile, char * Listing, bool IsBasic, bool CrLf )
 
                                     exp = GetByte( BufFile, Pos + 4, Deprotect ) - 129;
                                     Pos += 5;
-                                    sprintf( Tmp, "%f", f * pow( 2, exp ) );
+                                    sprintf( Tmp, "%f", f * pow( (double) 2, exp ) );
                                     // Suppression des '0' inutiles
                                     p = &Tmp[ strlen( Tmp ) - 1 ];
                                     while( * p == '0' )
