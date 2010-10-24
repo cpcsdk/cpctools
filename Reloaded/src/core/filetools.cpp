@@ -48,9 +48,8 @@ std::vector<std::string> listDirectory(std::string sDirectory) {
        return s;
    }
    while ((pent = readdir(pDir))){
-       std::string fileName = std::string(pent->d_name);
-       if (fileName != ".." and fileName != ".") {
-           s.push_back(fileName);
+       if (strcmp(pent->d_name,"..")!=0 && strcmp(pent->d_name,".")!=0) {
+           s.push_back(pent->d_name);
        }
    }
    closedir(pDir);

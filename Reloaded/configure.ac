@@ -149,7 +149,7 @@ AC_MSG_NOTICE([platform and operating system ------------------------------])
 #    AC_MSG_RESULT([yes])
 #    M32="-m32"
 #else
-    AC_MSG_RESULT([no])
+#    AC_MSG_RESULT([no])
     M32=""
 #fi
 

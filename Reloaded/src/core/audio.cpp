@@ -137,7 +137,7 @@ int audio_update()
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
     return Pa_WriteStream(audioStream,pbSndBuffer,1) == paNoError ? 0 : -1;
 #else
-    return 0
+    return 0;
 #endif
 }
 

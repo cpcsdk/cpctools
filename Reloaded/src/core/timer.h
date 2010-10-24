@@ -1,7 +1,7 @@
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
-#if _POSIX_C_SOURCE >= 199309L 
+#if _POSIX_C_SOURCE >= 199309L
 	#include <ctime>
 	#define _USE_CLOCK_GETTIME
 //	#pragma message "Use clock_gettime"
@@ -13,6 +13,9 @@
 	#include <windows.h>
 	#define _USE_QUERYPERFORMANCE
 //	#pragma message "Use QueryPerformanceTimer"
+#elif defined(__HAIKU__)
+	#include <OS.h>
+	#define _USE_BEAPI
 #else
 	#include <SDL_timer.h>
 	#define _USE_SDLTIMER
@@ -34,6 +37,10 @@ class Timer
 		LARGE_INTEGER ticks;
 		#endif
 
+		#ifdef _USE_BEAPI
+		bigtime_t refTime;
+		#endif
+
 		unsigned int startTime;
 		unsigned int workingTime;
 		
@@ -53,6 +60,10 @@ class Timer
 			QueryPerformanceFrequency(&ticksPerMillisecond);
 			ticksPerMillisecond.QuadPart /= 1000;
 			if (ticksPerMillisecond.QuadPart <1) printf("Your computer is too slow !\n");
+			#endif
+
+			#ifdef USE_BEAPI
+			refTime = real_time_clock_usecs();
 			#endif
 		};
 
@@ -111,7 +122,10 @@ class Timer
 			#ifdef _USE_QUERYPERFORMANCE
 			QueryPerformanceCounter(&ticks);
 			return ticks.QuadPart/ticksPerMillisecond.QuadPart;
-			
+			#endif
+
+			#ifdef _USE_BEAPI
+			return (real_time_clock_usecs() - refTime) / 1000L;
 			#endif
 		}
 		
