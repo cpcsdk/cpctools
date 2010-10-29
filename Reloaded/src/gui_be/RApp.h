@@ -4,8 +4,17 @@
 
 #include <Application.h>
 
+#include "REmulator.h"
+
+class ReloadedWin;
+
 class ReloadedApp : public BApplication
 {
 	public:
-		ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded") {}
+		ReloadedApp();
+		~ReloadedApp() {delete mEmu;}
+
+	private:
+		ReloadedWin* mWin;
+		REmulator* mEmu;
 };

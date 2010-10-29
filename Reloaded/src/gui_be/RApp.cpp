@@ -4,10 +4,31 @@
 
 #include "RApp.h"
 
+#include "RVideo.h"
+#include "RWin.h"
+
+
 int main(int argc, char* argv[])
 {
 	ReloadedApp app;
 	app.Run();
 
 	return 0;
+}
+
+
+ReloadedApp::ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded")
+{
+	mWin = new ReloadedWin();
+
+	mWin->Show();
+	
+	mEmu = REmulator::getInstance();
+	mEmu->setVideoPlugin(&RVidPlugin::Create);
+
+	mEmu->setCfgPath("/Donnees/Dev/cpcsdk/reloaded");
+	RVidPlugin::sView = mWin->mainView;
+
+	mEmu->Init();
+
 }

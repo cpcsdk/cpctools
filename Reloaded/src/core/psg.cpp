@@ -74,6 +74,7 @@ t_PSG::~t_PSG()
 
 void t_PSG::Emulate(int iCycleCount)
 {
+	if (pbSndBufferPtr == NULL) return;
 #ifdef ST_SOUND
     cycle_count += iCycleCount;
 
