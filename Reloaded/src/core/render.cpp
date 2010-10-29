@@ -120,7 +120,7 @@ void Renderer::EndDisplay(bool frameCompleted)
     {
     // Display texts
 //        if(config->scr_fps)
-        if(_displayFPS)
+//        if(_displayFPS)
         {
             for (unsigned int t=0 ; t < _textArray.size() ; t++)
             {
@@ -506,6 +506,7 @@ bool Renderer::Init()
 		_preRenderFunc = _preRenderNormalFunc;
 	}
 
+	printf("VIDEO BPP : %d",_videoPlugin->GetRenderSurfaceBPP());
 	switch(_videoPlugin->GetRenderSurfaceBPP())
 	{
 	case 32:

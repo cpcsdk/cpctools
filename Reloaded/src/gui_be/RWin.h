@@ -10,7 +10,7 @@ class ReloadedWin : public BWindow
 		ReloadedWin() : BWindow(BRect(80,80,806,606),"Reloaded", B_TITLED_WINDOW,
 			B_NOT_ZOOMABLE|B_NOT_RESIZABLE|B_QUIT_ON_WINDOW_CLOSE)
 		{
-			mainView = new BView(BRect(0,0,800,600), "main", 0, 0);
+			mainView = new BView(BRect(0,0,800,600), "main", 0, B_WILL_DRAW);
 			AddChild(mainView);
 		}
 

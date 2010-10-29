@@ -97,7 +97,7 @@ t_CPC::t_CPC(Emulator* emu)
 
     vid_w=800;
     vid_h=600;
-    vid_bpp=24;
+    vid_bpp=32;
     vid_style=VideoPlugin::DoubleSize;
 
 }
@@ -197,7 +197,7 @@ void t_CPC::loadConfiguration ()
 
 	    vid_w = getConfigValueInt(chFileName, "video", "scr_width", 800);
 	    vid_h = getConfigValueInt(chFileName, "video", "scr_height", 600);
-	    vid_bpp = getConfigValueInt(chFileName, "video", "scr_bpp", 24);
+	    vid_bpp = getConfigValueInt(chFileName, "video", "scr_bpp", 32);
 	    vid_style = (VideoPlugin::VideoType)getConfigValueInt(chFileName, "video", "scr_style", 1);
 	    fs = (getConfigValueInt(chFileName, "video", "scr_window", 0) & 1) == 0;
 	    oglfilter = getConfigValueInt(chFileName, "video", "scr_oglfilter", 1) & 1;

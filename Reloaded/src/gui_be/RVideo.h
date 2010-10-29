@@ -23,7 +23,19 @@ class RVidPlugin : public VideoPlugin
 
 	virtual void* Init(int w,int h,int bpp,bool fs)
 	{
-		printf("create vid : w%d h%d d%d f%d\n",w,h,bpp,fs);
+		_publicBPP = bpp;
+
+		if (!fs)
+		{
+			w=CPCVisibleSCRWidth*2;
+			h=CPCVisibleSCRHeight;
+		}
+
+		_outputWidth = w;
+		_outputHeight = h;
+		_publicWidth = w;
+		_publicHeight = h;
+
 		switch(bpp) {
 			case 8:
 				mMap = new BBitmap(BRect(0,0,w,h),B_CMAP8);
@@ -33,9 +45,13 @@ class RVidPlugin : public VideoPlugin
 				break;
 			case 32:
 			default:
-				mMap = new BBitmap(BRect(0,0,w,h),B_RGB32);
+				mMap = new BBitmap(BRect(0,0,w-1,h-1),B_RGB32);
 				break;
 		}
+		
+		_publicVideo = mMap->Bits();
+		_publicPitch = w*_publicBPP/8;
+
 		return mMap->Bits();
 	}
 	virtual void SetPalette(ColorARGB8888* c) {}
@@ -46,9 +62,9 @@ class RVidPlugin : public VideoPlugin
     virtual void UnlockOutput() {}
 	virtual void Flip()
 	{ 
-		if (sView->Window()->LockLooper()) {
-			sView->DrawBitmap(mMap,BPoint(0,0));
-			sView->Window()->UnlockLooper();
+		if (sView->LockLooper()) {
+			sView->DrawBitmap(mMap,BRect(0,0,_outputWidth - 1, _outputHeight*2-1));
+			sView->UnlockLooper();
 		}
 	}
 	virtual void Close() {}
