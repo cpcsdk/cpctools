@@ -26,8 +26,13 @@ caprice_LDADD += gui/IDE/libcapricewxide.a
 endif
 endif
 
+if HAIKU
+  SUBDIRS += gui_be
+  caprice_LDADD += gui_be/libreloadedbe.a -lbe
+endif
+
 caprice_LDADD += core/libcapricecore.a \
-                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB) -lpthread
+                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB)
 
 
 #Add CLI files if activate

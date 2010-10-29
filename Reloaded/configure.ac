@@ -214,6 +214,11 @@ netbsd*)
      AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
      build_target="mingw"
      ;;
+*haiku*)
+     AC_DEFINE_UNQUOTED(HAIKU,1,[This is Haiku])
+     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system to use emulator in background])
+	 build_target="haiku"
+	 ;;
 *)
      AC_MSG_RESULT(Unrecognised OS $host_os)
      AC_DEFINE_UNQUOTED(OTHEROS,1,[Some strange OS])
@@ -228,6 +233,7 @@ AM_CONDITIONAL(SOLARIS, test "$build_target" = "solaris")
 AM_CONDITIONAL(XFREEBSD, test "$build_target" = "freebsd")
 AM_CONDITIONAL(OPENBSD, test "$build_target" = "openbsd")
 AM_CONDITIONAL(LINUX, test "$build_target" = "linux")
+AM_CONDITIONAL(HAIKU, test "$build_target" = "haiku")
 AC_MSG_RESULT([$build_target])
 
 AC_MSG_NOTICE([display and gui options ------------------------------------])
@@ -369,6 +375,7 @@ AC_CONFIG_FILES([
         src/Makefile
         src/gui/Makefile
         src/gui/IDE/Makefile
+        src/gui_be/Makefile
         src/core/Makefile
         src/cli/Makefile
         src/asm/Makefile

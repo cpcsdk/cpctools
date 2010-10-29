@@ -62,6 +62,10 @@ extern char* DeviceID;
 extern char filename[LINEMAX], * lp, line[LINEMAX], temp[LINEMAX], * tp, pline[LINEMAX2], ErrorLine[LINEMAX2], * bp;
 extern char mline[LINEMAX2], sline[LINEMAX2], sline2[LINEMAX2];
 
+#ifndef MAX_PATH
+#define MAX_PATH PATH_MAX
+#endif
+
 extern char SourceFNames[128][MAX_PATH];
 extern int CurrentSourceFName;
 extern int SourceFNamesCount;

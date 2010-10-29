@@ -34,7 +34,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
-#include <locale>
+#include <clocale>
 #include "YmMusic.h"
 #include "LZH/LZH.H"
 
