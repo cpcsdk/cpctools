@@ -63,7 +63,7 @@ class RVidPlugin : public VideoPlugin
 	virtual void Flip()
 	{ 
 		if (sView->LockLooper()) {
-			sView->DrawBitmap(mMap,BRect(0,0,_outputWidth - 1, _outputHeight*2-1));
+			sView->DrawBitmapAsync(mMap,BRect(0,0,_outputWidth - 1, _outputHeight*2-1));
 			sView->UnlockLooper();
 		}
 	}

@@ -14,5 +14,31 @@ class ReloadedWin : public BWindow
 			AddChild(mainView);
 		}
 
+		void MessageReceived(BMessage* mess)
+		{
+			int k;
+			int m;
+
+			switch(mess->what)
+			{
+				case B_KEY_DOWN:
+				case B_UNMAPPED_KEY_DOWN:
+					m = mess->FindInt32("modifiers");
+					k = mess->FindInt32("key");
+					REmulator::getInstance()->PressKey(k,m);
+					break;
+				case B_KEY_UP:
+				case B_UNMAPPED_KEY_UP:
+					m = mess->FindInt32("modifiers");
+					k = mess->FindInt32("key");
+					REmulator::getInstance()->ReleaseKey(k,m);
+					break;
+
+				default:
+					BWindow::MessageReceived(mess);
+					break;
+			}
+		}
+
 		BView* mainView;
 };
