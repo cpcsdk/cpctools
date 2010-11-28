@@ -4,4 +4,4 @@
 
 #include "RVideo.h"
 
-BView* RVidPlugin::sView = NULL;
+ReloadedWin* RVidPlugin::sView = NULL;

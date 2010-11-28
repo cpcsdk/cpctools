@@ -24,10 +24,10 @@ ReloadedApp::ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded")
 	mWin->Show();
 	
 	mEmu = REmulator::getInstance();
+	RVidPlugin::sView = mWin;
 	mEmu->setVideoPlugin(&RVidPlugin::Create);
 
 	mEmu->setCfgPath("/Donnees/Dev/cpcsdk/reloaded");
-	RVidPlugin::sView = mWin->mainView;
 
 	mEmu->Init();
 

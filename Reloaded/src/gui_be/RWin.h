@@ -2,16 +2,37 @@
  * Haiku/BeOS GUI by PulkoMandy - 2010
  */
 
-#include <Window.h>
+#ifndef __RWIN_H__
+#define __RWIN_H__
 
-class ReloadedWin : public BWindow
+#include <DirectWindow.h>
+#include <Locker.h>
+
+#include "REmulator.h"
+
+class ReloadedWin : public BDirectWindow
 {
 	public:
-		ReloadedWin() : BWindow(BRect(80,80,806,606),"Reloaded", B_TITLED_WINDOW,
+		ReloadedWin() : BDirectWindow(BRect(80,80,847,619),"Reloaded", B_TITLED_WINDOW,
 			B_NOT_ZOOMABLE|B_NOT_RESIZABLE|B_QUIT_ON_WINDOW_CLOSE)
 		{
-			mainView = new BView(BRect(0,0,800,600), "main", 0, B_WILL_DRAW);
-			AddChild(mainView);
+			fConnected = false;
+			fConnectionDisabled = false;
+			locker = new BLocker();
+			fClipList = NULL;
+			fNumClipRects = 0;
+
+//			AddChild(new SampleView(Bounds()));
+
+			if (!SupportsWindowMode()) {
+				SetFullScreen(true);
+			}
+
+			fDirty = true;
+//			fDrawThreadID = spawn_thread(DrawingThread, "drawing_thread",
+//					B_NORMAL_PRIORITY, (void *) this);
+//			resume_thread(fDrawThreadID);
+			Show();
 		}
 
 		void MessageReceived(BMessage* mess)
@@ -40,5 +61,22 @@ class ReloadedWin : public BWindow
 			}
 		}
 
-		BView* mainView;
+		void   DirectConnected(direct_buffer_info *info);
+
+		uint8*		fBits;
+		BLocker*       locker;
+		int32          fRowBytes;
+	private:
+		color_space    fFormat;
+		clipping_rect  fBounds;
+
+		uint32         fNumClipRects;
+		clipping_rect* fClipList;
+
+		bool           fDirty;      // needs refresh?
+		bool           fConnected;
+		bool           fConnectionDisabled;
+		thread_id      fDrawThreadID;
 };
+
+#endif

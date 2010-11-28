@@ -2,6 +2,9 @@
  * Haiku/BeOS GUI by PulkoMandy - 2010
  */
 
+#ifndef __REMU_H__
+#define __REMU_H__
+
 #include "emulator.h"
 
 #include "../core/CPCKeyDefs.h"
@@ -184,3 +187,4 @@ class REmulator: public Emulator {
 		}
 };
 
+#endif

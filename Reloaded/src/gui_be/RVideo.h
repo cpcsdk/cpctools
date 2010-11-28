@@ -2,6 +2,7 @@
 #include <View.h>
 #include <Window.h>
 
+#include "RWin.h"
 #include "emulator.h"
 
 class RVidPlugin : public VideoPlugin
@@ -10,10 +11,7 @@ class RVidPlugin : public VideoPlugin
 	RVidPlugin() 
 		: VideoPlugin("Reloaded", ALL, 0)
 	{
-		mMap = NULL;
 	}
-
-	BBitmap* mMap;
 
 	public:
 	static VideoPlugin* Create()
@@ -36,42 +34,25 @@ class RVidPlugin : public VideoPlugin
 		_publicWidth = w;
 		_publicHeight = h;
 
-		switch(bpp) {
-			case 8:
-				mMap = new BBitmap(BRect(0,0,w,h),B_CMAP8);
-				break;
-			case 16:
-				mMap = new BBitmap(BRect(0,0,w,h),B_RGB16);
-				break;
-			case 32:
-			default:
-				mMap = new BBitmap(BRect(0,0,w-1,h-1),B_RGB32);
-				break;
-		}
-		
-		_publicVideo = mMap->Bits();
-		_publicPitch = w*_publicBPP/8;
+		_publicVideo = sView->fBits;
+		_publicPitch = sView->fRowBytes;
 
-		return mMap->Bits();
+		return sView->fBits;
 	}
 	virtual void SetPalette(ColorARGB8888* c) {}
-	virtual bool TryLock() {return true;}
-	virtual void Unlock() {}
+	virtual bool TryLock() {return sView->locker->Lock();}
+	virtual void Unlock() {sView->locker->Unlock();}
     virtual bool LockOutput() {return true;}
     virtual bool TryLockOutput() {return true;}
     virtual void UnlockOutput() {}
 	virtual void Flip()
 	{ 
-		if (sView->LockLooper()) {
-			sView->DrawBitmapAsync(mMap,BRect(0,0,_outputWidth - 1, _outputHeight*2-1));
-			sView->UnlockLooper();
-		}
 	}
 	virtual void Close() {}
     virtual bool IsUpdate() {return false;}
 	void Screenshot(string filename) {}
 
-	~RVidPlugin() {delete mMap;}
+	~RVidPlugin() {}
 
-	static BView* sView;
+	static ReloadedWin* sView;
 };

@@ -506,7 +506,6 @@ bool Renderer::Init()
 		_preRenderFunc = _preRenderNormalFunc;
 	}
 
-	printf("VIDEO BPP : %d",_videoPlugin->GetRenderSurfaceBPP());
 	switch(_videoPlugin->GetRenderSurfaceBPP())
 	{
 	case 32:

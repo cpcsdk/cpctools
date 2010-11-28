@@ -28,7 +28,7 @@ endif
 
 if HAIKU
   SUBDIRS += gui_be
-  caprice_LDADD += gui_be/libreloadedbe.a -lbe
+  caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame
 endif
 
 caprice_LDADD += core/libcapricecore.a \
