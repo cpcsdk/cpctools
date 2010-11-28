@@ -7,6 +7,8 @@
 
 #include <DirectWindow.h>
 #include <Locker.h>
+#include <MenuBar.h>
+#include <MenuItem.h>
 
 #include "REmulator.h"
 
@@ -16,22 +18,25 @@ class ReloadedWin : public BDirectWindow
 		ReloadedWin() : BDirectWindow(BRect(80,80,847,619),"Reloaded", B_TITLED_WINDOW,
 			B_NOT_ZOOMABLE|B_NOT_RESIZABLE|B_QUIT_ON_WINDOW_CLOSE)
 		{
+			SetSizeLimits(847-80,847-80,619-61,619-61);
 			fConnected = false;
 			fConnectionDisabled = false;
 			locker = new BLocker();
 			fClipList = NULL;
 			fNumClipRects = 0;
 
-//			AddChild(new SampleView(Bounds()));
+			BMenuBar* menu = new BMenuBar(BRect(0,0,847,16),"mainmenu");
+				BMenu* file = new BMenu("File");
+				menu->AddItem(file);
+					BMenuItem* insertdsk = new BMenuItem("Insert Disc", new BMessage());
+					file->AddItem(insertdsk);
+			AddChild(menu);
 
 			if (!SupportsWindowMode()) {
 				SetFullScreen(true);
 			}
 
 			fDirty = true;
-//			fDrawThreadID = spawn_thread(DrawingThread, "drawing_thread",
-//					B_NORMAL_PRIORITY, (void *) this);
-//			resume_thread(fDrawThreadID);
 			Show();
 		}
 
@@ -56,7 +61,7 @@ class ReloadedWin : public BDirectWindow
 					break;
 
 				default:
-					BWindow::MessageReceived(mess);
+					BDirectWindow::MessageReceived(mess);
 					break;
 			}
 		}
@@ -77,6 +82,9 @@ class ReloadedWin : public BDirectWindow
 		bool           fConnected;
 		bool           fConnectionDisabled;
 		thread_id      fDrawThreadID;
+
+		void MenusBeginning() {locker->Lock();}
+		void MenusEnding() {locker->Unlock();}
 };
 
 #endif

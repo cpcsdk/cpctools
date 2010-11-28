@@ -32,8 +32,9 @@ void ReloadedWin::DirectConnected(direct_buffer_info *info) {
             fFormat = info->pixel_format;
             fBounds = info->window_bounds;
 
-			fBits += fBounds.top * info->bytes_per_row + fBounds.left * 4;
+			fBits += (fBounds.top+19) * info->bytes_per_row + fBounds.left * 4;
 				// TODO : the 4 here is only valid for 32bpp mode
+				// 19 = height of menubar
 
             fDirty = true;
 
