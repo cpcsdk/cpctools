@@ -86,7 +86,7 @@ class Renderer
 			switch(_renderSurfaceBPP)
 			{
 			case 32:
-				palColour = (colour.b << 16) + (colour.g << 8) + (colour.r);
+				palColour = (colour.r << 16) + (colour.g << 8) + (colour.b);
 				break;
 			case 24:
 				palColour = (colour.b << 16) + (colour.g << 8) + (colour.r);

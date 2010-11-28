@@ -47,6 +47,10 @@ class RVidPlugin : public VideoPlugin
     virtual void UnlockOutput() {}
 	virtual void Flip()
 	{ 
+		for(int i = 0; i < 270; i++) {
+			memcpy(_publicVideo + i * _publicPitch + _publicPitch/2,
+				_publicVideo + i * _publicPitch, _publicWidth * 4);
+		}
 	}
 	virtual void Close() {}
     virtual bool IsUpdate() {return false;}
