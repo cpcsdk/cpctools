@@ -34,6 +34,11 @@ endif
 caprice_LDADD += core/libcapricecore.a \
                  $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB)
 
+# Must not be linked in Haiku
+if MINGW
+caprice_LDADD += -lpthread
+endif
+
 
 #Add CLI files if activate
 if CLI
