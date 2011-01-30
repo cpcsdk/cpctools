@@ -87,7 +87,7 @@ protected:
 public:
 
 	//! The video surface shown by the plugin to the renderer function.
-    SpinSync publicSurfaceSync;
+    SysSync publicSurfaceSync;
 	void* _publicVideo;
 	int _publicHeight;
 	int _publicWidth;
@@ -95,7 +95,6 @@ public:
 	int _publicPitch;
 
 	//! The real video surface
-    SpinSync outputSurfaceSync;
 	void* _outputSurface;
 	int _outputHeight;
 	int _outputWidth;

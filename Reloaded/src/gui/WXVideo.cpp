@@ -32,27 +32,19 @@
 
 #include "log.h"
 
-#ifndef min
-#define min(a,b) (a<b ? a : b)
-#endif
-
-#ifndef max
-#define max(a,b) (a>b ? a : b)
-#endif
-
-/* ------------------------------------------------------------------------------------ *
- * wxWidget Line doubling video plugin ------------------------------------------------ *
- * This plugin is for wxWidget windows output.                                          *
- * Only support DoubleLine Mode and 24bpp mode.                                         *
- * ------------------------------------------------------------------------------------ */
+/* ----------------------------------------------------------------------- *
+ * wxWidget Line doubling video plugin ----------------------------------- *
+ * This plugin is for wxWidget windows output.                             *
+ * Only supports DoubleLine Mode and 24bpp mode.                           *
+ * ----------------------------------------------------------------------- */
 
 void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 {
     publicSurfaceSync.lock();
-    outputSurfaceSync.lock();
 	if(bpp != 24)
 	{
-		ErrorLogMessage("WXDoubleLinePlugin initialization error : Only support 24bpp mode");
+		ErrorLogMessage("WXDoubleLinePlugin initialization error: "
+			"Only supports 24bpp mode");
 		return NULL;
 	}
 
@@ -69,25 +61,15 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 	if (!_outputSurface)
 	{
         publicSurfaceSync.unlock();
-        outputSurfaceSync.unlock();
 		return NULL;
 	}
 
-	//_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,bpp,0x0000FF,0x00FF00,0xFF0000,0);
-	_publicVideo = (unsigned char*)malloc(CPCVisibleSCRWidth*2*CPCVisibleSCRHeight*3*sizeof(unsigned char));
-	if (!_publicVideo)
-	{
-		free(_outputSurface);
-		_outputSurface = NULL;
-        publicSurfaceSync.unlock();
-        outputSurfaceSync.unlock();
-		return NULL;
-	}
+	_publicVideo = _outputSurface;
 
 	_publicWidth = CPCVisibleSCRWidth*2;
 	_publicHeight = CPCVisibleSCRHeight;
 	_publicBPP = 24;
-	_publicPitch = CPCVisibleSCRWidth*2*_publicBPP/8;
+	_publicPitch = CPCVisibleSCRWidth*4*_publicBPP/8;
 
 	img = new wxImage(w,h,(unsigned char*)_outputSurface,true);
 	//img = new wxImage(CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,(unsigned char*)_publicVideo->pixels,true);
@@ -96,7 +78,6 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 	f->SetEmuImage(img);
 
     publicSurfaceSync.unlock();
-    outputSurfaceSync.unlock();
 	return (void*)_publicVideo;
 }
 
@@ -120,19 +101,18 @@ void WXDoubleLinePlugin::Unlock()
 bool WXDoubleLinePlugin::TryLockOutput()
 {
 //    DebugLogMessage("WXDoubleLinePlugin::TryLockOutput()");
-    return outputSurfaceSync.tryLock();
+    return true; /*outputSurfaceSync.tryLock();*/
 }
 
 bool WXDoubleLinePlugin::LockOutput()
 {
-    outputSurfaceSync.lock();
+    /*outputSurfaceSync.lock();*/
     return true;
 }
 
 void WXDoubleLinePlugin::UnlockOutput()
 {
 //    DebugLogMessage("WXDoubleLinePlugin::UnlockOutput()");
-    outputSurfaceSync.unlock();
 }
 
 bool WXDoubleLinePlugin::IsUpdate()
@@ -142,15 +122,16 @@ bool WXDoubleLinePlugin::IsUpdate()
 
 void WXDoubleLinePlugin::Flip()
 {
-    DebugLogMessage("Flip()");
     publicSurfaceSync.lock();
-    outputSurfaceSync.lock();
-	//byte* src = (byte*)_publicVideo->pixels;
+	for(int i = 0; i < 270; i++) {
+		memcpy(_publicVideo + i * _publicPitch + _publicPitch/2,
+			_publicVideo + i * _publicPitch, _publicWidth * 3);
+	}
+	/*
+    DebugLogMessage("Flip()");
 	byte* src = (byte*)_publicVideo;
 	byte* dest = (byte*)_outputSurface;
-	//int length = _publicVideo->w * 3;
 	int length = _publicWidth * 3;
-	//for(line=0;line<_publicVideo->h;line++)
 	for(int line=0;line<_publicHeight;line++)
 	{
 	    memcpy(dest,src,length);
@@ -159,6 +140,7 @@ void WXDoubleLinePlugin::Flip()
 	    dest+=length;
 	    src+=length;
 	}
+*/
     publicSurfaceSync.unlock();
 
 #if !USE_PTHREAD
@@ -172,7 +154,6 @@ void WXDoubleLinePlugin::Flip()
 		dc.DrawBitmap(bmp,0,0,false);
 	}
 #endif
-    outputSurfaceSync.unlock();
     isUpdateSync.unlock(); // Indicate update of output
 }
 
@@ -190,15 +171,11 @@ void WXDoubleLinePlugin::Screenshot(string filename)
 void WXDoubleLinePlugin::Close()
 {
     publicSurfaceSync.lock();
-    outputSurfaceSync.lock();
 	delete img;
 	img = NULL;
 	free(_outputSurface);
 	_outputSurface = NULL;
-	free(_publicVideo);
-	_publicVideo = NULL;
     publicSurfaceSync.unlock();
-    outputSurfaceSync.unlock();
 }
 
 /* ------------------------------------------------------------------------------------ */
@@ -499,8 +476,6 @@ void OpenGLPlugin::Flip()
 
 	if (_postRenderCallBack != NULL)
 		_postRenderCallBack();
-	
-	//SDL_GL_SwapBuffers();
 }
 
 void OpenGLPlugin::Close()
