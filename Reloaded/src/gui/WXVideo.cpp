@@ -124,8 +124,8 @@ void WXDoubleLinePlugin::Flip()
 {
     publicSurfaceSync.lock();
 	for(int i = 0; i < 270; i++) {
-		memcpy(_publicVideo + i * _publicPitch + _publicPitch/2,
-			_publicVideo + i * _publicPitch, _publicWidth * 3);
+		memcpy((uint8_t*)_publicVideo + i * _publicPitch + _publicPitch/2,
+			(uint8_t*)_publicVideo + i * _publicPitch, _publicWidth * 3);
 	}
 	/*
     DebugLogMessage("Flip()");
