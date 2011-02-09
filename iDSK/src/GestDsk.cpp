@@ -46,7 +46,7 @@ StAmsdos * CreeEnteteAmsdos( char * NomFic, unsigned short Longueur ) {
     static char NomReel[ 256 ];
     static StAmsdos Entete;
     static char Nom[ 12 ];
-    int CheckSum = 0,i;
+    int i;
 	
     strcpy( NomReel, NomFic );
     memset( &Entete, 0, sizeof( Entete ) );
@@ -598,7 +598,7 @@ bool DSK::ReadDsk( std::string NomFic ) {
     if ( (fp=fopen(NomFic.c_str(),"rb"))!=NULL ) {
 		fread(ImgDsk,sizeof(ImgDsk),1,fp);
 		Infos = ( CPCEMUEnt * )ImgDsk;
-		if ( isBigEndian( ) ) FixEndianDsk( false ); // fix endian for Big endianness machines (PPC)
+        if ( isBigEndian( ) ) FixEndianDsk( false ); // fix endian for Big endianness machines (PPC)
 		if (  ! strncmp( Infos->debut, "MV -", 4 )
 			  || ! strncmp( Infos->debut, "EXTENDED CPC DSK", 16 )
 			  )
@@ -686,22 +686,17 @@ bool DSK::WriteDsk( string NomDsk ) {
     if ( (fp=fopen(NomDsk.c_str(),"wb+")) != NULL) {
 		if ( ! Infos->DataSize ) Infos->DataSize = 0x100 + SECTSIZE * 9;
         Taille = Infos->NbTracks * Infos->DataSize + sizeof( * Infos );
-		if ( isBigEndian() ) FixEndianDsk( true ) ; // Fix endianness for Big endian machines (PPC)
+        if ( isBigEndian() ) FixEndianDsk( true ) ; // Fix endianness for Big endian machines (PPC)
 		
 		if ( (Copie=(fwrite(ImgDsk,1,Taille,fp))) !=Taille ) ;
 		fclose(fp);
 		// in case of the same DSK image stay in memory
-		if ( isBigEndian() ) FixEndianDsk( false ) ; // Fix endianness for Big endian machines (PPC)
+        if ( isBigEndian() ) FixEndianDsk( false ) ; // unFix endianness for Big endian machines (PPC)
 		
         return( true );
 	}
     return( false );
 }
-
-
-
-
-
 
 
 void DSK::DskEndian() {
@@ -712,6 +707,7 @@ void DSK::DskEndian() {
 	}
 	Infos = CPCEMUEntEndian ( Infos ) ;
 }
+
 
 StAmsdos* DSK::StAmsdosEndian ( StAmsdos * pEntete ){
 	pEntete->Length = FIX_SHORT( pEntete->Length );
@@ -728,6 +724,7 @@ CPCEMUEnt* DSK::CPCEMUEntEndian ( CPCEMUEnt* Infos ) {
 	Infos->DataSize = FIX_SHORT( Infos->DataSize );
 	return (Infos);
 }
+
 
 CPCEMUTrack* DSK::CPCEMUTrackEndian ( CPCEMUTrack* tr ) {
 	for ( int i=0;i < (int)tr->NbSect ; i++) {
@@ -826,6 +823,7 @@ char * DSK::GetEntrySizeInCatalogue ( int num , char* Size ) {
 	return Size;
 }
 
+
 bool DSK::GetFileInDsk( char* path, int Indice ){
 	int i = Indice;
 	char current[ 16 ];
@@ -872,6 +870,7 @@ bool DSK::GetFileInDsk( char* path, int Indice ){
 	return true;
 }
 
+
 bool DSK::PutFileInDsk( string Masque ,int TypeModeImport ,int loadAdress, int exeAdress, int UserNumber, bool System_file, bool Read_only ) {
 	static unsigned char Buff[ 0x20000 ];
 	static char *cFileName;
@@ -914,8 +913,8 @@ bool DSK::PutFileInDsk( string Masque ,int TypeModeImport ,int loadAdress, int e
 		}
 		// Il faut recalculer le checksum en comptant es adresses !
 		SetChecksum(e);
-		// fix the endianness of the input file 
-		if ( isBigEndian() ) e = StAmsdosEndian(e);
+        // fix the endianness of the input file
+        if ( isBigEndian() ) e = StAmsdosEndian(e);
 	}
 	else
 		cout << "Le fichier a déjà une en-tête\n";
@@ -968,6 +967,7 @@ bool DSK::PutFileInDsk( string Masque ,int TypeModeImport ,int loadAdress, int e
 
 	return ret;
 }
+
 
 bool DSK::OnViewFic(int nItem) {
 	int LongFic = 0;
@@ -1068,6 +1068,7 @@ bool DSK::Hexdecimal() {
 	return true;
 }
 
+
 void DSK::RemoveFile ( int item ) {
 	char NomFic[ 16 ];
 	int i = item;
@@ -1088,6 +1089,7 @@ void DSK::RemoveFile ( int item ) {
 		
 	return ;
 }
+
 
 
 void DSK::RenameFile( int item , char *NewName) {
@@ -1120,10 +1122,9 @@ void DSK::RenameFile( int item , char *NewName) {
 		memcpy( TabDir[ c ].Ext , DirLoc.Ext, 3 );
 		SetInfoDirEntry( c, &TabDir[ c ]);
 		p = GetNomAmsdos( TabDir[ ++c ].Nom );
-	}while (!strncmp( NomFic, p , max(strlen(p),strlen(NomFic))));
-	
-	
+	}while (!strncmp( NomFic, p , max(strlen(p),strlen(NomFic))));		
 }
+
 
 std::string DSK::ReadDskDir( void ) {
 	StDirEntry TabDir[ 64 ];
@@ -1170,8 +1171,9 @@ std::string DSK::ReadDskDir( void ) {
 					t += TabDir[ p + i ].NbPages;
 				p++;
 			} while( TabDir[ p + i ].NumPage && ( p + i ) < 64  );
-			string size = GetTaille( ( t + 7 ) >> 3  );
-			catalogue+= " : " + size + "\n";
+            //string size = GetTaille( ( t + 7 ) >> 3  );
+            //catalogue+= " : " + size + "\n";
+            catalogue += "\n";
 
 		}
 	}
