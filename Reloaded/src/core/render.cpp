@@ -398,7 +398,7 @@ void Renderer::SetMonitor(MonitorMode mode, unsigned int intensity, bool remanen
 }
 
 
-bool Renderer::Init()
+int Renderer::Init()
 {
 	byte *oldMemory = NULL;
 	if (_preRenderNormalFunc != NULL)
@@ -426,7 +426,7 @@ bool Renderer::Init()
 
 	if (_videoPluginPtr == NULL) {
 		CriticalLogMessage("There is no video plugin !\n");
-		return false;
+		return -1;
 	}
 
 	_videoPlugin = (*_videoPluginPtr)();
@@ -436,7 +436,9 @@ bool Renderer::Init()
 	// attempt to set the required video mode
 	if (!_videoPlugin->Init(_scrFullScreenWidth, _scrFullScreenHeight, _scrFullScreenBPP, _scrFullScreen))
 	{ 
-		return false;
+		//CriticalLogMessage("Video plugin init failed\n");
+		// message is set in the video plugin
+		return -2;
 	}
 
 	void *backSurface = _videoPlugin->GetSurface();
@@ -549,7 +551,7 @@ bool Renderer::Init()
 
 	InitPalette(); // init CPC colours
 	
-	return true;
+	return 0;
 }
 
 

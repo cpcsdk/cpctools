@@ -43,7 +43,7 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
     publicSurfaceSync.lock();
 	if(bpp != 24)
 	{
-		ErrorLogMessage("WXDoubleLinePlugin initialization error: "
+		CriticalLogMessage("WXDoubleLinePlugin initialization error: "
 			"Only supports 24bpp mode");
 		return NULL;
 	}
@@ -60,6 +60,7 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 	_outputSurface = (unsigned char*)malloc(h*w*3*sizeof(unsigned char));
 	if (!_outputSurface)
 	{
+		CriticalLogMessage("Creating output surface failed");
         publicSurfaceSync.unlock();
 		return NULL;
 	}

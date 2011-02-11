@@ -26,7 +26,11 @@
 class WXDoubleLinePlugin : public VideoPlugin
 {
 public:
-	WXDoubleLinePlugin() : VideoPlugin("Double size", ALL, 0) {}
+	WXDoubleLinePlugin() 
+		: VideoPlugin("Double size", ALL, 0) 
+		, img(NULL)
+		, bmp(NULL)
+	{}
 
 	virtual void* Init(int w,int h,int bpp,bool fs);
 	//virtual void SetPalette(SDL_Color* c);

@@ -261,7 +261,8 @@ Emulator::Emulator():
 	_renderer(this),
 	_config(this),
 	_videoPlugin(NULL),
-	FPSDisplay(true),
+	_cpcMemory(NULL),
+	FPSDisplay(false),
 	exitRequested(false)
 {
     emuSync.lock();
@@ -358,8 +359,8 @@ bool Emulator::Init()
 
 	_renderer.SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
 
-	if (!_renderer.Init()) {
-        CriticalLogMessage("video_init() failed. Aborting.");
+	int status = _renderer.Init();
+	if (status != 0) {
 		return false;
 	}
 
@@ -436,6 +437,8 @@ void Emulator::Emulate()
 
 	iExitCondition = EC_FRAME_COMPLETE;
 	bolDone = false;
+
+	while(_cpcMemory == NULL); // Wait for init...
 
 #ifdef USE_PTHREAD
 	while(1)

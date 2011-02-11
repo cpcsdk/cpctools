@@ -108,11 +108,12 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
 	emulator->GetRenderer().GetVideoPlugin()->LockOutput();
 	wxImage *imgPlugin;
 	imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
-	wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
-	//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
-	wxPaintDC dc(getPanel());
-	dc.DrawBitmap(bmpPlugin,0,0,false);
-
+	if (imgPlugin != NULL) {
+		wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
+		//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
+		wxPaintDC dc(getPanel());
+		dc.DrawBitmap(bmpPlugin,0,0,false);
+	}
 	emulator->GetRenderer().GetVideoPlugin()->UnlockOutput();
 
 	// In pause mode, we display a crosshair showing where the electron

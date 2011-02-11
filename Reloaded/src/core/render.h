@@ -423,7 +423,7 @@ class Renderer
 	bool SetFullScreen(bool fs);
 	bool ToggleFullScreen();
 
-	bool Init();
+	int Init();
 
 	bool BeginDisplay(int screenLine);
 	void EndDisplay(bool frameCompleted);
