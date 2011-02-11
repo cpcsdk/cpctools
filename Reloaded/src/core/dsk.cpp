@@ -64,13 +64,15 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 {
 	int iRetCode;
 	dword dwTrackSize, track, side, sector, dwSectorSize, dwSectors;
-	byte *pbPtr, *pbDataPtr, *pbTempPtr, *pbTrackSizeTable;
+    byte *pbPtr, *pbDataPtr, *pbTempPtr, *pbTrackSizeTable;
+
+    byte* tmpBuffer = (byte*)malloc(0x200);
 
 	iRetCode = 0;
 	dsk_eject(drive);
 	if ((pDSKfileObject = fopen(pchFileName, "rb")) != NULL) {
-		fread(pbGPBuffer, 0x100, 1, pDSKfileObject); // read DSK header
-		pbPtr = pbGPBuffer;
+        fread(tmpBuffer, 0x100, 1, pDSKfileObject); // read DSK header
+        pbPtr = tmpBuffer;
 
 		if (memcmp(pbPtr, "MV - CPC", 8) == 0) { // normal DSK image?
 			drive->tracks = *(pbPtr + 0x30); // grab number of tracks
@@ -86,8 +88,8 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 			drive->sides--; // zero base number of sides
 			for (track = 0; track < drive->tracks; track++) { // loop for all tracks
 				for (side = 0; side <= drive->sides; side++) { // loop for all sides
-					fread(pbGPBuffer+0x100, 0x100, 1, pDSKfileObject); // read track header
-					pbPtr = pbGPBuffer + 0x100;
+                    fread(tmpBuffer+0x100, 0x100, 1, pDSKfileObject); // read track header
+                    pbPtr = tmpBuffer + 0x100;
 					if (memcmp(pbPtr, "Track-Info", 10) != 0) { // abort if ID does not match
 						iRetCode = ERR_DSK_INVALID;
 						cout << "Track info not found\n";
@@ -144,8 +146,8 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 						dwTrackSize = (*pbTrackSizeTable++ << 8); // track size in bytes
 						if (dwTrackSize != 0) { // only process if track contains data
 							dwTrackSize -= 0x100; // compensate for track header
-							fread(pbGPBuffer+0x100, 0x100, 1, pDSKfileObject); // read track header
-							pbPtr = pbGPBuffer + 0x100;
+                            fread(tmpBuffer+0x100, 0x100, 1, pDSKfileObject); // read track header
+                            pbPtr = tmpBuffer + 0x100;
 							if (memcmp(pbPtr, "Track-Info", 10) != 0) { // valid track header?
 								cout << "Track info not found\n";
 								iRetCode = ERR_DSK_INVALID;
@@ -200,7 +202,8 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 		delete [] pchTmpBuffer;
 	  } */
 exit:
-		fclose(pDSKfileObject);
+        fclose(pDSKfileObject);
+        free(tmpBuffer);
    } else {
 	   iRetCode = ERR_FILE_NOT_FOUND;
    }

@@ -4,8 +4,7 @@
 
 #ifndef HAVE_LIB765_H
 
-
-#include "fdc.h"
+#include "fdc_old.h"
 
 #ifndef _DSK_H_
 #define _DSK_H_

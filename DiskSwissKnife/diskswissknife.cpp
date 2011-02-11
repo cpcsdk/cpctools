@@ -44,7 +44,7 @@ void DiskSwissKnife::on_actionOpen_triggered()
 #define trackpix 10
 
     // Update the overview
-    for (int track = 0; track < currentDisk.tracks; track++)
+    for (unsigned int track = 0; track < currentDisk.tracks; track++)
     {
         int x = 0;
         for (unsigned int sector = 0; sector<currentDisk.track[track]->sectors; sector++)
@@ -59,7 +59,22 @@ void DiskSwissKnife::on_actionOpen_triggered()
     // Update the file list
     // Update the sector editor
         // check current track <= trackcount
+    unsigned int track = 0;
         // Sector list for current track
+    for (unsigned int sector = 0; sector<currentDisk.track[track]->sectors; sector++)
+    {
+        QString str;
+        str.setNum(currentDisk.track[track]->sector[sector].CHRN[2],16);
+        ui->sectorList->addItem(str);
+    }
+    int size = currentDisk.track[track][0].sector[0].declared_size;
+    unsigned char* data = currentDisk.track[track][0].sector[0].data;
+    QByteArray q((char*)data, size);
+    delete ui->hexView;
+    ui->hexView = new QHexEdit();
+    ui->hexView->setData(q);
+    ui->sectorTab->layout()->addWidget(ui->hexView);
+
         // Current sector exists ?
         // Update current sector
 }
