@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "../Reloaded/src/core/dsk.h"
+
 namespace Ui {
     class DiskSwissKnife;
 }
@@ -17,6 +19,7 @@ public:
 
 private:
     Ui::DiskSwissKnife *ui;
+    t_drive currentDisk;
 
 private slots:
     void on_actionOpen_triggered();

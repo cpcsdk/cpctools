@@ -12,13 +12,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         diskswissknife.cpp \
-    ../iDSK/src/GestDsk.cpp \
-    ../iDSK/src/endianPPC.cpp \
-    ../iDSK/src/Outils.cpp
+    ../Reloaded/src/core/dsk.cpp
 
 HEADERS  += diskswissknife.h \
-    ../iDSK/src/GestDsk.h \
-    ../iDSK/src/endianPPC.h \
-    ../iDSK/src/Outils.h
+    ../Reloaded/src/core/dsk.h
 
 FORMS    += diskswissknife.ui
