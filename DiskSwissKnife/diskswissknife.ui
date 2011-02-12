@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>610</width>
-    <height>563</height>
+    <width>714</width>
+    <height>667</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -90,7 +90,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QSpinBox" name="spinBox">
+             <widget class="QSpinBox" name="trackSpin">
               <property name="maximum">
                <number>83</number>
               </property>
@@ -137,8 +137,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>476</width>
-             <height>468</height>
+             <width>580</width>
+             <height>572</height>
             </rect>
            </property>
           </widget>
@@ -155,7 +155,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>610</width>
+     <width>714</width>
      <height>18</height>
     </rect>
    </property>

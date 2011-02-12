@@ -10,11 +10,21 @@
 
 #include <QFileDialog>
 
+#include <cassert>
+
 DiskSwissKnife::DiskSwissKnife(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::DiskSwissKnife)
+    ui(new Ui::DiskSwissKnife),
+    currentTrack(0)
 {
     ui->setupUi(this);
+    delete(ui->hexView);
+    ui->hexView = new QHexEdit();
+    ui->sectorTab->layout()->addWidget(ui->hexView);
+
+    // signals connection
+    assert(connect(ui->sectorList, SIGNAL(itemSelectionChanged()), this, SLOT(on_changeSector())));
+    assert(connect(ui->trackSpin, SIGNAL(valueChanged(int)), this, SLOT(on_changeTrack(int))));
 }
 
 DiskSwissKnife::~DiskSwissKnife()
@@ -41,7 +51,7 @@ void DiskSwissKnife::on_actionOpen_triggered()
 
     s->clear();
 
-#define trackpix 10
+#define trackpix 11
 
     // Update the overview
     for (unsigned int track = 0; track < currentDisk.tracks; track++)
@@ -49,32 +59,63 @@ void DiskSwissKnife::on_actionOpen_triggered()
         int x = 0;
         for (unsigned int sector = 0; sector<currentDisk.track[track]->sectors; sector++)
         {
-            int w = currentDisk.track[track][0].sector[sector].declared_size / 16;
+            int w = min(currentDisk.track[track][0].sector[sector].declared_size,
+                        currentDisk.track[track][0].sector[sector].size)/ 8;
             // Draw the sector
-            s->addRect(x+8, track * trackpix, w, trackpix/*pen brush*/);
+            // Brush color :
+                // white : normal
+                // grey : erased
+                // red : weak
+            QBrush b;
+            b.setStyle(Qt::SolidPattern);
+            if (currentDisk.track[track][0].sector[sector].size !=
+                currentDisk.track[track][0].sector[sector].declared_size)
+                    b.setColor(Qt::red);
+            else
+                b.setColor(Qt::white);
+            if (currentDisk.track[track][0].sector[sector].flags[1]&0x40)
+                b.setColor(b.color().darker());
+            s->addRect(x+8, track * trackpix, w, trackpix, Qt::SolidLine, b);
+
+            // Draw the sector ID
+            QString qstr;
+            qstr.setNum(currentDisk.track[track][0].sector[sector].CHRN[2],16);
+            QGraphicsSimpleTextItem* i = s->addSimpleText(qstr);
+            i->setPos(x+w/2,(int)track*trackpix-1);
+
             x += w;
         }
     }
 
     // Update the file list
+
     // Update the sector editor
-        // check current track <= trackcount
-    unsigned int track = 0;
-        // Sector list for current track
-    for (unsigned int sector = 0; sector<currentDisk.track[track]->sectors; sector++)
+    on_changeTrack(0);
+}
+
+
+void DiskSwissKnife::on_changeSector()
+{
+    int sectornum = ui->sectorList->currentRow();
+    sectornum = max(0, sectornum);
+    // Update sector view
+    int size = currentDisk.track[currentTrack][0].sector[sectornum].declared_size;
+    unsigned char* data = currentDisk.track[currentTrack][0].sector[sectornum].data;
+    QByteArray q((char*)data, size);
+    ui->hexView->setData(q);
+}
+
+
+void DiskSwissKnife::on_changeTrack(int i)
+{
+    currentTrack = i;
+    ui->sectorList->clear();
+
+    for (unsigned int sector = 0; sector<currentDisk.track[currentTrack]->sectors; sector++)
     {
         QString str;
-        str.setNum(currentDisk.track[track]->sector[sector].CHRN[2],16);
+        str.setNum(currentDisk.track[currentTrack]->sector[sector].CHRN[2],16);
         ui->sectorList->addItem(str);
     }
-    int size = currentDisk.track[track][0].sector[0].declared_size;
-    unsigned char* data = currentDisk.track[track][0].sector[0].data;
-    QByteArray q((char*)data, size);
-    delete ui->hexView;
-    ui->hexView = new QHexEdit();
-    ui->hexView->setData(q);
-    ui->sectorTab->layout()->addWidget(ui->hexView);
-
-        // Current sector exists ?
-        // Update current sector
+    on_changeSector();
 }
