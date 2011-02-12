@@ -206,6 +206,7 @@ t_sector* t_FDC::find_sector(byte *requested_CHRN)
 		result[RES_ST2] &= ~0x10; // remove possible No Cylinder flag
 	}
 	active_drive->current_sector = idx; // update sector table index for active drive
+
 	return sector;
 }
 
@@ -316,6 +317,13 @@ loop:
 	else { // sector not found
 		result[RES_ST0] |= 0x40; // AT
 		result[RES_ST1] |= 0x04; // No Data
+
+		if (active_track->sectors == 0)
+		{
+			// Not formatted track 
+			result[RES_ST1]|=1; // set MA flag
+			result[RES_ST2]|=1; // set MD flag
+		}
 		
 		LOAD_RESULT_WITH_CHRN();
 			
