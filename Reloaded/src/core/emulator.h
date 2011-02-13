@@ -133,7 +133,7 @@ public:
 
 	// fdc led status
 	virtual void fdcLed(bool on) {};
-	virtual void fdcNotifyRead(int side, int track, int sector, int mode) {};
+	virtual void fdcNotifyRead(int side, int track, t_sector* sector) {};
 		// mode > 0 : read sector
 		// mode < 0 : read track
 		// mode = 0 : sector not found

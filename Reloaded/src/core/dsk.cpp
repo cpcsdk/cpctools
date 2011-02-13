@@ -107,7 +107,8 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 					if (drive->track[track][side].data == NULL) { // abort if not enough
 						iRetCode = ERR_OUT_OF_MEMORY;
 						goto exit;
-					}
+                    }
+                    drive->track[track][side].gap3 = *(pbPtr + 0x16);
 					pbDataPtr = drive->track[track][side].data; // pointer to start of memory buffer
 					pbTempPtr = pbDataPtr; // keep a pointer to the beginning of the buffer for the current track
 					for (sector = 0; sector < dwSectors; sector++) { // loop for all sectors

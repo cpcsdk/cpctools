@@ -19,6 +19,7 @@ SOURCES += main.cpp\
 HEADERS  += diskswissknife.h \
     ../Reloaded/src/core/dsk.h \
     QHexEdit/qhexedit.h \
-    QHexEdit/qhexedit_p.h
+    QHexEdit/qhexedit_p.h \
+    ../Reloaded/src/core/fdc_old.h
 
 FORMS    += diskswissknife.ui

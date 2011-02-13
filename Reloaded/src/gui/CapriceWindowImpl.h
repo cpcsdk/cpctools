@@ -59,9 +59,6 @@ class CapriceWindowImpl : public EmulatorWindow
     virtual void onInsertDiscA( wxCommandEvent& event );
     virtual void onInsertDiscB( wxCommandEvent& event );
 
-	virtual void menu_editDiskA( wxCommandEvent& event );
-	virtual void menu_editDiskB( wxCommandEvent& event );
-
     virtual void onLoadSNA( wxCommandEvent& event );
     virtual void onSaveSNA( wxCommandEvent& event );
     virtual void onReloadSNA( wxCommandEvent& event );

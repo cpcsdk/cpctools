@@ -29,7 +29,6 @@
 #include "CapriceApp.h"
 #include "CapriceWindowImpl.h"
 #include "CapriceInputSettingsImpl.h"
-#include "DiscEditor.h"
 
 
 #include "cap32.h"
@@ -151,8 +150,6 @@ int CapriceApp::OnExit()
 	delete wsic;
 	wsic = NULL;
 #endif
-	delete DiscEditorImpl::sectorClipboard;
-	DiscEditorImpl::sectorClipboard = NULL;
 
 	delete emulator;
 	emulator = NULL;

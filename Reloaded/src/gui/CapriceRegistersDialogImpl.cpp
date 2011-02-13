@@ -46,12 +46,10 @@ void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
 		// Saved as a var since we pop the elements so the size changes
 	for(unsigned int i = 0; i < t; i++) {
 		WXEmulator::fdcLog l = emulator->fdcAccess.front();
-		if (l.v > 0)
-			text.Printf(wxT("Read side %d, track %d, sector %X"), l.s, l.t, l.u);
-		else if (l.v < 0)
-			text.Printf(wxT("Track read side %d, track %d, starting at sector %X"), l.s, l.t, l.u);
+		if (l.val == NULL)
+			text.Printf(wxT("Read side %d, track %d, NOT FOUND"), l.s, l.t);
 		else
-			text.Printf(wxT("Read error on side %d, track %d, sector %X"), l.s, l.t, l.u);
+			text.Printf(wxT("Read side %d, track %d, CHRN %.8X ST %.8X"), l.s, l.t, *(int*)l.val->CHRN, *(int*)l.val->flags);
 		FDCAccessLog->Append(text);
 		emulator->fdcAccess.pop();
 	}

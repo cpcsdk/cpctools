@@ -193,9 +193,9 @@ void WXEmulator::fdcLed(bool on) {
 }
 
 
-void WXEmulator::fdcNotifyRead(int side, int track, int sector, int mode) {
+void WXEmulator::fdcNotifyRead(int side, int track, t_sector* sector) {
 	// We store the FDC access list for debuggingin the register window 
-	fdcLog l = {side, track, sector, mode};
+	fdcLog l = {side, track, sector};
 	fdcAccess.push(l);
 }
 

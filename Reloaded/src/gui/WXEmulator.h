@@ -53,7 +53,7 @@ class WXEmulator : public Emulator {
 
   public:
 	// TODO : accessors for this instead
-	struct fdcLog {int s; int t; int u; int v;};
+	struct fdcLog {int s; int t; t_sector* val;};
 	std::queue<fdcLog> fdcAccess;
 
 	static inline WXEmulator* getInstance()
@@ -78,7 +78,7 @@ class WXEmulator : public Emulator {
 
 	// FDC Led status
 	void fdcLed(bool on);
-	void fdcNotifyRead(int side, int track, int sector, int mode);
+	void fdcNotifyRead(int side, int track, t_sector* sector);
 	// Emulator->Emulate() (?)
 	// "Pause"/"Breakpoint" menu (de)activation, screen or pause-image display
 	void Pause();

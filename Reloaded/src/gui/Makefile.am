@@ -19,8 +19,6 @@ CapriceInputSettingsImpl.cpp\
 CPCKeyDefs.h \
 WXEmulator.h \
 WXEmulator.cpp \
-DiscEditor.h \
-DiscEditor.cpp \
 WXVideo.cpp \
 WXLog.h
 

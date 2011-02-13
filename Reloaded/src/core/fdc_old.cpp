@@ -179,16 +179,37 @@ t_sector* t_FDC::find_sector(byte *requested_CHRN)
 	loop_count = 0; // detection of index hole counter
 	idx = active_drive->current_sector; // get the active sector index
 	do {
-		if (!(memcmp(&active_track->sector[idx].CHRN, requested_CHRN, 4))) { // sector matches requested ID?
+		// If R (sector number) and N (sector size) match te request the transfer can be 
+		// initialized. We must still set the "no cylinder" flag.
+		if (active_track->sector[idx].CHRN[2] == requested_CHRN[2] 
+		&&  active_track->sector[idx].CHRN[3] == requested_CHRN[3])
+		{
+		// if (!(memcmp(&active_track->sector[idx].CHRN, requested_CHRN, 4))) { // sector matches requested ID?
 			sector = &active_track->sector[idx]; // return value points to sector information
 			if ((sector->flags[0] & 0x20) || (sector->flags[1] & 0x20)) { // any Data Errors?
 				if (active_drive->random_DEs) { // simulate 'random' DEs?
 					flags |= RNDDE_flag;
 				}
 			}
-			result[RES_ST2] &= ~(0x02 | 0x10); // remove possible Bad Cylinder + No Cylinder flags
-			break;
+
+			// Check the cylinder for the sector we found. If it's wrong, the flags are set,
+			// and the transfer won't occur
+			byte cylinder = active_track->sector[idx].CHRN[0]; // extract C
+			if (cylinder == 0xff) {
+				result[RES_ST2] |= 0x02; // Bad Cylinder
+				sector = NULL; // abort transfer
+			}
+			else if (cylinder != command[CMD_C]) { // does not match requested C?
+				result[RES_ST2] |= 0x10; // No Cylinder
+				sector = NULL; // abort transfer
+			} else {
+				result[RES_ST2] &= ~(0x02 | 0x10);
+					// remove possible Bad Cylinder + No Cylinder flags
+				break; // found perfect match 
+			}
 		}
+
+		/* Only set for a matching sector
 		byte cylinder = active_track->sector[idx].CHRN[0]; // extract C
 		if (cylinder == 0xff) {
 			result[RES_ST2] |= 0x02; // Bad Cylinder
@@ -196,16 +217,21 @@ t_sector* t_FDC::find_sector(byte *requested_CHRN)
 		else if (cylinder != command[CMD_C]) { // does not match requested C?
 			result[RES_ST2] |= 0x10; // No Cylinder
 		}
+		*/
 		idx++; // increase sector table index
 		if (idx >= active_track->sectors) { // index beyond number of sectors for this track?
 			idx = 0; // reset index
 			loop_count++; // increase 'index hole' count
+			result[RES_ST1] |= 0x80; // EN (end of cylinder)
 		}
 	} while (loop_count < 2); // loop until sector is found, or index hole has passed twice
+	/*
 	if (result[RES_ST2] & 0x02) { // Bad Cylinder set?
 		result[RES_ST2] &= ~0x10; // remove possible No Cylinder flag
 	}
+	*/
 	active_drive->current_sector = idx; // update sector table index for active drive
+
 
 	return sector;
 }
@@ -260,7 +286,7 @@ void t_FDC::cmd_read(void)
 loop:
 	sector = find_sector(&command[CMD_C]); // locate the requested sector on the current track
 	Emulator::getInstance()->fdcNotifyRead(driveA.current_side, driveA.current_track,
-		sector==NULL?0:sector->CHRN[2], sector!=NULL);
+		sector);
 	if (sector) { // sector found
 		result[RES_ST1] = sector->flags[0] & 0x25; // copy ST1 to result, ignoring unused bits
 		result[RES_ST2] = sector->flags[1] & 0x61; // copy ST2 to result, ignoring unused bits
@@ -296,6 +322,8 @@ loop:
 				sector_size = 128 << command[CMD_N]; // determine number of bytes from N value
 			}
 			buffer_count = sector_size; // init number of bytes to transfer
+
+			// Handle weak sectors
 			int versions_count = 1;
 			if(sector->declared_size != 0)
 				versions_count = sector->size/sector->declared_size;
@@ -308,6 +336,7 @@ loop:
 			}
 			else
 				offset = 0;
+
 			buffer_ptr = sector->data + sector->declared_size*offset; // pointer to sector data
 			buffer_endptr = active_track->data + active_track->size; // pointer beyond end of track data
 			timeout = INITIAL_TIMEOUT;
@@ -327,7 +356,7 @@ loop:
 		
 		LOAD_RESULT_WITH_CHRN();
 			
-			phase = RESULT_PHASE; // switch to result phase
+		phase = RESULT_PHASE; // switch to result phase
 	}
 }
 
@@ -361,7 +390,7 @@ void t_FDC::cmd_readtrk(void)
 	read_status_delay = 1;
 
 	Emulator::getInstance()->fdcNotifyRead(driveA.current_side, driveA.current_track,
-		sector->CHRN[2], -(sector!=NULL));
+		sector);
 }
 
 
@@ -914,6 +943,7 @@ void t_FDC::fdc_read(t_FDC &FDC)
 		else { // unformatted track
 			FDC.result[RES_ST0] |= 0x40; // AT
 			FDC.result[RES_ST1] |= 0x01; // Missing AM
+			FDC.result[RES_ST2] |= 0x01; // Missing AM in data field
 			
 			FDC.LOAD_RESULT_WITH_CHRN();
 				

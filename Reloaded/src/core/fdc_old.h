@@ -74,6 +74,7 @@ typedef struct {
    unsigned int sectors; // sector count for this track
    unsigned int size; // track size in bytes
    unsigned char *data; // pointer to track data
+   unsigned char gap3;
    t_sector sector[FDC_SECTORMAX]; // array of sector information structures
 } t_track;
 

@@ -26,7 +26,6 @@
 #include "WXVideo.h"
 #include "CapriceInputSettingsImpl.h"
 
-#include "DiscEditor.h"
 #include "MemoryImpl.h"
 #include "tape.h"
 #include "error.h"
@@ -262,15 +261,6 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 
 }
 
-void CapriceWindowImpl::menu_editDiskA( wxCommandEvent& event ) {
-		DiscEditorImpl* de = new DiscEditorImpl(this, 0);
-		de->Show(true);
-}
-
-void CapriceWindowImpl::menu_editDiskB( wxCommandEvent& event ) {
-	DiscEditorImpl* de = new DiscEditorImpl(this, 1);
-	de->Show(true);
-}
 
 /*
  * Ask from the menu to change the disc in the drive B
