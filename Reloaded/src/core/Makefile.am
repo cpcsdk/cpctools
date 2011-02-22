@@ -2,8 +2,7 @@ noinst_LIBRARIES = libcapricecore.a
 
 libcapricecore_a_LIBADD = 
 libcapricecore_a_SOURCES = \
-audio.cpp\
-audio.h\
+	audioPlugin.h \
 c_bool.h\
 c_inifile.cpp\
 c_inifile.h\
@@ -64,6 +63,11 @@ clock_gettime_stub.cpp clock_gettime_stub.h \
 synchro.cpp synchro.h \
 log.cpp log.h \
 Desass.cpp Desass.h
+
+if PORTAUDIO
+  libcapricecore_a_SOURCES += portAudioAudioPlugin.cpp \
+							  portAudioAudioPlugin.h
+endif
 
 if LIB765
   libcapricecore_a_LIBADD += /usr/local/lib/lib765.a /usr/local/lib/libdsk.a

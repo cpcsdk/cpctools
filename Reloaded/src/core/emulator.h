@@ -32,6 +32,9 @@
 #include "fdc.h"
 #include "z80.h"
 #include "audio.h"
+
+#include "audioPlugin.h"
+
 #include "timer.h"
 #include "crtc.h"
 
@@ -86,6 +89,7 @@ protected:
 
 	unsigned int			_cycleCount;
 	VideoPlugin*			(*_videoPlugin)();
+	AudioPlugin*			_audioPlugin;
 
 #ifdef USE_PTHREAD
 	pthread_t emuthread;
@@ -103,6 +107,7 @@ protected:
 public:
 	static Emulator* getInstance();
 	inline void setVideoPlugin(VideoPlugin* (*videoPlugin)()) {_videoPlugin = videoPlugin;}
+	inline void setAudioPlugin(AudioPlugin* audioPlugin) {_audioPlugin = audioPlugin;}
 	void setCRTC(t_CRTC* newCRTC) {
 		this->Pause();
 		delete _crtc;
@@ -265,6 +270,7 @@ public:
 	 */
 	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
 
+    inline AudioPlugin& GetAudioPlugin() {return *_audioPlugin;}
 
 	 char _config_path[1024];
 protected:

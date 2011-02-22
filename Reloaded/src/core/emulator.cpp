@@ -261,6 +261,7 @@ Emulator::Emulator():
 	_renderer(this),
 	_config(this),
 	_videoPlugin(NULL),
+    _audioPlugin(NULL),
 	_cpcMemory(NULL),
 	FPSDisplay(false),
 	exitRequested(false)
@@ -292,7 +293,7 @@ Emulator::~Emulator()
 
 	emulator_shutdown();
 
-	audio_shutdown();
+    _audioPlugin->shutdown();
 
 #ifdef USE_DEBUGGER
 	if (pfoDebug) {
@@ -387,9 +388,9 @@ bool Emulator::Init()
 
 	_psg = new t_PSG(_config, *_tape);
 
-	if (audio_init(_config, _psg))
+	if (_audioPlugin->init(_config, *_psg))
 	{
-        ErrorLogMessage("audio_init() failed. Disabling sound.");
+        ErrorLogMessage("AudioPlugin init() failed. Disabling sound.");
 		// disable sound emulation
 		_config.snd_enabled = 0;
 	}
@@ -407,7 +408,7 @@ bool Emulator::Init()
 	emulator_reset(false);
 	_config.paused &= ~1;
 
-	audio_resume(_config);
+	_audioPlugin->resume();
 
 	dwTicks = 0;
 	dwFPS = 0;

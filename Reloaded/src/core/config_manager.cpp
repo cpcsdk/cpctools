@@ -32,7 +32,6 @@
 #include "cap32type.h"
 #include <string.h>
 #include <stdlib.h>
-#include "audio.h"
 #include "dsk.h"
 #include "render.h"
 #include "emulator.h"

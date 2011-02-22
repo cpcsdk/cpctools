@@ -325,7 +325,8 @@ AM_CONDITIONAL([AYLET], [test "$with_aylet" = "yes"])
 
 # Sound Output
 AC_DEFINE([SOUND_OUTPUT_None], 0, [Define enum for sound output])
-AC_DEFINE([SOUND_OUTPUT_PortAudio], 1, [Define enum for sound output])
+AC_DEFINE([SOUND_OUTPUT_Null], 1, [Define enum for sound output])
+AC_DEFINE([SOUND_OUTPUT_PortAudio], 2, [Define enum for sound output])
 sound_output="None";
 
 AC_MSG_CHECKING([portaudio : >= 19?])
@@ -343,10 +344,13 @@ AC_TRY_COMPILE(
 #AC_MSG_ERROR(You need portaudio >= 19.1)
         )
 
+#sound_output="Null"
+
 AC_DEFINE_UNQUOTED(SOUND_OUTPUT, [SOUND_OUTPUT_${sound_output}], [Sound output library used])
 if test "$sound_output" = "PortAudio" ; then
     AC_SUBST([SOUND_OUTPUT_LIB], [-lportaudio])
 fi
+AM_CONDITIONAL([PORTAUDIO], [test "$sound_output" = "PortAudio"])
 
 
 #TODO: See for a clean fallback mode

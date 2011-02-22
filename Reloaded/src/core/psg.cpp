@@ -48,7 +48,7 @@
 #include "psg.h"
 #include "config.h"
 #include "tape.h"
-#include "audio.h"
+#include "audioPlugin.h"
 #include "emulator.h"
 
 #include <iostream>
@@ -58,6 +58,10 @@
 #endif
 
 #define TAPE_VOLUME 32
+
+#ifdef ST_SOUND
+#include "YmProfiles.h"
+#endif
 
 t_PSG::t_PSG(t_CPC &cpc, t_Tape &tape)
  : CPC(cpc)
@@ -74,24 +78,31 @@ t_PSG::~t_PSG()
 
 void t_PSG::Emulate(int iCycleCount)
 {
-	if (pbSndBufferPtr == NULL) return;
+    AudioPlugin& ap = Emulator::getInstance()->GetAudioPlugin();
+	//if (pbSndBufferPtr == NULL) return;
+    if(ap.getBuffer() == NULL) return;
 #ifdef ST_SOUND
     cycle_count += iCycleCount;
 
     if (cycle_count >= snd_cycle_count)
     {
         cycle_count -= snd_cycle_count;
+        
+        uint8_t* bufferPtr = ap.getBuffer();
 
-        m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
+        //m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
+        m_Ym2149->updateStereo((ymsample*)bufferPtr, (ymint)1);
         for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
         {
             // Add Tape Sound
             // TODO: Overflow verification
             // TODO: Configurable
-            *(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel()/32;
+            //*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel()/32;
+            *(bufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel()/32;
         }
 
-        audio_update();
+        ap.update();
+        //Emulator::getInstance()->GetAudioPlugin().update();
     }
 #endif
 
@@ -147,7 +158,7 @@ void t_PSG::Init(int enableSound)
 #endif
 
 #ifdef ST_SOUND
-    m_Ym2149=new CYm2149Ex(AMSTRAD_CLOCK, 1, CPC.snd_playback_rate);
+    m_Ym2149 = new CYm2149Ex(profileCPC, CPC.snd_playback_rate);
     m_Ym2149->reset();
 #endif
     InitAYCounterVars();

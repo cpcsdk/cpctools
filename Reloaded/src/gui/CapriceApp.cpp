@@ -68,6 +68,8 @@ CapASM *capAsm ;
 
 #include "WXLog.h"
 
+#include "../core/portAudioAudioPlugin.h"
+
 //TODO destroy emulator when finishing
 
 IMPLEMENT_APP(CapriceApp)
@@ -132,6 +134,12 @@ bool CapriceApp::OnInit()
 	emulator = WXEmulator::getInstance();
 	emulator->setVideoPlugin(&WXDoubleLinePlugin::Create);
 	//Emulator::getInstance();
+    
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
+    emulator->setAudioPlugin(new PortAudioAudioPlugin());
+#elif SOUND_OUTPUT == SOUND_OUTPUT_Null
+    emulator->setAudioPlugin(new NullAudioPlugin());
+#endif
 	
 	#if WITH_ASM
 	capAsm = new CapASM(emulator);
