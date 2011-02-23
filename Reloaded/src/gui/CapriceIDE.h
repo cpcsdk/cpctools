@@ -22,9 +22,10 @@
 #ifndef _CAPRICE_IDE_IMPL_H_
 #define _CAPRICE_IDE_IMPL_H_
 
+#include "wx/stedit/stedit.h"
+
 #include "CapriceUI.h"
 #include "WXEmulator.h"
-#include "stedit.h"
 
 /**
  * Window allowing the editing, compilation of assembly files

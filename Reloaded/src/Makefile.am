@@ -19,11 +19,13 @@ endif
 
 if WITH_WXWIDGET
 SUBDIRS += gui
-caprice_LDADD += gui/libcapricewx.a gui/libfoo.a $(WX_LIBS)
-caprice_CPPFLAGS += $(WX_CPPFLAGS)
+caprice_LDADD += gui/libcapricewx.a gui/libfoo.a 
 if WITH_IDE
+#this needs to be after capricewx but before wx
 caprice_LDADD += gui/IDE/libcapricewxide.a
 endif
+caprice_LDADD += $(WX_LDFLAGS)
+caprice_CPPFLAGS += $(WX_CPPFLAGS)
 endif
 
 if HAIKU
@@ -51,7 +53,11 @@ endif
 if WITH_ASM
 SUBDIRS += asm
 caprice_LDADD += asm/libsjasm.a \
-                 asm/libsjasminternal.a -ldl
+                 asm\libsjasminternal.a 
+if MINGW 
+else
+caprice_LDADD += -ldl
+endif
 endif
 
 #Add aylet files if used as backend

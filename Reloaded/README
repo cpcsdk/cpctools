@@ -1,6 +1,6 @@
 Reloaded - Amstrad CPC Emulator
 (c) Copyright 1997-2004 Ulrich Doewich
-(c) Copyright 2008-2010 the cpcdsk crew (Cloudstrife, Krusty, PulkoMandy)
+(c) Copyright 2008-2011 the cpcdsk crew (Cloudstrife, Krusty, PulkoMandy)
 
 http://cpcsdk.googlecode.com
 
@@ -43,7 +43,7 @@ You will need the following to successfully compile an executable:
 MinGW (only for Windows) - http://sourceforge.net/projects/mingw/
 Portaudio - http://portaudio.com
 wxWidgets - http://www.wxwidgets.org
-libpng - http://www.libpng.org
+libpng - http://www.libpng.org (optional,  for taking screenshots)
 
 
 ..........................................................................
@@ -51,9 +51,11 @@ libpng - http://www.libpng.org
 COMPILING
 ~~~~~~~~~
 
+If you got the program from svn, you first need to bootstrap the build
+system. The command for that is sh build_config.sh
 Run ./configure --help to see the available options.
 Run ./ configure ; make ; make install to get the program ready (the install
-step is needed, it it not possible to run it from the source directory).
+step is mandatory, it it not possible to run it from the source directory).
 
 
 ..........................................................................

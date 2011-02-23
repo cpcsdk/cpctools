@@ -34,7 +34,7 @@ if WITH_IDE
   libcapricewx_a_SOURCES += \
   CapriceIDE.h \
   CapriceIDE.cpp
-  libcapricewx_a_CPPFLAGS += -I@top_srcdir@/src/gui/IDE
+  libcapricewx_a_CPPFLAGS += -I@top_srcdir@/src/gui/IDE/include/
 endif
 
 if CLI
