@@ -24,7 +24,7 @@ if WITH_IDE
 #this needs to be after capricewx but before wx
 caprice_LDADD += gui/IDE/libcapricewxide.a
 endif
-caprice_LDADD += $(WX_LDFLAGS)
+caprice_LDADD += $(WX_LIBS)
 caprice_CPPFLAGS += $(WX_CPPFLAGS)
 endif
 

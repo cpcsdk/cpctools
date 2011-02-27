@@ -22,6 +22,7 @@ libcapricewxide_a_SOURCES = \
                             stedit/stesplit.cpp  \
                             stedit/stestyls.cpp \
                             stedit/stedlgs.wdr      \
-                            stedit/stedlgs_wdr.cpp
+                            stedit/stedlgs_wdr.cpp \
+							stedit/wxext.cpp
 
 
