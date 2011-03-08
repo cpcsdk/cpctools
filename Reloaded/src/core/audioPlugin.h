@@ -20,6 +20,7 @@
 #define _AUDIOPLUGIN_H_
 
 #include <stdint.h>
+#include <stdlib.h>
 
 //extern uint8_t *pbSndBuffer;
 //uint8_t *pbSndBuffer;
@@ -53,7 +54,7 @@ class NullAudioPlugin : public AudioPlugin
         int update() {return 0;}
         void pause() {}
         void resume() {}
-        uint8_t* getBuffer() {return 0;} // NULL was not declared in this scope... ?!?
+        uint8_t* getBuffer() {return NULL;}
 };
 
 #endif /* #ifndef _AUDIOPLUGIN_H_ */

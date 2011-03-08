@@ -5,6 +5,7 @@
 #include "RApp.h"
 
 #include "RVideo.h"
+#include "RAudio.h"
 #include "RWin.h"
 
 
@@ -26,6 +27,7 @@ ReloadedApp::ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded")
 	mEmu = REmulator::getInstance();
 	RVidPlugin::sView = mWin;
 	mEmu->setVideoPlugin(&RVidPlugin::Create);
+	mEmu->setAudioPlugin(new BeAudioPlugin());
 
 	mEmu->setCfgPath("/Donnees/Dev/cpcsdk/reloaded");
 

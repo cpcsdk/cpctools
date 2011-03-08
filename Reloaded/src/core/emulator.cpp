@@ -388,6 +388,13 @@ bool Emulator::Init()
 
 	_psg = new t_PSG(_config, *_tape);
 
+	if (_audioPlugin == NULL)
+	{
+		ErrorLogMessage("No audio plugin selected ! If you want no sound use "
+			"NullAudioPlugin.");
+		return false;
+	}
+
 	if (_audioPlugin->init(_config, *_psg))
 	{
         ErrorLogMessage("AudioPlugin init() failed. Disabling sound.");
