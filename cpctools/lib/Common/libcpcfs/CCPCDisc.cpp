@@ -595,7 +595,7 @@ void CCPCDisc::writeDirectory()
 		// On en recrée un nouveau
 		for (CCPCDirectoryMap::const_iterator it=_directory.begin();it!=_directory.end();it++)
 		{
-			int nbEntry = ceil(it->second.Size / (float)_discFormat.NbBlocksPerEntry);
+			int nbEntry = (int)ceil(it->second.Size / (float)_discFormat.NbBlocksPerEntry);
 			char name[11];
 			char ordreChargement=0;
 			unsigned int nbRecord = it->second.NbRecord;
@@ -1713,9 +1713,9 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 
 int CCPCDisc::isFloppy(const string &filename)
 {
-    if (strcasecmp(filename.c_str(),"/dev/sdb")==0)
+    if (strcmp(filename.c_str(),"/dev/sdb")==0 || strncmp(filename.c_str(),"/dev/disk/ufi",14))
     {
-	return 2; // RAW file
+		return 2; // RAW file
     }
     else if (strcasecmp(filename.c_str(), "a:")==0 ||
 	    strcasecmp(filename.c_str(), "b:")==0 ||
