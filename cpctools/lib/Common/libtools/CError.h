@@ -8,8 +8,6 @@
 #ifndef _CERROR_HH_
 #define _CERROR_HH_
 
-#include <config.h>
-
 #include <string>
 #include <iostream>
 
@@ -96,9 +94,7 @@ namespace tools
 
 #endif
 
-#define TOOLS_ERROR() { \
-	throw tools::CException(__FILE__,__LINE__); \
-}
+#define TOOLS_ERROR() { throw tools::CException(__FILE__,__LINE__); }
 
 #ifdef HAVE_SSTREAM
 #define TOOLS_ERRORMSG(message) { \

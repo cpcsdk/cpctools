@@ -1,6 +1,5 @@
 SUBDIRS = aft \
           cpcDSK \
-          cpcFS \
           cpcFSExt \
           cpcVideo \
           damsConverter \

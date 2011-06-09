@@ -125,19 +125,19 @@ static const std::string authorName = "Ramlaid";
 static const std::string authorMail = "cpcTools@ramlaid.com";
 static const std::string appliName = "cpcfs";
 static const std::string appliUsageShort = "<dskfile> <command>";
-static const std::string appliUsageLong = "<dskfile> <command>\n\
-Manage DSK file.\n\
-Command list :\n\
-\tc : directory\n\
-\tf : disc format\n\
-\tp : put file\n\
-\tg : get file\n\
-\ta : get all file\n\
-\tr : rename file\n\
-\td : delete file\n\
-\ti : print disc info\n\
-\th : print file header\n\
-When putting or getting file, you can use [<user>:]name.ext[,S][,P][,start][,exec]";
+static const std::string appliUsageLong = "<dskfile> <command>\n"
+"Manage DSK file.\n"
+"Command list :\n"
+"\tc : directory\n"
+"\tf : disc format\n"
+"\tp : put file\n"
+"\tg : get file\n"
+"\ta : get all file\n"
+"\tr : rename file\n"
+"\td : delete file\n"
+"\ti : print disc info\n"
+"\th : print file header\n"
+"When putting or getting file, you can use [<user>:]name.ext[,S][,P][,start][,exec]";
 
 int main(int argc, char* argv[])
 {
