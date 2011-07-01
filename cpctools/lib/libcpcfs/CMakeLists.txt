@@ -1,0 +1,11 @@
+add_library(libcpcfs
+	CCPCAsciiFile.cpp
+	CCPCBinaryFile.cpp
+	CCPCDataDisc.cpp
+	CCPCDisc.cpp
+	CCPCFile.cpp
+	CCPCRomdosD1Disc.cpp
+	CCPCSystemDisc.cpp
+	CCPCUnknownDisc.cpp
+	CDSKFile.cpp
+)
