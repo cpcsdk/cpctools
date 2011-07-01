@@ -136,9 +136,10 @@ void CCPCBooster::OpenPort()
 	    SerialPort::FLOW_CONTROL_HARD);	
 	    */
 	    
-	if (OpenComport(_COMPortHandle,115200) == 0)
+	if (OpenComport(_COMPortNumber,115200) == 0)
 	{
 	    _currentState = PortOpened ;
+	    _COMPortHandle = _COMPortNumber;
 	}
 
 #endif
@@ -169,17 +170,13 @@ bool CCPCBooster::ReadWaitByte(unsigned char &val)
 
 	return ((nbBytesReceived == 1) && fSuccess);
 #else
-	unsigned long nbBytesReceived = 1 ;
-	/*
-	char byte = _COMPortHandle.ReadByte();
-
-	val = byte ;
-	*/
-
-	_COMPortHandle >> val ;
+	while(PollComport(_COMPortHandle, &val, 1) != 1) ; 
+		
 	return true ; 
 #endif
 }
+
+
 bool CCPCBooster::ReadByte(unsigned char &val)
 {
 #if _WINDOWS
@@ -189,10 +186,7 @@ bool CCPCBooster::ReadByte(unsigned char &val)
 
 	return nbBytesReceived == 1 ;
 #else
-	 unsigned long nbBytesReceived = 1 ;
-
-	 _COMPortHandle >> val ;
-	return true;
+	return PollComport(_COMPortHandle, &val, 1) == 1;
 #endif
 
 }

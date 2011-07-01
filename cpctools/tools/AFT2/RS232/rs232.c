@@ -44,11 +44,14 @@ int Cport[22],
 struct termios new_port_settings,
        old_port_settings[22];
 
+#ifdef __HAIKU__
+char comports[4][16]={"/dev/ports/usb0","/dev/ports/usb1","/dev/ports/usb2","/dev/ports/usb3"};
+#else
 char comports[22][13]={"/dev/ttyS0","/dev/ttyS1","/dev/ttyS2","/dev/ttyS3","/dev/ttyS4","/dev/ttyS5",
                        "/dev/ttyS6","/dev/ttyS7","/dev/ttyS8","/dev/ttyS9","/dev/ttyS10","/dev/ttyS11",
                        "/dev/ttyS12","/dev/ttyS13","/dev/ttyS14","/dev/ttyS15","/dev/ttyUSB0",
                        "/dev/ttyUSB1","/dev/ttyUSB2","/dev/ttyUSB3","/dev/ttyUSB4","/dev/ttyUSB5"};
-
+#endif
 
 int OpenComport(int comport_number, int baudrate)
 {
@@ -56,7 +59,7 @@ int OpenComport(int comport_number, int baudrate)
 
   if((comport_number>21)||(comport_number<0))
   {
-    printf("illegal comport number\n");
+    printf("%d is not a valid comport number\n", comport_number);
     return(1);
   }
 
@@ -98,7 +101,7 @@ int OpenComport(int comport_number, int baudrate)
                    break;
     case  230400 : baudr = B230400;
                    break;
-/*
+#ifndef __HAIKU__
     case  460800 : baudr = B460800;
                    break;
     case  500000 : baudr = B500000;
@@ -109,7 +112,7 @@ int OpenComport(int comport_number, int baudrate)
                    break;
     case 1000000 : baudr = B1000000;
                    break;
-*/
+#endif
     default      : printf("invalid baudrate\n");
                    return(1);
                    break;
@@ -118,6 +121,7 @@ int OpenComport(int comport_number, int baudrate)
   Cport[comport_number] = open(comports[comport_number], O_RDWR | O_NOCTTY | O_NDELAY);
   if(Cport[comport_number]==-1)
   {
+  	printf(comports[comport_number]);
     perror("unable to open comport ");
     return(1);
   }

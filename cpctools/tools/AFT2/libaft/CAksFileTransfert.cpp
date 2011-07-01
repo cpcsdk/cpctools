@@ -154,8 +154,7 @@ CAksCommand CAksFileTransfert::GetCommand(bool wait)
 		}
 		else
 		{
-			std::cout << "Unknwon command get" << std::hex << (int)command << std::endl;
-	//		printf(" Unknown command get ($%x)\n", command );
+			std::cout << "Unknwon command received : 0x" << std::hex << (int)command << std::endl;
 			return AksUnknownCommand;
 		}
 	}
