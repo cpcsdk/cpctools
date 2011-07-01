@@ -1,0 +1,6 @@
+#!/bin/sh
+
+mkdir build
+cd build
+cmake ..
+echo "Project configured! Type make to build..."
