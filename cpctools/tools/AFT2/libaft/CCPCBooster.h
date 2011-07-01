@@ -21,10 +21,7 @@
 #include <sys/types.h>
 
 #include <string>
-#include <SerialStream.h>
 #include <SerialPort.h>
- using namespace LibSerial ;
-
 #endif
 
 
