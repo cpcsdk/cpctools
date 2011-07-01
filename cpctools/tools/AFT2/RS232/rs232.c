@@ -135,7 +135,7 @@ int OpenComport(int comport_number, int baudrate)
   }
   memset(&new_port_settings, 0, sizeof(new_port_settings));  /* clear the new struct */
 
-  new_port_settings.c_cflag = baudr | CS8 | CLOCAL | CREAD;
+  new_port_settings.c_cflag = baudr | CS8 | CLOCAL | CREAD | CRTSCTS;    /* Also called CRTSCTS */
   new_port_settings.c_iflag = IGNPAR;
   new_port_settings.c_oflag = 0;
   new_port_settings.c_lflag = 0;
