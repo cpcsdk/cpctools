@@ -46,11 +46,7 @@ int main(int argc, char *argv[])
 		}
 
 		bool noLoop = false;
-#if _WINDOWS
 		int COMport = 1;
-#else
-		std::string COMport = "/dev/ttyUSB0" ;
-#endif
 		std::string filename = "";
 		std::string dir = "";
 
@@ -62,11 +58,7 @@ int main(int argc, char *argv[])
 			{
 			case 'p':
 				{
-#if _WINDOWS
 					COMport = optParser.GetIntOptionI(i);
-#else
-					COMport = optParser.GetStringOptionI(i);
-#endif
 					break;
 				}
 			case 'f':

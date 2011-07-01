@@ -55,11 +55,7 @@ char* CAksFileTransfert::DisplayMessageHeader[] =
 	"Debug: "
 };
 
-#if _WINDOWS
 CAksFileTransfert::CAksFileTransfert(int comNumber) :
-#else
-CAksFileTransfert::CAksFileTransfert(std::string comNumber) :
-#endif
 CCPCBooster(comNumber),
 _transfertMode(NoTransfert),
 _nbTransfert(0),

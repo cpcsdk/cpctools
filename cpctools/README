@@ -1,1 +1,415 @@
-CPCTools is a set of different tools to permit Cross Developpemnent for the Amstrad CPC.
+CPCTools 0.2.0
+(c) Ramlaid 2005
+
+1) About CPCTools
+-----------------
+
+This package contains some few tools that I create during my CPC development under a Win32 environement.
+It's include general tools like file manager or image viewer and purely developement tools like Dams converter,
+data linker or snapshot creator.
+
+This is a Windows version but it might compile under Linux, DOS & maybe other platform. Unfortunatly, I have'nt
+time to do these port. Any help would be appreciate !
+
+All the sources a in C++ (and a bit commented but mainly in french, sorry for english guys !).
+
+WARNING : all these tools are under developpement ! bug report & remark will be appreciate ! (This is also the
+case for this small doc)
+
+2) CPCFS
+--------
+
+Include a lib and a executable. The libcpcfs use libDSK from John Eliott (version 1.1.6 but it might work with
+more recent version). What the libcpcfs is doing is just managing CPC file system over libDSK physical DSK management.
+(I also include a libdskrc file in order to manage more file format)
+
+CPCFS : This tool take a .dsk and manage file on this .dsk. Getting/putting with binary mode & on the fly header
+creation. There few option and only 2 file system managed (DATA and SYSTEM). 
+
+cpcfs <disc> <command> [option] [file *] [-s]
+Commands :
+        c  : catalogue
+        f  : disc format
+        p  : put file
+             -ch : header creation when putting
+             -b : binary mode
+        g  : get file
+             -nh : no header when getting
+        ga : get all file
+             -nh : no header when getting
+        r  : rename file
+        d  : delete file
+        i  : print disc info
+        h  : print file header
+Options
+		-s : select side B
+When putting or getting file, you can use [<user>:]name.ext[,S][,P][,start][,exec]
+
+Ex :
+Putting a file on the DSK
+	cpcfs myDisk.dsk p myFile
+
+Putting a binary file and create header (start 0x1000 and exe 0x1050) on the fly:
+	cpcfs myDisk.dsk p myFile.bin,0x1000,0x1050
+
+I originaly create this tools under Linux and use it with a real 3'5 disk !
+cpcfs /dev/fd0 c
+
+Might work also under windows using libdsk extension fdrawcmd.sys (WARNING ! Use at your own risk !)
+cpcfs a: c
+
+
+John Eliott site :
+http://www.seasip.demon.co.uk/Unix/LibDsk/
+fdrawcmd.sys site :
+http://simonowen.com/fdrawcmd/
+
+3) CPCFSExt
+-----------
+
+This is a shell extension for Windows Explorer. It had a new "CPCFS tools" context menu on right clicking of file, .dsk or directory.
+What does CPCFSExt on right clicking :
+	
+	a. Background
+		- Create...
+			Create a new DSK in the current directory, default format is Data 40 tracks
+		- Create ??.dsk
+			Create a new DSK using current directory name, default format is Data 40 tracks
+	
+	b. DSK file (single selection) (if the file is not a .dsk, you can't get this context menu !)
+		- Extract all to...
+			Extract all files (keeping header) to a given directory
+		- Extract all here
+			Extract all files (keeping header) to current directory
+		- Extract to ??\
+			Extract all files (keeping header) to directory named like ??.dsk
+		- Catalogue
+			Display a catalogue interface of the current .dsk
+		- Disc Info
+			Display disc information of the current .dsk
+		- Send to A:
+			... NOT IMPLEMENTED ...
+		- Send to CPCBooster
+			... NOT IMPLEMENTED ...
+		- Format
+			Format current .dsk using dsk format specification (all file deleted !)
+	
+	c. DSK file (mutiple selection) (if one file is not a dsk, you can't get this context menu !)
+		- Extract all to directories
+			Extract all file of each .dsk to directory named like ??.dsk
+		- Extract all here
+			Extract all file of each .dsk to current directory
+			
+	d. File (single selection and multiple selection)
+		- Add to...
+			Add current file(s) to a given .dsk (no header created on the fly)
+		- Add to ??.dsk
+			Add current file(s) to a dsk name like current directory (no header created on the fly)
+		- Send to A:
+			... NOT IMPLEMENTED ...
+		- Send to CPCBooster
+			... NOT IMPLEMENTED ...
+		
+		If the file is a binary file (single selection only) :
+		- Edit header
+			Display a interface to edit AMSDOS file header (start address & execution address)
+		- Remove header
+			Remove AMSDOS file header
+		
+		If the file is not a binary file (single selection only) :
+		- Add header
+			Display a interface to add AMSDOS file header (start address & execution address)
+	
+	e. Directory (single selection)
+		- Add all file to...
+			Add all file in directory to a given .dsk (no header created on the fly)
+		- Add all file to ??.dsk
+			Add all file in directory to a .dsk named like selected directory (no header created on the fly)
+	
+	f. Directory (multiple selection)
+		- Add all file to *.dsk
+			For each directory, add all file in directory to a .dsk named like current directory (no header created on the fly)
+
+This is a first release. If you think there is some missing functionnality, please contact me. 
+I'm also looking on explorer namespace extension in order to use .dsk like directories (drag & drop, rename, etc... inside explorer).
+It seems to be possible, but I haven't already start the development, if you are interested, please contact me.
+
+4) CPCFileViewer
+----------------
+
+Include a lib and a executable. The lib use SDL for displaying.
+
+* cpcFileViewer :
+This tools load the file and display it using a standard CPC video mode. It can load screen, windows and font
+file data. It manage also OCP file format .SCR and .WIN (including compressed one) as well as .PAL (when loading
+myScreen.SCR, it try to find a myScreen.PAL).
+If the tools detect a standard CPC header, it's automatically remove it in order to display only binary data of 
+the loaded file.
+
+In all mode :
+	CTRL + left / right 		: change CRTC R1 value
+	CTRL + up / down 		: change CRTC R6 value
+	F1 				: switch to screen display mode
+	F2 				: switch to window display mode
+	F3 				: switch to font display mode
+	0,1,2 				: change video mode
+
+In Window display mode :
+	left / right 			: change width of window
+	up / down 			: change height of window
+	
+In Font display mode :
+	left / right 			: change width of a single character
+	up / down 			: change height of a single character
+	SHFT + left / right 		: change the number of character displayed
+	v / h 				: switch between vertical and horizontal display of each character
+	
+usage : cpcFileViewer myScreen.scr
+
+Remark : under windows, assign .SCR and .WIN to be opened using cpcFileViewer and you can run it directly under
+Explorer by double clicking on .SCR or .WIN files.
+
+* libVideoCPC :
+You can use this lib to display your data in CPC video mode. It's include a CPCVideo object creation and many 
+method on this object (putting / getting byte, window, pixel, etc...). It also include a small SDL management
+over CPCVideo screen (see source code for example ! ;).
+
+Remark : this lib can easily be use to create a drawing tool, but it need to be include in a real GUI, 
+and I don't plan to make these development yet.
+
+5) createSnapshot
+-----------------
+
+This tools can create and modify a emulator .SNA file. 
+During developement I use this tool to create .SNA file containing datas, graphics and code.
+Using a config file (or command line option) you can easily create an auto executable .SNA file i.e
+when you load it under an emulator, it's automatically start.
+
+Usage : createSnapshot <filename.sna> [-i $1] [-l $1 $2]* [-p $1 $2]* [-s $1 $2]
+* [-x] [-r] [-e] [-d] [-c $1] [-t] [-h]
+Create a Amstrad CPC snapshot <filename.sna>
+Default snapshot : 6128, CRTC 0, rom deconnected, no interrupt, CRTC standard value
+
+        -i <$1> | --inSnapshot <$1>
+                Load <$1> snapshot file
+        -l <$1> <$2> | --loadFileData <$1> <$2>
+                Load <$1> file data at <$2> address in snapshot memory
+        -p <$1> <$2> | --putData <$1> <$2>
+                Put <$1> byte at <$2> address in snapshot memory
+        -s <$1> <$2> | --setToken <$1> <$2>
+                Set snapshot token <$1> to value <$2>
+                Use <$1>:<val> to set array value
+                ex '-s CRTC_REG:6 20' : Set CRTC register 6 to 20
+        -x | --clearMemory
+                Clear snapshot memory
+        -r | --romDeconnect
+                Deconnect lower and upper rom
+        -e | --enableInterrupt
+                Enable interrupt
+        -d | --disableInterrupt
+                Disable interrupt
+        -c <$1> | --configFile <$1>
+                Load a config file with createSnapshot option
+        -t | --tokenList
+                Display setable snapshot token ID
+        -h | --help
+                Display help
+
+Snapshot settable token list :
+
+TOKEN           Description
+
+Z80_AF          Z80 register AF
+Z80_F           Z80 register F
+Z80_A           Z80 register A
+Z80_BC          Z80 register BC
+Z80_C           Z80 register C
+Z80_B           Z80 register B
+Z80_DE          Z80 register DE
+Z80_E           Z80 register E
+Z80_D           Z80 register D
+Z80_HL          Z80 register HL
+Z80_L           Z80 register L
+Z80_H           Z80 register H
+Z80_R           Z80 register R
+Z80_I           Z80 register I
+Z80_IFF0        Z80 interrupt flip-flop IFF0
+Z80_IFF1        Z80 interrupt flip-flop IFF1
+Z80_IX          Z80 register IX
+Z80_IXL         Z80 register IX (low)
+Z80_IXH         Z80 register IX (high)
+Z80_IY          Z80 register IY
+Z80_IYL         Z80 register IY (low)
+Z80_IYH         Z80 register IY (high)
+Z80_SP          Z80 register SP
+Z80_PC          Z80 register PC
+Z80_IM          Z80 interrupt mode (0,1,2)
+Z80_AFA         Z80 register AF'
+Z80_FA          Z80 register F'
+Z80_AA          Z80 register A'
+Z80_BCA         Z80 register BC'
+Z80_CA          Z80 register C'
+Z80_BA          Z80 register B'
+Z80_DEA         Z80 register DE'
+Z80_EA          Z80 register E'
+Z80_DA          Z80 register D'
+Z80_HLA         Z80 register HL'
+Z80_LA          Z80 register L'
+Z80_HA          Z80 register H'
+GA_PEN          GA: index of selected pen
+GA_PAL          GA: current palette (0..16)
+GA_ROMCFG       GA: multi configuration
+GA_RAMCFG       Current RAM configuration
+CRTC_SEL        CRTC: index of selected register
+CRTC_REG        CRTC: register data (0..17)
+ROM_UP          Current ROM selection
+PPI_A           PPI: port A
+PPI_B           PPI: port B
+PPI_C           PPI: port C
+PPI_CTL         PPI: control port
+PSG_SEL         PSG: index of selected register
+PSG_REG         PSG: register data (0..15)
+CPC_TYPE        CPC type:
+                        0 = CPC464
+                        1 = CPC664
+                        2 = CPC6128
+                        3 = unknown
+                        4 = 6128 Plus
+                        5 = 464 Plus
+                        6 = GX4000
+INT_NUM interrupt number (0..5)
+MULTIMODE       6 multimode bytes
+FDD_MOTOR       FDD motor drive state (0=off, 1=on)
+FDD_TRACK       FDD current physical track
+PRNT_DATA       Printer Data/Strobe Register
+CRTC_TYPE       CRTC type:
+                        0 = HD6845S/UM6845
+                        1 = UM6845R
+                        2 = MC6845
+                        3 = 6845 in CPC+ ASIC
+                        4 = 6845 in Pre-ASIC
+CRTC_HCC        CRTC horizontal character counter register
+CRTC_CLC        CRTC character-line counter register
+CRTC_RLC        CRTC raster-line counter register
+CRTC_VAC        CRTC vertical total adjust counter register
+CRTC_VSWC       CRTC horizontal sync width counter
+CRTC_HSWC       CRTC vertical sync width counter
+CRTC_STATE      CRTC state flags.
+                        0 if '1'/'0' VSYNC active/inactive
+                        1 if '1'/'0' HSYNC active/inactive
+                        2-7 reserved
+                        7 if '1'/'0' Vert Total Adjust active/inactive
+                        8-15 reserved (0)
+GA_VSC          GA vsync delay counter
+GA_ISC          GA interrupt scanline counter
+INT_REQ         Interrupt request flag
+                        0=no interrupt requested
+                        1=interrupt requested
+                
+Usage example :
+
+myConfigFile.cfg :
+;********************************************
+; Snapshot test creation
+; Create a sna with code at 0x100 and many datas in first and second bank memory
+; Automatically starting a 0x100 and byte at address 0xa000 set to 0
+-s Z80_PC 0x100
+-l code.o 0x100 
+-l data.da0 0x1000
+-l data.da1 0x4000
+-l gfx.dat 0x14000
+-l addCode.o 0x10000 
+-l music.mus 0x18b10
+-p 0xA000 0
+;*********************************************
+
+createSnapshot myFile.sna -c myConfigFile.cfg
+
+6) damsConverter
+----------------
+
+Small tool to convert a dams file to ascii file.
+damsConverter <myFile.s> <myFile.txt>
+
+7) dataDBGenerator
+------------------
+
+Small tool to generate a text file with db ??,??,?? where value a taken from a binary file
+dataDBGenerator <myFile.bin> <myFile.txt>
+
+8) dataLinker
+-------------
+
+This tool pack many input data file in one or more output data file. It's also generate a source file with right
+data definition.
+It automatically organize data in order to minimize memory usage (according to data address masking)
+
+Usage : dataLinker <-z $1 $2 $3 $4>+ <-d $1 $2 $3>+ [-o $1] [-c $1] [-h]
+Link data and create a .z80 file
+
+        -z <$1> <$2> <$3> <$4> | --zone <$1> <$2> <$3> <$4>
+                Define a zone named $1 in bank $2 from $3 to $4
+        -d <$1> <$2> <$3> | --dataFilename <$1> <$2> <$3>
+                Load a data file $1 with label $2 and mask $3 to be linked
+        -o <$1> | --output <$1>
+                Z80 output filename
+        -c <$1> | --configFile <$1>
+                Configuration file
+        -h | --help
+                Display help
+
+myConfigFile.cfg :
+;********************************************
+; Load all data file and try to put them into the 2 data zone define
+; For data place in memory, output a :
+; LABEL EQU address
+; in the output file (to be include in your general file source)
+; The 3 first datas are aligned to address with low byte = 0
+
+-z zone.da0 			0xc0 0x1000 0x3fff
+-z zone.da1 			0xc0 0x5000 0x7fff
+
+-d curvePos.dat		T_CURVE_POS 		0xff00
+-d curveHeight.dat 	T_CURVE_HAUT 		0xff00
+-d curveMove.dat 	T_CURVE_MOVE		0xff00
+-d logo.dat			T_ADR_GFX_LOGO 		0xffff
+-d bottom.dat		T_ADR_GFX_BOTTOM 	0xffff
+-d top.dat			T_ADR_GFX_TOP 		0xffff
+
+-o dataAddress.z80
+;*********************************************
+                
+9) Other tools
+--------------
+
+In the 'tools' directory you can find 'optionParser.h' and 'optionParser.c'. Theses function are used to manage
+command line option parsing (using a simple option structure description).
+You can also reuse this piece of code ! ;)
+
+10) Future developpement
+------------------------
+
+Continue to make these tools better and better (error management, additionals options, ...)
+
+Make a global SDK for CPC . For example :
+	- text editing under Notepad / UltraEdit / Crimson editor / VC++
+	- source code compiling using ZMac (and maybe linking ?), with symbol table & break point exporting
+	- snapshot generation from datas using config file
+	- automatic running of .SNA under emulator (WinApe or Arnold or ?) and using symbol table and breaking in a debugging phase
+	- automatic running of .SNA on real CPC using CPCBooster + Arkos tools :)
+
+I think we have a good base of tools to do this SDK, but we need to package all this in a single SDK...
+	
+11) License
+-----------
+
+No license at all ! You can use these tools freely. 
+You can also modify all source code or include them into your own production (small credit will be enough ! ;).
+
+12) Contact
+-----------
+
+Thierry JOUIN
+aka Ramlaid
+
+ramlaid at ramlaid.com

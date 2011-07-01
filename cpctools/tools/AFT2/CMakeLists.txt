@@ -15,3 +15,5 @@ add_executable(aft2
 	${librs232_sources}
 	${libaft_sources}
 )
+
+target_link_libraries(aft2 libcpcfs tools)

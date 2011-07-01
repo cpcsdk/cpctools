@@ -1,6 +1,4 @@
-SUBDIRS = libcpcfs  \
-          libsnapshot \
-          libtools \
+SUBDIRS = libsnapshot \
           libVideoCPC  \
           libYM
 

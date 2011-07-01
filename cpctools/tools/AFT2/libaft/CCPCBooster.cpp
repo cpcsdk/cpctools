@@ -16,12 +16,7 @@
  *
  * Pourquoi ne pas avoir utilise les read/write buffer depuis les read/write byte/word ?
  */
-#if _WINDOWS
-CCPCBooster::CCPCBooster(int comNumber) :
-#else
-CCPCBooster::CCPCBooster(std::string comNumber) :
-_COMPortHandle(comNumber, std::ios::in|std::ios::out),
-#endif
+CCPCBooster::CCPCBooster(int comNumber):
 _COMPortNumber(comNumber),
 _currentState(PortFailed),
 _currentError(ErrOK)
@@ -140,42 +135,8 @@ void CCPCBooster::OpenPort()
 	    SerialPort::STOP_BITS_1,
 	    SerialPort::FLOW_CONTROL_HARD);	
 	    */
-
-	_COMPortHandle.SetBaudRate(SerialStreamBuf::BAUD_115200);
-	if ( !_COMPortHandle.good())
-	{
-	    _currentError = ErrInvalidHandle ;
-	    return ;
-	}
-
-	_COMPortHandle.SetCharSize(LibSerial::SerialStreamBuf::CHAR_SIZE_8);
-	if ( !_COMPortHandle.good())
-	{
-	    _currentError = ErrInvalidHandle ;
-	    return ;
-	}
-
-	_COMPortHandle.SetParity(SerialStreamBuf::PARITY_NONE) ;
-	if ( !_COMPortHandle.good())
-	{
-	    _currentError = ErrInvalidHandle ;
-	    return ;
-	}
-
-	_COMPortHandle.SetNumOfStopBits(1);
-	if ( !_COMPortHandle.good())
-	{
-	    _currentError = ErrInvalidHandle ;
-	    return ;
-	}
-	
-	_COMPortHandle.SetFlowControl( SerialStreamBuf::FLOW_CONTROL_NONE ) ;
-	//_COMPortHandle.SetFlowControl( SerialStreamBuf::FLOW_CONTROL_HARD ) ;
-
-	_COMPortHandle.unsetf( std::ios_base::skipws ) ;
-
-
-	if (_COMPortHandle.IsOpen())
+	    
+	if (OpenComport(_COMPortHandle,115200) == 0)
 	{
 	    _currentState = PortOpened ;
 	}
@@ -190,7 +151,7 @@ void CCPCBooster::ClosePort()
 #if _WINDOWS
 		CloseHandle(_COMPortHandle);
 #else
-		_COMPortHandle.Close();
+		CloseComport(_COMPortHandle);
 #endif
 	}
 	_currentState = PortClosed;
@@ -246,12 +207,7 @@ bool CCPCBooster::WriteByte(const unsigned char val)
 	
 	return ((nbBytesSend == 1) && fSuccess);
 #else
-	unsigned long nbBytesSend = 1 ;
-
-  _COMPortHandle << val ;
-  _COMPortHandle.flush();
-
-	return nbBytesSend == 1 ;
+  return SendByte(_COMPortHandle, val);
 #endif
 }
 
@@ -345,8 +301,13 @@ bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 	    buffer[i] =_COMPortHandle.ReadByte( );
 	    */
 
-	_COMPortHandle.read( (char *)buffer, 
-		             nbBytes) ;
+	long bytesLeft = nbBytes;
+	while(bytesLeft != 0)
+	{
+		int i = PollComport(_COMPortHandle, buffer, bytesLeft) ; 
+		bytesLeft -= i;
+		buffer += i;
+	}
 
 	return true ;
 #endif
@@ -366,8 +327,14 @@ bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 	for (long i=0 ; i< nbBytes ; i++)
 	    buffer[i] =_COMPortHandle.ReadByte( 100 );
 	    */
-	_COMPortHandle.read( (char *)buffer,                                                                             
-	                     nbBytes) ; 
+	    
+	long bytesLeft = nbBytes;
+	while(bytesLeft != 0)
+	{
+		int i = PollComport(_COMPortHandle, buffer, bytesLeft) ; 
+		bytesLeft -= i;
+		buffer += i;
+	}
 	return true ;
 
 #endif
@@ -388,7 +355,7 @@ bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
 	    _COMPortHandle.WriteByte(buffer[i]);
     */
 
-	_COMPortHandle.write( (char *) buffer, nbBytes);
+	SendBuf(_COMPortHandle, buffer, nbBytes);
 	return true ;
 #endif
 

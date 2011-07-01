@@ -99,11 +99,7 @@ protected:
 	std::ofstream		*_outStream;
 public:
 	//! Constructor, opening a COM port
-#if _WINDOWS
 	CAksFileTransfert(int comNumber = 1);
-#else
-	CAksFileTransfert(std::string comNumber = "/dev/ttyUSB0");
-#endif
 	//! Destructor
 	~CAksFileTransfert();
 
