@@ -1,5 +1,4 @@
-SUBDIRS = libaft  \
-          libcpcfs  \
+SUBDIRS = libcpcfs  \
           libsnapshot \
           libtools \
           libVideoCPC  \

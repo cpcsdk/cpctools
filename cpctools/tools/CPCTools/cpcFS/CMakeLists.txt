@@ -1,5 +1,3 @@
-set(libtools_dir ../../../lib/Common/libtools)
-set(libcpcfs_dir ../../../lib/Common/libcpcfs)
 add_executable (cpcfs cpcfs.cpp ${libtools_dir}/COptionParser.cpp
 	${libtools_dir}/CError.cpp ${libcpcfs_dir}/CCPCDisc.cpp
 	${libcpcfs_dir}/CCPCFile.cpp ${libcpcfs_dir}/CCPCAsciiFile.cpp

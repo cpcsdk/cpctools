@@ -1,6 +1,9 @@
 project (CPCTools)
 cmake_minimum_required(VERSION 2.8)
 
-include_directories (lib/Common/libcpcfs/)
-include_directories (lib/Common/libtools/)
+set(libtools_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/Common/libtools)
+set(libcpcfs_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/Common/libcpcfs)
+
+include_directories (${libcpcfs_dir})
+include_directories (${libtools_dir})
 add_subdirectory(tools)

@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#ifndef __RAUDIO_H__
+#define __RAUDIO_H__
 
 #include "audioPlugin.h"
 
@@ -66,3 +67,5 @@ class BeAudioPlugin : public AudioPlugin
 		uint8_t* outBuf;
 		size_t outSize;
 };
+
+#endif
