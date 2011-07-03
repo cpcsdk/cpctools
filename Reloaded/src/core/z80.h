@@ -169,10 +169,10 @@ public:
 		_ioPort.z80_OUT_handler(port, val);
 	}
 
-  inline std::set<dword> GetBreakpoints()
-  {
-    return break_points;
-  }
+    inline std::set<dword> GetBreakpoints() const
+    {
+        return break_points;
+    }
 
 	void z80_init_tables(void);
 	void z80_mf2stop(void);
@@ -197,12 +197,12 @@ public:
   void remove_break_point(dword adress);
 
 protected:
-	inline byte RES(byte bit, byte val) 
+	inline byte RES(byte bit, byte val) const
 	{
 		return val & ~(1 << bit);
 	}
 
-	inline byte RLC(byte val) 
+	inline byte RLC(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x80) ? Cflag : 0;
@@ -211,7 +211,7 @@ protected:
 		return res;
 	}
 
-	inline byte RL(byte val) 
+	inline byte RL(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x80) ? Cflag : 0;
@@ -220,7 +220,7 @@ protected:
 		return res;
 	}
 
-	inline byte RRC(byte val) 
+	inline byte RRC(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x01) ? Cflag : 0;
@@ -229,7 +229,7 @@ protected:
 		return res;
 	}
 
-	inline byte RR(byte val) 
+	inline byte RR(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x01) ? Cflag : 0;
@@ -238,12 +238,12 @@ protected:
 		return res;
 	}
 
-	inline byte SET(byte bit, byte val) 
+	inline byte SET(byte bit, byte val)
 	{
 		return val | (1 << bit);
 	}
 
-	inline byte SLA(byte val) 
+	inline byte SLA(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x80) ? Cflag : 0;
@@ -252,7 +252,7 @@ protected:
 		return res;
 	}
 
-	inline byte SLL(byte val) 
+	inline byte SLL(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x80) ? Cflag : 0;
@@ -261,7 +261,7 @@ protected:
 		return res;
 	}
 
-	inline byte SRA(byte val) 
+	inline byte SRA(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x01) ? Cflag : 0;
@@ -270,7 +270,7 @@ protected:
 		return res;
 	}
 
-	inline byte SRL(byte val) 
+	inline byte SRL(byte val)
 	{
 		unsigned res = val;
 		unsigned carry = (res & 0x01) ? Cflag : 0;

@@ -138,7 +138,7 @@ public:
 
 	void Reset();
 
-	unsigned char getST(int n)
+	unsigned char getST(int n) const
 	{
 		return result[n];
 	}

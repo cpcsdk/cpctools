@@ -76,7 +76,7 @@ class Log
 #endif
             va_end(args);
 
-            delete formatOut;
+            delete[] formatOut;
             formatOut = NULL;
 #endif
         }

@@ -43,13 +43,12 @@ class Timer
 
 		unsigned int startTime;
 		unsigned int workingTime;
-		
+
 		bool started;
 		bool paused;
-			
 	public:
 		inline Timer(): startTime(0), workingTime(0), started(false), paused(false)
-	{
+		{
 			#ifdef _USE_CLOCK_GETTIME
 			struct timespec t;
 			clock_gettime(CLOCK_REALTIME, &t);
@@ -65,7 +64,7 @@ class Timer
 			#ifdef USE_BEAPI
 			refTime = real_time_clock_usecs();
 			#endif
-		};
+		}
 
 		inline void start()
 		{
@@ -76,6 +75,7 @@ class Timer
 				startTime = currentTime();
 			}
 		}
+
 		inline void stop()
 		{
 			if(started == true && paused == false)
@@ -84,7 +84,8 @@ class Timer
 			}
 			started = false;
 			paused = false;
-		};
+		}
+
 		inline void pause()
 		{
 			if(paused == false && started == true)
@@ -94,7 +95,7 @@ class Timer
 				startTime = 0;
 			}
 		}
-		
+
 		inline unsigned int getTime()
 		{
 			if(paused == true)
@@ -106,7 +107,7 @@ class Timer
 				return workingTime + currentTime() - startTime;
 			}
 		}
-		
+
 		inline unsigned int currentTime()
 		{
 			#ifdef _USE_SDLTIMER
@@ -128,9 +129,9 @@ class Timer
 			return (real_time_clock_usecs() - refTime) / 1000L;
 			#endif
 		}
-		
-		inline bool is_started() { return started; }
-		inline bool is_paused() { return paused; }
+
+		inline bool is_started() const { return started; }
+		inline bool is_paused() const { return paused; }
 };
 
 // Stupid windows.h defines this to DrawTextA, making wxWidgets unhappy...

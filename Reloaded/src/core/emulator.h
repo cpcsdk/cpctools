@@ -121,6 +121,8 @@ public:
 	void Loop();
 	void Emulate();
 
+	bool isInit() const {return _isInit;}
+
 	//## These are events sent from the GUI to the emulator
 	/**
 	 * Operate the keyboard emulation
@@ -152,7 +154,7 @@ public:
 
 
 	virtual void logMessage(const char* message) {
-		printf(message);
+		printf("%s\n", message);
 	}
 
 
@@ -320,6 +322,8 @@ protected:
 	dword dwTicksOffset ;
 	dword dwTicksTarget ;
 	dword dwTicksTargetFPS ;
+
+	bool _isInit;
 
 	//int loopcon;
 public:

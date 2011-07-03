@@ -51,7 +51,19 @@ public:
 
 	void Reset();
 
-	unsigned char GetAYRegister(int Num);
+	unsigned char GetAYRegister(int Num) const
+	{
+#ifdef ST_SOUND
+	    return m_Ym2149->readRegister(Num);
+#endif
+#ifdef AYLET
+    	return sound_ay_read(Num);
+#endif
+#ifdef AYEMU
+    	return m_ayemu_reg_frame[Num];
+#endif
+	}
+
 	void SetAYRegister(int Num, unsigned char Value);
     void fillSample(int nbSample);
 

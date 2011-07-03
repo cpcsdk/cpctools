@@ -51,6 +51,8 @@
 #include "audioPlugin.h"
 #include "emulator.h"
 
+#include "log.h"
+
 #include <iostream>
 
 #ifdef AYLET
@@ -87,7 +89,7 @@ void t_PSG::Emulate(int iCycleCount)
     if (cycle_count >= snd_cycle_count)
     {
         cycle_count -= snd_cycle_count;
-        
+
         uint8_t* bufferPtr = ap.getBuffer();
 
         //m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
@@ -162,21 +164,6 @@ void t_PSG::Init(int enableSound)
     m_Ym2149->reset();
 #endif
     InitAYCounterVars();
-}
-
-unsigned char t_PSG::GetAYRegister(int Num)
-{
-#ifdef ST_SOUND
-    return m_Ym2149->readRegister(Num);
-#endif
-
-#ifdef AYLET
-    return sound_ay_read(Num);
-#endif
-
-#ifdef AYEMU
-    return m_ayemu_reg_frame[Num];
-#endif
 }
 
 void t_PSG::SetAYRegister(int Num, byte Value)
