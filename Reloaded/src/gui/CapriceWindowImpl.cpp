@@ -46,6 +46,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <cassert>
+
 CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu) 
 	: EmulatorWindow(NULL)
 {
@@ -92,14 +94,14 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 
 
 	#ifdef __WXMSW__
+		emulator->Pause();
+		emulator->setWindow(NULL);
 		Close();
 	#else
 		emulator->Pause();
+		emulator->setWindow(NULL);
 		delete this;
-		delete emulator;
 	#endif
-
-
 }
 
 
@@ -136,6 +138,7 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
+    assert(emulator);
 #ifdef USE_PTHREAD
 	if(emulator->GetRenderer().GetVideoPlugin()->IsUpdate())
 	{

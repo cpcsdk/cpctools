@@ -69,6 +69,7 @@ CapASM *capAsm ;
 #include "WXLog.h"
 
 #include "../core/portAudioAudioPlugin.h"
+#include "../core/alsaAudioPlugin.h"
 
 //TODO destroy emulator when finishing
 
@@ -137,6 +138,8 @@ bool CapriceApp::OnInit()
     
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
     emulator->setAudioPlugin(new PortAudioAudioPlugin());
+#elif SOUND_OUTPUT == SOUND_OUTPUT_Alsa
+	emulator->setAudioPlugin(new AlsaAudioPlugin());
 #elif SOUND_OUTPUT == SOUND_OUTPUT_Null
     emulator->setAudioPlugin(new NullAudioPlugin());
 #endif
@@ -145,6 +148,9 @@ bool CapriceApp::OnInit()
 	capAsm = new CapASM(emulator);
 	#endif
 
+#if DEBUG
+	InfoLogMessage("Compile in Debug mode");
+#endif
 	InfoLogMessage("Initialization done\n");
 	return true ; 
 }

@@ -69,6 +69,11 @@ if PORTAUDIO
 							  portAudioAudioPlugin.h
 endif
 
+if ALSA
+  libcapricecore_a_SOURCES += alsaAudioPlugin.cpp \
+							  alsaAudioPlugin.h
+endif
+
 if LIB765
   libcapricecore_a_LIBADD += /usr/local/lib/lib765.a /usr/local/lib/libdsk.a
 endif

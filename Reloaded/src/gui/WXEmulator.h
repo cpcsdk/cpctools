@@ -86,7 +86,7 @@ class WXEmulator : public Emulator {
 	//Return folder where config files should be stored
 	void getConfigPath(char* buf);
 
-	~WXEmulator() { logMessage("exit emu");}
+	~WXEmulator() { InfoLogMessage("Exit and destruct WXEmulator (0x%x)", this);}
 } ;
 
 #endif

@@ -180,7 +180,7 @@ case "$host_os" in
      ;;
 linux*)
      AC_DEFINE_UNQUOTED(LINUX,1,[This is a Linux system])
-#     AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
+     #AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system])
      build_target="linux"
      ;;
 freebsd*)
@@ -326,6 +326,7 @@ AM_CONDITIONAL([AYLET], [test "$with_aylet" = "yes"])
 AC_DEFINE([SOUND_OUTPUT_None], 0, [Define enum for sound output])
 AC_DEFINE([SOUND_OUTPUT_Null], 1, [Define enum for sound output])
 AC_DEFINE([SOUND_OUTPUT_PortAudio], 2, [Define enum for sound output])
+AC_DEFINE([SOUND_OUTPUT_ALSA], 3, [Define enum for sound output])
 sound_output="None";
 
 AC_MSG_CHECKING([portaudio : >= 19?])
@@ -343,14 +344,20 @@ AC_TRY_COMPILE(
 #AC_MSG_ERROR(You need portaudio >= 19.1)
         )
 
-#sound_output="Null"
-
-AC_DEFINE_UNQUOTED(SOUND_OUTPUT, [SOUND_OUTPUT_${sound_output}], [Sound output library used])
+if test "$sound_output" = "None";
+then
+	AC_DEFINE_UNQUOTED(SOUND_OUTPUT, [SOUND_OUTPUT_Null], [Sound output library used])
+else
+	AC_DEFINE_UNQUOTED(SOUND_OUTPUT, [SOUND_OUTPUT_${sound_output}], [Sound output library used])
+fi
 if test "$sound_output" = "PortAudio" ; then
     AC_SUBST([SOUND_OUTPUT_LIB], [-lportaudio])
 fi
+if test "$sound_output" = "Alsa" ; then
+    AC_SUBST([SOUND_OUTPUT_LIB], [-lasound])
+fi
 AM_CONDITIONAL([PORTAUDIO], [test "$sound_output" = "PortAudio"])
-
+AM_CONDITIONAL([ALSA], [test "$sound_output" = "Alsa"])
 
 #TODO: See for a clean fallback mode
 #Dsk

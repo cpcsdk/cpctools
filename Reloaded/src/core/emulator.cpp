@@ -53,6 +53,8 @@
 #include <iostream>
 #include <unistd.h>
 
+#include <cassert>
+
 #define VERSION_STRING "v5.0.0"
 
 dword dwMF2ExitAddr;
@@ -204,7 +206,7 @@ bool Emulator::MF2Init()
 // Non Thread Safe
 void Emulator::emulator_shutdown()
 {
-	logMessage("Shutting down...");
+	InfoLogMessage("Shutting down...");
 	delete [] pbMF2ROMbackup;
 	pbMF2ROMbackup = NULL;
 	delete [] pbMF2ROM;
@@ -264,7 +266,8 @@ Emulator::Emulator():
     _audioPlugin(NULL),
 	_cpcMemory(NULL),
 	FPSDisplay(false),
-	exitRequested(false)
+	exitRequested(false),
+	_isInit(false)
 {
     emuSync.lock();
 	// retrieve the emulator configuration
@@ -276,7 +279,7 @@ Emulator::Emulator():
 
 Emulator::~Emulator()
 {
-	logMessage("Destructing emu!");
+	InfoLogMessage("Destructing Emulator (0x%x)", this);
     emuSync.lock();
 #ifdef USE_PTHREAD
     exitRequested=1;
@@ -293,6 +296,7 @@ Emulator::~Emulator()
 
 	emulator_shutdown();
 
+	assert(_audioPlugin);
     _audioPlugin->shutdown();
 
 #ifdef USE_DEBUGGER
@@ -301,7 +305,6 @@ Emulator::~Emulator()
 		pfoDebug = NULL;
 	}
 #endif
-    DebugLogMessage("Destruct Emulator");
     emuSync.unlock();
 }
 
@@ -311,6 +314,7 @@ void* runEmulation(void* theEmu)
 {
     DebugLogMessage("runEmulation");
     Emulator* theRealEmu = (Emulator*)theEmu;
+	assert(theReadlEmu);
     DebugLogMessage("runEmulation lock");
     theRealEmu->emuSync.lock();
     DebugLogMessage("runEmulation Emulate");
@@ -323,9 +327,10 @@ void* runEmulation(void* theEmu)
 
 bool Emulator::Init()
 {
+	DebugLogMessage("Emulator::Init()");
     emuSync.lock();
 	timer.start();
-	
+
 	// attempt to allocate the general purpose buffer
 	pbGPBuffer = new byte [128*1024];
 
@@ -430,8 +435,11 @@ bool Emulator::Init()
 
 #ifdef USE_PTHREAD
 	// Spawn a thread for emulating (this way we do not freeze the window)
+	InfoLogMessage("Create Emulator Thread");
 	pthread_create(&emuthread,NULL,runEmulation,this);
 #endif
+
+	_isInit = true;
 
     emuSync.unlock();
 
@@ -446,7 +454,7 @@ void Emulator::Emulate()
 	iExitCondition = EC_FRAME_COMPLETE;
 	bolDone = false;
 
-	while(_cpcMemory == NULL); // Wait for init...
+	assert(_cpcMemory);
 
 #ifdef USE_PTHREAD
 	while(1)
@@ -532,6 +540,7 @@ void Emulator::Emulate()
         //active if necessary trace mode
         if (GetConfig().breakpoint)
         {
+			assert(_z80);
             _z80->trace = 1 ;
         }
         // run the emulation until an exit condition is met

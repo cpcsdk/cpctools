@@ -34,7 +34,7 @@ class WXLog: public Log
             int bufferSize = 256 < strlen(format) ? 256 + strlen(format) : 256;
             int r = 0;
             do {
-                delete buffer;
+                delete[] buffer;
                 buffer = new char[bufferSize];
                 r = vsnprintf(buffer, bufferSize, format, args);
                 if(r != -1 && r < bufferSize)
@@ -44,7 +44,7 @@ class WXLog: public Log
                 bufferSize *= 2;
             } while((r >= bufferSize) && (bufferSize <= 16384));
 #endif
-            delete buffer;
+            delete[] buffer;
             buffer = NULL;
         }
         void infoLogMsg(const char *format, va_list args)

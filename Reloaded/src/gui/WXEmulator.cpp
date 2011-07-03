@@ -61,6 +61,10 @@ void WXEmulator::logMessage(const char* message) {
     if(win)
     {
         win->setStatus(message);
+#if DEBUG
+		fprintf(stderr, message);
+		fprintf(stderr, "\n");
+#endif
     }
     else // If no window print in stderr
     {

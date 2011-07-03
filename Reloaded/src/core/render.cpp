@@ -39,6 +39,7 @@
 #define FNT_BAD_CHAR 95
 
 #include <iostream>
+#include <cassert>
 
 // SSE Intrinsics
 #ifdef __SSE__
@@ -98,6 +99,8 @@ Renderer::~Renderer()
 
 bool Renderer::BeginDisplay(int screenLine)
 {
+    assert(_videoPlugin);
+	assert(_renderFunc);
 	if (!_videoPlugin->TryLock()) { // lock the video buffer
 		return false; // skip the emulation if we can't get a lock
 	}
@@ -116,6 +119,7 @@ bool Renderer::BeginDisplay(int screenLine)
 
 void Renderer::EndDisplay(bool frameCompleted)
 {
+    assert(_videoPlugin);
     if (frameCompleted)
     {
     // Display texts

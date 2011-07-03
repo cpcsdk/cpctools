@@ -20,8 +20,9 @@
 #define _AUDIOPLUGIN_H_
 
 #include <stdint.h>
-#include <stdlib.h>
+#include <cstdlib>
 
+#include "log.h"
 //extern uint8_t *pbSndBuffer;
 //uint8_t *pbSndBuffer;
 //extern uint8_t *pbSndBufferPtr;
@@ -40,6 +41,8 @@ class AudioPlugin
         virtual void pause() = 0;
         virtual void resume() = 0;
         virtual uint8_t* getBuffer() = 0;
+		virtual void lock() {}
+		virtual void unlock() {}
     protected:
         t_CPC* cpc;
         t_PSG* psg;
@@ -49,7 +52,10 @@ class NullAudioPlugin : public AudioPlugin
 {
     public:
         NullAudioPlugin() {}
-        int init(t_CPC& cpc, t_PSG& psg) {return 0;}
+        int init(t_CPC& cpc, t_PSG& psg) {
+				InfoLogMessage("[NullAudio Plugin] Open.");
+				return 0;
+		}
         void shutdown() {}
         int update() {return 0;}
         void pause() {}
