@@ -110,7 +110,7 @@ int isOptionString(char *argv)
 	return (argv[0] == '-');
 }
 
-int compareOptionString(char *argv, char shortName, char *longName)
+int compareOptionString(char *argv, char shortName, const char *longName)
 {
 	unsigned int i;
 	if (argv == NULL || longName == NULL)

@@ -11,7 +11,7 @@
 #include <cstring>
 #include <iostream>
 
-char* CAksFileTransfert::AksCommandShortDesc[] = 
+const char* CAksFileTransfert::AksCommandShortDesc[] = 
 {
 	"TestComunication",
 	"Send",
@@ -28,7 +28,7 @@ char* CAksFileTransfert::AksCommandShortDesc[] =
 	"OpenFile"
 };
 
-char* CAksFileTransfert::AksCommandLongDesc[] = 
+const char* CAksFileTransfert::AksCommandLongDesc[] = 
 {
 	"Test Communication (send #80 to CPC to confirm).",
 	"Asked to send 'word' bytes. 0=#10000",
@@ -45,7 +45,7 @@ char* CAksFileTransfert::AksCommandLongDesc[] =
 	"Open a file in input. Get 12 bytes (filename). Send byte (#80=ok autre=echec)"
 };
 
-char* CAksFileTransfert::DisplayMessageHeader[] =
+const char* CAksFileTransfert::DisplayMessageHeader[] =
 {
 	"",
 	"Err: ",

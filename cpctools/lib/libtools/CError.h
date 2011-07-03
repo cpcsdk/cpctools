@@ -10,15 +10,7 @@
 
 #include <string>
 #include <iostream>
-
-//http://gcc.gnu.org/onlinedocs/libstdc++/manual/backwards.html
-#ifdef HAVE_SSTREAM
-# include <sstream>
-#else
-# include <strstream>
-#endif
-
-
+#include <sstream>
 
 #include <exception>
 #include <stdexcept>
@@ -96,24 +88,11 @@ namespace tools
 
 #define TOOLS_ERROR() { throw tools::CException(__FILE__,__LINE__); }
 
-#ifdef HAVE_SSTREAM
 #define TOOLS_ERRORMSG(message) { \
 ostringstream __s;\
 __s << message ;\
         throw tools::CException(__FILE__,__LINE__,__s.str()); \
 }
-
-
-#else
-
-#define TOOLS_ERRORMSG(message) { \
-char __c[256];\
-ostrstream __s(__c,256);\
-__s << message << ends;\
-	throw tools::CException(__FILE__,__LINE__,__s.str()); \
-}
-#endif
-
 
 
 #define TOOLS_ASSERT(expr) { \

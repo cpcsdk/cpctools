@@ -68,12 +68,12 @@ class CAksFileTransfert : public CCPCBooster
 {
 protected:
 	//! Command short description
-	static char* AksCommandShortDesc[];
+	static const char* AksCommandShortDesc[];
 	//! Command long description
-	static char* AksCommandLongDesc[];
+	static const char* AksCommandLongDesc[];
 
 	//! Display message header
-	static char* DisplayMessageHeader[];
+	static const char* DisplayMessageHeader[];
 protected:
 	//! Current transfert mode
 	CAksTransfertMode	_transfertMode;

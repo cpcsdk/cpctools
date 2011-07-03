@@ -21,7 +21,6 @@
 #include <sys/types.h>
 
 #include <string>
-#include <SerialPort.h>
 
 #include "rs232.h"
 #endif
