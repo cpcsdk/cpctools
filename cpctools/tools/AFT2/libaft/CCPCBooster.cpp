@@ -13,10 +13,18 @@
 #include <iostream>
 
 /**
- * @todo Gerer comNumber comme un entier sous windows et une chaine sous linux
- *
- * Pourquoi ne pas avoir utilise les read/write buffer depuis les read/write byte/word ?
+ * @todo use a string to designate the COMPort instead of an int, as it makes more sense.
  */
+ 
+ 
+// Create a communication with the CPC Booster on the given port number.
+// The port number is mapped as follow :
+// Windows : COM1 = 0 ; COM2 = 1, and so on, up to COM 16
+
+// Linux : 0 = /dev/ttyS0 .. 15 = /dev/ttyS15
+//        16 = /dev/ttyUSB0 .. 22 = /dev/ttyUSB7
+
+// Haiku : 0 = /dev/ports/usb0 .. 3 = /dev/ports/usb3
 CCPCBooster::CCPCBooster(int comNumber):
 _COMPortNumber(comNumber),
 _currentState(PortFailed),
@@ -26,24 +34,28 @@ _currentError(ErrOK)
 }
 
 
+// Close and destroy a communication when we're done
 CCPCBooster::~CCPCBooster()
 {
 	ClosePort();
 }
 
 
+// Return true if communication is opened (and false if there was an error)
 bool CCPCBooster::IsOpen() const
 {
 	return (_currentState == PortOpened);
 }
 
 
+// Get status flag
 CCPCBoosterState CCPCBooster::GetState() const
 {
 	return _currentState;
 }
 
 
+// Open the communication (done when you create it)
 void CCPCBooster::OpenPort()
 {
 	if (_currentState == PortOpened)
@@ -141,6 +153,7 @@ void CCPCBooster::OpenPort()
 }
 
 
+// Close communication (you can reopen it later)
 void CCPCBooster::ClosePort()
 {
 	if (_currentState == PortOpened)
@@ -155,6 +168,7 @@ void CCPCBooster::ClosePort()
 }
 
 
+// Read a byte. If the buffer is empty, wait for a byte to come
 bool CCPCBooster::ReadWaitByte(unsigned char &val)
 {
 #if _WINDOWS
@@ -170,7 +184,6 @@ bool CCPCBooster::ReadWaitByte(unsigned char &val)
 	int ret;
 	do {
 		ret = PollComport(_COMPortHandle, &val, 1);
-		std::cout << ".\n";
 	} while (ret  != 1);
 		
 	return true ; 
@@ -178,6 +191,7 @@ bool CCPCBooster::ReadWaitByte(unsigned char &val)
 }
 
 
+// Non-blocking read of a byte. If the buffer is empty, retunrs false.
 bool CCPCBooster::ReadByte(unsigned char &val)
 {
 #if _WINDOWS
@@ -193,6 +207,7 @@ bool CCPCBooster::ReadByte(unsigned char &val)
 }
 
 
+// Write a byte
 bool CCPCBooster::WriteByte(const unsigned char val)
 {
 #if _WINDOWS
@@ -207,6 +222,7 @@ bool CCPCBooster::WriteByte(const unsigned char val)
 }
 
 
+// Read a word in little-endian format.
 bool CCPCBooster::ReadWaitWord(unsigned short &val)
 {
 #if _WINDOWS
@@ -236,6 +252,8 @@ bool CCPCBooster::ReadWaitWord(unsigned short &val)
 #endif
 }
 
+
+// read a word in little endian format, non blocking
 bool CCPCBooster::ReadWord(unsigned short &val)
 {
 #if _WINDOWS
@@ -258,6 +276,7 @@ bool CCPCBooster::ReadWord(unsigned short &val)
 }
 
 
+// Write a word in little endian format
 bool CCPCBooster::WriteWord(const unsigned short val)
 {
 #if _WINDOWS
@@ -281,6 +300,7 @@ bool CCPCBooster::WriteWord(const unsigned short val)
 }
 
 
+// Read multiple bytes at once, waiting if there isn't enough
 bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 {
 #if _WINDOWS
@@ -315,6 +335,8 @@ bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 }
 
 
+// read multiple bytes, non-blocking.
+// TODO : there is no way to know how many bytes were actually read !
 bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 {
 #if _WINDOWS
@@ -344,6 +366,7 @@ bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 }
 
 
+// Write multiple bytes
 bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
 {
 #if _WINDOWS
@@ -351,8 +374,6 @@ bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
     
 	BOOL fSuccess = WriteFile(_COMPortHandle, buffer, nbBytes, &nbBytesSend, NULL);
 	
-
-	std::cout << (int)nbBytesSend << " bytes send" << std::endl;
 	return ((nbBytesSend == nbBytes) && fSuccess);
 #else
 	/*
@@ -365,7 +386,6 @@ bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
 	{
 		int i = SendBuf(_COMPortHandle, buffer, bytesLeft);
 		if (i > 0) {
-			std::cout << "Wrote " << i << " bytes\n";
 			bytesLeft -= i;
 			buffer += i;
 		}
