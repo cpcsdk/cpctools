@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+#define PRNFUNCNAME std::cout << __func__ << std::endl;
+
 /**
  * @todo Gerer comNumber comme un entier sous windows et une chaine sous linux
  *
@@ -24,23 +26,29 @@ _currentError(ErrOK)
 	OpenPort();
 }
 
+
 CCPCBooster::~CCPCBooster()
 {
 	ClosePort();
 }
+
 
 bool CCPCBooster::IsOpen() const
 {
 	return (_currentState == PortOpened);
 }
 
+
 CCPCBoosterState CCPCBooster::GetState() const
 {
+	PRNFUNCNAME
 	return _currentState;
 }
 
+
 void CCPCBooster::OpenPort()
 {
+	PRNFUNCNAME
 	if (_currentState == PortOpened)
 	{
 		ClosePort();
@@ -145,8 +153,11 @@ void CCPCBooster::OpenPort()
 #endif
 	
 }
+
+
 void CCPCBooster::ClosePort()
 {
+	PRNFUNCNAME
 	if (_currentState == PortOpened)
 	{
 #if _WINDOWS
@@ -158,8 +169,10 @@ void CCPCBooster::ClosePort()
 	_currentState = PortClosed;
 }
 
+
 bool CCPCBooster::ReadWaitByte(unsigned char &val)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	BOOL fSuccess = TRUE;
@@ -170,7 +183,11 @@ bool CCPCBooster::ReadWaitByte(unsigned char &val)
 
 	return ((nbBytesReceived == 1) && fSuccess);
 #else
-	while(PollComport(_COMPortHandle, &val, 1) != 1) ; 
+	int ret;
+	do {
+		ret = PollComport(_COMPortHandle, &val, 1);
+		std::cout << ".\n";
+	} while (ret  != 1);
 		
 	return true ; 
 #endif
@@ -179,6 +196,7 @@ bool CCPCBooster::ReadWaitByte(unsigned char &val)
 
 bool CCPCBooster::ReadByte(unsigned char &val)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	
@@ -194,6 +212,7 @@ bool CCPCBooster::ReadByte(unsigned char &val)
 
 bool CCPCBooster::WriteByte(const unsigned char val)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesSend = 0;
     
@@ -201,12 +220,14 @@ bool CCPCBooster::WriteByte(const unsigned char val)
 	
 	return ((nbBytesSend == 1) && fSuccess);
 #else
-  return SendByte(_COMPortHandle, val);
+  return SendByte(_COMPortHandle, val) == 0;
 #endif
 }
 
+
 bool CCPCBooster::ReadWaitWord(unsigned short &val)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	BOOL fSuccess = TRUE;
@@ -236,6 +257,7 @@ bool CCPCBooster::ReadWaitWord(unsigned short &val)
 
 bool CCPCBooster::ReadWord(unsigned short &val)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	
@@ -254,8 +276,11 @@ bool CCPCBooster::ReadWord(unsigned short &val)
 
 #endif
 }
+
+
 bool CCPCBooster::WriteWord(const unsigned short val)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesSend = 0;
     
@@ -276,8 +301,10 @@ bool CCPCBooster::WriteWord(const unsigned short val)
 #endif
 }
 
+
 bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	BOOL fSuccess = TRUE;
@@ -299,8 +326,10 @@ bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 	while(bytesLeft != 0)
 	{
 		int i = PollComport(_COMPortHandle, buffer, bytesLeft) ; 
-		bytesLeft -= i;
-		buffer += i;
+		if (i > 0) {
+			bytesLeft -= i;
+			buffer += i;
+		}
 	}
 
 	return true ;
@@ -310,6 +339,7 @@ bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 
 bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	
@@ -326,15 +356,20 @@ bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 	while(bytesLeft != 0)
 	{
 		int i = PollComport(_COMPortHandle, buffer, bytesLeft) ; 
-		bytesLeft -= i;
-		buffer += i;
+		if (i > 0) {
+			bytesLeft -= i;
+			buffer += i;
+		}
 	}
 	return true ;
 
 #endif
 }
+
+
 bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
 {
+	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesSend = 0;
     
@@ -349,7 +384,16 @@ bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
 	    _COMPortHandle.WriteByte(buffer[i]);
     */
 
-	SendBuf(_COMPortHandle, buffer, nbBytes);
+	long bytesLeft = nbBytes;
+	while(bytesLeft != 0)
+	{
+		int i = SendBuf(_COMPortHandle, buffer, bytesLeft);
+		if (i > 0) {
+			std::cout << "Wrote " << i << " bytes\n";
+			bytesLeft -= i;
+			buffer += i;
+		}
+	}
 	return true ;
 #endif
 

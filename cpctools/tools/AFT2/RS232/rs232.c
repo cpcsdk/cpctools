@@ -133,14 +133,18 @@ int OpenComport(int comport_number, int baudrate)
     perror("unable to read portsettings ");
     return(1);
   }
-  memset(&new_port_settings, 0, sizeof(new_port_settings));  /* clear the new struct */
+  memcpy(&new_port_settings, old_port_settings + comport_number, sizeof(new_port_settings));  /* clear the new struct */
 
-  new_port_settings.c_cflag = baudr | CS8 | CLOCAL | CREAD | CRTSCTS;    /* Also called CRTSCTS */
-  new_port_settings.c_iflag = IGNPAR;
-  new_port_settings.c_oflag = 0;
-  new_port_settings.c_lflag = 0;
-  new_port_settings.c_cc[VMIN] = 0;      /* block untill n bytes are received */
-  new_port_settings.c_cc[VTIME] = 0;     /* block untill a timer expires (n * 100 mSec.) */
+  new_port_settings.c_cflag &= ~(CSIZE | PARENB | HUPCL | CSTOPB);
+  new_port_settings.c_cflag |= CS8 | CLOCAL | CREAD | CRTSCTS;
+  
+  cfsetispeed(&new_port_settings, baudr);
+  cfsetospeed(&new_port_settings, baudr);
+//  new_port_settings.c_iflag |= IGNPAR;
+  new_port_settings.c_oflag &= ~OPOST;
+  new_port_settings.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+//  new_port_settings.c_cc[VMIN] = 0;      /* block untill n bytes are received */
+  new_port_settings.c_cc[VTIME] = 1;     /* block untill a timer expires (n * 100 mSec.) */
   error = tcsetattr(Cport[comport_number], TCSANOW, &new_port_settings);
   if(error==-1)
   {
@@ -159,8 +163,6 @@ int PollComport(int comport_number, unsigned char *buf, int size)
 
 #ifndef __STRICT_ANSI__                       /* __STRICT_ANSI__ is defined when the -ansi option is used for gcc */
   if(size>SSIZE_MAX)  size = (int)SSIZE_MAX;  /* SSIZE_MAX is defined in limits.h */
-#else
-  if(size>4096)  size = 4096;
 #endif
 
   n = read(Cport[comport_number], buf, size);

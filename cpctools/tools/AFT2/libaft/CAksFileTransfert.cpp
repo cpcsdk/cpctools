@@ -62,7 +62,8 @@ _nbTransfert(0),
 _transferingData(false),
 _EDSKFile(NULL),
 _inStream(NULL),
-_outStream(NULL)
+_outStream(NULL),
+_filepath(".")
 {
 	memset(_amsFilename, 0, 13);
 }
@@ -90,7 +91,12 @@ std::string CAksFileTransfert::GetFilename() const
 {
 	if (_filename.size() != 0)
 		return _filename;
-	return (_filepath+std::string("\\")+std::string((char*)_amsFilename));
+	#ifdef _WINDOWS
+		const char* pathsseparator = "\\";
+	#else
+		const char* pathseparator = "/";
+	#endif
+	return (_filepath+std::string(pathseparator)+std::string((char*)_amsFilename));
 }
 
 int CAksFileTransfert::GetNbTransfertDone() const
@@ -499,7 +505,11 @@ bool CAksFileTransfert::OpenFile(const CAksCommand &cmd)
 	if (_inStream != NULL)
 		delete _inStream;
 
-	_inStream = new std::ifstream(GetFilename().c_str(), std::ios::binary);
+	std::string fileName = GetFilename();
+	
+	std::cout << "file : " << fileName << std::endl;
+	
+	_inStream = new std::ifstream(fileName.c_str(), std::ios::binary);
 
 	if (_inStream->good())
 	{
@@ -509,8 +519,8 @@ bool CAksFileTransfert::OpenFile(const CAksCommand &cmd)
 	}
 	else
 	{
+		perror("File access error");
 		NotAcknowledge();
-
 		return false;
 	}
 }
