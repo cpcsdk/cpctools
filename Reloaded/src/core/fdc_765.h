@@ -31,7 +31,7 @@
 #include <unistd.h>
 
 #include "cap32type.h"
-#include "configBis.h"
+#include "config.h"
 #include <cstring>
 #include <string>
 #include <libdsk.h>
