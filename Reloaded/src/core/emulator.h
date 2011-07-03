@@ -16,7 +16,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- */  
+ */
 
 //
 // Caprice32 Emulator class
@@ -67,7 +67,7 @@ void InitDebug();
 
 /**
  * Emulator class.
- * This class is now abstract in order to be easily adaptable 
+ * This class is now abstract in order to be easily adaptable
  * with other GUI.
  */
 class Emulator
@@ -98,7 +98,7 @@ protected:
 	 * Address to jump if required
 	 */
 	int goToAddress ;
-	
+
 	Emulator();
 	virtual ~Emulator();
 	static Emulator* instance;
@@ -116,7 +116,7 @@ public:
 		this->GetZ80().setCRTC(newCRTC);
 		this->Run();
 	}
-	
+
 	bool Init();
 	void Loop();
 	void Emulate();
@@ -134,7 +134,7 @@ public:
 
 	//## These are events sent from the emulator to the GUI
 	// This way the GUI does not have to poll the emu to know these things
-	
+
 	// screen update every 50Hz (do we want that ?)
 
 	// fdc led status
@@ -148,7 +148,7 @@ public:
 	//## These are "internal" methods.
 	// They still may be overriden from the gui to do some things more.
 
-	virtual void getConfigPath(char* buf) { 
+	virtual void getConfigPath(char* buf) {
       strcpy(buf,_config_path);
   	}
 
@@ -175,7 +175,7 @@ public:
 		Pause();
 		sem_wait(&breakpointLock);
 	}
-	
+
 	/**
 	 * Run the emulator
 	 */
@@ -275,8 +275,6 @@ public:
 
 	 char _config_path[1024];
 protected:
-	
-
 	bool MF2Init();
 
 	int emulator_init();

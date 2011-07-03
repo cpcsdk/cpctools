@@ -262,9 +262,9 @@ void Emulator::printer_stop()
 Emulator::Emulator():
 	_renderer(this),
 	_config(this),
+	_cpcMemory(NULL),
 	_videoPlugin(NULL),
     _audioPlugin(NULL),
-	_cpcMemory(NULL),
 	FPSDisplay(false),
 	exitRequested(false),
 	_isInit(false)

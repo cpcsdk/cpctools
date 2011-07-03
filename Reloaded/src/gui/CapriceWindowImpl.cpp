@@ -51,9 +51,12 @@
 CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu) 
 	: EmulatorWindow(NULL)
 {
+	assert(emu); // emu exist
+
 	emulator = emu ;
 	emulator->setWindow(this);
     m_panel4->SetFocus();
+
 #if ENABLE_FILLDROP
 	dndhandler= new CapriceDNDHandler(emulator);
 	this->SetDropTarget(dndhandler);
@@ -62,7 +65,6 @@ CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu)
 #if __WXMAC__
 	wxApp::s_macAboutMenuItemId = wxID_ABOUT; //TODO Need to correctly specify this id
 	//wxApp::s_macPreferencesMenuItemId = PreferencesID;
-
 #endif
 
 	fdcActive = false;
@@ -91,7 +93,6 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 		emulator->GetDriveB().altered = false;
 		dsk_save(emulator->GetFDC().files[1].c_str(), &emulator->GetDriveB());
 	}
-
 
 	#ifdef __WXMSW__
 		emulator->Pause();
@@ -138,7 +139,10 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
  */
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
+	// Test if emulator exist and is init.
     assert(emulator);
+	assert(emulator->isInit());
+
 #ifdef USE_PTHREAD
 	if(emulator->GetRenderer().GetVideoPlugin()->IsUpdate())
 	{
