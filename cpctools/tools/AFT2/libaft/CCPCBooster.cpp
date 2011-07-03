@@ -2,16 +2,15 @@
  * @class CCPCBooster
  * Class used to communicate with CPCBooster
  * @author Thierry JOUIN
- * @version 1.1
- * @date 06/02/2006
+ * @author Adrien DESTUGUES
+ * @version 2.0
+ * @date 2011-07-03
  */
 
 #include "CCPCBooster.h"
 #include <stdio.h>
 
 #include <iostream>
-
-#define PRNFUNCNAME std::cout << __func__ << std::endl;
 
 /**
  * @todo Gerer comNumber comme un entier sous windows et une chaine sous linux
@@ -41,14 +40,12 @@ bool CCPCBooster::IsOpen() const
 
 CCPCBoosterState CCPCBooster::GetState() const
 {
-	PRNFUNCNAME
 	return _currentState;
 }
 
 
 void CCPCBooster::OpenPort()
 {
-	PRNFUNCNAME
 	if (_currentState == PortOpened)
 	{
 		ClosePort();
@@ -134,22 +131,11 @@ void CCPCBooster::OpenPort()
  * Code specifique aux unices
  */
 #else
-	//portName = _COMPortNumber ;
-/*
-	_COMPortHandle.Open(
-	    SerialPort::BAUD_115200,
-	    SerialPort::CHAR_SIZE_8,
-	    SerialPort::PARITY_NONE,
-	    SerialPort::STOP_BITS_1,
-	    SerialPort::FLOW_CONTROL_HARD);	
-	    */
-	    
 	if (OpenComport(_COMPortNumber,115200) == 0)
 	{
 	    _currentState = PortOpened ;
 	    _COMPortHandle = _COMPortNumber;
 	}
-
 #endif
 	
 }
@@ -157,7 +143,6 @@ void CCPCBooster::OpenPort()
 
 void CCPCBooster::ClosePort()
 {
-	PRNFUNCNAME
 	if (_currentState == PortOpened)
 	{
 #if _WINDOWS
@@ -172,7 +157,6 @@ void CCPCBooster::ClosePort()
 
 bool CCPCBooster::ReadWaitByte(unsigned char &val)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	BOOL fSuccess = TRUE;
@@ -196,7 +180,6 @@ bool CCPCBooster::ReadWaitByte(unsigned char &val)
 
 bool CCPCBooster::ReadByte(unsigned char &val)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	
@@ -212,7 +195,6 @@ bool CCPCBooster::ReadByte(unsigned char &val)
 
 bool CCPCBooster::WriteByte(const unsigned char val)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesSend = 0;
     
@@ -227,7 +209,6 @@ bool CCPCBooster::WriteByte(const unsigned char val)
 
 bool CCPCBooster::ReadWaitWord(unsigned short &val)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	BOOL fSuccess = TRUE;
@@ -245,7 +226,7 @@ bool CCPCBooster::ReadWaitWord(unsigned short &val)
 		ReadWaitByte(byte2) 
 	    )
 	{
-	    val = byte1 * 256 + byte2 ;
+	    val = byte2 * 256 + byte1 ;
 	    return 1 == 1 ;
 	}
 	else{
@@ -257,7 +238,6 @@ bool CCPCBooster::ReadWaitWord(unsigned short &val)
 
 bool CCPCBooster::ReadWord(unsigned short &val)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	
@@ -280,7 +260,6 @@ bool CCPCBooster::ReadWord(unsigned short &val)
 
 bool CCPCBooster::WriteWord(const unsigned short val)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesSend = 0;
     
@@ -291,8 +270,8 @@ bool CCPCBooster::WriteWord(const unsigned short val)
 
 	unsigned char byte1, byte2 ;
 
-	byte1 = val % 256 ;
-	byte2 = val / 256 ;
+	byte1 = val / 256 ;
+	byte2 = val % 256 ;
 
 	WriteByte(byte1);
 	WriteByte(byte2) ;
@@ -304,7 +283,6 @@ bool CCPCBooster::WriteWord(const unsigned short val)
 
 bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	BOOL fSuccess = TRUE;
@@ -339,7 +317,6 @@ bool CCPCBooster::ReadWaitBuffer(unsigned char *buffer, const  long nbBytes)
 
 bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesReceived = 0;
 	
@@ -369,7 +346,6 @@ bool CCPCBooster::ReadBuffer(unsigned char *buffer, const long nbBytes)
 
 bool CCPCBooster::WriteBuffer(unsigned char *buffer, const  long nbBytes)
 {
-	PRNFUNCNAME
 #if _WINDOWS
 	unsigned long nbBytesSend = 0;
     

@@ -118,7 +118,7 @@ int OpenComport(int comport_number, int baudrate)
                    break;
   }
 
-  Cport[comport_number] = open(comports[comport_number], O_RDWR | O_NOCTTY | O_NDELAY);
+  Cport[comport_number] = open(comports[comport_number], O_RDWR | O_NOCTTY);
   if(Cport[comport_number]==-1)
   {
   	printf(comports[comport_number]);
@@ -135,8 +135,8 @@ int OpenComport(int comport_number, int baudrate)
   }
   memcpy(&new_port_settings, old_port_settings + comport_number, sizeof(new_port_settings));  /* clear the new struct */
 
-  new_port_settings.c_cflag &= ~(CSIZE | PARENB | HUPCL | CSTOPB);
-  new_port_settings.c_cflag |= CS8 | CLOCAL | CREAD | CRTSCTS;
+  new_port_settings.c_cflag &= ~(CSIZE | PARENB | HUPCL | CSTOPB | CRTSCTS);
+  new_port_settings.c_cflag |= CS8 | CLOCAL | CREAD;
   
   cfsetispeed(&new_port_settings, baudr);
   cfsetospeed(&new_port_settings, baudr);
