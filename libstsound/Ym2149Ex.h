@@ -49,6 +49,7 @@
 #include "YmTypes.h"
 #include "YmProfiles.h"
 #include "YmFilters.h"
+#include <list>
 
 enum
 {
@@ -56,6 +57,42 @@ enum
 	VOICE_B=1,
 	VOICE_C=2,
 };
+
+enum
+{
+    F_MONO=0,
+    F_LEFT=1,
+    F_RIGHT=2,
+};
+
+enum
+{
+	R_A_TONE_PERIOD_LOW=0,
+	R_A_TONE_PERIOD_HIGH,
+	R_B_TONE_PERIOD_LOW,
+	R_B_TONE_PERIOD_HIGH,
+	R_C_TONE_PERIOD_LOW,
+	R_C_TONE_PERIOD_HIGH,
+	R_NOISE_PERIOD,
+	R_ENABLE,
+	R_A_AMPLITUDE,
+	R_B_AMPLITUDE,
+	R_C_AMPLITUDE,
+	R_ENVELOPE_PERIOD_LOW,
+	R_ENVELOPE_PERIOD_HIGH,
+	R_ENVELOPE_SHAPE,
+	R_A_IO_PORT,
+	R_B_IO_PORT,
+};
+
+#define ENABLE_NOT_TONE_A  (1 << 0)
+#define ENABLE_NOT_TONE_B  (1 << 1)
+#define ENABLE_NOT_TONE_C  (1 << 2)
+#define ENABLE_NOT_NOISE_A (1 << 3)
+#define ENABLE_NOT_NOISE_B (1 << 4)
+#define ENABLE_NOT_NOISE_C (1 << 5)
+#define ENABLE_OUT_IO_A    (1 << 6)
+#define ENABLE_OUT_IO_B    (1 << 7)
 
 struct	YmSpecialEffect
 {
@@ -102,14 +139,18 @@ class CYm2149Ex
 		void	syncBuzzerStop(void);
 */
 
-    private:
-		DCRemover		m_dcAdjust;
-		DCRemover		m_dcAdjustLeft;
-		DCRemover		m_dcAdjustRight;
+        bool    isIntegerVersion()
+        {
+#if YM_INTEGER_ONLY
+            return true;
+#else
+            return false;
+#endif
+        }
 
-        SimpleLowPassFilter   f_lowPass;
-        SimpleLowPassFilter   f_lowPassLeft;
-        SimpleLowPassFilter   f_lowPassRight;
+    private:
+        std::list<Filter*> filters[3];
+//        std::list<Filter*> filtersStereo[2];
 
 		ymu32	frameCycle;
 		ymu32	cyclePerSample;

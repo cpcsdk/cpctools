@@ -36,6 +36,11 @@
 
 #include "YmTypes.h"
 
+/**
+ * \struct ymProfile
+ * \brief Stock emulation profile parameters
+ * Profile for emulation, contains volumes tables, mixing value and clock
+ */
 typedef struct _ymProfile
 {
     ymint volumeTable[5][16];
@@ -52,33 +57,46 @@ typedef struct _ymProfile
 // Note : when there is noise, the table is altered. We have 5 different ones
 #define AY_VOL_TABLE { {0,116,348,579,1042,1390,2084,3358,4053,6600,9147,12157,16094,20378,26400,32767}, {0,0,  348,348,1042,1042,2084,2084,4053,4053,9147,12157,16094,16094,26400,32767}, {0,0,  0,  0,  3358,3358,3358,4053,4053,4053,6600,6600,  6600,32767,32767,32767}, {0,0,  0,  0,  0,   4053,4053,4053,4053,4053,4053,32767,32767,32767,32767,32767}, {0,0,  0,  0,  0,   0,  4053,4053,4053,4053,32767,32767,32767,32767,32767,32767} }
 
+/**
+ * \brief Profile for Atari ST emulation
+ * \todo Found good mixing and see for difference between Atari models
+ */
 static ymProfile profileAtari =
 {
     YM_VOL_TABLE,
     { 0.333, 0.333, 0.333 },
     { 0.333, 0.333, 0.333 },
     { 0.333, 0.333, 0.333 },
-    /* TODO: Found good mixer value */
+    /** \TODO: Found good mixer value */
     2000000,
 };
 
+/**
+ * \brief Profile for Amstrad CPC emulation
+ * Mixing value calculate from component value
+ * Thank to Grimmy/Arkos
+ */
 static ymProfile profileCPC =
 {
     AY_VOL_TABLE,
     { 0.333, 0.333, 0.333 },
     { 0.687, 0.312, 0.000 },
     { 0.000, 0.312, 0.687 },
-    /* Volume Table Calc with component */
+    /** Volume Table Calc with component by Grimmy*/
     1000000,
 }; 
 
+/**
+ * \brief Profile for Spectrum emulation
+ * \todo Found good mixing and see for difference between all Spectrum clone
+ */
 static ymProfile profileSpectrum =
 {
     AY_VOL_TABLE,
     { 0.333, 0.333, 0.333 },
     { 0.333, 0.333, 0.333 },
     { 0.333, 0.333, 0.333 },
-    /* TODO: Found good mixer value */
+    /** \TODO: Found good mixer value */
     1773400,
 };
 
@@ -88,7 +106,7 @@ static ymProfile profileMFP =
     { 0.333, 0.333, 0.333 },
     { 0.333, 0.333, 0.333 },
     { 0.333, 0.333, 0.333 },
-    /* TODO: Found good mixer value */
+    /** \TODO: Found good mixer value */
     2457600,
 };
 

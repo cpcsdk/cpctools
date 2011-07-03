@@ -606,7 +606,7 @@ FILE	*in;
 		fclose(in);
 
 		//---------------------------------------------------
-		// Transforme les donnes en donnes valides.
+		// Transforme les données en données valides.
 		//---------------------------------------------------
 		pBigMalloc = depackFile();
 		if (!pBigMalloc)
@@ -615,7 +615,7 @@ FILE	*in;
 		}
 
 		//---------------------------------------------------
-		// Lecture des donnes YM:
+		// Lecture des données YM:
 		//---------------------------------------------------
 		if (!ymDecode())
 		{
@@ -657,7 +657,7 @@ ymbool	CYmMusic::loadMemory(void *pBlock,ymu32 size)
 		memcpy(pBigMalloc,pBlock,size);
 
 		//---------------------------------------------------
-		// Transforme les donnes en donnes valides.
+		// Transforme les données en données valides.
 		//---------------------------------------------------
 		pBigMalloc = depackFile();
 		if (!pBigMalloc)
@@ -666,7 +666,7 @@ ymbool	CYmMusic::loadMemory(void *pBlock,ymu32 size)
 		}
 
 		//---------------------------------------------------
-		// Lecture des donnes YM:
+		// Lecture des données YM:
 		//---------------------------------------------------
 		if (!ymDecode())
 		{

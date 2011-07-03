@@ -1,5 +1,19 @@
-#include "YmFilters.h"
+/**
+ * \file YmFilters.cpp
+ * \brief libstsound Audio Filter implementation file
+ * This file implement some audio filter used for improve audio output quality
+ */
+
+/*
+ * libstsound is an AY-3-8192, YM2149 and clone PSG emulator
+ * Copyright (C) 2008-2011 CPCSDK crew ( http://code.google.com/p/cpcsdk/ )
+ * Based on ST-Sound
+ * Copyright (C) 1995-1999 Arnaud Carre ( http://leonard.oxg.free.fr )
+ */
+
 #include <cstring>
+
+#include "YmFilters.h"
 
 Filter::Filter()
 {
@@ -18,7 +32,7 @@ void DCRemover::Reset()
     full = 0; // Calculate DC Remove only on the number of sample in buffer, can limits start clicks
 }
 
-void DCRemover::AddSample(ymint sample)
+inline void DCRemover::AddSample(ymint sample)
 {
     pos = (pos+1)&(DC_ADJUST_BUFFERLEN-1);
 #ifndef YM_SIMPLIFIED_FILTER
@@ -33,7 +47,7 @@ void DCRemover::AddSample(ymint sample)
     buffer[pos] = sample;
 }
 
-ymint DCRemover::GetResult()
+inline ymint DCRemover::GetResult()
 {
 #ifdef YM_SIMPLIFIED_FILTER
     return buffer[pos] - (sum / DC_ADJUST_BUFFERLEN);
@@ -61,18 +75,52 @@ void SimpleLowPassFilter::Reset()
     delay_line[2] = 0;
 }
 
-void SimpleLowPassFilter::AddSample(ymint sample)
+inline void SimpleLowPassFilter::AddSample(ymint sample)
 {
     delay_line[0] = delay_line[1];
     delay_line[1] = delay_line[2];
     delay_line[2] = sample;
 }
 
-ymint SimpleLowPassFilter::GetResult()
+inline ymint SimpleLowPassFilter::GetResult()
 {
     return (delay_line[0] >> 2)
         + (delay_line[1] >> 1)
         + (delay_line[2] >> 2);
+}
+
+SimpleStereoEffectReducer::SimpleStereoEffectReducer()
+{
+    Reset();
+}
+
+void SimpleStereoEffectReducer::Reset()
+{
+    buffer.r = buffer.l = 0;
+}
+
+inline void SimpleStereoEffectReducer::AddSample(stereoSample sample)
+{
+    buffer = sample;
+}
+
+inline stereoSample SimpleStereoEffectReducer::GetResult()
+{
+    // Simple stereo reducer based on mid-side
+    ymint m, s;
+    stereoSample out;
+
+    m = buffer.r + buffer.l;
+    s = buffer.r - buffer.l;
+
+    out.r = (3*m + s) >> 2;
+    out.l = (3*m - s) >> 2;
+
+    return out;
+}
+
+FilterStereo::FilterStereo()
+{
 }
 
 #if 0

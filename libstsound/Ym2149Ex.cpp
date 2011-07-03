@@ -72,19 +72,40 @@ static	ymint ymVolumeTable[5][16] =
 {0,0,  0,  0,  0,   0,  4053,4053,4053,4053,32767,32767,32767,32767,32767,32767}
 };
 
-static	ymu8 *ym2149EnvInit(ymu8 *pEnv,ymint a,ymint b)
-{
-ymint i;
-ymint d;
+/*
+ * 15 = 65535
+ * 14 = 52799
+ * 13 = 40757
+ * 12 = 32189
+ * 11 = 24315
+ * 10 = 18294
+ * 9 = 13200
+ * 8 = 8105
+ * 7 = 6716
+ * 6 = 4168
+ * 5 = 2779
+  4 = 2084
+ * 3 = 1158
+ * 2 = 695
+ * 1 = 116
+ * 0 = 0
+ */
 
-		d = b-a;
-		a *= 15;
-		for (i=0;i<16;i++)
-		{
-			*pEnv++ = (ymu8)a;
-			a += d;
-		}
-		return pEnv;
+static ymu8 *ym2149EnvInit(ymu8 *pEnv,ymint a,ymint b)
+{
+    ymint i;
+    ymint d;
+
+    d = b - a;
+    a *= 15;
+
+    for(i = 0; i < 16; i++)
+    {
+        *pEnv++ = (ymu8)a;
+        a += d;
+    }
+
+    return pEnv;
 }
 
 
@@ -118,6 +139,12 @@ CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
 //    setProfile(profileAtari);
     setProfile(profileCPC);
 
+    for(ymint i = 0; i < 3; i++)
+    {
+        filters[i].push_back(new SimpleLowPassFilter());
+        filters[i].push_back(new DCRemover());
+    }
+
     // Reset YM2149
     reset();
 }
@@ -150,6 +177,12 @@ CYm2149Ex::CYm2149Ex(ymProfile profile, ymu32 playRate)
     pVolA = &volA;
     pVolB = &volB;
     pVolC = &volC;
+
+    for(ymint i = 0; i < 3; i++)
+    {
+        filters[i].push_back(new SimpleLowPassFilter());
+        filters[i].push_back(new DCRemover());
+    }
 
     // Reset YM2149
     reset();
@@ -209,6 +242,9 @@ ymu32 CYm2149Ex::noiseStepCompute(ymu8 rNoise)
 	return (ymu32)step;
 }
 
+/**
+ * Emulation of noise channel
+ */
 ymu32	CYm2149Ex::rndCompute(void)
 {
 	/*
@@ -242,7 +278,9 @@ ymu32 CYm2149Ex::envStepCompute(ymu8 rHigh,ymu8 rLow)
 	return (ymu32)step;
 }
 
-
+/**
+ * Reset of all internal registers of the PSG
+ */
 void	CYm2149Ex::reset(void)
 {
 
@@ -268,17 +306,21 @@ void	CYm2149Ex::reset(void)
 	envPhase = 0;
 	envPos = 0;
 
-	m_dcAdjust.Reset();
-	m_dcAdjustLeft.Reset();
-	m_dcAdjustRight.Reset();
-
 /*	memset(specialEffect,0,sizeof(specialEffect));
 
 	syncBuzzerStop();
 */
-    f_lowPass.Reset();
-    f_lowPassLeft.Reset();
-    f_lowPassRight.Reset();
+
+    // Reset of all filter
+    std::list<Filter*>::iterator f_it;
+
+    for(ymint i = 0; i < 3; i++)
+    {
+        for(f_it = filters[i].begin(); f_it != filters[i].end(); f_it++)
+        {
+            (*f_it)->Reset();
+        }
+    }
 }
 
 /*
@@ -404,15 +446,17 @@ ymsample CYm2149Ex::nextSample(void)
 		specialEffect[1].sidPos += specialEffect[1].sidStep;
 		specialEffect[2].sidPos += specialEffect[2].sidStep;
 */
-	//---------------------------------------------------
-	// Normalize process
-	//---------------------------------------------------
-    m_dcAdjust.AddSample(vol);
-//    const int in = vol - m_dcAdjust.GetDcLevel();
-    const int in = m_dcAdjust.GetResult();
-//    return LowPassFilter(in,0);
-    f_lowPass.AddSample(in);
-    return f_lowPass.GetResult();
+
+    // Apply all mono filters
+    std::list<Filter*>::iterator f_it;
+
+    ymint in = vol;
+    for(f_it = filters[F_MONO].begin(); f_it != filters[F_MONO].end(); f_it++)
+    {
+        (*f_it)->AddSample(in);
+        in = (*f_it)->GetResult();
+    }
+    return in;
 }
 
 
@@ -507,36 +551,20 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 		specialEffect[1].sidPos += specialEffect[1].sidStep;
 		specialEffect[2].sidPos += specialEffect[2].sidStep;
 */
-	//---------------------------------------------------
-	// Normalize process
-	//---------------------------------------------------
-#if 0
-	{
-		m_dcAdjustLeft.AddSample(volLeft);
-//		const int in = volLeft- m_dcAdjustLeft.GetDcLevel();
-		const int in = m_dcAdjustLeft.GetResult();
-//		left = LowPassFilter(in,0);
-        f_lowPassLeft.AddSample(in);
-        left = f_lowPassLeft.GetResult();
-//		left = in;
-	}
-	{
-		m_dcAdjustRight.AddSample(volRight);
-//		const int in = volRight- m_dcAdjustRight.GetDcLevel();
-		const int in = m_dcAdjustRight.GetResult();
-		//right = LowPassFilter(in,1);
-        f_lowPassRight.AddSample(in);
-        right = f_lowPassRight.GetResult();
-//		right = in;
-	}
-#else
-    f_lowPassLeft.AddSample(volLeft);
-    f_lowPassRight.AddSample(volRight);
-    m_dcAdjustLeft.AddSample(f_lowPassLeft.GetResult());
-    m_dcAdjustRight.AddSample(f_lowPassRight.GetResult());
-    left = m_dcAdjustLeft.GetResult();
-    right = m_dcAdjustRight.GetResult();
-#endif
+	// Apply all filter from filters list.
+    std::list<Filter*>::iterator f_it;
+
+    ymint in[2] = {volLeft, volRight};
+    for(ymint i = F_LEFT; i < F_RIGHT; i++)
+    {
+        for(f_it = filters[i].begin(); f_it != filters[i].end(); f_it++)
+        {
+            (*f_it)->AddSample(in[i]);
+            in[i] = (*f_it)->GetResult();
+        }
+    }
+    left = in[0];
+    right = in[1];
 }
 
 ymint		CYm2149Ex::readRegister(ymint reg)
@@ -550,45 +578,45 @@ void	CYm2149Ex::writeRegister(ymint reg,ymint data)
 
 		switch (reg)
 		{
-		case 0:
-			registers[0] = data&255;
-			stepA = toneStepCompute(registers[1],registers[0]);
+		case R_A_TONE_PERIOD_LOW:
+			registers[R_A_TONE_PERIOD_LOW] = data & 0xFF;
+			stepA = toneStepCompute(registers[R_A_TONE_PERIOD_HIGH], registers[R_A_TONE_PERIOD_LOW]);
 			if (!stepA) posA = (1<<31);		// Assume output always 1 if 0 period (for Digi-sample !)
 			break;
 
-		case 2:
-			registers[2] = data&255;
-			stepB = toneStepCompute(registers[3],registers[2]);
+		case R_B_TONE_PERIOD_LOW:
+			registers[R_B_TONE_PERIOD_LOW] = data & 0xFF;
+			stepB = toneStepCompute(registers[R_B_TONE_PERIOD_HIGH], registers[R_B_TONE_PERIOD_LOW]);
 			if (!stepB) posB = (1<<31);		// Assume output always 1 if 0 period (for Digi-sample !)
 			break;
 
-		case 4:
-			registers[4] = data&255;
-			stepC = toneStepCompute(registers[5],registers[4]);
+		case R_C_TONE_PERIOD_LOW:
+			registers[R_C_TONE_PERIOD_LOW] = data & 0xFF;
+			stepC = toneStepCompute(registers[R_C_TONE_PERIOD_HIGH], registers[R_C_TONE_PERIOD_LOW]);
 			if (!stepC) posC = (1<<31);		// Assume output always 1 if 0 period (for Digi-sample !)
 			break;
 
-		case 1:
-			registers[1] = data&15;
-			stepA = toneStepCompute(registers[1],registers[0]);
+		case R_A_TONE_PERIOD_HIGH:
+			registers[R_A_TONE_PERIOD_HIGH] = data & 0x0F;
+			stepA = toneStepCompute(registers[R_A_TONE_PERIOD_HIGH], registers[R_A_TONE_PERIOD_LOW]);
 			if (!stepA) posA = (1<<31);		// Assume output always 1 if 0 period (for Digi-sample !)
 			break;
 
-		case 3:
-			registers[3] = data&15;
-			stepB = toneStepCompute(registers[3],registers[2]);
+		case R_B_TONE_PERIOD_HIGH:
+			registers[R_B_TONE_PERIOD_HIGH] = data & 0x0F;
+			stepB = toneStepCompute(registers[R_B_TONE_PERIOD_HIGH], registers[R_B_TONE_PERIOD_LOW]);
 			if (!stepB) posB = (1<<31);		// Assume output always 1 if 0 period (for Digi-sample !)
 			break;
 
-		case 5:
-			registers[5] = data&15;
-			stepC = toneStepCompute(registers[5],registers[4]);
+		case R_C_TONE_PERIOD_HIGH:
+			registers[R_C_TONE_PERIOD_HIGH] = data & 0x0F;
+			stepC = toneStepCompute(registers[R_C_TONE_PERIOD_HIGH], registers[R_C_TONE_PERIOD_LOW]);
 			if (!stepC) posC = (1<<31);		// Assume output always 1 if 0 period (for Digi-sample !)
 			break;
 
-		case 6:
-			registers[6] = data&0x1f;
-			noiseStep = noiseStepCompute(registers[6]);
+		case R_NOISE_PERIOD:
+			registers[R_NOISE_PERIOD] = data&0x1f;
+			noiseStep = noiseStepCompute(registers[R_NOISE_PERIOD]);
 			if (!noiseStep)
 			{
 				noisePos = 0;
@@ -596,8 +624,8 @@ void	CYm2149Ex::writeRegister(ymint reg,ymint data)
 			}
 			break;
 
-		case 7:
-			registers[7] = data&255;
+		case R_ENABLE:
+			registers[7] = data & 0xFF;
 			mixerTA = (data&(1<<0)) ? 0xffff : 0;
 			mixerTB = (data&(1<<1)) ? 0xffff : 0;
 			mixerTC = (data&(1<<2)) ? 0xffff : 0;
@@ -606,47 +634,46 @@ void	CYm2149Ex::writeRegister(ymint reg,ymint data)
 			mixerNC = (data&(1<<5)) ? 0xffff : 0;
 			break;
 
-		case 8:
-			registers[8] = data&31;
-			if (data&0x10)
+		case R_A_AMPLITUDE:
+			registers[R_A_AMPLITUDE] = data & 0x1F;
+			if (data & 0x10)
 				pVolA = &volEA;
 			else
 				pVolA = &volA;
 			break;
 
-		case 9:
-			registers[9] = data&31;
-			if (data&0x10)
+		case R_B_AMPLITUDE:
+			registers[R_B_AMPLITUDE] = data & 0x1F;
+			if (data & 0x10)
 				pVolB = &volEB;
 			else
 				pVolB = &volB;
 			break;
 
-		case 10:
-			registers[10] = data&31;
-			if (data&0x10)
+		case R_C_AMPLITUDE:
+			registers[R_C_AMPLITUDE] = data & 0x1F;
+			if (data & 0x10)
 				pVolC = &volEC;
 			else
 				pVolC = &volC;
 			break;
 
-		case 11:
-			registers[11] = data&255;
-			envStep = envStepCompute(registers[12],registers[11]);
+		case R_ENVELOPE_PERIOD_LOW:
+			registers[R_ENVELOPE_PERIOD_LOW] = data & 0xFF;
+			envStep = envStepCompute(registers[R_ENVELOPE_PERIOD_HIGH],registers[R_ENVELOPE_PERIOD_LOW]);
 			break;
 
-		case 12:
-			registers[12] = data&255;
-			envStep = envStepCompute(registers[12],registers[11]);
+		case R_ENVELOPE_PERIOD_HIGH:
+			registers[R_ENVELOPE_PERIOD_HIGH] = data & 0xFF;
+			envStep = envStepCompute(registers[R_ENVELOPE_PERIOD_HIGH],registers[R_ENVELOPE_PERIOD_LOW]);
 			break;
 
-		case 13:
-			registers[13] = data&0xf;
+		case R_ENVELOPE_SHAPE:
+			registers[R_ENVELOPE_SHAPE] = data & 0x0F;
 			envPos = 0;
 			envPhase = 0;
-			envShape = data&0xf;
+			envShape = data & 0x0F;
 			break;
-
 		}
 }
 /*
@@ -663,7 +690,11 @@ void	CYm2149Ex::update(ymsample *pSampleBuffer,ymint nbSample)
 		}
 }
 */
-void	CYm2149Ex::updateStereo(ymsample *pSampleBuffer,ymint nbSample)
+
+/**
+ * Generate nbSample sample and put in them in the buffer pSampleBuffer
+ */
+void CYm2149Ex::updateStereo(ymsample *pSampleBuffer,ymint nbSample)
 {
     ymsample *pBuffer = pSampleBuffer;
     if (nbSample>0)
@@ -736,6 +767,9 @@ void	CYm2149Ex::syncBuzzerStop(void)
 }
 #endif
 
+/**
+ * Set mono output mixer ratio, after calculate if fixed point mode
+ */
 void CYm2149Ex::outputMixerMono(ymfloat out[3])
 {
 #if YM_INTEGER_ONLY
@@ -750,6 +784,9 @@ void CYm2149Ex::outputMixerMono(ymfloat out[3])
 #endif
 }
 
+/**
+ * Set stereo output mixer ratio, after calculate if fixed point mode
+ */
 void CYm2149Ex::outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3])
 {
     // Set default output mixer.
@@ -775,6 +812,9 @@ void CYm2149Ex::outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3])
 #endif
 }
 
+/**
+ * Import emulation parameters from computer profiles (Clock, volume tables, mixer...)
+ */
 void CYm2149Ex::setProfile(ymProfile p)
 {
     outputMixerMono(p.volOut);
