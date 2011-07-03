@@ -80,7 +80,7 @@ class FIRFilter: public Filter
         void Reset();
 
     privte:
-        ymint N; // N-tap 
+        ymint N; // N-tap
         ymint delay;
         ymint pos;
         ymint *buffer;

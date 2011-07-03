@@ -84,7 +84,7 @@ static ymProfile profileCPC =
     { 0.000, 0.312, 0.687 },
     /** Volume Table Calc with component by Grimmy*/
     1000000,
-}; 
+};
 
 /**
  * \brief Profile for Spectrum emulation
