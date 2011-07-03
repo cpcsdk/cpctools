@@ -314,7 +314,7 @@ void* runEmulation(void* theEmu)
 {
     DebugLogMessage("runEmulation");
     Emulator* theRealEmu = (Emulator*)theEmu;
-	assert(theReadlEmu);
+	assert(theRealEmu);
     DebugLogMessage("runEmulation lock");
     theRealEmu->emuSync.lock();
     DebugLogMessage("runEmulation Emulate");

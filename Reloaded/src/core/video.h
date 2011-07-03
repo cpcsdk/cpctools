@@ -180,4 +180,40 @@ protected:
 	static bool HaveOpenGLExtension(const string &name_ext);
 };
 
+class NullVideoPlugin : public VideoPlugin
+{
+private:
+	NullVideoPlugin() 
+		: VideoPlugin("No output", ALL, 0)
+	{
+		surf = NULL;
+	}
+
+	unsigned char* surf;
+
+public:
+	static VideoPlugin* Create()
+	{
+		return (new NullVideoPlugin());
+	}
+
+	virtual void* Init(int w,int h,int bpp,bool fs)
+	{
+		surf = new unsigned char[w*h*bpp/8];
+		return (void*)surf;
+	}
+	virtual void SetPalette(ColorARGB8888* c) {}
+	virtual bool TryLock() {return true;}
+	virtual void Unlock() {}
+    virtual bool LockOutput() {return true;}
+    virtual bool TryLockOutput() {return true;}
+    virtual void UnlockOutput() {}
+	virtual void Flip() {}
+	virtual void Close() {}
+    virtual bool IsUpdate() {return false;}
+	void Screenshot(string filename) {}
+
+	~NullVideoPlugin() {delete [] surf;}
+};
+
 #endif
