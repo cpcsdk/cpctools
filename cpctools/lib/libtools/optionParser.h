@@ -3,7 +3,7 @@
  * (c) Ramlaid 2003
  */
 
-#define NO_ERROR		0
+#define OPT_NO_ERROR	0
 #define DISPLAY_HELP	1
 #define ERROR_UNKNOWN	-1
 #define ERROR_UNKOPT	-2

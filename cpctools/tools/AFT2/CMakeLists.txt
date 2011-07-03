@@ -10,6 +10,10 @@ add_subdirectory(${aft})
 
 include_directories(${librs232} ${libaft})
 
+if(WIN32)
+	add_definitions(-D_WINDOWS)
+endif(WIN32)
+
 add_executable(aft2
 	${aft_sources}
 	${librs232_sources}

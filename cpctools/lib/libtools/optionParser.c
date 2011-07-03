@@ -123,7 +123,7 @@ int compareOptionString(char *argv, char shortName, const char *longName)
 		if (strlen(argv) != 2)
 			RET_ERROR( ERROR_UNKOPT, "Unknown option, '-' with more than one caracter");
 		if (toupper(argv[1]) == toupper(shortName))
-			RET_ERROR( NO_ERROR, "No error");
+			RET_ERROR( OPT_NO_ERROR, "No error");
 		RET_ERROR( ERROR_UNKOPT, "Unknown option");
 	}
 	else
@@ -134,7 +134,7 @@ int compareOptionString(char *argv, char shortName, const char *longName)
 		while ((toupper(argv[i+2]) == toupper(longName[i])) && (i < strlen(longName)))
 			i++;
 		if (i == strlen(longName))
-			RET_ERROR( NO_ERROR, "No error");
+			RET_ERROR( OPT_NO_ERROR, "No error");
 		RET_ERROR( ERROR_UNKOPT, "Unknown option");
 	}
 }
@@ -146,7 +146,7 @@ int findOption(char *argv, struct SOption *option)
 		RET_ERROR(ERROR_UNKNOWN, "Internal error");
 	while (option[i].shortName != 0)
 	{
-		if (compareOptionString(argv,option[i].shortName,option[i].longName) == NO_ERROR)
+		if (compareOptionString(argv,option[i].shortName,option[i].longName) == OPT_NO_ERROR)
 			return i;
 		i++;
 	}
@@ -273,7 +273,7 @@ int parseCommandLineOption(int *argc, char*** argv, struct SOption *option, stru
 		if (isOptionString((*argv)[iArgv]) != 0)
 		{
 			//verification si aide
-			if (compareOptionString((*argv)[iArgv],'h',"help") == NO_ERROR)
+			if (compareOptionString((*argv)[iArgv],'h',"help") == OPT_NO_ERROR)
 			{
 				free(nbValOption);
 				RET_ERROR(DISPLAY_HELP, "Display help");
@@ -347,7 +347,7 @@ int parseCommandLineOption(int *argc, char*** argv, struct SOption *option, stru
 		}
 	}
 	free(nbValOption);
-	RET_ERROR(NO_ERROR, "No error");
+	RET_ERROR(OPT_NO_ERROR, "No error");
 }
 
 int parseConfigFileOption(char* configFile, int *argc, char*** argv, struct SOption *option, struct SOptionOut **cmdOptionLine)
@@ -439,7 +439,7 @@ int parseCommandLine(int *argc, char*** argv,
 					 struct SOption *option, struct SOptionOut **commandLine,
 					 int nbMinArg, int noConfig)
 {
-	if (parseCommandLineOption(argc,argv,option,commandLine) != NO_ERROR)
+	if (parseCommandLineOption(argc,argv,option,commandLine) != OPT_NO_ERROR)
 	{
 		return getError();
 	}
@@ -449,7 +449,7 @@ int parseCommandLine(int *argc, char*** argv,
 		int o;
 		if ((o=optionIndex(*commandLine,'c')) != ERROR_UNKNOWN)
 		{
-			if (parseConfigFileOption((*commandLine)[o].argv[0],argc,argv,option,commandLine) != NO_ERROR)
+			if (parseConfigFileOption((*commandLine)[o].argv[0],argc,argv,option,commandLine) != OPT_NO_ERROR)
 			{
 				return getError();
 			}
@@ -462,5 +462,5 @@ int parseCommandLine(int *argc, char*** argv,
 		sprintf(errorStr, "Wrong number of arg, %d expected\n\n", nbMinArg);
 		RET_ERROR(ERROR_NBARG, errorStr);
 	}
-	return NO_ERROR;
+	return OPT_NO_ERROR;
 }

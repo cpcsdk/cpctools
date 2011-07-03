@@ -39,7 +39,7 @@ COptionParser::~COptionParser()
 
 bool COptionParser::ParseCommandLine(int *argc, char ***argv, int nbMinArg, bool useConfig)
 {
-	return (parseCommandLine(argc, argv, const_cast<SOption*>(_options), &_optionsOut, nbMinArg, useConfig ? 0 : 1) == NO_ERROR);
+	return (parseCommandLine(argc, argv, const_cast<SOption*>(_options), &_optionsOut, nbMinArg, useConfig ? 0 : 1) == OPT_NO_ERROR);
 }
 
 bool COptionParser::FindOption(const char shortName) const
