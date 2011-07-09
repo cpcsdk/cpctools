@@ -107,6 +107,8 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 
 
 void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
+	assert(emulator);
+	assert(emulator->GetRenderer().GetVideoPlugin());
 	emulator->GetRenderer().GetVideoPlugin()->LockOutput();
 	wxImage *imgPlugin;
 	imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
@@ -129,7 +131,6 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
 		dc.CrossHair(scrpos, 2*y+1);
 		dc.SetPen(*wxWHITE_PEN);
 		dc.CrossHair(scrpos-1, 2*y);
-
 	}
 }
 
@@ -144,12 +145,16 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 	assert(emulator->isInit());
 
 #ifdef USE_PTHREAD
+	assert(emulator->GetRenderer().GetVideoPlugin());
 	if(emulator->GetRenderer().GetVideoPlugin()->IsUpdate())
 	{
 		DebugLogMessage("TryLockOutput succes");
 		emulator->GetRenderer().GetVideoPlugin()->LockOutput();
+
 		wxImage *imgPlugin;
 		imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+
+		assert(imgPlugin);
 		wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
 		//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
 		wxClientDC dc(getPanel());

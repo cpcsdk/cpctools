@@ -790,9 +790,12 @@ void Renderer::PreRenderNormalFunction::PreRender(unsigned int memAddr)
 	_renderPos += 4;*/
 	register byte bVidMem = *(_memory + memAddr);
 	register byte bVidMem2 = *(_memory + memAddr + 1);
+#if 0
 #ifdef __SSE__
-	_mm_prefetch(_modeMap + (bVidMem * 2), _MM_HINT_NTA);
-	_mm_prefetch(_modeMap + (bVidMem2 * 2), _MM_HINT_NTA);
+	// TODO voire pour clang
+	_mm_prefetch((_modeMap + (bVidMem * 2)), _MM_HINT_NTA);
+	_mm_prefetch((_modeMap + (bVidMem2 * 2)), _MM_HINT_NTA);
+#endif
 #endif
 	*_renderPos = *(_modeMap + (bVidMem * 2));
 	*(_renderPos + 1) = *(_modeMap + (bVidMem * 2) + 1);

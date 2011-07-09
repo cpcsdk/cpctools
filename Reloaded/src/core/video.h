@@ -165,6 +165,8 @@ public:
 
 	virtual void Screenshot(string filename) = 0;
 
+	bool _is_init;
+	virtual bool isInit() const {return _is_init;}
 protected:
 	//! Default constructor
 	VideoPlugin(const string name, const dword format, const byte halfPixels);

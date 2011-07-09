@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
+#include <cassert>
 
 #include "video.h"
 #include "WXVideo.h"
@@ -40,6 +41,8 @@
 
 void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 {
+	assert((w > 0) && (h > 0) && (bpp > 0));
+
     publicSurfaceSync.lock();
 	if(bpp != 24)
 	{
@@ -48,17 +51,18 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 		return NULL;
 	}
 
-	if (!fs)
+	if(!fs)
 	{
-		w=CPCVisibleSCRWidth*2;
-		h=CPCVisibleSCRHeight*2;
+		w = CPCVisibleSCRWidth*2;
+		h = CPCVisibleSCRHeight*2;
 	}
 
 	_outputWidth = w;
 	_outputHeight = h;
 
-	_outputSurface = (unsigned char*)malloc(h*w*3*sizeof(unsigned char));
-	if (!_outputSurface)
+	//_outputSurface = (unsigned char*)malloc(h*w*3*sizeof(unsigned char));
+	_outputSurface = new uint8_t[h*w*3];
+	if(!_outputSurface)
 	{
 		CriticalLogMessage("Creating output surface failed");
         publicSurfaceSync.unlock();
@@ -72,13 +76,22 @@ void* WXDoubleLinePlugin::Init(int w,int h, int bpp, bool fs)
 	_publicBPP = 24;
 	_publicPitch = CPCVisibleSCRWidth*4*_publicBPP/8;
 
-	img = new wxImage(w,h,(unsigned char*)_outputSurface,true);
+	img = new wxImage(w,h,(uint8_t*)_outputSurface,true);
 	//img = new wxImage(CPCVisibleSCRWidth*2,CPCVisibleSCRHeight,(unsigned char*)_publicVideo->pixels,true);
+
+	assert(img);
     bmp = new wxBitmap(*img);
+
+	assert(bmp);
+	assert(wxTheApp);
 	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
+
+	assert(f);
 	f->SetEmuImage(img);
 
     publicSurfaceSync.unlock();
+
+	_is_init = true;
 	return (void*)_publicVideo;
 }
 
@@ -124,7 +137,7 @@ bool WXDoubleLinePlugin::IsUpdate()
 void WXDoubleLinePlugin::Flip()
 {
     publicSurfaceSync.lock();
-	for(int i = 0; i < 270; i++) {
+	for(int i = 0; i < 270 /* TODO: define ou variable */; i++) {
 		memcpy((uint8_t*)_publicVideo + i * _publicPitch + _publicPitch/2,
 			(uint8_t*)_publicVideo + i * _publicPitch, _publicWidth * 3);
 	}
@@ -146,6 +159,8 @@ void WXDoubleLinePlugin::Flip()
 
 #if !USE_PTHREAD
 	CapriceWindowImpl* f = static_cast<CapriceApp*>(wxTheApp)->frame;
+	assert(f);
+
 	if (f->IsShownOnScreen() && !f->IsIconized())
 	{
     	wxBitmap bmp(*img);
@@ -155,6 +170,7 @@ void WXDoubleLinePlugin::Flip()
 		dc.DrawBitmap(bmp,0,0,false);
 	}
 #endif
+
     isUpdateSync.unlock(); // Indicate update of output
 }
 
@@ -172,10 +188,14 @@ void WXDoubleLinePlugin::Screenshot(string filename)
 void WXDoubleLinePlugin::Close()
 {
     publicSurfaceSync.lock();
+
 	delete img;
 	img = NULL;
-	free(_outputSurface);
+
+	//free(_outputSurface);
+	delete [] (uint8_t*)_outputSurface;
 	_outputSurface = NULL;
+
     publicSurfaceSync.unlock();
 }
 

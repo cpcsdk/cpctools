@@ -40,10 +40,11 @@ int VideoPlugin::CPCVisibleSCRWidth = 384; // visible width: 4+40+4 * 8
 int VideoPlugin::CPCVisibleSCRHeight = 270;
 
 VideoPlugin::VideoPlugin(const string name, const uint32_t format, const uint8_t halfPixels) :
-_name(name),
-_formats(format),
-_halfPixels(halfPixels),
-_postRenderCallBack(NULL)
+	_name(name),
+	_formats(format),
+	_halfPixels(halfPixels),
+	_postRenderCallBack(NULL),
+	_is_init(false)
 {
 }
 
