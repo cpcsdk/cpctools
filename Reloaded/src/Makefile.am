@@ -35,7 +35,7 @@ endif
 
 caprice_LDADD += \
 	core/libcapricecore.a \
-    $(LIB765) $(PNG_LIB) $(TIMER_LIB)
+    $(LIB765) $(PNG_LIB)
 
 # Must not be linked in Haiku
 if MINGW
