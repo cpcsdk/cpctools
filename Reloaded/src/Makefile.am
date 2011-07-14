@@ -54,7 +54,7 @@ endif
 if WITH_ASM
 SUBDIRS += asm
 caprice_LDADD += asm/libsjasm.a \
-                 asm\libsjasminternal.a 
+                 asm/libsjasminternal.a 
 if MINGW 
 else
 caprice_LDADD += -ldl

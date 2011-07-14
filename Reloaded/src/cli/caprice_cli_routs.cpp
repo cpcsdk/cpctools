@@ -172,7 +172,7 @@ void caprice_cli_memory_poke(int address, int value)
 void caprice_cli_memory_disasm_quantity(int address, int size)
 {
    std::cout << address << "\t" << size << endl;
-  Desass(
+  Disassemble(
       Emulator::getInstance()->GetMemory(),
       (std::ostream &) std::cout,
       address,
