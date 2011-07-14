@@ -11,7 +11,7 @@ caprice_CPPFLAGS = -I$(srcdir)/core -I$(srcdir)/gui -DUNICODE
 
 #caprice core needs to be before portaudio and soundlib
 #caprice wx needs to be after mingw32 so we can find WinMain ?
-caprice_LDADD =
+caprice_LDADD = $(SOUNDLIB) $(SOUND_OUTPUT_LIB)
 
 if MINGW
 caprice_LDADD += $(MINGW_LIB)
@@ -33,8 +33,9 @@ if HAIKU
   caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame
 endif
 
-caprice_LDADD += core/libcapricecore.a \
-                 $(LIB765) $(PNG_LIB) $(SOUNDLIB) $(SOUND_OUTPUT_LIB) $(TIMER_LIB)
+caprice_LDADD += \
+	core/libcapricecore.a \
+    $(LIB765) $(PNG_LIB) $(TIMER_LIB)
 
 # Must not be linked in Haiku
 if MINGW

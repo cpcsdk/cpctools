@@ -375,7 +375,8 @@ AC_SUBST(CFLAGS)
 
 # TODO: Detect other timer library
 AC_SEARCH_LIBS([clock_gettime], [rt],
-        AC_SUBST([TIMER_LIB], [-lrt])
+        [],
+        AC_MSG_ERROR(Unable to find clock_gettime)
         )
 
 #Output file
