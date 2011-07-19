@@ -16,6 +16,15 @@ import glob         # glob() expande los patrones de los ficheros
 from optparse import make_option, OptionParser
 
 
+class MemoryAddressError(Exception):
+    """Exception raised if memory address is invalid in CPC memory space"""
+    def __init__(self, addr):
+        self.addr = addr
+
+    def __str__(self):
+        return hex(self.addr)
+
+
 # Procesa la línea de comandos
 def procesar_linea_comandos(linea_de_comandos):
     """
@@ -26,7 +35,7 @@ def procesar_linea_comandos(linea_de_comandos):
         linea_de_comandos = sys.argv[1:]
 
     version_programa = "%prog v0.1"
-    uso_programa = "usage: %prog [options] song1.sks son2.sks ... songX.sks"
+    uso_programa = "usage: %prog [options] song1.sks song2.sks ... songX.sks"
     descripcion_programa = "%prog recompile STarKos song files."
 
     # definimos las opciones que soportaremos desde la lnea de comandos
@@ -51,10 +60,10 @@ def procesar_linea_comandos(linea_de_comandos):
             lista_ficheros = lista_ficheros + glob.glob(i)
     try:
         opciones.recompile_address = int(opciones.recompile_address, 16)
-        if (0 > opciones.recompile_address) or (opciones.recompile_address > 0x10000):
-            raise Exception
-    except:
-        parser.error("Address to recompile invalid.")
+        if (0 > opciones.recompile_address) or (opciones.recompile_address > 0xFFFF):
+            raise MemoryAddressError(opciones.recompile_address)
+    except MemoryAddressError as e:
+        parser.error("Address to recompile (%s) invalid." % e)
 
     return opciones, lista_ficheros
 
