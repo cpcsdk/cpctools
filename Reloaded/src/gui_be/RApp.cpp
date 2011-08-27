@@ -8,6 +8,9 @@
 #include "RAudio.h"
 #include "RWin.h"
 
+#include <FindDirectory.h>
+#include <Path.h>
+
 
 int main(int argc, char* argv[])
 {
@@ -29,7 +32,10 @@ ReloadedApp::ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded")
 	mEmu->setVideoPlugin(&RVidPlugin::Create);
 	mEmu->setAudioPlugin(new BeAudioPlugin());
 
-	mEmu->setCfgPath("/Donnees/Dev/cpcsdk/reloaded");
+	BPath path;
+	find_directory(B_USER_SETTINGS_DIRECTORY, &path);
+	path.Append("Reloaded");
+	mEmu->setCfgPath(path.Path());
 
 	mEmu->Init();
 
