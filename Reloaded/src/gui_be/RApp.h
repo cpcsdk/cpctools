@@ -13,6 +13,8 @@ class ReloadedApp : public BApplication
 	public:
 		ReloadedApp();
 		~ReloadedApp() {delete mEmu;}
+		
+		void RefsReceived(BMessage* message);
 
 	private:
 		REmulator* mEmu;

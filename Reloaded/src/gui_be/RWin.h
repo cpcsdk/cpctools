@@ -10,6 +10,7 @@
 #include <MenuBar.h>
 #include <MenuItem.h>
 #include <Bitmap.h>
+#include <FilePanel.h>
 
 #include "REmulator.h"
 #include "video.h"
@@ -27,7 +28,7 @@ class ReloadedWin : public BWindow
 			BMenuBar* menu = new BMenuBar(BRect(0,0,847,16),"mainmenu");
 				BMenu* file = new BMenu("File");
 				menu->AddItem(file);
-					BMenuItem* insertdsk = new BMenuItem("Insert Disc", new BMessage());
+					BMenuItem* insertdsk = new BMenuItem("Insert Disc", new BMessage('dins'));
 					file->AddItem(insertdsk);
 			AddChild(menu);
 			
@@ -63,7 +64,13 @@ class ReloadedWin : public BWindow
 				case 'rfsh':
 					fBitmapView->Invalidate();
 					break;
-
+					
+				case 'dins':
+				{
+					BFilePanel* f = new BFilePanel(B_OPEN_PANEL, &be_app_messenger, NULL, B_FILE_NODE, false);
+					f->Show();
+					break;
+				}
 				default:
 					BWindow::MessageReceived(mess);
 					break;
