@@ -82,15 +82,15 @@ void t_PSG::Emulate(int iCycleCount)
 {
     AudioPlugin& ap = Emulator::getInstance()->GetAudioPlugin();
 	//if (pbSndBufferPtr == NULL) return;
-    if(ap.getBuffer() == NULL) return;
+	
+	uint8_t* bufferPtr = ap.getBuffer();
+    if(bufferPtr == NULL) return;
 #ifdef ST_SOUND
     cycle_count += iCycleCount;
 
     if (cycle_count >= snd_cycle_count)
     {
         cycle_count -= snd_cycle_count;
-
-        uint8_t* bufferPtr = ap.getBuffer();
 
         //m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
         m_Ym2149->updateStereo((ymsample*)bufferPtr, (ymint)1);

@@ -43,6 +43,7 @@ class Log
         {
             if(!instance) instance = new Log();
         }
+        
         static inline void log(const char *format, ...)
         {
             if(!instance) init();
@@ -57,6 +58,7 @@ class Log
 #endif
             va_end(args);
         }
+        
         static inline void debugLog(const char *formatIn, ...)
         {
 #if DEBUG
@@ -80,6 +82,7 @@ class Log
             formatOut = NULL;
 #endif
         }
+        
         static inline void infoLog(const char *format, ...)
         {
             if(!instance) init();
@@ -94,6 +97,7 @@ class Log
 #endif
             va_end(args);
         }
+        
     protected:
         Log() {};
         virtual ~Log() {};

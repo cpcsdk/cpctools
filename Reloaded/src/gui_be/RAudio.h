@@ -31,22 +31,36 @@ class BeAudioPlugin : public AudioPlugin
         int init(t_CPC& cpc, t_PSG& psg)
 		{
 			gs_audio_format format;
-			format.frame_rate = 44100; // TOOD : use config
-			format.channel_count = 2;
-			format.format = gs_audio_format::B_GS_F; // float
+			format.frame_rate = cpc.snd_playback_rate;
+			format.channel_count = cpc.snd_stereo ? 2 : 1;
+			format.format = gs_audio_format::B_GS_S16;
+			switch(cpc.snd_bits)
+			{
+				case 8:
+					format.format = gs_audio_format::B_GS_U8;
+					break;
+				case 16:
+					format.format = gs_audio_format::B_GS_S16;
+					break;
+				case 32:
+					format.format = gs_audio_format::B_GS_S32;
+					break;
+				default:
+					WarningLogMessage("Wrong sound bits count in config. Falling back to 16-bits audio.");	
+			}
 			format.buffer_size = 0; // auto choose
-			soundOutput = new BPushGameSound(1, &format);
+			soundOutput = new BPushGameSound(1024, &format);
 
 			if (soundOutput->InitCheck() != B_OK)
 			{
-				printf("BPushGameSound init fail\n");
+				ErrorLogMessage("BPushGameSound init failed !");
 				return -1;
 			}
 
 			status_t sta = soundOutput->LockForCyclic((void**)&outBuf, &outSize);
 
 			if (sta == BPushGameSound::lock_failed) {
-				printf("unable to lock sound buffer\n");
+				ErrorLogMessage("unable to lock BPushGameSound sound buffer");
 				return -2;
 			}
 			return 0;
@@ -54,6 +68,7 @@ class BeAudioPlugin : public AudioPlugin
 
         void shutdown()
 		{
+			soundOutput->UnlockCyclic;
 			delete soundOutput;
 			soundOutput = NULL;
 		}
@@ -61,10 +76,16 @@ class BeAudioPlugin : public AudioPlugin
         int update() {return 0;}
         void pause() {}
         void resume() {}
-        uint8_t* getBuffer() {return outBuf;}
+        uint8_t* getBuffer()
+        {
+        	if (++curWPos >= outSize)
+        		curWPos = 0;
+        	return outBuf + curWPos;
+        }
 	private:
 		BPushGameSound* soundOutput;
 		uint8_t* outBuf;
+		size_t curWPos;
 		size_t outSize;
 };
 
