@@ -68,9 +68,9 @@ protected:
 		ALL					= 0xffffffff
 	};
 
-protected:
-	static int CPCVisibleSCRWidth;
-	static int CPCVisibleSCRHeight;
+public:
+	static const int CPCVisibleSCRWidth;
+	static const int CPCVisibleSCRHeight;
 
 protected:
 	//! Plugin name

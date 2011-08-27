@@ -9,21 +9,20 @@
 #include <Locker.h>
 #include <MenuBar.h>
 #include <MenuItem.h>
+#include <Bitmap.h>
 
 #include "REmulator.h"
+#include "video.h"
 
-class ReloadedWin : public BDirectWindow
+#include "RBitmapView.h"
+
+class ReloadedWin : public BWindow
 {
 	public:
-		ReloadedWin() : BDirectWindow(BRect(80,80,847,619),"Reloaded", B_TITLED_WINDOW,
+		ReloadedWin() : BWindow(BRect(80,80,847,619),"Reloaded", B_TITLED_WINDOW,
 			B_NOT_ZOOMABLE|B_NOT_RESIZABLE|B_QUIT_ON_WINDOW_CLOSE)
 		{
 			SetSizeLimits(847-80,847-80,619-61,619-61);
-			fConnected = false;
-			fConnectionDisabled = false;
-			locker = new BLocker();
-			fClipList = NULL;
-			fNumClipRects = 0;
 
 			BMenuBar* menu = new BMenuBar(BRect(0,0,847,16),"mainmenu");
 				BMenu* file = new BMenu("File");
@@ -31,12 +30,13 @@ class ReloadedWin : public BDirectWindow
 					BMenuItem* insertdsk = new BMenuItem("Insert Disc", new BMessage());
 					file->AddItem(insertdsk);
 			AddChild(menu);
-
-			if (!SupportsWindowMode()) {
-				SetFullScreen(true);
-			}
-
-			fDirty = true;
+			
+			BRect bitmapArea(0,0,VideoPlugin::CPCVisibleSCRWidth * 2,VideoPlugin::CPCVisibleSCRHeight);
+			contents = new BBitmap(bitmapArea, B_RGB32);
+			fBitmapView = new RBitmapView(contents);
+			AddChild(fBitmapView);
+			fBitmapView->MoveTo(0, menu->Bounds().bottom + 1);
+			
 			Show();
 		}
 
@@ -60,31 +60,20 @@ class ReloadedWin : public BDirectWindow
 					REmulator::getInstance()->ReleaseKey(k,m);
 					break;
 
+				case 'rfsh':
+					fBitmapView->Invalidate();
+					break;
+
 				default:
-					BDirectWindow::MessageReceived(mess);
+					BWindow::MessageReceived(mess);
 					break;
 			}
 		}
-
-		void   DirectConnected(direct_buffer_info *info);
-
-		uint8*		fBits;
-		BLocker*       locker;
-		int32          fRowBytes;
+		
+		BBitmap& getBitmap() {return *contents;}
 	private:
-		color_space    fFormat;
-		clipping_rect  fBounds;
-
-		uint32         fNumClipRects;
-		clipping_rect* fClipList;
-
-		bool           fDirty;      // needs refresh?
-		bool           fConnected;
-		bool           fConnectionDisabled;
-		thread_id      fDrawThreadID;
-
-		void MenusBeginning() {locker->Lock();}
-		void MenusEnding() {locker->Unlock();}
+		BView* fBitmapView;
+		BBitmap* contents;
 };
 
 #endif

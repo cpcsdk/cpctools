@@ -15,6 +15,5 @@ class ReloadedApp : public BApplication
 		~ReloadedApp() {delete mEmu;}
 
 	private:
-		ReloadedWin* mWin;
 		REmulator* mEmu;
 };

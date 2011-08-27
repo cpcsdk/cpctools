@@ -68,7 +68,7 @@ class BeAudioPlugin : public AudioPlugin
 
         void shutdown()
 		{
-			soundOutput->UnlockCyclic;
+			soundOutput->UnlockCyclic();
 			delete soundOutput;
 			soundOutput = NULL;
 		}
