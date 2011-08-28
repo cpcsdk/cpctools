@@ -273,7 +273,7 @@ bool CAksFileTransfert::SendFileSize(const CAksCommand &cmd)
 	
 	if (_inStream != NULL)
 	{
-		std::ios::pos_type pos = _inStream->tellg();
+		std::streampos pos = _inStream->tellg();
 		
 		_inStream->seekg(0,std::ios::end);
 		fileSize = _inStream->tellg();

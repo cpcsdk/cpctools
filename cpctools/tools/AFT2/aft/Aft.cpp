@@ -27,8 +27,7 @@ static const std::string authorName = "Targhan/Ramlaid/Krusty";
 static const std::string authorMail = "cpcTools@ramlaid.com";
 static const std::string appliName = "aft";
 static const std::string appliUsageShort = "";
-static const std::string appliUsageLong = "\n\
-Arkos File Transfert tool";
+static const std::string appliUsageLong = "\nArkos File Transfert tool";
 
 int main(int argc, char *argv[])
 {
