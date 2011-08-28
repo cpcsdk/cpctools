@@ -1,6 +1,6 @@
 /* GFX2CRTC - raw2crtc.c 
  * CloudStrife - 20080921
- * Diffusé sous licence libre CeCILL v2
+ * DiffusÃ© sous licence libre CeCILL v2
  * Voire LICENCE
  */
 
@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   unsigned long inSize;
   unsigned long outSize;
 
-  unsigned char r1, r9;
+  unsigned char r1, r6, r9;
   unsigned short width;
   unsigned short height;
   unsigned char mode;
@@ -67,7 +67,6 @@ int main(int argc, char **argv)
   fread(inBuffer, 1, inSize, inFile);
   fclose(inFile);
 
-  unsigned char r6;
   outBuffer = raw2crtc(inBuffer, width, height, mode, r9, &outSize, &r1, 0, 0, &r6);
 
   printf("Taille de l'écran de sortie : %lu\n",outSize);

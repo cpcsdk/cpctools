@@ -1,6 +1,6 @@
 /* GFX2CRTC - libraw2crtc.c
  * CloudStrife - 20080921
- * Diffusé sous licence libre CeCILL v2
+ * DiffusÃ© sous licence libre CeCILL v2
  * Voire LICENCE
  */
 
@@ -113,43 +113,49 @@ unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned sho
   }
   memset(allocationBuffer, 0, 0xFFFF);
 
-  unsigned char r6;
-  r6 = height/(r9+1);
-  *reg6 = r6;
-
-  for(unsigned char vcc = 0; vcc < r6; vcc++)
   {
-    for(unsigned char rcc = 0; rcc < (r9+1); rcc++)
-    {
-      for(unsigned char hcc = 0; hcc < *r1; hcc++)
-      {
-	for(unsigned char cclk = 0; cclk < 2; cclk++)
+	unsigned char r6;
+	unsigned char vcc,rcc,hcc,cclk;
+	r6 = height/(r9+1);
+	*reg6 = r6;
+	
+	for(vcc = 0; vcc < r6; vcc++)
 	{
-	  x = (hcc << 1 | cclk);
-	  y = vcc*(r9+1) + rcc;
-	  *(tmpBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1, r12, r13)) = (*ptrMode)(input + y*width + x*nbPixPerByte);
-	  *(allocationBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1, r12, r13)) += 1;
+	    for(rcc = 0; rcc < (r9+1); rcc++)
+	    {
+	      for(hcc = 0; hcc < *r1; hcc++)
+	      {
+			for(cclk = 0; cclk < 2; cclk++)
+			{
+			  x = (hcc << 1 | cclk);
+			  y = vcc*(r9+1) + rcc;
+			  *(tmpBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1, r12, r13)) = (*ptrMode)(input + y*width + x*nbPixPerByte);
+			  *(allocationBuffer + addrCalc(vcc, rcc, hcc, cclk, *r1, r12, r13)) += 1;
+			}
+	      }
+	    }
 	}
-      }
-    }
   }
 
-  for(unsigned short i = 0; i < 0xFFFF; i++)
-  {
-    if(*(allocationBuffer + i) > 1)
-    {
-      printf("Attention : Ecriture multiple a l'adresse mémoire %d\n",i);
-    }
-    if(*(allocationBuffer + i) > 0)
-    {
-      maxAddr = i;
-    }
-    if((*(allocationBuffer + i) == 1) && (minAddrIsDefined == 0))
-    {
-      minAddr = i;
-      minAddrIsDefined = 1;
-    }
-  }
+	{
+	  unsigned short i;
+	  for(i = 0; i < 0xFFFF; i++)
+	  {
+	    if(*(allocationBuffer + i) > 1)
+	    {
+	      printf("Attention : Ecriture multiple a l'adresse mémoire %d\n",i);
+	    }
+	    if(*(allocationBuffer + i) > 0)
+	    {
+	      maxAddr = i;
+	    }
+	    if((*(allocationBuffer + i) == 1) && (minAddrIsDefined == 0))
+	    {
+	      minAddr = i;
+	      minAddrIsDefined = 1;
+	    }
+	  }
+	}
 
   *outSize = (maxAddr + 1) - minAddr;
 
@@ -160,16 +166,18 @@ unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned sho
     exit(4);
   }
 
-  unsigned char *ptrTmp;
-  unsigned char *ptrOut;
-  ptrTmp = tmpBuffer + minAddr;
-  ptrOut = outBuffer;
-
-  for(unsigned short i = minAddr; i <= maxAddr; i++)
-  {
-    *(ptrOut++) = *(ptrTmp++);
-  }
-
+	{
+	  unsigned char *ptrTmp;
+	  unsigned char *ptrOut;
+	  unsigned short i;
+	  ptrTmp = tmpBuffer + minAddr;
+	  ptrOut = outBuffer;
+	
+	  for(i = minAddr; i <= maxAddr; i++)
+	  {
+	    *(ptrOut++) = *(ptrTmp++);
+	  }
+	}
   free(tmpBuffer);
   tmpBuffer = NULL;
   free(allocationBuffer);

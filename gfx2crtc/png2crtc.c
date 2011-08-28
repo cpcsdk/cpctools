@@ -1,6 +1,6 @@
 /* GFX2CRTC - png2crtc.c
  * CloudStrife - 20080921
- * Diffusé sous licence libre CeCILL v2
+ * DiffusÃ© sous licence libre CeCILL v2
  * Voire LICENCE
  */
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   unsigned char *inBuffer, *outBuffer;
   unsigned long outSize;
 
-  unsigned char r1, r9, r12, r13;
+  unsigned char r1, r6, r9, r12, r13;
   png_uint_32 width;
   png_uint_32 height;
   int bitdepth;
@@ -43,7 +43,8 @@ int main(int argc, char **argv)
 
   if((argc != 3) && (argc != 4) && (argc != 5) && (argc != 6) && (argc != 7))
   {
-    printf("Utilisation : %s input_filename output_filename [registre9] [mode] [r12] [r13]\n",argv[0]);
+    printf("Utilisation : %s input_filename output_filename [registre9] [mode] "
+    "[r12] [r13]\n",argv[0]);
     exit(0);
   }
 
@@ -94,7 +95,8 @@ int main(int argc, char **argv)
     exit(2);
   }
 
-  png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, (png_voidp)NULL, NULL, NULL);
+  png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, (png_voidp)NULL, NULL,
+  	NULL);
   if (!png_ptr) return (ERROR);
 
   info_ptr = png_create_info_struct(png_ptr);
@@ -123,11 +125,14 @@ int main(int argc, char **argv)
 
   png_read_info(png_ptr, info_ptr);
 
-  png_get_IHDR(png_ptr, info_ptr, &width, &height, &bitdepth, &colorType, NULL, NULL, NULL);
+  png_get_IHDR(png_ptr, info_ptr, &width, &height, &bitdepth, &colorType, NULL,
+  	NULL, NULL);
 
-  if(!((colorType == PNG_COLOR_TYPE_GRAY) || (colorType == PNG_COLOR_TYPE_PALETTE)))
+  if(!((colorType == PNG_COLOR_TYPE_GRAY)
+  	|| (colorType == PNG_COLOR_TYPE_PALETTE)))
   {
-    puts("Ce PNG n'est pas dans un format exploitable (niveaux de gris ou palette)");
+    puts("Ce PNG n'est pas dans un format exploitable "
+    	"(niveaux de gris ou palette)");
     return (ERROR);
   }
 
@@ -152,7 +157,8 @@ int main(int argc, char **argv)
       }
       default:
       {
-        puts("Ce PNG n'est pas dans un format exploitable (bitdepth = 1, 2 ou 4)");
+        puts("Ce PNG n'est pas dans un format exploitable"
+        	"(bitdepth = 1, 2 ou 4)");
         return (ERROR);
       }
     }
@@ -176,7 +182,6 @@ int main(int argc, char **argv)
 
   png_read_image(png_ptr, ptrRow);
 
-  unsigned char r6;
   outBuffer = raw2crtc(inBuffer, width, height, mode, r9, &outSize, &r1, r12, r13, &r6);
 
   printf("Taille de l'écran de sortie : %lu\n",outSize);
