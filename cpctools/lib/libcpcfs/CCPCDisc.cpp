@@ -57,7 +57,7 @@ une piste fait 6250 octets
 12 octets de synchro
 3 octets d'id
 1 octet -&fb
-n octet de donnée
+n octet de donnÃ©es
 2 octets de crc
 n octet de gap &3e
 
@@ -70,7 +70,8 @@ const unsigned int CCPCDisc::EntrySize = 32;
 const unsigned char CCPCDisc::FormatByte = 0xe5;
 const unsigned int CCPCDisc::MaxTrackSize = 6250;
 const unsigned int CCPCDisc::SectorHeaderSize = 62;
-const unsigned int CCPCDisc::MaxSectorPerTrack = 32; // will never exceed 19 sectors size 0 per tracks !
+const unsigned int CCPCDisc::MaxSectorPerTrack = 32;
+	// will never exceed 19 sectors size 0 per tracks !
 const unsigned int CCPCDisc::MaxGAPSize = 0x4e;
 const unsigned int CCPCDisc::SectorGAPSizeArray[] =
 {
@@ -134,7 +135,8 @@ void CCPCDisc::CDiscFileEntryKey::convertStringToFilename(const string &i_name)
 	string e;
 	if (n.find(FILE_SEPARATOR) != string::npos)
     {
-		n = n.substr(n.find_last_of(FILE_SEPARATOR)+1,n.size() - n.find_last_of(FILE_SEPARATOR));
+		n = n.substr(n.find_last_of(FILE_SEPARATOR)+1,n.size()
+			- n.find_last_of(FILE_SEPARATOR));
     }
 	if (n.find('.') != string::npos)
 	{
@@ -159,7 +161,8 @@ void CCPCDisc::CDiscFileEntryKey::convertStringToFilename(const string &i_name)
 
 bool CCPCDisc::CDiscFileEntryKey::operator()(const CDiscFileEntryKey &i_file1,const CDiscFileEntryKey &i_file2) const
 {
-	return ( (i_file1.User < i_file2.User) || ((i_file1.User == i_file2.User) && (strncmp(i_file1.Name,i_file2.Name,11) < 0)) );
+	return ( (i_file1.User < i_file2.User) || ((i_file1.User == i_file2.User)
+		&& (strncmp(i_file1.Name,i_file2.Name,11) < 0)) );
 }
 
 ////////////////////////////////////////////////////
@@ -266,7 +269,7 @@ void CCPCDisc::CTrack::ComputeGapValue()
 		Geometry.dg_fmtgap = CCPCDisc::MaxGAPSize;
 		Geometry.dg_rwgap = CCPCDisc::MaxGAPSize;
 
-		for (int i=0 ; CCPCDisc::SectorGAPSizeArray[i] != (unsigned int)-1 ; i+=3)
+		for (int i=0; CCPCDisc::SectorGAPSizeArray[i] != (unsigned int)-1; i+=3)
 		{
 			if (CCPCDisc::SectorGAPSizeArray[i+0] == psh &&
 				CCPCDisc::SectorGAPSizeArray[i+1] == Geometry.dg_sectors)
@@ -278,15 +281,16 @@ void CCPCDisc::CTrack::ComputeGapValue()
 	}
 	else
 	{
-		//TOOLS_ERRORMSG("Unable to compute GAP value, not all same size for sector");
-
 		unsigned int sectorSizeCount = 0;
 		for (unsigned int s=0 ; s<Geometry.dg_sectors ; s++)
 		{
-			sectorSizeCount += (SectorIDArray[s].fmt_secsize + CCPCDisc::SectorHeaderSize);
+			sectorSizeCount += (SectorIDArray[s].fmt_secsize
+				+ CCPCDisc::SectorHeaderSize);
 		}
 
-		TOOLS_ASSERTMSG(sectorSizeCount < CCPCDisc::MaxTrackSize, "Unable to compute GAP size " << sectorSizeCount << " bytes on track > " << CCPCDisc::MaxTrackSize);
+		TOOLS_ASSERTMSG(sectorSizeCount < CCPCDisc::MaxTrackSize,
+			"Unable to compute GAP size " << sectorSizeCount
+			<< " bytes on track > " << CCPCDisc::MaxTrackSize);
 		unsigned int gapSize = CCPCDisc::MaxTrackSize - sectorSizeCount;
 		gapSize /= Geometry.dg_sectors;
 		if (gapSize > CCPCDisc::MaxGAPSize)
@@ -307,7 +311,8 @@ void CCPCDisc::CTrack::Interlace()
 	unsigned int s;
 	for (s=1 ; s<Geometry.dg_sectors ; s++)
 	{
-		linear = linear && ((SectorIDArray[s].fmt_sector - SectorIDArray[s-1].fmt_sector) == 1);
+		linear = linear && ((SectorIDArray[s].fmt_sector
+			- SectorIDArray[s-1].fmt_sector) == 1);
 	}
 	if (!linear)
 		return;
@@ -452,20 +457,25 @@ bool CCPCDisc::CTrack::IsEqual(const CTrack &track) const
 	int dataPtr = 0;
 	for (unsigned int s=0 ; s<Geometry.dg_sectors ; s++)
 	{
-		if (SectorIDArray[s].fmt_cylinder != track.SectorIDArray[s].fmt_cylinder ||
-			SectorIDArray[s].fmt_head != track.SectorIDArray[s].fmt_head ||
-			SectorIDArray[s].fmt_secsize != track.SectorIDArray[s].fmt_secsize ||
-			SectorIDArray[s].fmt_sector != track.SectorIDArray[s].fmt_sector)
+		if (SectorIDArray[s].fmt_cylinder != track.SectorIDArray[s].fmt_cylinder 
+			|| SectorIDArray[s].fmt_head != track.SectorIDArray[s].fmt_head
+			|| SectorIDArray[s].fmt_secsize
+				!= track.SectorIDArray[s].fmt_secsize
+			|| SectorIDArray[s].fmt_sector != track.SectorIDArray[s].fmt_sector)
 			return false;
 
-		if (memcmp(Data+dataPtr, track.Data+dataPtr, SectorIDArray[s].fmt_secsize) != 0)
+		if (memcmp(Data+dataPtr, track.Data+dataPtr, 	
+			SectorIDArray[s].fmt_secsize) != 0)
 		{
 			int dataPtr2 = 0;
 			for (unsigned int s2=0 ; s2<Geometry.dg_sectors ; s2++)
 			{
-				if (memcmp(Data, track.Data+dataPtr2, SectorIDArray[s].fmt_secsize) == 0)
+				if (memcmp(Data, track.Data+dataPtr2, 
+					SectorIDArray[s].fmt_secsize) == 0)
 				{
-					cout << s << ":" << SectorIDArray[s].fmt_sector << " = " << s2 << ":" << track.SectorIDArray[s2].fmt_sector << endl;
+					cout << s << ":" << SectorIDArray[s].fmt_sector << " = "
+						<< s2 << ":" << track.SectorIDArray[s2].fmt_sector
+						<< endl;
 				}
 			}
 			dataPtr2 += SectorIDArray[s].fmt_secsize;
@@ -529,7 +539,8 @@ void CCPCDisc::readDirectory()
 
 		// clean name
 		for (unsigned int i=0;i<11;i++)
-			validName = validName && ((name.Name[i] & 127)>=' ') && (name.Name[i]!=(char)CCPCDisc::DeleteUser);
+			validName = validName && ((name.Name[i] & 127)>=' ')
+				&& (name.Name[i]!=(char)CCPCDisc::DeleteUser);
 
 		if (validName)
 		{
@@ -552,12 +563,15 @@ void CCPCDisc::readDirectory()
 			CDiscFileEntry &dirEntry = _directory[name];
 
 			bool addEntry = true;
-			for(unsigned int b=16;b<CCPCDisc::EntrySize;b+=_discFormat.BlockIDSize)
+			for(unsigned int b=16; b<CCPCDisc::EntrySize;
+				b+=_discFormat.BlockIDSize)
 			{
-				if ((_discFormat.BlockIDSize == 1 || currentEntry[b+1]==0) && currentEntry[b] == 0 )
+				if ((_discFormat.BlockIDSize == 1 || currentEntry[b+1]==0)
+					&& currentEntry[b] == 0 )
 					continue;
 
-				unsigned int blockID = ordreChargement*_discFormat.NbBlocksPerEntry+(b-16);
+				unsigned int blockID = ordreChargement
+					* _discFormat.NbBlocksPerEntry+(b-16);
 				if (blockID > dirEntry.Blocks.size() ||
 					dirEntry.Blocks[blockID] != CCPCDisc::NoBlock)
 				{
@@ -567,7 +581,8 @@ void CCPCDisc::readDirectory()
 					break;
 				}
 
-				dirEntry.Blocks[blockID] = currentEntry[b] + (_discFormat.BlockIDSize-1)*256*currentEntry[b+1];
+				dirEntry.Blocks[blockID] = currentEntry[b]
+					+ (_discFormat.BlockIDSize-1)*256*currentEntry[b+1];
 				dirEntry.Size++;
 			}
 			if (addEntry)
@@ -578,7 +593,8 @@ void CCPCDisc::readDirectory()
     }
 
 	// Clean each entry block
-	for (CCPCDirectoryMap::iterator it = _directory.begin() ; it != _directory.end() ; it++)
+	for (CCPCDirectoryMap::iterator it = _directory.begin() ;
+			it != _directory.end() ; it++)
 		(*it).second.CleanBlocks();
 }
 
@@ -592,14 +608,17 @@ void CCPCDisc::writeDirectory()
 		for (int i=0;i<_discFormat.GetDirectorySize();i++)
 			_directoryBuffer[i]=(char)CCPCDisc::FormatByte;
 
-		// On en recrée un nouveau
-		for (CCPCDirectoryMap::const_iterator it=_directory.begin();it!=_directory.end();it++)
+		// On en recrÃ©e un nouveau
+		for (CCPCDirectoryMap::const_iterator it=_directory.begin();
+			it!=_directory.end();it++)
 		{
-			int nbEntry = (int)ceil(it->second.Size / (float)_discFormat.NbBlocksPerEntry);
+			int nbEntry = (int)ceil(it->second.Size
+				/ (float)_discFormat.NbBlocksPerEntry);
 			char name[11];
 			char ordreChargement=0;
 			unsigned int nbRecord = it->second.NbRecord;
-			unsigned int nbRecordMaxPerEntry = (_discFormat.BlockSize*_discFormat.NbBlocksPerEntry)/_discFormat.GetRecordSize();
+			unsigned int nbRecordMaxPerEntry = (_discFormat.BlockSize
+				* _discFormat.NbBlocksPerEntry)/_discFormat.GetRecordSize();
 
 			memcpy(name,it->first.Name,11);
 //			cout << "Writing file " << name << endl;
@@ -612,18 +631,26 @@ void CCPCDisc::writeDirectory()
 				for (unsigned int k=0;k<CCPCDisc::EntrySize;k++)
 					pCatBuffer[k]=0;
 
-				pCatBuffer[0] = (char)it->first.User;	// Numéro d'USER
+				pCatBuffer[0] = (char)it->first.User;	// NumÃ©ro d'USER
 				memcpy(pCatBuffer+1,name,11);		// Nom du fichier
-				pCatBuffer[12] = ordreChargement;	// Numéro du bloc dans le fichier
-				pCatBuffer[15] = (nbRecord > nbRecordMaxPerEntry) ? nbRecordMaxPerEntry : nbRecord; // Taille du bloc (attention, pour le dernier bloc il faut indiquer la taille restante ?)
+				pCatBuffer[12] = ordreChargement;
+					// NumÃ©ro du bloc dans le fichier
+				pCatBuffer[15] = (nbRecord > nbRecordMaxPerEntry) ? 		
+					nbRecordMaxPerEntry : nbRecord;
+					// Taille du bloc (attention, pour le dernier bloc il faut
+					// indiquer la taille restante ?)
 				for (unsigned int b=16;b<CCPCDisc::EntrySize;b+=_discFormat.BlockIDSize)
 				{
 					unsigned int bI = (ordreChargement*_discFormat.NbBlocksPerEntry + (b/_discFormat.BlockIDSize) - _discFormat.NbBlocksPerEntry);
 					if (bI < it->second.Size)
 					{
-//					    cout << name << " block " << b << " is number " << it->second.Blocks[bI] << " at offset " << b <<  " and entry number " << (int)ordreChargement << endl;
+//					    cout << name << " block " << b << " is number " 
+//							<< it->second.Blocks[bI] << " at offset " << b
+//							<<  " and entry number " << (int)ordreChargement
+//							<< endl;
 					    pCatBuffer[b] = it->second.Blocks[bI] % 256;
-					    if(_discFormat.BlockIDSize==2) pCatBuffer[b+1] = it->second.Blocks[bI] / 256;
+					    if(_discFormat.BlockIDSize==2)
+					    	pCatBuffer[b+1] = it->second.Blocks[bI] / 256;
 					}
 					    
 				}
@@ -638,22 +665,22 @@ void CCPCDisc::writeDirectory()
 
 void CCPCDisc::addDirectoryEntry(const CDiscFileEntryKey &i_name, const CDiscFileEntry &i_nameData)
 {
-    // Récupère le nombre d'entrées nécessaires pour ce fichier, vérifie qu'on a assez de place dans le catalogue
+    // RÃ©cupÃ¨re le nombre d'entrÃ©es nÃ©cessaires pour ce fichier, vÃ©rifie qu'on a 	// assez de place dans le catalogue
 //    cout << i_name.Name << " size is " << i_nameData.Size << endl;
     int nbEntry = getNbEntry(i_nameData.Size);
     TOOLS_ASSERTMSG( (nbEntry < (_discFormat.NbMaxEntry-getNbUsedEntry())) , "Directory Full");
 
-    // Regarde si une entrée avec ce om existe déjà
+    // Regarde si une entrÃ©e avec ce nom existe dÃ©jÃ à
     CCPCDirectoryMap::iterator iNorm = _directory.find(i_name);
 
-    // Si le fichier existe déjà
+    // Si le fichier existe dÃ©jÃ 
     if (iNorm != _directory.end())
     {
 	// On renomme l'ancien en .BAK
 	CDiscFileEntryKey name_bak = i_name;
 	name_bak.Name[8]='B';name_bak.Name[9]='A';name_bak.Name[10]='K';
 
-	// On regarde si il n'y a pas déjà un .BAK
+	// On regarde si il n'y a pas dÃ©jÃ  un .BAK
 	CCPCDirectoryMap::iterator iBak = _directory.find(name_bak);
 
 	if (iBak != _directory.end())
@@ -662,7 +689,7 @@ void CCPCDisc::addDirectoryEntry(const CDiscFileEntryKey &i_name, const CDiscFil
 	    CDiscFileEntryKey name_bak_del = name_bak;
 	    name_bak_del.User=CCPCDisc::DeleteUser;
 
-	    // On met à jour le catalogue
+	    // On met Ã  jour le catalogue
 	    _directory[name_bak_del] = _directory[name_bak];
 	}
 	_directory[name_bak]=_directory[i_name];
@@ -672,6 +699,7 @@ void CCPCDisc::addDirectoryEntry(const CDiscFileEntryKey &i_name, const CDiscFil
     _isDirectoryChanged = true;
 
 }
+
 void CCPCDisc::removeDirectoryEntry(const CDiscFileEntryKey &i_name)
 {
 	CCPCDirectoryMap::iterator iNorm = _directory.find(i_name);
@@ -1166,6 +1194,8 @@ unsigned int CCPCDisc::GetNbFiles() const
 {
 	return _directory.size();
 }
+
+
 string CCPCDisc::GetFilename(const unsigned int i_id, int &user) const
 {
 	unsigned int i;
@@ -1176,6 +1206,8 @@ string CCPCDisc::GetFilename(const unsigned int i_id, int &user) const
 	user = e->first.User;
 	return (e->first.getFilename());
 }
+
+
 const CCPCDisc::CDiscFileEntryKey& CCPCDisc::GetFileEntry(const unsigned int i_id) const
 {
 	unsigned int i;
@@ -1185,6 +1217,8 @@ const CCPCDisc::CDiscFileEntryKey& CCPCDisc::GetFileEntry(const unsigned int i_i
 		e++;
 	return e->first;
 }
+
+
 int CCPCDisc::GetFileSize(const unsigned int i_id) const
 {
 	unsigned int i;
@@ -1205,6 +1239,8 @@ int CCPCDisc::GetDiscCapacity() const
 
 	return capacity;
 }
+
+
 const DSK_GEOMETRY& CCPCDisc::GetDiscGeometry() const
 {
 	return _geometry;
@@ -1379,7 +1415,9 @@ dsk_format_t CCPCDisc::getLibDskFormat(const string &name)
 	return (dsk_format_t)-1;
 }
 
-CCPCDisc::TDisc CCPCDisc::guessGeometry(const string &i_filename, DSK_PDRIVER driver, DSK_GEOMETRY &geometry, bool &needAdvancedMode, bool &interlaced, bool extendedGuess)
+CCPCDisc::TDisc CCPCDisc::guessGeometry(const string &i_filename,
+	DSK_PDRIVER driver, DSK_GEOMETRY &geometry, bool &needAdvancedMode,
+	bool &interlaced, bool extendedGuess)
 {
 	TDisc format;
 
@@ -1388,13 +1426,16 @@ CCPCDisc::TDisc CCPCDisc::guessGeometry(const string &i_filename, DSK_PDRIVER dr
 		switch(isFloppy(i_filename))
 		{
 		    case 1:
-			format = guessFloppyGeometry(driver, geometry, needAdvancedMode, interlaced, extendedGuess);
+				format = guessFloppyGeometry(driver, geometry, needAdvancedMode,
+					interlaced, extendedGuess);
 			break;
 		    case 0:
-			format = guessDSKGeometry(i_filename, geometry, needAdvancedMode, interlaced, extendedGuess);
+				format = guessDSKGeometry(i_filename, geometry,
+					needAdvancedMode, interlaced, extendedGuess);
 			break;
 		    case 2:
-			format = guessRAWGeometry(i_filename, geometry, needAdvancedMode, interlaced, extendedGuess);
+				format = guessRAWGeometry(i_filename, geometry,
+					needAdvancedMode, interlaced, extendedGuess);
 			break;
 		    default:
 	//		format = -1;
@@ -1713,9 +1754,15 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 
 int CCPCDisc::isFloppy(const string &filename)
 {
-    if (strcmp(filename.c_str(),"/dev/sdb")==0 || strncmp(filename.c_str(),"/dev/disk/ufi",14))
+	// Haiku has a bug in the STL. Notice the ars to compare are not in the same 
+	// order!
+	#ifdef __HAIKU__
+	if (filename.compare("/dev/disk/ufi", 0, 13) == 0)
+	#else
+	if (filename.compare(0,7,"/dev/sd") == 0)
+	#endif
     {
-		return 2; // RAW file
+		return 2; // RAW-access device (USB floppy drive on Linux or Haiku)
     }
     else if (strcasecmp(filename.c_str(), "a:")==0 ||
 	    strcasecmp(filename.c_str(), "b:")==0 ||
@@ -1763,12 +1810,15 @@ CCPCDisc* CCPCDisc::OpenDisc(const string &i_filename, int i_inside)
 	dsk_err_t e;
 
 	e = dsk_open(&driver,i_filename.c_str(), NULL, NULL);
-	TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk - Cant open :" << string(dsk_strerror(e)));
+	TOOLS_ASSERTMSG((e==DSK_ERR_OK),
+		"Error opening dsk - Cant open :" << string(dsk_strerror(e)));
 
 	if (CCPCDisc::isFloppy(i_filename)==1)
 	{
 		e = dsk_set_forcehead(driver, i_inside);
-		TOOLS_ASSERTMSG( (e==DSK_ERR_OK) , "Error opening dsk - Cant forcehead while opening :" << string(dsk_strerror(e)));
+		TOOLS_ASSERTMSG((e==DSK_ERR_OK),
+			"Error opening dsk - Cant forcehead while opening :"
+				<< string(dsk_strerror(e)));
 	}
 
 	TDisc format;
@@ -1776,7 +1826,8 @@ CCPCDisc* CCPCDisc::OpenDisc(const string &i_filename, int i_inside)
 	bool needAdvancedMode;
 	bool interlaced;
 
-	format = guessGeometry(i_filename, driver, geometry, needAdvancedMode, interlaced);
+	format = guessGeometry(i_filename, driver, geometry, needAdvancedMode,
+		interlaced);
 
 	TOOLS_ASSERTMSG( (format != -1) , "Error opening dsk : unknown geometry");
 
@@ -1785,7 +1836,8 @@ CCPCDisc* CCPCDisc::OpenDisc(const string &i_filename, int i_inside)
 	    case RomdosD1:
 		{
 		    disc = new CCPCRomdosD1Disc;
-		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
+		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode,
+		    	interlaced);
 		    disc->readDirectory();
 		    break;
 		}
@@ -1801,14 +1853,16 @@ CCPCDisc* CCPCDisc::OpenDisc(const string &i_filename, int i_inside)
 	    case System42:
 		{
 		    disc = new CCPCSystemDisc;
-		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
+		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode,
+		    	interlaced);
 		    disc->readDirectory();
 		    break;
 		}
 	    case Unknown:
 		{
 		    disc = new CCPCUnknownDisc;
-		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode, interlaced);
+		    disc->Open(i_filename, driver, geometry, format, needAdvancedMode,
+		    	interlaced);
 		    break;
 		}
 	    default:

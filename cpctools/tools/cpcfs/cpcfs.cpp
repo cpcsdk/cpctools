@@ -200,10 +200,13 @@ int main(int argc, char* argv[])
 
 				int totalSize = 0;
 				int nbFile = 0;
-				for (CCPCDisc::CCPCDirectoryMap::const_iterator i=dir.begin();i!=dir.end();i++)
+				for (CCPCDisc::CCPCDirectoryMap::const_iterator i = dir.begin();
+					i!=dir.end(); i++)
 				{
 					std::cout.width(3);
-					std::cout << (unsigned int)i->first.User << ":" << std::string(i->first.Name,0,8) << "." << std::string(i->first.Name,8,3) << " ";
+					std::cout << (unsigned int)i->first.User << ":"
+						<< std::string(i->first.Name,0,8) << "."
+						<< std::string(i->first.Name,8,3) << " ";
 					if (i->first.System)
 					{
 						std::cout << "S";
@@ -231,7 +234,8 @@ int main(int argc, char* argv[])
 
 				int capacity = disc->GetDiscCapacity();
 
-				std::cout << nbFile << " Files, " << (capacity-totalSize) << "Kb Free/" << capacity << "Kb" << std::endl;
+				std::cout << nbFile << " Files, " << (capacity-totalSize)
+					<< "Kb Free/" << capacity << "Kb" << std::endl;
 				disc->Close();
 				delete disc;
 
