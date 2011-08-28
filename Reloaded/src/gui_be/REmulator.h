@@ -23,7 +23,8 @@ class REmulator: public Emulator {
 
 			printf("k %d\n",key);
 
-			if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused) && ((byte)cpc_key != 0xff))
+			if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused)
+				&& ((byte)cpc_key != 0xff))
 			{
 				// key is being held down
 				_input.keyboard_matrix[(byte)cpc_key >> 4] &= ~(1 << ((byte)cpc_key & 7));
@@ -91,7 +92,7 @@ class REmulator: public Emulator {
 				return false;
 			// Line 0
 			_input.keyboard_normal[87] = 0; // cursor up
-			_input.keyboard_normal[96] = 1; // cursor right
+			_input.keyboard_normal[99] = 1; // cursor right
 			_input.keyboard_normal[98] = 2; // cursor down
 			_input.keyboard_normal[57] = 3; // F9
 			_input.keyboard_normal[77] = 4; // F6
@@ -100,7 +101,7 @@ class REmulator: public Emulator {
 			_input.keyboard_normal[101] = 7; // F.
 
 			// Line 1
-			_input.keyboard_normal[99] = 16; // cursor left
+			_input.keyboard_normal[97] = 16; // cursor left
 			_input.keyboard_normal[93] = 17; // copy
 			_input.keyboard_normal[55] = 18; // f7
 			_input.keyboard_normal[56] = 19; // f8
@@ -181,7 +182,7 @@ class REmulator: public Emulator {
 
 			// Line 9 (152)
 			// joy.......
-			_input.keyboard_normal[30] = 160; // del
+			_input.keyboard_normal[30] = 159; // del
 
 			return true;
 		}
