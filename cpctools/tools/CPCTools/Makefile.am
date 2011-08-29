@@ -3,5 +3,4 @@ SUBDIRS = cpcDSK \
           cpcVideo \
           damsConverter \
           dataDBGenerator \
-          dataLinker \
-          cpcSnapshot 
+          dataLinker

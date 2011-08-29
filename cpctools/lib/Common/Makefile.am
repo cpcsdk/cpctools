@@ -1,4 +1,3 @@
-SUBDIRS = libsnapshot \
-          libVideoCPC  \
+SUBDIRS = libVideoCPC  \
           libYM
 
