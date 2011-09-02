@@ -105,18 +105,17 @@ unsigned char *raw2crtc(unsigned char *input, unsigned short width, unsigned sho
     exit(4);
   }
 
-  allocationBuffer = (unsigned char*)malloc(0xFFFF);
+  allocationBuffer = (unsigned char*)calloc(0xFFFF, 1);
   if(allocationBuffer == NULL)
   {
     printf("Allocation allocationBuffer raté\n");
     exit(4);
   }
-  memset(allocationBuffer, 0, 0xFFFF);
 
   {
 	unsigned char r6;
 	unsigned char vcc,rcc,hcc,cclk;
-	r6 = height/(r9+1);
+	r6 = (height+r9)/(r9+1);
 	*reg6 = r6;
 	
 	for(vcc = 0; vcc < r6; vcc++)
