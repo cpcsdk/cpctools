@@ -96,7 +96,15 @@ std::string CAksFileTransfert::GetFilename() const
 	#else
 		const char* pathseparator = "/";
 	#endif
-	return (_filepath+std::string(pathseparator)+std::string((char*)_amsFilename));
+	std::string result = _filepath;
+	result += pathseparator;
+	result += (char*)_amsFilename;
+	
+	int i = result.size();
+	while(result[i] == ' ') --i;
+	result.resize(i);
+	
+	return result;
 }
 
 int CAksFileTransfert::GetNbTransfertDone() const
@@ -509,7 +517,7 @@ bool CAksFileTransfert::OpenFile(const CAksCommand &cmd)
 	
 	std::cout << "file : " << fileName << std::endl;
 	
-	_inStream = new std::ifstream(fileName.c_str(), std::ios::binary);
+	_inStream = new std::ifstream(fileName.c_str(), std::ios::binary | std::ios::in);
 
 	if (_inStream->good())
 	{
