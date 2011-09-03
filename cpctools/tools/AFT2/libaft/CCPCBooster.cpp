@@ -25,7 +25,7 @@
 //        16 = /dev/ttyUSB0 .. 22 = /dev/ttyUSB7
 
 // Haiku : 0 = /dev/ports/usb0 .. 3 = /dev/ports/usb3
-CCPCBooster::CCPCBooster(int comNumber):
+CCPCBooster::CCPCBooster(std::string comNumber):
 _COMPortNumber(comNumber),
 _currentState(PortFailed),
 _currentError(ErrOK)
@@ -65,15 +65,12 @@ void CCPCBooster::OpenPort()
 
 	_currentState = PortFailed;
 
-	char portName[256];
-
 /**
  * code specifique aux windows
  */
 #if _WINDOWS
-	sprintf(portName,"COM%d",_COMPortNumber);
 
-    _COMPortHandle = CreateFile(	portName,
+    _COMPortHandle = CreateFile(_COMPortNumber.c_str(),
 						GENERIC_READ | GENERIC_WRITE,
 						0,								// must be opened with exclusive-access
 						NULL,							// no security attributes
@@ -143,10 +140,10 @@ void CCPCBooster::OpenPort()
  * Code specifique aux unices
  */
 #else
-	if (OpenComport(_COMPortNumber,115200) == 0)
+	if (OpenComport(_COMPortNumber.c_str(),115200) == 0)
 	{
 	    _currentState = PortOpened ;
-	    _COMPortHandle = _COMPortNumber;
+	    _COMPortHandle = 0;
 	}
 #endif
 	

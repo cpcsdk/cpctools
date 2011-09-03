@@ -16,15 +16,15 @@
 
 struct SOption appliOption[]=
 {
-	{'p',(char *)"comPort",0,1,1,(char *)"Set <$1> as COM port"},
+	{'p',(char *)"comPort",0,1,1,(char *)"Set <$1> as COM port (/dev/ttyS* or COM*)"},
 	{'f',(char *)"file",0,1,1,(char *)"Force <$1> to be transfered file"},
 	{'d',(char *)"directory",0,1,1,(char *)"Force <$1> to be transfered directory"},
 	{'n',(char *)"noLoop",0,1,0,(char *)"Do not loop AFT transfert"},
 	{0,NULL,0,0,0,NULL}
 };
 
-static const std::string authorName = "Targhan/Ramlaid/Krusty";
-static const std::string authorMail = "cpcTools@ramlaid.com";
+static const std::string authorName = "Targhan/Ramlaid/Krusty/PulkoMandy";
+static const std::string authorMail = "cpcsdk@googlegroups.com";
 static const std::string appliName = "aft";
 static const std::string appliUsageShort = "";
 static const std::string appliUsageLong = "\nArkos File Transfert tool";
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		}
 
 		bool noLoop = false;
-		int COMport = 1;
+		std::string COMport = "COM1";
 		std::string filename = "";
 		std::string dir = "";
 
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 			{
 			case 'p':
 				{
-					COMport = optParser.GetIntOptionI(i);
+					COMport = optParser.GetStringOptionI(i);
 					break;
 				}
 			case 'f':
@@ -85,13 +85,14 @@ int main(int argc, char *argv[])
 			i++;
 		}
 
-		std::cout << "COMport " << COMport << endl ;
 		CAksFileTransfert transfert(COMport);
 
 		if (!transfert.IsOpen())
 		{
 			std::cout << "Unable to open port COM " << COMport << std::endl;
 			return -1;
+		} else {
+			std::cout << "AFT now listening on " << COMport << std::endl;
 		}
 
 		if (filename.size() != 0)

@@ -55,7 +55,7 @@ const char* CAksFileTransfert::DisplayMessageHeader[] =
 	"Debug: "
 };
 
-CAksFileTransfert::CAksFileTransfert(int comNumber) :
+CAksFileTransfert::CAksFileTransfert(std::string comNumber) :
 CCPCBooster(comNumber),
 _transfertMode(NoTransfert),
 _nbTransfert(0),
@@ -101,8 +101,8 @@ std::string CAksFileTransfert::GetFilename() const
 	result += (char*)_amsFilename;
 	
 	int i = result.size();
-	while(result[i] == ' ') --i;
-	result.resize(i);
+	while(result[--i] == ' ');
+	result.resize(i + 1);
 	
 	return result;
 }

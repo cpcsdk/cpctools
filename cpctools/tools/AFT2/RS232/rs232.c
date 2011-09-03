@@ -38,30 +38,16 @@
 #if defined(__linux__)||defined(__HAIKU__)   /* Linux */
 
 
-int Cport[22],
+int Cport[1],
     error;
 
 struct termios new_port_settings,
        old_port_settings[22];
 
-#ifdef __HAIKU__
-char comports[4][16]={"/dev/ports/usb0","/dev/ports/usb1","/dev/ports/usb2","/dev/ports/usb3"};
-#else
-char comports[22][13]={"/dev/ttyS0","/dev/ttyS1","/dev/ttyS2","/dev/ttyS3","/dev/ttyS4","/dev/ttyS5",
-                       "/dev/ttyS6","/dev/ttyS7","/dev/ttyS8","/dev/ttyS9","/dev/ttyS10","/dev/ttyS11",
-                       "/dev/ttyS12","/dev/ttyS13","/dev/ttyS14","/dev/ttyS15","/dev/ttyUSB0",
-                       "/dev/ttyUSB1","/dev/ttyUSB2","/dev/ttyUSB3","/dev/ttyUSB4","/dev/ttyUSB5"};
-#endif
 
-int OpenComport(int comport_number, int baudrate)
+int OpenComport(const char* comport_number, int baudrate)
 {
   int baudr;
-
-  if((comport_number>21)||(comport_number<0))
-  {
-    printf("%d is not a valid comport number\n", comport_number);
-    return(1);
-  }
 
   switch(baudrate)
   {
@@ -118,22 +104,22 @@ int OpenComport(int comport_number, int baudrate)
                    break;
   }
 
-  Cport[comport_number] = open(comports[comport_number], O_RDWR | O_NOCTTY);
-  if(Cport[comport_number]==-1)
+  Cport[0] = open(comport_number, O_RDWR | O_NOCTTY);
+  if(Cport[0]==-1)
   {
-  	printf(comports[comport_number]);
+  	printf(comport_number);
     perror("unable to open comport ");
     return(1);
   }
 
-  error = tcgetattr(Cport[comport_number], old_port_settings + comport_number);
+  error = tcgetattr(Cport[0], old_port_settings + 0);
   if(error==-1)
   {
-    close(Cport[comport_number]);
+    close(Cport[0]);
     perror("unable to read portsettings ");
     return(1);
   }
-  memcpy(&new_port_settings, old_port_settings + comport_number, sizeof(new_port_settings));  /* clear the new struct */
+  memcpy(&new_port_settings, old_port_settings + 0, sizeof(new_port_settings));  /* clear the new struct */
 
   new_port_settings.c_cflag &= ~(CSIZE | PARENB | HUPCL | CSTOPB | CRTSCTS);
   new_port_settings.c_cflag |= CS8 | CLOCAL | CREAD;
@@ -145,10 +131,10 @@ int OpenComport(int comport_number, int baudrate)
   new_port_settings.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 //  new_port_settings.c_cc[VMIN] = 0;      /* block untill n bytes are received */
   new_port_settings.c_cc[VTIME] = 1;     /* block untill a timer expires (n * 100 mSec.) */
-  error = tcsetattr(Cport[comport_number], TCSANOW, &new_port_settings);
+  error = tcsetattr(Cport[0], TCSANOW, &new_port_settings);
   if(error==-1)
   {
-    close(Cport[comport_number]);
+    close(Cport[0]);
     perror("unable to adjust portsettings ");
     return(1);
   }
