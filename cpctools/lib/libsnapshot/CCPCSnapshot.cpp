@@ -15,7 +15,7 @@
 #define SNAPVERS_ID 0x10
 #define MEM_SIZE_ID 0x6b
 
-struct CCPCSnapshot::TTokenID CCPCSnapshot::TokenID[NB_SNAPSHOT_TOKEN] = 
+const struct CCPCSnapshot::TTokenID CCPCSnapshot::TokenID[NB_SNAPSHOT_TOKEN] = 
 {
 	{0x11, 2, "Z80_AF",		"\t\tZ80 register AF"},
 	{0x11, 1, "Z80_F",		"\t\tZ80 register F"},
@@ -86,7 +86,7 @@ struct CCPCSnapshot::TTokenID CCPCSnapshot::TokenID[NB_SNAPSHOT_TOKEN] =
 	{0xb4, 1, "INT_REQ",	"\t\tInterrupt request flag\n\t\t\t0=no interrupt requested\n\t\t\t1=interrupt requested"},
 };
 
-char *CCPCSnapshot::TokenSection[NB_SNAPSHOT_TOKEN_SECTION] =
+const char *CCPCSnapshot::TokenSection[NB_SNAPSHOT_TOKEN_SECTION] =
 {
 	"CPC",
 	"Z80",
@@ -187,7 +187,7 @@ void CCPCSnapshot::loadSnapshotIni(const string &filename)
 			if (tokenIdx == -1)
 				continue;
 
-			TTokenID &token = TokenID[tokenIdx];
+			const TTokenID &token = TokenID[tokenIdx];
 			string value = line.substr(line.find('=')+1, line.size() - line.find('=') - 1);
 			if (token.Size == 1)
 			{
@@ -240,7 +240,7 @@ void CCPCSnapshot::saveSnapshotIni(const string &filename) const
 		iniFile << "[" << sectionName << "]" << endl;
 		for (int t=0 ; t<NB_SNAPSHOT_TOKEN ; t++)
 		{
-			TTokenID &token = TokenID[t];
+			const TTokenID &token = TokenID[t];
 			string tokenName = token.ID;
 			if (tokenName.find(sectionName) != string::npos)
 			{
@@ -293,7 +293,7 @@ void CCPCSnapshot::saveSnapshotIni(const string &filename) const
 	}
 }
 
-CCPCSnapshot::TTokenID CCPCSnapshot::GetToken(char *i_dataID, int &o_index)
+CCPCSnapshot::TTokenID CCPCSnapshot::GetToken(const char *i_dataID, int &o_index)
 {
 	std::string token(i_dataID);
 	int p;
@@ -338,7 +338,7 @@ int CCPCSnapshot::GetTokenIndex(const string &tokenName)
 	return -1;
 }
 
-int CCPCSnapshot::GetTokenOffset(char *i_dataID)
+int CCPCSnapshot::GetTokenOffset(const char *i_dataID)
 {
 	int idx;
 	CCPCSnapshot::TTokenID t = GetToken(i_dataID,idx);
@@ -348,7 +348,7 @@ int CCPCSnapshot::GetTokenOffset(char *i_dataID)
 		return t.Offset;
 }
 
-int CCPCSnapshot::GetTokenSize(char *i_dataID)
+int CCPCSnapshot::GetTokenSize(const char *i_dataID)
 {
 	int idx;
 	CCPCSnapshot::TTokenID t = GetToken(i_dataID,idx);
@@ -359,19 +359,19 @@ int CCPCSnapshot::GetTokenSize(char *i_dataID)
 }
 
 // Renvoie la byte valeur data
-unsigned char CCPCSnapshot::tokenByteValue(char *i_dataID) const
+unsigned char CCPCSnapshot::tokenByteValue(const char *i_dataID) const
 {
 	int o = GetTokenOffset(i_dataID);
 	return _header[o];
 }
 // Renvoie la short valeur data
-unsigned short CCPCSnapshot::tokenShortValue(char *i_dataID) const
+unsigned short CCPCSnapshot::tokenShortValue(const char *i_dataID) const
 {
 	int o = GetTokenOffset(i_dataID);
 	return (_header[o]+_header[o+1]*256);
 }
 
-void CCPCSnapshot::setTokenValue(char *i_dataID,int val)
+void CCPCSnapshot::setTokenValue(const char *i_dataID,int val)
 {
 	int o = GetTokenOffset(i_dataID);
 	int s = GetTokenSize(i_dataID);

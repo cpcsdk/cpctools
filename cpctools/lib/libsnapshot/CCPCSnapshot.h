@@ -30,11 +30,11 @@ private:
 	{
 		unsigned int Offset;
 		unsigned int Size;
-		char *ID;
-		char *Description;
+		const char *ID;
+		const char *Description;
 	};
-	static struct TTokenID TokenID[NB_SNAPSHOT_TOKEN];
-	static char *TokenSection[NB_SNAPSHOT_TOKEN_SECTION];
+	static const struct TTokenID TokenID[NB_SNAPSHOT_TOKEN];
+	static const char *TokenSection[NB_SNAPSHOT_TOKEN_SECTION];
 	static unsigned char DefaultHeader[0x100];
 
 	/// Header du snapshot
@@ -53,13 +53,13 @@ private:
 
 protected:
 	// Return token struct for token, with appropriate index in data array if any
-	static TTokenID GetToken(char *i_dataID, int &o_index);
+	static TTokenID GetToken(const char *i_dataID, int &o_index);
 	// Get token struct from token name
 	static int GetTokenIndex(const string &tokenName);
 	// Renvoie l'offset du token
-	static int GetTokenOffset(char *i_dataID);
+	static int GetTokenOffset(const char *i_dataID);
 	// Renvoie la taille du token
-	static int GetTokenSize(char *i_dataID);
+	static int GetTokenSize(const char *i_dataID);
 
 public:
 	/// Constructeur par defaut
@@ -78,12 +78,12 @@ public:
 	unsigned int getSnapshotVersion() const;
 	
 	// Renvoie la byte valeur data
-	unsigned char tokenByteValue(char *i_dataID) const;
+	unsigned char tokenByteValue(const char *i_dataID) const;
 	// Renvoie la short valeur data
-	unsigned short tokenShortValue(char *i_dataID) const;
+	unsigned short tokenShortValue(const char *i_dataID) const;
 
 	// Met a jour la valeur
-	void setTokenValue(char *i_dataID,int);
+	void setTokenValue(const char *i_dataID,int);
 
 	/// Efface la memoire du snapshot
 	void clearMemory();
