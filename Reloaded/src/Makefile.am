@@ -30,7 +30,7 @@ endif
 
 if HAIKU
   SUBDIRS += gui_be
-  caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame -ltracker
+  caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame -ltracker -llocale
 endif
 
 caprice_LDADD += \
