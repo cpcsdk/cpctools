@@ -14,11 +14,11 @@
 #include <Entry.h>
 
 
-int main(int argc, char* argv[])
+int main(void)
 {
-	ReloadedApp app;
-	app.Run();
-
+	new ReloadedApp();
+	be_app->Run();
+	delete be_app;
 	return 0;
 }
 
@@ -35,7 +35,6 @@ ReloadedApp::ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded")
 	mEmu->setCfgPath(path.Path());
 
 	mEmu->Init();
-
 }
 
 
@@ -60,7 +59,7 @@ void ReloadedApp::RefsReceived(BMessage* message)
 }
 
 
-void ReloadedApp::ArgvReceived(int32 argc, char* argv[])
+void ReloadedApp::ArgvReceived(int32 argc, char** argv)
 {
 	for (int i = 0; i < argc; i++)
 	{

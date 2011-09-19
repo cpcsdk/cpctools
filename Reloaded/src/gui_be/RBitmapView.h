@@ -30,6 +30,7 @@ class RBitmapView: public BView
 				} else {
 					std::cout << "Error while creating overlay bitmap: " << strerror(res) <<
 					". Falling back to slow method.\n"; 
+					delete fDisplay;
 				}
 			}
 			

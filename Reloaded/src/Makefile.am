@@ -31,6 +31,11 @@ endif
 if HAIKU
   SUBDIRS += gui_be
   caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame -ltracker -llocale
+
+# Add resources to the executable
+all-local:: gui_be/Reloaded.rdef caprice
+	rc -o Reloaded.rsrc gui_be/Reloaded.rdef
+	xres -o caprice Reloaded.rsrc
 endif
 
 caprice_LDADD += \

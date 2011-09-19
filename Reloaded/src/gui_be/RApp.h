@@ -6,8 +6,6 @@
 
 #include "REmulator.h"
 
-class ReloadedWin;
-
 class ReloadedApp : public BApplication
 {
 	public:
@@ -15,7 +13,7 @@ class ReloadedApp : public BApplication
 		~ReloadedApp() {delete mEmu;}
 		
 		void RefsReceived(BMessage* message);
-		void ArgvReceived(int32 argc, char* argv[]);
+		void ArgvReceived(int32 argc, char** argv);
 
 	private:
 		REmulator* mEmu;
