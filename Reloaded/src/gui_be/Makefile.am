@@ -16,3 +16,8 @@ keymap/KeyboardLayoutView.cpp
 if RELEASE
   libreloadedbe_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s
 endif
+
+# Add resources to the executable
+all-local: ../caprice
+	rc -o Reloaded.rsrc Reloaded.rdef
+	xres -o ../caprice Reloaded.rsrc

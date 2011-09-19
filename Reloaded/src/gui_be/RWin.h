@@ -8,6 +8,8 @@
 #include <Window.h>
 #include <Bitmap.h>
 
+#include "RBitmapView.h"
+
 class ReloadedWin : public BWindow
 {
 	public:
@@ -15,10 +17,9 @@ class ReloadedWin : public BWindow
 
 		void MessageReceived(BMessage* mess);
 		
-		BBitmap& getBitmap() {return *contents;}
+		BBitmap& getBitmap() {return *fBitmapView->fDisplay;}
 	private:
-		BView* fBitmapView;
-		BBitmap* contents;
+		RBitmapView* fBitmapView;
 };
 
 #endif

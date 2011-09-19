@@ -1,5 +1,5 @@
 /* Reloaded - Amstrad CPC emulator
- * Haiku/BeOS GUI by PulkoMandy - 2010
+ * Haiku/BeOS GUI by PulkoMandy - 2010-2011
  */
 
 #include <Application.h>
@@ -15,6 +15,7 @@ class ReloadedApp : public BApplication
 		~ReloadedApp() {delete mEmu;}
 		
 		void RefsReceived(BMessage* message);
+		void ArgvReceived(int32 argc, char* argv[]);
 
 	private:
 		REmulator* mEmu;

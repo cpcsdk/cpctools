@@ -21,31 +21,49 @@ class RVidPlugin : public VideoPlugin
 
 	virtual void* Init(int w,int h,int bpp,bool fs)
 	{
+		fWindow = new ReloadedWin();
+		fWindow->Show();
+			// If the window doesn't exist yet, we can't lock.
+
+		if (!LockOutput())
+			return NULL;
+			// We are going to change about everything... make sure no one is
+			// messing with it
 		_publicBPP = bpp;
 
 		_outputWidth = w;
 		_outputHeight = h;
 		_publicWidth = w;
 		_publicHeight = h;
-		
-		fWindow = new ReloadedWin();
-		fWindow->Show();
 
 		_publicVideo = fWindow->getBitmap().Bits();
 		_publicPitch = fWindow->getBitmap().BytesPerRow();
 
+		UnlockOutput();
+
 		return _publicVideo;
 	}
+	
+	// TODO
 	virtual void SetPalette(ColorARGB8888* c) {}
-	virtual bool TryLock() {return true;}
-	virtual void Unlock() {}
-    virtual bool LockOutput() {return true;}
-    virtual bool TryLockOutput() {return true;}
-    virtual void UnlockOutput() {}
+	
+	// Only one surface for us
+	virtual bool TryLock() {return LockOutput();}
+	virtual void Unlock() {return UnlockOutput();}
+	
+    virtual bool LockOutput()
+    {
+    	status_t res = fWindow->getBitmap().LockBits();
+    	return res == B_OK ? true : false;
+    }
+    virtual bool TryLockOutput() {return LockOutput();}
+    virtual void UnlockOutput() {fWindow->getBitmap().UnlockBits();}
+    
 	virtual void Flip()
 	{
 		fWindow->PostMessage('rfsh');
 	}
+	
 	virtual void Close()
 	{
 		// TODO	

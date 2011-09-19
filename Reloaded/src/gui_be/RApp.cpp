@@ -58,3 +58,31 @@ void ReloadedApp::RefsReceived(BMessage* message)
 	
 	mEmu->GetFDC().insertA(path.Path());
 }
+
+
+void ReloadedApp::ArgvReceived(int32 argc, char* argv[])
+{
+	for (int i = 0; i < argc; i++)
+	{
+		if (argv[i][0] == '-')
+		{
+			switch(argv[i][1])
+			{
+				case 'a':
+					mEmu->GetFDC().insertA(argv[++i]);
+					break;
+				case 'b':
+					mEmu->GetFDC().insertB(argv[++i]);
+					break;
+				/*
+				case 'f': // Fullscreen
+				case 'g': // Green screen
+				case 'r': // Set remanency
+				case 'i': // Set intensity
+				case 't': // Tape
+				case 's': // Snapshot
+				*/
+			}
+		}
+	}
+}
