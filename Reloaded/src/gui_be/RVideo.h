@@ -1,3 +1,10 @@
+/* Reloaded Haiku GUI
+ * PulkoMandy - Shinra / 2011
+ */
+
+#ifndef __HAIKUVIDEOPLUGIN
+#define __HAIKUVIDEOPLUGIN
+
 #include <Bitmap.h>
 #include <View.h>
 #include <Window.h>
@@ -74,3 +81,5 @@ class RVidPlugin : public VideoPlugin
 	~RVidPlugin() {}
 	ReloadedWin* fWindow;
 };
+
+#endif

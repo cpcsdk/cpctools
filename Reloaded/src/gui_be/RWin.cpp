@@ -21,7 +21,8 @@ ReloadedWin::ReloadedWin()
 	// TODO - compute the size instead of hardcoding it
 	SetSizeLimits(847-80,847-80,619-61,619-61);
 
-	BMenuBar* menu = new BMenuBar(BRect(0,0,847,16),"mainmenu");
+	BMenuBar* menu = new BMenuBar(BRect(0,0,Bounds().Width() - 16,16),
+		"mainmenu", B_FOLLOW_LEFT | B_FOLLOW_TOP);
 		BMenu* file = new BMenu("File");
 		menu->AddItem(file);
 			BMenuItem* insertdsk = new BMenuItem("Insert Disc",
@@ -34,7 +35,12 @@ ReloadedWin::ReloadedWin()
 				new BMessage('kymp'));
 		settings->AddItem(keymap);
 	AddChild(menu);
-	
+
+	fStatusLed = new BView(BRect(Bounds().Width() - 16, 0, Bounds().Width(), 16), "fdcLed",
+		B_FOLLOW_RIGHT | B_FOLLOW_TOP, B_WILL_DRAW);
+	fStatusLed->SetViewColor(0x77,00,00);
+	AddChild(fStatusLed);
+
 	fBitmapView = new RBitmapView(this, false);
 	fBitmapView->MoveTo(0, menu->Bounds().bottom + 1);
 	
@@ -68,7 +74,8 @@ void ReloadedWin::MessageReceived(BMessage* mess)
 			
 		case 'dins':
 		{
-			BFilePanel* f = new BFilePanel(B_OPEN_PANEL, &be_app_messenger, NULL, B_FILE_NODE, false);
+			BFilePanel* f = new BFilePanel(B_OPEN_PANEL, &be_app_messenger,
+				NULL, B_FILE_NODE, false);
 			f->Show();
 			break;
 		}
@@ -78,6 +85,19 @@ void ReloadedWin::MessageReceived(BMessage* mess)
 			KeymapWindow* kwin = new KeymapWindow();
 			kwin->Show();
 			break;	
+		}
+
+		case 'fled':
+		{
+			// Draw FDC LED
+			bool status;
+			mess->FindBool("status", &status);
+			if (status)
+				fStatusLed->SetViewColor(0xFF,00,00);
+			else
+				fStatusLed->SetViewColor(0x77,00,00);
+			fStatusLed->Invalidate();
+			break;
 		}
 		
 		default:

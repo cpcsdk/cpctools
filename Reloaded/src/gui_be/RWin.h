@@ -20,6 +20,7 @@ class ReloadedWin : public BWindow
 		BBitmap& getBitmap() {return *fBitmapView->fDisplay;}
 	private:
 		RBitmapView* fBitmapView;
+		BView* fStatusLed;
 };
 
 #endif

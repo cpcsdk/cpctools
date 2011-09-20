@@ -87,7 +87,6 @@ protected:
 	t_Memory				*_cpcMemory;
 
 	unsigned int			_cycleCount;
-	VideoPlugin*			(*_videoPlugin)();
 	AudioPlugin*			_audioPlugin;
 
 #ifdef USE_PTHREAD
@@ -328,6 +327,7 @@ public:
     SysSync emuSync; // Global sync on Emulator object
 private:
 	sem_t breakpointLock;
+	VideoPlugin*			(*_videoPlugin)();
 };
 
 #endif
