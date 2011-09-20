@@ -119,7 +119,6 @@ private:
 
 	int timeout;
 	int motor;
-	int led;
 	int flags;
 	int phase;
 	int byte_count;

@@ -102,7 +102,6 @@ void t_FDC::Reset()
 {
 	timeout = 0;
 	motor = 0;
-	led = 0;
 	flags = STATUSDRVA_flag | STATUSDRVB_flag;
 	phase = CMD_PHASE;
 	byte_count = 0;
@@ -746,7 +745,7 @@ byte t_FDC::fdc_read_data(void)
             flags &= ~SCAN_flag; // reset scan command flag
             byte_count = 0; // clear byte counter
             phase = CMD_PHASE; // switch to command phase
-            led = 0; // turn the drive LED off
+			Emulator::getInstance()->fdcLed(false);
 		}
 		break;
 	}
@@ -853,7 +852,7 @@ void t_FDC::fdc_seek(t_FDC &FDC)
 
 void t_FDC::fdc_readtrk(t_FDC &FDC)
 {
-	FDC.led = 1; // turn the drive LED on
+	Emulator::getInstance()->fdcLed(true);
 	FDC.check_unit(); // switch to target drive
 	if (FDC.init_status_regs() == 0) { // drive Ready?
 		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -888,7 +887,7 @@ void t_FDC::fdc_readtrk(t_FDC &FDC)
 
 void t_FDC::fdc_write(t_FDC &FDC)
 {
-	FDC.led = 1; // turn the drive LED on
+	Emulator::getInstance()->fdcLed(true);
 	FDC.check_unit(); // switch to target drive
 	if (FDC.init_status_regs() == 0) { // drive Ready?
 		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -928,7 +927,7 @@ void t_FDC::fdc_write(t_FDC &FDC)
 
 void t_FDC::fdc_read(t_FDC &FDC)
 {
-	FDC.led = 1; // turn the drive LED on
+	Emulator::getInstance()->fdcLed(true);
 	FDC.check_unit(); // switch to target drive
 	if (FDC.init_status_regs() == 0) { // drive Ready?
 		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -961,7 +960,7 @@ void t_FDC::fdc_read(t_FDC &FDC)
 
 void t_FDC::fdc_readID(t_FDC &FDC)
 {
-	FDC.led = 1; // turn the drive LED on
+	Emulator::getInstance()->fdcLed(true);
 	FDC.check_unit(); // switch to target drive
 	if (FDC.init_status_regs() == 0) { // drive Ready?
 		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -994,7 +993,7 @@ void t_FDC::fdc_readID(t_FDC &FDC)
 
 void t_FDC::fdc_writeID(t_FDC &FDC)
 {
-	FDC.led = 1; // turn the drive LED on
+	Emulator::getInstance()->fdcLed(true);
 	FDC.check_unit(); // switch to target drive
 	if (FDC.init_status_regs() == 0) { // drive Ready?
 		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -1030,7 +1029,7 @@ void t_FDC::fdc_writeID(t_FDC &FDC)
 
 void t_FDC::fdc_scan(t_FDC &FDC)
 {
-	FDC.led = 1; // turn the drive LED on
+	Emulator::getInstance()->fdcLed(true);
 	FDC.check_unit(); // switch to target drive
 	if (FDC.init_status_regs() == 0) { // drive Ready?
 		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -1078,7 +1077,6 @@ int t_FDC::insertB(const string filename, const char *type )
 void t_FDC::SetMotor(int m)
 {
 	motor = m;
-	Emulator::getInstance()->fdcLed(m);
 }
 
 #endif
