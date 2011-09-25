@@ -8,6 +8,7 @@
 #include "RAudio.h"
 #include "RWin.h"
 #include "log.h"
+#include "snapshot.h"
 
 #include <FindDirectory.h>
 #include <Path.h>
@@ -73,13 +74,15 @@ void ReloadedApp::ArgvReceived(int32 argc, char** argv)
 				case 'b':
 					mEmu->GetFDC().insertB(argv[++i]);
 					break;
+				case 's':
+					snapshot_load(*mEmu, argv[++i]);
+					break;
 				/*
 				case 'f': // Fullscreen
 				case 'g': // Green screen
 				case 'r': // Set remanency
 				case 'i': // Set intensity
 				case 't': // Tape
-				case 's': // Snapshot
 				*/
 			}
 		}
