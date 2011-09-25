@@ -374,10 +374,12 @@ AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)
 
 # TODO: Detect other timer library
+if test "$build_target" != "mingw" ; then
 AC_SEARCH_LIBS([clock_gettime], [rt],
         [],
         AC_MSG_ERROR(Unable to find clock_gettime)
         )
+fi
 
 #Output file
 AC_CONFIG_HEADERS([config.h])

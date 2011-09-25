@@ -553,12 +553,12 @@ void CapriceWindowImpl::windowKeyUp( wxKeyEvent& event )
 void CapriceWindowImpl::fdcLed(bool on) {
 	fdcActive = on;
 
-	wxClientDC dc(DriveActivity);
 	if (on)
-		dc.SetBrush(*wxRED_BRUSH);
+		DriveActivity->SetBackgroundColour(*wxRED);
 	else
-		dc.SetBrush(wxBrush(wxColor(127,0,0), wxSOLID));
-	dc.FloodFill(3, 3, *wxWHITE, wxFLOOD_BORDER);
+		DriveActivity->SetBackgroundColour(wxColor(127,0,0));
+	DriveActivity->Refresh();
+	DriveActivity->Update();
 }
 
 

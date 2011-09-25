@@ -5,14 +5,11 @@ DIST_SUBDIRS = core gui asm cli
 SUBDIRS = core
 MINGW_LIB=-lmingw32
 
-#TODO : Build video and emulator inside libcapricecore
-caprice_SOURCES = #core/video.cpp core/emulator.cpp
+caprice_SOURCES =	# no files
+caprice_LDADD =
 caprice_CPPFLAGS = -I$(srcdir)/core -I$(srcdir)/gui -DUNICODE
 
-#caprice core needs to be before portaudio and soundlib
 #caprice wx needs to be after mingw32 so we can find WinMain ?
-caprice_LDADD = $(SOUNDLIB) $(SOUND_OUTPUT_LIB)
-
 if MINGW
 caprice_LDADD += $(MINGW_LIB)
 endif
@@ -42,6 +39,10 @@ caprice_LDADD += \
 	core/libcapricecore.a \
     $(LIB765) $(PNG_LIB)
 
+#caprice core needs to be before portaudio and soundlib
+caprice_LDADD += $(SOUNDLIB) $(SOUND_OUTPUT_LIB)
+
+
 # Must not be linked in Haiku
 if MINGW
 caprice_LDADD += -lpthread
@@ -55,7 +56,6 @@ caprice_CPPFLAGS += -Icli
 caprice_LDADD += cli/libcapricecli.a
 endif
 
-
 if WITH_ASM
 SUBDIRS += asm
 caprice_LDADD += asm/libsjasm.a \
@@ -66,14 +66,7 @@ caprice_LDADD += -ldl
 endif
 endif
 
-#Add aylet files if used as backend
-if AYLET
-  caprice_CPPFLAGS += -Iaylet
-  caprice_SOURCES += aylet/sound.cc \
-                     aylet/sound.h \
-                     aylet/drv-oss.cc \
-                     aylet/driver.h
-endif
+caprice_LDADD += -lstdc++
 
 if RELEASE
   caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s

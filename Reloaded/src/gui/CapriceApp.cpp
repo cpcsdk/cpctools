@@ -68,8 +68,11 @@ CapASM *capAsm ;
 
 #include "WXLog.h"
 
+#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
 #include "../core/portAudioAudioPlugin.h"
+#elif SOUND_OUTPUT == SOUND_OUTPUT_Alsa
 #include "../core/alsaAudioPlugin.h"
+#endif
 
 //TODO destroy emulator when finishing
 
