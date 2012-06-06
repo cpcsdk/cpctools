@@ -350,7 +350,7 @@ class GetOpt_pp
 {
 	ShortOptions _shortOps;
 	LongOptions _longOps;
-	std::ios_base::iostate _exc;
+	std::ios::iostate _exc;
 	_Option::Result _last;
 	std::ios::fmtflags _flags;
 	std::string _app_name;
@@ -364,9 +364,9 @@ public:
 	GETOPT_INLINE GetOpt_pp(int argc, char* argv[]);
 	GETOPT_INLINE GetOpt_pp(int argc, char* argv[], _EnvTag);
 	
-	std::ios_base::iostate exceptions ( ) const			{ return _exc; }
-	void exceptions ( std::ios_base::iostate except )	{ _exc = except; }
-	void exceptions_all()                               { _exc = std::ios_base::failbit | std::ios_base::eofbit; }
+	std::ios::iostate exceptions ( ) const			{ return _exc; }
+	void exceptions ( std::ios::iostate except )	{ _exc = except; }
+	void exceptions_all()                               { _exc = std::ios::failbit | std::ios::eofbit; }
 	
 	operator bool() const								{ return _last == _Option::OK;	}
 
@@ -374,7 +374,7 @@ public:
 	
 	void end_of_options() const throw(GetOptEx)
 	{
-    	if (options_remain() && (_exc & std::ios_base::eofbit))
+    	if (options_remain() && (_exc & std::ios::eofbit))
     	    throw TooManyOptionsEx();
     }
 	
@@ -385,7 +385,7 @@ public:
 	
 	GETOPT_INLINE GetOpt_pp& operator >> (const _Option& opt) throw(GetOptEx);
 	
-	GETOPT_INLINE GetOpt_pp& operator >> (std::ios_base& (*iomanip)(std::ios_base&));
+	GETOPT_INLINE GetOpt_pp& operator >> (std::ios& (*iomanip)(std::ios&));
 
 	// Alternative to manipulators, for those who don't like them: the 'getopt' method :)	
 	// Combination 1: with long option:

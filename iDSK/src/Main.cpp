@@ -3,6 +3,7 @@
 #include <cstring>
 #include <algorithm> // pour contourner un bug de std::vector ...
 #include <libgen.h>
+#include <streambuf.h>
 
 #include "getopt_pp.h" /* Command line handling */
 
@@ -170,8 +171,8 @@ int main(int argc, char** argv) {
     		if ( ( Indice = MyDsk.FileIsIn( amsdosfile ) ) != -1 && !Force_Overwrite) {
     			cerr << "(" << amsdosfile <<") File exists, replace ? (Y/N) (try -f switch for autoreplace...):";
     			string answer ;
-    			cin >> uppercase >> answer;
-    			if ( answer == "Y")
+    			cin >> answer;
+    			if ( toupper(answer[0]) == 'Y')
     				MyDsk.RemoveFile(Indice);
     			else {
     				cerr<<"Import cancelled, dsk unchanged."<<endl;

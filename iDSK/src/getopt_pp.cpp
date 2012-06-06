@@ -117,7 +117,7 @@ GETOPT_INLINE void GetOpt_pp::_parse_env()
 }
 
 GETOPT_INLINE GetOpt_pp::GetOpt_pp(int argc, char* argv[])
-	: _exc(std::ios_base::goodbit)
+	: _exc(std::ios::goodbit)
 {
 	_init_flags();
 	_parse(argc, argv);	
@@ -142,22 +142,22 @@ GETOPT_INLINE GetOpt_pp& GetOpt_pp::operator >> (const _Option& opt) throw (GetO
 				break;
 				
 			case _Option::OptionNotFound:
-				if (_exc & std::ios_base::eofbit )
+				if (_exc & std::ios::eofbit )
 					throw OptionNotFoundEx();
 				break;
 				
 			case _Option::BadType:
-				if (_exc & std::ios_base::failbit )
+				if (_exc & std::ios::failbit )
 					throw InvalidFormatEx();
 				break;
 				
 			case _Option::NoArgs:
-				if (_exc & std::ios_base::eofbit )
+				if (_exc & std::ios::eofbit )
 					throw ArgumentNotFoundEx();
 				break;
 				
 			case _Option::TooManyArgs:
-				if (_exc & std::ios_base::failbit )
+				if (_exc & std::ios::failbit )
 					throw TooManyArgumentsEx();
 				break;
 			
@@ -167,13 +167,13 @@ GETOPT_INLINE GetOpt_pp& GetOpt_pp::operator >> (const _Option& opt) throw (GetO
 			case _Option::ParsingError: break;	// just to disable warning
 		}
 	}
-	else if (_exc & std::ios_base::failbit )
+	else if (_exc & std::ios::failbit )
 		throw ParsingErrorEx();
 		
 	return *this;
 }
 
-GETOPT_INLINE GetOpt_pp& GetOpt_pp::operator >> (std::ios_base& (*iomanip)(std::ios_base&))
+GETOPT_INLINE GetOpt_pp& GetOpt_pp::operator >> (std::ios& (*iomanip)(std::ios&))
 {
 	std::stringstream ss;
 	ss.flags(_flags);

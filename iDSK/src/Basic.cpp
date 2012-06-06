@@ -3,6 +3,7 @@ using namespace std;
 #include <cmath>
 #include <cstring>
 #include <cstdio>
+#include <ctype.h>
 
 #include "MyType.h"
 #include "Basic.h"

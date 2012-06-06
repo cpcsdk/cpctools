@@ -1,6 +1,8 @@
 #ifndef GESTDSK_H
 #define GESTDSK_H
 
+#include <string>
+
 #define     USER_DELETED    0xE5
 
 
