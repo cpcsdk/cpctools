@@ -26,13 +26,16 @@ caprice_CPPFLAGS += $(WX_CPPFLAGS)
 endif
 
 if HAIKU
-  SUBDIRS += gui_be
-  caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame -ltracker -llocale
+SUBDIRS += gui_be
+caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame -ltracker -llocale -lstdc++.r4
 
 # Add resources to the executable
 all-local:: gui_be/Reloaded.rdef caprice
 	rc -o Reloaded.rsrc gui_be/Reloaded.rdef
 	xres -o caprice Reloaded.rsrc
+	mimeset -f caprice
+else
+caprice_LDADD += -lstdc++
 endif
 
 caprice_LDADD += \
@@ -66,7 +69,6 @@ caprice_LDADD += -ldl
 endif
 endif
 
-caprice_LDADD += -lstdc++
 
 if RELEASE
   caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s

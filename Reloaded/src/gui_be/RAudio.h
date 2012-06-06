@@ -23,6 +23,7 @@
 
 #include <PushGameSound.h>
 #include <GameSoundDefs.h>
+#include <MediaTrack.h>
 
 class BeAudioPlugin : public AudioPlugin
 {
@@ -31,9 +32,12 @@ class BeAudioPlugin : public AudioPlugin
         int init(t_CPC& cpc, t_PSG& psg)
 		{
 			gs_audio_format format;
+			memset(&format, 0, sizeof(format));
 			format.frame_rate = cpc.snd_playback_rate;
 			format.channel_count = cpc.snd_stereo ? 2 : 1;
+			// Curently we don't support anything else anyway
 			format.format = gs_audio_format::B_GS_S16;
+			/*
 			switch(cpc.snd_bits)
 			{
 				case 8:
@@ -48,6 +52,8 @@ class BeAudioPlugin : public AudioPlugin
 				default:
 					WarningLogMessage("Wrong sound bits count in config. Falling back to 16-bits audio.");	
 			}
+			*/
+			format.byte_order = B_MEDIA_LITTLE_ENDIAN;
 			format.buffer_size = 0; // auto choose
 			soundOutput = new BPushGameSound(1024, &format);
 
@@ -63,6 +69,9 @@ class BeAudioPlugin : public AudioPlugin
 				ErrorLogMessage("unable to lock BPushGameSound sound buffer");
 				return -2;
 			}
+
+			soundOutput->StartPlaying();
+
 			return 0;
 		}
 
