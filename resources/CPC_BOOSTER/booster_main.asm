@@ -1364,7 +1364,7 @@ WR_1WIRE_INIT:	IN A,PINC
 
 ;**************************************************************		
 
-.INCLUDE "INITIALIZE.ASM"
+.INCLUDE "initialize.asm"
 .INCLUDE "1WIRE.ASM"
 
 ;**************************************************************		
