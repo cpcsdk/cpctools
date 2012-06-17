@@ -45,6 +45,8 @@ void writefile(const char* source, const char* dest);
 	// Copy source (host file) to dest (on disk)
 void readfile(const char* source, const char* dest);
 	// Copy source (on disk) to dest (host file)
+void erasefile(const char* file);
+	// Erase file from disk (free block map and fentries)
 void hexdump(uint16_t sid);
 	// Dump sector
 const char* normalize_name(const char* original);
@@ -73,8 +75,9 @@ const char* normalize_name(const char* original);
 // 										Note: only safe way to detect it is :
 // 										Nxt == EOC AND Sec0 == EOC.
 // 										This way :
-// 										* Nxt == EOC tells us it is not an
-// 										xentry (thus Sec is meaningfull)
+// 										* Nxt == EOC tells us it is an end of
+// 										file/dir entry. Sec is either part of
+// 										first or last extent.
 // 										* fentry pointing to itself doesn't
 // 										exist (unless we look at an empty root
 // 										dir, but this can't happen either as we
@@ -119,6 +122,14 @@ struct __attribute((packed)) xentry
 };
 
 
+bool yesno()
+{
+	char c;
+	do c = tolower(getchar()); while (c != 'y' && c != 'n');
+	return c == 'y';
+}
+
+
 int main(int argc, const char* argv[])
 {
 	if (argc != 2)
@@ -152,9 +163,7 @@ int main(int argc, const char* argv[])
 			" This device does not look like MLI-formatted !\n"
 			"Format it now ? (y/n)\n");
 
-		do c = tolower(getchar()); while (c != 'y' && c != 'n');
-
-		if (c == 'y')
+		if (yesno())
 		{
 			format_device();
 		}
@@ -185,25 +194,37 @@ int main(int argc, const char* argv[])
 				puts("not yet!");
 				break;
 			*/
+			case 'e':
+				char d[1024];
+				scanf(" %s",d);
+				printf("About to erase file %s. Are you sure ?\n",d);
+				if (yesno())
+					erasefile(d);
+				break;
 			case 'f':
 				format_device();
 				break;
 			case 'h':
 				// Show help
-				puts("Available commands :\n"
-					// c      - check disk structures
-					//"  d s    - change dir to s\n"
-					// e f    - erase file
-					"  f      - format drive\n"
-					"  h      - show this helptext\n"
-					"  l      - list files\n"
-					// m n    - mkdir n
-					"  q      - quit fs-shell\n"
-					"  r s d  - read s (MLI) to d (host file)\n"
-					"  t s    - hexdump file s\n"
-					// u      - disk usage stats
-					"  w s d  - write s (host file) to d (MLI file)\n"
-					"  x n    - hexdump sector n\n"
+				puts(
+					"Syntax of operands:\n"
+					"  n - sector number\n"
+					"  s - source file\n"
+					"  d - destination file\n"
+					"Available commands:\n"
+					// C      - check disk structures
+					//"  D d    - change dir to d\n"
+					"  E d    - erase file\n"
+					"  F      - format drive\n"
+					"  H      - show this helptext\n"
+					"  L      - list files\n"
+					// M n    - mkdir n
+					"  Q      - quit fs-shell\n"
+					"  R s d  - read s (MLI) to d (host file)\n"
+					"  T s    - hexdump file s\n"
+					// U      - disk usage stats
+					"  W s d  - write s (host file) to d (MLI file)\n"
+					"  X n    - hexdump sector n\n"
 				);
 				break;
 			case 'l':
@@ -215,7 +236,6 @@ int main(int argc, const char* argv[])
 				exit(0);
 			case 'r':
 				char s[1024];
-				char d[1024];
 				scanf(" %s %s",s,d);
 				readfile(s,d);
 				break;
@@ -385,9 +405,6 @@ bool for_each_file_in_dir(uint16_t dentry, handle_file handler, void* cookie)
 {
 	std::vector<struct extent> entries;
 	stack_extents(dentry, entries);
-	// TODO Bonus points if the entries are sorted so that we don't need to
-	// read the same sector multiple times. (doesn't matter for a dir, when
-	// reading a file however it's better to not change the order of sectors...
 	
 	while(!entries.empty())
 	{
@@ -438,9 +455,9 @@ bool listwd_handle(uint16_t fentry, void* cookie)
 	return false;
 }
 
+// list files in current dir
 void list_wd()
 {
-	// list files in current dir
 	uint16_t cwd = 0;
 	// TODO for now this lists files in the root dir
 
@@ -476,13 +493,13 @@ void writesector(uint16_t which)
 }
 
 
+// Allocate space in the block map
+// We start from the END of the map, in the beginning is the sector list,
+// which we want to stay contiguous.
 bool allocateFromEnd(uint16_t sectorcount, std::vector<uint16_t>& secList)
 {
 	bool changed = false;
 	
-	// Allocate space in the block map
-	// We start from the END of the map, in the beginning is the sector list,
-	// which we want to stay contiguous.
 	for (int8_t k = 16; --k >= 0;)
 	{
 		readsector(k);
@@ -615,7 +632,7 @@ void readfile(const char* s, const char* d)
 	s = normalize_name(s);
 
 	struct readfile_cookie cookie = {
-		d, normalize_name(s)
+		d, s
 	};
 
 	// TODO 0 = root dir for now, need to extract the dir from filepath
@@ -842,6 +859,127 @@ const char* normalize_name(const char* original)
 }
 
 
+bool erase_handle(uint16_t entry, void* cookie)
+{
+	// get the name we are looking for
+	const char* d = (const char*)cookie;
+
+	// Look at filename
+	readsector(fentry_to_sector(entry));
+	uint16_t off = fentry_to_offset(entry);
+
+	// Does name match ?
+	if(memcmp(diskbuffer + off + 3, d, 11) != 0)
+		return false;
+
+	// Ok, name found, now handle the file
+	
+	// Since the file might span several entries, we need to stack up
+	// all the sectors in a list. Then, we can browse this list and
+	// handle each element.
+	std::vector<struct extent> entries;
+	// TODO Would be nice to clear the entries as we gather them. Else we'll
+	// need to read the same sectors again when removing them. But this code
+	// is getting crazy enough, and I want to test it first.
+	stack_extents(entry, entries);
+
+	while(!entries.empty())
+	{
+		// Handle next extent
+		struct extent x = entries.back();
+		entries.pop_back();
+
+		// Free the extent in the block map (it is faster to free a whole
+		// extent at once than bit by bit)
+		
+		// Convert extent start sector to byte + bit in sector map
+		uint8_t sbit = 1 << (x.sector & 7);
+		uint16_t sbyte = (x.sector >> 3) & 0x1FF;
+		uint8_t ssector = x.sector >> 9;
+
+		if (x.length == 0)
+			x.sector += 256;
+		else
+			x.sector += x.length;
+		// Compute end position
+		uint8_t bite = 1 << (x.sector & 7);
+		uint16_t bytee = (x.sector >> 3) & 0x1FF,
+		uint8_t sectore = x.sector >> 9;
+
+		uint8_t sector = ssector;
+		uint16_t byte = sbyte;
+		while (sector <= sectore)
+		{
+			readsector(sector);
+
+			if (sector == ssector)
+			{
+				// process first byte
+				uint8_t bits = 0;
+				while(bits < sbit)
+				{
+					bits = (bits<<1) | 1;
+				}
+
+				diskbuffer[byte] &= ~bits;
+			} else 
+				byte = -1;
+
+			if (sector == sectore)
+			{
+				sbyte = bytee;
+			} else {
+				sbyte = 512;
+			}
+
+			// process middle bytes (if any)
+			while (++byte < sbyte)
+			{
+				diskbuffer[byte] = 0;
+			}
+
+			if (sector == sectore)
+			{
+				// process last byte
+				bits = 255;
+				while(bits > bite)
+				{
+					bits >>= 1;
+				}
+
+				diskbuffer[byte] &= ~bits;
+			}
+
+			writesector(sector);
+			sector++;
+		}
+	}
+
+	// TODO
+	// Now we need to erase the fentry itself and any associated xentries.
+	// We know the sector number and offset, so all is fine.
+	
+	// TODO
+	// And finally, the most tricky part, we need to erase the pointer to this
+	// file in the parent dir. We may need to split an extent if the file is
+	// in the middle of it. This means the direntry can grow and require an
+	// extra xentry. We know we can reuse the one from the file we just deleted,
+	// so this is safe. The directory never grows here (phew!).
+	
+	return true;
+}
+
+// Erase one single file from the disk.
+// TODO handle file patterns (* and ?) for multi-file erase
+void erase_file(const char* name)
+{
+	// Locate the file in the entry table.
+	if (!for_each_file_in_dir(0, erase_handle, &cookie))
+	{
+		fprintf(stderr, "File %s not found.\n", s);
+	}
+}
+
 // More TODO
 // CheckDisk features :
 //  * Check every file is in a dir
@@ -862,10 +1000,5 @@ const char* normalize_name(const char* original)
 // Since the filesystem structure allows it, maybe ùSEARCH to look for a file ?
 // but we have no way to find which dir it's in.
 
-// RM-ing a file.
-// When removing a file in the middle of a dir, we may have to split a
-// dir-extent, and thus allocate a new xentry for the directory. Good news is,
-// we just freed one by removing the file !
-//
 // When creating a file, we also need to add an xentry to the dir. This can
 // very easily get quite tricky to do right...
