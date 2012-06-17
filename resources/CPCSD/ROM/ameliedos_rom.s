@@ -1,26 +1,22 @@
 ; ---------------------------------------------------------------------------
-; AMÈLIE ROM
+; AMÈLIE ROM (c) 2012
 ; ---------------------------------------------------------------------------
+
+; Assembly with:
+; vasmz80_oldstyle ameliedos_rom.s -o ameliedos.rom -L ameliedos_rom.lst -Fbin -z80asm
 
 ;  9   AMSDOS, XDPB
 ; 10.7 Examples of searching ROM commands
 ; 19   AMSDOS BIOS Facilities
 ; 20   AMSDOS External Commands
 
-AMSDOS_MEMORY_POOL          EQU $BE7D
-AMSDOS_HOOK                 EQU $BE7F
-
-amelie_cas_hook_far_call    EQU AMSDOS_HOOK + 4
-amsdos_cas_vectors          EQU amelie_cas_hook_far_call + 3
-amsdos_buffers              EQU amsdos_cas_vectors + 2
-
-farcall_amsdos_drive        EQU amsdos_buffers + 2
-farcall_amsdos_dir          EQU farcall_amsdos_drive + 3
-farcall_amsdos_era          EQU farcall_amsdos_dir + 3
-farcall_amsdos_ren          EQU farcall_amsdos_era + 3
-farcall_amsdos_read_sector  EQU farcall_amsdos_ren + 3
-farcall_amsdos_write_sector EQU farcall_amsdos_read_sector + 3
-farcall_amsdos_format_track EQU farcall_amsdos_write_sector + 3
+; TODO: 
+; .- Extract the drive number from the strings passed as parameters at the 
+;    RSXs (REN, ERA, DIR).
+; .- Extend the parameters of rsx_read_sector, rsx_write_sector and 
+;    rsx_format_track when the drive is the SD. Or use directly the SD CMDs
+;    variables.
+; .- Adding support for machines without disk rom.
 
 ; Constants
 SD_DRIVE_NUMBER             EQU 2   ; A = 0 | B = 1 | SD = 2
@@ -30,12 +26,14 @@ SD_DRIVE_NUMBER             EQU 2   ; A = 0 | B = 1 | SD = 2
     ORG  $C000
 
 ; ---------------------------------------------------------------------------
+; ROM Header
 rom_type
     DEFB 1                          ; Background ROM
 
 rom_version
     DEFB 0,0,1
 
+; ---------------------------------------------------------------------------
 rsx_names
     DEFW rsx_name_table
 
@@ -43,52 +41,54 @@ rsx_names
     JP   initialize_amelie          ; RSX AMÈLIE DOS
 
 ; ---------------------------------------------------------------------------
-begin_amelie_rsxs
+amelie_extra_rsxs
+;    JP   rsx_change_dir             ; |CD
+;    JP   rsx_make_dir               ; |MD
+;    JP   rsx_delete_dir             ; |RD
+;    JP   rsx_format_sd              ; |FORMAT
+;    JP   ...                        ; |
+
+; ---------------------------------------------------------------------------
+amsdos_overloaded_rsxs
     JP   rsx_drive                  ; |DRIVE
     JP   rsx_dir                    ; |DIR
     JP   rsx_era                    ; |ERA
     JP   rsx_ren                    ; |REN
     JP   rsx_sd                     ; |SD
 
-; ---------------------------------------------------------------------------
     ; Hidden RSXs
-    JP   rsx_read_sector            ; Read Sector
-    JP   rsx_write_sector           ; Write Sector
-    JP   rsx_format_track           ; Format Track
+    JP   rsx_read_sector            ; Read Sector (|^D)
+    JP   rsx_write_sector           ; Write Sector (|^E)
+    JP   rsx_format_track           ; Format Track (|^F)
 
 ; ---------------------------------------------------------------------------
 amelie_cas_vectors
     JP   amelie_cas_in_open         ; CAS_IN_OPEN (LOAD 3, OPENIN 1, MERGE 3, RUN 3)
-
     JP   amelie_cas_in_close        ; CAS_IN_CLOSE (LOAD 5, CLOSEIN 1, MERGE 5, RUN 5)
-
     JP   amelie_cas_in_abandon      ; CAS_IN_ABANDON (CAT 1, LOAD 1, SAVE 1, MERGE 1, RUN 1)
-
     JP   amelie_cas_in_char         ; CAS_IN_CHAR (MERGE 4)
-
     JP   amelie_cas_in_direct       ; CAS_IN_DIRECT (LOAD 4, RUN 4)
-
     JP   amelie_cas_return          ; CAS_RETURN
-
     JP   amelie_cas_test_eof        ; CAS_TEST_EOF
-
     JP   amelie_cas_out_open        ; CAS_OUT_OPEN (SAVE 3 y OPENOUT 1)
-
     JP   amelie_cas_out_close       ; CAS_OUT_CLOSE (SAVE 5, CLOSEOUT 1, CHAIN MERGE 6, RUN 6)
-
     JP   amelie_cas_out_abandon     ; CAS_OUT_ABANDON (CAT 2, LOAD 2, SAVE 2, MERGE 2, RUN 2)
-
     JP   amelie_cas_out_char        ; CAS_OUT_CHAR
-
     JP   amelie_cas_out_direct      ; CAS_OUT_DIRECT (SAVE 4)
-
     JP   amelie_cas_catalog         ; CAS_CATALOG (CAT 3)
 
 ; ---------------------------------------------------------------------------
 rsx_name_table
     DEFB 'AMELIE DO','S' + $80
-    
-    ; Disk RSXs
+
+    ; Amèlie extra RSXs
+;    DEFB 'C', 'D' + $80
+;    DEFB 'M', 'D' + $80
+;    DEFB 'RMDI', 'R' + $80
+;    DEFB 'FORMA', 'T' + $80
+;    DEFB '', '' + $80
+
+    ; Amsdos overloaded RSXs
     DEFB 'DRIV', 'E' + $80
     DEFB 'DI', 'R' + $80
     DEFB 'ER', 'A' + $80
@@ -96,7 +96,7 @@ rsx_name_table
     DEFB 'S', 'D' + $80
 ;    DEFB '', '' + $80
 
-    ; Hidden RSXs
+    ; Amsdos Hidden RSXs
 ;    DEFB $81                        ; Set Message (Not need to overload)
 ;    DEFB $82                        ; Set Drive Speed (Not need to overload)
 ;    DEFB $83                        ; Set Disk Type (Not need to overload)
@@ -107,8 +107,6 @@ rsx_name_table
 ;    DEFB $88                        ; Test Drive (Not need to overload)
 ;    DEFB $89                        ; Set Retry Count (Not need to overload)
 
-    ; 13 CAS Vectors    
-    DEFS 13,' ' + $80
     DEFB 0                          ; End RSX name table
 
 ; ---------------------------------------------------------------------------
@@ -204,6 +202,11 @@ amelie_cas_in_open
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
+    SBC  A,A                        ; Zero False
+    LD   A,(IY + $67)	            ; A -> File type from the header
     RET
 
 ; ---------------------------------------------------------------------------
@@ -224,6 +227,9 @@ amelie_cas_in_close
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -237,6 +243,8 @@ amelie_cas_in_abandon
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
     RET
 
 ; ---------------------------------------------------------------------------
@@ -260,6 +268,9 @@ amelie_cas_in_char
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -288,6 +299,9 @@ amelie_cas_in_direct
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -300,6 +314,8 @@ amelie_cas_return
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
     RET
 
 ; ---------------------------------------------------------------------------
@@ -323,6 +339,9 @@ amelie_cas_test_eof
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -353,6 +372,9 @@ amelie_cas_out_open
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -376,6 +398,9 @@ amelie_cas_out_close
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -389,6 +414,8 @@ amelie_cas_out_abandon
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
     RET
 
 ; ---------------------------------------------------------------------------
@@ -414,6 +441,9 @@ amelie_cas_out_char
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -442,6 +472,9 @@ amelie_cas_out_direct
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -467,6 +500,9 @@ amelie_cas_catalog
     CALL check_drive_and_prepare_return_for_cas
 
     ; Make Amèlie code
+
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
@@ -488,8 +524,9 @@ rsx_dir
     LD   A,C
     OR   A
     CALL NZ,get_string_param        ; HL = String
-    ; decode
 
+    ; Return to firmware
+    OR   A                          ; Carry False
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |DIR RSX
@@ -511,12 +548,21 @@ rsx_era
 
     CALL test_for_single_param
 
-    ; Check for the active drive
-    CALL is_sd_active_drive
-    JR   NZ,.make_amsdos_call
+;    CALL get_string_param           ; HL = String
+
+    ; Check for the drive in the parameter
+;;    CALL is_sd_active_drive
+;    LD   A,(BC)
+;    CP   SD_DRIVE_NUMBER
+;    JR   NZ,.make_amsdos_call
 
     ; |ERA Amèlie code
-    CALL get_string_param           ; HL = String
+;    CALL enable_parameter_drive
+
+
+;   JP   return_from_rsx            ; RET
+    ; Return to firmware
+    OR   A                          ; Carry False
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |ERA RSX
@@ -529,7 +575,18 @@ rsx_era
     RET
 
 ; ---------------------------------------------------------------------------
+enable_parameter_drive
+    LD   A,(BC)                     ; Get drive number from parameter
+    INC  BC
+
+    PUSH AF
+    CALL set_active_drive
+    POP  AF
+    RET
+
+; ---------------------------------------------------------------------------
 ; |REN
+; Amsdos send an error in case of rename a file using differents drives.
 ; ---------------------------------------------------------------------------
 rsx_ren
     CALL save_return_address_for_errors
@@ -550,6 +607,8 @@ rsx_ren
     ; Get second parameter
 ;    CALL get_string_param           ; HL = String
 
+    ; Return to firmware
+    OR   A                          ; Carry False
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |REN RSX
@@ -596,6 +655,7 @@ rsx_drive
 rsx_sd
     LD   A,SD_DRIVE_NUMBER
 
+set_active_drive
     PUSH DE
     LD   E,$FF                      ; Drive CLOSE flag
     CP   (IY + 8)                   ; Extended File Control Block for OPENIN
@@ -632,7 +692,7 @@ rsx_sd
 ; EXITS:
 ;   * If the sector was read OK:
 ;     Carry true.
-;      A : 0.
+;      A : 0
 ;     HL : Preserved.
 ;   * If an error ocurred:
 ;     Carry false.
@@ -650,6 +710,8 @@ rsx_read_sector
     JR   NZ,.make_amsdos_call
     ; |^D Amèlie code
 
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |^D RSX
@@ -686,6 +748,8 @@ rsx_write_sector
     JR   NZ,.make_amsdos_call
     ; |^E Amèlie code
 
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |^E RSX
@@ -719,6 +783,8 @@ rsx_format_track
     JR   NZ,.make_amsdos_call
     ; |^F Amèlie code
 
+    ; Return to firmware
+    SCF                             ; Carry True
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |^F RSX
@@ -738,6 +804,15 @@ save_return_address_for_errors
     LD   (IY + 7),H
     POP  HL
     RET
+
+; ---------------------------------------------------------------------------
+; Carry False
+; ---------------------------------------------------------------------------
+;return_from_rsx
+;    LD   L,(IY + 6)
+;    LD   H,(IY + 7)
+;    LD   SP,HL                  ; Restore stack pointer
+;    RET
 
 ; ---------------------------------------------------------------------------
 ; Test for a single parameter
@@ -768,6 +843,7 @@ test_for_single_param
 ; Get a pointer to an string parameter
 ; EXITS:
 ;     HL : String Address
+;      B : String length
 ; ---------------------------------------------------------------------------
 get_string_param
     CALL get_string_descriptor
@@ -1032,21 +1108,78 @@ print_text
     RET
 
 ; ---------------------------------------------------------------------------
+initialize_text
+    DEFB $0F,2,' AMELIE v0.1 ',$A4,'2012 PulkoMandy & SyX',$0F,1,10,13,$FF
+
+; ---------------------------------------------------------------------------
 ; Put after the Amsdos memory zone in $BE40 - $BE7D (Variables for Amèlie)
 ; ---------------------------------------------------------------------------
 begin_ameliedos_patch
-    incbin 'ameliedos_patch.bin'
-end_ameliedos_patch
+    RORG AMSDOS_HOOK
 
 ; ---------------------------------------------------------------------------
-initialize_text
-    DEFB $0F,2,' AMELIE v',$0F,3,'0.1 ',$0F,1,$A4
-    DEFB $0F,3,' PulkoMandy & SyX',$0F,1,' 2012',10,13,$FF
+; CAS vectors hook
+hook_for_amsdos_cas_vectors
+    RST  $18                        ; FAR_CALL amelie_hook
+    DEFW amelie_cas_hook_far_call
+    RET
+
+amelie_cas_hook_far_call
+    DEFW amelie_cas_hook            ; ROM Address
+    DEFB 0                          ; ROM number for our ROM
+
+; ---------------------------------------------------------------------------
+; Amsdos variables
+amsdos_cas_vectors
+    DEFS 2                          ; Amsdos ROM CAS Vectors (CPC = $CD4C / CPC+ = $CDB0)
+
+amsdos_buffers
+    DEFS 2                          ; Amsdos reserved area + 560 
+                                    ; Start of Catalog (128 bytes) and Sector (512) buffers
+; ---------------------------------------------------------------------------
+; Far address of overloaded RSXs
+farcall_amsdos_drive
+    DEFS 2                          ; |DRIVE RSX address
+    DEFS 1                          ; |DRIVE RSX ROM number
+
+farcall_amsdos_dir
+    DEFS 2                          ; |DIR RSX address
+    DEFS 1                          ; |DIR RSX ROM number
+
+farcall_amsdos_era
+    DEFS 2                          ; |ERA RSX address
+    DEFS 1                          ; |ERA RSX ROM number
+
+farcall_amsdos_ren
+    DEFS 2                          ; |REN RSX address
+    DEFS 1                          ; |REN RSX ROM number
+ 
+farcall_amsdos_read_sector
+    DEFS 2                          ; |^D  RSX address
+    DEFS 1                          ; |^D RSX ROM number
+
+farcall_amsdos_write_sector
+    DEFS 2                          ; |^E RSX address
+    DEFS 1                          ; |^E RSX ROM number
+
+farcall_amsdos_format_track
+    DEFS 2                          ; |^F RSX address
+    DEFS 1                          ; |^F RSX ROM number
+
+; ---------------------------------------------------------------------------
+; SD Commands
+
+; ---------------------------------------------------------------------------
+    REND
+
+; ---------------------------------------------------------------------------
+end_ameliedos_patch
 
 ; --------------------------------------------------------------------------- 
-; Añadimos ceros al final de la ROM hasta tener 16 KBs
-;    DEFS $3FFF - $
-;    DEFB 0
+; Padding the rom with 0s until the checksum byte
+    ORG  $FFFF
+checksum_byte
+    DEFB 0
 
 ; ---------------------------------------------------------------------------
     END
