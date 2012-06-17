@@ -1,0 +1,2 @@
+@ECHO OFF
+"C:\Program Files\Atmel\AVR Tools\AvrAssembler2\avrasm2.exe" -S "d:\projects\cpc_booster\bios_february05\labels.tmp" -fI  -o "d:\projects\cpc_booster\bios_february05\booster_02_05.hex" -d "d:\projects\cpc_booster\bios_february05\booster_02_05.obj" -e "d:\projects\cpc_booster\bios_february05\booster_02_05.eep" -m "d:\projects\cpc_booster\bios_february05\booster_02_05.map" -W+ie   "D:\PROJECTS\CPC_BOOSTER\bios_february05\booster_main.asm"
