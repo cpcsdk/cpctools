@@ -333,13 +333,103 @@ GET_SECTOR_DATA                 EQU $C56C
 ; ---------------------------------------------------------------------------
 ; System Variables
 
-; Related to AMSDOS
+; Amsdos Variables between $BE40 - $BE7F
+; BE40   2 Pointer to Disk Parameter Header for Drive A (A910h) (CPM:AE58h)
+; BE42   2 Pointer to Disk Parameter Block for Drive A  (A890h) (CPM:ADD8h)
+; BE44   2 Delay for Motor Spin-up in 1/50 seconds      (0032h)
+; BE46   2 Delay for Motor Spin-down in 1/50 seconds    (00FAh)
+; BE48   1 Delay for Formatting in whatever units       (AFh)
+; BE49   1 Delay for whatever in milliseconds           (0Fh)
+; BE4A   1 Delay for Track-Settle in milliseconds       (0Ch)
+; BE4B   1 Number of bytes received in Result Phase
+; BE4C   7 Response from FDC in Result Phase
+; BE53   1 Drive HS/US
+; BE54   1 Track
+; BE55   1 Record
+; BE56   1 Drive HS/US
+; BE57   1 Track
+; BE58   1 Sector
+; BE59   1 Number of Records per Track? or (Blockmask+1)?
+; BE5A   1 Drive HS/US
+; BE5B   1 Track
+; BE5C   1 Record
+; BE5D   1 ?
+; BE5E   1 Flag Read/Write Sector
+; BE5F   1 Flag On/Off Motor
+; BE60   2 Pointer to 128-byte Directory Record I/O Buffer (A930h) (CPM:0080h)
+; BE62   2 Pointer to 512-byte Sector I/O Buffer           (A9B0h) (CPM:AEF8h)
+; BE64   2 Stack...Temporary...?                           (BFxxh)
+; BE66   1 Number of retries (10h)
+; BE67   6 Ticker Block (Chain,Count,Reload)
+; BE6D   7 Event Block (Chain,Count,Class,Proc,Bank)
+; BE74   1 Desired Track or Sector Number
+; BE75   1 FDC Command Number
+; BE76   2 Pointer to 512-byte Sector I/O Buffer           (A9B0h) (CPM:AEF8h)
+; BE78   1 Flag Enable/Disable Error Messages
+; BE79   1 Reserved, CPC+: 00h=Normal, FFh=Enable Keyboard Scanning during I/O
+; BE7A   1 Reserved, CPC+: 00h=No Disc (464+), FFh=Disc (6128+)
+; BE7B   2 Reserved
+; BE7D   2 Pointer to Memory Pool                          (A700h) (CPM:N/A)
+; BE7F   1 Hook                                            (C9h)
+AMSDOS_DRIVE_HSUS               EQU $BE53
 AMSDOS_RESERVED_AREA            EQU $BE7D
 AMSDOS_MEMORY_POOL              EQU $BE7D
-AMSDOS_HOOK             	EQU $BE7F
+AMSDOS_HOOK                     EQU $BE7F
+
+; Amsdos Offsets between $A6FC - $ABFF
+AMSDOS_RSX_BLOCK                EQU 0                                   ; (4) Next block and AMSDOS ROM bank
+AMSDOS_DEFAULT_DRIVE            EQU AMSDOS_RSX_BLOCK + 4                ; (1) A = 0, B = 1, ...
+AMSDOS_DEFAULT_USER             EQU AMSDOS_DEFAULT_DRIVE + 1            ; (1) 0 - 255
+AMSDOS_ACTIVE_DRIVE             EQU AMSDOS_DEFAULT_USER + 1             ; (1) A = 0, B = 1, ...
+AMSDOS_DPH_ACTIVE_DRIVE         EQU AMSDOS_ACTIVE_DRIVE + 1             ; (2)
+AMSDOS_DEFAULT_DRIVE_OPEN       EQU AMSDOS_DPH_ACTIVE_DRIVE + 2         ; (1) Open = $FF
+AMSDOS_STACK_POINTER            EQU AMSDOS_DEFAULT_DRIVE_OPEN + 1       ; (2)
+AMSDOS_FCB_OPENIN               EQU AMSDOS_STACK_POINTER + 2            ; (36) Extended File Control Block for OPENIN
+AMSDOS_FCB_OPENOUT              EQU AMSDOS_FCB_OPENIN + 36              ; (36) Extended File Control Block for OPENOUT
+AMSDOS_FH_OPENIN                EQU AMSDOS_FCB_OPENOUT + 36             ; (74) File Header for OPENIN
+AMSDOS_FH_OPENOUT               EQU AMSDOS_FH_OPENIN + 74               ; (74) File Header for OPENOUT
+AMSDOS_RECORD_NAME_BUFFER       EQU AMSDOS_FH_OPENOUT + 74              ; (128) Temporary Record & Filename Buffer
+AMSDOS_OLD_CAS_VECTORS          EQU AMSDOS_RECORD_NAME_BUFFER + 128     ; (39) Original CAS_Function Vectors
+AMSDOS_UNUSED                   EQU AMSDOS_OLD_CAS_VECTORS + 39         ; (2)
+AMSDOS_FAR_ADDRESS_CAS_VECTORS  EQU AMSDOS_UNUSED + 2                   ; (3) FAR Address for RST4 in patched CAS_vectors
+AMSDOS_DPB_DRIVE_A              EQU AMSDOS_FAR_ADDRESS_CAS_VECTORS + 3  ; (64) Extended Disk Parameter Block Drive A
+AMSDOS_DPB_DRIVE_B              EQU AMSDOS_DPB_DRIVE_A + 64             ; (64) Extended Disk Parameter Block Drive B
+AMSDOS_DPH_DRIVE_A              EQU AMSDOS_DPB_DRIVE_B + 64             ; (16) Disk Parameter Header Drive A
+AMSDOS_DPH_DRIVE_B              EQU AMSDOS_DPH_DRIVE_A + 16             ; (16) Disk Parameter Header Drive B
+AMSDOS_CATALOG_BUFFER           EQU AMSDOS_DPH_DRIVE_B + 16             ; (128) Buffer for Catalog Records
+AMSDOS_SECTOR_BUFFER            EQU AMSDOS_CATALOG_BUFFER + 128         ; (512) Sector Buffer
+AMSDOS_RESERVED                 EQU AMSDOS_SECTOR_BUFFER + 512          ; (80)
+    
+; Offsets in the Extended File Control Block (FCB) for OPENIN/OPENOUT 
+FCB_DRIVE_NUMBER                EQU $00                                 ; (1) A = 0, B = 1, ... $FF = Not Open
+FCB_USER_NUMBER                 EQU FCB_DRIVE_NUMBER + 1                ; (1) 0 - 255
+FCB_FILE_NAME                   EQU FCB_USER_NUMBER + 1                 ; (8) Pad with spaces
+FCB_FILE_EXTENSION              EQU FCB_FILE_NAME + 8                   ; (3) Pad with spaces
+FCB_EXTENT_NUMBER               EQU FCB_FILE_EXTENSION + 3              ; (1) First directory entry of file = 0
+FCB_UNUSED                      EQU FCB_EXTENT_NUMBER + 1               ; (2) $00
+FCB_EXTENT_RECORDS              EQU FCB_UNUSED + 2                      ; (1) Number of Records in current Extent
+FCB_EXTENT_BLOCKS               EQU FCB_EXTENT_RECORDS + 1              ; (16) Block Numbers for current Extent
+FCB_PREVIOS_RECORDS             EQU FCB_EXTENT_BLOCKS + 16              ; (3) Number of previously accessed Records
+
+; Offsets in the File Header for OPENIN/OPENOUT 
+FH_ACCESS_MODE                  EQU $00                                 ; (1) CHAR = 1, DIRECT = 2
+FH_2K_BUFFER                    EQU FH_ACCESS_MODE + 1                  ; (2) Pointer to 2K work buffer
+FH_CHAR_2K_BUFFER               EQU FH_2K_BUFFER + 2                    ; (2) Pointer to current CHAR in 2K work buffer
+FH_USER_FILE_NAME               EQU FH_CHAR_2K_BUFFER + 2               ; (16) User Number and Filename (pad with $00)
+FH_BLOCK_NUMBER                 EQU FH_USER_FILE_NAME + 16              ; (1) Block Number
+FH_LAST_BLOCK                   EQU FH_BLOCK_NUMBER + 1                 ; (1) Last Block 
+FH_FILE_TYPE                    EQU FH_LAST_BLOCK + 1                   ; (1) File Type (BASIC = 0, PROTECTED = 1, BINARY = 2)
+FH_DATA_LENGTH                  EQU FH_FILE_TYPE + 1                    ; (2) Data Length
+FH_LOAD_ADDRESS                 EQU FH_DATA_LENGTH + 2                  ; (2) Load Address in memory
+FH_FIRST_BLOCK                  EQU FH_LOAD_ADDRESS + 2                 ; (1) First Block ($FF)
+FH_FILE_SIZE                    EQU FH_FIRST_BLOCK + 1                  ; (2) Filesize, less the header ($80 bytes)
+FH_EXEC_ADDRESS                 EQU FH_FILE_SIZE + 2                    ; (2) Execution Address
+FH_UNUSED                       EQU FH_EXEC_ADDRESS + 2                 ; (36)
+FH_FILE_SIZE_24                 EQU FH_UNUSED + 36                      ; (3) 24 bits filesize
+FH_CHECSUM                      EQU FH_FILE_SIZE_24 + 3                 ; (2) Checksum for bytes between $05 - $47
 
 ; ---------------------------------------------------------------------------
-; Paleta de Firmware
+; Firmware Palette
 fNEGRO               EQU 0      ; Black 
 fAZUL                EQU 1      ; Blue 
 fAZUL_BRILLANTE      EQU 2      ; Bright Blue 
