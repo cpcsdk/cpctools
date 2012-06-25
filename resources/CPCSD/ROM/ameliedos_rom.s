@@ -1,4 +1,5 @@
 ; ---------------------------------------------------------------------------
+; ---------------------------------------------------------------------------
 ; AMÉLIE ROM (c) 2012
 ; ---------------------------------------------------------------------------
 
@@ -184,7 +185,7 @@ check_drive_and_prepare_return_for_cas
 ; EXITS:
 ;   * If file was opened OK:
 ;     Carry true and Zero false.
-;     HL : Adress of buffer with the file header.
+;     HL : Address of buffer with the file header.
 ;     DE : File load Address.
 ;     BC : File length.
 ;      A : File type.
@@ -356,7 +357,7 @@ amelie_cas_test_eof
 ; EXITS:
 ;   * If file was opened OK:
 ;     Carry true and Zero false.
-;     HL : Adress of buffer with the file header.
+;     HL : Address of buffer with the file header.
 ;     A corrupt.
 ;   * If the stream was in use:
 ;     Carry and Zero false.
@@ -526,7 +527,7 @@ rsx_dir
     ; |DIR Amélie code
     LD   A,C
     OR   A
-    CALL NZ,get_string_param        ; HL = String
+    CALL NZ,get_string_parameter    ; HL = String | B = Length
 
     ; Return to firmware
     OR   A                          ; Carry False
@@ -551,17 +552,15 @@ rsx_era
 
     CALL test_for_single_param
 
-;    CALL get_string_param           ; HL = String
+    CALL put_filename_in_buffer             ; DE : Filename buffer
 
     ; Check for the drive in the parameter
-;;    CALL is_sd_active_drive
-;    LD   A,(BC)
-;    CP   SD_DRIVE_NUMBER
-;    JR   NZ,.make_amsdos_call
+    LD   A,(DE)                             ; Get Active drive for ERA
+    CP   SD_DRIVE_NUMBER
+    JR   NZ,.make_amsdos_call
 
     ; |ERA Amélie code
 ;    CALL enable_parameter_drive
-
 
 ;   JP   return_from_rsx            ; RET
     ; Return to firmware
@@ -605,10 +604,10 @@ rsx_ren
     JR   NZ,.make_amsdos_call
 
     ; |REN Amélie code
-;    CALL get_string_param           ; HL = String
+;    CALL get_string_parameter    ; HL = String | B = Length
     
     ; Get second parameter
-;    CALL get_string_param           ; HL = String
+;    CALL get_string_parameter    ; HL = String | B = Length
 
     ; Return to firmware
     OR   A                          ; Carry False
@@ -633,7 +632,7 @@ rsx_drive
     PUSH IX
     CALL test_for_single_param
 
-    CALL get_string_param           ; HL = String
+    CALL get_string_parameter       ; HL = String | B = Length
 
     ; Get Drive Number
     RST  $20                        ; RAM LAM -> LD A,(HL)
@@ -719,6 +718,8 @@ rsx_read_sector
     JR   NZ,.make_amsdos_call
     ; |^D Amélie code
 
+    ; *** FILL HERE ***
+
     ; Return to firmware
     SCF                             ; Carry True
     RET
@@ -757,6 +758,8 @@ rsx_write_sector
     JR   NZ,.make_amsdos_call
     ; |^E Amélie code
 
+    ; *** FILL HERE ***
+
     ; Return to firmware
     SCF                             ; Carry True
     RET
@@ -791,6 +794,8 @@ rsx_format_track
     CP   E
     JR   NZ,.make_amsdos_call
     ; |^F Amélie code
+
+    ; *** FILL HERE *** or much better ignore this rsx :P
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -848,35 +853,39 @@ test_for_single_param
     LD   SP,HL                              ; Set SP to it
     RET
 
+
 ; ---------------------------------------------------------------------------
-; Get a pointer to an string parameter
+; Get string parameter
 ; EXITS:
-;     HL : String Address
-;      B : String length
+;     HL : Pointer to the string
+;      B : Length string
 ; ---------------------------------------------------------------------------
-get_string_param
-    CALL get_string_descriptor
-    LD   B,(HL)                     ; String length
+get_string_parameter
+    CALL get_string_descriptor_in_hl
+    LD   B,(HL)                     ; B: Length string
     INC  HL
-    JP   load_hl_from_hl
-
-get_string_descriptor    
-    LD   L,(IX + 0)
-    LD   H,(IX + 1)
-    INC  IX
-    INC  IX
-    RET
+;    JP   get_string_pointer_in_hl
 
 ; ---------------------------------------------------------------------------
-; LD HL,(HL)
+; Get string pointer
 ; ---------------------------------------------------------------------------
-load_hl_from_hl
+get_string_pointer_in_hl
     PUSH AF
     LD   A,(HL)
     INC  HL
     LD   H,(HL)
     LD   L,A
     POP  AF
+    RET
+
+; ---------------------------------------------------------------------------
+; Get string descriptror
+; ---------------------------------------------------------------------------
+get_string_descriptor_in_hl
+    LD   L,(IX + 0)
+    LD   H,(IX + 1)
+    INC  IX
+    INC  IX
     RET
 
 ; ---------------------------------------------------------------------------
@@ -892,6 +901,293 @@ is_sd_active_drive
     LD   A,(HL)                     ; AMSDOS_MEMORY_POOL + 2 = Active Drive Number
     CP   SD_DRIVE_NUMBER
     RET
+
+; ---------------------------------------------------------------------------
+; Copy the filename parameter to the amsdos filename buffer
+; EXITS:
+;    DE: Filename buffer
+; ---------------------------------------------------------------------------
+put_filename_in_buffer
+    CALL get_string_parameter    ; HL = String | B = Length
+
+    PUSH BC
+    PUSH HL                     ; *** SOBRA ***
+
+    ; Get address of Temporary Record & Filename Buffer in DE ($A7E4)
+    LD   DE,AMSDOS_RECORD_NAME_BUFFER
+    CALL add_de_iy
+
+    ; Initialize filename buffer
+    PUSH DE
+    CALL initialize_filename_in_buffer
+    POP  DE                 ; DE => Filename buffer
+
+    POP  HL                 ; HL => Filename *** SOBRA ***
+    POP  BC                 ; B => Length filename
+
+    ; Copy the filename to the buffer
+    PUSH DE
+    CALL check_and_copy_filename
+    POP  DE
+
+    RET
+
+; ---------------------------------------------------------------------------
+; Initialize filename buffer
+; ---------------------------------------------------------------------------
+initialize_filename_in_buffer
+    ; Set default Drive and User in the filename buffer
+    LD   A,(IY + AMSDOS_DEFAULT_DRIVE)
+    LD   (DE),A
+    INC  DE
+    LD   A,(IY + AMSDOS_DEFAULT_USER)
+    LD   (DE),A
+    INC  DE
+
+    ; Fill filename with spaces
+    PUSH BC
+    LD   C,11
+    CALL fill_with_spaces
+    POP  BC
+
+    ; Mark end of filename
+    LD   A,$FF
+    LD   (DE),A
+ 
+    RET
+
+; ---------------------------------------------------------------------------
+; ENTRIES:
+;    DE: Address of Amsdos filename buffer
+;    HL: Filename
+;     B: Length Filename
+; ---------------------------------------------------------------------------
+check_and_copy_filename
+    DEC  HL                         ; HL--, need for the routine
+    CALL get_char_from_string
+    CCF
+    RET  C                          ; Return if string was empty
+
+    LD   C,A                        ; Save first byte read from string
+    PUSH HL
+    PUSH BC
+.loop_search_colon
+    CP   ':'
+    JR   Z,.colon_found
+
+    ; Get next char
+    CALL get_valid_amsdos_char_from_string
+    JR   C,.loop_search_colon
+    SCF                             ; Set colon not found
+
+.colon_found
+    POP  BC
+    POP  HL
+    LD   A,C                        ; Recover first char read
+    JR   C,.get_filename            ; Colon not found
+
+    ; Test for user number |DIR,"0A:*.*" (|DIR,"15A:" is max user)
+.check_user_number
+    INC  DE
+    CP   '0'
+    JR   C,.check_drive_number      ; < '0'
+    CP   ':'
+    JR   NC,.check_drive_number     ; >= ':'
+    SUB  '0'                        ; Convert to binary
+    LD   C,A                        ; Save User number in C
+    LD   (DE),A                     ; Transfer to Amsdos buffer filename
+
+    ; Get next char
+    CALL get_valid_amsdos_char_from_string
+    CP   '0'
+    JR   C,.check_drive_number      ; < '0'
+    CP   ':'
+    JR   NC,.check_drive_number     ; >= ':'
+    OR   A
+    DEC  C
+    RET  NZ                         ; Return if first digit user number is not 1
+    ADD  A,$DA                      ; $DA + $30 = $
+    CP   $10
+    RET  NC                         ; Return if the second digit >= 6
+    LD   (DE),A                     ; Save user number (0 - 15)
+
+    ; Get next char
+    CALL get_valid_amsdos_char_from_string
+.check_drive_number
+    DEC  DE
+    CP   'Q'
+    JR   NC,.check_colon            ; > 'Q'
+    CP   'A'
+    JR   C,.check_colon             ; < 'A'
+    SUB  'A'                        ; Convert to binary
+    LD   (DE),A                     ; Save drive number
+
+    ; Get next char and Skip (it could be ':' or 'D' <- SD:)
+    CALL get_valid_amsdos_char_from_string
+
+.check_colon
+    CALL skip_space_and_get_next_char
+    XOR  ':'
+    RET  NZ                         ; Return if it isn't ':'
+    ; Get next char
+    CALL get_char_from_string
+    CCF
+    RET  C                          ; Return if string is empty
+
+.get_filename
+    INC  DE
+    INC  DE                         ; Set buffer at the beginning of the name
+    CP   '.'
+    RET  Z                          ; Return if it's '.'
+
+    ; Check name
+    LD   C,8
+    CALL .check_substring
+    RET  C
+
+    XOR  '.'
+    RET  NZ                         ; Return if it isn't '.'
+
+    ; Get next char
+    CALL get_char_from_string
+
+    ; Check extension
+    LD   C,3
+    JR   NC,fill_with_spaces
+
+.check_substring
+    CP   ' '
+    JR   C,fill_with_spaces         ; < ' ', then fill with spaces
+    PUSH HL
+    PUSH BC
+    LD   B,A                        ; Save char in B
+    LD   HL,list_invalid_chars_for_filename
+.check_for_invalid_chars
+    LD   A,(HL)
+    INC  HL
+    OR   A
+    JR   Z,.char_is_valid
+    CP   B
+    JR   NZ,.check_for_invalid_chars
+.char_not_valid    
+    SCF                             ; Set char invalid for Amsdos 
+
+.char_is_valid
+    LD   A,B
+    POP  BC
+    POP  HL
+    JR   C,fill_with_spaces         ; In case of invalid char, put space.
+    DEC  C
+    RET  M                          ; Return when length is reached (Carry true)
+    CP   '*'                        ; Is it a wildcard?
+    CALL Z,fill_buffer_with_wildchar
+    LD   (DE),A
+    INC  DE
+    ; Get next char
+    CALL get_valid_amsdos_char_from_string
+    JR   NC,fill_with_spaces
+    CP   ' '
+    JR   NZ,.check_substring        ; Space? No, then continue checking the string
+    ; Space found, fill the rest of the filename buffer with spaces
+    CALL skip_space_and_get_next_char
+
+; ---------------------------------------------------------------------------
+; Fill buffer with spaces.
+; ENTRIES:
+;     C: Length buffer
+;    DE: Address of the buffer
+; ---------------------------------------------------------------------------
+fill_with_spaces
+    PUSH AF
+    LD   A,$20                        ; ' '
+    CALL fill_buffer_with_a
+    POP  AF
+    CCF
+    RET
+
+; ---------------------------------------------------------------------------
+; Fill buffer with '?' (Mark of wildcard).
+; ---------------------------------------------------------------------------
+fill_buffer_with_wildchar
+    LD   A,'?'
+
+; ---------------------------------------------------------------------------
+; Fill buffer with the value in the Acumulator.
+; ENTRIES:
+;     A: Byte to fill the buffer
+;     C: Length buffer
+;    DE: Address of the buffer
+; ---------------------------------------------------------------------------
+fill_buffer_with_a
+    INC  C
+.loop_fill_buffer_with_a
+    DEC  C
+    RET  Z
+    LD   (DE),A
+    INC  DE
+    JR   NZ,.loop_fill_buffer_with_a
+
+; ---------------------------------------------------------------------------
+; Fill buffer with 0.
+; Entries:
+;    DE : Pointer to the buffer
+;    BC : Length of buffer
+; ---------------------------------------------------------------------------
+;fill_with_zeros
+;    XOR  A
+;    LD   (DE),A
+;    INC  DE
+;    DEC  BC
+;    LD   A,B
+;    OR   C
+;    JR   NZ,fill_with_zeros
+;    RET
+
+; ---------------------------------------------------------------------------
+skip_space_and_get_next_char
+    CP   ' '
+    SCF
+    RET  NZ
+
+get_char_from_string
+    CALL get_valid_amsdos_char_from_string
+    JR   C,skip_space_and_get_next_char
+    RET                             ; The string is empty
+
+; ---------------------------------------------------------------------------
+; Get a valid amsdos char from the string ($00 - $7F) 
+; ENTRIES:
+;     B: Length String HL
+;     C: $FF
+;    DE: Address of Amsdos filename buffer
+;    HL: String
+; EXITS:
+;     A: Char in uppercase.
+;     Carry true if the string is not empty yet.
+; ---------------------------------------------------------------------------
+get_valid_amsdos_char_from_string
+    LD   A,B
+    OR   A
+    RET  Z                          ; Length String == 0
+    INC  HL
+    DEC  B
+    RST  $20                        ; RAM LAM -> LD A,(HL) with ROMs disabled
+    AND  $7F
+    CALL uppercase_char
+    SCF
+    RET
+
+uppercase_char
+    CP   'a'
+    RET  C
+    CP   'z' + 1
+    RET  NC
+    AND  %11011111                  ; Uppercase it
+    RET
+
+; ---------------------------------------------------------------------------
+list_invalid_chars_for_filename
+    DEFB '<>.,;:=[]_%|()/\\',$7F,$00
 
 ; ---------------------------------------------------------------------------
 ; Initialization
@@ -1102,6 +1398,17 @@ ldrom_a_from_de
     ADD  HL,SP
     CALL KL_FAR_PCHL                ; HL = Address | C = ROM Select
     POP  HL
+    POP  HL
+    RET
+
+; ---------------------------------------------------------------------------
+; ADD DE,IY
+; ---------------------------------------------------------------------------
+add_de_iy
+    PUSH IY
+    EX   (SP),HL
+    ADD  HL,DE
+    EX   DE,HL
     POP  HL
     RET
 
