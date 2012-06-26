@@ -205,7 +205,7 @@ amelie_cas_in_open
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS IN OPEN code *** goes here ***
 
     ; Return to firmware
     SCF                                             ; Carry True
@@ -230,14 +230,14 @@ amelie_cas_in_close
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS IN CLOSE code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_IN_ABANDON: Close the input file immediately.
+; CAS_IN_ABANDON: Close the input file immediately.                       ***
 ; EXITS:
 ;     AF, BC, DE and HL corrupt.
 ;     All others registers preserved.
@@ -246,9 +246,14 @@ amelie_cas_in_abandon
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS IN ABANDON code
 
+    ; Close Drive used by OPENIN
+    LD   (IY + AMSDOS_FCB_OPENIN + FCB_DRIVE_NUMBER),$FF
+    
     ; Return to firmware
+    SCF
+    SBC  A,A
     RET
 
 ; ---------------------------------------------------------------------------
@@ -271,7 +276,7 @@ amelie_cas_in_char
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS IN CHAR code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -302,7 +307,7 @@ amelie_cas_in_direct
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS IN DIRECT code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -317,7 +322,7 @@ amelie_cas_return
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS RETURN code *** goes here ***
 
     ; Return to firmware
     RET
@@ -342,7 +347,7 @@ amelie_cas_test_eof
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS TEST EOF code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -375,7 +380,7 @@ amelie_cas_out_open
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS OUT OPEN code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -401,7 +406,7 @@ amelie_cas_out_close
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS OUT CLOSE code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -417,7 +422,7 @@ amelie_cas_out_abandon
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS OUT ABANDON code *** goes here ***
 
     ; Return to firmware
     RET
@@ -444,7 +449,7 @@ amelie_cas_out_char
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS OUT CHAR code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -475,7 +480,7 @@ amelie_cas_out_direct
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS OUT code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -503,7 +508,7 @@ amelie_cas_catalog
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_and_prepare_return_for_cas
 
-    ; Make Amélie code
+    ; Amélie CAS CATALOG code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -519,18 +524,45 @@ rsx_dir
     PUSH AF
     PUSH IX
 
-    LD   C,A                        ; Save number of parameters (BC can be used freely)
-    ; Check for the active drive
-    CALL is_sd_active_drive
+    ; Test for the optional single parameter
+    OR   A
+    JR   Z,.no_parameter_passed
+    DEC  A
+    JR   NZ,.make_amsdos_call               ; More than one parameter passed
+
+    ; Get single parameter
+    LD   DE,AMSDOS_RECORD_NAME_BUFFER
+    CALL put_filename_in_buffer             ; DE : Filename buffer
+
+    ; Check for the drive in the parameter
+    LD   A,(DE)                             ; Get Active drive for DIR
+    CP   SD_DRIVE_NUMBER
     JR   NZ,.make_amsdos_call
 
-    ; |DIR Amélie code
-    LD   A,C
-    OR   A
-    CALL NZ,get_string_parameter    ; HL = String | B = Length
+    CALL set_active_drive
+
+    INC  DE                                 ; Skip Drive
+    INC  DE                                 ; Skip User
+    JR   .do_dir_ameli
+
+.no_parameter_passed
+    LD   A,(IY + AMSDOS_ACTIVE_DRIVE)       ; Get Active Drive
+    CP   SD_DRIVE_NUMBER
+    JR   NZ,.make_amsdos_call
+    LD   DE,AMSDOS_RECORD_NAME_BUFFER + 2
+    CALL add_de_iy
+    LD   A,' '
+    LD   (DE),A                             ; Mark as name not valid
+
+
+    ; |DIR Amélie code *** goes here ***
+.do_dir_ameli
 
     ; Return to firmware
-    OR   A                          ; Carry False
+    POP  IX
+    POP  AF
+
+    OR   A                          ; Clear Carry
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |DIR RSX
@@ -550,8 +582,11 @@ rsx_era
     PUSH AF
     PUSH IX
 
-    CALL test_for_single_param
+    ; Test for the single parameter
+    DEC  A
+    JR   NZ,.make_amsdos_call               ; Pass error control to amsdos
 
+    LD   DE,AMSDOS_RECORD_NAME_BUFFER
     CALL put_filename_in_buffer             ; DE : Filename buffer
 
     ; Check for the drive in the parameter
@@ -559,12 +594,31 @@ rsx_era
     CP   SD_DRIVE_NUMBER
     JR   NZ,.make_amsdos_call
 
-    ; |ERA Amélie code
-;    CALL enable_parameter_drive
+    CALL set_active_drive
+    
+    ; Mark end of second filename
+    LD   H,D
+    LD   L,E
+    LD   BC,16                      ; 1 (Drive) + 1 (User) + 11 (Name) + 1 (End) + 1 (D) + 1 (U)
+    ADD  HL,BC
+    LD   (HL),$FF
 
-;   JP   return_from_rsx            ; RET
+    ; |ERA Amélie code *** goes here ***
+
+    ; Check if the filename is valid (invalid names are converted to spaces)
+    INC  DE                                 ; Skip Drive
+    INC  DE                                 ; Skip User
+    LD   A,(DE)
+    CP   ' '
+    JR   Z,.make_amsdos_call                ; This is lazy, it would be better show the Error
+
+    ; The file exist?
+
     ; Return to firmware
-    OR   A                          ; Carry False
+    POP  IX
+    POP  AF
+
+    OR   A                          ; Clear Carry
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |ERA RSX
@@ -577,14 +631,14 @@ rsx_era
     RET
 
 ; ---------------------------------------------------------------------------
-enable_parameter_drive
-    LD   A,(BC)                     ; Get drive number from parameter
-    INC  BC
-
-    PUSH AF
-    CALL set_active_drive
-    POP  AF
-    RET
+;enable_parameter_drive
+;    LD   A,(BC)                     ; Get drive number from parameter
+;    INC  BC
+;
+;    PUSH AF
+;    CALL set_active_drive
+;    POP  AF
+;    RET
 
 ; ---------------------------------------------------------------------------
 ; |REN
@@ -596,21 +650,38 @@ rsx_ren
     PUSH IX
 
     ; Test for the 2 parameters
-    DEC  A                          ; DEC Number of Parameters
-    CALL test_for_single_param
+    DEC  A
+    DEC  A
+    JR   NZ,.make_amsdos_call               ; Pass error control to amsdos
 
-    ; Check for the active drive
-    CALL is_sd_active_drive
-    JR   NZ,.make_amsdos_call
+    ; Get first parameter
+    LD   DE,AMSDOS_RECORD_NAME_BUFFER
+    CALL put_filename_in_buffer             ; DE : Filename buffer
+    PUSH DE
 
-    ; |REN Amélie code
-;    CALL get_string_parameter    ; HL = String | B = Length
-    
     ; Get second parameter
-;    CALL get_string_parameter    ; HL = String | B = Length
+    LD   DE,AMSDOS_RECORD_NAME_BUFFER + 14  ; 1 (D) + 1 (U) + 11 (N) + 1 (E)
+    CALL put_filename_in_buffer
 
+    ; Check for the drive in the parameters
+    LD   A,(DE)                             ; Get Active drive for the second parameter
+    POP  HL
+    CP   (HL)
+    JR   NZ,.make_amsdos_call               ; Both drives are the same?
+    CP   SD_DRIVE_NUMBER
+    JR   NZ,.make_amsdos_call               ; Is SD?
+
+    CALL set_active_drive
+
+    ; |REN Amélie code *** goes here ***
+    ; HL: Pointer to the first filename | 1 (D) + 1 (U) + 11 (N) + 1 (E)
+    ; DE: Pointer to the second filename | 1 (D) + 1 (U) + 11 (N) + 1 (E)
+    
     ; Return to firmware
-    OR   A                          ; Carry False
+    POP  IX
+    POP  AF
+
+    OR   A                          ; Clear Carry
     RET
 
     ; It's not the SD drive, we redirect to the AMSDOS |REN RSX
@@ -630,7 +701,10 @@ rsx_drive
     
     PUSH AF
     PUSH IX
-    CALL test_for_single_param
+
+    ; Test for the single parameter
+    DEC  A
+    JR   NZ,.make_amsdos_call       ; Pass error control to amsdos
 
     CALL get_string_parameter       ; HL = String | B = Length
 
@@ -716,9 +790,8 @@ rsx_read_sector
     LD   A,SD_DRIVE_NUMBER
     CP   E
     JR   NZ,.make_amsdos_call
-    ; |^D Amélie code
 
-    ; *** FILL HERE ***
+    ; |^D Amélie code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -756,9 +829,8 @@ rsx_write_sector
     LD   A,SD_DRIVE_NUMBER
     CP   E
     JR   NZ,.make_amsdos_call
-    ; |^E Amélie code
 
-    ; *** FILL HERE ***
+    ; |^E Amélie code *** goes here ***
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -793,9 +865,7 @@ rsx_format_track
     LD   A,SD_DRIVE_NUMBER
     CP   E
     JR   NZ,.make_amsdos_call
-    ; |^F Amélie code
-
-    ; *** FILL HERE *** or much better ignore this rsx :P
+    ; |^F Amélie code *** goes here *** or much better ignore this dangerous rsx :P
 
     ; Return to firmware
     SCF                             ; Carry True
@@ -833,9 +903,9 @@ save_return_address_for_errors
 ; ENTRIES:
 ;     A: Number of parameters
 ; ---------------------------------------------------------------------------
-test_for_single_param
-    DEC  A
-    RET  Z
+;test_for_single_param
+;    DEC  A
+;    RET  Z
 
     ; ERROR "Too many parameters"
 ;;;    LD   A,error_number
@@ -847,11 +917,11 @@ test_for_single_param
 ;;;    OR   $80
 ;;;    CP   A
 
-    ; And return from the bug "gracefully"
-    LD   L,(IY + AMSDOS_STACK_POINTER)
-    LD   H,(IY + AMSDOS_STACK_POINTER + 1)  ; Recover AMSDOS stack pointer
-    LD   SP,HL                              ; Set SP to it
-    RET
+;    ; And return from the bug "gracefully"
+;    LD   L,(IY + AMSDOS_STACK_POINTER)
+;    LD   H,(IY + AMSDOS_STACK_POINTER + 1)  ; Recover AMSDOS stack pointer
+;    LD   SP,HL                              ; Set SP to it
+;    RET
 
 
 ; ---------------------------------------------------------------------------
@@ -894,16 +964,18 @@ get_string_descriptor_in_hl
 ;    Zero flag true if SD is the active drive.
 ;     A and HL corrupt. 
 ; ---------------------------------------------------------------------------
-is_sd_active_drive
-    LD   HL,(AMSDOS_MEMORY_POOL)
-    INC  HL
-    INC  HL
-    LD   A,(HL)                     ; AMSDOS_MEMORY_POOL + 2 = Active Drive Number
-    CP   SD_DRIVE_NUMBER
-    RET
+;is_sd_active_drive
+;    LD   HL,(AMSDOS_MEMORY_POOL)
+;    INC  HL
+;    INC  HL
+;    LD   A,(HL)                     ; AMSDOS_MEMORY_POOL + 2 = Active Drive Number
+;    CP   SD_DRIVE_NUMBER
+;    RET
 
 ; ---------------------------------------------------------------------------
 ; Copy the filename parameter to the amsdos filename buffer
+; ENTRIES:
+;    DE: Offset to filename buffer
 ; EXITS:
 ;    DE: Filename buffer
 ; ---------------------------------------------------------------------------
@@ -914,7 +986,7 @@ put_filename_in_buffer
     PUSH HL                     ; *** SOBRA ***
 
     ; Get address of Temporary Record & Filename Buffer in DE ($A7E4)
-    LD   DE,AMSDOS_RECORD_NAME_BUFFER
+;    LD   DE,AMSDOS_RECORD_NAME_BUFFER
     CALL add_de_iy
 
     ; Initialize filename buffer
@@ -1402,6 +1474,18 @@ ldrom_a_from_de
     RET
 
 ; ---------------------------------------------------------------------------
+; ADD BC,IY
+; ---------------------------------------------------------------------------
+;add_bc_iy
+;    PUSH IY
+;    EX   (SP),HL
+;    ADD  HL,BC
+;    LD   B,H
+;    LD   C,L
+;    POP  HL
+;    RET
+
+; ---------------------------------------------------------------------------
 ; ADD DE,IY
 ; ---------------------------------------------------------------------------
 add_de_iy
@@ -1410,6 +1494,17 @@ add_de_iy
     ADD  HL,DE
     EX   DE,HL
     POP  HL
+    RET
+
+; ---------------------------------------------------------------------------
+; ADD HL,IY
+; ---------------------------------------------------------------------------
+add_hl_iy
+    PUSH DE
+    PUSH IY
+    POP  DE
+    ADD  HL,DE
+    POP  DE
     RET
 
 ; ---------------------------------------------------------------------------
