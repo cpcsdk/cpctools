@@ -69,39 +69,111 @@
 ; voltage). Since this is designed for internal mounting, going with no led at
 ; all is likely safer (there will be no way to eject the card)
 
+; Some compilation information:
+; vasmz80_oldstyle -Dtest cpcsd_m.z80 -Fbin -o A.BIN
+;
+; Some macro exist:
+;  * lowfootprint: create a lighter (but slower) version (~40kbps)
+;  * nowrite: desactivate write sector function
+;  * test: activate test code
+; vasmz80_oldstyle -Dlowfootprint -Dnowrite cpcsd_m.z80 -Fbin -o A.BIN
+
 ; Write
-WRITE_PORT      EQU $EF
+WRITE_PORT		EQU $EF
 
-DATA_OUT        EQU $01
-CLOCK           EQU $02
-ACCESS_LED      EQU $04
+DATA_OUT		EQU $01
+CLOCK			EQU $02
+ACCESS_LED		EQU $04
 
-DATA_OUT_BIT    EQU 1
-CLOCK_BIT       EQU 2
-ACCESS_LED_BIT  EQU 3
+DATA_OUT_BIT	EQU 1
+CLOCK_BIT		EQU 2
+ACCESS_LED_BIT	EQU 3
 
 ; Read
-READ_PORT       EQU $F5
-DATA_IN         EQU $40
-DATA_IN_BIT     EQU 6
+READ_PORT		EQU $F5
+DATA_IN			EQU $40
+DATA_IN_BIT		EQU 6
 
-    ORG $4000
+START_TOKEN		EQU $FE
 
+GET_BIT_6		EQU 0b11000000
+
+; Macro
+  ifdef lowfootprint
+	macro RD_BIT_TO_REG ; (15 NOP)
+	OUT		(C),C		; (4) C: FF = clock high, data high, led off
+	IN		A,(C)		; (4) bit6 is relevant
+	RLA					; (1) ... now bit 7
+	OUT		(C),B		; (4) B: E5 = clock low, data high, led off.
+	RLA					; (1) ... and now the carry
+	RL		\1			; (1) and we can put it in "\1" bit 0
+	endmacro
+  else
+	macro RD_BIT_TO_REG
+	OUT		(C),C		; (4) C: FF = clock high, data high, led off
+	IN		A,(C)		; (4) bit6 is relevant
+	RLA					; (1) ... now bit 7
+	OUT		(C),B		; (4) B: E5 = clock low, data high, led off.
+	RLA					; (1) ... now bit 7
+;    ADD D   ; Put bit into carry
+	RL		\1			; (1) and we can put it in "\1" bit 0
+	endmacro
+  endif
+
+	macro RD_BYTE_TO_REG ; Valid Reg: ?:
+	rept	8
+	RD_BIT_TO_REG \1;
+	endr
+	endmacro
+
+	macro RD_BYTE_N_DROP
+	rept	8
+	OUT		(C),C	; C: FF = clock high, data high, led off
+;	IN		F,(C)	; bit6 is relevant
+	OUT		(C),B	; B: E5 = clock low, data high, led off.
+	endr
+	endmacro
+
+	macro CALL_RBYTE_N_DROP
+  ifdef lowfootprint
+	CALL RBYTE
+	CALL RBYTE
+  else
+	RD_BYTE_N_DROP
+	RD_BYTE_N_DROP
+  endif
+	endmacro
+
+	ORG $4000
+
+ ifdef test
 ; ------------------------------------------------------
 ; TEST CODE : just write the screen, then read it again.
 start
-    DI
-	; Set start address
-    LD   HL,$C000
-    LD   (ADDR0),HL
-	; Set end address + 1
-    LD   HL,$0000
-    LD   (ADDR1),HL
-
 	CALL	SD_Init
-	;CALL	SD_WRITE
+	; Set start address
+;    LD   HL,(&B8B4) ; Recuperation de TIME
+;    PUSH HL
+	LD   HL,$C000
+	LD   (ADDR0),HL
+	; Set end address + 1
+	LD   HL,$0000
+	LD   (ADDR1),HL
+
+;	CALL	SD_WRITE
 	CALL	SD_READ
+;    LD   HL,(&B8B4) ; Recuperation de TIME
+;    PUSH HL
+;    POP HL
+;    CALL printhex
+;    LD   H,L
+;    CALL printhex
+;    POP HL
+;    CALL printhex
+;    LD   H,L
+;    CALL printhex
 	JR $				; Done !
+  endif
 
 ; ------------------------------------------------------
 ;  Initialize the card
@@ -110,22 +182,22 @@ SD_Init
 
 ; First of all, we need to send at least 74 clock pulses to the card so it can
 ; self-initialize.
-    LD   L,$0A                              ; loop 10 times
+	LD   L,$0A								; loop 10 times
 .loop_power
-    CALL RBYTE                              ; just send some clock pulses
-    DEC  L
-    JR   NZ,.loop_power
+	CALL RBYTE								; just send some clock pulses
+	DEC  L
+	JR   NZ,.loop_power
 
 ; Then, we send CMD0 to the card. This command resets the card and make it
 ; select SPI mode, because the chip select line is tied to ground (in hardware)
-    LD   IY,CMD0
-    CALL EXECMD
-    JP   C,ERROR
+	LD   IY,CMD0
+	CALL EXECMD
+	JP   C,ERROR
 
 ; For SDHC cards, there is an extra step to do for initializing.
 ; As this command is only valid for SDHC, we don't check the return code.
-    LD   IY,CMD8                            ; commande CMD8
-    CALL EXECMD                             ; execution commande
+	LD   IY,CMD8							; commande CMD8
+	CALL EXECMD								; execution commande
 
 ; Now the card is intialized and ready to accept acual commands.
 ; We initialize it with "Application Command" 41. This command will only work
@@ -133,26 +205,28 @@ SD_Init
 ; It is an application command, so we need to prefix it with CMD55.
 INIT
 	; Try 32 times
-    LD   IXL,$20
+	LD   IXL,$20
 .loop_initialization
-    LD   IY,CMD55
-    CALL EXECMD
+	LD   IY,CMD55
+	CALL EXECMD
 
-    LD   IY,ACMD41
-    CALL EXECMD
-    CP   (IY)
-    JR   Z,TESTSD
+	LD   IY,ACMD41
+	CALL EXECMD
+	CP   (IY)
+	JR   Z,TESTSD
 
+  ifdef debug
 	; Just show some activity so the user knows we're working (with my test
 	; card we run this loop 3 times)
 	LD A,'.'
 	CALL $BB5A
-	DI
+;	DI
+  endif
 
-    DEC  IXL
-    JR   NZ,.loop_initialization
+	DEC  IXL
+	JR   NZ,.loop_initialization
 
-    JP   ERROR
+	JP   ERROR
 
 ; Now the card is initialized, we read the OCR register that gives us
 ; informations on the type of card (SD or SDHC) and the voltage it can work
@@ -161,23 +235,22 @@ INIT
 ; relevant bit (SD/SDHC)
 ; This is important because the read and write routines are slightly different.
 TESTSD
-
-    LD   IY,CMD58                           ; Read OCR
-    CALL EXECMD
-    JP   C,ERROR
+	LD   IY,CMD58							; Read OCR
+	CALL EXECMD
+	JP   C,ERROR
 
 	; The OCR is 4 bytes, but only the first one is relevant.
-    CALL RBYTE
+	CALL RBYTE
 	LD	A,E
-    ADD	A,E
-    LD   (SDTYP),A
+	ADD	A,E
+	LD   (SDTYP),A
 
-    CALL RBYTE
-    CALL RBYTE
-    CALL RBYTE
+	CALL RBYTE
+	CALL RBYTE
+	CALL RBYTE
 
 	; yay! initialization succesful!
-    RET
+	RET
 
 ; ------------------------------------------------------
 ;  EXECUTE A COMMAND
@@ -194,11 +267,11 @@ EXECMD
 ; Wait for SD card to be ready. When the card is busy, it does not answer to
 ; SPI requests and we read FF. When the card is ready, we read something else
 ; and we can go on with sending commands.
-.l
+.loop_wait_ready
 	CALL RBYTE
 	LD A,E
 	CP $FF
-	JR NZ,.l
+	JR NZ,.loop_wait_ready
 
 ; A command is made of 6 bytes :
 ; Command ID + $40
@@ -208,13 +281,13 @@ EXECMD
 ; The CRC byte is ignored in SPI mode, except for the first commands (CMD0 and
 ; CMD8). For other commands, we can put any value, but we still must send the
 ; byte.
-    LD   IXH,6
+	LD   IXH,6
 .loop_send_cmd
-    LD   C,(IY + 0)                         ; Get next byte
-    DEC  IY
-    CALL WBYTE                              ; and write it !
-    DEC  IXH
-    JR   NZ,.loop_send_cmd
+	LD   C,(IY + 0)							; Get next byte
+	DEC  IY
+	CALL WBYTE								; and write it !
+	DEC  IXH
+	JR   NZ,.loop_send_cmd
 
 ; The card can be busy again, then after some time it will send a return code.
 ; We wait for at most 256 attempts - notice IXH was left at FF by previous
@@ -222,15 +295,15 @@ EXECMD
 ; The expected return code is stored just below the command itself, pointed by
 ; IY
 .loop_get_return_code
-    CALL RBYTE                              ; Get card return code
+	CALL RBYTE								; Get card return code
 	LD A,E
-    CP   (IY)                               ; Is it the right code ?
-    RET  Z                                  ; If so, we're done 
+	CP   (IY)								; Is it the right code ?
+	RET  Z									; If so, we're done 
 											; (CP cleared the carry)
-    DEC  IXH                                ; Retry 256 times in the worst case
-    JR   NZ,.loop_get_return_code
-    SCF                                     ; We didn't get the code in time
-    RET										; Set the carry to indicate error.
+	DEC  IXH								; Retry 256 times in the worst case
+	JR   NZ,.loop_get_return_code
+	SCF										; We didn't get the code in time
+	RET										; Set the carry to indicate error.
 
 ; ------------------------------------------------------
 ;  ERROR HANDLING
@@ -240,14 +313,14 @@ EXECMD
 ; Then, we enter an infinite loop.
 ERROR
 	JP INIT
-	PUSH AF
-	LD A,'e'
-	Call $BB5A
+;	PUSH AF
+;	LD A,'e'
+;	Call $BB5A
 
-	POP HL
-	CALL printhex
+;	POP HL
+;	CALL printhex
 
-    JR   $
+	JR   $
 
 ; ------------------------------------------------------
 ; READ SECTORS from card
@@ -256,48 +329,84 @@ ERROR
 ;		We only read full sectors, so we need ADDR1 = ADDR0 + n*512.
 ; ------------------------------------------------------
 SD_READ
-    LD   HL,(ADDR0)                         ; get start of buffer
+	LD   HL,(ADDR0)							; get start of buffer
 
 .send_cmd_read_sector
 ; TODO maybe when reading only one sector, it is faster to use CMD17.
 ; In that case we don't need CMD12 at the end, and the card may answer faster
 ; (multiple read may make the card prepare a full 2K bloc or so)
-    LD   IY,CMD18                           ; Send read sector command
-    CALL EXECMD
-    JP   C,ERROR
+	LD   IY,CMD18							; Send read sector command
+	CALL EXECMD
+	JP   C,ERROR
 
 ; The card can take as much time as it wants to answer this command. When it's
 ; ok, it will send the start token (FE) followed by the sector data.
 .loop_wait_begin_sector
-    CALL RBYTE
+	CALL RBYTE
 	LD A,E
 
-    CP   $FE                                ; Is it the start token yet ?
-    JR   NZ,.loop_wait_begin_sector
+	CP   START_TOKEN						; Is it the start  yet ?
+	JR   NZ,.loop_wait_begin_sector
 
 ; We read 256*2 bytes - that's one sector.
-    LD   D,0
+  ifdef lowfootprint
+	LD   IXH,0 ; 3NOP
 .loop_read_sector
-    CALL RBYTE                          ; Read a byte
-    LD   (HL),E                         ; Store it in the destination area
-    INC  HL
-    CALL RBYTE
-    LD   (HL),E
-    INC  HL
-    DEC  D
-    JR   NZ,.loop_read_sector
+	CALL RBYTE								; Read a byte
+	LD   (HL),E								; Store it in the destination area
+	INC  HL
+	CALL RBYTE
+	LD   (HL),E
+	INC  HL
+	DEC  IXH   ; 2NOP
+	JR   NZ,.loop_read_sector
+  else
+	; WARNING: BC need to contain $E5FF (previously done by CALL RBYTE)
+	LD A,64
+	LD D,GET_BIT_6
+.loop_read_sector
+	LD   I,A
+	rept 8
+	RD_BYTE_TO_REG E
+	LD   (HL),E
+	INC  HL
+	endr
+	LD   A,I
+	DEC  A
+	JP   NZ,.loop_read_sector
+;.loop_read_sector
+;    LD   I,A
+;	RD_BYTE_TO_REG E                    ; Read a byte
+;    LD   (HL),E                         ; Store it in the destination area
+;    INC  HL
+;	RD_BYTE_TO_REG E
+;    LD   (HL),E
+;    INC  HL
+;    LD   A,I
+;    DEC  A
+;    JP   NZ,.loop_read_sector
+  endif
 
 ; The card also sends us an useless 16 bit CRC.
-    CALL RBYTE
-    CALL RBYTE
+  ifdef lowfootprint
+	CALL RBYTE
+	CALL RBYTE
+  else
+	RD_BYTE_N_DROP
+	RD_BYTE_N_DROP
+  endif
 
 ; We can now test if we reached the last sector
 ; Since sectors are 512-byte aligned, we don't need to check the low byte of
 ; the addresses. This makes the code quite a bit simpler. 
 .last_sector_reached
-    LD   A,(ADDR1+1)
+	LD   A,(ADDR1+1)
 	XOR H
-    JR   NZ,.loop_wait_begin_sector              ; read again if needed
+  ifdef lowfootprint
+	JR   NZ,.loop_wait_begin_sector				; read again if needed
+  else
+	JP   NZ,.loop_wait_begin_sector				; read again if needed
+  endif
 
 	; Send the command to end data transmission
 	LD IY,CMD12
@@ -307,45 +416,55 @@ SD_READ
 	; Loading finished !
 	RET
 
+  ifndef nowrite
 ; ------------------------------------------------------
 ; WRITE SECTORS to the SD card
 ; Very similar to the read code, but the other way around.
 ; ------------------------------------------------------
 SD_WRITE
-    LD   HL,(ADDR0)                         ; buffer address
+	LD   HL,(ADDR0)								; buffer address
 
 .send_cmd_write_sector
-    LD   IY,CMD25                           ; This time we send CMD24
-    CALL EXECMD
-    JP   C,ERROR
+	LD   IY,CMD25								; This time we send CMD24
+	CALL EXECMD
+	JP   C,ERROR
 
 .next_sector
 	; TODO wait for card to get ready (we read FF from it) before writing first
 	; sector. Looks my test card is ok without it, but...
 
 	; Like in read mode, we send a start token to tell the card we're starting
-    LD   C,$FE
-    CALL WBYTE
+	LD   C,START_TOKEN
+	CALL WBYTE
 
 	; Then we send 256*2 bytes - a sector again.
-    LD   IXL,0
+  ifdef lowfootprint
+	LD   IXL,0
 .loop_write_sector
-    LD   C,(HL)								; get next byte
-    INC  HL
-    CALL WBYTE                              ; write it
-
-    LD   C,(HL)
-    INC  HL
-    CALL WBYTE
-
-    DEC  IXL
-    JR   NZ,.loop_write_sector
+	rept 2
+	LD   C,(HL)									; get next byte
+	INC  HL
+	CALL WBYTE									; write it
+	endr
+	DEC  IXL
+	JR   NZ,.loop_write_sector
+  else
+	LD   IXL,64
+.loop_write_sector
+	rept 8
+	LD   C,(HL)									; get next byte
+	INC  HL
+	CALL WBYTE									; write it
+	endr
+	DEC  IXL
+	JP   NZ,.loop_write_sector
+  endif
 
 	; Finally, we need to write CRC bytes. They are ignored by the card anyway,
 	; so we use the RBYTE routine which will actually be identical to writing
 	; $FF (but slightly faster)
-	CALL RBYTE
-	CALL RBYTE
+	CALL_RBYTE_N_DROP
+	CALL_RBYTE_N_DROP
 
 	; And, we need to wait for the card to finish the operation. For all other
 	; cases we rely on the next call to EXECMD to do this, but here, we are
@@ -353,16 +472,20 @@ SD_WRITE
 	; When we are not accessing the card, there is no clock for it, so it is
 	; sleeping and can't do any work.
 	; When the card is done it will stop sending FF bytes.
-.l
+.loop_wait_write_finish
 	CALL RBYTE
 	LD A,E
 	CP $FF
-	JR NZ,.l
+	JR NZ,.loop_wait_write_finish
 
 .last_sector_reached
-    LD   A,(ADDR1+1)
+	LD   A,(ADDR1+1)
 	XOR H
-    JR   NZ,.next_sector              ; lecture secteur suivant
+  ifdef lowfootprint
+	JR   NZ,.next_sector						; lecture secteur suivant
+  else
+	JP   NZ,.next_sector						; lecture secteur suivant
+  endif
 
 	LD IY,CMD25
 	CALL EXECMD
@@ -374,6 +497,7 @@ SD_WRITE
 ; what we will be doing most of the time.
 ; You'll see that this code is optimized as much as possible (can you do better
 ; than us ?)
+  endif
 
 ; ------------------------------------------------------
 ;  READ BYTE
@@ -381,69 +505,66 @@ SD_WRITE
 ;  Corrupts: AF, BC
 ; ------------------------------------------------------
 RBYTE
- if 0
-	LD	BC,$EFF5	; EF = write port
-					; F5 = write value for clock off | read port
-
-	; Reading needs to be fast, so this is an unrolled loop !
-	REPT 8
-
-	; The value of B is EF. We can use this both as the port address we want to
-	; write to, and as the value. This will set all 3 useful bits to 1 (clock,
-	; data and LED)
-    LD   A,B
-    OUT  ($FF),A	; Quick reminder : A is used both as port and value
-
-	; Then, we need to read the busy bit from port F5.
-    LD   A,C ;READ_PORT
-    IN   A,($FF)    ; A is used as port number, then result is written to it
-    RLA				; Do one shift now (so interesting bit is in BIT7)
-
-    OUT  (C),C      ; Port $FE gets value $F5. This sets clock=0, led=1, data=1
-
-    RLA             ; Now shift  again to put the useful bit in carry
-    RL	E           ; store bit to register E
-
-	ENDR
-    RET
- endif
+  ifdef lowfootprint
+	LD		BC,$E5FF
+	LD		D,8
+.loop_read_byte
+	RD_BIT_TO_REG E;
+	DEC	D
+	JR  NZ,.loop_read_byte
+	RET
+  else
 	LD		BC,$E5FF
 		; E5 = Write AND Read port. As they both decode the I/O direction as
 		; well as the address, and work only in a single way, this is fine,
 		; there is no IO conflict.
-	REPT	8
-	OUT		(C),C	; C: FF = clock high, data high, led off
-	IN		A,(C)		; bit6 is relevant
-	RLA					; ... now bit 7
-	OUT		(C),B	; B: E5 = clock low, data high, led off.
-	RLA					; ... and now the carry
-	RL		E			; and we can put it in E bit 0
-	ENDR
+	LD D,GET_BIT_6
+	RD_BYTE_TO_REG E
 	RET
+  endif
+
 ; ------------------------------------------------------
 ;  WRITE BYTE
 ;	Input: C = byte to write
 ;  Corrupts: A, BC, DE
 ; ------------------------------------------------------
 WBYTE
-    LD   DE,$0608
-    	; D = clock=1, led=1, data=0 (will be ORed later)
-    	; E = loop counter
-    LD   B,$EF ;WRITE PORT
+  ifdef lowfootprint
+	LD   DE,$0608
+		; D = clock=1, led=1, data=0 (will be ORed later)
+		; E = loop counter
+	LD   B,WRITE_PORT
 	XOR A
 .loop_write_byte
-    RL   C				; Get the first bit in carry
-	ADC D
+	RL   C				; Get the first bit in carry
+	ADC  D
 
-    OUT  (C),A          ; Clock = 1, Led = 1, data = as needed
-	XOR A				; Everything = 0. We should keep the data bit, but this
-    OUT  (C),A			; looks to work ok and is 1 NOP faster...
+	OUT  (C),A			; Clock = 1, Led = 1, data = as needed
+	XOR  A				; Everything = 0. We should keep the data bit, but this
+	OUT  (C),A			; looks to work ok and is 1 NOP faster...
 
 	; ... and go on for all 8 bytes (we could unroll that).
-    DEC  E
-    JR   NZ,.loop_write_byte
+	DEC  E
+	JR   NZ,.loop_write_byte
 
-    RET
+	RET
+  else
+	LD   D,$06
+		; D = clock=1, led=1, data=0 (will be ORed later)
+	LD   B,WRITE_PORT
+	XOR A
+	REPT 8
+	RL   C				; Get the first bit in carry
+	ADC D
+
+	OUT  (C),A			; Clock = 1, Led = 1, data = as needed
+	XOR A				; Everything = 0. We should keep the data bit, but this
+	OUT  (C),A			; looks to work ok and is 1 NOP faster...
+	ENDR
+
+	RET
+  endif
+
 
 
 ; ------------------------------------------------------
@@ -454,90 +575,92 @@ WBYTE
 ; 		PARAMS
 ; CMDx	VALUE
 ; ------------------------------------------------------
-    DEFB $01,$95 
-    DEFB $00,$00,$00,$00
+	DEFB $01,$95 
+	DEFB $00,$00,$00,$00
 CMD0 
-    DEFB $40                                ; go iddle state
+	DEFB $40								; go iddle state
 
-    DEFB $00,$87
-    DEFB $AA,$01,$00,$00
+	DEFB $00,$87
+	DEFB $AA,$01,$00,$00
 CMD8
-    DEFB $48                                ; send interface condition
+	DEFB $48								; send interface condition
 
 	DEFB $00,$00
 	DEFB $00,$00,$00,$00
 CMD12
 	DEFB $40 + 12							; end multiple sector operation
 
-    DEFB $00,$65
-    DEFB $00,$00,$00,$00
+	DEFB $00,$65
+	DEFB $00,$00,$00,$00
 CMD55
-    DEFB $77                                ; application command
+	DEFB $77								; application command
 
-    DEFB $00,$77
-    DEFB $00,$00,$00,$40 
+	DEFB $00,$77
+	DEFB $00,$00,$00,$40 
 ACMD41
-    DEFB $69                                ; activate card initialization 
+	DEFB $69								; activate card initialization 
 
-    DEFB $00,$FF
-    DEFB $00,$00,$00,$00
+	DEFB $00,$FF
+	DEFB $00,$00,$00,$00
 CMD58
-    DEFB $7A                                ; read OCR
+	DEFB $7A								; read OCR
 
 ; ------------------------------------------------------
 ;  RAM DATA BUFFERS
 ; ------------------------------------------------------
 
 ; READSECTOR command. RSECT1 and RSECT2 will be replaced with actual sector pos.
-    DEFB 0,$FF
+	DEFB 0,$FF
 RSECT2
-    DEFS 1                                  ; SDHC address
+	DEFS 1									; SDHC address
 RSECT1
-    DEFS 3                                  ; SD address
+	DEFS 3									; SD address
 CMD18
-    DEFB $52
+	DEFB $52
 
 ; WRITESECTOR command. WSECT1 and WSECT2 will be replaced with actual sector pos.
-    DEFB 0,$FF
+	DEFB 0,$FF
 WSECT2
-    DEFS 1                                  ; SDHC address
+	DEFS 1									; SDHC address
 WSECT1
-    DEFS 3                                  ; SD address
+	DEFS 3									; SD address
 CMD25
-    DEFB $59
+	DEFB $59
 
 
 ADDR0 
-    DEFS 2                                  ; Load address
+	DEFS 2									; Load address
 
 ADDR1
-    DEFS 2                                  ; End load address
+	DEFS 2									; End load address
 
 SDTYP
-    DEFS 1                                  ; type $00=SD, $80=SDHC
+	DEFS 1									; type $00=SD, $80=SDHC
 
+  ifdef test
 ; ---------------------------------------------------------------------------
 ; Print H value as hex
 ; Corrupts AF
 ; Only used in ERROR handler.
 ; ---------------------------------------------------------------------------
 printhex
-    LD   A,H
-    CALL .bin2hex1
-    LD   A,H
-    JR   .bin2hex2
+	LD   A,H
+	CALL .bin2hex1
+	LD   A,H
+	JR   .bin2hex2
 .bin2hex1
-    RRA
-    RRA
-    RRA
-    RRA
+	RRA
+	RRA
+	RRA
+	RRA
 .bin2hex2
-    OR   $F0
-    DAA
-    ADD  A,$A0
-    ADC  A,$40
-    CALL &BB5A
-	DI
-    RET
+	OR   $F0
+	DAA
+	ADD  A,$A0
+	ADC  A,$40
+	CALL &BB5A
+;	DI
+	RET
 ; ------------------------------------------------------
-    END
+  endif
+	END
