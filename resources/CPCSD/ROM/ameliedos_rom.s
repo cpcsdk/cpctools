@@ -11,18 +11,26 @@
 ; 19   AMSDOS BIOS Facilities
 ; 20   AMSDOS External Commands
 
-; Amélie need to be in a lower rom position than Amsdos.
+; Amélie need to be in the rom number just before Amsdos/Parados.
 
 ; TODO: 
-; .- Extract the drive number from the strings passed as parameters at the 
-;    RSXs (REN, ERA, DIR).
+; .- Initialize SD hardware, after reset the CPC.
+; .- Expand wildcards in filenames.
+; .- Check every function is preloaded with IY = (AMSDOS_MEMORY_POOL).
 ; .- Extend the parameters of rsx_read_sector, rsx_write_sector and 
 ;    rsx_format_track when the drive is the SD. Or use directly the SD CMDs
 ;    variables.
+; .- If file extension is empty, test first with spaces, second with 'BAS'
+;    and third with 'BIN'.
 ; .- Adding support for machines without disk rom.
+; .- Support extended CATArt, a file in a folder called '.cat' is printed
+;    when a CAT or |DIR is made.
 
 ; Constants
 SD_DRIVE_NUMBER             EQU 2   ; A = 0 | B = 1 | C = SD = 2
+
+ERROR_STREAM_WAS_CLOSED     EQU $0E
+ERROR_EOF_REACHED           EQU $0F
 
     include 'firmware.i'
 
@@ -120,7 +128,7 @@ amelie_cas_hook
     PUSH HL
     PUSH DE
     PUSH AF
-    LD   IY,(AMSDOS_MEMORY_POOL)
+    LD   IY,(AMSDOS_MEMORY_POOL)    ; Preload IY with the memory zone used by Amsdos
     LD   HL,14
     ADD  HL,SP
     LD   E,(HL)
@@ -152,32 +160,69 @@ amelie_cas_hook
     RET
 
 ; ---------------------------------------------------------------------------
+; Check for the drive in the filename and prepare return address for firmware
+; ENTRIES:
+;     B : Length filename.
+;    HL : Address filename.
+; ---------------------------------------------------------------------------
+check_filename_drive_and_prepare_return_for_cas
+    PUSH AF
+
+    ; Decode filename and extract drive
+    PUSH BC 
+    PUSH HL
+    PUSH DE
+    
+    ; Decode the filename in AMSDOS_RECORD_NAME_BUFFER
+    LD   DE,AMSDOS_RECORD_NAME_BUFFER
+    CALL put_filename_in_buffer             ; DE : Filename buffer
+
+    LD   IXL,E
+    LD   IXH,D
+    
+    POP  DE
+    POP  HL
+    POP  BC
+    
+    LD   A,(IX + 0)                         ; Get Drive number
+    CP   SD_DRIVE_NUMBER                    ; Is SD?
+    JR   NZ,make_amsdos_cas_vector_call     ; No, then call AMSDOS CAS vector
+
+    ; Yes, then we need to update the return address for after our patched CAS vector
+    JR   update_stack_for_return_from_cas_vector
+    
+; ---------------------------------------------------------------------------
 ; Check for the active drive and prepare return address for firmware
 ; ---------------------------------------------------------------------------
-check_drive_and_prepare_return_for_cas
+check_drive_out_and_prepare_return_for_cas
+    PUSH AF
+    LD   A,(IY + AMSDOS_FCB_OPENOUT + FCB_DRIVE_NUMBER)
+    JR   check_drive_in_and_prepare_return_for_cas.check
+check_drive_in_and_prepare_return_for_cas
     PUSH AF
     LD   A,(IY + AMSDOS_FCB_OPENIN + FCB_DRIVE_NUMBER)
+.check
     CP   SD_DRIVE_NUMBER                    ; Is SD?
-    JR   NZ,.make_amsdos_cas_vector_call    ; No, then call AMSDOS CAS vector
+    JR   NZ,make_amsdos_cas_vector_call     ; No, then call AMSDOS CAS vector
     
     ; Yes, then we need to update the return address for after our patched CAS vector
-.update_stack_for_return_from_cas_vector
+update_stack_for_return_from_cas_vector
     PUSH HL
     LD   HL,14
     ADD  HL,SP          ; HL = SP + 14
     LD   (HL),$0F
     INC  HL
-    LD   (HL),0         ; Change to $000F -> RET in Lower ROM
+    LD   (HL),$00       ; Change to $000F -> RET in Lower ROM
     POP  HL
 
-.make_amsdos_cas_vector_call
+make_amsdos_cas_vector_call
     POP  AF
     RET
 
 ; ---------------------------------------------------------------------------
 ; Amélie CAS vectors
 ; ---------------------------------------------------------------------------
-; CAS_IN_OPEN: Open a file for input.
+; CAS_IN_OPEN: Open a file for input.                                     wip
 ; ENTRIES:
 ;     B : Length filename.
 ;    HL : Address filename.
@@ -202,8 +247,8 @@ check_drive_and_prepare_return_for_cas
 ;     All others registers preserved.
 ; ---------------------------------------------------------------------------
 amelie_cas_in_open
-    ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    ; Check for the drive in the filename and prepare return address for firmware
+    CALL check_filename_drive_and_prepare_return_for_cas
 
     ; Amélie CAS IN OPEN code *** goes here ***
 
@@ -214,7 +259,7 @@ amelie_cas_in_open
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_IN_CLOSE: Close the input file properly.
+; CAS_IN_CLOSE: Close the input file properly.                            ***
 ; EXITS:
 ;   * If the stream was closed OK:
 ;     Carry true.
@@ -228,13 +273,21 @@ amelie_cas_in_open
 ; ---------------------------------------------------------------------------
 amelie_cas_in_close
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_in_and_prepare_return_for_cas
 
-    ; Amélie CAS IN CLOSE code *** goes here ***
+    ; Amélie CAS IN CLOSE code
+    CALL save_return_address_for_errors
 
-    ; Return to firmware
-    SCF                             ; Carry True
-    RET
+    ; We don't need to stop any motor in the SD and by the same, we don't need 
+    ; to disable the event use by the Amsdos ($BE67 and $BE6D)
+;    ; Stop FDC Motor
+;    XOR  A
+;    LD   (AMSDOS_FLAG_MOTOR),A                  ; Set flag motor stopped
+
+    LD   A,(IY + AMSDOS_FCB_OPENIN + FCB_DRIVE_NUMBER)
+    CP   $FF                                    ; Stream active?
+    JP   Z,stream_was_closed
+    JR   amelie_cas_in_abandon.close_stream     ; Stream was open 
 
 ; ---------------------------------------------------------------------------
 ; CAS_IN_ABANDON: Close the input file immediately.                       ***
@@ -244,10 +297,10 @@ amelie_cas_in_close
 ; ---------------------------------------------------------------------------
 amelie_cas_in_abandon
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_in_and_prepare_return_for_cas
 
     ; Amélie CAS IN ABANDON code
-
+.close_stream
     ; Close Drive used by OPENIN
     LD   (IY + AMSDOS_FCB_OPENIN + FCB_DRIVE_NUMBER),$FF
     
@@ -257,7 +310,7 @@ amelie_cas_in_abandon
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_IN_CHAR: read a character from the input file.
+; CAS_IN_CHAR: read a character from the input file.                      ***
 ; EXITS:
 ;   * If the character was read OK:
 ;     Carry true and Zero false.
@@ -274,22 +327,112 @@ amelie_cas_in_abandon
 ; ---------------------------------------------------------------------------
 amelie_cas_in_char
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_in_and_prepare_return_for_cas
 
-    ; Amélie CAS IN CHAR code *** goes here ***
+    ; Amélie CAS IN CHAR code
+.cas_in_char_code
+    PUSH  BC
+    PUSH  DE
+    PUSH  HL
+    CALL  get_char
+    POP   HL
+    POP   DE
+    POP   BC
 
-    ; Return to firmware
-    SCF                             ; Carry True
+    RET                 ; Carry False => EOF
+
+    ; Original firmware code    
+;    RET   NC          ; Return if Hard-EOF
+
+;    CP    $1A         ; Soft-EOF?
+;    SCF
+;    RET   NZ          ; Carry True, Zero False and Char in the Acumulator
+
+;    OR    A           ; return by Soft-EOF
+;    RET
+
+; ---------------------------------------------------------------------------
+; Get a char from the SD                                                  wip
+; ---------------------------------------------------------------------------
+get_char
+    CALL save_return_address_for_errors
+
+    CALL prepare_for_input
+
+    ; Set Char mode
+    LD   A,(IY + AMSDOS_FH_OPENIN + FH_ACCESS_MODE)
+    CP   2                                          ; CHAR = 1, DIRECT = 2
+    JP   Z,stream_was_closed                        ; Exit if it was in Direct Mode
+    LD   (IY + AMSDOS_FH_OPENIN + FH_ACCESS_MODE),1 ; Set Char mode
+
+    ; NOTE:
+    ; We are going to use the counters FH_FILE_SIZE_24 and FH_DATA_LENGTH 
+    ; in the file header as variables to control how many bytes are in the 
+    ; file or how many bytes left to read before EOF, ...
+    
+    ; Check if we have reached the end of the file.
+    
+    ; First counter is File Lenght in 24 bits
+    LD   HL,AMSDOS_FH_OPENIN + FH_FILE_SIZE_24
+    CALL add_hl_iy
+    LD   A,(HL)
+    INC  HL
+    OR   (HL)
+    INC  HL
+    OR   (HL)
+    JR   Z,is_a_hard_eof                            ; If Filepos = 0, then EOF file.
+    
+    ; Second counter is File Length 16 bits
+    LD   L,(IY + AMSDOS_FH_OPENIN + FH_DATA_LENGTH)
+    LD   H,(IY + AMSDOS_FH_OPENIN + FH_DATA_LENGTH + 1)
+    LD   A,H
+    OR   L
+    JR   Z,is_a_hard_eof                            ; File is not empty
+
+    ; Get byte from the SD
+    PUSH HL
+    ; *** Amelié read byte goes here ***
+    POP  HL
+
+    LD   D,A                                        ; instead of using the stack, use DE
+                                                    ; that is going to be used in Amélie 
+                                                    ; read byte. Because that i push de
+                                                    ; before call get_char
+    
+    ; Decrease second counter (16 bits)
+    DEC  HL
+    LD   (IY + AMSDOS_FH_OPENIN + FH_DATA_LENGTH),L
+    LD   (IY + AMSDOS_FH_OPENIN + FH_DATA_LENGTH + 1),H
+
+    ; Decrease first counter (24 bits)
+    LD   HL,AMSDOS_FH_OPENIN + FH_FILE_SIZE_24
+    CALL add_hl_iy
+    LD   B,3
+.loop_decrease_24_bits
+    LD   A,(HL)
+    DEC  (HL)
+    AND  A
+    JR   NZ,.exit_loop_decrease_24_bits
+    INC  HL
+    DJNZ .loop_decrease_24_bits
+.exit_loop_decrease_24_bits
+    LD   A,D                                        ; Restore byte read from SD
+    SCF
+    RET
+
+is_a_hard_eof
+    LD   A,ERROR_EOF_REACHED
+    OR   A                          ; Clear Carry
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_IN_DIRECT: Read the input file into store.
+; CAS_IN_DIRECT: Read the input file into store.                          wip
 ; ENTRIES:
 ;     HL: Address where put the file.
 ; EXITS:
 ;   * If the file was read OK:
 ;     Carry true and Zero false.
-;     HL : Character read from the file.
+;     HL : Execution Address.
 ;      A corrupt. 
 ;   * If the file was not open as expected:
 ;     Carry and Zero false.
@@ -305,30 +448,88 @@ amelie_cas_in_char
 ; ---------------------------------------------------------------------------
 amelie_cas_in_direct
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_in_and_prepare_return_for_cas
 
-    ; Amélie CAS IN DIRECT code *** goes here ***
+    ; Amélie CAS IN DIRECT code
+    CALL save_return_address_for_errors
+
+    CALL prepare_for_input
+
+    ; Set Direct Mode
+    LD   A,(IY + AMSDOS_FH_OPENIN + FH_ACCESS_MODE)
+    CP   1                                          ; CHAR = 1, DIRECT = 2
+    JP   Z,stream_was_closed                        ; Exit if it was in Char Mode
+    LD   (IY + AMSDOS_FH_OPENIN + FH_ACCESS_MODE),2 ; Set Direct mode
+
+    ; Get File Length (if we are going to use this more, make function move.w de(iy),ix
+    ; and use ix as offset :P)
+    PUSH HL
+    PUSH IY
+    POP  HL
+    LD   DE,AMSDOS_FH_OPENIN + FH_FILE_SIZE_24
+    ADD  HL,DE
+    LD   E,(HL)                                     ; FH_FILE_SIZE_24
+    INC  HL
+    LD   D,(HL)                                     ; FH_FILE_SIZE_24 + 1
+    POP  HL
+
+    ; Load file
+    ; DE: File Length
+    ; HL: Load address
+    ; *** Insert Amélie code here ***
+    
+    ; Get Execution Address
+    LD   L,(IY + AMSDOS_FH_OPENIN + FH_EXEC_ADDRESS)
+    LD   H,(IY + AMSDOS_FH_OPENIN + FH_EXEC_ADDRESS + 1)
 
     ; Return to firmware
     SCF                             ; Carry True
+    SBC  A,A
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_RETURN: Put the last character read back.
+; CAS_RETURN: Put the last character read back.                           wip
 ; EXITS:
 ;     All registers and flags preserved.
 ; ---------------------------------------------------------------------------
 amelie_cas_return
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_in_and_prepare_return_for_cas
 
-    ; Amélie CAS RETURN code *** goes here ***
+.cas_return_code
+    ; Amélie CAS RETURN code
+    PUSH HL
+
+    ; Increase First counter (File Lenght in 24 bits)
+    LD   HL,AMSDOS_FH_OPENIN + FH_FILE_SIZE_24
+    CALL add_hl_iy
+    
+    ; Increase the 24 bits counter (convert in function in case is more used)
+    INC  (HL)
+    JR   NZ,.end_inc_24
+    INC  HL
+    INC  (HL)
+    JR   NZ,.end_inc_24
+    INC  HL
+    INC  (HL)
+.end_inc_24
+
+    ; Increase Second counter (File Length in 16 bits)
+    INC  (IY + AMSDOS_FH_OPENIN + FH_DATA_LENGTH)
+    JR   NZ,.end_inc_16
+    INC  (IY + AMSDOS_FH_OPENIN + FH_DATA_LENGTH + 1)
+.end_inc_16
+
+    ; *** Insert Amélie code here ***
+    ; We need to go back 1 byte in the SD
+    
+    POP  HL
 
     ; Return to firmware
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_TEST_EOF: Have we reached the end of the input file yet?
+; CAS_TEST_EOF: Have we reached the end of the input file yet?            ***
 ; EXITS:
 ;   * If the end of the file was not found:
 ;     Carry true and Zero false.
@@ -345,16 +546,22 @@ amelie_cas_return
 ; ---------------------------------------------------------------------------
 amelie_cas_test_eof
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_in_and_prepare_return_for_cas
 
-    ; Amélie CAS TEST EOF code *** goes here ***
+    ; Amélie CAS TEST EOF code
+
+    ; Read the next char
+    CALL amelie_cas_in_char.cas_in_char_code
+    RET  NC                         ; Return if EOF was reached
+
+    ; In other case, put back the byte read
+    CALL amelie_cas_return.cas_return_code
 
     ; Return to firmware
-    SCF                             ; Carry True
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_OUT_OPEN: Open a file for output.
+; CAS_OUT_OPEN: Open a file for output.                                   wip
 ; ENTRIES:
 ;     B : Length filename.
 ;    HL : Address filename.
@@ -377,8 +584,8 @@ amelie_cas_test_eof
 ;     All others registers preserved.
 ; ---------------------------------------------------------------------------
 amelie_cas_out_open
-    ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    ; Check for the drive in the filename and prepare return address for firmware
+    CALL check_filename_drive_and_prepare_return_for_cas
 
     ; Amélie CAS OUT OPEN code *** goes here ***
 
@@ -387,7 +594,7 @@ amelie_cas_out_open
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_OUT_CLOSE: Close the output file properly.
+; CAS_OUT_CLOSE: Close the output file properly.                          wip
 ; EXITS:
 ;   * If the stream was closed OK:
 ;     Carry true and Zero false.
@@ -404,31 +611,51 @@ amelie_cas_out_open
 ; ---------------------------------------------------------------------------
 amelie_cas_out_close
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_out_and_prepare_return_for_cas
 
-    ; Amélie CAS OUT CLOSE code *** goes here ***
+    ; Amélie CAS OUT CLOSE code
+    
+    CALL save_return_address_for_errors
 
-    ; Return to firmware
-    SCF                             ; Carry True
-    RET
+    ; NOTE:In Amsdos could happen the last record (128 bytes) is not saved,
+    ; because that Amsdos checks if it has bytes to save yet, and save them. 
+    ;
+    ; Our SD write code (CAS_OUT_DIRECT), it's going to save the files
+    ; completely. Except when the the file was written in CHAR access mode
+    ; where we save only full sectors, because that we need to check it
+    ; (FH_ACCESS_MODE) and check if there is a sector buffered to write.
+    ;
+    ; NOTE2: We don't know the size of a file written using CAS_OUT_CHAR
+    ; until close it, that means that we should update the length in the
+    ; file header and the Checksum, of course. *TODO*
+    
+    LD   A,(IY + AMSDOS_FCB_OPENOUT + FCB_DRIVE_NUMBER)
+    CP   $FF                                    ; Stream active?
+    JP   Z,stream_was_closed
+    JR   amelie_cas_out_abandon.close_stream    ; Stream was open 
 
 ; ---------------------------------------------------------------------------
-; CAS_OUT_ABANDON: Close the output file immediately.
+; CAS_OUT_ABANDON: Close the output file immediately.                     ***
 ; EXITS:
 ;     AF, BC, DE and HL corrupt.
 ;     All others registers preserved.
 ; ---------------------------------------------------------------------------
 amelie_cas_out_abandon
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_out_and_prepare_return_for_cas
 
-    ; Amélie CAS OUT ABANDON code *** goes here ***
-
+    ; Amélie CAS OUT ABANDON code
+.close_stream
+    ; Close Drive used by OPENOUT
+    LD   (IY + AMSDOS_FCB_OPENOUT + FCB_DRIVE_NUMBER),$FF
+    
     ; Return to firmware
+    SCF
+    SBC  A,A
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_OUT_CHAR: Write a character to the output file.
+; CAS_OUT_CHAR: Write a character to the output file.                     wip
 ; ENTRIES:
 ;      A : Character to write.
 ; EXITS:
@@ -447,18 +674,60 @@ amelie_cas_out_abandon
 ; ---------------------------------------------------------------------------
 amelie_cas_out_char
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_out_and_prepare_return_for_cas
 
-    ; Amélie CAS OUT CHAR code *** goes here ***
+    ; Amélie CAS OUT CHAR code
+    CALL save_return_address_for_errors
 
-    ; Return to firmware
-    SCF                             ; Carry True
+    CALL prepare_for_output
+
+    ; MOVE.W DE(AMSDOS_MEMORY_POOL),IX
+    PUSH DE
+    LD   DE,AMSDOS_FH_OPENOUT
+    LD   IX,(AMSDOS_MEMORY_POOL)
+    ADD  IX,DE
+    POP  DE
+
+    
+    PUSH HL
+    PUSH DE
+    PUSH BC
+    PUSH AF
+
+    ; Set Char mode
+    LD   A,(IX + FH_ACCESS_MODE)
+    CP   2                                  ; CHAR = 1, DIRECT = 2
+    JP   Z,stream_was_closed                ; Exit if it was in Direct Mode
+    LD   (IX + FH_ACCESS_MODE),1            ; Set Char mode
+
+    ; *TODO*
+    ; We need to fill with those bytes the buffer with the SD sector size
+    ; (512 bytes) and only after filling up, we'll dump the buffer to the SD.
+
+    ; Increase the counters used (24 and 16 bits)
+;    LD   L,(IX + FH_DATA_LENGTH)
+;    LD   H,(IX + FH_DATA_LENGTH + 1)
+    
+    ; Increase the sector buffer pointer and if we have overflowed the 
+    ; buffer, dump the buffer to the SD, update buffer pointer and put
+    ; the new byte in the buffer. 
+    ; IX + FH_POS_IN_2K_BUFFER -> Pointer to the actual byte in the sector buffer
+
+    POP  AF                         ; Get new byte to put in the buffer
+    
+    POP  BC
+    POP  DE
+    POP  HL
+
+    ; Return to the firmware
+    SCF
+    SBC  A,A
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_OUT_DIRECT: Write the output file directly from store.
+; CAS_OUT_DIRECT: Write the output file directly from store.              wip
 ; ENTRIES:
-;     HL : Addres of the data to write.
+;     HL : Address of the data to write.
 ;     DE : Length of the data to write.
 ;     BC : Execute address for the header.
 ;      A : File type for the header.
@@ -478,16 +747,49 @@ amelie_cas_out_char
 ; ---------------------------------------------------------------------------
 amelie_cas_out_direct
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_out_and_prepare_return_for_cas
 
-    ; Amélie CAS OUT code *** goes here ***
+    ; Amélie CAS OUT code
+    CALL save_return_address_for_errors
 
+    CALL prepare_for_output
+
+    ; MOVE.W DE(AMSDOS_MEMORY_POOL),IX
+    PUSH DE
+    LD   DE,AMSDOS_FH_OPENOUT
+    LD   IX,(AMSDOS_MEMORY_POOL)
+    ADD  IX,DE
+    POP  DE
+
+    ; Set Direct Mode
+    LD   A,(IX + FH_ACCESS_MODE)
+    CP   1                                  ; CHAR = 1, DIRECT = 2
+    JP   Z,stream_was_closed                ; Exit if it was in Char Mode
+    LD   (IX + FH_ACCESS_MODE),2            ; Set Direct mode
+    
+    ; Fill the rest of fields of the header for the output file
+    LD   (IX + FH_FILE_TYPE),A              ; File type
+    LD   (IX + FH_LOAD_ADDRESS),L           ; Load Address
+    LD   (IX + FH_LOAD_ADDRESS + 1),H
+    LD   (IX + FH_EXEC_ADDRESS),C           ; Execute Address
+    LD   (IX + FH_EXEC_ADDRESS + 1),B
+    LD   (IX + FH_DATA_LENGTH),E            ; Length File
+    LD   (IX + FH_DATA_LENGTH + 1),D
+    LD   (IX + FH_FILE_SIZE),E              ; Length File
+    LD   (IX + FH_FILE_SIZE + 1),D
+    LD   (IX + FH_FILE_SIZE_24),E           ; Length File
+    LD   (IX + FH_FILE_SIZE_24 + 1),D
+    LD   (IX + FH_FILE_SIZE_24 + 2),0
+
+    ; *** Amélie Code to dump the file (header + data) to the SD ***
+    
     ; Return to firmware
-    SCF                             ; Carry True
+    SCF                                     ; Carry True
+    SBC  A,A
     RET
 
 ; ---------------------------------------------------------------------------
-; CAS_CATALOG: Generate a catalogue from the tape.
+; CAS_CATALOG: Generate a catalogue from the tape.                        wip
 ; ENTRIES:
 ;     DE : Address of 2 KBs buffer.
 ; EXITS:
@@ -506,21 +808,64 @@ amelie_cas_out_direct
 ; ---------------------------------------------------------------------------
 amelie_cas_catalog
     ; Check for the active drive and prepare return address for firmware
-    CALL check_drive_and_prepare_return_for_cas
+    CALL check_drive_in_and_prepare_return_for_cas
 
     ; Amélie CAS CATALOG code *** goes here ***
+    CALL save_return_address_for_errors
 
     ; Return to firmware
     SCF                             ; Carry True
+    SBC  A,A
+    RET
+
+; ---------------------------------------------------------------------------
+; Prepare for output operations
+; ---------------------------------------------------------------------------
+prepare_for_output    
+    PUSH AF
+    LD   A,(IY + AMSDOS_FCB_OPENOUT + FCB_DRIVE_NUMBER)
+    JR   check_stream
+
+; ---------------------------------------------------------------------------
+; Prepare for input operations
+; ---------------------------------------------------------------------------
+prepare_for_input    
+    PUSH AF
+    LD   A,(IY + AMSDOS_FCB_OPENIN + FCB_DRIVE_NUMBER)
+check_stream
+    CP   $FF                                    ; Stream active?
+    JR   Z,stream_was_closed
+    CALL set_active_drive
+    POP  AF
+    RET
+
+; ---------------------------------------------------------------------------
+; Stream was closed?
+; ---------------------------------------------------------------------------
+stream_was_closed
+    LD   A,ERROR_STREAM_WAS_CLOSED              ; Error code
+    OR   A                                      ; Clear Carry
+;    JR   return_from_error
+
+; ---------------------------------------------------------------------------
+; Return to the firmware from an error
+; ---------------------------------------------------------------------------
+return_from_error
+    ; Set SP for recover from an error 
+    LD   L,(IY + AMSDOS_STACK_POINTER)
+    LD   H,(IY + AMSDOS_STACK_POINTER + 1)
+    LD   SP,HL
+
+    ; Return to firmware
     RET
 
 ; ---------------------------------------------------------------------------
 ; Amélie RSXs
 ; ---------------------------------------------------------------------------
-; |DIR
+; |DIR                                                                    wip
 ; ---------------------------------------------------------------------------
 rsx_dir
-    CALL save_return_address_for_errors
+    CALL save_return_address_for_errors_rsx
     PUSH AF
     PUSH IX
 
@@ -535,7 +880,7 @@ rsx_dir
     CALL put_filename_in_buffer             ; DE : Filename buffer
 
     ; Check for the drive in the parameter
-    LD   A,(DE)                             ; Get Active drive for DIR
+    LD   A,(DE)                             ; Get Active drive for |DIR
     CP   SD_DRIVE_NUMBER
     JR   NZ,.make_amsdos_call
 
@@ -552,12 +897,13 @@ rsx_dir
     LD   DE,AMSDOS_RECORD_NAME_BUFFER + 2
     CALL add_de_iy
     LD   A,' '
-    LD   (DE),A                             ; Mark as name not valid
+    LD   (DE),A                             ; Mark as not valid name
 
 
     ; |DIR Amélie code *** goes here ***
 .do_dir_ameli
-
+    ; It should CALL CAS_CATALOG
+    
     ; Return to firmware
     POP  IX
     POP  AF
@@ -575,22 +921,22 @@ rsx_dir
     RET
 
 ; ---------------------------------------------------------------------------
-; |ERA
+; |ERA                                                                    wip
 ; ---------------------------------------------------------------------------
 rsx_era
-    CALL save_return_address_for_errors
+    CALL save_return_address_for_errors_rsx
     PUSH AF
     PUSH IX
 
     ; Test for the single parameter
     DEC  A
-    JR   NZ,.make_amsdos_call               ; Pass error control to amsdos
+    JR   NZ,.make_amsdos_call       ; Pass error control to amsdos
 
     LD   DE,AMSDOS_RECORD_NAME_BUFFER
-    CALL put_filename_in_buffer             ; DE : Filename buffer
+    CALL put_filename_in_buffer     ; DE : Filename buffer
 
     ; Check for the drive in the parameter
-    LD   A,(DE)                             ; Get Active drive for ERA
+    LD   A,(DE)                     ; Get Active drive for |ERA
     CP   SD_DRIVE_NUMBER
     JR   NZ,.make_amsdos_call
 
@@ -603,17 +949,18 @@ rsx_era
     ADD  HL,BC
     LD   (HL),$FF
 
-    ; |ERA Amélie code *** goes here ***
+    ; |ERA Amélie code
 
     ; Check if the filename is valid (invalid names are converted to spaces)
-    INC  DE                                 ; Skip Drive
-    INC  DE                                 ; Skip User
+    INC  DE                         ; Skip Drive
+    INC  DE                         ; Skip User
     LD   A,(DE)
     CP   ' '
-    JR   Z,.make_amsdos_call                ; This is lazy, it would be better show the Error
+    JR   Z,.make_amsdos_call        ; This is lazy, it would be better show the Error
 
     ; The file exist?
-
+    ;*** Amélie code goes here ***
+    
     ; Return to firmware
     POP  IX
     POP  AF
@@ -641,11 +988,11 @@ rsx_era
 ;    RET
 
 ; ---------------------------------------------------------------------------
-; |REN
+; |REN                                                                    wip
 ; Amsdos send an error in case of rename a file using differents drives.
 ; ---------------------------------------------------------------------------
 rsx_ren
-    CALL save_return_address_for_errors
+    CALL save_return_address_for_errors_rsx
     PUSH AF
     PUSH IX
 
@@ -694,10 +1041,10 @@ rsx_ren
     RET
 
 ; ---------------------------------------------------------------------------
-; |DRIVE
+; |DRIVE                                                                  ***
 ; ---------------------------------------------------------------------------
 rsx_drive
-    CALL save_return_address_for_errors
+    CALL save_return_address_for_errors_rsx
     
     PUSH AF
     PUSH IX
@@ -730,11 +1077,14 @@ rsx_drive
     POP  AF
 
 ; ---------------------------------------------------------------------------
-; |SD
+; |SD                                                                     ***
 ; ENTRIES:
 ;    IY: Amsdos Memory Pool (default $A700)
 ; ---------------------------------------------------------------------------
 rsx_sd
+    ; Preload IY with the memory zone used by Amsdos
+    LD   IY,(AMSDOS_MEMORY_POOL)
+
     LD   A,SD_DRIVE_NUMBER
 
 set_active_drive
@@ -765,7 +1115,7 @@ set_active_drive
 ; + Read Only + System + ...
 
 ; ---------------------------------------------------------------------------
-; Read Sector (^D ó $84)
+; Read Sector (^D ó $84)                                                  wip
 ; ENTRIES:
 ;    HL : Address of sector buffer.
 ;     E : Drive number.
@@ -787,8 +1137,9 @@ set_active_drive
 ; NOTE: The sector buffer can lie even under ROM.
 ; ---------------------------------------------------------------------------
 rsx_read_sector
-    LD   A,SD_DRIVE_NUMBER
-    CP   E
+    CALL check_drive_for_hidden_rsx
+;    LD   A,SD_DRIVE_NUMBER
+;    CP   E
     JR   NZ,.make_amsdos_call
 
     ; |^D Amélie code *** goes here ***
@@ -804,7 +1155,7 @@ rsx_read_sector
     RET
 
 ; ---------------------------------------------------------------------------
-; Write Sector (^E ó $85)
+; Write Sector (^E ó $85)                                                 wip
 ; ENTRIES:
 ;    HL : Address of sector buffer.
 ;     E : Drive number.
@@ -826,8 +1177,9 @@ rsx_read_sector
 ; NOTE: The sector buffer can lie even under ROM.
 ; ---------------------------------------------------------------------------
 rsx_write_sector
-    LD   A,SD_DRIVE_NUMBER
-    CP   E
+    CALL check_drive_for_hidden_rsx
+;    LD   A,SD_DRIVE_NUMBER
+;    CP   E
     JR   NZ,.make_amsdos_call
 
     ; |^E Amélie code *** goes here ***
@@ -843,7 +1195,7 @@ rsx_write_sector
     RET
 
 ; ---------------------------------------------------------------------------
-; Format Track (^F ó $86)
+; Format Track (^F ó $86)                                                 wip
 ; ENTRIES:
 ;    HL : Address of header information buffer.
 ;     E : Drive number.
@@ -862,8 +1214,9 @@ rsx_write_sector
 ;     All others registers preserved.
 ; ---------------------------------------------------------------------------
 rsx_format_track
-    LD   A,SD_DRIVE_NUMBER
-    CP   E
+    CALL check_drive_for_hidden_rsx
+;    LD   A,SD_DRIVE_NUMBER
+;    CP   E
     JR   NZ,.make_amsdos_call
     ; |^F Amélie code *** goes here *** or much better ignore this dangerous rsx :P
 
@@ -877,12 +1230,33 @@ rsx_format_track
     DEFW farcall_amsdos_format_track
     RET
 
+
+; ---------------------------------------------------------------------------
+; Check the drive number for the RSXs $84, $85 y $86
+; ENTRIES:
+;     E : Drive number.
+; EXITS:
+;     Zero true if Drive number is SD.
+; ---------------------------------------------------------------------------
+check_drive_for_hidden_rsx
+    ; Preload IY with the memory zone used by Amsdos
+    LD   IY,(AMSDOS_MEMORY_POOL)
+
+    ; Check if is SD 
+    LD   A,SD_DRIVE_NUMBER
+    CP   E
+    RET
+
 ; ---------------------------------------------------------------------------
 ; Save return address in case of error
 ; ---------------------------------------------------------------------------
+save_return_address_for_errors_rsx
+    ; Preload IY with the memory zone used by Amsdos
+    LD   IY,(AMSDOS_MEMORY_POOL)
+
 save_return_address_for_errors
     PUSH HL
-    LD   HL,6
+    LD   HL,6                               ; 2 CALLs + 1 PUSH
     ADD  HL,SP
     LD   (IY + AMSDOS_STACK_POINTER),L      ; Update AMSDOS stack pointer
     LD   (IY + AMSDOS_STACK_POINTER + 1),H
@@ -1262,7 +1636,7 @@ list_invalid_chars_for_filename
     DEFB '<>.,;:=[]_%|()/\\',$7F,$00
 
 ; ---------------------------------------------------------------------------
-; Initialization
+; Initialization                                                          wip
 ; ENTRIES:
 ;     DE: Pointer to the lowest RAM address that we can use.
 ;     HL: Pointer to the highest RAM address that we can use.
@@ -1274,8 +1648,8 @@ list_invalid_chars_for_filename
 ;     All others registers preserved.
 ; ---------------------------------------------------------------------------
 initialize_amelie
-    PUSH  HL
-    PUSH  DE
+    PUSH HL
+    PUSH DE
 
 ;;;    CALL test_checksum_rom       ; Suma de todos los bytes de la rom, excepto el último que es el checksum
 ;;;    JR   NC,.checksum_failed
@@ -1292,6 +1666,7 @@ initialize_amelie
 .exit_initialize_amelie
     POP   DE
     POP   HL
+
     SCF
     RET
 
@@ -1603,6 +1978,11 @@ farcall_amsdos_format_track
 ; ---------------------------------------------------------------------------
 ; SD Commands
 
+; ---------------------------------------------------------------------------
+; Pointer to the active directory in the Amélidos catalog
+amelie_active_dir
+    DEFS 2                          ; Default in Root or comment this line
+                                    ; for saving the active dir between resets?
 ; ---------------------------------------------------------------------------
     REND
 

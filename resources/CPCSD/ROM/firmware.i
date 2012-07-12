@@ -129,7 +129,7 @@ GRA_LINE_ABSOLUTE               EQU $BBF6
 GRA_LINE_RELATIVE               EQU $BBF9
 GRA_WR_CHAR                     EQU $BBFC
 
-; the Screen Pack
+; The Screen Pack
 SCR_INITIALISE                  EQU $BBFF
 SCR_RESET                       EQU $BC02
 SCR_SET_OFFSET                  EQU $BC05
@@ -372,13 +372,15 @@ GET_SECTOR_DATA                 EQU $C56C
 ; BE7D   2 Pointer to Memory Pool                          (A700h) (CPM:N/A)
 ; BE7F   1 Hook                                            (C9h)
 AMSDOS_DRIVE_HSUS               EQU $BE53
+AMSDOS_DRIVE_TRACK              EQU $BE54
+AMSDOS_FLAG_RW_SECTOR           EQU $BE5E
+AMSDOS_FLAG_MOTOR               EQU $BE5F
 AMSDOS_RESERVED_AREA            EQU $BE7D
 AMSDOS_MEMORY_POOL              EQU $BE7D
 AMSDOS_HOOK                     EQU $BE7F
 
-; Amsdos Offsets between $A6FC - $ABFF
-AMSDOS_RSX_BLOCK                EQU 0                                   ; (4) Next block and AMSDOS ROM bank
-AMSDOS_DEFAULT_DRIVE            EQU AMSDOS_RSX_BLOCK + 4                ; (1) A = 0, B = 1, ...
+; Amsdos Offsets between $A700 - $ABFF
+AMSDOS_DEFAULT_DRIVE            EQU 0                                   ; (1) A = 0, B = 1, ...
 AMSDOS_DEFAULT_USER             EQU AMSDOS_DEFAULT_DRIVE + 1            ; (1) 0 - 255
 AMSDOS_ACTIVE_DRIVE             EQU AMSDOS_DEFAULT_USER + 1             ; (1) A = 0, B = 1, ...
 AMSDOS_DPH_ACTIVE_DRIVE         EQU AMSDOS_ACTIVE_DRIVE + 1             ; (2)
@@ -401,7 +403,7 @@ AMSDOS_SECTOR_BUFFER            EQU AMSDOS_CATALOG_BUFFER + 128         ; (512) 
 AMSDOS_RESERVED                 EQU AMSDOS_SECTOR_BUFFER + 512          ; (80)
     
 ; Offsets in the Extended File Control Block (FCB) for OPENIN/OPENOUT 
-FCB_DRIVE_NUMBER                EQU $00                                 ; (1) A = 0, B = 1, ... $FF = Not Open
+FCB_DRIVE_NUMBER                EQU 0                                   ; (1) A = 0, B = 1, ... $FF = Not Open
 FCB_USER_NUMBER                 EQU FCB_DRIVE_NUMBER + 1                ; (1) 0 - 255
 FCB_FILE_NAME                   EQU FCB_USER_NUMBER + 1                 ; (8) Pad with spaces
 FCB_FILE_EXTENSION              EQU FCB_FILE_NAME + 8                   ; (3) Pad with spaces
@@ -412,10 +414,10 @@ FCB_EXTENT_BLOCKS               EQU FCB_EXTENT_RECORDS + 1              ; (16) B
 FCB_PREVIOS_RECORDS             EQU FCB_EXTENT_BLOCKS + 16              ; (3) Number of previously accessed Records
 
 ; Offsets in the File Header for OPENIN/OPENOUT 
-FH_ACCESS_MODE                  EQU $00                                 ; (1) CHAR = 1, DIRECT = 2
+FH_ACCESS_MODE                  EQU 0                                   ; (1) CHAR = 1, DIRECT = 2
 FH_2K_BUFFER                    EQU FH_ACCESS_MODE + 1                  ; (2) Pointer to 2K work buffer
-FH_CHAR_2K_BUFFER               EQU FH_2K_BUFFER + 2                    ; (2) Pointer to current CHAR in 2K work buffer
-FH_USER_FILE_NAME               EQU FH_CHAR_2K_BUFFER + 2               ; (16) User Number and Filename (pad with $00)
+FH_POS_IN_2K_BUFFER             EQU FH_2K_BUFFER + 2                    ; (2) Pointer to current CHAR in 2K work buffer
+FH_USER_FILE_NAME               EQU FH_POS_IN_2K_BUFFER + 2             ; (16) User Number and Filename (pad with $00)
 FH_BLOCK_NUMBER                 EQU FH_USER_FILE_NAME + 16              ; (1) Block Number
 FH_LAST_BLOCK                   EQU FH_BLOCK_NUMBER + 1                 ; (1) Last Block 
 FH_FILE_TYPE                    EQU FH_LAST_BLOCK + 1                   ; (1) File Type (BASIC = 0, PROTECTED = 1, BINARY = 2)
@@ -425,8 +427,8 @@ FH_FIRST_BLOCK                  EQU FH_LOAD_ADDRESS + 2                 ; (1) Fi
 FH_FILE_SIZE                    EQU FH_FIRST_BLOCK + 1                  ; (2) Filesize, less the header ($80 bytes)
 FH_EXEC_ADDRESS                 EQU FH_FILE_SIZE + 2                    ; (2) Execution Address
 FH_UNUSED                       EQU FH_EXEC_ADDRESS + 2                 ; (36)
-FH_FILE_SIZE_24                 EQU FH_UNUSED + 36                      ; (3) 24 bits filesize
-FH_CHECSUM                      EQU FH_FILE_SIZE_24 + 3                 ; (2) Checksum for bytes between $05 - $47
+FH_FILE_SIZE_24                 EQU FH_UNUSED + 36                      ; (3) 24 bits filepos in CHARs or 16 bits filesize if non-ASCII file
+FH_CHECKSUM                     EQU FH_FILE_SIZE_24 + 3                 ; (2) Checksum for bytes between $05 - $47
 
 ; ---------------------------------------------------------------------------
 ; Firmware Palette
