@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libreloadedbe.a
 
-libreloadedbe_a_CPPFLAGS =  \
+libreloadedbe_a_CPPFLAGS = -Wno-multichar \
     -I@top_srcdir@/src/core \
     -I@top_srcdir@/src/asm \
     -Ikeymap -I. -I-

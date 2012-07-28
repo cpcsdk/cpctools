@@ -28,6 +28,7 @@ endif
 if HAIKU
 SUBDIRS += gui_be
 caprice_LDADD += gui_be/libreloadedbe.a -lbe -lgame -ltracker -llocale -lstdc++.r4
+caprice_CPPFLAGS += -Wno-multichar
 
 # Add resources to the executable
 all-local:: gui_be/Reloaded.rdef caprice

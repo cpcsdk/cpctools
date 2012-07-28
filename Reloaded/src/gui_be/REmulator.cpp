@@ -108,8 +108,6 @@ void REmulator::PressKey(uint32_t key, uint32_t mod)
 	dword cpc_key;
 	cpc_key = _input.keyboard_normal[key];
 
-	printf("k %d\n",key);
-
 	if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused)
 			&& ((byte)cpc_key != 0xff))
 	{
