@@ -8,9 +8,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/mman.h>
 
 // linux
+#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -18,6 +18,9 @@
 
 #include <vector>
 
+#include "mli.h"
+
+// TODO we shouldn't be using these in here
 #define RED "\x1B[31m"
 #define BLACK "\x1B[0m"
 
@@ -35,20 +38,6 @@ int fd;
 void readsector(uint16_t sector);
 void writesector(uint16_t sector);
 
-bool check_magic();
-	// Check wether a drive is already formatted
-void format_device();
-	// Get ready for action !
-void list_wd();
-	// Print list of files in current dir
-void writefile(const char* source, const char* dest);
-	// Copy source (host file) to dest (on disk)
-void readfile(const char* source, const char* dest);
-	// Copy source (on disk) to dest (host file)
-void erasefile(const char* file);
-	// Erase file from disk (free block map and fentries)
-void hexdump(uint16_t sid);
-	// Dump sector
 const char* normalize_name(const char* original);
 	// DOES NOT HANDLE SUBDIRS
 
@@ -122,141 +111,6 @@ struct __attribute((packed)) xentry
 };
 
 
-bool yesno()
-{
-	char c;
-	do c = tolower(getchar()); while (c != 'y' && c != 'n');
-	return c == 'y';
-}
-
-
-int main(int argc, const char* argv[])
-{
-	if (argc != 2)
-	{
-		fprintf(stderr, "usage: %s path_to_device\n", basename((char*)argv[0]));
-		exit(-1);
-	}
-
-	fd = open(argv[1], O_RDWR);
-
-	if (fd <= 0)
-	{
-		fprintf(stderr, "can't open device. Sorry!\n");
-		exit(-2);
-	}
-
-	char c = 0;
-
-	diskbuffer = (uint8_t*)malloc(512);
-		// We could allocate it statically or on the stack, but a bug in Haiku
-		// prevents access to unaligned memory for EHCI usb driver. Using
-		// malloc in Haiku is enough to make sure the memory is aligned.
-
-	// on z80, we also need to check if device has a partition map, and if so,
-	// wether one of the partitions is "magic". (this allows sharing an SD card
-	// between MLI and another FS like FAT. An example use is inide the HxC
-	// floppy emulator, which needs a FAT partition to load the config file.
-	if (!check_magic())
-	{
-		printf(RED "WARNING" BLACK 
-			" This device does not look like MLI-formatted !\n"
-			"Format it now ? (y/n)\n");
-
-		if (yesno())
-		{
-			format_device();
-		}
-		else
-		{
-			puts("Not touching device. Bye!");
-			free(diskbuffer);
-			close(fd);
-			exit(0);
-		}
-	}
-
-	// do stuff !
-	puts("Now entering command mode. Press h for help.");
-
-	for(;;)
-	{
-		printf(">");
-		fflush(stdout);
-		do {
-			c = tolower(getchar());
-		} while(!isalpha(c));
-
-		switch(c)
-		{
-			/*
-			case 'd':
-				puts("not yet!");
-				break;
-			*/
-			case 'e':
-				char d[1024];
-				scanf(" %s",d);
-				printf("About to erase file %s. Are you sure ?\n",d);
-				if (yesno())
-					erasefile(d);
-				break;
-			case 'f':
-				format_device();
-				break;
-			case 'h':
-				// Show help
-				puts(
-					"Syntax of operands:\n"
-					"  n - sector number\n"
-					"  s - source file\n"
-					"  d - destination file\n"
-					"Available commands:\n"
-					// C      - check disk structures
-					//"  D d    - change dir to d\n"
-					"  E d    - erase file\n"
-					"  F      - format drive\n"
-					"  H      - show this helptext\n"
-					"  L      - list files\n"
-					// M n    - mkdir n
-					"  Q      - quit fs-shell\n"
-					"  R s d  - read s (MLI) to d (host file)\n"
-					"  T s    - hexdump file s\n"
-					// U      - disk usage stats
-					"  W s d  - write s (host file) to d (MLI file)\n"
-					"  X n    - hexdump sector n\n"
-				);
-				break;
-			case 'l':
-				list_wd();
-				break;
-			case 'q':
-				close(fd);
-				free(diskbuffer);
-				exit(0);
-			case 'r':
-				char s[1024];
-				scanf(" %s %s",s,d);
-				readfile(s,d);
-				break;
-			case 't':
-				scanf(" %s",s);
-				readfile(s,NULL);
-				break;
-			case 'w':
-				scanf(" %s %s",s,d);
-				writefile(s,d);
-				break;
-			case 'x':
-				uint16_t sid;
-				scanf(" %d",&sid);
-				hexdump(sid);
-			default:
-				// Do nothing.
-				break;
-		}
-	}
-}
 
 
 bool check_magic()
@@ -903,19 +757,19 @@ bool erase_handle(uint16_t entry, void* cookie)
 			x.sector += x.length;
 		// Compute end position
 		uint8_t bite = 1 << (x.sector & 7);
-		uint16_t bytee = (x.sector >> 3) & 0x1FF,
+		uint16_t bytee = (x.sector >> 3) & 0x1FF;
 		uint8_t sectore = x.sector >> 9;
 
 		uint8_t sector = ssector;
 		uint16_t byte = sbyte;
 		while (sector <= sectore)
 		{
+			uint8_t bits = 0;
 			readsector(sector);
 
 			if (sector == ssector)
 			{
 				// process first byte
-				uint8_t bits = 0;
 				while(bits < sbit)
 				{
 					bits = (bits<<1) | 1;
@@ -971,12 +825,13 @@ bool erase_handle(uint16_t entry, void* cookie)
 
 // Erase one single file from the disk.
 // TODO handle file patterns (* and ?) for multi-file erase
-void erase_file(const char* name)
+void erasefile(const char* name)
 {
+	void* cookie;
 	// Locate the file in the entry table.
 	if (!for_each_file_in_dir(0, erase_handle, &cookie))
 	{
-		fprintf(stderr, "File %s not found.\n", s);
+		fprintf(stderr, "File %s not found.\n", name);
 	}
 }
 
