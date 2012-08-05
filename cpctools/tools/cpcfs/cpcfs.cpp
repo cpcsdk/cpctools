@@ -1,8 +1,8 @@
 /**
 * Petit utilitaire de transfert, mode texte, ligne de commande uniquement
-* @author Thierry JOUIN
-* @version 1.1
-* @date 31/10/2001
+* @author Thierry JOUIN, Adrien Destugues
+* @version 1.2
+* @date 18/09/2011
 */
 
 #include "CCPCDisc.h"
@@ -114,15 +114,15 @@ void GetAmsdosParamFromName(const std::string &filename, std::string &filenameam
 
 static struct SOption appliOption[]=
 {
-	{'c',(char *)"configFile",0,1,1,(char *)"Configuration file"},
-	{'b',(char *)"binaryMode",0,1,0,(char *)"Use binary mode for transfert"},
-	{'e',(char *)"createHeader",0,1,0,(char *)"Create header when transfering"},
-	{'n',(char *)"noHeader",0,1,0,(char *)"Remove header when transfering"},
-	{0,NULL,0,0,0,NULL}
+	{'b', "binaryMode"  ,0,1,0,"Use binary mode for transfert"},
+	{'e', "createHeader",0,1,0,"Create header when transfering"},
+	{'n', "noHeader"    ,0,1,0,"Remove header when transfering"},
+	{'s', "side"        ,0,1,0,"Use disk B side"},
+	{0,   NULL          ,0,0,0,NULL}
 };
 
-static const std::string authorName = "Ramlaid";
-static const std::string authorMail = "cpcTools@ramlaid.com";
+static const std::string authorName = "Ramlaid & PulkoMandy";
+static const std::string authorMail = "cpcsdk@googlecode.com";
 static const std::string appliName = "cpcfs";
 static const std::string appliUsageShort = "<dskfile> <command>";
 static const std::string appliUsageLong = "<dskfile> <command>\n"
@@ -143,7 +143,8 @@ int main(int argc, char* argv[])
 {
 	try
 	{
-		COptionParser optParser(appliOption, appliName, appliUsageShort, appliUsageLong, authorName, authorMail);
+		COptionParser optParser(appliOption, appliName, appliUsageShort,
+			appliUsageLong, authorName, authorMail);
 
 		optParser.PrintHeader(std::cout);
 

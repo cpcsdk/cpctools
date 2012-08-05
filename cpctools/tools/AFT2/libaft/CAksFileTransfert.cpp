@@ -168,7 +168,7 @@ CAksCommand CAksFileTransfert::GetCommand(bool wait)
 		}
 		else
 		{
-			std::cout << "Unknwon command received : 0x" << std::hex << (int)command << std::endl;
+			std::cout << "Unknown command received : 0x" << std::hex << (int)command << std::endl;
 			return AksUnknownCommand;
 		}
 	}
