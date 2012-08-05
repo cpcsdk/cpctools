@@ -19,7 +19,7 @@
 #pragma once
 #define _VIDEO_H_
 
-#include "SDL.h"
+#include <SDL.h>
 #include <string>
 
 using namespace std;

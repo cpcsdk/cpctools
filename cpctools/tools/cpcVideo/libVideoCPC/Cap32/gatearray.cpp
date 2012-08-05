@@ -5,8 +5,6 @@
 #include "gatearray.h"
 #include "cap32type.h"
 
-#include <AntTweakBar.h>
-
 #ifdef Z80_H
 extern t_z80regs z80;
 #endif

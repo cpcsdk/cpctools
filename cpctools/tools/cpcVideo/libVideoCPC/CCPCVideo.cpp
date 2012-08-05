@@ -15,8 +15,6 @@
 #include "Cap32/vdu.h"
 #include "Cap32/gatearray.h"
 
-#include <AntTweakBar.h>
-
 #include <algorithm>
 #include <functional>
 
@@ -29,115 +27,6 @@ float round(float x)
 		return floor(x);
 	else
 		return ceil(x);
-}
-
-//
-// Tweak bar functions
-//
-#define CRTC_TWEAKBAR_CB( reg ) \
-void TW_CALL SetCRTCR##reg(const void *value, void *clientData)					\
-{																				\
-	unsigned char val = *(const unsigned char*)value;							\
-	((t_CRTC*)clientData)->SetRegisterValue(reg, val);							\
-}																				\
-void TW_CALL GetCRTCR##reg(void *value, void *clientData)						\
-{																				\
-	*(unsigned char *)value = ((t_CRTC*)clientData)->GetRegisterValue(reg);		\
-}
-
-CRTC_TWEAKBAR_CB(1)
-CRTC_TWEAKBAR_CB(2)
-CRTC_TWEAKBAR_CB(6)
-CRTC_TWEAKBAR_CB(7)
-
-void TW_CALL SetCRTCOffset(const void *value, void *clientData)
-{
-	unsigned short offset = *(const unsigned short*)value;
-	((t_CRTC*)clientData)->SetRegisterValue(12, ((offset & 0xff00) >> 8 ) );
-	((t_CRTC*)clientData)->SetRegisterValue(13, (offset & 0xff) );
-}																			
-void TW_CALL GetCRTCOffset(void *value, void *clientData)
-{
-	*(unsigned short *)value =	(((t_CRTC*)clientData)->GetRegisterValue(12) << 8) + 
-								((t_CRTC*)clientData)->GetRegisterValue(13);
-}
-
-#define GA_TWEAKBAR_CB( reg ) \
-void TW_CALL SetGAInk##reg(const void *value, void *clientData)						\
-{																					\
-	unsigned char val = t_GateArray::SoftToHardTable[*(const unsigned char*)value];	\
-	((t_GateArray*)clientData)->SetInk(reg, val);						\
-}																		\
-void TW_CALL GetGAInk##reg(void *value, void *clientData)				\
-{																		\
-	*(unsigned char *)value = t_GateArray::HardToSoftTable[((t_GateArray*)clientData)->GetInk(reg)];	\
-}
-
-#define GA_DECLARE_TWEAK(reg) TwAddVarCB(GABar, "Col"#reg, TW_TYPE_UINT8, &SetGAInk##reg, &GetGAInk##reg, _gateArray, "group='Colors' max=26")
-
-GA_TWEAKBAR_CB(0)
-GA_TWEAKBAR_CB(1)
-GA_TWEAKBAR_CB(2)
-GA_TWEAKBAR_CB(3)
-GA_TWEAKBAR_CB(4)
-GA_TWEAKBAR_CB(5)
-GA_TWEAKBAR_CB(6)
-GA_TWEAKBAR_CB(7)
-GA_TWEAKBAR_CB(8)
-GA_TWEAKBAR_CB(9)
-GA_TWEAKBAR_CB(10)
-GA_TWEAKBAR_CB(11)
-GA_TWEAKBAR_CB(12)
-GA_TWEAKBAR_CB(13)
-GA_TWEAKBAR_CB(14)
-GA_TWEAKBAR_CB(15)
-GA_TWEAKBAR_CB(16)
-
-void TW_CALL SetGAMode(const void *value, void *clientData)
-{
-	unsigned char mode = *(const unsigned char*)value;
-	((t_GateArray*)clientData)->SetMode(mode);
-
-	int nbColor = (mode == 0) ? 16 : ((mode == 1) ? 4 : ((mode == 2) ? 2 : 4));
-	
-	for (int c=0 ; c < nbColor ; c++)
-	{
-		char def[64];
-		sprintf(def, "GA/Col%d readwrite", c);
-		TwDefine(def);
-	}
-	for (int c=nbColor ; c < 16 ; c++)
-	{
-		char def[64];
-		sprintf(def, "GA/Col%d readonly", c);
-		TwDefine(def);
-	}
-}																			
-void TW_CALL GetGAMode(void *value, void *clientData)
-{
-	*(unsigned char *)value = ((t_GateArray*)clientData)->GetMode();
-}
-
-void TW_CALL SetVDUIntensity(const void *value, void *clientData)
-{
-	unsigned char val = *(const unsigned char*)value;
-	((Renderer*)clientData)->SetMonitorIntensity(val);
-}
-
-void TW_CALL GetVDUIntensity(void *value, void *clientData)
-{
-	*(unsigned char *)value = ((Renderer*)clientData)->GetMonitorIntensity();
-}
-
-void TW_CALL SetVDUColor(const void *value, void *clientData)
-{
-	bool val = *(const bool*)value;
-	((Renderer*)clientData)->SetMonitorColorTube(val);
-}
-
-void TW_CALL GetVDUColor(void *value, void *clientData)
-{
-	*(bool *)value = ((Renderer*)clientData)->IsMonitorColorTube();
 }
 
 //
@@ -264,53 +153,6 @@ _frameCount(0)
 	_crtc->SetRegisterValue(12,0);
 	_crtc->SetRegisterValue(13,0);
 
-	// Initialize AntTweakBar
-	TwInit(TW_OPENGL, NULL);
-	// Tell the window size to AntTweakBar
-	TwWindowSize(_renderer.GetVideoPlugin()->GetWidth(), _renderer.GetVideoPlugin()->GetHeight());
-
-	_renderer.GetVideoPlugin()->SetPostRenderCallBack((int (*)(void))&TwDraw);
-
-	// Create a tweak bar
-	TwBar *CRTCBar = TwNewBar("CRTC");
-
-	// Add CRTC Register to bar
-	TwAddVarCB(CRTCBar, "R1", TW_TYPE_UINT8, &SetCRTCR1, &GetCRTCR1, _crtc, "group=Size");
-	TwAddVarCB(CRTCBar, "R6", TW_TYPE_UINT8, &SetCRTCR6, &GetCRTCR6, _crtc, "group=Size");
-	TwAddVarCB(CRTCBar, "R2", TW_TYPE_UINT8, &SetCRTCR2, &GetCRTCR2, _crtc, "group='VSync/HSync Pos'");
-	TwAddVarCB(CRTCBar, "R7", TW_TYPE_UINT8, &SetCRTCR7, &GetCRTCR7, _crtc, "group='VSync/HSync Pos'");
-	TwAddVarCB(CRTCBar, "R12-13", TW_TYPE_UINT16, &SetCRTCOffset, &GetCRTCOffset, _crtc, "hexa group=Offset");
-	TwDefine("CRTC iconify label='CRTC Registers' size='200 180'");
-
-	TwBar *GABar = TwNewBar("GA");
-	TwAddVarCB(GABar, "Border", TW_TYPE_UINT8, &SetGAInk16, &GetGAInk16, _gateArray, "group='Colors' max=26");
-	GA_DECLARE_TWEAK(0);
-	GA_DECLARE_TWEAK(1);
-	GA_DECLARE_TWEAK(2);
-	GA_DECLARE_TWEAK(3);
-	GA_DECLARE_TWEAK(4);
-	GA_DECLARE_TWEAK(5);
-	GA_DECLARE_TWEAK(6);
-	GA_DECLARE_TWEAK(7);
-	GA_DECLARE_TWEAK(8);
-	GA_DECLARE_TWEAK(9);
-	GA_DECLARE_TWEAK(10);
-	GA_DECLARE_TWEAK(11);
-	GA_DECLARE_TWEAK(12);
-	GA_DECLARE_TWEAK(13);
-	GA_DECLARE_TWEAK(14);
-	GA_DECLARE_TWEAK(15);
-	TwAddVarCB(GABar, "Mode", TW_TYPE_UINT8, &SetGAMode, &GetGAMode, _gateArray, "max=3");
-	TwDefine("GA iconify label='GateArray Registers' size='200 330'");
-
-	// Create a tweak bar
-	TwBar *VDUBar = TwNewBar("VDU");
-
-	// Add CRTC Register to bar
-	TwAddVarCB(VDUBar, "Intensity", TW_TYPE_UINT8, &SetVDUIntensity, &GetVDUIntensity, &_renderer, "max = 15");
-	TwAddVarCB(VDUBar, "Color", TW_TYPE_BOOLCPP, &SetVDUColor, &GetVDUColor, &_renderer, "");
-	TwDefine("VDU iconify label='Monitor' size='200 100'");
-
 	Cls();
 }
 
@@ -329,9 +171,6 @@ CCPCVideo::~CCPCVideo()
 	delete _crtc;
 	delete[] _cpcMemory;
 	
-	// Terminate AntTweakBar
-	TwTerminate();
-
 	_renderer.Shutdown();
 }
 
@@ -367,8 +206,6 @@ bool CCPCVideo::Display(bool pause)
 	{
 		if (! _renderer.BeginDisplay(_vdu->GetScrLn()))
 			return false;
-
-		TwDraw();
 
 		if (_displayFPS)
 		{

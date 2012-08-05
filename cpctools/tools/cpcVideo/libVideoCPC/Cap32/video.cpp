@@ -440,9 +440,9 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 	_GLScanlines = glScanline;
 
 #ifdef _WIN32
-	char *gl_library = "OpenGL32.DLL";
+	const char *gl_library = "OpenGL32.DLL";
 #else
-	char *gl_library = "libGL.so.1";
+	const char *gl_library = "libGL.so.1";
 #endif
 	int surface_bpp;
 	
@@ -473,14 +473,14 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 	
 	int major, minor;
 	const char *version;
-	version = (char *) eglGetString(GL_VERSION); 
+	version = (char *) glGetString(GL_VERSION); 
 	if (sscanf(version, "%d.%d", &major, &minor) != 2) {
 		fprintf(stderr, "Unable to get OpenGL version\n");
 		return NULL;
 	}
 	
 	GLint max_texsize;
-	eglGetIntegerv(GL_MAX_TEXTURE_SIZE,&max_texsize);
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE,&max_texsize);
 	if (max_texsize<512) {
 		fprintf(stderr, "Your OpenGL implementation doesn't support 512x512 textures\n");
 		return NULL;
@@ -512,37 +512,37 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 		return NULL;
 	}
 	
-	eglDisable(GL_FOG);
-	eglDisable(GL_LIGHTING);
-	eglDisable(GL_CULL_FACE);
-	eglDisable(GL_DEPTH_TEST);
-	eglDisable(GL_BLEND);
-	eglDisable(GL_NORMALIZE);
-	eglDisable(GL_ALPHA_TEST);
-	eglEnable(GL_TEXTURE_2D);
-	eglBlendFunc (GL_SRC_ALPHA, GL_ONE);
+	glDisable(GL_FOG);
+	glDisable(GL_LIGHTING);
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	glDisable(GL_NORMALIZE);
+	glDisable(GL_ALPHA_TEST);
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE);
 	
-	eglGenTextures(1,&_screenTexnum);
-	eglBindTexture(GL_TEXTURE_2D,_screenTexnum);
-	eglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
-	eglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
+	glGenTextures(1,&_screenTexnum);
+	glBindTexture(GL_TEXTURE_2D,_screenTexnum);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
 	_texWidth=512;
 	_texHeight=512;
 	
 	switch(surface_bpp)
 	{
 	case 24:
-		eglTexImage2D(GL_TEXTURE_2D, 0,GL_RGB,_texWidth,_texHeight, 0,
+		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB,_texWidth,_texHeight, 0,
 			GL_RGB,
 			GL_UNSIGNED_BYTE, NULL);
 		break;
 	case 16:
-		eglTexImage2D(GL_TEXTURE_2D, 0,GL_RGB5,_texWidth,_texHeight, 0,
+		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB5,_texWidth,_texHeight, 0,
 			GL_RGB,
 			GL_UNSIGNED_BYTE, NULL);
 		break;
 	case 8:
-		eglTexImage2D(GL_TEXTURE_2D, 0,GL_COLOR_INDEX8_EXT,_texWidth,_texHeight, 0,
+		glTexImage2D(GL_TEXTURE_2D, 0,GL_COLOR_INDEX8_EXT,_texWidth,_texHeight, 0,
 			GL_COLOR_INDEX,
 			GL_UNSIGNED_BYTE, NULL);
 		break;
@@ -564,10 +564,10 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 		default:
 			texmod=255;
 		}
-		eglGenTextures(1,&_modulateTexnum);
-		eglBindTexture(GL_TEXTURE_2D,_modulateTexnum);
-		eglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
-		eglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
+		glGenTextures(1,&_modulateTexnum);
+		glBindTexture(GL_TEXTURE_2D,_modulateTexnum);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, _openGLFilter?GL_LINEAR:GL_NEAREST);
 		
 		Uint8 modulate_texture[]={
 			255,255,255,
@@ -575,15 +575,15 @@ SDL_Surface* OpenGLPlugin::OpenGLInit(int w,int h, int bpp, bool fs, int glScanl
 			modulate_texture[3]=texmod;
 			modulate_texture[4]=texmod;
 			modulate_texture[5]=texmod;
-			eglTexImage2D(GL_TEXTURE_2D, 0,GL_RGB8,1,2, 0,GL_RGB,GL_UNSIGNED_BYTE, modulate_texture);
+			glTexImage2D(GL_TEXTURE_2D, 0,GL_RGB8,1,2, 0,GL_RGB,GL_UNSIGNED_BYTE, modulate_texture);
 	}
-	eglViewport(0,0,w,h);
-	eglMatrixMode(GL_PROJECTION);
-	eglLoadIdentity();
-	eglOrtho(0,w,h,0,-1.0, 1.0);
+	glViewport(0,0,w,h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0,w,h,0,-1.0, 1.0);
 	
-	eglMatrixMode(GL_MODELVIEW);
-	eglLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	
 	_publicVideo=SDL_CreateRGBSurface(SDL_SWSURFACE,CPCVisibleSCRWidth,CPCVisibleSCRHeight,surface_bpp,0,0,0,0);
 	return _publicVideo;
@@ -601,8 +601,8 @@ void OpenGLPlugin::SetPalette(SDL_Color* c)
 			pal[3*i+1] = _publicVideo->format->palette->colors[i].g;
 			pal[3*i+2] = _publicVideo->format->palette->colors[i].b;
 		}
-		eglBindTexture(GL_TEXTURE_2D,_screenTexnum);
-		eglColorTableEXT(GL_TEXTURE_2D,GL_RGB8,256,GL_RGB,GL_UNSIGNED_BYTE,pal);
+		glBindTexture(GL_TEXTURE_2D,_screenTexnum);
+		glColorTable(GL_TEXTURE_2D,GL_RGB8,256,GL_RGB,GL_UNSIGNED_BYTE,pal);
 		free(pal);
 	}
 }
@@ -618,70 +618,70 @@ void OpenGLPlugin::Unlock()
 
 void OpenGLPlugin::Flip()
 {
-	eglDisable(GL_BLEND);
+	glDisable(GL_BLEND);
 	
 	if (_GLScanlines!=0)
 	{
-		eglActiveTextureARB(GL_TEXTURE1_ARB);
-		eglEnable(GL_TEXTURE_2D);
-		eglBindTexture(GL_TEXTURE_2D,_modulateTexnum);
-		eglTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-		eglColor4f(1.0,1.0,1.0,1.0);
-		eglActiveTextureARB(GL_TEXTURE0_ARB);
+		glActiveTextureARB(GL_TEXTURE1_ARB);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D,_modulateTexnum);
+		glTexEnvf (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glColor4f(1.0,1.0,1.0,1.0);
+		glActiveTextureARB(GL_TEXTURE0_ARB);
 	}
 	
-	eglEnable(GL_TEXTURE_2D);
-	eglBindTexture(GL_TEXTURE_2D,_screenTexnum);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,_screenTexnum);
 	
 	if (_remanency)
 	{
 		/* draw again using the old texture */
-		eglBegin(GL_QUADS);
-		eglColor4f(1.0,1.0,1.0,1.0);
+		glBegin(GL_QUADS);
+		glColor4f(1.0,1.0,1.0,1.0);
 		
-		eglTexCoord2f(0.f, 0.f);
+		glTexCoord2f(0.f, 0.f);
 		if (_GLScanlines!=0)
-			eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, 0.f);
-		eglVertex2i(0, 0);
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, 0.f);
+		glVertex2i(0, 0);
 		
-		eglTexCoord2f(0.f, (float)(_publicVideo->h)/_texHeight);
+		glTexCoord2f(0.f, (float)(_publicVideo->h)/_texHeight);
 		if (_GLScanlines!=0)
-			eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, (float)_video->h/2);
-		eglVertex2i(0, _video->h);
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, (float)_video->h/2);
+		glVertex2i(0, _video->h);
 		
-		eglTexCoord2f((float)(_publicVideo->w)/_texWidth, (float)(_publicVideo->h)/_texHeight);
+		glTexCoord2f((float)(_publicVideo->w)/_texWidth, (float)(_publicVideo->h)/_texHeight);
 		if (_GLScanlines!=0)
-			eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, (float)_video->h/2);
-		eglVertex2i(_video->w, _video->h);
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, (float)_video->h/2);
+		glVertex2i(_video->w, _video->h);
 		
-		eglTexCoord2f((float)(_publicVideo->w)/_texWidth, 0.f);
+		glTexCoord2f((float)(_publicVideo->w)/_texWidth, 0.f);
 		if (_GLScanlines!=0)
-			eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, 0);
-		eglVertex2i(_video->w, 0);
-		eglEnd();
+			glMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, 0);
+		glVertex2i(_video->w, 0);
+		glEnd();
 		
 		/* enable blending for the subsequent pass */
-		eglEnable(GL_BLEND);
-		eglBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
 	/* upload the texture */
 	switch(_publicVideo->format->BitsPerPixel)
 	{
 	case 24:
-		eglTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 			_publicVideo->w, _publicVideo->h,
 			GL_BGR,GL_UNSIGNED_BYTE,
 			_publicVideo->pixels);
 		break;
 	case 16:
-		eglTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
 			_publicVideo->w, _publicVideo->h,
 			GL_RGB,GL_UNSIGNED_SHORT_5_6_5,
 			_publicVideo->pixels);
 		break;
 	case 8:
-		eglTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0,
+		glTexSubImage2D (GL_TEXTURE_2D, 0, 0, 0,
 			_publicVideo->w,_publicVideo->h, 
 			GL_COLOR_INDEX, GL_UNSIGNED_BYTE, 
 			_publicVideo->pixels);
@@ -689,29 +689,29 @@ void OpenGLPlugin::Flip()
 	}
 	
 	/* draw ! */
-	eglBegin(GL_QUADS);
-	eglColor4f(1.0,1.0,1.0,0.5);
+	glBegin(GL_QUADS);
+	glColor4f(1.0,1.0,1.0,0.5);
 	
-	eglTexCoord2f(0.f, 0.f);
+	glTexCoord2f(0.f, 0.f);
 	if (_GLScanlines!=0)
-		eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, 0.f);
-	eglVertex2i(0, 0);
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, 0.f);
+	glVertex2i(0, 0);
 	
-	eglTexCoord2f(0.f, (float)(_publicVideo->h)/_texHeight);
+	glTexCoord2f(0.f, (float)(_publicVideo->h)/_texHeight);
 	if (_GLScanlines!=0)
-		eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, (float)_video->h/2);
-	eglVertex2i(0, _video->h);
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB,0.f, (float)_video->h/2);
+	glVertex2i(0, _video->h);
 	
-	eglTexCoord2f((float)(_publicVideo->w)/_texWidth, (float)(_publicVideo->h)/_texHeight);
+	glTexCoord2f((float)(_publicVideo->w)/_texWidth, (float)(_publicVideo->h)/_texHeight);
 	if (_GLScanlines!=0)
-		eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, (float)_video->h/2);
-	eglVertex2i(_video->w, _video->h);
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, (float)_video->h/2);
+	glVertex2i(_video->w, _video->h);
 	
-	eglTexCoord2f((float)(_publicVideo->w)/_texWidth, 0.f);
+	glTexCoord2f((float)(_publicVideo->w)/_texWidth, 0.f);
 	if (_GLScanlines!=0)
-		eglMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, 0);
-	eglVertex2i(_video->w, 0);
-	eglEnd();
+		glMultiTexCoord2fARB(GL_TEXTURE1_ARB,(float)_video->w, 0);
+	glVertex2i(_video->w, 0);
+	glEnd();
 
 	if (_postRenderCallBack != NULL)
 		_postRenderCallBack();
@@ -724,10 +724,10 @@ void OpenGLPlugin::Close()
 	if (!_video)
 		return;
 	SDL_FreeSurface(_publicVideo);
-	if (eglIsTexture(_screenTexnum))
-		eglDeleteTextures(1,&_screenTexnum);
-	if (eglIsTexture(_modulateTexnum))
-		eglDeleteTextures(1,&_modulateTexnum);
+	if (glIsTexture(_screenTexnum))
+		glDeleteTextures(1,&_screenTexnum);
+	if (glIsTexture(_modulateTexnum))
+		glDeleteTextures(1,&_modulateTexnum);
 }
 
 void OpenGLPlugin::SetOption(const string &optionName, bool val)
@@ -1736,7 +1736,7 @@ VideoPlugin* VideoPlugin::Create(VideoType type)
 bool VideoPlugin::HaveOpenGLExtension(const string &name_ext)
 {
 	const char *ext;
-	ext = (const char *) (eglGetString (GL_EXTENSIONS));
+	ext = (const char *) (glGetString (GL_EXTENSIONS));
 	const char *f;
 	if (ext == NULL)
 		return false;

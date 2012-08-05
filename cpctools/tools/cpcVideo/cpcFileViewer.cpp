@@ -19,8 +19,6 @@
 #include "Cap32/vdu.h"
 #include "Cap32/render.h"
 
-#include "AntTweakBar.h"
-
 CCPCDataView *File = NULL;
 
 bool loadScreen(std::string &i_filename)
@@ -136,6 +134,11 @@ void loadFile(std::string &filename, CCPCVideo &scr)
 
 int main(int argc, char **argv)
 {
+	if (argc < 2)
+	{
+		printf("Usage: %s filename\n", argv[0]);
+		exit(-2);
+	}
 
 	std::string filename = argv[1];
 
@@ -174,9 +177,6 @@ int main(int argc, char **argv)
 
 			while(SDL_PollEvent(&event))
 			{
-				if (TwEventSDL(&event))
-					continue;
-
 				switch( event.type )
 				{
 				case SDL_QUIT:

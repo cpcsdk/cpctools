@@ -1754,10 +1754,9 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 
 int CCPCDisc::isFloppy(const string &filename)
 {
-	// Haiku has a bug in the STL. Notice the ars to compare are not in the same 
-	// order!
 	#ifdef __HAIKU__
-	if (filename.compare("/dev/disk/ufi", 0, 13) == 0)
+		// It seems that Haiku string.compare doesn't work as expected ?
+	if (strncmp(filename.c_str(), "/dev/disk/ufi/", 14) == 0)
 	#else
 	if (filename.compare(0,7,"/dev/sd") == 0)
 	#endif
@@ -1768,9 +1767,11 @@ int CCPCDisc::isFloppy(const string &filename)
 	    strcasecmp(filename.c_str(), "b:")==0 ||
 	    strcasecmp(filename.c_str(), "/dev/fd0")==0 ||
 	    strcasecmp(filename.c_str(), "/dev/fd1")==0)
-	return 1; // Floppy with sectors/side handling
-    else
-	return 0; // DSK file
+	{
+		return 1; // Floppy with sectors/side handling
+    } else {
+		return 0; // DSK file
+	}
 }
 
 bool CCPCDisc::IsDSK(const string &i_filename, int i_inside)
