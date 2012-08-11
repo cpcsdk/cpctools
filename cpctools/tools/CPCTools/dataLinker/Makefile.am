@@ -1,5 +1,5 @@
 bin_PROGRAMS = datalinker
-LDADD = $(srcdir)/../../../lib/Common/libtools/libtools.la
-AM_CXXFLAGS = -I$(srcdir)/../../../lib/Common/libtools 
+LDADD = $(srcdir)/../../../lib/libtools/libtools.a
+AM_CXXFLAGS = -I$(srcdir)/../../../lib/libtools 
 datalinker_SOURCES = CDataLink.cpp  CDataLink.h  dataLinker.cpp 
 

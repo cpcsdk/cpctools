@@ -1,1 +1,1 @@
-SUBDIRS = lib tools
+SUBDIRS = tools/CPCTools

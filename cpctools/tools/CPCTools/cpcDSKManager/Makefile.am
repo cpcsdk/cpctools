@@ -1,5 +1,5 @@
 bin_PROGRAMS = cpcdskmanager
-LDADD = $(srcdir)/../../../lib/Common/libcpcfs/libcpcfs.la $(srcdir)/../../../lib/Common/libtools/libtools.la
-AM_CXXFLAGS = -I$(srcdir)/../../../lib/Common/libcpcfs \
-              -I$(srcdir)/../../../lib/Common/libtools
+LDADD = $(srcdir)/../../../lib/libcpcfs/libcpcfs.la $(srcdir)/../../../lib/libtools/libtools.la
+AM_CXXFLAGS = -I$(srcdir)/../../../lib/libcpcfs \
+              -I$(srcdir)/../../../lib/libtools
 cpcdskmanager_SOURCES = cpcDSKManager.cpp

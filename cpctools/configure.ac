@@ -50,17 +50,11 @@ fi
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
 	Makefile
-	lib/Makefile
-	lib/Common/Makefile
-	tools/Makefile
 	tools/CPCTools/Makefile
         tools/CPCTools/cpcDSK/Makefile
         tools/CPCTools/cpcFSExt/Makefile
-        tools/CPCTools/cpcSnapshot/Makefile
         tools/CPCTools/damsConverter/Makefile
         tools/CPCTools/dataDBGenerator/Makefile
         tools/CPCTools/dataLinker/Makefile
-	lib/Common/libsnapshot/Makefile
-	lib/Common/libtools/Makefile
 ])
 AC_OUTPUT
