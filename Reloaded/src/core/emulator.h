@@ -56,7 +56,7 @@ class t_Tape;
 class t_Memory;
 
 #ifdef WITH_ASM
-#include <../asm/CapASM.h>
+#include "../asm/CapASM.h"
 #endif
 
 #ifdef USE_DEBUGGER

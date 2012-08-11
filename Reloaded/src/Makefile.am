@@ -7,7 +7,7 @@ MINGW_LIB=-lmingw32
 
 caprice_SOURCES =	# no files
 caprice_LDADD =
-caprice_CPPFLAGS = -I$(srcdir)/core -I$(srcdir)/gui -DUNICODE
+caprice_CPPFLAGS = -I$(srcdir)/core -I$(srcdir)/gui -DUNICODE -mtune=k6
 
 #caprice wx needs to be after mingw32 so we can find WinMain ?
 if MINGW
@@ -64,12 +64,7 @@ if WITH_ASM
 SUBDIRS += asm
 caprice_LDADD += asm/libsjasm.a \
                  asm/libsjasminternal.a 
-if MINGW 
-else
-caprice_LDADD += -ldl
 endif
-endif
-
 
 if RELEASE
   caprice_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s

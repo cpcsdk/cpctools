@@ -77,7 +77,3 @@ endif
 if LIB765
   libcapricecore_a_LIBADD += /usr/local/lib/lib765.a /usr/local/lib/libdsk.a
 endif
-
-if RELEASE
-  libcapricecore_a_CPPFLAGS = -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s
-endif

@@ -125,6 +125,7 @@ AM_CONDITIONAL([WITH_IDE], [test "$with_ide" = "yes"])
 
 if test "$with_asm" = "yes" ; then
     AC_DEFINE(WITH_ASM,1,[Allow the compilation of programs in caprice])
+	AC_CHECK_LIB(dl, dlopen)
 	wxLibs=stc
 fi
 AM_CONDITIONAL([WITH_ASM], [test "$with_asm" = "yes"])
@@ -158,8 +159,8 @@ if test "$enable_debug" = "yes" ; then
     CXXFLAGS="-O0 -g -DDEBUG -pg ${M32}"
     CFLAGS="-O0 -g -DDEBUG -pg ${M32}"
 else
-    CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
-    CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
+    CXXFLAGS="-Wall -march=k6 -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
+    CFLAGS="-Wall -march=k6 -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
 fi
 AC_SUBST([M32], [${M32}])
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
@@ -218,6 +219,8 @@ netbsd*)
      AC_DEFINE_UNQUOTED(HAIKU,1,[This is Haiku])
      AC_DEFINE_UNQUOTED(USE_PTHREAD,1,[We can use the pthread system to use emulator in background])
 	 build_target="haiku"
+     CXXFLAGS="$CXXFLAGS -Wno-multichar"
+     CFLAGS="$CFLAGS -Wno-multichar"
 	 ;;
 *)
      AC_MSG_RESULT(Unrecognised OS $host_os)
@@ -368,7 +371,6 @@ if test "$with_lib765" = "yes" ; then
     AC_SUBST(LIB765)
 fi
 AM_CONDITIONAL([LIB765], [test "$with_lib765" = "yes"])
-
 
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CFLAGS)

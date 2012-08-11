@@ -13,7 +13,3 @@ RWin.h RWin.cpp RBitmapView.h keymap/KeymapWindow.cpp keymap/KeymapWindow.h \
 keymap/Keymap2.cpp keymap/Keymap.cpp keymap/KeyboardLayout.cpp \
 keymap/KeyboardLayoutView.cpp
 
-if RELEASE
-  libreloadedbe_a_CPPFLAGS += -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -s
-endif
-
