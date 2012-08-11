@@ -30,7 +30,7 @@ bool CCPCScreenView::display(CCPCVideo &scr)
 bool CCPCScreenView::keyPressed(CCPCVideo &scr, const SDLKey &key, const SDLMod &mod, bool &redisplay)
 {
 	int r1 = scr.GetCRTCValue(1);
-	int r6 = scr.GetCRTCValue(6);
+	//int r6 = scr.GetCRTCValue(6);
 
 	switch (mod & 0xfff)
 	{

@@ -29,8 +29,14 @@ add_executable (cpcVideo
 	../../../Reloaded/src/core/video.cpp
 )
 
+set(CXXFLAGS -Wall -O3)
+
+if ( BEOS )
+	target_link_libraries(cpcVideo be game)
+endif ( BEOS )
+
 set_target_properties(cpcVideo PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(cpcVideo PROPERTIES COMPILE_DEFINITIONS NO_Z80)
-set_target_properties(cpcVideo PROPERTIES COMPILE_FLAGS "-Wall -Wno-multichar")
+set_target_properties(cpcVideo PROPERTIES COMPILE_FLAGS "-Wall -Wno-multichar -O3 -march=k6")
 
-target_link_libraries(cpcVideo ${SDL_LIBRARY} tools TinyPTC lua be game)
+target_link_libraries(cpcVideo ${SDL_LIBRARY} tools TinyPTC lua)

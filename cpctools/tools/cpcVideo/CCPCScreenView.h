@@ -19,7 +19,7 @@ public:
 	virtual bool display(CCPCVideo &scr);
 	virtual bool keyPressed(CCPCVideo &scr, const SDLKey &key, const SDLMod &mod, bool &redisplay);
 protected:
-	int _offset;
+	unsigned int _offset;
 };
 
 #endif //_CCPCSCREENVIEW_H_

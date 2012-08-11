@@ -179,126 +179,39 @@ class Renderer
 				void PlotPixel(int x, int y, const ColorARGB8888 &colour) {};
 		};
 
-	// Pre render function
-	class PreRenderFunction
-	{
+	class PreRenderStandardFunction
+    {
 	    protected:
 		//! Prerender buffer pointer
 		dword			*_renderPos;
 		//! Current mode map (conversion from CPC memory to SDL memory)
-		dword			*_modeMap;
+		const uint64_t	*_modeMap;
 		//! CPC memory
 		byte			*_memory;
 		//! Current CPC mode
 		unsigned int	_mode;
-	    public:
-		inline PreRenderFunction() : _renderPos(NULL), _modeMap(NULL), _memory(NULL), _mode(0) {}
-		virtual ~PreRenderFunction() {}
+	public:
+		inline PreRenderStandardFunction() : _renderPos(NULL), _modeMap(NULL), _memory(NULL), _mode(0) {}
+	    ~PreRenderStandardFunction() {}
 
-		inline unsigned int GetMode() const	{ return _mode;				}
 		inline void SetMode(unsigned int m)	{ _mode = m; UpdateMode();	}
 
 		inline dword* GetRenderPos() const	{ return _renderPos;		}
 		inline void SetRenderPos(dword* v)	{ _renderPos = v;			}
 
 		inline void SetMemory(byte *memory)	{ _memory = memory;			}
-		inline byte* GetMemory() const		{ return _memory;			}
 
-		virtual void PreRender(unsigned int memAddr) = 0;
-	    protected:
-		virtual void UpdateMode() = 0;
-	};
-
-
-	class PreRenderStandardFunction : public PreRenderFunction
-    {
-		friend class RenderFunction;
-	protected:
-	    virtual ~PreRenderStandardFunction() {}
+		void PreRenderSync(unsigned int);
+		void PreRenderBorder(unsigned int);
+		void PreRenderNormal(unsigned int);
 
 	private:
-	    static dword M0Map[0x200];
-	    static dword M1Map[0x200];
-	    static dword M2Map[0x200];
-	    static dword M3Map[0x200];
+	    static const uint64_t M0Map[0x100];
+	    static const uint64_t M1Map[0x100];
+	    static const uint64_t M2Map[0x100];
+	    static const uint64_t M3Map[0x100];
 	protected:
-	    virtual void UpdateMode();
-    };
-
-
-	class PreRenderHalfFunction : public PreRenderFunction
-    {
-		friend class RenderFunction;
-	protected:
-	    virtual ~PreRenderHalfFunction() {}
-
-	private:
-	    static dword M0hMap[0x100];
-	    static dword M1hMap[0x100];
-	    static dword M2hMap[0x100];
-	    static dword M3hMap[0x100];
-	protected:
-	    virtual void UpdateMode();
-    };
-
-
-	class PreRenderSyncFunction : public PreRenderStandardFunction
-    {
-		friend class RenderFunction;
-		virtual ~PreRenderSyncFunction() {}
-
-	public:
-		virtual void PreRender(unsigned int memAddr);
-    };
-
-
-	class PreRenderBorderFunction : public PreRenderStandardFunction
-    {
-		friend class RenderFunction;
-		virtual ~PreRenderBorderFunction() {}
-
-	public:
-		virtual void PreRender(unsigned int memAddr);
-    };
-
-
-	class PreRenderNormalFunction : public PreRenderStandardFunction
-    {
-		friend class RenderFunction;
-		virtual ~PreRenderNormalFunction() {}
-
-	public:
-		virtual void PreRender(unsigned int memAddr);
-    };
-
-
-	class PreRenderSyncHalfFunction : public PreRenderHalfFunction
-    {
-		friend class RenderFunction;
-		virtual ~PreRenderSyncHalfFunction() {}
-
-	public:
-		virtual void PreRender(unsigned int memAddr);
-    };
-
-
-	class PreRenderBorderHalfFunction : public PreRenderHalfFunction
-    {
-		friend class RenderFunction;
-		virtual ~PreRenderBorderHalfFunction() {}
-
-	public:
-		virtual void PreRender(unsigned int memAddr);
-    };
-
-
-	class PreRenderNormalHalfFunction : public PreRenderHalfFunction
-    {
-		friend class RenderFunction;
-		virtual ~PreRenderNormalHalfFunction() {}
-
-	public:
-		virtual void PreRender(unsigned int memAddr);
+	    void UpdateMode();
     };
 
 
@@ -315,16 +228,14 @@ class Renderer
 	};
 
     private:
-        static double ColoursRGB[32][3];
+        static const double ColoursRGB[32][3];
         static double ColoursPersonal[32][3];
-        static double ColoursHiFi[32][3];
-        static double ColoursGrey[32];
-        static double ColoursGreen[32];
-        static byte Font[768];
+        static const double ColoursHiFi[32][3];
+        static const double ColoursGrey[32];
+        static const double ColoursGreen[32];
+        static const byte Font[768];
 
     private:
-	//! Current CRTC flag config used to switch preRenderer
-	dword				_currentFlagConfig;
 	//! Render buffer to be fill by preRenderer
 	byte				_renderBuffer[800];
 	//!	Start address for preRenderer
@@ -334,7 +245,7 @@ class Renderer
 	//! Used to handle monitor displaying
 	int					_horizontalPosition;
 	//! Position to char index number of shift
-	byte				_pos2CharShift;
+	static const byte	_pos2CharShift = 4;
 	//! Current horizontal char index
 	byte				_horizontalCurrentChar;
 	//! Number maximum of char displayed in horizontal
@@ -342,19 +253,10 @@ class Renderer
 	//! Horizontal pixel width array
 	byte				_horizontalPixelWidth[49];
 
-	//! Display half ?
-	bool				_renderHalf;
-
 	//! Render to SDL surface function
 	RenderFunction		*_renderFunc;
 	//! Current preRender function
-	PreRenderFunction	*_preRenderFunc;
-	//! Sync preRender function
-	PreRenderFunction	*_preRenderSyncFunc;
-	//! Border preRender function
-	PreRenderFunction	*_preRenderBorderFunc;
-	//! Memory preRender function
-	PreRenderFunction	*_preRenderNormalFunc;
+	PreRenderStandardFunction	_preRenderFunc;
 
 	//! Current CPC Palette
 	unsigned int		_palette[20];

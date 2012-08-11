@@ -51,12 +51,8 @@
 RendererException RendererEx;
 
 Renderer::Renderer() :
-_currentFlagConfig(0),
 _renderFunc(NULL),
-_preRenderFunc(NULL),
-_preRenderSyncFunc(NULL),
-_preRenderBorderFunc(NULL),
-_preRenderNormalFunc(NULL),
+_preRenderFunc(),
 _videoPlugin(NULL),
 _monitorMode(ColoursMode),
 _monitorIntensity(10),
@@ -84,12 +80,6 @@ Renderer::~Renderer()
 	Shutdown();
 	delete _renderFunc;
 	_renderFunc = NULL;
-	delete _preRenderBorderFunc;
-	_preRenderBorderFunc = NULL;
-	delete _preRenderSyncFunc;
-	_preRenderSyncFunc = NULL;
-	delete _preRenderNormalFunc;
-	_preRenderNormalFunc = NULL;
 	delete _videoPlugin;
 	_videoPlugin = NULL;
 }
@@ -357,7 +347,7 @@ void Renderer::InitPalette()
 
 void Renderer::SetMemory(byte *memory)
 {
-	_preRenderNormalFunc->SetMemory(memory);
+	_preRenderFunc.SetMemory(memory);
 }
 
 
@@ -401,27 +391,8 @@ void Renderer::SetMonitor(MonitorMode mode, unsigned int intensity, bool remanen
 
 int Renderer::Init()
 {
-	byte *oldMemory = NULL;
-	if (_preRenderNormalFunc != NULL)
-	{
-		oldMemory = _preRenderNormalFunc->GetMemory();
-	}
-	dword *oldRendPos = NULL;
-	unsigned int oldMode = 0;
-	if (_preRenderFunc != NULL)
-	{
-		oldRendPos = _preRenderFunc->GetRenderPos();
-		oldMode = _preRenderFunc->GetMode();
-	}
-
 	delete _renderFunc;
 	_renderFunc = NULL;
-	delete _preRenderBorderFunc;
-	_preRenderBorderFunc = NULL;
-	delete _preRenderSyncFunc;
-	_preRenderSyncFunc = NULL;
-	delete _preRenderNormalFunc;
-	_preRenderNormalFunc = NULL;
 	delete _videoPlugin;
 	_videoPlugin = NULL;
 
@@ -443,71 +414,6 @@ int Renderer::Init()
 	}
 
 	void *backSurface = _videoPlugin->GetSurface();
-
-	_renderHalf = _videoPlugin->IsHalfSize();
-
-	if (_renderHalf)
-	{
-		try
-		{
-			_preRenderSyncFunc = new PreRenderSyncHalfFunction;
-		}
-		catch(bad_alloc&)
-		{
-			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderSyncFunc");
-			throw RendererEx;
-		}
-		try
-		{
-			_preRenderBorderFunc = new PreRenderBorderHalfFunction;
-		}
-		catch(bad_alloc&)
-		{
-			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderBorderFunc");
-			throw RendererEx;
-		}
-		try
-		{
-			_preRenderNormalFunc = new PreRenderNormalHalfFunction;
-		}
-		catch(bad_alloc&)
-		{
-			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderNormalFunc");
-			throw RendererEx;
-		}
-		_preRenderFunc = _preRenderNormalFunc;
-	}
-	else
-	{
-		try
-		{
-			_preRenderSyncFunc = new PreRenderSyncFunction;
-		}
-		catch(bad_alloc&)
-		{
-			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderSyncFunc");
-			throw RendererEx;
-		}
-		try
-		{
-			_preRenderBorderFunc = new PreRenderBorderFunction;
-		}
-		catch(bad_alloc&)
-		{
-			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderBorderFunc");
-			throw RendererEx;
-		}
-		try
-		{
-			_preRenderNormalFunc = new PreRenderNormalFunction;
-		}
-		catch(bad_alloc&)
-		{
-			ErrorLogMessage("Renderer::Init() Error, can't alloc _preRenderNormalFunc");
-			throw RendererEx;
-		}
-		_preRenderFunc = _preRenderNormalFunc;
-	}
 
 	switch(_videoPlugin->GetRenderSurfaceBPP())
 	{
@@ -531,10 +437,6 @@ int Renderer::Init()
 		_renderFunc = new Render0BppFunction;
 		break;
 	}
-
-	_preRenderNormalFunc->SetMemory(oldMemory);
-	_preRenderFunc->SetMode(oldMode);
-	_preRenderFunc->SetRenderPos(oldRendPos);
 
 	_videoPlugin->TryLock(); // TODO: Seen if need real lock.
 	
@@ -568,24 +470,14 @@ void Renderer::Shutdown ()
 
 void Renderer::Reset()
 {
-	int pixelWidth;
+	static const int pixelWidth = 16;
 
-	if (_renderHalf) 
-	{
-		pixelWidth = 8;
-		_pos2CharShift = 5;
-	} 
-	else 
-	{
-		pixelWidth = 16;
-		_pos2CharShift = 4;
-	}
 	for (int i = 0; i < 48; i++) {
 		_horizontalPixelWidth[i] = pixelWidth;
 	}
 	_horizontalPixelWidth[48] = 0;
 	_renderStart = (dword *)&_renderBuffer[pixelWidth];
-	_preRenderFunc->SetRenderPos( (dword *)&_renderBuffer[0] );
+	_preRenderFunc.SetRenderPos( (dword *)&_renderBuffer[0] );
 	_renderFunc->SetRenderData( (byte *)_renderStart );
 	_renderFunc->SetRenderWidth( &_horizontalPixelWidth[0] );
 	
@@ -597,7 +489,7 @@ void Renderer::Reset()
 
 void Renderer::SetMode(unsigned int mode)
 {
-	_preRenderFunc->SetMode(mode);
+	_preRenderFunc.SetMode(mode);
 }
 
 
@@ -632,8 +524,14 @@ void Renderer::Render(unsigned int memAddr, dword flags)
 	{ 
 		// below horizontal cut-off?
 
-		SetPreRender(flags); // change pre-renderer if necessary
-		_preRenderFunc->PreRender(memAddr); // translate CPC video memory bytes to entries referencing the palette
+		if (flags == 0x03ff0000)
+		{
+			_preRenderFunc.PreRenderNormal(memAddr);
+		} else if(!(word)flags) {
+			_preRenderFunc.PreRenderBorder(memAddr);
+		} else {
+			_preRenderFunc.PreRenderSync(memAddr);
+		}
 		_renderFunc->Render();
 	}
 }
@@ -655,15 +553,15 @@ void Renderer::HSyncCycle(int horzPos, unsigned int flag_drawing)
 	{
 		_horizontalCharMax = 48;
 		_horizontalPixelWidth[0] = _horizontalPixelWidth[1];
-		_preRenderFunc->SetRenderPos( _renderStart );
+		_preRenderFunc.SetRenderPos( _renderStart );
 		_horizontalCurrentChar--;
 	} 
 	else 
 	{
 		// When have some deformation due to monitor
 		// Adapt renderer
-		_preRenderFunc->SetRenderPos( (dword *)&_renderBuffer[val] );
-		int tmp = (byte *)_renderStart - (byte *)_preRenderFunc->GetRenderPos();
+		_preRenderFunc.SetRenderPos( (dword *)&_renderBuffer[val] );
+		int tmp = (byte *)_renderStart - (byte *)_preRenderFunc.GetRenderPos();
 		_horizontalPixelWidth[48] = (byte)tmp;
 		_horizontalPixelWidth[0] = _horizontalPixelWidth[1] - (byte)tmp;
 		_horizontalCharMax = 49;
@@ -679,36 +577,6 @@ void Renderer::HSyncCycle(int horzPos, unsigned int flag_drawing)
 }
 
 
-void Renderer::SetPreRender(dword flags)
-{
-	if (flags == _currentFlagConfig) 
-		return;
-
-	dword *oldRendPos = _preRenderFunc->GetRenderPos();
-	unsigned int oldMode = _preRenderFunc->GetMode();
-	
-	_currentFlagConfig = flags;
-	if (_currentFlagConfig == 0x03ff0000) 
-	{
-		_preRenderFunc = _preRenderNormalFunc;
-	}
-	else 
-	{
-		if (!(word)_currentFlagConfig) 
-		{
-			_preRenderFunc = _preRenderBorderFunc;
-		}
-		else 
-		{
-			_preRenderFunc = _preRenderSyncFunc;
-		}
-	}
-
-	_preRenderFunc->SetRenderPos( oldRendPos );
-	_preRenderFunc->SetMode( oldMode );
-}
-
-
 void Renderer::PreRenderStandardFunction::UpdateMode()
 {
 	switch (_mode)
@@ -721,62 +589,25 @@ void Renderer::PreRenderStandardFunction::UpdateMode()
 }
 
 
-void Renderer::PreRenderHalfFunction::UpdateMode()
+void Renderer::PreRenderStandardFunction::PreRenderBorder(unsigned int /*memAddr*/)
 {
-	switch (_mode)
-	{
-	case 0: _modeMap = M0hMap; break;
-	case 1: _modeMap = M1hMap; break;
-	case 2: _modeMap = M2hMap; break;
-	case 3: _modeMap = M3hMap; break;
-	}
-}
-
-void Renderer::PreRenderBorderFunction::PreRender(unsigned int /*memAddr*/)
-{
-	register dword dwVal = 0x10101010;
-	*_renderPos = dwVal;
-	*(_renderPos + 1) = dwVal;
-	*(_renderPos + 2) = dwVal;
-	*(_renderPos + 3) = dwVal;
+	static const uint64_t dwVal = 0x1010101010101010ULL;
+	*(uint64_t*)_renderPos = dwVal;
+	*(uint64_t*)(_renderPos + 2) = dwVal;
 	_renderPos += 4;
 }
 
 
-
-void Renderer::PreRenderBorderHalfFunction::PreRender(unsigned int /*memAddr*/)
+void Renderer::PreRenderStandardFunction::PreRenderSync(unsigned int /*memAddr*/)
 {
-	register dword dwVal = 0x10101010;
-	*_renderPos = dwVal;
-	*(_renderPos + 1) = dwVal;
-	_renderPos += 2;
-}
-
-
-
-void Renderer::PreRenderSyncFunction::PreRender(unsigned int /*memAddr*/)
-{
-	register dword dwVal = 0x11111111;
-	*_renderPos = dwVal;
-	*(_renderPos + 1) = dwVal;
-	*(_renderPos + 2) = dwVal;
-	*(_renderPos + 3) = dwVal;
+	static const uint64_t dwVal = 0x1111111111111111ULL;
+	*(uint64_t*)_renderPos = dwVal;
+	*(uint64_t*)(_renderPos + 2) = dwVal;
 	_renderPos += 4;
 }
 
 
-
-void Renderer::PreRenderSyncHalfFunction::PreRender(unsigned int /*memAddr*/)
-{
-	register dword dwVal = 0x11111111;
-	*_renderPos = dwVal;
-	*(_renderPos + 1) = dwVal;
-	_renderPos += 2;
-}
-
-
-
-void Renderer::PreRenderNormalFunction::PreRender(unsigned int memAddr)
+void Renderer::PreRenderStandardFunction::PreRenderNormal(unsigned int memAddr)
 {
 	/*register byte bVidMem = *(_memory + memAddr);
 	*_renderPos = *(_modeMap + (bVidMem * 2));
@@ -785,8 +616,8 @@ void Renderer::PreRenderNormalFunction::PreRender(unsigned int memAddr)
 	*(_renderPos + 2) = *(_modeMap + (bVidMem * 2));
 	*(_renderPos + 3) = *(_modeMap + (bVidMem * 2) + 1);
 	_renderPos += 4;*/
-	register byte bVidMem = *(_memory + memAddr);
-	register byte bVidMem2 = *(_memory + memAddr + 1);
+	const register byte bVidMem = *(_memory + memAddr);
+	const register byte bVidMem2 = *(_memory + memAddr + 1);
 #if 0
 #ifdef __SSE__
 	// TODO voire pour clang
@@ -794,23 +625,11 @@ void Renderer::PreRenderNormalFunction::PreRender(unsigned int memAddr)
 	_mm_prefetch((_modeMap + (bVidMem2 * 2)), _MM_HINT_NTA);
 #endif
 #endif
-	*_renderPos = *(_modeMap + (bVidMem * 2));
-	*(_renderPos + 1) = *(_modeMap + (bVidMem * 2) + 1);
-	*(_renderPos + 2) = *(_modeMap + (bVidMem2 * 2));
-	*(_renderPos + 3) = *(_modeMap + (bVidMem2 * 2) + 1);
+	*(uint64_t*)_renderPos = _modeMap[bVidMem];
+	*(uint64_t*)(_renderPos + 2) = _modeMap[bVidMem2];
 	_renderPos += 4;
 }
 
-
-
-void Renderer::PreRenderNormalHalfFunction::PreRender(unsigned int memAddr)
-{
-	register byte bVidMem = *(_memory + memAddr);
-	*_renderPos = *(_modeMap + bVidMem);
-	bVidMem = *(_memory + memAddr + 1);
-	*(_renderPos + 1) = *(_modeMap + bVidMem);
-	_renderPos += 2;
-}
 
 void Renderer::RenderFunction::SetPalette(unsigned int pen, const ColorARGB8888 &colour)
 {
