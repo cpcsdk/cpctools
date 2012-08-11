@@ -21,9 +21,9 @@ public:
 	virtual bool keyPressed(CCPCVideo &scr, const SDLKey &key, const SDLMod &mod, bool &redisplay);
 protected:
 
-	int _charWidth;
-	int _charHeight;
-	int _nbChar;
+	unsigned int _charWidth;
+	unsigned int _charHeight;
+	unsigned int _nbChar;
 	bool _verticalMode;
 	bool _displayBox;
 

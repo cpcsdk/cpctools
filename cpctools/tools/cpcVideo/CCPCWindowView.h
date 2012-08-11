@@ -20,8 +20,8 @@ public:
 	virtual bool keyPressed(CCPCVideo &scr, const SDLKey &key, const SDLMod &mod, bool &redisplay);
 protected:
 
-	int _width;
-	int _height;
+	unsigned int _width;
+	unsigned int _height;
 	bool _displayBox;
 
 	void forceWindowSize(CCPCVideo &scr);

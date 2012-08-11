@@ -2,7 +2,9 @@
 // Caprice32 GateArray memory emulator
 //
 
+#if __GNUC__ > 2
 #pragma once
+#endif
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 

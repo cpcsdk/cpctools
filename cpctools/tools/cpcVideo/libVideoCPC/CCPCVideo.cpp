@@ -123,14 +123,14 @@ _vdu(NULL),
 _gateArray(NULL),
 _crtc(NULL),
 _cycleCount(0),
-_chipChangeArray(),
 _chipChangeIndex(0),
+_chipChangeArray(),
 _emulation(NULL),
 _limitSpeed(true),
 _displayFPS(true),
 _timer(SDL_GetTicks()),
 _FPSTimer(_timer),
-_FPS(0.0f),
+_FPS(0),
 _frameCount(0)
 {
 	_renderer.SetVideoMode(ptcVideo::create, 768, 540, 32, false);
@@ -322,10 +322,11 @@ void CCPCVideo::ManageChip()
 {
 	if (_chipChangeArray.empty())
 		return;
-	if (_chipChangeArray[_chipChangeIndex].Key != _cycleCount)
+
+	if (_chipChangeArray[_chipChangeIndex].Key > _cycleCount)
 		return;
 
-	while (_chipChangeArray[_chipChangeIndex].Key == _cycleCount && _chipChangeIndex < _chipChangeArray.size())
+	while (_chipChangeArray[_chipChangeIndex].Key <= _cycleCount && _chipChangeIndex < _chipChangeArray.size())
 	{
 		_chipChangeArray[_chipChangeIndex].Change->Execute();
 		_chipChangeIndex++;
@@ -353,7 +354,7 @@ unsigned int CCPCVideo::GetMode() const
 }
 void CCPCVideo::SetColorTable(const unsigned int *color, const unsigned int nbColor, bool hard)
 {
-	for (int i=0;i<nbColor;i++)
+	for (unsigned int i=0;i<nbColor;i++)
 	{
 		SetInk(i,color[i], hard);
 	}
@@ -409,7 +410,7 @@ unsigned int CCPCVideo::GetPixelAddress(const int i_posX, const int i_posY) cons
 
 	unsigned char r1 = _crtc->GetRegisterValue(1);
 	unsigned char charNbLine = _crtc->GetRegisterValue(9)+1;
-	unsigned char r6 = _crtc->GetRegisterValue(6);
+	//TODO unsigned char r6 = _crtc->GetRegisterValue(6);
 
 	unsigned int lineAddr = ((i_posY - (i_posY % charNbLine)) / charNbLine) * r1 * 2 + ((i_posY % charNbLine) * 0x800);
 	lineAddr += addrBase;
@@ -583,7 +584,7 @@ void CCPCVideo::FillWindow(const unsigned int i_ink, const unsigned int i_x1, co
 }
 void CCPCVideo::MoveWindow(const unsigned int i_xDest,const unsigned int i_yDest, const unsigned int i_x1, const unsigned int i_y1, const unsigned int i_x2, const unsigned int i_y2)
 {
-	int x,y;
+	unsigned int x,y;
 	int i;
 	int *window = new int[(i_x2-i_x1)*(i_y2-i_y1)];
 	
@@ -608,7 +609,7 @@ void CCPCVideo::MoveWindow(const unsigned int i_xDest,const unsigned int i_yDest
 }
 void CCPCVideo::CopyWindow(const unsigned int i_xDest,const unsigned int i_yDest, const unsigned int i_x1, const unsigned int i_y1, const unsigned int i_x2, const unsigned int i_y2)
 {
-	int x,y;
+	unsigned int x,y;
 	int i;
 	int *window = new int[(i_x2-i_x1)*(i_y2-i_y1)];
 	
@@ -641,7 +642,7 @@ void CCPCVideo::SwapInkWindow(unsigned int i_ink1, unsigned int i_ink2, int i_x1
 	{
 		for (int x=xS;x<xD;x++)
 		{
-			int ink = GetPixel(x,y);
+			unsigned int ink = GetPixel(x,y);
 			if (ink == i_ink1)
 				PlotPixel(i_ink2,x,y);
 			else
@@ -675,7 +676,7 @@ void CCPCVideo::PutWindow(const int i_adr, const unsigned char *i_byte, const un
 {
 	unsigned int adr = i_adr;
 	unsigned char *byte = (unsigned char*)i_byte;
-	for (int i=0;i<i_sizeY;i++)
+	for (unsigned int i=0;i<i_sizeY;i++)
 	{
 		int nbBytes = ((adr+i_sizeX) < 64*1024) ? i_sizeX : 64*1024-1;
 		for (int j=0;j<nbBytes;j++)
@@ -838,7 +839,7 @@ void CCPCVideo::ConvertGFX(const vector<unsigned char> &inGfx, vector<unsigned c
 {
 	outGfx.clear();
 
-	int ppb = 2 << mode;
+	unsigned int ppb = 2 << mode;
 	int pixDecal = decal & (ppb-1);
 
 	int nbByte = (inGfx.size() + pixDecal) >> (mode+1);
@@ -847,7 +848,7 @@ void CCPCVideo::ConvertGFX(const vector<unsigned char> &inGfx, vector<unsigned c
 	outGfx.resize(nbByte, fillByte);
 	int outGfxAdr = 0;
 
-	for (int p=0 ; p<inGfx.size() ; p++)
+	for (unsigned int p=0 ; p<inGfx.size() ; p++)
 	{
 		unsigned char ink = inGfx[p];
 

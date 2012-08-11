@@ -12,6 +12,7 @@
 #include "CCPCScreenView.h"
 #include "CCPCWindowView.h"
 #include "CCPCFontView.h"
+#include "ScriptRunner.h"
 
 #include "crtc.h"
 #include "video.h"
@@ -32,6 +33,15 @@ bool loadScreen(std::string &i_filename)
 		delete File;
 	File = new CCPCScreenView(data,size);
 	delete[] data;
+	
+	return true;
+}
+
+bool loadScript(std::string &i_filename)
+{
+	if (File != NULL)
+		delete File;
+	File = new ScriptRunner(i_filename);
 	
 	return true;
 }
@@ -70,7 +80,7 @@ void loadFile(std::string &filename, CCPCVideo &scr)
 {
 	std::string fileExt;
 	fileExt = filename.substr(filename.find_last_of('.')+1,filename.size()-(filename.find_last_of('.')+1));
-	for (int i=0;i<fileExt.size();i++)
+	for (unsigned int i=0;i<fileExt.size();i++)
 		fileExt[i] = toupper(fileExt[i]);
 
 	if (fileExt == std::string("WIN"))
@@ -128,6 +138,11 @@ void loadFile(std::string &filename, CCPCVideo &scr)
 		loadScreen(filename);
 		return;
 	}
+	if (fileExt == std::string("LUA"))
+	{
+		loadScript(filename);
+		return;
+	}
 	
 	loadScreen(filename);
 }
@@ -147,11 +162,11 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-	COUT("cpcFileViewer (c) Ramlaid 2004");
+	COUT("cpcVideo (c) Ramlaid 2004, PulkoMandy 2012");
 
 	if (argc != 2)
 	{
-		CERR("No file to view !");
+		CERR("No file to execute !");
 		return -1;
 	}
 
@@ -170,10 +185,9 @@ int main(int argc, char **argv)
 
 		bool quit = false;
 
-		File->display(*scr);
-
 		while (!quit)
 		{
+			File->display(*scr);
 			scr->Display();
 			SDL_Event event;
 

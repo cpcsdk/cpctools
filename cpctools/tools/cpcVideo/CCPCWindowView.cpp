@@ -122,7 +122,7 @@ void CCPCWindowView::forceWindowSize(CCPCVideo &scr)
 
 	if (_width < _dataSize)
 	{
-		int heightMax = ((_dataSize -(_dataSize % _width)) / _width);
+		unsigned int heightMax = ((_dataSize -(_dataSize % _width)) / _width);
 		_height = (_height < heightMax) ? _height : heightMax;
 	}
 	else

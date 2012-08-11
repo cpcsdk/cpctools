@@ -12,6 +12,7 @@ add_executable (cpcVideo
 	CCPCFontView.cpp
 	CCPCDataView.cpp
 	CCPCWindowView.cpp
+	ScriptRunner.cpp
 
 	libVideoCPC/CCPCFileManager.cpp
 	libVideoCPC/CCPCVideo.cpp
@@ -32,4 +33,4 @@ set_target_properties(cpcVideo PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(cpcVideo PROPERTIES COMPILE_DEFINITIONS NO_Z80)
 set_target_properties(cpcVideo PROPERTIES COMPILE_FLAGS "-Wall -Wno-multichar")
 
-target_link_libraries(cpcVideo ${SDL_LIBRARY} tools TinyPTC be game)
+target_link_libraries(cpcVideo ${SDL_LIBRARY} tools TinyPTC lua be game)

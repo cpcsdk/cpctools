@@ -30,18 +30,18 @@ bool CCPCFontView::display(CCPCVideo &scr)
 	forceFontSize(scr);
 
 	int r1 = scr.GetCRTCValue(1);
-	int r6 = scr.GetCRTCValue(6);
+	//int r6 = scr.GetCRTCValue(6);
 	int widthMax = r1*2;
-	int heightMax = r6*8;
-	int nbCharWMax = (widthMax - (widthMax % _charWidth)) / _charWidth;
-	int nbCharHMax = (heightMax - (heightMax % _charHeight)) / _charHeight;
+	//int heightMax = r6*8;
+	unsigned int nbCharWMax = (widthMax - (widthMax % _charWidth)) / _charWidth;
+	//int nbCharHMax = (heightMax - (heightMax % _charHeight)) / _charHeight;
 	int nbCharW = (_nbChar < nbCharWMax) ? _nbChar : nbCharWMax;
 	int nbCharH = (_nbChar < nbCharWMax) ? 1 : (((_nbChar - (_nbChar % nbCharWMax))/nbCharWMax)+1);
 	
 	unsigned char *win = new unsigned char[nbCharW*_charWidth*nbCharH*_charHeight];
 	memset(win,0,nbCharW*_charWidth*nbCharH*_charHeight);
 
-	int ichar=0;
+	unsigned int ichar=0;
 	int offData=0;
 	int wWidth = nbCharW*_charWidth;
 	for (int cH=0;cH<nbCharH;cH++)
@@ -53,8 +53,8 @@ bool CCPCFontView::display(CCPCVideo &scr)
 				{
 					int cX = cW * _charWidth;
 					int cY = cH * _charHeight;
-					for (int x=0;x<_charWidth;x++)
-						for (int y=0;y<_charHeight;y++)
+					for (unsigned int x=0;x<_charWidth;x++)
+						for (unsigned int y=0;y<_charHeight;y++)
 						{
 							int offWin = (cY+y)*wWidth + cX+x;
 							win[offWin] = _data[offData++];
@@ -64,8 +64,8 @@ bool CCPCFontView::display(CCPCVideo &scr)
 				{
 					int cX = cW * _charWidth;
 					int cY = cH * _charHeight;
-					for (int y=0;y<_charHeight;y++)
-						for (int x=0;x<_charWidth;x++)
+					for (unsigned int y=0;y<_charHeight;y++)
+						for (unsigned int x=0;x<_charWidth;x++)
 						{
 							int offWin = (cY+y)*wWidth + cX+x;
 							win[offWin] = _data[offData++];
@@ -157,8 +157,8 @@ void CCPCFontView::forceFontSize(CCPCVideo &scr)
 {
 	int r1 = scr.GetCRTCValue(1);
 	int r6 = scr.GetCRTCValue(6);
-	int widthMax = r1*2;
-	int heightMax = r6*8;
+	unsigned int widthMax = r1*2;
+	unsigned int heightMax = r6*8;
 
 	_charWidth = (_charWidth < widthMax) ? _charWidth : widthMax;
 	_charHeight = (_charHeight < heightMax) ? _charHeight : heightMax;
@@ -167,7 +167,7 @@ void CCPCFontView::forceFontSize(CCPCVideo &scr)
 
 	if (_charWidth < _dataSize)
 	{
-		int charHeightMax = ((_dataSize -(_dataSize % _charWidth)) / _charWidth);
+		unsigned int charHeightMax = ((_dataSize -(_dataSize % _charWidth)) / _charWidth);
 		_charHeight = (_charHeight < charHeightMax) ? _charHeight : charHeightMax;
 	}
 	else
@@ -176,13 +176,13 @@ void CCPCFontView::forceFontSize(CCPCVideo &scr)
 	}
 
 	int charSize = _charWidth * _charHeight;
-	int maxChar = ((_dataSize -(_dataSize % charSize)) / charSize);
+	unsigned int maxChar = ((_dataSize -(_dataSize % charSize)) / charSize);
 	_nbChar = (_nbChar > 1) ? _nbChar : 1;
 	_nbChar = (_nbChar < maxChar) ? _nbChar : maxChar;
 
 
 	int nbCharWMax = (widthMax - (widthMax % _charWidth)) / _charWidth;
 	int nbCharHMax = (heightMax - (heightMax % _charHeight)) / _charHeight;
-	int nbCharMax = (nbCharWMax*nbCharHMax);
+	unsigned int nbCharMax = (nbCharWMax*nbCharHMax);
 	_nbChar = (_nbChar < nbCharMax) ? _nbChar : nbCharMax;
 }

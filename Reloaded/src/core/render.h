@@ -107,8 +107,8 @@ class Renderer
 			return palColour;
 		}
 
-		inline void SetBackSurface(void *surface)		{ _backSurface = surface;		}
-		inline void * GetBackSurface() const				{ return _backSurface;			}
+		inline void SetBackSurface(void *surface) { _backSurface = surface; }
+		inline void * GetBackSurface() const { return _backSurface; }
 
 		void SetPalette(unsigned int pen, const ColorARGB8888 &colour);
 		void SetAntiAliasingColour(const ColorARGB8888 &colour);
@@ -127,14 +127,15 @@ class Renderer
 		}
 
 		virtual void Render() = 0;
-		inline byte* GetRenderWidth() const						{ return _renderWidth;			}
-		inline void SetRenderWidth(byte* v)						{ _renderWidth = v;				}
-		//		inline byte* GetRenderData() const						{ return _renderData;			}
-		inline void SetRenderData(byte* v)						{ _renderData = v;				}
+		inline byte* GetRenderWidth() const { return _renderWidth; }
+		inline void SetRenderWidth(byte* v) { _renderWidth = v; }
+		// inline byte* GetRenderData() const { return _renderData; }
+		inline void SetRenderData(byte* v) { _renderData = v; }
 	};
 
         class Render32BppFunction : public RenderFunction
         {
+			friend class RenderFunction;
             virtual ~Render32BppFunction() { }
 
             public:
@@ -143,6 +144,7 @@ class Renderer
         };
         class Render24BppFunction : public RenderFunction
         {
+			friend class RenderFunction;
             virtual ~Render24BppFunction() { }
 
             public:
@@ -151,6 +153,7 @@ class Renderer
         };
         class Render16BppFunction : public RenderFunction
         {
+			friend class RenderFunction;
             virtual ~Render16BppFunction() { }
 
             public:
@@ -159,6 +162,7 @@ class Renderer
         };
         class Render8BppFunction : public RenderFunction
         {
+			friend class RenderFunction;
             virtual ~Render8BppFunction() { }
 
             public:
@@ -167,6 +171,7 @@ class Renderer
         };
 		class Render0BppFunction : public RenderFunction
 		{
+			friend class RenderFunction;
 			~Render0BppFunction() {};
 
 			public:
@@ -203,8 +208,11 @@ class Renderer
 	    protected:
 		virtual void UpdateMode() = 0;
 	};
+
+
 	class PreRenderStandardFunction : public PreRenderFunction
     {
+		friend class RenderFunction;
 	protected:
 	    virtual ~PreRenderStandardFunction() {}
 
@@ -216,8 +224,11 @@ class Renderer
 	protected:
 	    virtual void UpdateMode();
     };
+
+
 	class PreRenderHalfFunction : public PreRenderFunction
     {
+		friend class RenderFunction;
 	protected:
 	    virtual ~PreRenderHalfFunction() {}
 
@@ -229,48 +240,67 @@ class Renderer
 	protected:
 	    virtual void UpdateMode();
     };
+
+
 	class PreRenderSyncFunction : public PreRenderStandardFunction
     {
-	virtual ~PreRenderSyncFunction() {}
+		friend class RenderFunction;
+		virtual ~PreRenderSyncFunction() {}
 
 	public:
-	virtual void PreRender(unsigned int memAddr);
+		virtual void PreRender(unsigned int memAddr);
     };
+
+
 	class PreRenderBorderFunction : public PreRenderStandardFunction
     {
-	virtual ~PreRenderBorderFunction() {}
+		friend class RenderFunction;
+		virtual ~PreRenderBorderFunction() {}
 
 	public:
-	virtual void PreRender(unsigned int memAddr);
+		virtual void PreRender(unsigned int memAddr);
     };
+
+
 	class PreRenderNormalFunction : public PreRenderStandardFunction
     {
-	virtual ~PreRenderNormalFunction() {}
+		friend class RenderFunction;
+		virtual ~PreRenderNormalFunction() {}
 
 	public:
-	virtual void PreRender(unsigned int memAddr);
+		virtual void PreRender(unsigned int memAddr);
     };
+
+
 	class PreRenderSyncHalfFunction : public PreRenderHalfFunction
     {
-	virtual ~PreRenderSyncHalfFunction() {}
+		friend class RenderFunction;
+		virtual ~PreRenderSyncHalfFunction() {}
 
 	public:
-	virtual void PreRender(unsigned int memAddr);
+		virtual void PreRender(unsigned int memAddr);
     };
+
+
 	class PreRenderBorderHalfFunction : public PreRenderHalfFunction
     {
-	virtual ~PreRenderBorderHalfFunction() {}
+		friend class RenderFunction;
+		virtual ~PreRenderBorderHalfFunction() {}
 
 	public:
-	virtual void PreRender(unsigned int memAddr);
+		virtual void PreRender(unsigned int memAddr);
     };
+
+
 	class PreRenderNormalHalfFunction : public PreRenderHalfFunction
     {
-	virtual ~PreRenderNormalHalfFunction() {}
+		friend class RenderFunction;
+		virtual ~PreRenderNormalHalfFunction() {}
 
 	public:
-	virtual void PreRender(unsigned int memAddr);
+		virtual void PreRender(unsigned int memAddr);
     };
+
 
 	//! Text display class
 	class TextDisplay

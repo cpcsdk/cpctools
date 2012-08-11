@@ -123,7 +123,7 @@ public:
 	//! Constructeur modeVideo, R1, R6
 	CCPCVideo(int mode = 1);
 	//! Destructeur
-	~CCPCVideo();
+	virtual ~CCPCVideo();
 	
 	//! Set window caption
 	inline void SetCaption(const char *title, const char *icon) { /*_renderer.SetCaption(title, icon);*/ }
