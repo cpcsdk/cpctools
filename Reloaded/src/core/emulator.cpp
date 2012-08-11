@@ -260,7 +260,7 @@ void Emulator::printer_stop()
 }
 
 Emulator::Emulator():
-	_renderer(this),
+	_renderer(),
 	_config(this),
 	_cpcMemory(NULL),
 	_videoPlugin(NULL),

@@ -385,7 +385,7 @@ class Renderer
 	void InitPalette();
 
 	//! Constructor
-	Renderer(Emulator *emu);
+	Renderer();
 	//! Destructor
 	~Renderer();
 

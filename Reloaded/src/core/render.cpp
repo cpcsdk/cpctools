@@ -27,7 +27,6 @@
 
 #include "render.h"
 #include "video.h"
-#include "emulator.h"
 
 #include "log.h"
 
@@ -51,7 +50,7 @@
 
 RendererException RendererEx;
 
-Renderer::Renderer(Emulator* emu) :
+Renderer::Renderer() :
 _currentFlagConfig(0),
 _renderFunc(NULL),
 _preRenderFunc(NULL),
@@ -78,8 +77,6 @@ _displayFPS(false)
     {
         _renderBuffer[i] = 0;
     }
-
-//    config = &emu->GetConfig(); // Inutile
 }
 
 Renderer::~Renderer()
