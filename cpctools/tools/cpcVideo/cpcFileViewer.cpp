@@ -13,11 +13,11 @@
 #include "CCPCWindowView.h"
 #include "CCPCFontView.h"
 
-#include "Cap32/crtc.h"
-#include "Cap32/video.h"
-#include "Cap32/gatearray.h"
-#include "Cap32/vdu.h"
-#include "Cap32/render.h"
+#include "crtc.h"
+#include "video.h"
+#include "gatearray.h"
+#include "vdu.h"
+#include "render.h"
 
 CCPCDataView *File = NULL;
 
@@ -169,10 +169,12 @@ int main(int argc, char **argv)
 		loadFile(filename,*scr);
 
 		bool quit = false;
+
+		File->display(*scr);
+
 		while (!quit)
 		{
-			File->display(*scr);
-
+			scr->Display();
 			SDL_Event event;
 
 			while(SDL_PollEvent(&event))

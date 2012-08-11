@@ -84,6 +84,19 @@ bool VideoPlugin::HaveOpenGLExtension(const string &name_ext)
 	return false;
 }
 
+void* VideoPlugin::Init(int w, int h, int bpp, bool fs)
+{
+	_publicBPP = bpp;
+	
+	_outputWidth = w;
+	_outputHeight = h;
+	_publicWidth = w;
+	_publicHeight = h / 2; // we will double the scanlines ourselves.
+	_publicPitch = w * bpp / 8;
+
+	return _publicVideo;
+}
+
 void VideoPlugin::SetOption(const string &/*optionName*/, bool /*val*/)
 {
 }

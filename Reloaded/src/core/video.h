@@ -106,7 +106,7 @@ public:
 
 	//TODO: Rework on surface system
 	//! initializes the video plugin ; returns the surface that you must draw into as a void*, you do use this pointer only for detect allocation error (NULL), you do use a internal private pointer to use surface, NULL in the (unlikely ;) event of a failure
-	virtual void* Init(int w,int h,int bpp,bool fs) = 0;
+	virtual void* Init(int w,int h,int bpp,bool fs);
 	
 	virtual void* GetSurface() {return _publicVideo;}
 

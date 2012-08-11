@@ -115,7 +115,7 @@ void t_GateArray::MatchHsw()
 {
 	sl_count++; // update GA scan line counter
 	if (sl_count == 52) { // trigger interrupt?
-#ifdef Z80_H
+#ifndef NO_Z80
 		_z80->int_pending = 1; // queue Z80 interrupt
 #endif
 		sl_count = 0; // clear counter
@@ -124,7 +124,7 @@ void t_GateArray::MatchHsw()
 		hs_count--;
 		if (!hs_count) {
 			if (sl_count >= 32) { // counter above save margin?
-#ifdef Z80_H
+#ifndef NO_Z80
 				_z80->int_pending = 1; // queue interrupt
 #endif
 			}

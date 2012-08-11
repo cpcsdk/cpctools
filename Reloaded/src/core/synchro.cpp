@@ -122,6 +122,12 @@ static inline void _busyPause(unsigned int count)
     }
 }
 
+
+Sync::~Sync()
+{
+}
+
+
 void SpinSync::lock()
 {
     unsigned int count = 1;

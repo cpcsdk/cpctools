@@ -10,7 +10,7 @@
 #define _CCPCVIDEO_H_
 
 #include <string>
-#include "Cap32/render.h"
+#include "render.h"
 
 #include <vector>
 
@@ -114,8 +114,8 @@ protected:
 	//! FPS management
 	bool					_limitSpeed;
 	bool					_displayFPS;
-	Uint32					_timer;
-	Uint32					_FPSTimer;
+	uint32_t				_timer;
+	uint32_t				_FPSTimer;
 	int						_FPS;
 	int						_frameCount;
 
@@ -126,7 +126,7 @@ public:
 	~CCPCVideo();
 	
 	//! Set window caption
-	inline void SetCaption(const char *title, const char *icon) { _renderer.SetCaption(title, icon); }
+	inline void SetCaption(const char *title, const char *icon) { /*_renderer.SetCaption(title, icon);*/ }
 
 	//! Reset timer
 	void InitTimer();

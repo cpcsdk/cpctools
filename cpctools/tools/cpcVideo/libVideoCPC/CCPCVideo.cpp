@@ -4,22 +4,25 @@
 * @author Thierry JOUIN
 * @version 1.1
 * @date 31/10/2001
-*/                                                                                                           
+*/
 
 #include "CCPCVideo.h"
 #include "CCPCFileManager.h"
+#include "ptcVideo.h"
 
 #include "CError.h"
 
-#include "Cap32/crtc.h"
-#include "Cap32/vdu.h"
-#include "Cap32/gatearray.h"
+#include "crtc.h"
+#include "vdu.h"
+#include "gatearray.h"
 
 #include <algorithm>
 #include <functional>
 
 #include <fstream>
 #include <math.h>
+
+#include <SDL.h>
 
 float round(float x)
 {
@@ -75,7 +78,7 @@ CCPCVideo::ChipChange* CCPCVideo::CRTCChange::Clone() const
 //
 void CCPCVideo::GateArrayChange::Execute()
 {
-	_gateArray->SetInk(_ink, t_GateArray::SoftToHardTable[_value]);
+	_gateArray->SetInk(_ink, _value);
 }
 CCPCVideo::ChipChange* CCPCVideo::GateArrayChange::Clone() const
 {
@@ -130,11 +133,11 @@ _FPSTimer(_timer),
 _FPS(0.0f),
 _frameCount(0)
 {
-	_renderer.SetVideoMode(VideoPlugin::OpenGLScale, 800, 600, 32, false);
+	_renderer.SetVideoMode(ptcVideo::create, 768, 540, 32, false);
 	_renderer.SetOpenGLFilter(true);
-	_renderer.SetMonitor(true, 15, true);
+	_renderer.SetMonitor(Renderer::ColoursHiFiMode, 15, true);
 
-	if (!_renderer.Init()) {
+	if (_renderer.Init() != 0) {
 		fprintf(stderr, "video_init() failed. Aborting.\n");
 		exit(-1);
 	}
@@ -171,7 +174,7 @@ CCPCVideo::~CCPCVideo()
 	delete _crtc;
 	delete[] _cpcMemory;
 	
-	_renderer.Shutdown();
+	//_renderer.Shutdown();
 }
 
 
@@ -188,9 +191,9 @@ bool CCPCVideo::Display(bool pause)
 {
 	Uint32 newTimer = SDL_GetTicks();
 	Uint32 diffTimer = newTimer - _timer;
-	if (((newTimer - _timer) <= (64*312/1000)) && _limitSpeed)
+	if (((diffTimer) <= (64*312/1000)) && _limitSpeed)
 	{
-		return false;
+		SDL_Delay(64 * 312 / 1000 - diffTimer);
 	}
 
 	_timer = newTimer;
@@ -363,15 +366,18 @@ void CCPCVideo::SetInk(const unsigned int i_ink,const unsigned int i_color, bool
 	}
 	else
 	{
-		_gateArray->SetInk(i_ink, t_GateArray::SoftToHardTable[i_color]);
+		// TODO
+		_gateArray->SetInk(i_ink, i_color);
 	}
 }
 unsigned int CCPCVideo::GetInk(const unsigned int i_ink, bool hard)
 {
 	if (hard)
 		return _gateArray->GetInk(i_ink);
-	else
-		return t_GateArray::HardToSoftTable[_gateArray->GetInk(i_ink)];
+	else {
+		// TODO
+		return _gateArray->GetInk(i_ink);
+	}
 }
 void CCPCVideo::DisplayColorTable(ostream &io_o, bool hard)
 {

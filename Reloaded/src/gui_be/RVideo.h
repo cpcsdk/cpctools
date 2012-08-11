@@ -36,12 +36,8 @@ class RVidPlugin : public VideoPlugin
 			return NULL;
 			// We are going to change about everything... make sure no one is
 			// messing with it
-		_publicBPP = bpp;
-
-		_outputWidth = w;
-		_outputHeight = h;
-		_publicWidth = w;
-		_publicHeight = h;
+		
+		VideoPlugin::Init(w,h,bpp,fs);
 
 		_publicVideo = fWindow->getBitmap().Bits();
 		_publicPitch = fWindow->getBitmap().BytesPerRow();
