@@ -30,6 +30,9 @@
 #include "config_manager.h"
 #include "input.h"
 #include "fdc.h"
+#include "psg.h"
+#include "ppi.h"
+#include "tape.h"
 #include "z80.h"
 
 #include "audioPlugin.h"
@@ -50,9 +53,6 @@ class t_z80regs;
 class t_VDU;
 class t_GateArray;
 class t_CRTC;
-class t_PSG;
-class t_PPI;
-class t_Tape;
 class t_Memory;
 
 #ifdef WITH_ASM
@@ -73,21 +73,22 @@ void InitDebug();
 class Emulator
 {
 protected:
-	Renderer				_renderer;
 	t_CPC					_config;
+	Renderer				_renderer;
 	t_Input					_input;
-	t_z80regs				*_z80;
-	t_VDU					*_vdu;
-	t_GateArray				*_gateArray;
+
+	t_GateArray				_gateArray;
+	t_VDU					_vdu;
 	t_CRTC					*_crtc;
-	t_PSG					*_psg;
-	t_FDC					*_fdc;
-	t_PPI					*_ppi;
-	t_Tape					*_tape;
-	t_Memory				*_cpcMemory;
+	t_FDC					_fdc;
+	t_PPI					_ppi;
+	t_Tape					_tape;
+	t_PSG					_psg;
+	t_Memory				_cpcMemory;
+	t_z80regs				_z80;
 
 	unsigned int			_cycleCount;
-	AudioPlugin*			_audioPlugin;
+	AudioPlugin&			_audioPlugin;
 
 #ifdef USE_PTHREAD
 	pthread_t emuthread;
@@ -98,18 +99,15 @@ protected:
 	 */
 	int goToAddress ;
 
-	Emulator();
+	Emulator(VideoPlugin& video, AudioPlugin& audio);
 	virtual ~Emulator();
 	static Emulator* instance;
 
 public:
 	static Emulator* getInstance();
-	inline void setVideoPlugin(VideoPlugin* (*videoPlugin)()) {_videoPlugin = videoPlugin;}
-	inline void setAudioPlugin(AudioPlugin* audioPlugin) {_audioPlugin = audioPlugin;}
 	void setCRTC(t_CRTC* newCRTC) {
 		this->Pause();
 		delete _crtc;
-		// Todo : init it using copy constructor ?
 		_crtc = newCRTC;
 		_crtc->Reset();
 		this->GetZ80().setCRTC(newCRTC);
@@ -225,42 +223,15 @@ public:
 
 	void SaveScreenshot(string filename);
 
-	/**
-	 * Get the processor
-	 */
-	inline  t_z80regs&		GetZ80()					{ return *_z80;			}
-	/**
-	 * Get the gate array
-	 */
-	inline  t_GateArray&	GetGateArray()				{ return *_gateArray;	}
-	/**
-	 * Get the CRTC
-	 */
-	inline  t_CRTC&			GetCRTC()					{ return *_crtc;		}
-	/**
-	 * Get the Screen
-	 */
-	inline  t_VDU&			GetVDU()					{ return *_vdu;			}
-	/**
-	 * Get the PSG
-	 */
-	inline  t_PSG&			GetPSG()					{ return *_psg;			}
-	/**
-	 * Get the Memory
-	 */
-	inline  t_Memory&		GetMemory()					{ return *_cpcMemory;	}
-	/**
-	 * Get the FDC
-	 */
-	inline  t_FDC&			GetFDC()					{ return *_fdc;			}
-	/**
-	 * Get the ppi
-	 */
-	inline  t_PPI&			GetPPI()					{ return *_ppi;			}
-	/**
-	 * Get the tape reader
-	 */
-	inline  t_Tape&			GetTape()					{ return *_tape;		}
+	inline t_z80regs& GetZ80() { return _z80; }
+	inline t_GateArray&	GetGateArray() { return _gateArray;	}
+	inline t_CRTC& GetCRTC() { return *_crtc; }
+	inline t_VDU& GetVDU() { return _vdu; }
+	inline t_PSG& GetPSG() { return _psg; }
+	inline t_Memory& GetMemory() { return _cpcMemory; }
+	inline t_FDC& GetFDC() { return _fdc; }
+	inline t_PPI& GetPPI() { return _ppi; }
+	inline t_Tape& GetTape() { return _tape; }
 	/**
 	 * Get drive a
 	 */
@@ -270,7 +241,7 @@ public:
 	 */
 	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
 
-    inline AudioPlugin& GetAudioPlugin() {return *_audioPlugin;}
+    inline AudioPlugin& GetAudioPlugin() {return _audioPlugin;}
 
 	 char _config_path[1024];
 protected:
@@ -327,7 +298,7 @@ public:
     SysSync emuSync; // Global sync on Emulator object
 private:
 	sem_t breakpointLock;
-	VideoPlugin*			(*_videoPlugin)();
+	VideoPlugin& _videoPlugin;
 };
 
 #endif

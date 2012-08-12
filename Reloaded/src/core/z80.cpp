@@ -1002,6 +1002,15 @@ int t_z80regs::z80_execute(void)
         break_points.end() == break_points.find(_rPCdword)           ) { // loop until break point
 
     adressAlreadyBlocked = false ;
+
+		if (dwMF2Flags & MF2_RUNNING) {
+			if (_rPCdword == dwMF2ExitAddr) { // have we returned from the MF2?
+				dwMF2Flags = MF2_INVISIBLE; // clear running flag and make the MF2 'invisible'
+			}
+		}
+
+		bOpCode = read_mem(_rPC++);
+
 #ifdef USE_DEBUGGER_Z80
 		if (dwDebugFlag)
 		{
@@ -1020,13 +1029,6 @@ int t_z80regs::z80_execute(void)
 		}
 #endif
 
-		if (dwMF2Flags & MF2_RUNNING) {
-			if (_rPCdword == dwMF2ExitAddr) { // have we returned from the MF2?
-				dwMF2Flags = MF2_INVISIBLE; // clear running flag and make the MF2 'invisible'
-			}
-		}
-
-		bOpCode = read_mem(_rPC++);
 		iCycleCount = cc_op[bOpCode];
 		_rR++;
 		switch(bOpCode)

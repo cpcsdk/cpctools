@@ -60,8 +60,8 @@ Soft -> Hard color table
 26 Bright White		11	&4B
 */
 
-t_GateArray::t_GateArray(Renderer &render) :
-_z80(NULL),
+t_GateArray::t_GateArray(Renderer &render, t_z80regs* z80) :
+_z80(z80),
 _renderer(render)
 {
 }

@@ -30,27 +30,6 @@ using namespace std;
 
 class VideoPlugin
 {
-public:
-	enum VideoType
-	{
-//		Scanlines			= 0,
-		DoubleSize			= 1,
-//		DoubleWidth			= 2,
-//		HalfSize			= 3,
-//		HardwareHalfSize	= 4,
-//		SuperEagle			= 5,
-//		Scale2x				= 6,
-//		AdvancedScale2x		= 7,
-//		TVScale2x			= 8,
-//		SoftwareBilinear	= 9,
-//		SoftwareBicubic		= 10,
-//		DotMatrix			= 11,
-		OpenGLScale			= 12,
-		OpenGLScale25		= 13,
-		OpenGLScale50		= 14,
-		OpenGLScale75		= 15,
-		OpenGLScale100		= 16
-	};
 protected:
 	//! the pixel formats video plugins can support
 	enum VideoFormat
@@ -78,10 +57,8 @@ protected:
 	// what you can feed to this plugin :
 	//! the pixel formats supported
 	dword			_formats;
-	//! this plugin wants : 0 half sized pixels (320x200 screen)/1 full sized pixels (640x200 screen)*/
-	byte			_halfPixels;
 
-		//! Post render call back
+	//! Post render call back
 	int				(*_postRenderCallBack)();
 
 public:
@@ -100,9 +77,6 @@ public:
 	int _outputWidth;
 	int _outputBPP;
 	int _outputPitch;
-
-	//! Return halfsize config
-	inline bool IsHalfSize() const { return _halfPixels == 1; };
 
 	//TODO: Rework on surface system
 	//! initializes the video plugin ; returns the surface that you must draw into as a void*, you do use this pointer only for detect allocation error (NULL), you do use a internal private pointer to use surface, NULL in the (unlikely ;) event of a failure
@@ -169,24 +143,18 @@ public:
 	virtual bool isInit() const {return _is_init;}
 protected:
 	//! Default constructor
-	VideoPlugin(const string name, const dword format, const byte halfPixels);
+	VideoPlugin(const string name, const dword format);
 
 public:
-	//static VideoPlugin* Create(VideoType type);
-	//static VideoPlugin* Create(VideoPlugin *ptr);
-	static VideoPlugin* Create();
-
 	virtual ~VideoPlugin();
-
-protected:
-	static bool HaveOpenGLExtension(const string &name_ext);
 };
+
 
 class NullVideoPlugin : public VideoPlugin
 {
 private:
 	NullVideoPlugin() 
-		: VideoPlugin("No output", ALL, 0)
+		: VideoPlugin("No output", ALL)
 	{
 		surf = NULL;
 	}

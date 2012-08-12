@@ -4,8 +4,6 @@
 
 #include "RApp.h"
 
-#include "RVideo.h"
-#include "RAudio.h"
 #include "RWin.h"
 #include "log.h"
 #include "snapshot.h"
@@ -26,9 +24,8 @@ int main(void)
 
 ReloadedApp::ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded")
 {
+	REmulator::createInstance(video, audio);
 	mEmu = REmulator::getInstance();
-	mEmu->setVideoPlugin(&RVidPlugin::Create);
-	mEmu->setAudioPlugin(new BeAudioPlugin());
 
 	BPath path;
 	find_directory(B_USER_SETTINGS_DIRECTORY, &path);

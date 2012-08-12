@@ -85,7 +85,7 @@ void InitDebug()
 void Emulator::emulator_reset(bool bolMF2Reset)
 {
 	// Z80
-	_z80->reset();
+	_z80.reset();
 
 	// CPC
 	_config.cycle_count = CYCLE_COUNT_INIT;
@@ -101,25 +101,14 @@ void Emulator::emulator_reset(bool bolMF2Reset)
 	// CRTC
 	//_crtc->Reset();
 
-	// Gate Array
-	_gateArray->Reset();
-	_cpcMemory->ga_init_banking();
+	_gateArray.Reset();
+	_cpcMemory.ga_init_banking();
 
-	// PPI
-	// clear PPI data structure
-	_ppi->Reset();
-
-	// PSG
-	_psg->Reset();
-
-	// FDC
-	// clear FDC data structure
-	_fdc->Reset();
-
-	_cpcMemory->Reset(bolMF2Reset);
-
-	// initialize active read/write bank configuration
-	_cpcMemory->InitMemConfig();
+	_ppi.Reset();
+	_psg.Reset();
+	_fdc.Reset();
+	_cpcMemory.Reset(bolMF2Reset);
+	_cpcMemory.InitMemConfig();
 
 	// Multiface 2
 	dwMF2Flags = 0;
@@ -131,7 +120,7 @@ void Emulator::emulator_reset(bool bolMF2Reset)
 		memcpy(pbMF2ROM, pbMF2ROMbackup, 8192);
 	}
 
-  goToAddress = -1 ;
+	goToAddress = -1 ;
 }
 
 bool Emulator::MF2Init()
@@ -206,7 +195,6 @@ bool Emulator::MF2Init()
 // Non Thread Safe
 void Emulator::emulator_shutdown()
 {
-	InfoLogMessage("Shutting down...");
 	delete [] pbMF2ROMbackup;
 	pbMF2ROMbackup = NULL;
 	delete [] pbMF2ROM;
@@ -215,25 +203,9 @@ void Emulator::emulator_shutdown()
 	delete [] pbGPBuffer;
 	pbGPBuffer = NULL;
 
-	_cpcMemory->Clean();
-	delete _cpcMemory;
-	_cpcMemory = NULL;
-	delete _gateArray;
-	_gateArray = NULL;
-	delete _vdu;
-	_vdu = NULL;
+	_cpcMemory.Clean();
 	delete _crtc;
 	_crtc = NULL;
-	delete _tape;
-	_tape = NULL;
-	delete _psg;
-	_psg = NULL;
-	delete _ppi;
-	_ppi = NULL;
-	delete _fdc;
-	_fdc = NULL;
-	delete _z80;
-	_z80 = NULL;
 }
 
 int Emulator::printer_start()
@@ -259,19 +231,26 @@ void Emulator::printer_stop()
 	pfoPrinter = NULL;
 }
 
-Emulator::Emulator():
-	_renderer(),
+Emulator::Emulator(VideoPlugin& video, AudioPlugin& audio):
 	_config(this),
-	_cpcMemory(NULL),
-	_videoPlugin(NULL),
-    _audioPlugin(NULL),
+	_renderer(_config.vid_bpp),
+	_gateArray(_renderer, &_z80),
+	_vdu(_renderer),
+	_fdc(_config),
+	_tape(_config),
+	_psg(_config, _tape),
+	_cpcMemory(_config),
+	_z80(*this),
+    _audioPlugin(audio),
 	FPSDisplay(false),
 	exitRequested(false),
-	_isInit(false)
+	_isInit(false),
+	_videoPlugin(video)
 {
     emuSync.lock();
-	// retrieve the emulator configuration
-	_config.loadConfiguration();
+
+	setCRTC(new t_CRTC(_gateArray, _vdu));
+
     emuSync.unlock();
 
 	sem_init(&breakpointLock, 0, 0);
@@ -279,10 +258,9 @@ Emulator::Emulator():
 
 Emulator::~Emulator()
 {
-	InfoLogMessage("Destructing Emulator (0x%x)", this);
+    exitRequested=1;
     emuSync.lock();
 #ifdef USE_PTHREAD
-    exitRequested=1;
     pthread_join(emuthread, NULL);
 #endif
 
@@ -292,12 +270,11 @@ Emulator::~Emulator()
 	//	dsk_eject(&_driveA);
 	//	dsk_eject(&_driveB);
 	//#endif
-	_tape->tape_eject();
+	_tape.tape_eject();
 
 	emulator_shutdown();
 
-	assert(_audioPlugin);
-    _audioPlugin->shutdown();
+    _audioPlugin.shutdown();
 
 #ifdef USE_DEBUGGER
 	if (pfoDebug) {
@@ -343,84 +320,48 @@ bool Emulator::Init()
 		}
 	}
 
-	// init Z80 emulation
-	_z80->z80_init_tables();
-
 	if (_input.input_init(_config))
 	{
 		CriticalLogMessage("input_init() failed. Aborting.");
 		return false;
 	}
 
-#if 0
-#ifdef USE_OPENGL
-	_renderer.SetVideoMode(VideoPlugin::OpenGLScale/*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
-	_renderer.SetOpenGLFilter(true);
-#else
-	_renderer.SetVideoMode(VideoPlugin::DoubleSize/*_config.vid_style*/, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
-#endif
-#endif
-
-	_renderer.SetVideoMode(_videoPlugin, _config.vid_w, _config.vid_h, _config.vid_bpp, false);
-
+	_videoPlugin.Init(_config.vid_w, _config.vid_h, _config.vid_bpp, false);
 	_renderer.SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
-
-	int status = _renderer.Init();
+	int status = _renderer.Init(_videoPlugin);
 	if (status != 0) {
 		return false;
 	}
 
-	_cpcMemory = new t_Memory(_config);
-
-	_cpcMemory->Init();
+	_cpcMemory.Init();
 
 	if (!MF2Init())
 	{
 		return false;
 	}
 
-	_renderer.SetMemory(_cpcMemory->GetRAM());
-
-	_gateArray = new t_GateArray(_renderer);
-	_vdu = new t_VDU(_renderer);
-
+	_renderer.SetMemory(_cpcMemory.GetRAM());
 	if(_config.crtc == 1)
-		_crtc = new t_CRTC1(*_gateArray, *_vdu);
+		_crtc = new t_CRTC1(_gateArray, _vdu);
 	else
-		_crtc = new t_CRTC(*_gateArray, *_vdu);
+		_crtc = new t_CRTC(_gateArray, _vdu);
 
-	_tape = new t_Tape(_config);
+	// init Z80 emulation
+	_z80.z80_init_tables();
 
-	_psg = new t_PSG(_config, *_tape);
-
-	if (_audioPlugin == NULL)
-	{
-		ErrorLogMessage("No audio plugin selected ! If you want no sound use "
-			"NullAudioPlugin.");
-		return false;
-	}
-
-	if (_audioPlugin->init(_config, *_psg))
+	if (_audioPlugin.init(_config, _psg))
 	{
         ErrorLogMessage("AudioPlugin init() failed. Disabling sound.");
 		// disable sound emulation
 		_config.snd_enabled = 0;
 	}
 
-	_psg->Init(_config.snd_enabled);
-
-	_ppi = new t_PPI();
-
-	_fdc = new t_FDC(_config) ;
-
-	_z80 = new t_z80regs(*this);
-
-	_gateArray->SetZ80(_z80);
+	_psg.Init(_config.snd_enabled);
 
 	emulator_reset(false);
 	_config.paused &= ~1;
 
-	_audioPlugin->resume();
+	_audioPlugin.resume();
 
 	dwTicks = 0;
 	dwFPS = 0;
@@ -430,12 +371,10 @@ bool Emulator::Init()
 	dwTicksTarget = timer.getTime();
 	dwTicksTargetFPS = dwTicksTarget;
 
-
 	goToAddress = -1 ;
 
 #ifdef USE_PTHREAD
 	// Spawn a thread for emulating (this way we do not freeze the window)
-	InfoLogMessage("Create Emulator Thread");
 	pthread_create(&emuthread,NULL,runEmulation,this);
 #endif
 
@@ -454,14 +393,22 @@ void Emulator::Emulate()
 	iExitCondition = EC_FRAME_COMPLETE;
 	bolDone = false;
 
-	assert(_cpcMemory);
-
 #ifdef USE_PTHREAD
-	while(1)
+	for(;;)
 #else
 	for (int i = 0; i<100000; i++)
 #endif
 	{
+
+        if (exitRequested)
+        {
+#ifdef USE_PTHREAD
+            return;
+#else
+            break;
+#endif
+        }
+
 		//Do the goto if needed
 		if ( goToAddress != -1 )
 		{
@@ -532,7 +479,7 @@ void Emulator::Emulate()
 		}
 		}
 		*/
-        if (!_renderer.BeginDisplay(_vdu->GetScrLn()))
+        if (!_renderer.BeginDisplay(_vdu.GetScrLn()))
         {
 //            continue;
         }
@@ -540,11 +487,10 @@ void Emulator::Emulate()
         //active if necessary trace mode
         if (GetConfig().breakpoint)
         {
-			assert(_z80);
-            _z80->trace = 1 ;
+            _z80.trace = 1 ;
         }
         // run the emulation until an exit condition is met
-        iExitCondition = _z80->z80_execute();
+        iExitCondition = _z80.z80_execute();
 
         //We have meet a breakpoint
         if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
@@ -554,7 +500,7 @@ void Emulator::Emulate()
 #endif
 			if (iExitCondition == EC_BREAKPOINT) {
 				char msg[19] = "Breakpoint at NNNN";
-				sprintf(msg+14, "%.4X", _z80->_rPC);
+				sprintf(msg+14, "%.4X", _z80._rPC);
 				logMessage(msg);
 			}
 			Breakpoint();
@@ -592,15 +538,6 @@ void Emulator::Emulate()
 			}
 		}
 	*/
-
-        if (exitRequested)
-        {
-#ifdef USE_PTHREAD
-            return;
-#else
-            break;
-#endif
-        }
     }
 }
 

@@ -22,7 +22,7 @@
 class t_VDU
 {
 private:
-	Renderer	&_renderer;
+	Renderer & _renderer;
 
 	word MinVSync;
 	word MaxVSync;
@@ -46,7 +46,7 @@ private:
 	unsigned int frame_completed;
 	
 public:
-	t_VDU(Renderer &render);
+	t_VDU(Renderer & render);
 
 	void Reset();
 	

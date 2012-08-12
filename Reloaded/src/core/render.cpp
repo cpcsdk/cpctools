@@ -50,14 +50,14 @@
 
 RendererException RendererEx;
 
-Renderer::Renderer() :
+Renderer::Renderer(int bpp) :
 _renderFunc(NULL),
 _preRenderFunc(),
 _videoPlugin(NULL),
-_monitorMode(ColoursMode),
 _monitorIntensity(10),
 _monitorRemanency(false),
-_displayFPS(false)
+_displayFPS(false),
+_monitorMode(ColoursMode)
 {
 	for( int i = 0; i < 20; i++)
     {
@@ -73,6 +73,22 @@ _displayFPS(false)
     {
         _renderBuffer[i] = 0;
     }
+
+	switch(bpp)
+	{
+		case 32:
+			_renderFunc = new Render32BppFunction();
+			break;
+		case 16:
+			_renderFunc = new Render16BppFunction();
+			break;
+		case 8:
+			_renderFunc = new Render8BppFunction();
+			break;
+		case 0:
+			_renderFunc = new Render0BppFunction();
+			break;
+	}
 }
 
 Renderer::~Renderer()
@@ -80,8 +96,6 @@ Renderer::~Renderer()
 	Shutdown();
 	delete _renderFunc;
 	_renderFunc = NULL;
-	delete _videoPlugin;
-	_videoPlugin = NULL;
 }
 
 bool Renderer::BeginDisplay(int screenLine)
@@ -150,7 +164,7 @@ bool Renderer::ToggleFullScreen()
 	Shutdown();
 	_scrFullScreen = !_scrFullScreen;
 	
-	return Init();
+	return Init(*_videoPlugin);
 }
 
 
@@ -274,6 +288,7 @@ void Renderer::InitPalette()
                 break;
             }
         case ColoursHiFiMode:
+		default:
             {
                 for (int n = 0; n < 32; n++)
                 {
@@ -313,17 +328,6 @@ void Renderer::InitPalette()
                 }
                 break;
             }
-        default:
-            {
-                for (int n = 0; n < 32; n++)
-                {
-                    dword green = (dword)(ColoursGreen[n] * (_monitorIntensity / 10.0) * 255);
-                    if (green > 255) {green = 255;}
-                    _colours[n].r = 0;
-                    _colours[n].g = green;
-                    _colours[n].b = 0;
-                }
-            }
     }
 
     _videoPlugin->SetPalette(_colours);
@@ -351,31 +355,6 @@ void Renderer::SetMemory(byte *memory)
 }
 
 
-/*void Renderer::SetVideoMode(VideoPlugin::VideoType videoPlugType, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
-{
-	_videoPluginType = videoPlugType;
-	_scrFullScreenWidth = fsWidth;
-	_scrFullScreenHeight = fsHeight;
-	_scrFullScreenBPP = fsBPP;
-	_scrFullScreen = fullScreen;
-}*/
-/*void Renderer::SetVideoMode(VideoPlugin* videoPlugin, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
-{
-	_videoPluginPtr = videoPlugin;
-	_scrFullScreenWidth = fsWidth;
-	_scrFullScreenHeight = fsHeight;
-	_scrFullScreenBPP = fsBPP;
-	_scrFullScreen = fullScreen;
-}*/
-void Renderer::SetVideoMode(VideoPlugin* (*videoPlugin)(), unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen)
-{
-	_videoPluginPtr = videoPlugin;
-	_scrFullScreenWidth = fsWidth;
-	_scrFullScreenHeight = fsHeight;
-	_scrFullScreenBPP = fsBPP;
-	_scrFullScreen = fullScreen;
-}
-
 void Renderer::SetOpenGLFilter(bool val)
 { 
 	_videoPluginOpenGLFilter = val; 
@@ -389,30 +368,17 @@ void Renderer::SetMonitor(MonitorMode mode, unsigned int intensity, bool remanen
 }
 
 
-int Renderer::Init()
+int Renderer::Init(VideoPlugin& plugin)
 {
 	delete _renderFunc;
 	_renderFunc = NULL;
 	delete _videoPlugin;
 	_videoPlugin = NULL;
 
-	if (_videoPluginPtr == NULL) {
-		CriticalLogMessage("There is no video plugin !\n");
-		return -1;
-	}
-
-	_videoPlugin = (*_videoPluginPtr)();
+	_videoPlugin = &plugin;
 	_videoPlugin->SetOption("OpenGLFilter", _videoPluginOpenGLFilter);
 	_videoPlugin->SetOption("Remanency", _monitorRemanency);
 	
-	// attempt to set the required video mode
-	if (!_videoPlugin->Init(_scrFullScreenWidth, _scrFullScreenHeight, _scrFullScreenBPP, _scrFullScreen))
-	{ 
-		//CriticalLogMessage("Video plugin init failed\n");
-		// message is set in the video plugin
-		return -2;
-	}
-
 	void *backSurface = _videoPlugin->GetSurface();
 
 	switch(_videoPlugin->GetRenderSurfaceBPP())
@@ -449,6 +415,8 @@ int Renderer::Init()
 	_renderFunc->SetScreenPosition(_scrPos);
 	_renderFunc->SetRenderSurfacePitch(_videoPlugin->GetRenderSurfacePitch());
 	_renderFunc->SetRenderSurfaceBPP(_videoPlugin->GetRenderSurfaceBPP());
+
+	Reset();
 
 	_videoPlugin->Unlock();
 

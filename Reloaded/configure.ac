@@ -134,7 +134,7 @@ AM_CONDITIONAL([WITH_ASM], [test "$with_asm" = "yes"])
 
 AC_ARG_ENABLE(debug,
         [  --enable-debug          turn on debug compiler [default=no]],
-        enable_debug=yes,
+        enable_debug=${enableval},
         enable_debug=no)
 
 AC_MSG_NOTICE([platform and operating system ------------------------------])
@@ -156,8 +156,8 @@ AC_MSG_NOTICE([platform and operating system ------------------------------])
 
 AC_MSG_CHECKING(for debugging mode)
 if test "$enable_debug" = "yes" ; then
-    CXXFLAGS="-O0 -g -DDEBUG -pg ${M32}"
-    CFLAGS="-O0 -g -DDEBUG -pg ${M32}"
+    CXXFLAGS="-O0 -g -DDEBUG ${M32}"
+    CFLAGS="-O0 -g -DDEBUG ${M32}"
 else
     CXXFLAGS="-Wall -march=k6 -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
     CFLAGS="-Wall -march=k6 -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
@@ -377,10 +377,7 @@ AC_SUBST(CFLAGS)
 
 # TODO: Detect other timer library
 if test "$build_target" != "mingw" ; then
-AC_SEARCH_LIBS([clock_gettime], [rt],
-        [],
-        AC_MSG_ERROR(Unable to find clock_gettime)
-        )
+AC_CHECK_LIB(rt, clock_gettime)
 fi
 
 #Output file

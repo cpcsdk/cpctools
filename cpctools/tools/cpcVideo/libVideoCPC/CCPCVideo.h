@@ -11,6 +11,7 @@
 
 #include <string>
 #include "render.h"
+#include "ptcVideo.h"
 
 #include <vector>
 
@@ -105,6 +106,7 @@ protected:
 	t_VDU					*_vdu;
 	t_GateArray				*_gateArray;
 	t_CRTC					*_crtc;
+	ptcVideo				_plugin;
 	unsigned int			_cycleCount;
 
 	unsigned int			_chipChangeIndex;

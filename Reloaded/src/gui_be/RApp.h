@@ -5,6 +5,8 @@
 #include <Application.h>
 
 #include "REmulator.h"
+#include "RVideo.h"
+#include "RAudio.h"
 
 class ReloadedApp : public BApplication
 {
@@ -17,4 +19,6 @@ class ReloadedApp : public BApplication
 
 	private:
 		REmulator* mEmu;
+		BeAudioPlugin audio;
+		RVidPlugin video;
 };

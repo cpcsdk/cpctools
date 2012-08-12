@@ -27,11 +27,10 @@
 */
 
 // sjio.h
+#include <limits.h>
 
 enum EStatus { ALL, PASS1, PASS2, PASS3, FATAL, CATCHALL, SUPPRESS };
 enum EReturn { END, ELSE, ENDIF, ENDTEXTAREA, ENDM }; 
-
-#define PAGESIZE 0x4000 /* added */
 
 extern aint PreviousAddress, epadres;
 

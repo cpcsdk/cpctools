@@ -5,14 +5,16 @@
 #ifndef _GATEARRAY_H_
 #define _GATEARRAY_H_
 
+#include <stdlib.h>
+
 class Renderer;
 class t_z80regs;
 
 class t_GateArray
 {
 private:
-	t_z80regs	*_z80;
-	Renderer	&_renderer;
+	t_z80regs	*const _z80;
+	Renderer	& _renderer;
 	
 	//! Requested mode (will be active on next HSync
 	unsigned int requested_scr_mode;
@@ -32,9 +34,7 @@ private:
 
 public:
 	//! Default constructor
-	t_GateArray(Renderer &render);
-
-	inline void SetZ80(t_z80regs *z80)						{ _z80 = z80;				}
+	t_GateArray(Renderer & render, t_z80regs *const z80 = NULL);
 
 	//! Reset Gate Array
 	void Reset(int mode = 1);

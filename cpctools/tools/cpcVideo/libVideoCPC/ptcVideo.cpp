@@ -3,13 +3,8 @@
 #include <tinyptc.h>
 
 ptcVideo::ptcVideo()
-	: VideoPlugin("cpcVideo", ALL, 0)
+	: VideoPlugin("cpcVideo", ALL)
 {
-}
-
-VideoPlugin* ptcVideo::create()
-{
-	return new ptcVideo();
 }
 
 void* ptcVideo::Init(int w, int h, int bpp, bool fs)

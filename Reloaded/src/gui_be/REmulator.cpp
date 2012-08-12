@@ -1,7 +1,5 @@
 #include "REmulator.h"
 
-volatile bool REmulator::sInitOnce = false;
-
 bool REmulator::Init()
 {
 	if (!Emulator::Init())

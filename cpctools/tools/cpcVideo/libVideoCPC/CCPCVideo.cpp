@@ -118,10 +118,11 @@ void CCPCVideo::EmulationInterface::NopUpdate(unsigned int cycle)
 //
 CCPCVideo::CCPCVideo(int mode) :
 _cpcMemory(new byte [64*1024]),
-_renderer(),
+_renderer(32),
 _vdu(NULL),
 _gateArray(NULL),
 _crtc(NULL),
+_plugin(),
 _cycleCount(0),
 _chipChangeIndex(0),
 _chipChangeArray(),
@@ -133,11 +134,11 @@ _FPSTimer(_timer),
 _FPS(0),
 _frameCount(0)
 {
-	_renderer.SetVideoMode(ptcVideo::create, 768, 540, 32, false);
 	_renderer.SetOpenGLFilter(true);
 	_renderer.SetMonitor(Renderer::ColoursHiFiMode, 15, true);
 
-	if (_renderer.Init() != 0) {
+	_plugin.Init(768, 540, 32, false);
+	if (_renderer.Init(_plugin) != 0) {
 		fprintf(stderr, "video_init() failed. Aborting.\n");
 		exit(-1);
 	}
@@ -160,7 +161,7 @@ _frameCount(0)
 }
 
 CCPCVideo::CCPCVideo(const CCPCVideo& i_scr) :
-_renderer(),
+_renderer(32),
 _vdu(NULL),
 _gateArray(NULL),
 _crtc(NULL)

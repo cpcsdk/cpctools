@@ -1,11 +1,11 @@
+#ifndef __PTCVIDEO_H__
+#define __PTCVIDEO_H__
+
 #include "video.h"
 
 class ptcVideo: public VideoPlugin
 {
 	private:
-		ptcVideo();
-
-		void* Init(int w, int h, int bpp, bool fullscreen);
 		void SetPalette(ColorARGB8888* colors);
 		void Flip();
 		bool IsUpdate();
@@ -20,5 +20,8 @@ class ptcVideo: public VideoPlugin
 
 		void Close();
 	public:
-		static VideoPlugin* create();
+		ptcVideo();
+		void* Init(int w, int h, int bpp, bool fullscreen);
 };
+
+#endif

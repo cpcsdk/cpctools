@@ -14,16 +14,10 @@
 
 class RVidPlugin : public VideoPlugin
 {
-	private:
-	RVidPlugin() 
-		: VideoPlugin("Reloaded", ALL, 0)
-	{
-	}
-
 	public:
-	static VideoPlugin* Create()
+	RVidPlugin() 
+		: VideoPlugin("Reloaded", ALL)
 	{
-		return (new RVidPlugin());
 	}
 
 	virtual void* Init(int w,int h,int bpp,bool fs)

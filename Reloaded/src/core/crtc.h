@@ -91,7 +91,7 @@ class t_CRTC
 		};
 	} t_new_dt;
 
-	t_VDU			&_vdu;
+	t_VDU &			_vdu;
 	t_flags1		_flags1;
 	t_new_dt		_newDT;
 	unsigned int	_nextAddress;
@@ -113,14 +113,14 @@ class t_CRTC
 private:
 	void dispRegs();
 	
-	t_GateArray		&_gateArray;
+	t_GateArray	& _gateArray;
 	
 	
 	bool			_inMonHSync;
 	unsigned int	_r7Match;
 
 public:
-	t_CRTC(t_GateArray &ga, t_VDU &vdu);
+	t_CRTC(t_GateArray & ga, t_VDU & vdu);
 
 	void Reset();
 	

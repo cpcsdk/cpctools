@@ -6,7 +6,7 @@
 #define _RENDER_H_
 #include "cap32type.h"
 #include "video.h"
-//#include "config.h" // Inutil
+
 #include <cstring>
 #include <string>
 #include <vector>
@@ -235,17 +235,21 @@ class Renderer
         static const double ColoursGreen[32];
         static const byte Font[768];
 
+		//! Position to char index number of shift
+		static const byte	_pos2CharShift = 4;
+
     private:
 	//! Render buffer to be fill by preRenderer
 	byte				_renderBuffer[800];
 	//!	Start address for preRenderer
 	dword				*_renderStart;
 
+	bool _scrFullScreen;
+		// TODO move this to the video plug-in, it's not our problem
+
 	//! Current horizontal position (char * 256)
 	//! Used to handle monitor displaying
 	int					_horizontalPosition;
-	//! Position to char index number of shift
-	static const byte	_pos2CharShift = 4;
 	//! Current horizontal char index
 	byte				_horizontalCurrentChar;
 	//! Number maximum of char displayed in horizontal
@@ -276,22 +280,8 @@ class Renderer
 	//! Current screen position
 	unsigned int		_scrPos;
 
-	//! Video fullscreen width
-	unsigned int		_scrFullScreenWidth;
-	//! Video fullscreen height
-	unsigned int		_scrFullScreenHeight;
-	//! Video fullscreen bit per pixel
-	unsigned int		_scrFullScreenBPP;
-	//! Full screen mode
-	bool				_scrFullScreen;
-	//! Video plugin index
-	VideoPlugin::VideoType	_videoPluginType;
-	VideoPlugin*			(*_videoPluginPtr)();
 	//! Use OpenGL filter for video
 	bool				_videoPluginOpenGLFilter;
-
-	//! Color monitor mode
-    int _monitorMode;
 
 	//! Monitor intensity
 	unsigned int		_monitorIntensity;
@@ -303,9 +293,7 @@ class Renderer
 
 	//! Display text array
 	vector<TextDisplay>	_textArray;
-//	t_CPC* config; // Inutile
     public:
-
     enum MonitorMode
     {
         GreenMode,
@@ -314,22 +302,18 @@ class Renderer
         ColoursHiFiMode,
         PersonalMode,
     };
+
 	void InitPalette();
 
 	//! Constructor
-	Renderer();
+	Renderer(int bpp);
 	//! Destructor
 	~Renderer();
-
-
 
 	void * GetBackSurface();
 	inline VideoPlugin* GetVideoPlugin() const { return _videoPlugin; }
 
 	void SetMemory(byte *memory);
-	//void SetVideoMode(VideoPlugin::VideoType type, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
-	//void SetVideoMode(VideoPlugin* ptr, unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
-	void SetVideoMode(VideoPlugin* (*videoPlugin)(), unsigned int fsWidth, unsigned int fsHeight, unsigned int fsBPP, bool fullScreen);
 	void SetOpenGLFilter(bool val);
 	void SetMonitor(MonitorMode mode, unsigned int intensity, bool remanency);
 	
@@ -338,9 +322,9 @@ class Renderer
 	//! Set monitor intensity
 	inline void SetMonitorIntensity(unsigned int intensity)	{ _monitorIntensity = intensity; InitPalette(); }
 	//! Get monitor intensity
-	inline unsigned int GetMonitorIntensity() const			{ return _monitorIntensity ;					}
+	inline unsigned int GetMonitorIntensity() const	{ return _monitorIntensity ;}
 	//! Set monitor color mode
-	void SetMonitorColorTube(MonitorMode mode)					{ _monitorMode = mode; InitPalette();			}
+	void SetMonitorColorTube(MonitorMode mode)	{ _monitorMode = mode; InitPalette(); }
 	//! Return true if monitor is color
     bool IsMonitorColorTube() const
     {
@@ -351,11 +335,10 @@ class Renderer
         else return false;
     }
 
-
 	bool SetFullScreen(bool fs);
 	bool ToggleFullScreen();
 
-	int Init();
+	int Init(VideoPlugin&);
 
 	bool BeginDisplay(int screenLine);
 	void EndDisplay(bool frameCompleted);
@@ -372,12 +355,12 @@ class Renderer
 	void SetAntiAliasingColour(unsigned int col0, unsigned int col1);
 
 	/* RenderFunc accessors */
-	int mapGAEntryToRGB(char pal)
+	inline int mapGAEntryToRGB(char pal)
 	{
 		return _renderFunc->MapRGB(_colours[(int)pal]);
 	}
 
-	int GetScreenPosition() { return _renderFunc->GetScreenPosition();}
+	inline int GetScreenPosition() { return _renderFunc->GetScreenPosition();}
 
 
 	//! Render CPC memory
@@ -408,6 +391,9 @@ class Renderer
 	void SetPreRender(dword flags);
 
 	void Shutdown();
+
+	//! Color monitor mode
+    MonitorMode _monitorMode;
 };
 
 #endif

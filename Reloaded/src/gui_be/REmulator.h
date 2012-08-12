@@ -14,18 +14,22 @@
 
 class REmulator: public Emulator {
 	private:
-		static volatile bool sInitOnce;
+		REmulator(VideoPlugin& video, AudioPlugin& audio)
+			: Emulator(video, audio)
+		{}
 
 	public:
 		~REmulator() {};
 
 		static inline REmulator* getInstance()
 		{
-			if(sInitOnce == false) {
-				sInitOnce = true;
-				instance = new REmulator();
-			}
+			// Assumes createInstance was called before
 			return (REmulator*)instance;
+		}
+
+		static inline void createInstance(VideoPlugin& video, AudioPlugin& audio)
+		{
+			instance = new REmulator(video, audio);
 		}
 
 		void setCfgPath(const char* p) {strcpy(_config_path, p);}

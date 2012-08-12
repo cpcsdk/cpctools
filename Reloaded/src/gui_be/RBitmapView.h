@@ -1,7 +1,12 @@
 /* Reloaded - Amstrad CPC emulator
  * Haiku/BeOS GUI by PulkoMandy - 2011
  */
+#if __GNUC__ > 2
 #pragma once
+#endif
+
+#ifndef __RBITMAPVIEW_H__
+#define __RBITMAPVIEW_H__
  
 #include <iostream>
 
@@ -41,3 +46,5 @@ class RBitmapView: public BView
 
 		BBitmap* fDisplay;
 };
+
+#endif
