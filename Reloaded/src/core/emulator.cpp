@@ -236,6 +236,7 @@ Emulator::Emulator(VideoPlugin& video, AudioPlugin& audio):
 	_renderer(_config.vid_bpp),
 	_gateArray(_renderer, &_z80),
 	_vdu(_renderer),
+	_crtc(NULL),
 	_fdc(_config),
 	_tape(_config),
 	_psg(_config, _tape),
