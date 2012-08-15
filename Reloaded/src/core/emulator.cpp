@@ -494,15 +494,15 @@ void Emulator::Emulate()
         //We have meet a breakpoint
         if (iExitCondition == EC_BREAKPOINT || iExitCondition == EC_TRACE)
         {
-#ifndef USE_PTHREAD
-            return;
-#endif
 			if (iExitCondition == EC_BREAKPOINT) {
 				char msg[19] = "Breakpoint at NNNN";
 				sprintf(msg+14, "%.4X", _z80._rPC);
 				logMessage(msg);
 			}
 			Breakpoint();
+#ifndef USE_PTHREAD
+            return;
+#endif
         }
 
         // emulation finished rendering a complete frame?

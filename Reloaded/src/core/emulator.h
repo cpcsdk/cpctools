@@ -190,8 +190,8 @@ public:
 	inline void Step()
 	{
 		GetConfig().paused = 0 ;
-		timer.start();
 		GetConfig().breakpoint = 1 ;
+		timer.start();
 		sem_post(&breakpointLock);
 	}
 

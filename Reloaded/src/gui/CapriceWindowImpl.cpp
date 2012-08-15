@@ -168,7 +168,7 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 
 	//    event.Skip();
 #else
-	if (emulator && ! emulator->GetConfig().paused)
+	if (!emulator->GetConfig().paused)
 	{
 		emulator->Emulate();
 		//Ask to continue idle things
