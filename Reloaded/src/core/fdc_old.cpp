@@ -75,27 +75,29 @@ t_FDC::fdc_cmd_table_def t_FDC::fdc_cmd_table[MAX_CMD_COUNT] =
 /* syntax is:
 command code, number of bytes for command, number of bytes for result, direction, pointer to command handler
 	*/
-	{0x03, 3, 0, FDC_TO_CPU, fdc_specify}, // specify
-	{0x04, 2, 1, FDC_TO_CPU, fdc_drvstat}, // sense device status
-	{0x07, 2, 0, FDC_TO_CPU, fdc_recalib}, // recalibrate
-	{0x08, 1, 2, FDC_TO_CPU, fdc_intstat}, // sense interrupt status
-	{0x0f, 3, 0, FDC_TO_CPU, fdc_seek},    // seek
-	{0x42, 9, 7, FDC_TO_CPU, fdc_readtrk}, // read diagnostic
-	{0x45, 9, 7, CPU_TO_FDC, fdc_write},   // write data
-	{0x46, 9, 7, FDC_TO_CPU, fdc_read},    // read data
-	{0x49, 9, 7, CPU_TO_FDC, fdc_write},   // write deleted data
-	{0x4a, 2, 7, FDC_TO_CPU, fdc_readID},  // read id
-	{0x4c, 9, 7, FDC_TO_CPU, fdc_read},    // read deleted data
-	{0x4d, 6, 7, CPU_TO_FDC, fdc_writeID}, // write id
-	{0x51, 9, 7, CPU_TO_FDC, fdc_scan},    // scan equal
-	{0x59, 9, 7, CPU_TO_FDC, fdc_scan},    // scan low or equal
-	{0x5d, 9, 7, CPU_TO_FDC, fdc_scan},    // scan high or equal
+	{0x03, 3, 0, FDC_TO_CPU, &t_FDC::fdc_specify}, // specify
+	{0x04, 2, 1, FDC_TO_CPU, &t_FDC::fdc_drvstat}, // sense device status
+	{0x07, 2, 0, FDC_TO_CPU, &t_FDC::fdc_recalib}, // recalibrate
+	{0x08, 1, 2, FDC_TO_CPU, &t_FDC::fdc_intstat}, // sense interrupt status
+	{0x0f, 3, 0, FDC_TO_CPU, &t_FDC::fdc_seek},    // seek
+	{0x42, 9, 7, FDC_TO_CPU, &t_FDC::fdc_readtrk}, // read diagnostic
+	{0x45, 9, 7, CPU_TO_FDC, &t_FDC::fdc_write},   // write data
+	{0x46, 9, 7, FDC_TO_CPU, &t_FDC::fdc_read},    // read data
+	{0x49, 9, 7, CPU_TO_FDC, &t_FDC::fdc_write},   // write deleted data
+	{0x4a, 2, 7, FDC_TO_CPU, &t_FDC::fdc_readID},  // read id
+	{0x4c, 9, 7, FDC_TO_CPU, &t_FDC::fdc_read},    // read deleted data
+	{0x4d, 6, 7, CPU_TO_FDC, &t_FDC::fdc_writeID}, // write id
+	{0x51, 9, 7, CPU_TO_FDC, &t_FDC::fdc_scan},    // scan equal
+	{0x59, 9, 7, CPU_TO_FDC, &t_FDC::fdc_scan},    // scan low or equal
+	{0x5d, 9, 7, CPU_TO_FDC, &t_FDC::fdc_scan},    // scan high or equal
 };
 
 t_FDC::t_FDC(t_CPC &cpc) :
 CPC(cpc),
-read_status_delay(0)
+active_drive(&driveA),
+active_track(&active_drive->track[0][0])
 {
+	Reset();
 }
 
 void t_FDC::Reset()
@@ -470,7 +472,7 @@ void t_FDC::fdc_write_data(byte val)
             if (byte_count == cmd_length) { // received all command bytes?
 				byte_count = 0; // clear byte counter
 				phase = EXEC_PHASE; // switch to execution phase
-				cmd_handler(*this);
+				(this->*cmd_handler)();
             }
 		}
 		else { // first command byte received
@@ -496,7 +498,7 @@ void t_FDC::fdc_write_data(byte val)
 				if (byte_count == cmd_length) { // already received all command bytes?
 					byte_count = 0; // clear byte counter
 					phase = EXEC_PHASE; // switch to execution phase
-					cmd_handler(*this);
+					(this->*cmd_handler)();
 				}
             }
             else { // unknown command received
@@ -754,310 +756,312 @@ byte t_FDC::fdc_read_data(void)
 
 
 
-void t_FDC::fdc_specify(t_FDC &FDC)
+void t_FDC::fdc_specify()
 {
-	FDC.phase = CMD_PHASE; // switch back to command phase (fdc_specify has no result phase!)
+	phase = CMD_PHASE; // switch back to command phase (fdc_specify has no
+					   // result phase!)
 }
 
 
 
-void t_FDC::fdc_drvstat(t_FDC &FDC)
+void t_FDC::fdc_drvstat()
 {
 	byte val;
 	
-	FDC.check_unit(); // switch to target drive
-	val = FDC.command[CMD_UNIT] & 7; // keep head and unit of command
-	if ((FDC.active_drive->write_protected) || (FDC.active_drive->tracks == 0)) { // write protected, or disk missing?
+	check_unit(); // switch to target drive
+	val = command[CMD_UNIT] & 7; // keep head and unit of command
+	if ((active_drive->write_protected) || (active_drive->tracks == 0)) {
+		// write protected, or disk missing?
 		val |= 0x48; // set Write Protect + Two Sided (?)
 	}
-	if ((FDC.active_drive->tracks) && (FDC.motor)) {
+	if ((active_drive->tracks) && (motor)) {
 		val |= 0x20; // set Ready
 	}
-	if (FDC.active_drive->current_track == 0) { // drive head is over track 0?
+	if (active_drive->current_track == 0) { // drive head is over track 0?
 		val |= 0x10; // set Track 0
 	}
-	FDC.result[RES_ST0] = val;
-	FDC.phase = RESULT_PHASE; // switch to result phase
+	result[RES_ST0] = val;
+	phase = RESULT_PHASE; // switch to result phase
 }
 
 
 
-void t_FDC::fdc_recalib(t_FDC &FDC)
+void t_FDC::fdc_recalib()
 {
-	FDC.command[CMD_C] = 0; // seek to track 0
-	fdc_seek(FDC);
+	command[CMD_C] = 0; // seek to track 0
+	fdc_seek();
 }
 
 
 
-void t_FDC::fdc_intstat(t_FDC &FDC)
+void t_FDC::fdc_intstat()
 {
 	byte val;
 	
-	val = FDC.result[RES_ST0] & 0xf8; // clear Head Address and Unit bits
-	if (FDC.flags & SEEKDRVA_flag) { // seek completed on drive A?
+	val = result[RES_ST0] & 0xf8; // clear Head Address and Unit bits
+	if (flags & SEEKDRVA_flag) { // seek completed on drive A?
 		val |= 0x20; // set Seek End
-		FDC.flags &= ~(SEEKDRVA_flag | STATUSDRVA_flag); // clear seek done and status change flags
-		FDC.result[RES_ST0] = val;
-		FDC.result[RES_ST1] = FDC.driveA.current_track;
+		flags &= ~(SEEKDRVA_flag | STATUSDRVA_flag); // clear seek done and status change flags
+		result[RES_ST0] = val;
+		result[RES_ST1] = driveA.current_track;
 	}
-	else if (FDC.flags & SEEKDRVB_flag) { // seek completed on drive B?
+	else if (flags & SEEKDRVB_flag) { // seek completed on drive B?
 		val |= 0x21; // set Seek End
-		FDC.flags &= ~(SEEKDRVB_flag | STATUSDRVB_flag); // clear seek done and status change flags
-		FDC.result[RES_ST0] = val;
-		FDC.result[RES_ST1] = FDC.driveB.current_track;
+		flags &= ~(SEEKDRVB_flag | STATUSDRVB_flag); // clear seek done and status change flags
+		result[RES_ST0] = val;
+		result[RES_ST1] = driveB.current_track;
 	}
-	else if (FDC.flags & STATUSDRVA_flag) { // has the status of drive A changed?
+	else if (flags & STATUSDRVA_flag) { // has the status of drive A changed?
 		val = 0xc0; // status change
-		if ((FDC.driveA.tracks == 0) || (!FDC.motor)) { // no DSK in the drive, or drive motor is turned off?
+		if ((driveA.tracks == 0) || (!motor)) { // no DSK in the drive, or drive motor is turned off?
 			val |= 0x08; // not ready
 		}
-		FDC.flags &= ~STATUSDRVA_flag; // clear status change flag
-		FDC.result[RES_ST0] = val;
-		FDC.result[RES_ST1] = FDC.driveA.current_track;
+		flags &= ~STATUSDRVA_flag; // clear status change flag
+		result[RES_ST0] = val;
+		result[RES_ST1] = driveA.current_track;
 	}
-	else if (FDC.flags & STATUSDRVB_flag) { // has the status of drive B changed?
+	else if (flags & STATUSDRVB_flag) { // has the status of drive B changed?
 		val = 0xc1; // status change
-		if ((FDC.driveB.tracks == 0) || (!FDC.motor)) { // no DSK in the drive, or drive motor is turned off?
+		if ((driveB.tracks == 0) || (!motor)) { // no DSK in the drive, or drive motor is turned off?
 			val |= 0x08; // not ready
 		}
-		FDC.flags &= ~STATUSDRVB_flag; // clear status change flag
-		FDC.result[RES_ST0] = val;
-		FDC.result[RES_ST1] = FDC.driveB.current_track;
+		flags &= ~STATUSDRVB_flag; // clear status change flag
+		result[RES_ST0] = val;
+		result[RES_ST1] = driveB.current_track;
 	}
 	else {
 		val = 0x80; // Invalid Command
-		FDC.result[RES_ST0] = val;
-		FDC.res_length = 1;
+		result[RES_ST0] = val;
+		res_length = 1;
 	}
-	FDC.phase = RESULT_PHASE; // switch to result phase
+	phase = RESULT_PHASE; // switch to result phase
 }
 
 
 
-void t_FDC::fdc_seek(t_FDC &FDC)
+void t_FDC::fdc_seek()
 {
-	FDC.check_unit(); // switch to target drive
-	if (FDC.init_status_regs() == 0) { // drive Ready?
-		FDC.active_drive->current_track = FDC.command[CMD_C];
-		if (FDC.active_drive->current_track >= FDC_TRACKMAX) { // beyond valid range?
-			FDC.active_drive->current_track = FDC_TRACKMAX-1; // limit to maximum
+	check_unit(); // switch to target drive
+	if (init_status_regs() == 0) { // drive Ready?
+		active_drive->current_track = command[CMD_C];
+		if (active_drive->current_track >= FDC_TRACKMAX) { // beyond valid range?
+			active_drive->current_track = FDC_TRACKMAX-1; // limit to maximum
 		}
 	}
-	FDC.flags |= (FDC.command[CMD_UNIT] & 1) ? SEEKDRVB_flag : SEEKDRVA_flag; // signal completion of seek operation
-	FDC.phase = CMD_PHASE; // switch back to command phase (fdc_seek has no result phase!)
+	flags |= (command[CMD_UNIT] & 1) ? SEEKDRVB_flag : SEEKDRVA_flag; // signal completion of seek operation
+	phase = CMD_PHASE; // switch back to command phase (fdc_seek has no result phase!)
 }
 
 
 
-void t_FDC::fdc_readtrk(t_FDC &FDC)
+void t_FDC::fdc_readtrk()
 {
 	Emulator::getInstance()->fdcLed(true);
-	FDC.check_unit(); // switch to target drive
-	if (FDC.init_status_regs() == 0) { // drive Ready?
-		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
-		dword side = FDC.active_drive->sides ? FDC.active_drive->current_side : 0; // single sided drives only acccess side 1
-		if ((FDC.active_drive->flipped)) { // did the user request to access the "other" side?
+	check_unit(); // switch to target drive
+	if (init_status_regs() == 0) { // drive Ready?
+		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
+		dword side = active_drive->sides ? active_drive->current_side : 0; // single sided drives only acccess side 1
+		if ((active_drive->flipped)) { // did the user request to access the "other" side?
 			side = side ? 0 : 1; // reverse the side to access
 		}
-		FDC.active_track = &FDC.active_drive->track[FDC.active_drive->current_track][side];
-		if (FDC.active_track->sectors != 0) { // track is formatted?
-			FDC.command[CMD_R] = 1; // set sector ID to 1
-			FDC.active_drive->current_sector = 0; // reset sector table index
+		active_track = &active_drive->track[active_drive->current_track][side];
+		if (active_track->sectors != 0) { // track is formatted?
+			command[CMD_R] = 1; // set sector ID to 1
+			active_drive->current_sector = 0; // reset sector table index
 			
-			FDC.cmd_readtrk();
+			cmd_readtrk();
 		}
 		else { // unformatted track
-			FDC.result[RES_ST0] |= 0x40; // AT
-			FDC.result[RES_ST1] |= 0x01; // Missing AM
+			result[RES_ST0] |= 0x40; // AT
+			result[RES_ST1] |= 0x01; // Missing AM
 			
-			FDC.LOAD_RESULT_WITH_CHRN();
+			LOAD_RESULT_WITH_CHRN();
 				
-			FDC.phase = RESULT_PHASE; // switch to result phase
+			phase = RESULT_PHASE; // switch to result phase
 		}
 	}
 	else { // drive was not ready
-		FDC.LOAD_RESULT_WITH_CHRN();
+		LOAD_RESULT_WITH_CHRN();
 			
-		FDC.phase = RESULT_PHASE; // switch to result phase
+		phase = RESULT_PHASE; // switch to result phase
 	}
 }
 
 
 
-void t_FDC::fdc_write(t_FDC &FDC)
+void t_FDC::fdc_write()
 {
 	Emulator::getInstance()->fdcLed(true);
-	FDC.check_unit(); // switch to target drive
-	if (FDC.init_status_regs() == 0) { // drive Ready?
-		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
-		dword side = FDC.active_drive->sides ? FDC.active_drive->current_side : 0; // single sided drives only acccess side 1
-		if ((FDC.active_drive->flipped)) { // did the user request to access the "other" side?
+	check_unit(); // switch to target drive
+	if (init_status_regs() == 0) { // drive Ready?
+		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
+		dword side = active_drive->sides ? active_drive->current_side : 0; // single sided drives only acccess side 1
+		if ((active_drive->flipped)) { // did the user request to access the "other" side?
 			side = side ? 0 : 1; // reverse the side to access
 		}
-		FDC.active_track = &FDC.active_drive->track[FDC.active_drive->current_track][side];
-		if (FDC.active_drive->write_protected) { // is write protect tab set?
-			FDC.result[RES_ST0] |= 0x40; // AT
-			FDC.result[RES_ST1] |= 0x02; // Not Writable
+		active_track = &active_drive->track[active_drive->current_track][side];
+		if (active_drive->write_protected) { // is write protect tab set?
+			result[RES_ST0] |= 0x40; // AT
+			result[RES_ST1] |= 0x02; // Not Writable
 			
-			FDC.LOAD_RESULT_WITH_CHRN();
+			LOAD_RESULT_WITH_CHRN();
 				
-			FDC.phase = RESULT_PHASE; // switch to result phase
+			phase = RESULT_PHASE; // switch to result phase
 		}
-		else if (FDC.active_track->sectors != 0) { // track is formatted?
-			FDC.cmd_write();
+		else if (active_track->sectors != 0) { // track is formatted?
+			cmd_write();
 		}
 		else { // unformatted track
-			FDC.result[RES_ST0] |= 0x40; // AT
-			FDC.result[RES_ST1] |= 0x01; // Missing AM
+			result[RES_ST0] |= 0x40; // AT
+			result[RES_ST1] |= 0x01; // Missing AM
 			
-			FDC.LOAD_RESULT_WITH_CHRN();
+			LOAD_RESULT_WITH_CHRN();
 				
-			FDC.phase = RESULT_PHASE; // switch to result phase
+			phase = RESULT_PHASE; // switch to result phase
 		}
 	}
 	else { // drive was not ready
-		FDC.LOAD_RESULT_WITH_CHRN();
+		LOAD_RESULT_WITH_CHRN();
 			
-		FDC.phase = RESULT_PHASE; // switch to result phase
+		phase = RESULT_PHASE; // switch to result phase
 	}
 }
 
 
 
-void t_FDC::fdc_read(t_FDC &FDC)
+void t_FDC::fdc_read()
 {
 	Emulator::getInstance()->fdcLed(true);
-	FDC.check_unit(); // switch to target drive
-	if (FDC.init_status_regs() == 0) { // drive Ready?
-		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
-		dword side = FDC.active_drive->sides ? FDC.active_drive->current_side : 0; // single sided drives only acccess side 1
-		if ((FDC.active_drive->flipped)) { // did the user request to access the "other" side?
+	check_unit(); // switch to target drive
+	if (init_status_regs() == 0) { // drive Ready?
+		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
+		dword side = active_drive->sides ? active_drive->current_side : 0; // single sided drives only acccess side 1
+		if ((active_drive->flipped)) { // did the user request to access the "other" side?
 			side = side ? 0 : 1; // reverse the side to access
 		}
-		FDC.active_track = &FDC.active_drive->track[FDC.active_drive->current_track][side];
-		if (FDC.active_track->sectors != 0) { // track is formatted?
-			FDC.cmd_read();
+		active_track = &active_drive->track[active_drive->current_track][side];
+		if (active_track->sectors != 0) { // track is formatted?
+			cmd_read();
 		}
 		else { // unformatted track
-			FDC.result[RES_ST0] |= 0x40; // AT
-			FDC.result[RES_ST1] |= 0x01; // Missing AM
-			FDC.result[RES_ST2] |= 0x01; // Missing AM in data field
+			result[RES_ST0] |= 0x40; // AT
+			result[RES_ST1] |= 0x01; // Missing AM
+			result[RES_ST2] |= 0x01; // Missing AM in data field
 			
-			FDC.LOAD_RESULT_WITH_CHRN();
+			LOAD_RESULT_WITH_CHRN();
 				
-			FDC.phase = RESULT_PHASE; // switch to result phase
+			phase = RESULT_PHASE; // switch to result phase
 		}
 	}
 	else { // drive was not ready
-		FDC.LOAD_RESULT_WITH_CHRN();
+		LOAD_RESULT_WITH_CHRN();
 			
-		FDC.phase = RESULT_PHASE; // switch to result phase
+		phase = RESULT_PHASE; // switch to result phase
 	}
 }
 
 
 
-void t_FDC::fdc_readID(t_FDC &FDC)
+void t_FDC::fdc_readID()
 {
 	Emulator::getInstance()->fdcLed(true);
-	FDC.check_unit(); // switch to target drive
-	if (FDC.init_status_regs() == 0) { // drive Ready?
-		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
-		dword side = FDC.active_drive->sides ? FDC.active_drive->current_side : 0; // single sided drives only acccess side 1
-		if ((FDC.active_drive->flipped)) { // did the user request to access the "other" side?
+	check_unit(); // switch to target drive
+	if (init_status_regs() == 0) { // drive Ready?
+		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
+		dword side = active_drive->sides ? active_drive->current_side : 0; // single sided drives only acccess side 1
+		if ((active_drive->flipped)) { // did the user request to access the "other" side?
 			side = side ? 0 : 1; // reverse the side to access
 		}
-		FDC.active_track = &FDC.active_drive->track[FDC.active_drive->current_track][side];
-		if (FDC.active_track->sectors != 0) { // track is formatted?
+		active_track = &active_drive->track[active_drive->current_track][side];
+		if (active_track->sectors != 0) { // track is formatted?
 			dword idx;
 			
-			idx = FDC.active_drive->current_sector; // get the active sector index
-			if (idx >= FDC.active_track->sectors) { // index beyond number of sectors for this track?
+			idx = active_drive->current_sector; // get the active sector index
+			if (idx >= active_track->sectors) { // index beyond number of sectors for this track?
 				idx = 0; // reset index
 			}
-			memcpy(&FDC.result[RES_C], &FDC.active_track->sector[idx].CHRN, 4); // copy sector's CHRN to result buffer
-			FDC.active_drive->current_sector = idx + 1; // update sector table index for active drive
+			memcpy(&result[RES_C], &active_track->sector[idx].CHRN, 4); // copy sector's CHRN to result buffer
+			active_drive->current_sector = idx + 1; // update sector table index for active drive
 		}
 		else { // unformatted track
-			FDC.result[RES_ST0] |= 0x40; // AT
-			FDC.result[RES_ST1] |= 0x01; // Missing AM
+			result[RES_ST0] |= 0x40; // AT
+			result[RES_ST1] |= 0x01; // Missing AM
 			
-			FDC.LOAD_RESULT_WITH_CHRN();
+			LOAD_RESULT_WITH_CHRN();
 		}
 	}
-	FDC.phase = RESULT_PHASE; // switch to result phase
+	phase = RESULT_PHASE; // switch to result phase
 }
 
 
 
-void t_FDC::fdc_writeID(t_FDC &FDC)
+void t_FDC::fdc_writeID()
 {
 	Emulator::getInstance()->fdcLed(true);
-	FDC.check_unit(); // switch to target drive
-	if (FDC.init_status_regs() == 0) { // drive Ready?
-		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
-		dword side = FDC.active_drive->sides ? FDC.active_drive->current_side : 0; // single sided drives only acccess side 1
-		if ((FDC.active_drive->flipped)) { // did the user request to access the "other" side?
+	check_unit(); // switch to target drive
+	if (init_status_regs() == 0) { // drive Ready?
+		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
+		dword side = active_drive->sides ? active_drive->current_side : 0; // single sided drives only acccess side 1
+		if ((active_drive->flipped)) { // did the user request to access the "other" side?
 			side = side ? 0 : 1; // reverse the side to access
 		}
-		FDC.active_track = &FDC.active_drive->track[FDC.active_drive->current_track][side];
-		if (FDC.active_drive->write_protected) { // is write protect tab set?
-			FDC.result[RES_ST0] |= 0x40; // AT
-			FDC.result[RES_ST1] |= 0x02; // Not Writable
+		active_track = &active_drive->track[active_drive->current_track][side];
+		if (active_drive->write_protected) { // is write protect tab set?
+			result[RES_ST0] |= 0x40; // AT
+			result[RES_ST1] |= 0x02; // Not Writable
 			
-			FDC.LOAD_RESULT_WITH_CHRN();
+			LOAD_RESULT_WITH_CHRN();
 				
-			FDC.phase = RESULT_PHASE; // switch to result phase
+			phase = RESULT_PHASE; // switch to result phase
 		}
 		else {
-			FDC.buffer_count = FDC.command[CMD_H] << 2; // number of sectors * 4 = number of bytes still outstanding
-			FDC.buffer_ptr = pbGPBuffer; // buffer to temporarily hold the track format
-			FDC.buffer_endptr = pbGPBuffer + FDC.buffer_count;
-			FDC.timeout = INITIAL_TIMEOUT;
-			FDC.read_status_delay = 1;
+			buffer_count = command[CMD_H] << 2; // number of sectors * 4 = number of bytes still outstanding
+			buffer_ptr = pbGPBuffer; // buffer to temporarily hold the track format
+			buffer_endptr = pbGPBuffer + buffer_count;
+			timeout = INITIAL_TIMEOUT;
+			read_status_delay = 1;
 		}
 	}
 	else { // drive was not ready
-		FDC.LOAD_RESULT_WITH_CHRN();
+		LOAD_RESULT_WITH_CHRN();
 			
-		FDC.phase = RESULT_PHASE; // switch to result phase
+		phase = RESULT_PHASE; // switch to result phase
 	}
 }
 
 
 
-void t_FDC::fdc_scan(t_FDC &FDC)
+void t_FDC::fdc_scan()
 {
 	Emulator::getInstance()->fdcLed(true);
-	FDC.check_unit(); // switch to target drive
-	if (FDC.init_status_regs() == 0) { // drive Ready?
-		FDC.active_drive->current_side = (FDC.command[CMD_UNIT] & 4) >> 2; // extract target side
-		dword side = FDC.active_drive->sides ? FDC.active_drive->current_side : 0; // single sided drives only acccess side 1
-		if ((FDC.active_drive->flipped)) { // did the user request to access the "other" side?
+	check_unit(); // switch to target drive
+	if (init_status_regs() == 0) { // drive Ready?
+		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
+		dword side = active_drive->sides ? active_drive->current_side : 0; // single sided drives only acccess side 1
+		if ((active_drive->flipped)) { // did the user request to access the "other" side?
 			side = side ? 0 : 1; // reverse the side to access
 		}
-		FDC.active_track = &FDC.active_drive->track[FDC.active_drive->current_track][side];
-		if (FDC.active_track->sectors != 0) { // track is formatted?
-			if (FDC.command[CMD_STP] > 2) {
-				FDC.command[CMD_STP] = 2; // step can only be 1 or 2
+		active_track = &active_drive->track[active_drive->current_track][side];
+		if (active_track->sectors != 0) { // track is formatted?
+			if (command[CMD_STP] > 2) {
+				command[CMD_STP] = 2; // step can only be 1 or 2
 			}
-			FDC.flags |= SCAN_flag; // scan command active
-			FDC.cmd_scan();
+			flags |= SCAN_flag; // scan command active
+			cmd_scan();
 		}
 		else { // unformatted track
-			FDC.result[RES_ST0] |= 0x40; // AT
-			FDC.result[RES_ST1] |= 0x01; // Missing AM
+			result[RES_ST0] |= 0x40; // AT
+			result[RES_ST1] |= 0x01; // Missing AM
 			
-			FDC.LOAD_RESULT_WITH_CHRN();
+			LOAD_RESULT_WITH_CHRN();
 				
-			FDC.phase = RESULT_PHASE; // switch to result phase
+			phase = RESULT_PHASE; // switch to result phase
 		}
 	}
 	else { // drive was not ready
-		FDC.LOAD_RESULT_WITH_CHRN();
+		LOAD_RESULT_WITH_CHRN();
 			
-		FDC.phase = RESULT_PHASE; // switch to result phase
+		phase = RESULT_PHASE; // switch to result phase
 	}
 }
 

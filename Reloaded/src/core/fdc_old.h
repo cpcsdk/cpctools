@@ -95,12 +95,13 @@ class t_FDC
 {
 private:
 
+	typedef void (t_FDC::*CmdHandler)();
 	typedef struct fdc_cmd_table_def {
 		int cmd;
 		int cmd_length;
 		int res_length;
 		int cmd_direction;
-		void (*cmd_handler)(t_FDC &FDC);
+		CmdHandler cmd_handler;
 	} fdc_cmd_table_def;
 
 private:
@@ -126,7 +127,7 @@ private:
 	int cmd_length;
 	int res_length;
 	int cmd_direction;
-	void (*cmd_handler)(t_FDC&);
+	CmdHandler cmd_handler;
 	unsigned char *buffer_ptr;
 	unsigned char *buffer_endptr;
 	unsigned char command[12];
@@ -220,19 +221,19 @@ private:
 	}
 
 private:
-	static void fdc_specify(t_FDC &FDC);
-	static void fdc_drvstat(t_FDC &FDC);
-	static void fdc_recalib(t_FDC &FDC);
-	static void fdc_intstat(t_FDC &FDC);
-	static void fdc_seek(t_FDC &FDC);
-	static void fdc_readtrk(t_FDC &FDC);
-	static void fdc_write(t_FDC &FDC);
-	static void fdc_read(t_FDC &FDC);
-	static void fdc_readID(t_FDC &FDC);
-	static void fdc_writeID(t_FDC &FDC);
-	static void fdc_scan(t_FDC &FDC);
-	static void fdc_scanlo(t_FDC &FDC);
-	static void fdc_scanhi(t_FDC &FDC);
+	void fdc_specify();
+	void fdc_drvstat();
+	void fdc_recalib();
+	void fdc_intstat();
+	void fdc_seek();
+	void fdc_readtrk();
+	void fdc_write();
+	void fdc_read();
+	void fdc_readID();
+	void fdc_writeID();
+	void fdc_scan();
+	void fdc_scanlo();
+	void fdc_scanhi();
 };
 
 #endif
