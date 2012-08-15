@@ -27,7 +27,7 @@ class WXDoubleLinePlugin : public VideoPlugin
 {
 public:
 	WXDoubleLinePlugin() 
-		: VideoPlugin("Double size", ALL, 0) 
+		: VideoPlugin("Double size", ALL) 
 		, img(NULL)
 		, bmp(NULL)
 	{}

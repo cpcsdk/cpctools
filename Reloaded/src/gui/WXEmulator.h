@@ -49,20 +49,22 @@ class WXEmulator : public Emulator {
 
 
   protected:
-	WXEmulator();
+	WXEmulator(VideoPlugin& video, AudioPlugin& audio);
 
   public:
 	// TODO : accessors for this instead
 	struct fdcLog {int s; int t; t_sector* val;};
 	std::queue<fdcLog> fdcAccess;
 
+	static inline WXEmulator* createInstance(VideoPlugin& video,
+		AudioPlugin& audio)
+	{
+		instance = new WXEmulator(video, audio);
+		return static_cast<WXEmulator*>(instance);
+	}
+
 	static inline WXEmulator* getInstance()
 	{
-		if(sInitOnce == false) {
-			sInitOnce = true;
-			instance = new WXEmulator();
-		}
-		DebugLogMessage("Get WXEmulator at %p",instance);
 		return (WXEmulator*)instance;
 	}
 

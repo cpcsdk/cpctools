@@ -35,6 +35,7 @@ class AudioPlugin
 {
     public:
         AudioPlugin() {}
+		virtual ~AudioPlugin() {}
         virtual int init(t_CPC& cpc, t_PSG& psg) = 0;
         virtual void shutdown() = 0;
         virtual int update() = 0;

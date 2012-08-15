@@ -134,18 +134,19 @@ bool CapriceApp::OnInit()
 	commServer->Create("~/.reloadedcommand");
 #endif
 
-	//Create emulator and IHM
-	emulator = WXEmulator::getInstance();
-	emulator->setVideoPlugin(&WXDoubleLinePlugin::Create);
-	//Emulator::getInstance();
-    
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
-    emulator->setAudioPlugin(new PortAudioAudioPlugin());
+    audio = new PortAudioAudioPlugin();
 #elif SOUND_OUTPUT == SOUND_OUTPUT_Alsa
-	emulator->setAudioPlugin(new AlsaAudioPlugin());
+	audio = new AlsaAudioPlugin();
 #elif SOUND_OUTPUT == SOUND_OUTPUT_Null
-    emulator->setAudioPlugin(new NullAudioPlugin());
+    audio = new NullAudioPlugin();
 #endif
+
+	video = new WXDoubleLinePlugin();
+
+	//Create emulator and IHM
+	WXEmulator::createInstance(*video, *audio);
+	emulator = WXEmulator::getInstance();
 	
 	#if WITH_ASM
 	capAsm = new CapASM(emulator);
@@ -170,6 +171,9 @@ int CapriceApp::OnExit()
 
 	delete emulator;
 	emulator = NULL;
+
+	delete audio;
+	delete video;
 
 	// The only way to exit the emulator is to delete the window.
 	// So when we get here, the window is already gone.

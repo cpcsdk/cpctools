@@ -36,6 +36,7 @@
 #include "CapriceWindowImpl.h"
 #include "CapriceRegistersDialogImpl.h"
 #include "WXEmulator.h"
+#include "WXVideo.h"
 #include "snapshot.h"
 
 #if defined(IPC)
@@ -89,6 +90,8 @@ public:
 
 private:
     WXEmulator          *emulator ;
+	WXDoubleLinePlugin* video;
+	AudioPlugin* audio;
 
     //params
     bool        fullscreen ;

@@ -29,8 +29,8 @@ extern byte *pbTapeImage;
 extern byte *pbTapeImageEnd;
 
 
-WXEmulator::WXEmulator()
-	: Emulator()
+WXEmulator::WXEmulator(VideoPlugin& video, AudioPlugin& audio)
+	: Emulator(video, audio)
 {
 	win = NULL;
 	//Get path for configuration

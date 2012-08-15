@@ -388,10 +388,8 @@ bool Emulator::Init()
 void Emulator::Emulate()
 {
 	int iExitCondition;
-	bool bolDone;
 
 	iExitCondition = EC_FRAME_COMPLETE;
-	bolDone = false;
 
 #ifdef USE_PTHREAD
 	for(;;)

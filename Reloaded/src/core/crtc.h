@@ -121,6 +121,7 @@ private:
 
 public:
 	t_CRTC(t_GateArray & ga, t_VDU & vdu);
+	virtual ~t_CRTC() {};
 
 	void Reset();
 	

@@ -159,8 +159,8 @@ if test "$enable_debug" = "yes" ; then
     CXXFLAGS="-O0 -g -DDEBUG ${M32}"
     CFLAGS="-O0 -g -DDEBUG ${M32}"
 else
-    CXXFLAGS="-Wall -march=k6 -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
-    CFLAGS="-Wall -march=k6 -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
+    CXXFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
+    CFLAGS="-Wall -O2 -funroll-loops -ffast-math -fomit-frame-pointer -fno-strength-reduce -finline-functions -DNDEBUG ${M32}"
 fi
 AC_SUBST([M32], [${M32}])
 AM_CONDITIONAL([RELEASE], [test "enable_debug" = "no"])
@@ -228,6 +228,13 @@ netbsd*)
 ;;
 esac
 
+if test "$build_target" = "haku" ; then
+	CXXFLAGS += "-march=k6"
+	CFLAGS += "-march=k6"
+else
+	CFLAGS += "-march=native"
+fi
+
 AC_MSG_CHECKING([for build target])
 AM_CONDITIONAL(DARWIN,  test "$build_target" = "darwin")
 AM_CONDITIONAL(CYGWIN,  test "$build_target" = "cygwin")
@@ -282,10 +289,8 @@ if test "$with_wxwidget" = "yes" ; then
 fi
 AM_CONDITIONAL([WITH_WXWIDGET], [test "$with_wxwidget" = "yes"])
 
-#png.h is needed for saving screenshots. Is it really useful ?
-AC_CHECK_HEADER( [png.h],AC_DEFINE(HAVE_LIBPNG,1,[Use libpng to save screenshots]),AC_MSG_CHECKING([libpng not found ! Saving screenshots will not work]))
-
-#	AC_SUBST([PNG_LIB], [-lpng])
+#libpng is used for saving screenshots
+PKG_CHECK_MODULES([PNG], [libpng]);
 
 # Sound
 
