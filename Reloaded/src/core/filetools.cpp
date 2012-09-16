@@ -27,19 +27,47 @@
 #include "filetools.h"
 #include <sys/stat.h>
 #include <string.h>
-#include <dirent.h>
 #include <string>
 #include <vector>
 #include <algorithm>
 #include <cstdio>
 
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <dirent.h>
+#endif
+
 // Returns a vector containing the names of the files in the specified directory
 std::vector<std::string> listDirectory(std::string sDirectory) {
    std::vector<std::string> s;
 
-   if (sDirectory[sDirectory.size() - 1] != '/') {
-      sDirectory += "/";
+   static const char pathSeparator =
+#ifdef _WIN32
+	'\\'
+#else
+	'/'
+#endif
+	;
+
+   if (sDirectory[sDirectory.size() - 1] != pathSeparator) {
+      sDirectory += pathSeparator;
    }
+
+#ifdef _WIN32
+   WIN32_FIND_DATA cookie;
+
+   sDirectory += '*';
+   HANDLE nextFile = FindFirstFile(sDirectory.c_str(), &cookie);
+
+   do
+   {
+	   // Add to the list
+	   s.push_back(cookie.cFileName);
+   }
+   while (FindNextFile(nextFile, &cookie) != 0);
+   FindClose(nextFile);
+#else
    DIR* pDir;
    struct dirent *pent;
    pDir = opendir(sDirectory.c_str());
@@ -53,6 +81,8 @@ std::vector<std::string> listDirectory(std::string sDirectory) {
        }
    }
    closedir(pDir);
+#endif
+
    std::sort(s.begin(), s.end()); // sort elements
    return s;
 }

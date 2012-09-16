@@ -55,7 +55,6 @@
 
 #include "fdc.h"
 #include "cap32.h"
-#include "config.h"
 #include "debug.h"
 #include "emulator.h"
 #include "error.h"

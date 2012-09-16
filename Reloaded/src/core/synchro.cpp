@@ -4,7 +4,8 @@
 #include <iostream>
 
 #if defined _WIN32
-#include <Winbase.h>
+#include <windows.h>
+#include <intrin.h>
 #endif
 
 // SpinSync
@@ -27,11 +28,13 @@ static inline unsigned int _compareAndExchange32(volatile unsigned int *addr, un
             : "=&r"(oldVal)
             : "r"(addr), "r"(newVal), "r"(expectedOldVal)
             : "cr0", "memory");
-#elif defined __i386__ || defined __x86_64__
+#elif defined __i386__ || defined __x86_64__ // using gcc
     __asm__ __volatile__ ("lock cmpxchgl %2,%1"
             : "=a"(oldVal), "=m"(*addr)
             : "q"(newVal), "0"(expectedOldVal)
             : "memory");
+#elif defined _M_IX86 // using VC++
+    return _InterlockedCompareExchange((volatile long*)addr, newVal, expectedOldVal);
 #elif defined __ARM__ || defined __ARMEL__ || defined __ARMEB__
     // This code doesn't garanty atomicity on SMP system
     // and work only on monoprocessor system
@@ -67,8 +70,8 @@ static inline unsigned int _compareAndExchange32(volatile unsigned int *addr, un
 
     unsigned long result, tmp;
     __asm__ __volatile__ ("\n"
-            "0:\n"
-            "   ldr     %1,[%2]\n"
+            "0:\n"_InterlockedCompareExchange
+            "   ldr     %1,_InterlockedCompareExchange[%2]\n"
             "   cmp     %1,%4\n"
             "   movne   %0,%1\n"
             "   bne     1f\n"
@@ -100,6 +103,8 @@ static inline void _memoryFence(void)
     __asm__ __volatile__ ("sync": : :"memory");
 #elif defined __i386__ || defined __x86_64__
     __asm__ __volatile__ ("mfence": : :"memory");
+#elif defined _M_IX86
+    _ReadWriteBarrier();
 #else
     __asm__ __volatile__ ("": : :"memory");
 #endif
@@ -114,6 +119,8 @@ static inline void _busyPause(unsigned int count)
         __asm__ __volatile__ ("ori r0,r0,0"); // fake nop
 #elif defined __i386__ || defined __x86_64__
         __asm__ __volatile__ ("pause");
+#elif defined _M_IX86
+	YieldProcessor();
 #elif defined __ARM__ || defined __ARMEL__ || defined __ARMEB__
         __asm__ __volatile__ ("mov r0,r0");
 #else

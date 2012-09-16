@@ -9,7 +9,7 @@
 	#include "clock_gettime_stub.h"
 	#define _USE_CLOCK_GETTIME
 //	#pragma message "Use clock_gettime"
-#elif defined(__WIN32__)
+#elif defined(__WIN32__) || defined(_WIN32)
 	#include <windows.h>
 	#define _USE_QUERYPERFORMANCE
 //	#pragma message "Use QueryPerformanceTimer"

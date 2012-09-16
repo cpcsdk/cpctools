@@ -19,7 +19,17 @@
  */  
 
 
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <cassert>
+
 #include <wx/app.h>
+#include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/dcbuffer.h>
+#include <wx/msgdlg.h>
+
 #include "CapriceWindowImpl.h"
 #include "snapshot.h"
 #include "video.h"
@@ -36,17 +46,7 @@
 #include "CapriceIDE.h"
 #endif
 
-#include <wx/filedlg.h>
-#include <wx/filename.h>
-#include <wx/dcbuffer.h>
-#include <wx/msgdlg.h>
-
 #include "Desass.h"
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
-
-#include <cassert>
 
 CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu) 
 	: EmulatorWindow(NULL)

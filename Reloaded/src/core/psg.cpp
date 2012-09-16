@@ -46,7 +46,6 @@
 
 #include "cap32.h"
 #include "psg.h"
-#include "config.h"
 #include "tape.h"
 #include "audioPlugin.h"
 #include "emulator.h"

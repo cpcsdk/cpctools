@@ -18,9 +18,7 @@
  *
  */  
 
-#include "config.h"
 #include <iostream>
-#include <pthread.h>
 
 #include <wx/splash.h>
 #include <wx/snglinst.h>

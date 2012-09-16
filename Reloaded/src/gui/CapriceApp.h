@@ -22,7 +22,6 @@
 #ifndef INCLUDED_CAPRICEAPP_H
 #define INCLUDED_CAPRICEAPP_H
 
-#include "config.h"
 #include <wx/wxprec.h>
 #include <wx/cmdline.h>
 #ifdef WINDOWS

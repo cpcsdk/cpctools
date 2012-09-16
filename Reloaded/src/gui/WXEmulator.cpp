@@ -19,11 +19,12 @@
  */  
 
 
-
-#include "WXEmulator.h"
-#include "CapriceWindowImpl.h"
+// Include wx first to avoid conflict with pthread.h on windows
+// (includes windows.h)
 #include <wx/defs.h>
 #include <wx/stdpaths.h>
+
+#include "CapriceWindowImpl.h"
 
 extern byte *pbTapeImage;
 extern byte *pbTapeImageEnd;

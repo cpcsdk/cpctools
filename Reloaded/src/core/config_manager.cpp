@@ -27,7 +27,6 @@
 // Caprice32 config manager
 //
 
-#include "config.h"
 #include <stdio.h>
 #include "cap32type.h"
 #include <string.h>

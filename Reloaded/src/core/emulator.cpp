@@ -36,7 +36,6 @@
 #include "ppi.h"
 #include "vdu.h"
 #include "render.h"
-#include "config.h"
 
 #include "dsk.h"
 #include "snapshot.h"
@@ -51,7 +50,6 @@
 #include <IMG_savepng.h>
 
 #include <iostream>
-#include <unistd.h>
 
 #include <cassert>
 
@@ -432,9 +430,11 @@ void Emulator::Emulate()
                 // delay emulation
                 if((dwTicksTarget - dwTicks) > 5) // if next frame in more than 5ms use passive wait
                 {
-                    usleep((dwTicksTarget - dwTicks)*900);
-//                    DebugLogMessage("usleep");
-                    //continue;
+			#ifdef _WIN32
+				Sleep(dwTicksTarget - dwTicks);
+			#else
+                    		usleep((dwTicksTarget - dwTicks)*900);
+			#endif
                 }
                 do
                 {

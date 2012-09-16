@@ -30,7 +30,7 @@
 #include "Desass.h"
 using namespace std;
 
-#define Hex(Chaine, Valeur, Digit) snprintf((Chaine), (Digit), "%.*X", (Digit), (Valeur))	
+#define Hex(Chaine, Valeur, Digit) sprintf((Chaine), "%.*X", (Digit), (Valeur))	
 //
 // Tableau des OP-Codes Z80...
 //

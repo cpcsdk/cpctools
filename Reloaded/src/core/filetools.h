@@ -5,7 +5,6 @@
 #ifndef _FILETOOLS_H_
 #define _FILETOOLS_H_
 
-#include <dirent.h>
 #include <string>
 #include <vector>
 

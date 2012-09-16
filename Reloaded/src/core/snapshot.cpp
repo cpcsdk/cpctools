@@ -29,7 +29,6 @@
 #include "cap32type.h"
 #include "error.h"
 #include "z80.h"
-#include "config.h"
 #include "psg.h"
 #include "fdc.h"
 #include "crtc.h"

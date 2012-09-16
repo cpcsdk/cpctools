@@ -2,13 +2,14 @@
 #define _CAPRICEWINDOWIMPL_H_
 
 
+#include <wx/dnd.h>
+#include <wx/image.h>
+
 #include "CapriceUI.h"
 #include "CapriceRegistersDialogImpl.h"
 #include "CapriceAboutImpl.h"
 #include "WXEmulator.h"
 
-#include <wx/dnd.h>
-#include <wx/image.h>
 
 #if ENABLE_FILEDROP
 class CapriceDNDHandler : public wxFileDropTarget

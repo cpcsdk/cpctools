@@ -64,7 +64,6 @@
 #include "tape.h"
 
 #include "psg.h"
-#include "config.h"
 #include "fdc.h"
 #include "gatearray.h"
 #include "vdu.h"

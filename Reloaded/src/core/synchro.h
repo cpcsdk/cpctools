@@ -1,7 +1,12 @@
 #ifndef _SYNCHRO_H_
 #define _SYNCHRO_H_
 
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <pthread.h>
+#endif
+
 #include <cerrno>
 
 // Interface of synchronization object

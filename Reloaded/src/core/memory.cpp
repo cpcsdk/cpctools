@@ -27,7 +27,6 @@
 #include "memory.h"
 #include "cap32.h"
 #include "cap32type.h"
-#include "config.h"
 
 #include "error.h"
 

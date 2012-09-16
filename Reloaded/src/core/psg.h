@@ -5,7 +5,6 @@
 #ifndef _PSG_H_
 #define _PSG_H_
 
-#include "config.h"
 #include "cap32type.h"
 
 class t_CPC;
