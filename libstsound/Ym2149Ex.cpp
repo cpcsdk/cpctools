@@ -34,6 +34,11 @@
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
+
+#ifdef _WIN32
+#define BUILDING_DLL
+#endif
+
 #include "Ym2149Ex.h"
 #include "YmProfiles.h"
 

@@ -33,6 +33,12 @@
 #ifndef __YM2149EX__
 #define __YM2149EX__
 
+#ifdef BUILDING_DLL
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+
 // Keep for compatibility reason, remove in next API (v3)
 #define	AMSTRAD_CLOCK	1000000L
 #define	ATARI_CLOCK		2000000L
@@ -110,7 +116,7 @@ struct	YmSpecialEffect
 
 };
 
-class CYm2149Ex
+class EXPORT CYm2149Ex
 {
     public:
 //        CYm2149Ex(ymu32 masterClock=ATARI_CLOCK,ymint prediv=1,ymu32 playRate=44100);

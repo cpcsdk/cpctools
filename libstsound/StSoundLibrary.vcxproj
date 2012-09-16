@@ -148,6 +148,7 @@
     <ClInclude Include="digidrum.h" />
     <ClInclude Include="StSoundLibrary.h" />
     <ClInclude Include="Ym2149Ex.h" />
+    <ClInclude Include="YmFilters.h" />
     <ClInclude Include="Ymload.h" />
     <ClInclude Include="YmMusic.h" />
     <ClInclude Include="YmTypes.h" />
