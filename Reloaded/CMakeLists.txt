@@ -5,5 +5,11 @@ project(Reloaded)
 add_definitions(-DST_SOUND)
 
 add_subdirectory(src/core)
-add_subdirectory(src/gui)
+
+IF (BEOS)
+	add_definitions(-DUSE_PTHREAD)
+	add_subdirectory(src/gui_be)
+ELSE (BEOS)
+	add_subdirectory(src/gui)
+ENDIF (BEOS)
 

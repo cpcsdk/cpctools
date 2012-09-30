@@ -55,7 +55,7 @@ class BeAudioPlugin : public AudioPlugin
 			*/
 			format.byte_order = B_MEDIA_LITTLE_ENDIAN;
 			format.buffer_size = 0; // auto choose
-			soundOutput = new BPushGameSound(1024, &format);
+			soundOutput = new BPushGameSound(1024, &format, 1);
 
 			if (soundOutput->InitCheck() != B_OK)
 			{
@@ -78,6 +78,7 @@ class BeAudioPlugin : public AudioPlugin
         void shutdown()
 		{
 			soundOutput->UnlockCyclic();
+			soundOutput->StopPlaying();
 			delete soundOutput;
 			soundOutput = NULL;
 		}
@@ -87,7 +88,8 @@ class BeAudioPlugin : public AudioPlugin
         void resume() {}
         uint8_t* getBuffer()
         {
-        	if (++curWPos >= outSize)
+			curWPos += 4; // 2*16 bits
+        	if (curWPos >= outSize)
         		curWPos = 0;
         	return outBuf + curWPos;
         }
