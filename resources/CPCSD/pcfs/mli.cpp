@@ -225,6 +225,7 @@ void stack_extents(uint16_t fentry, std::vector<struct extent>& extents)
 	uint16_t sector, offset, nxt;
 	int8_t xtc = 1;
 	do {
+		fentry = nxt;
 		sector = fentry_to_sector(fentry);
 		offset = fentry_to_offset(fentry);
 
@@ -332,6 +333,9 @@ void list_wd()
 
 void readsector(uint16_t which)
 {
+	// TODO this is the right place to store and test the "last accessed sector"
+	// anddecide if we need to read again or not. Remove that from listdir and
+	// put it here
 	if (lseek(fd, which * 512, SEEK_SET) == -1)
 		perror("Read sector can't seek");
 	if (read(fd, diskbuffer, 512) == - 1)
@@ -340,6 +344,8 @@ void readsector(uint16_t which)
 
 void writesector(uint16_t which)
 {
+	// TODO here we aways need to write, but we should update the sector number
+	// (we may write a sector from scratch while we din't read it)
 	if (lseek(fd, which * 512, SEEK_SET) == -1)
 		perror("Write sector can't seek");
 	if (write(fd, diskbuffer, 512) == - 1)
@@ -718,9 +724,11 @@ bool erase_handle(uint16_t entry, void* cookie)
 	// get the name we are looking for
 	const char* d = (const char*)cookie;
 
-	// Look at filename
-	readsector(fentry_to_sector(entry));
+	uint16_t entrysec = fentry_to_sector(entry);
 	uint16_t off = fentry_to_offset(entry);
+
+	// Look at filename
+	readsector(entrysec);
 
 	// Does name match ?
 	if(memcmp(diskbuffer + off + 3, d, 11) != 0)
@@ -737,6 +745,7 @@ bool erase_handle(uint16_t entry, void* cookie)
 	// is getting crazy enough, and I want to test it first.
 	stack_extents(entry, entries);
 
+	// Free the space used by this file in the block map
 	while(!entries.empty())
 	{
 		// Handle next extent
@@ -761,7 +770,7 @@ bool erase_handle(uint16_t entry, void* cookie)
 		uint8_t sectore = x.sector >> 9;
 
 		uint8_t sector = ssector;
-		uint16_t byte = sbyte;
+		int16_t byte = sbyte;
 		while (sector <= sectore)
 		{
 			uint8_t bits = 0;
@@ -809,9 +818,28 @@ bool erase_handle(uint16_t entry, void* cookie)
 		}
 	}
 
-	// TODO
 	// Now we need to erase the fentry itself and any associated xentries.
 	// We know the sector number and offset, so all is fine.
+	uint16_t curentry = entry;
+	readsector(entrysec);
+	// Check if there are extended entries to browse
+	while(((fentry*)(diskbuffer + off))->next != curentry)
+	{
+		// This entry has an extended pointer, store it before we erase it !
+		curentry = ((fentry*)(diskbuffer + off))->next;
+		
+		bzero(diskbuffer + off, 16);
+		writesector(entrysec);
+
+		// Move on to the extended entry...
+		entrysec = fentry_to_sector(curentry);
+		off = fentry_to_offset(curentry);
+		readsector(entrysec);
+	}
+
+	// and erase the last entry.
+	bzero(diskbuffer + off, 16);
+	writesector(entrysec);
 	
 	// TODO
 	// And finally, the most tricky part, we need to erase the pointer to this
@@ -820,6 +848,154 @@ bool erase_handle(uint16_t entry, void* cookie)
 	// extra xentry. We know we can reuse the one from the file we just deleted,
 	// so this is safe. The directory never grows here (phew!).
 	
+	// We cannot use stack_extents this time, because we need to edit the FAT,
+	// so we need to know what the extents points to, but also where it is
+	// in the FAT !
+	curentry = 0; // TODO assumes the file is in the root dir.
+	uint16_t nxt = curentry;
+	int8_t xtc = 1;
+
+	uint8_t nexLen = 0;
+	uint16_t nexSec = 0;
+	uint16_t sector, offset;
+	do {
+		curentry = nxt;
+		sector = fentry_to_sector(curentry);
+		offset = fentry_to_offset(curentry);
+
+		readsector(sector);
+
+		for(; --xtc >= 0;)
+		{
+			struct extent* x = (struct extent*)(diskbuffer + offset +
+					xtc * sizeof(struct extent));
+
+			if (x->sector <= entry && x->sector + (x->length - 1) >= entry)
+				// Remember this check relies on length - 1 overflowing when
+				// length is 0, so we take that for length + 255 in that case !
+			{
+				// We have found the extent that we need to change.
+				// We have 3 cases to handle here:
+				// * Either the file belongs right at the beginning of the extent
+				// 	> Increase sector and decrease length.
+				if (x->sector == entry)
+				{
+					x->sector ++;
+					x->length --;
+					if (x->length == 0)
+					{
+						// DAMNED ! This extent is now unused. We must fill it
+						// back with the last extent from the dir. This may even
+						// free the last xentry of this dir (or make the dir empty)
+						
+						// Crawl the remaining entries for this dir
+						// Get the last one and remove it from its entry
+						struct xentry* ext = (struct xentry*)(diskbuffer + offset);
+						uint16_t m_sector;
+						do
+						{
+							for(; --xtc >= 0 ;)
+							{
+								if (ext->x[xtc].sector == 0)
+								{
+									// Found the end !
+									// Get the last useable extent
+									xtc++;
+									nexSec = ext->x[xtc].sector;
+									nexLen = ext->x[xtc].length;
+
+									ext->x[xtc].sector = 0;
+									ext->x[xtc].length = 0;
+
+									goto erase_loop_done;
+								}
+							}
+							curentry = ext->next;
+							offset = fentry_to_offset(curentry);
+							m_sector = fentry_to_sector(curentry);
+							readsector(m_sector);
+							ext = (struct xentry*)(diskbuffer + offset);
+							xtc = 4;
+						} while(ext->next != curentry);
+erase_loop_done:
+						if(nexSec = 0)
+						{
+							// the last extent was fully allocated. Use
+							// xtc[0] there !
+							nexSec = ext->x[0].sector;
+							nexLen = ext->x[0].length;
+							ext->x[0].sector = 0;
+							ext->x[0].length = 0;
+						}
+
+						// Write the changes to the end of dir extent
+						writesector(m_sector);
+
+						// And add it back at the place we just freed
+						readsector(sector);
+						x->sector = nexSec;
+						x->length = nexLen;
+					}
+
+					writesector(sector);
+					return true;
+				}
+				// * Or, it is at the end
+				//  > Decrease length only
+				else if(x->sector + (x->length - 1) == entry)
+				{
+					x->length --;
+					writesector(sector);
+					return true;
+				}
+				// * Or, it is in the middle
+				//  > This is the most annoying one: Decrease the length to stop
+				//  right before our entry, and take note that we will be allocating
+				//  the remaining part somewhere else in the dentry.
+				else {
+					uint8_t length = entry - x->sector;
+					// handle the remaining part from entry + 1,
+					// length = old length - new length - 1
+					nexLen = x->length - length - 1;
+					nexSec = entry + 1;
+					// We need to store it somewhere !
+					x->length = length;
+
+					writesector(sector); // TODO the next write might (likely)
+										// be in the same sector. Optimize ?
+				}
+			}
+
+			if (x->sector == 0) {
+				// Allocation may end in the middle of an extent (or a dir may
+				// be empty). Since count = 0 means 256 entries, we have to
+				// check for sector being 0 to know
+				
+				x->sector = nexSec;
+				x->length = nexLen;
+				writesector(sector);
+				return true;
+			}
+		}
+
+		nxt = *(uint16_t*)(diskbuffer + offset + 14);
+		xtc = 4;
+	} while(curentry != nxt);
+
+	// If we get there, it means we didn't manage to reallocate the splitted
+	// extent. We need to extend the directory further and allocate it in the
+	// entry that removing the file just freed.
+	struct xentry* ext = (struct xentry*)(diskbuffer + offset);
+	ext->next = entry;
+	writesector(sector);
+
+	readsector(entrysec);
+	ext = (struct xentry*)(diskbuffer + off);
+	ext->next = entry;
+	ext->x[3].length = nexLen;
+	ext->x[3].sector = nexSec;
+	writesector(entrysec);
+
 	return true;
 }
 

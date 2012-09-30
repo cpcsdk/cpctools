@@ -7,6 +7,19 @@ corruption safety: if the filesystem goes crazy, only one volume is lost.
 Each volume starts with a block map of 16 sectors. Each bit maps to a sector in
 the volume. Bit set means the sector is allocated. The block map starts with
 FF FF to make space for itself.
+The bits are allocated from LSB to MSB.
+
+So, if we look at first byte:
+1 1 1 1 1 1 1 1
+| | | | | | | \_ Sector 0
+| | | | | | \___ Sector 1
+| | | | | \_____ Sector 2
+| | | | \_______ Sector 3
+| | | \_________ Sector 4
+| | \___________ Sector 5
+| \_____________ Sector 6
+\_______________ Sector 7
+
 
 Next to the block map, starting at sector 16, is the file catalog. It is made
 of consecutive sectors and has no size limit. When an allocated file comes in a
@@ -30,6 +43,8 @@ Ent L|D I R N A M E L O N G|Next	DIRECTORY ENTRY
 	it is followed by 255 entries, for a total of 256. If this is not enough
 	for a single directory, then Nxt points to an extended entry for this
 	directory, see below.
+	
+	The first char is ored with 0x80 to identify a directory.
 
 Sec L|F I L E N A M E E X T|Next	FILE ENTRY
 	A file entry is just like a directory entry, but it points to sectors in
@@ -78,3 +93,36 @@ Block allocation algorithm
 The blocks are allocated to file starting from the end of the volume. This
 allows to keep as much space as possible for the catalog at the start. When the
 allocated file space meets the catalog, the disk is full.
+
+However, the extent, once allocated, is used backwards. This means the last
+sector allocated is the one that will be used for the first part of the file.
+This sounds a bit strange, but it allows to :
+ * Have the file stocked forward in memory and use the "read multiple sector"
+easily.
+ * Conveniently put the allocated extents in a stack, and POP them as we use
+them.
+
+
+TODO LIST
+
+Program to check disk integrity :
+ * Every file is in a dir
+ * Allocated xentries are all linked from a file or dir
+ * No files (storage and catalog) overlap
+ * Sector map matches file catalog
+ * Circular/merging xentries chains
+
+There is no concept of a current path, nor parent dir. So it is not possible to
+go "up" in the filesystem. This can be added if we store the entry numbers of
+the parent dirs somewhere.
+
+RSXs:
+ùCD : with no args, go to root dir. ùCD "path","to","dir" to go in path/to/dir.
+This allows easy use from other programs with not too much string management,
+but is a bit painful for user, so accept / syntax as well maybe
+
+ùERA : can remove EMPTY dirs. Removing a dir that has other dir/files inside is
+too complicated, and the erase code is largely crazy enough.
+
+ùSEARCH : find a file by name on whole disk. But we need to crawl the catalog
+multiple times to get the path to the file !
