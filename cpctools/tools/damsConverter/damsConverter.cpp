@@ -23,7 +23,7 @@ static const std::string appliUsageShort = "<file.s> <file.z80>";
 static const std::string appliUsageLong = "<file.s> <file.z80>\n\
 Convert a dams source file to ascii source file";
 
-char *damsMnemonique[NB_DAMS_MNEMONIQUE]={
+static const char *damsMnemonique[NB_DAMS_MNEMONIQUE]={
 	"LD","INC","DEC","ADD","ADC","SUB","SBC","AND","XOR","OR","CP",
 		"PUSH","POP","BIT","RES","SET","RLC","RRC","RL","RR","SLA","SRA",
 		"SRL","IN","OUT","RST","DJNZ","EX","IM","JR","CALL","RET","JP",
@@ -36,7 +36,7 @@ char *damsMnemonique[NB_DAMS_MNEMONIQUE]={
 
 bool hasHeader(std::ifstream &inFile)
 {
-	unsigned char type;
+	unsigned char type = 99;
 	unsigned int checksum = 0;
 	unsigned int checksum2 = 0;
 
