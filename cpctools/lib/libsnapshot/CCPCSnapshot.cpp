@@ -314,6 +314,7 @@ CCPCSnapshot::TTokenID CCPCSnapshot::GetToken(const char *i_dataID, int &o_index
 	int index=0 ;
 	while (index<256 && cToken[index]){
 		cToken[index] = toupper(cToken[index]) ;
+		index++;
 	}
 #endif
 	token=cToken;
