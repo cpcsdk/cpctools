@@ -200,47 +200,37 @@ void Commands::PutFile(void)
 
 		GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
 
-		if (binary)
+		CCPCFile* const fileIn = binary ? new CCPCBinaryFile():new CCPCAsciiFile();
+		const char* const kind = binary ? "binary":"ascii";
+
+		try
 		{
-			CCPCBinaryFile fileIn;
-			try
-			{
-				fileIn.openFile(filename,headerCreation);
-			}
-			catch (tools::CException &e)
-			{
-				std::cerr << e << std::endl;
-				TOOLS_ERRORMSG("Error opening binary file " << filename)
-			}
-			std::cout << "Putting binary file <" << filename << "> " << fileIn.getSize() << " bytes";
-			if (start != -1)
-			{
-				fileIn.setAdress(start);
-				std::cout << " [start address &" << std::hex << start << "]" << std::dec;
-			}
-			if (exec != -1)
-			{
-				fileIn.setExecute(exec);
-				std::cout << " [execute address &" << std::hex << start << "]" << std::dec;
-			}
-			std::cout << std::endl;
-			disc->PutFile(fileIn,filename, user, sys, pro);
+			fileIn->openFile(fileNames[i],headerCreation);
 		}
-		else
+		catch (tools::CException &e)
 		{
-			CCPCAsciiFile fileIn;
-			try
-			{
-				fileIn.openFile(filename,headerCreation);
-			}
-			catch (tools::CException &e)
-			{
-				std::cerr << e << std::endl;
-				TOOLS_ERRORMSG("Error opening ascii file " << filename)
-			}
-			std::cout << "Putting ascii file <" << filename << "> " << fileIn.getSize() << " bytes" << std::endl;
-			disc->PutFile(fileIn,filename, user, sys, pro);
+			std::cerr << e << std::endl;
+			TOOLS_ERRORMSG("Error opening " << kind << " file " << filename)
+			delete fileIn;
 		}
+
+		std::cout << "Putting " << kind << " file <" << filename << "> " << fileIn->getSize() << " bytes";
+
+		if (binary && start != -1)
+		{
+			((CCPCBinaryFile*)fileIn)->setAdress(start);
+			std::cout << " [start address &" << std::hex << start << "]" << std::dec;
+		}
+		if (binary && exec != -1)
+		{
+			((CCPCBinaryFile*)fileIn)->setExecute(exec);
+			std::cout << " [execute address &" << std::hex << start << "]" << std::dec;
+		}
+
+		std::cout << std::endl;
+
+		disc->PutFile(*fileIn, filename, user, sys, pro);
+		delete fileIn;
 	}
 
 	disc->Close();
