@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 
-void GetAmsdosParamFromName(const std::string &filename, std::string &filenameams,
+void GetAmsdosParamFromName(std::string &filename, std::string &filenameams,
 		int &user, bool &system, bool &writeProtected,
 		int &start, int &exec)
 {
@@ -27,11 +27,6 @@ void GetAmsdosParamFromName(const std::string &filename, std::string &filenameam
 	exec = -1;
 
 	f = filename;
-
-	for (unsigned int i=0;i<f.size();i++)
-	{
-		f[i] = toupper(f[i]);
-	}
 
 	if (f.find(':') != std::string::npos)
 	{
@@ -83,6 +78,14 @@ void GetAmsdosParamFromName(const std::string &filename, std::string &filenameam
 				noexec = false;
 			}
 		}
+	}
+
+	filename = f;
+	// TODO make sure we output a valid AMSDOS filename (8.3, space padded,
+	// no special chars, etc).
+	for (unsigned int i=0;i<f.size();i++)
+	{
+		f[i] = toupper(f[i]);
 	}
 	filenameams = f;
 }
