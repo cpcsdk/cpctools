@@ -13,24 +13,10 @@
 
 #include <stdio.h>
 
-enum TCommand
-{
-    Catalogue,
-		Format,
-		PutFile,
-		GetFile,
-		GetAllFile,
-		RenameFile,
-		DeleteFile,
-		PrintDisc,
-		PrintFile,
-		DumpBlockFile,
-		Unknown
-};
 
 void GetAmsdosParamFromName(const std::string &filename, std::string &filenameams,
-							int &user, bool &system, bool &writeProtected,
-							int &start, int &exec)
+		int &user, bool &system, bool &writeProtected,
+		int &start, int &exec)
 {
 	std::string s,f;
 
@@ -49,24 +35,13 @@ void GetAmsdosParamFromName(const std::string &filename, std::string &filenameam
 
 	if (f.find(':') != std::string::npos)
 	{
+		// we've got a user, try to convert to value
 		s = filename.substr(0,filename.find(':'));
 
-		if (s.size() == 1)
-		{
-			if (s[0] >= '0' && s[0] < '9')
-			{
-				// we've got a user, try to convert to value
-				user = strtol(s.c_str(), NULL, 0);
-				f = f.substr(f.find(':')+1, f.size() - f.find(':'));
-			}
-		}
-		else
-		{
-			// we've got a user, try to convert to value
-			user = strtol(s.c_str(), NULL, 0);
-			f = f.substr(f.find(':')+1, f.size() - f.find(':'));
-		}
+		user = strtol(s.c_str(), NULL, 0);
+		f = f.substr(f.find(':')+1, f.size() - f.find(':'));
 	}
+
 	if (f.find(',') != std::string::npos)
 	{
 		s = f.substr(f.find(',')+1,f.size() - f.find(','));
@@ -112,6 +87,358 @@ void GetAmsdosParamFromName(const std::string &filename, std::string &filenameam
 	filenameams = f;
 }
 
+
+class Commands
+{
+	public:
+		static void Catalog(void);
+		static void Format(void);
+		static void PutFile(void);
+		static void GetFile(void);
+		static void GetAllFiles(void);
+		static void RenameFile(void);
+		static void DeleteFile(void);
+		static void DiskInfo(void);
+		static void FileInfo(void);
+		static void DumpFile(void);
+		static void Unknown(void);
+
+		static std::string discFilename;
+		static int side;
+		static bool binary;
+		static bool headerCreation;
+		static bool headerSaving;
+		static CCPCDisc::TDisc typeDisc;
+		static std::vector<std::string> fileNames;
+};
+
+std::string Commands::discFilename;
+int Commands::side;
+bool Commands::binary;
+bool Commands::headerCreation;
+bool Commands::headerSaving;
+CCPCDisc::TDisc Commands::typeDisc;
+std::vector<std::string> Commands::fileNames;
+
+typedef void(*TCommand)(void);
+
+
+void Commands::Catalog(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	const CCPCDisc::CCPCDirectoryMap &dir = disc->GetDirectoryMap();
+
+	std::cout << "Directory : " << std::endl;
+
+	int totalSize = 0;
+	int nbFile = 0;
+	for (CCPCDisc::CCPCDirectoryMap::const_iterator i = dir.begin();
+			i!=dir.end(); i++)
+	{
+		std::cout.width(3);
+		std::cout << (unsigned int)i->first.User << ":"
+			<< std::string(i->first.Name,0,8) << "."
+			<< std::string(i->first.Name,8,3) << " ";
+		if (i->first.System)
+		{
+			std::cout << "S";
+		}
+		else
+		{
+			std::cout << " ";
+		}
+		if (i->first.WriteProtected)
+		{
+			std::cout << "*";
+		}
+		else
+		{
+			std::cout << " ";
+		}
+		std::cout << i->second.Size << "Kb" << std::endl;
+		if (i->first.User != CCPCDisc::DeleteUser)
+		{
+			totalSize += i->second.Size;
+			nbFile++;
+		}
+		std::cout.width(0);
+	}
+
+	int capacity = disc->GetDiscCapacity();
+
+	std::cout << nbFile << " Files, " << (capacity-totalSize)
+		<< "Kb Free/" << capacity << "Kb" << std::endl;
+	disc->Close();
+	delete disc;
+
+	TOOLS_ASSERTMSG(capacity >= totalSize, "Disc capacity seems to be invalid, found " << totalSize << " on disc, but capacity only " << (int)disc->GetDiscCapacity());
+}
+
+
+void Commands::Format(void)
+{
+	CCPCDisc *disc = CCPCDisc::CreateDisc(discFilename,typeDisc,side);
+
+	disc->Format();
+
+	disc->Close();
+	delete disc;
+}
+
+
+void Commands::PutFile(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	for (unsigned int i=0;i<fileNames.size();i++)
+	{
+		std::string filename;
+		int user;
+		bool sys,pro;
+		int start, exec;
+
+		GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
+
+		if (binary)
+		{
+			CCPCBinaryFile fileIn;
+			try
+			{
+				fileIn.openFile(filename,headerCreation);
+			}
+			catch (tools::CException &e)
+			{
+				std::cerr << e << std::endl;
+				TOOLS_ERRORMSG("Error opening binary file " << filename)
+			}
+			std::cout << "Putting binary file <" << filename << "> " << fileIn.getSize() << " bytes";
+			if (start != -1)
+			{
+				fileIn.setAdress(start);
+				std::cout << " [start address &" << std::hex << start << "]" << std::dec;
+			}
+			if (exec != -1)
+			{
+				fileIn.setExecute(exec);
+				std::cout << " [execute address &" << std::hex << start << "]" << std::dec;
+			}
+			std::cout << std::endl;
+			disc->PutFile(fileIn,filename, user, sys, pro);
+		}
+		else
+		{
+			CCPCAsciiFile fileIn;
+			try
+			{
+				fileIn.openFile(filename,headerCreation);
+			}
+			catch (tools::CException &e)
+			{
+				std::cerr << e << std::endl;
+				TOOLS_ERRORMSG("Error opening ascii file " << filename)
+			}
+			std::cout << "Putting ascii file <" << filename << "> " << fileIn.getSize() << " bytes" << std::endl;
+			disc->PutFile(fileIn,filename, user, sys, pro);
+		}
+	}
+
+	disc->Close();
+	delete disc;
+}
+
+
+void Commands::GetFile(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	TOOLS_ASSERTMSG( (fileNames.size() != 0) , "No file to get !");
+
+	for (unsigned int i=0;i<fileNames.size();i++)
+	{
+		std::string filename;
+		int user;
+		bool sys,pro;
+		int start, exec;
+
+		GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
+
+		CCPCFile *file = disc->GetFile(filename, user);
+		std::cout << "Getting ";
+		if (file->getType() == Binary)
+		{
+			std::cout << "Bin :";
+		}
+		else
+		{
+			std::cout << "Asc :";
+		}
+		std::cout << "<" << user << ":" << filename << "> \t";
+		std::cout << file->getSize() << " bytes \t" << (float)file->getSize()/1024.0f << "Kb " << std::endl;
+		file->saveFile(filename,headerSaving);
+		delete file;
+	}
+
+	disc->Close();
+	delete disc;
+}
+
+
+void Commands::GetAllFiles(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	for (unsigned int i=0;i<disc->GetNbFiles();i++)
+	{
+		int user;
+		std::string filename = disc->GetFilename(i, user);
+		CCPCFile *file = disc->GetFile(filename, user);
+		std::cout << "Getting ";
+		if (file->getType() == Binary)
+		{
+			std::cout << "Bin :";
+		}
+		else
+		{
+			std::cout << "Asc :";
+		}
+		std::cout << "<" << user << ":" << filename << "> \t";
+		std::cout << file->getSize() << " bytes \t" << (float)file->getSize()/1024.0f << "Kb " << std::endl;
+		if (user != 0)
+		{
+			char userStr[16];
+			sprintf(userStr, "%d_", user);
+			filename = userStr + filename;
+		}
+		file->saveFile(filename,headerSaving);
+		delete file;
+	}
+
+	disc->Close();
+	delete disc;
+}
+
+
+void Commands::RenameFile(void)
+{
+	TOOLS_ASSERTMSG( (fileNames.size() == 2) , "2 fileNames for rename");
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	std::string o_filename;
+	int o_user;
+	bool o_sys, o_pro;
+	int o_start, o_exec;
+
+	GetAmsdosParamFromName(fileNames[0], o_filename, o_user, o_sys, o_pro, o_start, o_exec);
+
+	std::string n_filename;
+	int n_user;
+	bool n_sys, n_pro;
+	int n_start, n_exec;
+
+	GetAmsdosParamFromName(fileNames[1], n_filename, n_user, n_sys, n_pro, n_start, n_exec);
+
+	std::cout << "Rename file <" << o_user << ":" << o_filename << "> to <" << n_user << ":" << n_filename << ">" << std::endl;
+	disc->RenameFile(	o_filename,n_filename, o_user, n_user,
+			o_sys, n_sys, o_pro, n_pro);
+
+	disc->Close();
+	delete disc;
+}
+
+
+void Commands::DeleteFile(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	for (unsigned int i=0;i<fileNames.size();i++)
+	{
+		std::string filename;
+		int user;
+		bool sys,pro;
+		int start, exec;
+
+		GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
+
+		std::cout << "Delete file <" << user << ":" << filename << ">" << std::endl;
+		disc->EraseFile(filename, user);
+	}
+
+	disc->Close();
+
+	delete disc;
+}
+
+
+void Commands::DiskInfo(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	disc->PrintInfo(std::cout);
+
+	disc->Close();
+	delete disc;
+}
+
+
+void Commands::FileInfo(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	TOOLS_ASSERTMSG( (fileNames.size() != 0) , "No file to print !");
+
+	for (unsigned int i=0;i<fileNames.size();i++)
+	{
+		std::string filename;
+		int user;
+		bool sys,pro;
+		int start, exec;
+
+		GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
+
+		CCPCFile *file = disc->GetFile(filename, user);
+		std::cout << "File header <" << user << ":" << filename << ">" << std::endl;
+
+		std::cout << *file << std::endl;
+		file->printHeader(std::cout);
+
+		delete file;
+	}
+
+	disc->Close();
+	delete disc;
+}
+
+
+void Commands::DumpFile(void)
+{
+	CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
+
+	for (unsigned int i=0;i<fileNames.size();i++)
+	{
+		std::string filename;
+		int user;
+		bool sys,pro;
+		int start, exec;
+
+		GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
+
+		std::cout << "Dump block file <" << user << ":" << filename << ">" << std::endl;
+		disc->DumpBlockFile(filename, user, std::cout);
+	}
+
+	disc->Close();
+
+	delete disc;
+}
+
+
+void Commands::Unknown(void)
+{
+	TOOLS_ERRORMSG( "Unknown command.");
+}
+
+
 static struct SOption appliOption[]=
 {
 	{'b', "binaryMode"  ,0,1,0,"Use binary mode for transfert"},
@@ -129,15 +456,15 @@ static const std::string appliUsageLong = "<dskfile> <command>\n"
 "Manage DSK file.\n"
 "Command list :\n"
 "\tc : directory\n"
-"\tf : disc format\n"
+"\tf : format disc\n"
 "\tp : put file\n"
 "\tg : get file\n"
-"\ta : get all file\n"
+"\ta : extract all files\n"
 "\tr : rename file\n"
 "\td : delete file\n"
-"\ti : print disc info\n"
+"\ti : print disc information\n"
 "\th : print file header\n"
-"When putting or getting file, you can use [<user>:]name.ext[,S][,P][,start][,exec]";
+"When putting or getting file, you can use [<user>:]name.ext[,S][,P][,start[,exec]]";
 
 int main(int argc, char* argv[])
 {
@@ -155,23 +482,24 @@ int main(int argc, char* argv[])
 			return -1;
 		}
 
-		std::string discFilename(argv[1]);
+		Commands::discFilename = argv[1];
+
 		std::string c(argv[2]);
-		TCommand command = Unknown;
+		TCommand command = Commands::Unknown;
 
 		switch (c[0])
 		{
-		case 'c': { command = Catalogue; break;}
-		case 'f': { command = Format; break;}
-		case 'p': { command = PutFile; break;}
-		case 'g': { command = GetFile; break;}
-		case 'a': { command = GetAllFile; break;}
-		case 'r': { command = RenameFile; break;}
-		case 'd': { command = DeleteFile; break;}
-		case 'i': { command = PrintDisc; break;}
-		case 'h': { command = PrintFile; break;}
-		case 'b': { command = DumpBlockFile; break;}
-		default:
+			case 'c': { command = Commands::Catalog;	break;}
+			case 'f': { command = Commands::Format;		break;}
+			case 'p': { command = Commands::PutFile;	break;}
+			case 'g': { command = Commands::GetFile;	break;}
+			case 'a': { command = Commands::GetAllFiles;break;}
+			case 'r': { command = Commands::RenameFile;	break;}
+			case 'd': { command = Commands::DeleteFile;	break;}
+			case 'i': { command = Commands::DiskInfo;	break;}
+			case 'h': { command = Commands::FileInfo;	break;}
+			case 'b': { command = Commands::DumpFile;	break;}
+			default:
 			{
 				TOOLS_ERRORMSG("Unknown command " << c);
 			}
@@ -179,324 +507,16 @@ int main(int argc, char* argv[])
 
 		int i=3;
 
-		int	side= optParser.FindOption('s') ? 1 : 0;
-		bool headerCreation = optParser.FindOption('e');
-		bool headerSaving = !optParser.FindOption('n');
-		bool binary = optParser.FindOption('b');
-		CCPCDisc::TDisc typeDisc = CCPCDisc::Data;
+		Commands::side = optParser.FindOption('s') ? 1 : 0;
+		Commands::headerCreation = optParser.FindOption('e');
+		Commands::headerSaving = !optParser.FindOption('n');
+		Commands::binary = optParser.FindOption('b');
+		Commands::typeDisc = CCPCDisc::Data;
 
-		std::vector<std::string> fileNames;
 		for (i=3;i<argc;i++)
-			fileNames.push_back(std::string(argv[i]));
+			Commands::fileNames.push_back(std::string(argv[i]));
 
-		switch (command)
-		{
-		case Catalogue :
-			{
-				CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-				const CCPCDisc::CCPCDirectoryMap &dir = disc->GetDirectoryMap();
-
-				std::cout << "Directory : " << std::endl;
-
-				int totalSize = 0;
-				int nbFile = 0;
-				for (CCPCDisc::CCPCDirectoryMap::const_iterator i = dir.begin();
-					i!=dir.end(); i++)
-				{
-					std::cout.width(3);
-					std::cout << (unsigned int)i->first.User << ":"
-						<< std::string(i->first.Name,0,8) << "."
-						<< std::string(i->first.Name,8,3) << " ";
-					if (i->first.System)
-					{
-						std::cout << "S";
-					}
-					else
-					{
-						std::cout << " ";
-					}
-					if (i->first.WriteProtected)
-					{
-						std::cout << "*";
-					}
-					else
-					{
-						std::cout << " ";
-					}
-					std::cout << i->second.Size << "Kb" << std::endl;
-					if (i->first.User != CCPCDisc::DeleteUser)
-					{
-						totalSize += i->second.Size;
-						nbFile++;
-					}
-					std::cout.width(0);
-				}
-
-				int capacity = disc->GetDiscCapacity();
-
-				std::cout << nbFile << " Files, " << (capacity-totalSize)
-					<< "Kb Free/" << capacity << "Kb" << std::endl;
-				disc->Close();
-				delete disc;
-
-				TOOLS_ASSERTMSG(capacity >= totalSize, "Disc capacity seems to be invalid, found " << totalSize << " on disc, but capacity only " << (int)disc->GetDiscCapacity());
-
-				break;
-			}
-		case Format :
-			{
-				CCPCDisc *disc = CCPCDisc::CreateDisc(discFilename,typeDisc,side);
-
-				disc->Format();
-
-				disc->Close();
-				delete disc;
-				break;
-			}
-		case PutFile :
-			{
-				CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-				for (unsigned int i=0;i<fileNames.size();i++)
-				{
-					std::string filename;
-					int user;
-					bool sys,pro;
-					int start, exec;
-
-					GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
-
-					if (binary)
-					{
-						CCPCBinaryFile fileIn;
-						try
-						{
-							fileIn.openFile(filename,headerCreation);
-						}
-						catch (tools::CException &e)
-						{
-							std::cerr << e << std::endl;
-							TOOLS_ERRORMSG("Error opening binary file " << filename)
-						}
-						std::cout << "Putting binary file <" << filename << "> " << fileIn.getSize() << " bytes";
-						if (start != -1)
-						{
-							fileIn.setAdress(start);
-							std::cout << " [start address &" << std::hex << start << "]" << std::dec;
-						}
-						if (exec != -1)
-						{
-							fileIn.setExecute(exec);
-							std::cout << " [execute address &" << std::hex << start << "]" << std::dec;
-						}
-						std::cout << std::endl;
-						disc->PutFile(fileIn,filename, user, sys, pro);
-					}
-					else
-					{
-						CCPCAsciiFile fileIn;
-						try
-						{
-							fileIn.openFile(filename,headerCreation);
-						}
-						catch (tools::CException &e)
-						{
-							std::cerr << e << std::endl;
-							TOOLS_ERRORMSG("Error opening ascii file " << filename)
-						}
-						std::cout << "Putting ascii file <" << filename << "> " << fileIn.getSize() << " bytes" << std::endl;
-						disc->PutFile(fileIn,filename, user, sys, pro);
-					}
-		  }
-
-		  disc->Close();
-		  delete disc;
-		  break;
-	  }
-	case GetFile :
-		{
-			CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-			TOOLS_ASSERTMSG( (fileNames.size() != 0) , "No file to get !");
-
-			for (unsigned int i=0;i<fileNames.size();i++)
-			{
-				std::string filename;
-				int user;
-				bool sys,pro;
-				int start, exec;
-
-				GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
-
-				CCPCFile *file = disc->GetFile(filename, user);
-				std::cout << "Getting ";
-				if (file->getType() == Binary)
-				{
-					std::cout << "Bin :";
-				}
-				else
-				{
-					std::cout << "Asc :";
-				}
-				std::cout << "<" << user << ":" << filename << "> \t";
-				std::cout << file->getSize() << " bytes \t" << (float)file->getSize()/1024.0f << "Kb " << std::endl;
-				file->saveFile(filename,headerSaving);
-				delete file;
-			}
-
-			disc->Close();
-			delete disc;
-			break;
-		}
-	case GetAllFile :
-		{
-			CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-			for (unsigned int i=0;i<disc->GetNbFiles();i++)
-			{
-				int user;
-				std::string filename = disc->GetFilename(i, user);
-				CCPCFile *file = disc->GetFile(filename, user);
-				std::cout << "Getting ";
-				if (file->getType() == Binary)
-				{
-					std::cout << "Bin :";
-				}
-				else
-				{
-					std::cout << "Asc :";
-				}
-				std::cout << "<" << user << ":" << filename << "> \t";
-				std::cout << file->getSize() << " bytes \t" << (float)file->getSize()/1024.0f << "Kb " << std::endl;
-				if (user != 0)
-				{
-					char userStr[16];
-					sprintf(userStr, "%d_", user);
-					filename = userStr + filename;
-				}
-				file->saveFile(filename,headerSaving);
-				delete file;
-			}
-
-			disc->Close();
-			delete disc;
-			break;
-		}
-	case RenameFile :
-		{
-			TOOLS_ASSERTMSG( (fileNames.size() == 2) , "2 fileNames for rename");
-			CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-			std::string o_filename;
-			int o_user;
-			bool o_sys, o_pro;
-			int o_start, o_exec;
-
-			GetAmsdosParamFromName(fileNames[0], o_filename, o_user, o_sys, o_pro, o_start, o_exec);
-
-			std::string n_filename;
-			int n_user;
-			bool n_sys, n_pro;
-			int n_start, n_exec;
-
-			GetAmsdosParamFromName(fileNames[1], n_filename, n_user, n_sys, n_pro, n_start, n_exec);
-
-			std::cout << "Rename file <" << o_user << ":" << o_filename << "> to <" << n_user << ":" << n_filename << ">" << std::endl;
-			disc->RenameFile(	o_filename,n_filename, o_user, n_user,
-								o_sys, n_sys, o_pro, n_pro);
-
-			disc->Close();
-			delete disc;
-			break;
-		}
-	case DeleteFile :
-		{
-			CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-			for (unsigned int i=0;i<fileNames.size();i++)
-			{
-				std::string filename;
-				int user;
-				bool sys,pro;
-				int start, exec;
-
-				GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
-
-				std::cout << "Delete file <" << user << ":" << filename << ">" << std::endl;
-				disc->EraseFile(filename, user);
-			}
-
-			disc->Close();
-
-			delete disc;
-			break;
-		}
-	case PrintDisc :
-		{
-			CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-			disc->PrintInfo(std::cout);
-
-			disc->Close();
-			delete disc;
-			break;
-		}
-	case PrintFile :
-		{
-			CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-			TOOLS_ASSERTMSG( (fileNames.size() != 0) , "No file to print !");
-
-			for (unsigned int i=0;i<fileNames.size();i++)
-			{
-				std::string filename;
-				int user;
-				bool sys,pro;
-				int start, exec;
-
-				GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
-
-				CCPCFile *file = disc->GetFile(filename, user);
-				std::cout << "File header <" << user << ":" << filename << ">" << std::endl;
-
-				std::cout << *file << std::endl;
-				file->printHeader(std::cout);
-
-				delete file;
-			}
-
-			disc->Close();
-			delete disc;
-			break;
-		}
-	case DumpBlockFile :
-		{
-			CCPCDisc *disc = CCPCDisc::OpenDisc(discFilename,side);
-
-			for (unsigned int i=0;i<fileNames.size();i++)
-			{
-				std::string filename;
-				int user;
-				bool sys,pro;
-				int start, exec;
-
-				GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
-
-				std::cout << "Dump block file <" << user << ":" << filename << ">" << std::endl;
-				disc->DumpBlockFile(filename, user, std::cout);
-			}
-
-			disc->Close();
-
-			delete disc;
-			break;
-		}
-	default :
-		{
-			TOOLS_ERRORMSG( "Unknown command : " << c);
-		}
-	}
+		(*command)();
     }
 	catch (tools::CException &e)
     {
