@@ -31,6 +31,10 @@ class BeAudioPlugin : public AudioPlugin
         BeAudioPlugin() {}
         int init(t_CPC& cpc, t_PSG& psg)
 		{
+			curWPos = 1024;
+			outSize = 1024;
+			outBuf = NULL;
+
 			gs_audio_format format;
 			memset(&format, 0, sizeof(format));
 			format.frame_rate = cpc.snd_playback_rate;
@@ -55,19 +59,12 @@ class BeAudioPlugin : public AudioPlugin
 			*/
 			format.byte_order = B_MEDIA_LITTLE_ENDIAN;
 			format.buffer_size = 0; // auto choose
-			soundOutput = new BPushGameSound(1024, &format, 1);
+			soundOutput = new BPushGameSound(1024, &format, 2);
 
 			if (soundOutput->InitCheck() != B_OK)
 			{
 				ErrorLogMessage("BPushGameSound init failed !");
 				return -1;
-			}
-
-			status_t sta = soundOutput->LockForCyclic((void**)&outBuf, &outSize);
-
-			if (sta == BPushGameSound::lock_failed) {
-				ErrorLogMessage("unable to lock BPushGameSound sound buffer");
-				return -2;
 			}
 
 			soundOutput->StartPlaying();
@@ -89,8 +86,15 @@ class BeAudioPlugin : public AudioPlugin
         uint8_t* getBuffer()
         {
 			curWPos += 4; // 2*16 bits
-        	if (curWPos >= outSize)
+        	if (curWPos >= outSize) {
+				soundOutput->UnlockPage(outBuf);
+				status_t sta = soundOutput->LockNextPage((void**)&outBuf, &outSize);
+
+				if (sta == BPushGameSound::lock_failed) {
+					ErrorLogMessage("unable to lock BPushGameSound sound buffer");
+				}
         		curWPos = 0;
+			}
         	return outBuf + curWPos;
         }
 	private:
