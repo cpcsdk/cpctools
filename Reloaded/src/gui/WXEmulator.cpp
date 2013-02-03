@@ -63,14 +63,12 @@ void WXEmulator::logMessage(const char* message) {
     {
         win->setStatus(message);
 #if DEBUG
-		fprintf(stderr, message);
-		fprintf(stderr, "\n");
+		cerr << message << endl;
 #endif
     }
     else // If no window print in stderr
     {
-        fprintf(stderr, message);
-        fprintf(stderr, "\n");
+        cerr << message << endl;
     }
     logSync.unlock();
 }

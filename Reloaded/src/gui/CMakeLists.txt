@@ -16,7 +16,7 @@ add_executable(reloaded WIN32
 	CapriceUIWrapper.cpp
 	CapriceWindowImpl.cpp
 	MemoryImpl.cpp
-	../core/PortAudioAudioPlugin.cpp
+	../core/portAudioAudioPlugin.cpp
 	WXEmulator.cpp
 
 	# core (to be moved)
@@ -47,4 +47,8 @@ add_executable(reloaded WIN32
 	../core/synchro.cpp
 )
 
-target_link_libraries(reloaded ${wxWidgets_LIBRARIES} stsoundlibrary portaudio_x86 pthreadVC2)
+if (WIN32)
+    target_link_libraries(reloaded ${wxWidgets_LIBRARIES} stsoundlibrary portaudio_x86 pthreadVC2)
+else (WIN32)
+    target_link_libraries(reloaded ${wxWidgets_LIBRARIES} stsound portaudio pthread)
+endif (WIN32)

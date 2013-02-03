@@ -53,6 +53,10 @@
 
 #include <cassert>
 
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+
 #define VERSION_STRING "v5.0.0"
 
 dword dwMF2ExitAddr;
