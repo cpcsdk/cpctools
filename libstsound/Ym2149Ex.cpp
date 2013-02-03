@@ -30,10 +30,10 @@
 -----------------------------------------------------------------------------*/
 
 #include <algorithm>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <cstdio>
 
 #ifdef _WIN32
 #define BUILDING_DLL

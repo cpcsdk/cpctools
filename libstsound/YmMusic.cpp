@@ -28,8 +28,8 @@
 
 -----------------------------------------------------------------------------*/
 
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 #include "YmMusic.h"
 
 #define	_LINEAR_OVRS				// Activate linear oversampling (best quality) Only used for DigiMix and UniversalTracker YM file type
