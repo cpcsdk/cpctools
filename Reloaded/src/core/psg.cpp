@@ -136,9 +136,6 @@ void t_PSG::Init(int enableSound)
 
 #ifdef ST_SOUND
     m_Ym2149 = new CYm2149Ex(profileCPC, CPC->snd_playback_rate);
-	float left[] = {0.5f, 0.25f, 0.0f};
-	float right[] = {0.0f, 0.25f, 0.5f};
-	m_Ym2149->outputMixerStereo(left, right);
     m_Ym2149->reset();
 #endif
     InitAYCounterVars();
