@@ -8,10 +8,6 @@
 #include <memory>
 #include "cap32type.h"
 
-using std::shared_ptr;
-
-class t_CPC;
-
 #ifdef ST_SOUND
 #include "Ym2149Ex.h"
 #endif
@@ -19,6 +15,10 @@ class t_CPC;
 #ifdef AYEMU
 #include "ayemu.h"
 #endif
+
+using std::shared_ptr;
+
+class t_CPC;
 
 class t_PSG
 {

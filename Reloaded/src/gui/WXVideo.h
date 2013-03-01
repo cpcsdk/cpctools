@@ -49,14 +49,9 @@ public:
     virtual bool IsUpdate();
 
 	void Screenshot(string filename);
-	
-	static inline VideoPlugin* Create()
-	{
-		return (VideoPlugin*)(new WXDoubleLinePlugin());
-	}
 
 	wxImage* img;
-    wxBitmap* bmp;
+	wxBitmap* bmp;
 };
 
 #if 0
@@ -84,11 +79,6 @@ public:
 	virtual void Unlock();
 	virtual void Flip();
 	virtual void Close();
-	
-	static inline VideoPlugin* Create()
-	{
-		return (VideoPlugin*)(new OpenGLPlugin());
-	}
 
 	virtual void SetOption(const string &optionName, bool val);
 protected:

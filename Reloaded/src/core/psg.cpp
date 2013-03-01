@@ -78,58 +78,32 @@ t_PSG::~t_PSG()
 
 void t_PSG::Emulate(int iCycleCount)
 {
-    auto ap = Emulator::getInstance()->GetAudioPlugin();
-    if(!ap)
-        return;
-	//if (pbSndBufferPtr == NULL) return;
-	
-#ifdef ST_SOUND
-    cycle_count += iCycleCount;
-
-    if (cycle_count >= snd_cycle_count)
+    if(auto ap = Emulator::getInstance()->GetAudioPlugin())
     {
-		uint8_t* bufferPtr = ap->getBuffer();
-    	if(bufferPtr == NULL) return;
-
-        cycle_count -= snd_cycle_count;
-
-        //m_Ym2149->updateStereo((ymsample *)pbSndBufferPtr, (ymint)1);
-        m_Ym2149->updateStereo((ymsample*)bufferPtr, (ymint)1);
-        for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
+#ifdef ST_SOUND
+        cycle_count += iCycleCount;
+        
+        if (cycle_count >= snd_cycle_count)
         {
-            // Add Tape Sound
-            // TODO: Overflow verification
-            // TODO: Configurable
-            //*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
-            *(bufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
+            uint8_t* bufferPtr = ap->getBuffer();
+            if(bufferPtr == NULL) return;
+            
+            cycle_count -= snd_cycle_count;
+            
+            m_Ym2149->updateStereo((ymsample*)bufferPtr, (ymint)1);
+            for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
+            {
+                // Add Tape Sound
+                // TODO: Overflow verification
+                // TODO: Configurable
+                //*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
+                *(bufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
+            }
+
+            ap->update();
         }
-
-        ap->update();
-        //Emulator::getInstance()->GetAudioPlugin().update();
+#endif
     }
-#endif
-
-#if 0
-//TODO: Separate sound output from psg emulation
-#if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
-	//	pbSndBufferPtr += sizeof(ymsample)*2;
-		Pa_WriteStream(audioStream,pbSndBuffer,1);
-
-#if 0 // Synchronous audio
-		if (pbSndBufferPtr >= pbSndBufferEnd)
-		{
-			int nbFrames = (pbSndBufferEnd-pbSndBuffer+1)/4;
-			if(nbFrames <0) nbFrames = 0;
-//			char msg[1024];
-//			sprintf(msg,"rendering %d frames in %d buffer",nbFrames,Pa_GetStreamWriteAvailable(audioStream));
-
-//			Emulator::getInstance()->logMessage(msg);
-			pbSndBufferPtr -= nbFrames*4;
-		}
-#endif
-#endif /* if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio */
-	}
-#endif
 }
 
 

@@ -159,11 +159,6 @@ public:
 		surf = NULL;
 	}
 
-	static VideoPlugin* Create()
-	{
-		return (new NullVideoPlugin());
-	}
-
 	virtual void* Init(int w,int h,int bpp,bool fs)
 	{
 		surf = new unsigned char[w*h*bpp/8];
