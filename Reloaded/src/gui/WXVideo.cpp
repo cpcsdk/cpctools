@@ -23,16 +23,16 @@
 #include <cstdlib>
 #include <cassert>
 
-#include "video.h"
+#include "core/video.h"
 #include "WXVideo.h"
-#include "gatearray.h"
-#include "glfuncs.h"
+#include "core/gatearray.h"
+#include "core/glfuncs.h"
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/dcbuffer.h>
 #include "CapriceApp.h"
 
-#include "log.h"
+#include "core/log.h"
 
 /* ----------------------------------------------------------------------- *
  * wxWidget Line doubling video plugin ----------------------------------- *

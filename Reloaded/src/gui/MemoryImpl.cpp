@@ -29,9 +29,9 @@
 #include <wx/textfile.h>
 #include <wx/tokenzr.h>
 
-#include "Desass.h"
-#include "z80.h"
-#include "memory.h"
+#include "core/Desass.h"
+#include "core/z80.h"
+#include "core/memory.h"
 
 using std::max;
 

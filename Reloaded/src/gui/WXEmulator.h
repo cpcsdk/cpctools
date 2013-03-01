@@ -29,11 +29,10 @@
 #include <wx/filefn.h>
 #include <wx/log.h>
 
-#include "emulator.h"
+#include "core/emulator.h"
 
-#include "synchro.h"
-
-#include "log.h"
+#include "core/synchro.h"
+#include "core/log.h"
 
 using std::shared_ptr;
 

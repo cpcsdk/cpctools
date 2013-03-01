@@ -3,5 +3,5 @@
 // and there is no way to add it there (?).
 // So we cheat and compile this file instead of CapriceUI.cpp, making sure the
 // key definitions are included.
-#include "CPCKeyDefs.h"
+#include "core/CPCKeyDefs.h"
 #include "CapriceUI.cpp"

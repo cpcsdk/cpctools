@@ -30,13 +30,13 @@
 #include "CapriceInputSettingsImpl.h"
 
 
-#include "cap32.h"
-#include "debug.h"
-#include "fdc.h"
-#include "dsk.h"
-#include "snapshot.h"
-#include "tape.h"
-#include "filetools.h"
+#include "core/cap32.h"
+#include "core/debug.h"
+#include "core/fdc.h"
+#include "core/dsk.h"
+#include "core/snapshot.h"
+#include "core/tape.h"
+#include "core/filetools.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -56,7 +56,7 @@ extern "C" {
 #endif
 
 #if WITH_ASM
-#include "../asm/CapASM.h"
+#include "asm/CapASM.h"
 CapASM *capAsm ;
 #endif
 
@@ -70,9 +70,9 @@ CapASM *capAsm ;
 #include "WXLog.h"
 
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
-#include "../aop/portAudioAudioPlugin.h"
+#include "aop/portAudioAudioPlugin.h"
 #elif SOUND_OUTPUT == SOUND_OUTPUT_Alsa
-#include "../core/alsaAudioPlugin.h"
+#include "aop/alsaAudioPlugin.h"
 #endif
 
 //TODO destroy emulator when finishing

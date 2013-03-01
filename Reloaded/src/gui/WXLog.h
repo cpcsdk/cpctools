@@ -1,12 +1,12 @@
 #ifndef _WXLOG_H_
 #define _WXLOG_H_
 
-#include "log.h"
 #include <cstdio>
 #include <cstdarg>
 #include <cstdlib>
 
-#include "emulator.h"
+#include "core/log.h"
+#include "core/emulator.h"
 
 class WXLog: public Log
 {

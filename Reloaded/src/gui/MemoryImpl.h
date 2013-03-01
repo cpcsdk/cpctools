@@ -1,7 +1,7 @@
 #include <wx/sstream.h>
 
 #include "CapriceUI.h"
-#include "emulator.h"
+#include "core/emulator.h"
 
  WX_DECLARE_STRING_HASH_MAP( int, LabelsHashMap );
 

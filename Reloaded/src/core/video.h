@@ -152,16 +152,13 @@ public:
 
 class NullVideoPlugin : public VideoPlugin
 {
-private:
+public:
 	NullVideoPlugin() 
 		: VideoPlugin("No output", ALL)
 	{
 		surf = NULL;
 	}
 
-	unsigned char* surf;
-
-public:
 	static VideoPlugin* Create()
 	{
 		return (new NullVideoPlugin());
@@ -175,15 +172,18 @@ public:
 	virtual void SetPalette(ColorARGB8888* c) {}
 	virtual bool TryLock() {return true;}
 	virtual void Unlock() {}
-    virtual bool LockOutput() {return true;}
-    virtual bool TryLockOutput() {return true;}
-    virtual void UnlockOutput() {}
+	virtual bool LockOutput() {return true;}
+	virtual bool TryLockOutput() {return true;}
+	virtual void UnlockOutput() {}
 	virtual void Flip() {}
 	virtual void Close() {}
-    virtual bool IsUpdate() {return false;}
+	virtual bool IsUpdate() {return false;}
 	void Screenshot(string filename) {}
 
 	~NullVideoPlugin() {delete [] surf;}
+
+private:
+	unsigned char* surf;
 };
 
 #endif

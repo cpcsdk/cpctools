@@ -5,12 +5,12 @@
 
 #include "CapriceInputSettingsImpl.h"
 #include "CapriceWindowImpl.h"
-#include "input.h"
-#include "CPCKeyDefs.h"
-#include "crtc1.h"
-#include "filetools.h"
+#include "core/input.h"
+#include "core/CPCKeyDefs.h"
+#include "core/crtc1.h"
+#include "core/filetools.h"
 
-#include "log.h"
+#include "core/log.h"
 
 #include <wx/event.h>
 #include <wx/filename.h>

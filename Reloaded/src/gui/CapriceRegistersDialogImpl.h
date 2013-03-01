@@ -4,8 +4,8 @@
 
 #include "CapriceUI.h"
 #include "WXEmulator.h"
-#include "z80.h"
-#include "crtc.h"
+#include "core/z80.h"
+#include "core/crtc.h"
 
 
 class CapriceRegistersDialogImpl : public RegistersStates 

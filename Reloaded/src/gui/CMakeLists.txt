@@ -1,11 +1,13 @@
 # In this directory we build the executable with wxWidgets gui
+cmake_minimum_required(VERSION 2.8)
+project(ReloadedGUI)
 
 # wxWidgets
 set(wxWidgets_CONFIGURATION 'wxmsw')
 find_package(wxWidgets COMPONENTS aui adv core base REQUIRED)
 include( "${wxWidgets_USE_FILE}" )
 
-include_directories(../core)
+include_directories(..)
 
 add_executable(reloaded WIN32 
 	CapriceAboutImpl.cpp

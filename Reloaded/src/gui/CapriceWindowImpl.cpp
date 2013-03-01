@@ -31,22 +31,22 @@
 #include <wx/msgdlg.h>
 
 #include "CapriceWindowImpl.h"
-#include "snapshot.h"
-#include "video.h"
+#include "core/snapshot.h"
+#include "core/video.h"
 #include "WXVideo.h"
 #include "CapriceInputSettingsImpl.h"
 
 #include "MemoryImpl.h"
-#include "tape.h"
-#include "error.h"
-#include "dsk.h"
+#include "core/tape.h"
+#include "core/error.h"
+#include "core/dsk.h"
 #include "WXEmulator.h"
 
 #ifdef WITH_IDE
 #include "CapriceIDE.h"
 #endif
 
-#include "Desass.h"
+#include "core/Desass.h"
 
 using std::dynamic_pointer_cast;
 
@@ -143,7 +143,7 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
 void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 {
 	// Test if emulator exist and is init.
-    assert(emulator);
+	assert(emulator);
 	assert(emulator->isInit());
 
 #ifdef USE_PTHREAD
@@ -154,7 +154,7 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 		emulator->GetRenderer().GetVideoPlugin()->LockOutput();
 
 		wxImage *imgPlugin;
-		imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+		imgPlugin = dynamic_pointer_cast<WXDoubleLinePlugin>(emulator->GetRenderer().GetVideoPlugin())->img;
 
 		assert(imgPlugin);
 		wxBitmap bmpPlugin = wxBitmap(*imgPlugin);

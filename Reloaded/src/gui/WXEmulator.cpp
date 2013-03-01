@@ -28,7 +28,7 @@
 #include <iostream>
 
 #include "CapriceWindowImpl.h"
-#include "input.h"
+#include "core/input.h"
 
 using std::shared_ptr;
 using std::cerr;

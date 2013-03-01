@@ -4,7 +4,7 @@
 #include <wx/stdpaths.h>
 #include <wx/string.h>
 
-#include "config_manager.h"
+#include "core/config_manager.h"
 
 class Emulator;
 

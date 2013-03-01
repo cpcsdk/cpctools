@@ -35,7 +35,7 @@
 #include "CapriceWindowImpl.h"
 #include "CapriceRegistersDialogImpl.h"
 #include "WXEmulator.h"
-#include "snapshot.h"
+#include "core/snapshot.h"
 
 #if defined(IPC)
 //We have compilation problems under Linux. Need to check
