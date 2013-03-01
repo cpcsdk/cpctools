@@ -1,8 +1,9 @@
 #ifndef DESASS_H
 #define DESASS_H
 
-#include "memory.h"
 #include <iostream>
+
+class t_Memory;
 
 /**
  * Desassemble memory

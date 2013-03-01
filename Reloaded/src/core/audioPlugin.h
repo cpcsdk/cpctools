@@ -19,14 +19,18 @@
 #ifndef _AUDIOPLUGIN_H_
 #define _AUDIOPLUGIN_H_
 
-#include <stdint.h>
+#include <cstdint>
 #include <cstdlib>
+#include <memory>
 
 #include "log.h"
 //extern uint8_t *pbSndBuffer;
 //uint8_t *pbSndBuffer;
 //extern uint8_t *pbSndBufferPtr;
 //uint8_t *pbSndBufferPtr;
+
+using std::shared_ptr;
+using std::weak_ptr;
 
 class t_CPC;
 class t_PSG;
@@ -36,7 +40,7 @@ class AudioPlugin
     public:
         AudioPlugin() {}
 		virtual ~AudioPlugin() {}
-        virtual int init(t_CPC& cpc, t_PSG& psg) = 0;
+        virtual int init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg) = 0;
         virtual void shutdown() = 0;
         virtual int update() = 0;
         virtual void pause() = 0;
@@ -45,15 +49,15 @@ class AudioPlugin
 		virtual void lock() {}
 		virtual void unlock() {}
     protected:
-        t_CPC* cpc;
-        t_PSG* psg;
+        weak_ptr<t_CPC> cpc;
+        weak_ptr<t_PSG> psg;
 };
 
 class NullAudioPlugin : public AudioPlugin
 {
     public:
         NullAudioPlugin() {}
-        int init(t_CPC& cpc, t_PSG& psg) {
+        int init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg) {
 				InfoLogMessage("[NullAudio Plugin] Open.");
 				return 0;
 		}

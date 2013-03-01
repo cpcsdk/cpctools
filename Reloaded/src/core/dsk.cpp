@@ -32,6 +32,8 @@
 #include <cstdio>
 #include <iostream>
 
+using std::cout;
+
 #ifndef HAVE_LIB765_H
 extern byte *pbGPBuffer;
 

@@ -2,7 +2,7 @@
 
 class t_CRTC1: public t_CRTC {
 	public:
-		t_CRTC1(t_GateArray &ga, t_VDU &vdu) :t_CRTC(ga,vdu){};
+		t_CRTC1(shared_ptr<t_GateArray> ga, shared_ptr<t_VDU> vdu) :t_CRTC(ga,vdu){};
 		unsigned char ReadData() const;
 
 	protected:

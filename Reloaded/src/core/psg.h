@@ -5,10 +5,12 @@
 #ifndef _PSG_H_
 #define _PSG_H_
 
+#include <memory>
 #include "cap32type.h"
 
+using std::shared_ptr;
+
 class t_CPC;
-class t_Tape;
 
 #ifdef ST_SOUND
 #include "Ym2149Ex.h"
@@ -21,8 +23,7 @@ class t_Tape;
 class t_PSG
 {
 private:
-	t_CPC&		CPC;
-	t_Tape&		Tape;
+	shared_ptr<t_CPC>		CPC;
 	unsigned char reg_select;
 	unsigned char control;
 
@@ -41,7 +42,7 @@ private:
 
 public:
 	double snd_cycle_count;
-	t_PSG(t_CPC &cpc, t_Tape &tape);
+	t_PSG(shared_ptr<t_CPC> cpc);
 	~t_PSG();
 
 	void Emulate(int iCycleCount);

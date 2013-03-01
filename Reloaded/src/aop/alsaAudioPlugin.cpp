@@ -168,19 +168,19 @@ inline int AlsaAudioPlugin::update()
 //  }
 }
 
-int AlsaAudioPlugin::init(t_CPC& cpc, t_PSG& psg)
+int AlsaAudioPlugin::init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg)
 {
-	if(!cpc.snd_enable)
+	if(!cpc->snd_enabled)
 	{
 		InfoLogMessage("[ALSA Audio Plugin] Not opening audio because disabled in the config");
 		return 0;
 	}
     /*  TODO */
-    unsigned int rate = cpc.snd_playback_rate;
-    int channels = cpc.snd_stereo ? 2 : 1;
+    unsigned int rate = cpc->snd_playback_rate;
+    int channels = cpc->snd_stereo ? 2 : 1;
 
 	snd_pcm_format_t format = SND_PCM_FORMAT_S16;
-	switch(cpc.snd_bits)
+	switch(cpc->snd_bits)
 	{
 		case 8:
 			format = SND_PCM_FORMAT_U8;
@@ -195,7 +195,7 @@ int AlsaAudioPlugin::init(t_CPC& cpc, t_PSG& psg)
 			format = SND_PCM_FORMAT_S32;
 			break;
 		default:
-			WarningLogMessage("[ALSA Audio Plugin] Warning, %d bits format unknown, fallback to %s.", cpc.snd_bits, snd_pcm_format_name(format));
+			WarningLogMessage("[ALSA Audio Plugin] Warning, %d bits format unknown, fallback to %s.", cpc->snd_bits, snd_pcm_format_name(format));
 	}
 
     int periods = 2;

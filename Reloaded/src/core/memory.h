@@ -8,17 +8,28 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
+#include <memory>
+
 #include "cap32type.h"
 
 #include "synchro.h"
 
+using std::shared_ptr;
+
 class t_CPC;
+
+enum MemoryType {
+    LOW_ROM = 1,
+    HIGH_ROM = 2,
+    MAIN_RAM = 3,
+    BANK_RAM = 4,
+};
 
 class t_Memory
 {
 private:
     SysSync memSync;
-	t_CPC&			CPC;
+	shared_ptr<t_CPC>			CPC;
 	
 	unsigned char	ROM_config;
 	unsigned char	RAM_bank;
@@ -42,7 +53,7 @@ private:
 
 public:
 	//! Default constructor
-	t_Memory(t_CPC &cpc);
+	t_Memory(shared_ptr<t_CPC> cpc);
 
 	void Clean();
 	void Reset(bool MF2reset);
@@ -52,22 +63,22 @@ public:
 
 	bool UpdateRAMSize(unsigned int size);
 
-	char* GetROMFile(unsigned int idx) const;
+	const char* GetROMFile(unsigned int idx) const;
 
 	int getTypeForAddress(word adr)
 	{
 		if(membank_read[adr>>14] == pbROMlo)
-			return 1;
+			return LOW_ROM;
 		else if(membank_read[adr>>14] == pbROMhi)
-			return 2;
+			return HIGH_ROM;
 		else if(
 				membank_read[adr>>14] == pbRAM ||
 				membank_read[adr>>14] == pbRAM+0x4000 ||
 				membank_read[adr>>14] == pbRAM+0x8000 ||
 				membank_read[adr>>14] == pbRAM+0xC000 
 				)
-			return 0;
-		return 4;
+			return MAIN_RAM;
+		return BANK_RAM;
 	}
 
   /**

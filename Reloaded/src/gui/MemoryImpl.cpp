@@ -33,6 +33,8 @@
 #include "z80.h"
 #include "memory.h"
 
+using std::max;
+
 // TODO proper handling of BANKS and ROM mapping. Now you see the z80 view and
 // there is no way to get out of it
 
@@ -68,14 +70,14 @@ MemoryImpl::~MemoryImpl()
 void MemoryImpl::setZoneInfo(int addr)
 {
 	wxString s;
-	switch(_emulator->GetMemory().getTypeForAddress(addr<<8)) {
-		case 1:
+	switch(_emulator->GetMemory()->getTypeForAddress(addr<<8)) {
+		case LOW_ROM:
 			s = _("System ROM");
 			break;
-		case 2:
+		case HIGH_ROM:
 			s = _("Ext. ROM "); // TODO : rom ID
 			break;
-		case 4:
+		case BANK_RAM:
 			s = _("Bank "); // TODO : bank number
 			break;
 		default:
@@ -132,7 +134,7 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 
 			if(overviewType == 2) { // "z80 view"
 				setZoneInfo(y);
-				switch(_emulator->GetMemory().getTypeForAddress(y<<8))
+				switch(_emulator->GetMemory()->getTypeForAddress(y<<8))
 				{
 					case 1: // Low ROM
 					case 2: // Hi ROM
@@ -168,14 +170,14 @@ void MemoryImpl::UpdateOverview(wxPaintEvent& event)
 			int val;
 			switch(overviewType) {
 				case 0:
-					val = _emulator->GetMemory().GetRAM()[(y << 8) + x];
+					val = _emulator->GetMemory()->GetRAM()[(y << 8) + x];
 					break;
 				case 1:
-					val = _emulator->GetMemory().GetRAM()[65536 + (y << 8) + x];
+					val = _emulator->GetMemory()->GetRAM()[65536 + (y << 8) + x];
 					break;
 				case 2:
 				default:
-					val = _emulator->GetMemory().Read((y << 8) + x);
+					val = _emulator->GetMemory()->Read((y << 8) + x);
 					break;
 			}
 			if (val != 0)
@@ -216,7 +218,7 @@ void MemoryImpl::searchASCII( wxCommandEvent& event ) {
 	const char* string = searchBoxA->GetValue().mb_str();
 	int len = strlen(string);
 
-	char* space = (char*)_emulator->GetMemory().GetRAM();
+	char* space = (char*)_emulator->GetMemory()->GetRAM();
 
 	wxString res;
 	bool found = false;
@@ -247,7 +249,7 @@ void MemoryImpl::searchNumber( wxCommandEvent& event ) {
 	}
 	searchResult->Freeze();
 
-	char* space = (char*)_emulator->GetMemory().GetRAM();
+	char* space = (char*)_emulator->GetMemory()->GetRAM();
 
 
 	wxString res;
@@ -324,7 +326,7 @@ void MemoryImpl::RefreshMem(wxScrollEvent& event)
 
 void MemoryImpl::RefreshMem(int startAddress)
 {
-	t_Memory& emu_mem = _emulator -> GetMemory();
+	auto emu_mem = _emulator->GetMemory();
 
 	wxString str;
 
@@ -338,7 +340,7 @@ void MemoryImpl::RefreshMem(int startAddress)
 
 		for (int j = 0; j < 16; j++)
 		{
-			str.Printf(_("%02X"),emu_mem.Read(startAddress + i*16+j));
+			str.Printf(_("%02X"),emu_mem->Read(startAddress + i*16+j));
 			*hexView << str << _(" ");
 		}
 		*hexView << _("\n");
@@ -347,7 +349,7 @@ void MemoryImpl::RefreshMem(int startAddress)
 
 	// Disassembly view
 	std::stringstream data;
-	Disassemble(emu_mem, data, startAddress, 0x200);
+	Disassemble(*emu_mem, data, startAddress, 0x200);
 
 	char line[256];
 	wxArrayString a;

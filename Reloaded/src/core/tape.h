@@ -19,7 +19,10 @@
 #ifndef _TAPE_H_
 #define _TAPE_H_
 
+#include <memory>
 #include "cap32type.h"
+
+using std::shared_ptr;
 
 class t_CPC;
 
@@ -38,7 +41,7 @@ class t_CPC;
 class t_Tape
 {
 private:
-	t_CPC&		CPC;
+	shared_ptr<t_CPC>		CPC;
 
 	byte bTapeLevel;
 	byte bTapeData;
@@ -58,7 +61,7 @@ private:
 	dword dwTapeBitsToShift;
 
 public:
-	t_Tape(t_CPC &cpc);
+	t_Tape(shared_ptr<t_CPC> cpc);
 
 	void Emulate(int iCycleCount);
 

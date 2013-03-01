@@ -6,7 +6,6 @@
 #define _VDU_H_
 
 #include "cap32type.h"
-#include "render.h"
 
 #define MIN_VHOLD 250
 #define MAX_VHOLD 380
@@ -18,6 +17,8 @@
 #define MAX_SYNC_INC 80
 
 #define MAX_DRAWN 270 // Max displayed scan line (+1)
+
+class Renderer;
 
 class t_VDU
 {

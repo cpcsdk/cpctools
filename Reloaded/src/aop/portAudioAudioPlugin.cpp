@@ -19,9 +19,9 @@
 #include "portAudioAudioPlugin.h"
 #include <portaudio.h>
 
-#include "emulator.h"
+#include "../core/emulator.h"
 
-#include "log.h"
+#include "../core/log.h"
 
 PaStream* audioStream = NULL;
 
@@ -44,11 +44,11 @@ inline int PortAudioAudioPlugin::update()
     return Pa_WriteStream(audioStream,pbSndBuffer,1) == paNoError ? 0 : -1;
 }
 
-int PortAudioAudioPlugin::init(t_CPC& cpc, t_PSG& psg)
+int PortAudioAudioPlugin::init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg)
 {
 	PaError err;
 
-	if (!cpc.snd_enabled) {
+	if (!cpc->snd_enabled) {
 		InfoLogMessage("[PortAudio Plugin] Not opening audio because disabled in the config");
 		return 0;
 	}
@@ -60,14 +60,14 @@ int PortAudioAudioPlugin::init(t_CPC& cpc, t_PSG& psg)
 
 	PaStreamParameters hostApiOutputParameters;
 	PaStreamParameters *hostApiOutputParametersPtr;
-    this->cpc = &cpc;
-    this->psg = &psg;
+    this->cpc = cpc;
+    this->psg = psg;
 
-    unsigned int rate = cpc.snd_playback_rate;
-	int channels = cpc.snd_stereo ? 2 : 1;
+    unsigned int rate = cpc->snd_playback_rate;
+	int channels = cpc->snd_stereo ? 2 : 1;
 
 	PaSampleFormat format = paInt16;
-	switch(cpc.snd_bits)
+	switch(cpc->snd_bits)
 	{
 		case 8:
 			format = paUInt8;
@@ -82,7 +82,7 @@ int PortAudioAudioPlugin::init(t_CPC& cpc, t_PSG& psg)
 			format = paInt32;
 			break;
 		default:
-			WarningLogMessage("[PortAudio Plugin] Warning, %d bits format unknown, fallback to %s.", cpc.snd_bits, format);
+			WarningLogMessage("[PortAudio Plugin] Warning, %d bits format unknown, fallback to %s.", cpc->snd_bits, format);
 	}
 
 	hostApiOutputParameters.device = Pa_GetDefaultOutputDevice();
@@ -116,7 +116,7 @@ int PortAudioAudioPlugin::init(t_CPC& cpc, t_PSG& psg)
 #endif
 
 #define SAMPLECOUNT 1 /*CPC.snd_playback_rate * 2*/
-    if((err = Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, cpc.snd_playback_rate, 1, NULL, NULL)) != paNoError)
+    if((err = Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, cpc->snd_playback_rate, 1, NULL, NULL)) != paNoError)
 //    if((err = Pa_OpenStream(&audioStream, NULL, hostApiOutputParametersPtr, rate, 1, paNoFlag, NULL, NULL)) != paNoError)
 	{
 		ErrorLogMessage("[PortAudio Plugin] Could not open audio. (PortAudio Message: %s)", Pa_GetErrorText(err));
@@ -157,13 +157,13 @@ void PortAudioAudioPlugin::shutdown()
 void PortAudioAudioPlugin::pause()
 {
 	/// \TODO ...
-	if (cpc->snd_enabled) {
+	if (cpc.lock()->snd_enabled) {
 	}
 }
 
 void PortAudioAudioPlugin::resume()
 {
 	/// \TODO ...
-	if (cpc->snd_enabled) {
+	if (cpc.lock()->snd_enabled) {
 	}
 }

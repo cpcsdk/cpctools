@@ -24,11 +24,12 @@
 // Caprice32 VDU emulator
 //
 
-#include "vdu.h"
-#include "debug.h"
-
 #include <cmath>
-#include <memory.h>
+
+#include "vdu.h"
+#include "render.h"
+
+#include "debug.h"
 
 #ifdef USE_DEBUGGER_CRTC
 extern dword dwDebugFlag;

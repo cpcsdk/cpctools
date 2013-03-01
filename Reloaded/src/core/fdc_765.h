@@ -58,7 +58,7 @@ class t_FDC
 {
 
 private:
-	t_CPC&	CPC;
+	shared_ptr<t_CPC>	CPC;
 
 	t_drive		driveA;
 	t_drive		driveB;
@@ -70,7 +70,7 @@ private:
 
 
 public:
-	t_FDC(t_CPC &CPC);
+	t_FDC(shared_ptr<t_CPC> CPC);
 	~t_FDC();
 
 	void Reset();

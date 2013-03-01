@@ -10,9 +10,11 @@
 
 #include "cap32type.h"
 
+#include <memory>
 #include <string>
 
-using namespace std;
+using std::shared_ptr;
+using std::string;
 
 class t_CPC;
 
@@ -108,7 +110,7 @@ private:
 	static fdc_cmd_table_def fdc_cmd_table[MAX_CMD_COUNT];
 
 private:
-	t_CPC&	CPC;
+	shared_ptr<t_CPC>	CPC;
 
 	t_drive driveA;
 	t_drive driveB;
@@ -134,7 +136,7 @@ private:
 	unsigned char result[8];
 
 public:
-	t_FDC(t_CPC &CPC);
+	t_FDC(shared_ptr<t_CPC> CPC);
 
 	void Reset();
 

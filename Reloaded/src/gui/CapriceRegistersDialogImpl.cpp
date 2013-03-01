@@ -21,6 +21,7 @@
 
 #include "CapriceRegistersDialogImpl.h"
 
+#include <memory>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -28,12 +29,20 @@
 #include <wx/textctrl.h>
 
 #include "WXEmulator.h"
+#include "gatearray.h"
 
-#define  UpCRTCRegTextControl(X, Y) if(!X->IsModified()){X->Clear();*X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
-#define  ModifCRTCReg(X, Y) {wxString str; long val; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetCRTC().SetRegisterValue(Y, (unsigned char)(val));} X->Clear(); *X << (int)(emulator->GetCRTC().GetRegisterValue(Y));}
+#define  UpCRTCRegTextControl(X, Y) if(!X->IsModified()){X->Clear();*X << (int)(emulator->GetCRTC()->GetRegisterValue(Y));}
+#define  ModifCRTCReg(X, Y) {wxString str; long val; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetCRTC()->SetRegisterValue(Y, (unsigned char)(val));} X->Clear(); *X << (int)(emulator->GetCRTC()->GetRegisterValue(Y));}
 
 #define  UpZ80Reg8bitsTextControl(X, Y) if(!X->IsModified()){X->Clear();*X << (int)(emulator->GetZ80().Y);}
 #define  ModifZ80Reg8bits(X, Y) {wxString str; long val; str = X->GetValue(); if(str.ToLong(&val,10)){cout << val; if((val > 0) && (val < 255)); emulator->GetZ80().Y = (unsigned char)(val);} X->Clear(); *X << (int)(emulator->GetZ80().Y);}
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
+using std::uppercase;
+using std::hex;
+using std::dec;
 
 // Registers Dialog Event
 void CapriceRegistersDialogImpl::OnInitR( wxInitDialogEvent& event )
@@ -164,17 +173,17 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
         if(!m_tCcHCC->IsModified())
         {
         m_tCcHCC->Clear();
-        *m_tCcHCC << (int)(emulator->GetCRTC().GetCharCount());
+        *m_tCcHCC << (int)(emulator->GetCRTC()->GetCharCount());
         }
         if(!m_tCcVCC->IsModified())
         {
         m_tCcVCC->Clear();
-        *m_tCcVCC << (int)(emulator->GetCRTC().GetLineCount());
+        *m_tCcVCC << (int)(emulator->GetCRTC()->GetLineCount());
         }
         if(!m_tCcVLC->IsModified())
         {
         m_tCcVLC->Clear();
-        *m_tCcVLC << (int)(emulator->GetCRTC().GetRasterCount());
+        *m_tCcVLC << (int)(emulator->GetCRTC()->GetRasterCount());
         }
 
         // Horizontal Register
@@ -192,10 +201,10 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
         UpCRTCRegTextControl(m_tCcR9, 9);
 
         tmp.str("");
-        tmp << dec << ((int)(emulator->GetCRTC().GetRegisterValue(0) + 1)) << " us";
+        tmp << dec << ((int)(emulator->GetCRTC()->GetRegisterValue(0) + 1)) << " us";
         m_sT_HLineLength->SetLabel(wxString::FromAscii((tmp.str()).data()));
         tmp.str("");
-        tmp << dec << ((int)(emulator->GetCRTC().GetRegisterValue(0) + 1)*((emulator->GetCRTC().GetRegisterValue(4) + 1)*(emulator->GetCRTC().GetRegisterValue(9) + 1) + emulator->GetCRTC().GetRegisterValue(5))) << " us";
+        tmp << dec << ((int)(emulator->GetCRTC()->GetRegisterValue(0) + 1)*((emulator->GetCRTC()->GetRegisterValue(4) + 1)*(emulator->GetCRTC()->GetRegisterValue(9) + 1) + emulator->GetCRTC()->GetRegisterValue(5))) << " us";
         m_sT_VFrameLength->SetLabel(wxString::FromAscii((tmp.str()).data()));
     }
 
@@ -204,13 +213,13 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 	{
 		static const char ink2bas[32] = {13,27,19,25,1,7,10,16,28,29,24,26,6,8,15,17,30,31,18,20,0,2,9,11,4,22,21,23,3,5,12,14};
 		m_pen->Clear();
-		*m_pen << emulator->GetGateArray().GetPen();
+		*m_pen << emulator->GetGateArray()->GetPen();
 
 		wxColour c;
 		wxString s;
 		int ink;
 
-		ink = emulator->GetGateArray().GetInk(0);
+		ink = emulator->GetGateArray()->GetInk(0);
 		m_ink0->Clear();
 		*m_ink0 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -223,7 +232,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		emulator->logMessage(s.mb_str());
 		m_bas0->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(1);
+		ink = emulator->GetGateArray()->GetInk(1);
 		m_ink1->Clear();
 		*m_ink1 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -235,7 +244,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas1->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(2);
+		ink = emulator->GetGateArray()->GetInk(2);
 		m_ink2->Clear();
 		*m_ink2 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -247,7 +256,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas2->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(3);
+		ink = emulator->GetGateArray()->GetInk(3);
 		m_ink3->Clear();
 		*m_ink3 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -259,7 +268,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas3->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(4);
+		ink = emulator->GetGateArray()->GetInk(4);
 		m_ink4->Clear();
 		*m_ink4 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -271,7 +280,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas4->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(5);
+		ink = emulator->GetGateArray()->GetInk(5);
 		m_ink5->Clear();
 		*m_ink5 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -283,7 +292,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas5->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(6);
+		ink = emulator->GetGateArray()->GetInk(6);
 		m_ink6->Clear();
 		*m_ink6 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -295,7 +304,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas6->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(7);
+		ink = emulator->GetGateArray()->GetInk(7);
 		m_ink7->Clear();
 		*m_ink7 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -307,7 +316,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas7->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(8);
+		ink = emulator->GetGateArray()->GetInk(8);
 		m_ink8->Clear();
 		*m_ink8 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -319,7 +328,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas8->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(9);
+		ink = emulator->GetGateArray()->GetInk(9);
 		m_ink9->Clear();
 		*m_ink9 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -331,7 +340,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas9->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(10);
+		ink = emulator->GetGateArray()->GetInk(10);
 		m_ink10->Clear();
 		*m_ink10 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -343,7 +352,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas10->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(11);
+		ink = emulator->GetGateArray()->GetInk(11);
 		m_ink11->Clear();
 		*m_ink11 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -355,7 +364,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas11->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(12);
+		ink = emulator->GetGateArray()->GetInk(12);
 		m_ink12->Clear();
 		*m_ink12 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -367,7 +376,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas12->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(13);
+		ink = emulator->GetGateArray()->GetInk(13);
 		m_ink13->Clear();
 		*m_ink13 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -379,7 +388,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas13->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(14);
+		ink = emulator->GetGateArray()->GetInk(14);
 		m_ink14->Clear();
 		*m_ink14 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -391,7 +400,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas14->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(15);
+		ink = emulator->GetGateArray()->GetInk(15);
 		m_ink15->Clear();
 		*m_ink15 << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -403,7 +412,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		s.Printf(wxT("%d"),ink2bas[ink]);
 		m_bas15->SetValue(s); 
 
-		ink = emulator->GetGateArray().GetInk(16);
+		ink = emulator->GetGateArray()->GetInk(16);
 		m_border->Clear();
 		*m_border << ink;
 		c.Set(emulator->GetRenderer().mapGAEntryToRGB(ink));
@@ -417,7 +426,7 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 
 
 		m_vmode->Clear();
-		*m_vmode << (int)emulator->GetGateArray().GetMode();
+		*m_vmode << (int)emulator->GetGateArray()->GetMode();
 	}
 
 	// FDC
@@ -428,12 +437,12 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 		b_track->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_track));
 		b_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_sector));
 
-		t_st0->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(0)));
-		t_st1->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(1)));
-		t_st2->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(2)));
-		t_st3->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC().getST(3)));
+		t_st0->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC()->getST(0)));
+		t_st1->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC()->getST(1)));
+		t_st2->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC()->getST(2)));
+		t_st3->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC()->getST(3)));
 
-		c_motor->SetValue(emulator->GetFDC().GetMotor());
+		c_motor->SetValue(emulator->GetFDC()->GetMotor());
 	}
 }
 

@@ -26,9 +26,13 @@
 #include <cstring>
 #include <cstdio>
 
+#include "synchro.h"
+
 #include "memory.h"
 #include "Desass.h"
-using namespace std;
+
+using std::ios;
+using std::endl;
 
 #define Hex(Chaine, Valeur, Digit) sprintf((Chaine), "%.*X", (Digit), (Valeur))	
 //

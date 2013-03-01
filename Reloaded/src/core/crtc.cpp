@@ -40,7 +40,11 @@ based on the CRTC emulation of WinAPE32 v2.0a5b by Richard Wilson
 #include <memory.h>
 #include <iostream>
 
+#include "synchro.h"
+
 #include "crtc.h"
+#include "gatearray.h"
+#include "vdu.h"
 
 #include "debug.h"
 
@@ -49,13 +53,17 @@ extern dword dwDebugFlag;
 extern FILE *pfoDebug;
 #endif
 
+using std::cout;
+using std::hex;
+using std::endl;
+
 void t_CRTC::dispRegs() {
 	for(int i = 0; i < 14; i++)
 		cout << "crtc reg" << i << " : " << hex << _registers[i] << "\t";
 	cout << endl;
 }
 
-t_CRTC::t_CRTC(t_GateArray &ga, t_VDU &vdu) :
+t_CRTC::t_CRTC(shared_ptr<t_GateArray> ga, shared_ptr<t_VDU> vdu) :
 _vdu(vdu),
 _gateArray(ga)
 {
@@ -131,7 +139,7 @@ void t_CRTC::Emulate(int repeat_count)
 {
 	while (repeat_count) {
 
-		_vdu.Render(_nextAddress, _flags1.combined);
+		_vdu->Render(_nextAddress, _flags1.combined);
 
 		_nextAddress = _maxLate[(_addr + _charCount) & 0x73ff] | _scrBase; // next address for PreRender
 		_flags1.dt.combined = _newDT.combined; // update the DISPTMG flags
@@ -323,15 +331,15 @@ void t_CRTC::Emulate(int repeat_count)
 					_inVSync = false; // turn VSYNC off
 					_resVSync = false;
 
-					_vdu.CheckMaxScanlineCount();
+					_vdu->CheckMaxScanlineCount();
 				}
 				else
 				{
-					_vdu.CheckMinScanlineCount();
+					_vdu->CheckMinScanlineCount();
 				}
 			} else
 			{
-				_vdu.CheckMaxScanlineCount();
+				_vdu->CheckMaxScanlineCount();
 			}
 		}
 
@@ -419,7 +427,7 @@ void t_CRTC::SetRegisterValue(unsigned char reg, unsigned char val)
 								_vswCount = 0;
 								_inVSync = true;
 								_flags1.monVSYNC = 26;
-								_gateArray.SetHSCount( 2 ); // GA delays its VSYNC by two CRTC HSYNCs
+								_gateArray->SetHSCount( 2 ); // GA delays its VSYNC by two CRTC HSYNCs
 							}
 						}
 					}
@@ -580,7 +588,7 @@ void t_CRTC::ChangeMode()
 	if (_hadHSync)
 	{
 		_hadHSync = false;
-		_gateArray.HSyncChangeMode();
+		_gateArray->HSyncChangeMode();
 	}
 }
 
@@ -607,7 +615,7 @@ void t_CRTC::MatchLineCount()
 					_vswCount = 0; // reset vertical sync width counter
 					_inVSync = true; // enter VSYNC
 					_flags1.monVSYNC = 26; // enter vertical blanking period for 26 scanlines
-					_gateArray.SetHSCount( 2 ); // GA delays its VSYNC by two CRTC HSYNCs
+					_gateArray->SetHSCount( 2 ); // GA delays its VSYNC by two CRTC HSYNCs
 				}
 			}
 		}
@@ -651,7 +659,7 @@ void t_CRTC::MatchHsw()
 	// matches horizontal sync width?
 	if (_hswCount == _hsw)
 	{
-		_gateArray.MatchHsw();
+		_gateArray->MatchHsw();
 		_flags1.inHSYNC = 0; // turn HSYNC off
 
 		// in vertical blanking period?
@@ -664,7 +672,7 @@ void t_CRTC::MatchHsw()
 		if (_inMonHSync)
 		{
 			_inMonHSync = false;
-			_vdu.EndHSync();
+			_vdu->EndHSync();
 		}
 	}
 	else
@@ -676,14 +684,14 @@ void t_CRTC::MatchHsw()
 		if (_hswCount == 3)
 		{
 			_inMonHSync = true; // enter monitor HSYNC
-			_vdu.StartHSync();
+			_vdu->StartHSync();
 		}
 		// reached GA HSYNC output cutoff?
 		else if (_hswCount == 7)
 		{
 			ChangeMode();
 			_inMonHSync = false;
-			_vdu.EndHSync();
+			_vdu->EndHSync();
 		}
 	}
 }
@@ -795,7 +803,7 @@ void t_CRTC::DisplayDebug() const
 		_vswCount,
 		str);
 
-	_vdu.DisplayDebug();
+	_vdu->DisplayDebug();
 
 	fprintf(pfoDebug, "\n");
 #endif

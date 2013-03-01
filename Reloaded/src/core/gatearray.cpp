@@ -60,7 +60,7 @@ Soft -> Hard color table
 26 Bright White		11	&4B
 */
 
-t_GateArray::t_GateArray(Renderer &render, t_z80regs* z80) :
+t_GateArray::t_GateArray(Renderer &render, shared_ptr<t_z80regs> z80) :
 _z80(z80),
 _renderer(render)
 {
@@ -113,10 +113,11 @@ void t_GateArray::SetInk(unsigned int i, unsigned char v)
 
 void t_GateArray::MatchHsw()
 {
+    auto z80 = _z80.lock();
 	sl_count++; // update GA scan line counter
 	if (sl_count == 52) { // trigger interrupt?
 #ifndef NO_Z80
-		_z80->int_pending = 1; // queue Z80 interrupt
+		z80->int_pending = 1; // queue Z80 interrupt
 #endif
 		sl_count = 0; // clear counter
 	}
@@ -125,7 +126,7 @@ void t_GateArray::MatchHsw()
 		if (!hs_count) {
 			if (sl_count >= 32) { // counter above save margin?
 #ifndef NO_Z80
-				_z80->int_pending = 1; // queue interrupt
+				z80->int_pending = 1; // queue interrupt
 #endif
 			}
 			sl_count = 0; // clear counter

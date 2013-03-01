@@ -64,9 +64,8 @@
 #include "YmProfiles.h"
 #endif
 
-t_PSG::t_PSG(t_CPC &cpc, t_Tape &tape)
+t_PSG::t_PSG(shared_ptr<t_CPC> cpc)
  : CPC(cpc)
- , Tape(tape)
 {
 }
 
@@ -79,7 +78,9 @@ t_PSG::~t_PSG()
 
 void t_PSG::Emulate(int iCycleCount)
 {
-    AudioPlugin& ap = Emulator::getInstance()->GetAudioPlugin();
+    auto ap = Emulator::getInstance()->GetAudioPlugin();
+    if(!ap)
+        return;
 	//if (pbSndBufferPtr == NULL) return;
 	
 #ifdef ST_SOUND
@@ -87,7 +88,7 @@ void t_PSG::Emulate(int iCycleCount)
 
     if (cycle_count >= snd_cycle_count)
     {
-		uint8_t* bufferPtr = ap.getBuffer();
+		uint8_t* bufferPtr = ap->getBuffer();
     	if(bufferPtr == NULL) return;
 
         cycle_count -= snd_cycle_count;
@@ -99,11 +100,11 @@ void t_PSG::Emulate(int iCycleCount)
             // Add Tape Sound
             // TODO: Overflow verification
             // TODO: Configurable
-            //*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel()/32;
-            *(bufferPtr+k) += Emulator::getInstance()->GetTape().GetTapeLevel()/32;
+            //*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
+            *(bufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
         }
 
-        ap.update();
+        ap->update();
         //Emulator::getInstance()->GetAudioPlugin().update();
     }
 #endif
@@ -160,7 +161,7 @@ void t_PSG::Init(int enableSound)
 #endif
 
 #ifdef ST_SOUND
-    m_Ym2149 = new CYm2149Ex(profileCPC, CPC.snd_playback_rate);
+    m_Ym2149 = new CYm2149Ex(profileCPC, CPC->snd_playback_rate);
 	float left[] = {0.5f, 0.25f, 0.0f};
 	float right[] = {0.0f, 0.25f, 0.5f};
 	m_Ym2149->outputMixerStereo(left, right);
@@ -318,6 +319,6 @@ void t_PSG::Reset()
 void t_PSG::InitAYCounterVars()
 {
     cycle_count = 0;
-    snd_cycle_count = (4000000.0/(double)(CPC.snd_playback_rate)); // number of Z80 cycles per sample
+    snd_cycle_count = (4000000.0/(double)(CPC->snd_playback_rate)); // number of Z80 cycles per sample
     // std::cout << "Audio cycle count : " << snd_cycle_count << std::endl;
 }

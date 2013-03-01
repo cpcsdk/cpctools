@@ -19,9 +19,13 @@
 #ifndef CRTC_H
 #define CRTC_H
 
+#include <memory>
 #include "cap32type.h"
-#include "gatearray.h"
-#include "vdu.h"
+
+using std::shared_ptr;
+
+class t_GateArray;
+class t_VDU;
 
 class t_CRTC
 {
@@ -91,7 +95,7 @@ class t_CRTC
 		};
 	} t_new_dt;
 
-	t_VDU &			_vdu;
+	shared_ptr<t_VDU>			_vdu;
 	t_flags1		_flags1;
 	t_new_dt		_newDT;
 	unsigned int	_nextAddress;
@@ -113,14 +117,14 @@ class t_CRTC
 private:
 	void dispRegs();
 	
-	t_GateArray	& _gateArray;
+	shared_ptr<t_GateArray>	 _gateArray;
 	
 	
 	bool			_inMonHSync;
 	unsigned int	_r7Match;
 
 public:
-	t_CRTC(t_GateArray & ga, t_VDU & vdu);
+	t_CRTC(shared_ptr<t_GateArray> ga, shared_ptr<t_VDU> vdu);
 	virtual ~t_CRTC() {};
 
 	void Reset();

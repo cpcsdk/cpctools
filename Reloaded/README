@@ -1,6 +1,6 @@
 Reloaded - Amstrad CPC Emulator
 (c) Copyright 1997-2004 Ulrich Doewich
-(c) Copyright 2008-2012 the cpcdsk crew (Cloudstrife, Krusty, PulkoMandy)
+(c) Copyright 2008-2013 the cpcdsk crew (CloudStrife, Krusty, PulkoMandy)
 
 http://cpcsdk.googlecode.com
 
@@ -32,7 +32,6 @@ conditions of the license before using the source.
 I encourage you to get involved in the project - please see the Reloaded
 pages on Google Code for contact details.
 
-
 ..........................................................................
 
 REQUIREMENTS
@@ -53,17 +52,17 @@ Reloaded. Build and install it first.
 COMPILING
 ~~~~~~~~~
 
-If you got the program from svn, you first need to bootstrap the build
-system. The command for that is
-	sh build_config.sh
-Run ./configure --help to see the available options.
-A sane choice is:
-	./configure --without-ide
-(this disable the most broken features). Then run the make command:
+Compilation for Linux and probably other Unixoide
+	mkdir build
+	cd build
+	cmake ..
 	make ; make install
-to get the program ready (the install step is mandatory, it it not possible to
-run the emulator from the source directory before installing it).
 
+CrossCompilation for Windows: (TODO)
+	mkdir build
+	cd build
+	cmake .. -DCMAKE_TOOLCHAIN_FILE=../crossWin.cmake
+	make ; make install
 
 ..........................................................................
 

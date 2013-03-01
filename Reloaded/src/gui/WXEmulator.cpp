@@ -24,13 +24,21 @@
 #include <wx/defs.h>
 #include <wx/stdpaths.h>
 
+#include <memory>
+#include <iostream>
+
 #include "CapriceWindowImpl.h"
+#include "input.h"
+
+using std::shared_ptr;
+using std::cerr;
+using std::endl;
 
 extern byte *pbTapeImage;
 extern byte *pbTapeImageEnd;
 
 
-WXEmulator::WXEmulator(VideoPlugin& video, AudioPlugin& audio)
+WXEmulator::WXEmulator(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio)
 	: Emulator(video, audio)
 {
 	win = NULL;
@@ -52,7 +60,7 @@ WXEmulator::WXEmulator(VideoPlugin& video, AudioPlugin& audio)
 	}
 	strcpy(this->_config_path,s.mb_str());
 	// Now we need to reload the config with the correct path...
-	_config.loadConfiguration();
+	_config->loadConfiguration();
 }
 
 
@@ -83,46 +91,46 @@ void WXEmulator::PressKey(uint32_t key, uint32_t mod)
 	if (mod & wxMOD_SHIFT)
 	{
 	// consult the SHIFT table
-	cpc_key = _input.keyboard_shift[key];
+	cpc_key = _input->keyboard_shift[key];
 	}
 	// PC CTRL key held down?
 	else if (mod & wxMOD_CONTROL)
 	{
 	// consult the CTRL table
-	cpc_key = _input.keyboard_ctrl[key];
+	cpc_key = _input->keyboard_ctrl[key];
 	}
 	// PC AltGr key held down?
 	else if (mod & wxMOD_ALT)
 	{
 	// consult the AltGr table
-	cpc_key = _input.keyboard_mode[key];
+	cpc_key = _input->keyboard_mode[key];
 	}
 	else
 	{
 	// consult the normal table
-	cpc_key = _input.keyboard_normal[key];
+	cpc_key = _input->keyboard_normal[key];
 	}
 	*/
 
 	// Always use the same table. Less flexible mapping but makes handling of Ctrl Shift Esc much easier
-	cpc_key = _input.keyboard_normal[key];
+	cpc_key = _input->keyboard_normal[key];
 
-	if ((!(cpc_key & MOD_EMU_KEY)) && (!_config.paused) && ((byte)cpc_key != 0xff))
+	if ((!(cpc_key & MOD_EMU_KEY)) && (!_config->paused) && ((byte)cpc_key != 0xff))
 	{
 		// key is being held down
-		_input.keyboard_matrix[(byte)cpc_key >> 4] &= ~(1 << ((byte)cpc_key & 7));
+		_input->keyboard_matrix[(byte)cpc_key >> 4] &= ~(1 << ((byte)cpc_key & 7));
 
 		// CPC SHIFT key required?
 		//if (cpc_key & MOD_CPC_SHIFT)
 		if (mod & wxMOD_SHIFT)
 		{
 			// key needs to be SHIFTed
-			_input.keyboard_matrix[0x25 >> 4] &= ~(1 << (0x25 & 7));
+			_input->keyboard_matrix[0x25 >> 4] &= ~(1 << (0x25 & 7));
 		}
 		else
 		{
 			// make sure key is unSHIFTed
-			_input.keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
+			_input->keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
 		}
 
 		// CPC CONTROL key required?
@@ -130,12 +138,12 @@ void WXEmulator::PressKey(uint32_t key, uint32_t mod)
 		if (mod & wxMOD_CONTROL)
 		{
 			// CONTROL key is held down
-			_input.keyboard_matrix[0x27 >> 4] &= ~(1 << (0x27 & 7));
+			_input->keyboard_matrix[0x27 >> 4] &= ~(1 << (0x27 & 7));
 		}
 		else
 		{
 			// make sure CONTROL key is released
-			_input.keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
+			_input->keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
 		}
 	}
 }
@@ -149,38 +157,38 @@ void WXEmulator::ReleaseKey(uint32_t key, uint32_t mod)
 	if (mod & wxMOD_SHIFT)
 	{
 	// consult the SHIFT table
-	cpc_key = _input.keyboard_shift[key];
+	cpc_key = _input->keyboard_shift[key];
 	}
 	// PC CTRL key held down?
 	else if (mod & wxMOD_CONTROL)
 	{
 		// consult the CTRL table
-		cpc_key = _input.keyboard_ctrl[key];
+		cpc_key = _input->keyboard_ctrl[key];
 	}
 	// PC AltGr key held down?
 	else if (mod & wxMOD_ALT)
 	{
 		// consult the AltGr table
-		cpc_key = _input.keyboard_mode[key];
+		cpc_key = _input->keyboard_mode[key];
 	}
 	else
 	{
 		// consult the normal table
-		cpc_key = _input.keyboard_normal[key];
+		cpc_key = _input->keyboard_normal[key];
 	}
 	*/
 
-	cpc_key = _input.keyboard_normal[key];
+	cpc_key = _input->keyboard_normal[key];
 
 	// a key of the CPC keyboard?
-	if ((!_config.paused) && ((byte)cpc_key != 0xff))
+	if ((!_config->paused) && ((byte)cpc_key != 0xff))
 	{
 		// key has been released
-		_input.keyboard_matrix[(byte)cpc_key >> 4] |= (1 << ((byte)cpc_key & 7));
+		_input->keyboard_matrix[(byte)cpc_key >> 4] |= (1 << ((byte)cpc_key & 7));
 		// make sure key is unSHIFTed
-		_input.keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
+		_input->keyboard_matrix[0x25 >> 4] |= (1 << (0x25 & 7));
 		// make sure CONTROL key is not held down
-		_input.keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
+		_input->keyboard_matrix[0x27 >> 4] |= (1 << (0x27 & 7));
 	}
 }
 

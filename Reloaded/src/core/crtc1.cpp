@@ -1,4 +1,5 @@
 #include "crtc1.h"
+#include "vdu.h"
 
 unsigned char t_CRTC1::ReadData() const
 {
@@ -94,7 +95,7 @@ void t_CRTC1::Emulate(int repeat_count)
 {
 	while (repeat_count) {
 
-		_vdu.Render(_nextAddress, _flags1.combined);
+		_vdu->Render(_nextAddress, _flags1.combined);
 
 		_nextAddress = _maxLate[(_addr + _charCount) & 0x73ff] | _scrBase; // next address for PreRender
 		_flags1.dt.combined = _newDT.combined; // update the DISPTMG flags
@@ -287,15 +288,15 @@ void t_CRTC1::Emulate(int repeat_count)
 					_inVSync = false; // turn VSYNC off
 					_resVSync = false;
 
-					_vdu.CheckMaxScanlineCount();
+					_vdu->CheckMaxScanlineCount();
 				}
 				else
 				{
-					_vdu.CheckMinScanlineCount();
+					_vdu->CheckMinScanlineCount();
 				}
 			} else
 			{
-				_vdu.CheckMaxScanlineCount();
+				_vdu->CheckMaxScanlineCount();
 			}
 		}
 

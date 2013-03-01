@@ -27,10 +27,10 @@
 // Caprice32 config manager
 //
 
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
 #include "cap32type.h"
-#include <string.h>
-#include <stdlib.h>
 #include "dsk.h"
 #include "render.h"
 #include "emulator.h"
@@ -48,9 +48,9 @@
 
 extern t_disk_format disk_format[MAX_DISK_FORMAT];
 
-t_CPC::t_CPC(Emulator* emu)
+t_CPC::t_CPC(shared_ptr<Emulator> emu) :
+    _emulator(emu)
 {
-	emulator = emu;
     model=0;
     jumpers=0;
     ram_size=0;
@@ -140,6 +140,7 @@ void t_CPC::loadConfiguration ()
 {
 	C_Inifile_error err = C_INIFILE_NO_ERROR ;
 
+    auto emulator = _emulator.lock();
 
 	char chFileName[1024];
 	emulator->getConfigPath(chFileName);
@@ -498,6 +499,7 @@ void t_CPC::saveConfiguration ()
 {
 	C_Inifile_error err = C_INIFILE_NO_ERROR ;
 
+    auto emulator = _emulator.lock();
 
 	char chFileName[1024];
 	emulator->getConfigPath(chFileName);

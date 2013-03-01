@@ -25,6 +25,7 @@
 
 #include "video.h"
 #include "WXVideo.h"
+#include "gatearray.h"
 #include "glfuncs.h"
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -177,7 +178,7 @@ void WXDoubleLinePlugin::Flip()
 void WXDoubleLinePlugin::Screenshot(string filename)
 {
 	wxBitmap* b;
-	if (Emulator::getInstance()->GetGateArray().GetMode() != 2)
+	if (Emulator::getInstance()->GetGateArray()->GetMode() != 2)
 		b = new wxBitmap(img->Scale(384,272));
 	else
 		b = new wxBitmap(*img);

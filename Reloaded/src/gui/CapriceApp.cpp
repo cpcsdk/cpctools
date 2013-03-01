@@ -18,6 +18,7 @@
  *
  */  
 
+#include <memory>
 #include <iostream>
 
 #include <wx/splash.h>
@@ -37,6 +38,8 @@
 #include "tape.h"
 #include "filetools.h"
 
+using std::shared_ptr;
+using std::make_shared;
 
 #if CLI
 extern "C" {
@@ -67,7 +70,7 @@ CapASM *capAsm ;
 #include "WXLog.h"
 
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
-#include "../core/portAudioAudioPlugin.h"
+#include "../aop/portAudioAudioPlugin.h"
 #elif SOUND_OUTPUT == SOUND_OUTPUT_Alsa
 #include "../core/alsaAudioPlugin.h"
 #endif
@@ -133,17 +136,17 @@ bool CapriceApp::OnInit()
 #endif
 
 #if SOUND_OUTPUT == SOUND_OUTPUT_PortAudio
-    audio = new PortAudioAudioPlugin();
+    auto audio = shared_ptr<AudioPlugin>(new PortAudioAudioPlugin());
 #elif SOUND_OUTPUT == SOUND_OUTPUT_Alsa
-	audio = new AlsaAudioPlugin();
+    auto audio = shared_ptr<AudioPlugin>(new AlsaAudioPlugin());
 #elif SOUND_OUTPUT == SOUND_OUTPUT_Null
-    audio = new NullAudioPlugin();
+    auto audio = shared_ptr<AudioPlugin>(new NullAudioPlugin());
 #endif
 
-	video = new WXDoubleLinePlugin();
+	auto video = make_shared<WXDoubleLinePlugin>();
 
 	//Create emulator and IHM
-	WXEmulator::createInstance(*video, *audio);
+	WXEmulator::createInstance(video, audio);
 	emulator = WXEmulator::getInstance();
 	
 	#if WITH_ASM
@@ -169,9 +172,6 @@ int CapriceApp::OnExit()
 
 	delete emulator;
 	emulator = NULL;
-
-	delete audio;
-	delete video;
 
 	// The only way to exit the emulator is to delete the window.
 	// So when we get here, the window is already gone.
@@ -209,9 +209,9 @@ int CapriceApp::OnRun()
 #endif
 
     //Set command line options
-    if (greenscreen) emulator->GetConfig().scr_tube = Renderer::GreenMode;
-    if (intensity!=-1) emulator->GetConfig().scr_intensity = intensity;
-    if (remanency) emulator->GetConfig().scr_remanency = true;
+    if (greenscreen) emulator->GetConfig()->scr_tube = Renderer::GreenMode;
+    if (intensity!=-1) emulator->GetConfig()->scr_intensity = intensity;
+    if (remanency) emulator->GetConfig()->scr_remanency = true;
 
     if(emulator->Init())
     {
@@ -220,12 +220,12 @@ int CapriceApp::OnRun()
         #endif
 
         //do the initialisations
-        if (!drivea.IsEmpty()) emulator->GetFDC().insertA( (const char *) drivea.mb_str());
-        if (!driveb.IsEmpty()) emulator->GetFDC().insertB( (const char *) driveb.mb_str());
+        if (!drivea.IsEmpty()) emulator->GetFDC()->insertA( (const char *) drivea.mb_str());
+        if (!driveb.IsEmpty()) emulator->GetFDC()->insertB( (const char *) driveb.mb_str());
 
         if (!snapshot.IsEmpty()) snapshot_load( *emulator,  (const char *)snapshot.c_str()) ;
 
-        if (!tape.IsEmpty()) emulator->GetTape().tape_insert((const char *)tape.c_str()) ; 
+        if (!tape.IsEmpty()) emulator->GetTape()->tape_insert((const char *)tape.c_str()) ; 
 
         if (fullscreen) emulator->GetRenderer().ToggleFullScreen();		
 

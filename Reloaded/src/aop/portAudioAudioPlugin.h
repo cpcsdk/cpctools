@@ -19,13 +19,13 @@
 #ifndef _PORTAUDIOAUDIOPLUGIN_H_
 #define _PORTAUDIOAUDIOPLUGIN_H_
 
-#include "audioPlugin.h"
+#include "../core/audioPlugin.h"
 
 class PortAudioAudioPlugin : public AudioPlugin
 {
     public:
         PortAudioAudioPlugin();
-        int init(t_CPC &cpc, t_PSG &psg);
+        int init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg);
         void shutdown();
         inline int update();
         void pause();

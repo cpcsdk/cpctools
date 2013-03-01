@@ -25,22 +25,16 @@
 #ifndef _EMULATOR_H_
 #define _EMULATOR_H_
 
+#include <memory>
+#include <iostream>
+
 #include "cap32type.h"
-#include "render.h"
 #include "config_manager.h"
-#include "input.h"
 #include "fdc.h"
-#include "psg.h"
-#include "ppi.h"
-#include "tape.h"
 #include "z80.h"
 
-#include "audioPlugin.h"
-
 #include "timer.h"
-#include "crtc.h"
 
-#include <iostream>
 #include <semaphore.h>
 
 #include "synchro.h"
@@ -49,11 +43,18 @@
 #include <pthread.h>
 #endif
 
-class t_z80regs;
-class t_VDU;
-class t_GateArray;
 class t_CRTC;
+class t_GateArray;
+class t_Input;
 class t_Memory;
+class t_PPI;
+class t_PSG;
+class t_Tape;
+class t_VDU;
+class t_z80regs;
+
+class AudioPlugin;
+class VideoPlugin;
 
 #ifdef WITH_ASM
 #include "../asm/CapASM.h"
@@ -65,30 +66,37 @@ extern FILE *pfoDebug;
 void InitDebug();
 #endif
 
+using std::shared_ptr;
+using std::weak_ptr;
+using std::enable_shared_from_this;
+
 /**
  * Emulator class.
  * This class is now abstract in order to be easily adaptable
  * with other GUI.
  */
-class Emulator
+class Emulator : public enable_shared_from_this<Emulator>
 {
+private:
+    shared_ptr<Emulator>    this_;
 protected:
-	t_CPC					_config;
+	shared_ptr<t_CPC>					_config;
 	Renderer				_renderer;
-	t_Input					_input;
+	shared_ptr<t_Input>					_input;
 
-	t_GateArray				_gateArray;
-	t_VDU					_vdu;
-	t_CRTC					*_crtc;
-	t_FDC					_fdc;
-	t_PPI					_ppi;
-	t_Tape					_tape;
-	t_PSG					_psg;
-	t_Memory				_cpcMemory;
-	t_z80regs				_z80;
+	shared_ptr<t_VDU>					_vdu;
+	shared_ptr<t_CRTC>		_crtc;
+	shared_ptr<t_FDC>					_fdc;
+	shared_ptr<t_PPI>					_ppi;
+	shared_ptr<t_Tape>					_tape;
+	shared_ptr<t_PSG>					_psg;
+	shared_ptr<t_Memory>				_cpcMemory;
+	shared_ptr<t_z80regs>				_z80;
+	shared_ptr<t_GateArray>				_gateArray;
 
 	unsigned int			_cycleCount;
-	AudioPlugin&			_audioPlugin;
+	shared_ptr<AudioPlugin>			_audioPlugin;
+	shared_ptr<VideoPlugin>			_videoPlugin;
 
 #ifdef USE_PTHREAD
 	pthread_t emuthread;
@@ -99,20 +107,16 @@ protected:
 	 */
 	int goToAddress ;
 
-	Emulator(VideoPlugin& video, AudioPlugin& audio);
+	Emulator(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio);
 	virtual ~Emulator();
 	static Emulator* instance;
 
 public:
 	static Emulator* getInstance();
-	void setCRTC(t_CRTC* newCRTC) {
-		this->Pause();
-		delete _crtc;
-		_crtc = newCRTC;
-		_crtc->Reset();
-		this->GetZ80().setCRTC(newCRTC);
-		this->Run();
-	}
+
+    inline weak_ptr<Emulator> get_weak_ptr() {return this_;}
+
+	void setCRTC(shared_ptr<t_CRTC> newCRTC);
 
 	bool Init();
 	void Loop();
@@ -160,7 +164,7 @@ public:
 	 */
 	virtual inline void Pause()
 	{
-		GetConfig().paused = 1;
+		GetConfig()->paused = 1;
 		timer.pause();
 	}
 
@@ -178,8 +182,8 @@ public:
 	 */
 	inline void Run()
 	{
-		GetConfig().paused = 0;
-		GetConfig().breakpoint = 0;
+		GetConfig()->paused = 0;
+		GetConfig()->breakpoint = 0;
 		timer.start();
 		sem_post(&breakpointLock);
 	}
@@ -189,8 +193,8 @@ public:
 	 */
 	inline void Step()
 	{
-		GetConfig().paused = 0 ;
-		GetConfig().breakpoint = 1 ;
+		GetConfig()->paused = 0 ;
+		GetConfig()->breakpoint = 1 ;
 		timer.start();
 		sem_post(&breakpointLock);
 	}
@@ -211,7 +215,9 @@ public:
 	 */
 	void emulator_reset(bool bolMF2Reset);
 
-	inline	t_CPC&			GetConfig()					{ return _config;		}
+	//inline	t_CPC&			GetConfig()					{ return *_config;		}
+	inline	shared_ptr<t_CPC>			GetConfig()					{ return _config;		}
+	inline void SetConfig(t_CPC& cfg) {*_config = cfg;}
 	/**
 	 * Get the renderer of the emulator
 	 */
@@ -219,29 +225,29 @@ public:
 	/**
 	 * Get the input of the emulator
 	 */
-	inline	t_Input&		GetInput()					{ return _input;		}
+	inline	shared_ptr<t_Input>		GetInput()					{ return _input;		}
 
 	void SaveScreenshot(string filename);
 
-	inline t_z80regs& GetZ80() { return _z80; }
-	inline t_GateArray&	GetGateArray() { return _gateArray;	}
-	inline t_CRTC& GetCRTC() { return *_crtc; }
-	inline t_VDU& GetVDU() { return _vdu; }
-	inline t_PSG& GetPSG() { return _psg; }
-	inline t_Memory& GetMemory() { return _cpcMemory; }
-	inline t_FDC& GetFDC() { return _fdc; }
-	inline t_PPI& GetPPI() { return _ppi; }
-	inline t_Tape& GetTape() { return _tape; }
+	inline t_z80regs& GetZ80() { return *_z80; }
+	inline shared_ptr<t_GateArray>	GetGateArray() { return _gateArray;	}
+	inline shared_ptr<t_CRTC> GetCRTC() { return _crtc; }
+	inline shared_ptr<t_VDU> GetVDU() { return _vdu; }
+	inline shared_ptr<t_PSG> GetPSG() { return _psg; }
+	inline shared_ptr<t_Memory> GetMemory() { return _cpcMemory; }
+	inline shared_ptr<t_FDC> GetFDC() { return _fdc; }
+	inline shared_ptr<t_PPI> GetPPI() { return _ppi; }
+	inline shared_ptr<t_Tape> GetTape() { return _tape; }
 	/**
 	 * Get drive a
 	 */
-	inline t_drive& GetDriveA() {return GetFDC().GetDriveA();}
+	inline t_drive& GetDriveA() {return GetFDC()->GetDriveA();}
 	/**
 	 * Get drive b
 	 */
-	inline t_drive& GetDriveB() {return GetFDC().GetDriveB();}
+	inline t_drive& GetDriveB() {return GetFDC()->GetDriveB();}
 
-    inline AudioPlugin& GetAudioPlugin() {return _audioPlugin;}
+    inline shared_ptr<AudioPlugin> GetAudioPlugin() {return _audioPlugin;}
 
 	 char _config_path[1024];
 protected:
@@ -266,8 +272,8 @@ protected:
 
 		//TODO check if in amsdos execution mode
 		//Select bank
-		GetMemory().SetROMConfig(0);
-		GetMemory().ga_memory_manager();
+		GetMemory()->SetROMConfig(0);
+		GetMemory()->ga_memory_manager();
 
 		//Jump
 		GetZ80().PC.w.l = goToAddress & 0xffff ;
@@ -298,7 +304,6 @@ public:
     SysSync emuSync; // Global sync on Emulator object
 private:
 	sem_t breakpointLock;
-	VideoPlugin& _videoPlugin;
 };
 
 #endif

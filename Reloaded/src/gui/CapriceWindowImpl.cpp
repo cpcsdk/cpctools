@@ -18,7 +18,7 @@
  *
  */  
 
-
+#include <memory>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -47,6 +47,8 @@
 #endif
 
 #include "Desass.h"
+
+using std::dynamic_pointer_cast;
 
 CapriceWindowImpl::CapriceWindowImpl(WXEmulator* emu) 
 	: EmulatorWindow(NULL)
@@ -82,7 +84,7 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 		wxMessageBox(wxT("DSK in drive A was modified ! Do you want to save before quitting ?"),
 			wxT("Save DSK?"), wxICON_QUESTION | wxYES_NO, this) == wxYES)
 	{
-		dsk_save(emulator->GetFDC().files[0].c_str(), &emulator->GetDriveA());
+		dsk_save(emulator->GetFDC()->files[0].c_str(), &emulator->GetDriveA());
 		emulator->GetDriveA().altered = false;
 	}
 
@@ -91,7 +93,7 @@ void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 			wxT("Save DSK?"), wxICON_QUESTION | wxYES_NO, this) == wxYES)
 	{
 		emulator->GetDriveB().altered = false;
-		dsk_save(emulator->GetFDC().files[1].c_str(), &emulator->GetDriveB());
+		dsk_save(emulator->GetFDC()->files[1].c_str(), &emulator->GetDriveB());
 	}
 
 	#ifdef __WXMSW__
@@ -111,7 +113,7 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
 	assert(emulator->GetRenderer().GetVideoPlugin());
 	emulator->GetRenderer().GetVideoPlugin()->LockOutput();
 	wxImage *imgPlugin;
-	imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+	imgPlugin = dynamic_pointer_cast<WXDoubleLinePlugin>(emulator->GetRenderer().GetVideoPlugin())->img;
 	if (imgPlugin != NULL) {
 		wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
 		//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
@@ -122,7 +124,7 @@ void CapriceWindowImpl::drawPanel( wxPaintEvent& event ) {
 
 	// In pause mode, we display a crosshair showing where the electron
 	// beam is.
-	if (emulator->GetConfig().paused || emulator->GetConfig().breakpoint) {
+	if (emulator->GetConfig()->paused || emulator->GetConfig()->breakpoint) {
 		wxClientDC dc(getPanel());
 		int scrpos = emulator->GetRenderer().GetScreenPosition();
 		const int width = 640;
@@ -168,13 +170,13 @@ void CapriceWindowImpl::OnIdle( wxIdleEvent& event )
 
 	//    event.Skip();
 #else
-	if (!emulator->GetConfig().paused)
+	if (!emulator->GetConfig()->paused)
 	{
 		emulator->Emulate();
 		//Ask to continue idle things
 		event.RequestMore(true);
 	}
-	else if (emulator->GetConfig().breakpoint)
+	else if (emulator->GetConfig()->breakpoint)
 	{
 		//TODO: use listeners to do that only when emulator is paused 
 		//(due to pause not controlled by ihm)
@@ -202,7 +204,7 @@ void CapriceWindowImpl::Pause() {
 	// is drawn (this also erases the crosshair from the previous step)
 	emulator->GetRenderer().GetVideoPlugin()->LockOutput();
 	wxImage *imgPlugin;
-	imgPlugin = ((WXDoubleLinePlugin*)emulator->GetRenderer().GetVideoPlugin())->img;
+	imgPlugin = dynamic_pointer_cast<WXDoubleLinePlugin>(emulator->GetRenderer().GetVideoPlugin())->img;
 	wxBitmap bmpPlugin = wxBitmap(*imgPlugin);
 	//wxBitmap bmp = bmpPlugin.GetSubBitmap(wxRect(0, 0, bmpPlugin.GetWidth(), bmpPlugin.GetHeight()));
 	wxClientDC dc(getPanel());
@@ -245,7 +247,7 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 	{
 			wxString CurrentDocPath = OpenDialog->GetPath();
 
-			int error = emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+			int error = emulator->GetFDC()->insertA(std::string(CurrentDocPath.mb_str()));
 			switch(error) {
 				case 0:
 					SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
@@ -289,7 +291,7 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
     {
         wxString CurrentDocPath = OpenDialog->GetPath();
 
-        int error = emulator->GetFDC().insertB(std::string(CurrentDocPath.mb_str()));
+        int error = emulator->GetFDC()->insertB(std::string(CurrentDocPath.mb_str()));
 		switch(error) {
 			case 0:
         		SetTitle(wxString( wxT("Reloaded - ")) << OpenDialog->GetFilename()); // Set the Title to reflect the file open
@@ -521,13 +523,13 @@ void CapriceWindowImpl::insertTape( wxCommandEvent& event ) {
         SetTitle(wxString( wxT("Caprice - ")) << 
             OpenDialog->GetFilename()); // Set the Title to reflect the file open
 
-		emulator->GetTape().tape_insert(CurrentDocPath.mb_str());
+		emulator->GetTape()->tape_insert(CurrentDocPath.mb_str());
     }
 }
 
 
 void CapriceWindowImpl::pressPlayOnTape( wxCommandEvent& event ) {
-	emulator->GetConfig().tape_play_button = 1;
+	emulator->GetConfig()->tape_play_button = 1;
 }
 
 // ============================= Various functions
@@ -590,7 +592,7 @@ bool CapriceDNDHandler::OnDropFiles(wxCoord x, wxCoord y , const wxArrayString& 
         if(FileName.GetExt().CmpNoCase(wxT("dsk")) == 0)
         {
             std::cout << "Loading Disk file" << endl;
-            emulator->GetFDC().insertA(std::string(CurrentDocPath.mb_str()));
+            emulator->GetFDC()->insertA(std::string(CurrentDocPath.mb_str()));
         }
         else if(FileName.GetExt().CmpNoCase(wxT("sna")) == 0)
         {

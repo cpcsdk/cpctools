@@ -95,7 +95,7 @@ void caprice_cli_show_breakpoints()
 
 void caprice_cli_continue()
 {
-  if (Emulator::getInstance()->GetConfig().breakpoint)
+  if (Emulator::getInstance()->GetConfig()->breakpoint)
   {
     std::cout << "# Continue execution flow" << std::endl ;
     Emulator::getInstance()->Run();
@@ -108,7 +108,7 @@ void caprice_cli_continue()
 
 void caprice_cli_step()
 {
-  if (Emulator::getInstance()->GetConfig().breakpoint)
+  if (Emulator::getInstance()->GetConfig()->breakpoint)
   {
     std::cout << "# Continue execution flow step by step" << std::endl ;
     Emulator::getInstance()->Step();

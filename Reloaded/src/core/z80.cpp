@@ -346,7 +346,7 @@ static const byte cc_xycb[256] = {
 };
 
 static const byte cc_ex[256] = {
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+		0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 		4,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
 		4,  0,  0,  0,  0,  0,  0,  0,  4,  0,  0,  0,  0,  0,  0,  0,
@@ -364,23 +364,13 @@ static const byte cc_ex[256] = {
 		8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0,  8,  0,  0,  0
 };
 
-t_z80regs::t_z80regs(Emulator &emulator) :
+t_z80regs::t_z80regs(shared_ptr<Emulator> emulator) :
+emulator(emulator),
 _ioPort(emulator),
-CRTC(&(emulator.GetCRTC())),
-GateArray(emulator.GetGateArray()),
-VDU(emulator.GetVDU()),
-Memory(emulator.GetMemory()),
-CPC(emulator.GetConfig()),
-FDC(emulator.GetFDC()),
-PSG(emulator.GetPSG()),
-Tape(emulator.GetTape())
+VDU(emulator->GetVDU()),
+Memory(emulator->GetMemory()),
+CPC(emulator->GetConfig())
 {
-	_ioPort.SetZ80(this);
-}
-
-void t_z80regs::setCRTC(t_CRTC* newCRTC) {
-	CRTC = newCRTC;
-	_ioPort.SetCRTC(newCRTC);
 }
 
 void t_z80regs::reset()
@@ -414,7 +404,7 @@ void t_z80regs::reset()
 	int_pending = 0x00;
 
 	break_points.clear();
-  adressAlreadyBlocked = false ;
+	adressAlreadyBlocked = false;
 
 	trace = 0x00000000;
 }
@@ -423,20 +413,25 @@ void t_z80regs::reset()
 {																			\
 	if (iCycleCount)														\
 	{																		\
-		CRTC->Emulate(iCycleCount >> 2);										\
-		if (CPC.snd_enabled)												\
+		auto emu = emulator.lock();											\
+		auto CRTC = emu->GetCRTC();											\
+		auto FDC = emu->GetFDC();											\
+		CRTC->Emulate(iCycleCount >> 2);									\
+		if (CPC->snd_enabled)												\
 		{																	\
-			PSG.Emulate(iCycleCount);										\
+			auto PSG = emu->GetPSG();										\
+			PSG->Emulate(iCycleCount);										\
 		}																	\
 																			\
-		FDC.Emulate(iCycleCount);											\
+		FDC->Emulate(iCycleCount);											\
 																			\
-		if ((CPC.tape_motor) && (CPC.tape_play_button))						\
+		if ((CPC->tape_motor) && (CPC->tape_play_button))					\
 		{																	\
-			Tape.Emulate(iCycleCount);										\
+			auto Tape = emu->GetTape();										\
+			Tape->Emulate(iCycleCount);										\
 		}																	\
 																			\
-		CPC.cycle_count -= iCycleCount;										\
+		CPC->cycle_count -= iCycleCount;									\
 	}																		\
 }
 
@@ -913,7 +908,7 @@ _rF = (_rF & Cflag) | Hflag | (SZ_BIT[reg & (1 << bit)] & ~Xflags) | (WZ.b.h & X
 	_rR++; \
 	_rIFF1 = _rIFF2 = 0; /* clear interrupt flip-flops */ \
 	int_pending = 0; \
-	GateArray.SetSLCount(GateArray.GetSLCount() & 0x1f); /* clear bit 5 of GA scanline counter */ \
+	emulator.lock()->GetGateArray()->SetSLCount(emulator.lock()->GetGateArray()->GetSLCount() & 0x1f); /* clear bit 5 of GA scanline counter */ \
 	if (_rHALT) { /* HALT instruction active? */ \
 	_rHALT = 0; /* exit HALT 'loop' */ \
 	_rPC++; /* correct PC */ \
@@ -1309,17 +1304,17 @@ int t_z80regs::z80_execute(void)
 			  trace = 0; // reset trace condition
 			  return EC_TRACE; // exit emulation loop
 		  }
-		  else if (VDU.IsFrameFinished()) { // video emulation finished building frame?
+		  else if (VDU->IsFrameFinished()) { // video emulation finished building frame?
 			  return EC_FRAME_COMPLETE; // exit emulation loop
 		  }
 		  /*
-		  else if (PSG.GetBufferFull()) { // sound emulation finished filling a buffer?
-			  PSG.SetBufferFull(0);
+		  else if (PSG->GetBufferFull()) { // sound emulation finished filling a buffer?
+			  PSG->SetBufferFull(0);
 			  return EC_SOUND_BUFFER; // exit emulation loop
 		  }
 		  */
-		  else if (CPC.cycle_count <= 0) { // emulation loop ran for one frame?
-			  CPC.cycle_count += CYCLE_COUNT_INIT;
+		  else if (CPC->cycle_count <= 0) { // emulation loop ran for one frame?
+			  CPC->cycle_count += CYCLE_COUNT_INIT;
 			  return EC_CYCLE_COUNT; // exit emulation loop
 		  }
    }

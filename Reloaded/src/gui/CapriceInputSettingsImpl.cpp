@@ -1,3 +1,4 @@
+#include <memory>
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -15,6 +16,8 @@
 #include <wx/filename.h>
 #include <wx/dir.h>
 
+using std::make_shared;
+
 /******************************************************************************
 * COMMON BASE 
 ******************************************************************************/
@@ -23,7 +26,7 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	Settings(WinID),
 	emulator(*(static_cast<CapriceWindowImpl*>(WinID)->GetEmulator())),
 	lastClickedButton(NULL),
-	old_cfg(emulator.GetConfig())
+	old_cfg(*emulator.GetConfig())
 {
 	// input
 	std::ifstream file;
@@ -49,10 +52,10 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	}
 
 	// video
-	choice_colorPalette->SetSelection((int)(emulator.GetConfig().scr_tube));
+	choice_colorPalette->SetSelection((int)(emulator.GetConfig()->scr_tube));
 
 	// roms
-	t_CPC _config = emulator.GetConfig();
+	t_CPC _config = *emulator.GetConfig();
 
 	// TODO - the code bellow takes a lot of time to browse the disk. Can we improve it ?
 	wxArrayString sysromlist;
@@ -99,22 +102,22 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 	ROM6file->Append(realromlist);
 	ROM7file->Append(realromlist);
 
-	ROM0file->SetStringSelection(wxString(emulator.GetConfig().rom_file[0],wxConvUTF8));
-	ROM1file->SetStringSelection(wxString(emulator.GetConfig().rom_file[1],wxConvUTF8));
-	ROM2file->SetStringSelection(wxString(emulator.GetConfig().rom_file[2],wxConvUTF8));
-	ROM3file->SetStringSelection(wxString(emulator.GetConfig().rom_file[3],wxConvUTF8));
-	ROM4file->SetStringSelection(wxString(emulator.GetConfig().rom_file[4],wxConvUTF8));
-	ROM5file->SetStringSelection(wxString(emulator.GetConfig().rom_file[5],wxConvUTF8));
-	ROM6file->SetStringSelection(wxString(emulator.GetConfig().rom_file[6],wxConvUTF8));
-	ROM7file->SetStringSelection(wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
+	ROM0file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[0],wxConvUTF8));
+	ROM1file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[1],wxConvUTF8));
+	ROM2file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[2],wxConvUTF8));
+	ROM3file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[3],wxConvUTF8));
+	ROM4file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[4],wxConvUTF8));
+	ROM5file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[5],wxConvUTF8));
+	ROM6file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[6],wxConvUTF8));
+	ROM7file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[7],wxConvUTF8));
 
-	manufacturerName->SetSelection((~emulator.GetConfig().jumpers>>1) & 7);
-	if (emulator.GetConfig().jumpers & 0x10)
+	manufacturerName->SetSelection((~emulator.GetConfig()->jumpers>>1) & 7);
+	if (emulator.GetConfig()->jumpers & 0x10)
 		radio50->SetValue(true);
 	else
 		radio60->SetValue(true);
 
-	switch (emulator.GetConfig().ram_size) {
+	switch (emulator.GetConfig()->ram_size) {
 		case 576:
 			RAMSize576->SetValue(true);
 			break;
@@ -127,8 +130,8 @@ CapriceInputSettingsImpl::CapriceInputSettingsImpl(wxWindow* WinID):
 			break;
 	}
 
-	choice_colorPalette->SetSelection(emulator.GetConfig().scr_tube);
-	spin_CRTC->SetValue(emulator.GetConfig().crtc);
+	choice_colorPalette->SetSelection(emulator.GetConfig()->scr_tube);
+	spin_CRTC->SetValue(emulator.GetConfig()->crtc);
 }
 
 CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
@@ -138,13 +141,13 @@ CapriceInputSettingsImpl::~CapriceInputSettingsImpl()
 void CapriceInputSettingsImpl::onSave(wxCommandEvent& event)
 {
 	saveKeymap();
-	emulator.GetConfig().saveConfiguration();
+	emulator.GetConfig()->saveConfiguration();
 }
 
 
 void CapriceInputSettingsImpl::restoreSettings(wxCommandEvent& event)
 {
-	emulator.GetConfig() = old_cfg;
+    emulator.SetConfig(old_cfg);
 }
 
 
@@ -152,7 +155,7 @@ void CapriceInputSettingsImpl::applySettings()
 {
 	for (CPC_Keymap::iterator iter = keymap.begin();iter!=keymap.end();iter++)
 	{
-		emulator.GetInput().setupKey(iter->first, iter->second.stdKeyCode,
+		emulator.GetInput()->setupKey(iter->first, iter->second.stdKeyCode,
 			iter->second.shiftKeyCode, iter->second.ctrlKeyCode);
 	}
 }
@@ -313,15 +316,15 @@ wxString CapriceInputSettingsImpl::keyCodeToName(int keycode)
 
 void CapriceInputSettingsImpl::changeCRTCType( wxSpinEvent& event )
 {
-	t_CRTC* newCRTC;
+	shared_ptr<t_CRTC> newCRTC;
 
 	switch(event.GetPosition()) {
 		case 0:
 		default:
-			newCRTC = new t_CRTC(emulator.GetGateArray(), emulator.GetVDU());
+			newCRTC = make_shared<t_CRTC>(emulator.GetGateArray(), emulator.GetVDU());
 			break;
 		case 1:
-			newCRTC = new t_CRTC1(emulator.GetGateArray(), emulator.GetVDU());
+			newCRTC = make_shared<t_CRTC1>(emulator.GetGateArray(), emulator.GetVDU());
 			break;
 	}
 	emulator.setCRTC(newCRTC);
@@ -329,11 +332,10 @@ void CapriceInputSettingsImpl::changeCRTCType( wxSpinEvent& event )
 
 void CapriceInputSettingsImpl::changeColorPalette( wxCommandEvent& event )
 {
-#define _config emulator.GetConfig()
-	emulator.GetConfig().scr_tube = (Renderer::MonitorMode)(event.GetInt());
-	emulator.GetRenderer().SetMonitor(_config.scr_tube, _config.scr_intensity, _config.scr_remanency);
+    auto _config = emulator.GetConfig();
+	_config->scr_tube = (Renderer::MonitorMode)(event.GetInt());
+	emulator.GetRenderer().SetMonitor(_config->scr_tube, _config->scr_intensity, _config->scr_remanency);
 	emulator.GetRenderer().InitPalette();
-#undef _config
 }
 
 /***************
@@ -343,83 +345,83 @@ void CapriceInputSettingsImpl::RomChanged( wxCommandEvent& event )
 {
 	wxString fn;
 	fn = ROM0file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[0],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[0],fn.mb_str());
 	fn = ROM1file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[1],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[1],fn.mb_str());
 	fn = ROM2file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[2],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[2],fn.mb_str());
 	fn = ROM3file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[3],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[3],fn.mb_str());
 	fn = ROM4file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[4],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[4],fn.mb_str());
 	fn = ROM5file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[5],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[5],fn.mb_str());
 	fn = ROM6file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[6],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[6],fn.mb_str());
 	fn = ROM7file->GetStringSelection();
-	strcpy(emulator.GetConfig().rom_file[7],fn.mb_str());
+	strcpy(emulator.GetConfig()->rom_file[7],fn.mb_str());
 }
 
 
 void CapriceInputSettingsImpl::SelectManufacturer(wxCommandEvent& event)
 {
-	emulator.GetConfig().jumpers = (emulator.GetConfig().jumpers & 0xF1) 
+	emulator.GetConfig()->jumpers = (emulator.GetConfig()->jumpers & 0xF1) 
 		| (~event.GetSelection() <<1);
 }
 
 
 void CapriceInputSettingsImpl::Select50HZ(wxCommandEvent& event)
 {
-	emulator.GetConfig().jumpers |= 0x10;
+	emulator.GetConfig()->jumpers |= 0x10;
 }
 
 
 void CapriceInputSettingsImpl::Select60HZ(wxCommandEvent& event)
 {
-	emulator.GetConfig().jumpers &= 0xEF;
+	emulator.GetConfig()->jumpers &= 0xEF;
 }
 
 
 void CapriceInputSettingsImpl::LoadPreset( wxCommandEvent& event ) {
 	switch(event.GetSelection()) {
 		case 0: // 464
-			emulator.GetConfig().ram_size = 64; 
-			emulator.GetConfig().rom_file[7][0] = '\0';
+			emulator.GetConfig()->ram_size = 64; 
+			emulator.GetConfig()->rom_file[7][0] = '\0';
 			RAMSize64->SetValue(true);
 			break;
 
 		case 1: // 664
-			emulator.GetConfig().ram_size = 64; 
-			strcpy(emulator.GetConfig().rom_file[7],"amsdos.rom");
+			emulator.GetConfig()->ram_size = 64; 
+			strcpy(emulator.GetConfig()->rom_file[7],"amsdos.rom");
 			RAMSize64->SetValue(true);
 			break;
 
 		case 2: // 6128
 		default:
-			emulator.GetConfig().ram_size = 128; 
-			strcpy(emulator.GetConfig().rom_file[7],"amsdos.rom");
+			emulator.GetConfig()->ram_size = 128; 
+			strcpy(emulator.GetConfig()->rom_file[7],"amsdos.rom");
 			RAMSize128->SetValue(true);
 			break;
 	}
 
-	emulator.GetConfig().model = event.GetSelection();
+	emulator.GetConfig()->model = event.GetSelection();
 
-	ROM7file->SetStringSelection(wxString(emulator.GetConfig().rom_file[7],wxConvUTF8));
+	ROM7file->SetStringSelection(wxString(emulator.GetConfig()->rom_file[7],wxConvUTF8));
 }
 
 
 void CapriceInputSettingsImpl::Select64K( wxCommandEvent& event ) {
-	emulator.GetConfig().ram_size = 64; 
+	emulator.GetConfig()->ram_size = 64; 
 }
 
 
 void CapriceInputSettingsImpl::Select128K( wxCommandEvent& event ) {
-	emulator.GetConfig().ram_size = 128; 
+	emulator.GetConfig()->ram_size = 128; 
 }
 
 
 void CapriceInputSettingsImpl::Select576K( wxCommandEvent& event ) {
-	emulator.GetConfig().ram_size = 576; 
+	emulator.GetConfig()->ram_size = 576; 
 }
 
 

@@ -5,16 +5,16 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-class Emulator;
-
+#include <memory>
 
 #include "cap32.h"
 #include "cap32type.h"
-#include "video.h"
-
-class t_CPC;
-
 #include "render.h"
+
+using std::shared_ptr;
+using std::weak_ptr;
+
+class Emulator;
 
 class t_CPC
 {
@@ -87,11 +87,11 @@ public:
 public:
    void loadConfiguration ();
    void saveConfiguration();
-    t_CPC(Emulator* emu);
+    t_CPC(shared_ptr<Emulator> emu);
 	~t_CPC();
 
 private:
-	Emulator* emulator;
+	weak_ptr<Emulator> _emulator;
 };
 
 #endif

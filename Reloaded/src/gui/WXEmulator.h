@@ -21,6 +21,7 @@
 #ifndef __EMULATOR_WX__
 #define __EMULATOR_WX__
 
+#include <memory>
 #include <queue>
 
 #include <wx/stdpaths.h>
@@ -33,6 +34,9 @@
 #include "synchro.h"
 
 #include "log.h"
+
+using std::shared_ptr;
+
 class CapriceWindowImpl;
 
 /**
@@ -49,15 +53,15 @@ class WXEmulator : public Emulator {
 
 
   protected:
-	WXEmulator(VideoPlugin& video, AudioPlugin& audio);
+	WXEmulator(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio);
 
   public:
 	// TODO : accessors for this instead
 	struct fdcLog {int s; int t; t_sector* val;};
 	std::queue<fdcLog> fdcAccess;
 
-	static inline WXEmulator* createInstance(VideoPlugin& video,
-		AudioPlugin& audio)
+	static inline WXEmulator* createInstance(shared_ptr<VideoPlugin> video,
+		shared_ptr<AudioPlugin> audio)
 	{
 		instance = new WXEmulator(video, audio);
 		return static_cast<WXEmulator*>(instance);

@@ -53,7 +53,7 @@ void ReloadedApp::RefsReceived(BMessage* message)
 	
 	InfoLogMessage("[BeReloaded inserting disk in drive A: %s", path.Path());
 	
-	mEmu->GetFDC().insertA(path.Path());
+	mEmu->GetFDC()->insertA(path.Path());
 }
 
 
@@ -66,10 +66,10 @@ void ReloadedApp::ArgvReceived(int32 argc, char** argv)
 			switch(argv[i][1])
 			{
 				case 'a':
-					mEmu->GetFDC().insertA(argv[++i]);
+					mEmu->GetFDC()->insertA(argv[++i]);
 					break;
 				case 'b':
-					mEmu->GetFDC().insertB(argv[++i]);
+					mEmu->GetFDC()->insertB(argv[++i]);
 					break;
 				case 's':
 					snapshot_load(*mEmu, argv[++i]);

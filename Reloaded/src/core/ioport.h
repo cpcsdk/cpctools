@@ -7,38 +7,19 @@
 
 #include "cap32type.h"
 
-#include "crtc.h"
+#include <memory>
 
-class t_z80regs;
-class t_CRTC;
-class t_GateArray;
-class t_Memory;
-class t_FDC;
-class t_PSG;
-class t_PPI;
-class t_CPC;
-class t_Tape;
-class t_Input;
+using std::shared_ptr;
+using std::weak_ptr;
+
 class Emulator;
 
 class IOPort
 {
 private:
-	t_z80regs		*_z80;
-	t_CRTC			*CRTC;
-	t_GateArray		&GateArray;
-	t_Memory		&Memory;
-	t_FDC			&FDC;
-	t_PSG			&PSG;
-	t_PPI			&PPI;
-	t_CPC			&CPC;
-	t_Tape			&Tape;
-	t_Input			&Input;
+	weak_ptr<Emulator>		emulator;
 public:
-	IOPort(Emulator &emulator);
-
-	inline void SetZ80(t_z80regs *z80)					{ _z80 = z80;		}
-	inline void SetCRTC(t_CRTC *crtc)					{ CRTC = crtc;		}
+	IOPort(shared_ptr<Emulator> emulator);
 
 	byte z80_IN_handler(reg_pair port);
 	void z80_OUT_handler(reg_pair port, byte val);

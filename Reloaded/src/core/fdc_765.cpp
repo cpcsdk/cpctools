@@ -51,7 +51,7 @@ error_function(int debuglevel, char *fmt, va_list ap)
 }
 
 
-t_FDC::t_FDC(t_CPC &cpc) :
+t_FDC::t_FDC(shared_ptr<t_CPC> cpc) :
 CPC(cpc)
 {
 	lib765_register_error_function(error_function);

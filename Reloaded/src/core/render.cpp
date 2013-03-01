@@ -164,7 +164,7 @@ bool Renderer::ToggleFullScreen()
 	Shutdown();
 	_scrFullScreen = !_scrFullScreen;
 	
-	return Init(*_videoPlugin);
+	return Init(_videoPlugin);
 }
 
 
@@ -368,14 +368,12 @@ void Renderer::SetMonitor(MonitorMode mode, unsigned int intensity, bool remanen
 }
 
 
-int Renderer::Init(VideoPlugin& plugin)
+int Renderer::Init(shared_ptr<VideoPlugin> plugin)
 {
 	delete _renderFunc;
 	_renderFunc = NULL;
-	delete _videoPlugin;
-	_videoPlugin = NULL;
 
-	_videoPlugin = &plugin;
+	_videoPlugin = plugin;
 	_videoPlugin->SetOption("OpenGLFilter", _videoPluginOpenGLFilter);
 	_videoPlugin->SetOption("Remanency", _monitorRemanency);
 	

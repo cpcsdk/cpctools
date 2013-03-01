@@ -21,6 +21,7 @@
 
 
 #include <set>
+#include <memory>
 
 #include "cap32type.h"
 #include "ioport.h"
@@ -78,13 +79,11 @@
 #define EC_CYCLE_COUNT     40
 #define EC_SOUND_BUFFER    50
 
-class t_CRTC;
+using std::weak_ptr;
+
 class t_GateArray;
 class t_VDU;
 class t_CPC;
-class t_FDC;
-class t_PSG;
-class t_Tape;
 class Emulator;
 
 class t_z80regs
@@ -99,15 +98,11 @@ private:
 private:
 	int iCycleCount, iWSAdjust;
 
+	weak_ptr<Emulator> emulator;
 	IOPort			_ioPort;
-	t_CRTC			*CRTC;
-	t_GateArray		&GateArray;
-	t_VDU			&VDU;
-	t_Memory		&Memory;
-	t_CPC			&CPC;
-	t_FDC			&FDC;
-	t_PSG			&PSG;
-  t_Tape			&Tape;
+	shared_ptr<t_VDU>			VDU;
+	shared_ptr<t_Memory>		Memory;
+	shared_ptr<t_CPC>			CPC;
 
   /**
    * List of adresses where to break
@@ -119,7 +114,6 @@ private:
   bool adressAlreadyBlocked;
 
 public:
-	void setCRTC(t_CRTC* newCRTC);
 	reg_pair AF;
 	reg_pair BC;
 	reg_pair DE;
@@ -146,18 +140,18 @@ public:
 	dword trace;
 
 public:
-	t_z80regs(Emulator &emulator);
+	t_z80regs(shared_ptr<Emulator> emulator);
 
 	void reset();
 
 	inline byte read_mem(word addr) 
 	{
-		return Memory.Read(addr);
+		return Memory->Read(addr);
 	}
 
 	inline void write_mem(word addr, byte val) 
 	{
-		Memory.Write(addr, val);
+		Memory->Write(addr, val);
 	}
 
 	inline byte z80_IN_handler(reg_pair port)

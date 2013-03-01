@@ -23,6 +23,9 @@
 // Caprice32 GateArray memory emulator
 //
 
+#include <string>
+#include <vector>
+
 #include "emulator.h"
 #include "memory.h"
 #include "cap32.h"
@@ -30,17 +33,20 @@
 
 #include "error.h"
 
+using std::string;
+using std::vector;
+
 extern dword dwMF2Flags;
 extern byte *pbMF2ROM;
 
-char chROMFile[3][14] =
+vector<string> ROMFiles =
 {
 	"cpc464.rom",
 	"cpc664.rom",
 	"cpc6128.rom"
 };
 
-t_Memory::t_Memory(t_CPC &cpc) :
+t_Memory::t_Memory(shared_ptr<t_CPC> cpc) :
 CPC(cpc),
 ROM_config(0),
 RAM_bank(0),
@@ -143,7 +149,7 @@ void t_Memory::Reset(bool MF2Reset)
 	else
 	{
 		// clear all memory used for CPC RAM
-		memset(pbRAM, 0, CPC.ram_size*1024);
+		memset(pbRAM, 0, CPC->ram_size*1024);
 		if (pbMF2ROM)
 		{
 			// clear the MF2's RAM area
@@ -163,9 +169,9 @@ bool t_Memory::UpdateRAMSize(unsigned int size)
 	return true;
 }
 
-char* t_Memory::GetROMFile(unsigned int idx) const
+const char* t_Memory::GetROMFile(unsigned int idx) const
 {
-	return (chROMFile[idx]);
+	return ROMFiles[idx].c_str();
 }
 
 void t_Memory::SetUpperROM(unsigned char val)
@@ -250,7 +256,7 @@ void t_Memory::ga_memory_manager (void)
 {
 	dword mem_bank;
 	// 64KB of RAM?
-	if (CPC.ram_size == 64)
+	if (CPC->ram_size == 64)
 	{
 		// no expansion memory
 		mem_bank = 0;
@@ -267,7 +273,7 @@ void t_Memory::ga_memory_manager (void)
 			mem_bank = (RAM_config >> 3) & k;
 			k >>= 1;
 		}
-		while (((mem_bank+2)*64) > CPC.ram_size);
+		while (((mem_bank+2)*64) > CPC->ram_size);
 	}
 
 	// requested bank is different from the active one?
@@ -312,7 +318,7 @@ void t_Memory::ga_memory_manager (void)
 int t_Memory::RAMInit()
 {
 	// allocate memory for desired amount of RAM
-	pbRAM = new byte [CPC.ram_size*1024];
+	pbRAM = new byte [CPC->ram_size*1024];
 	// allocate memory for 32K of ROM
 	pbROMlo = new byte [32*1024];
 
@@ -392,28 +398,28 @@ int t_Memory::ROMInit()
 	for (iRomNum = 0; iRomNum < 16; iRomNum++)
 	{
 		// is a ROM image specified for this slot?
-		if (CPC.rom_file[iRomNum][0])
+		if (CPC->rom_file[iRomNum][0])
 		{
 			// allocate 16K
 			pchRomData = new char [16384];
 			// clear memory
 			memset(pchRomData, 0, 16384);
-			strncpy(chPath, CPC.rom_path, sizeof(chPath)-2);
+			strncpy(chPath, CPC->rom_path, sizeof(chPath)-2);
 			strcat(chPath, "/");
-			strncat(chPath, CPC.rom_file[iRomNum], sizeof(chPath)-1 - strlen(chPath));
+			strncat(chPath, CPC->rom_file[iRomNum], sizeof(chPath)-1 - strlen(chPath));
 
 			// attempt to open the ROM image
 			if(LoadOneRom(chPath, pchRomData) != 0) {
 				// Try another path - The user's settings
 				Emulator::getInstance()->getConfigPath(chPath);
 				strcat(chPath, "/roms/");
-				strncat(chPath, CPC.rom_file[iRomNum], sizeof(chPath)-1 - strlen(chPath));
+				strncat(chPath, CPC->rom_file[iRomNum], sizeof(chPath)-1 - strlen(chPath));
 				if(LoadOneRom(chPath, pchRomData) != 0) {
 					fprintf(stderr, "ERROR: The %s file is missing - clearing ROM slot %d.\n",
-						CPC.rom_file[iRomNum], iRomNum);
+						CPC->rom_file[iRomNum], iRomNum);
 					// free memory on error
 					delete [] pchRomData;
-					CPC.rom_file[iRomNum][0] = 0;
+					CPC->rom_file[iRomNum][0] = 0;
 				} else
 				memmap_ROM[iRomNum] = (byte *)pchRomData;
 			} else
@@ -431,11 +437,11 @@ int t_Memory::emulator_patch_ROM (void)
 
 	char chPath[_MAX_PATH + 1];
 
-	strncpy(chPath, CPC.rom_path, sizeof(chPath)-2);
+	strncpy(chPath, CPC->rom_path, sizeof(chPath)-2);
 	strcat(chPath, "/");
 
 	// determine the ROM image name for the selected model
-	strncat(chPath, chROMFile[CPC.model], sizeof(chPath)-1 - strlen(chPath));
+	strncat(chPath, ROMFiles[CPC->model].c_str(), sizeof(chPath)-1 - strlen(chPath));
 
 	// load CPC OS + Basic
 	if ((pfileObject = fopen(chPath, "rb")) != NULL)
@@ -449,7 +455,7 @@ int t_Memory::emulator_patch_ROM (void)
 		strcat(chPath, "/roms/");
 
 		// determine the ROM image name for the selected model
-		strncat(chPath, chROMFile[CPC.model], sizeof(chPath)-1 - strlen(chPath));
+		strncat(chPath, ROMFiles[CPC->model].c_str(), sizeof(chPath)-1 - strlen(chPath));
 
 		// load CPC OS + Basic
 		if ((pfileObject = fopen(chPath, "rb")) != NULL)

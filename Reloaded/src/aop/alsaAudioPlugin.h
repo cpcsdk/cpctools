@@ -35,7 +35,7 @@ class AlsaAudioPlugin : public AudioPlugin
 {
     public:
         AlsaAudioPlugin();
-        int init(t_CPC &cpc, t_PSG &psg);
+        int init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg);
         void shutdown() {}
         int update();
         void pause() {}

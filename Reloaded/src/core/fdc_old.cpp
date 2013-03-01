@@ -91,7 +91,7 @@ command code, number of bytes for command, number of bytes for result, direction
 	{0x5d, 9, 7, CPU_TO_FDC, &t_FDC::fdc_scan},    // scan high or equal
 };
 
-t_FDC::t_FDC(t_CPC &cpc) :
+t_FDC::t_FDC(shared_ptr<t_CPC> cpc) :
 CPC(cpc),
 active_drive(&driveA),
 active_track(&active_drive->track[0][0])
@@ -570,7 +570,7 @@ void t_FDC::fdc_write_data(byte val)
 						free(active_track->data); // dealloc memory for old track data
 					}
 					sector_size = 128 << command[CMD_C]; // determine number of bytes from N value
-					if (((sector_size + 62 + command[CMD_R]) * command[CMD_H]) > CPC.max_tracksize) { // track size exceeds maximum?
+					if (((sector_size + 62 + command[CMD_R]) * command[CMD_H]) > CPC->max_tracksize) { // track size exceeds maximum?
 						active_track->sectors = 0; // 'unformat' track
 					}
 					else {

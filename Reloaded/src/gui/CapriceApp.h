@@ -35,7 +35,6 @@
 #include "CapriceWindowImpl.h"
 #include "CapriceRegistersDialogImpl.h"
 #include "WXEmulator.h"
-#include "WXVideo.h"
 #include "snapshot.h"
 
 #if defined(IPC)
@@ -54,9 +53,9 @@ class ipcCnx: public wxConnection
 					wxString s(wxT("Insert "));
 				   	s << data << wxT(" into drive ") << item;
 					Emulator::getInstance()->logMessage(s.mb_str());
-					Emulator::getInstance()->GetFDC().insertA( (const char *) data); break;
+					Emulator::getInstance()->GetFDC()->insertA( (const char *) data); break;
 				}
-				case 'B': Emulator::getInstance()->GetFDC().insertB( (const char *) data); break;
+				case 'B': Emulator::getInstance()->GetFDC()->insertB( (const char *) data); break;
 
 				case 'S': snapshot_load(*(Emulator::getInstance()), (const char *)data) ; break;
 			}
@@ -89,8 +88,6 @@ public:
 
 private:
     WXEmulator          *emulator ;
-	WXDoubleLinePlugin* video;
-	AudioPlugin* audio;
 
     //params
     bool        fullscreen ;

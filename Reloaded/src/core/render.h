@@ -5,14 +5,20 @@
 #ifndef _RENDER_H_
 #define _RENDER_H_
 #include "cap32type.h"
-#include "video.h"
 
 #include <cstring>
 #include <string>
 #include <vector>
 #include <exception>
+#include <memory>
+
+using std::exception;
+using std::string;
+using std::vector;
+using std::shared_ptr;
 
 class Emulator;
+class VideoPlugin;
 
 class RendererException: public exception
 {
@@ -270,7 +276,7 @@ class Renderer
 	ColorARGB8888		_colours[32];
 
 	//! Video plugin used for rendering
-	VideoPlugin			*_videoPlugin;
+	shared_ptr<VideoPlugin>			_videoPlugin;
 
 	//! Current screen line offset (in DWord)
 	unsigned int		_scrLineOffset;
@@ -311,7 +317,7 @@ class Renderer
 	~Renderer();
 
 	void * GetBackSurface();
-	inline VideoPlugin* GetVideoPlugin() const { return _videoPlugin; }
+	inline shared_ptr<VideoPlugin> GetVideoPlugin() const { return _videoPlugin; }
 
 	void SetMemory(byte *memory);
 	void SetOpenGLFilter(bool val);
@@ -338,7 +344,7 @@ class Renderer
 	bool SetFullScreen(bool fs);
 	bool ToggleFullScreen();
 
-	int Init(VideoPlugin&);
+	int Init(shared_ptr<VideoPlugin>);
 
 	bool BeginDisplay(int screenLine);
 	void EndDisplay(bool frameCompleted);

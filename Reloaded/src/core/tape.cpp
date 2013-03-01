@@ -55,7 +55,9 @@ extern FILE *pfoDebug;
 extern dword dwDebugFlag;
 #endif
 
-t_Tape::t_Tape(t_CPC &cpc) :
+using std::bad_alloc;
+
+t_Tape::t_Tape(shared_ptr<t_CPC> cpc) :
 CPC(cpc),
 bTapeLevel(0),
 bTapeData(0),
@@ -816,7 +818,7 @@ void t_Tape::Tape_BlockDone(void)
 		
 		if (!Tape_GetNextBlock()) {
 			dwTapeStage = TAPE_END;
-			CPC.tape_play_button = 0;
+			CPC->tape_play_button = 0;
 		}
 	}
 }
@@ -1075,7 +1077,7 @@ void t_Tape::Tape_UpdateLevel(void)
 		break;
 		
 	case TAPE_END:
-		CPC.tape_play_button = 0;
+		CPC->tape_play_button = 0;
 		break;
    }
 }
@@ -1087,6 +1089,6 @@ void t_Tape::Tape_Rewind(void)
 	pbTapeBlock = pbTapeImage;
 	bTapeLevel = TAPE_LEVEL_LOW;
 	iTapeCycleCount = 0;
-	CPC.tape_play_button = 0;
+	CPC->tape_play_button = 0;
 	Tape_GetNextBlock();
 }

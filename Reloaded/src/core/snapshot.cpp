@@ -81,15 +81,15 @@ FILE *pMemoryfileObject;
 
 int snapshot_load (Emulator &emulator, const char *pchFileName)
 {
-	t_GateArray& GateArray = emulator.GetGateArray();
-	t_CRTC& CRTC = emulator.GetCRTC();
-	t_VDU& VDU = emulator.GetVDU();
+	auto GateArray = emulator.GetGateArray();
+	auto CRTC = emulator.GetCRTC();
+	auto VDU = emulator.GetVDU();
 	t_z80regs& z80 = emulator.GetZ80();
-	t_Memory& Memory = emulator.GetMemory();
-	t_CPC& CPC = emulator.GetConfig();
-	t_FDC& FDC = emulator.GetFDC();
-	t_PSG& PSG = emulator.GetPSG();
-	t_PPI& PPI = emulator.GetPPI();
+	auto Memory = emulator.GetMemory();
+    auto CPC = emulator.GetConfig();
+	auto FDC = emulator.GetFDC();
+	auto PSG = emulator.GetPSG();
+	auto PPI = emulator.GetPPI();
 
 	int n;
 	dword dwSnapSize, dwModel, dwFlags;
@@ -119,11 +119,11 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 			dwSnapSize = 64; // Compatibility with CPCE
 		
 		// memory dump size differs from current RAM size?
-		if (dwSnapSize > CPC.ram_size) 
+		if (dwSnapSize > CPC->ram_size) 
 		{
-			if (Memory.UpdateRAMSize(dwSnapSize*1024)) 
+			if (Memory->UpdateRAMSize(dwSnapSize*1024)) 
 			{
-				CPC.ram_size = dwSnapSize;
+				CPC->ram_size = dwSnapSize;
 			} 
 			else 
 			{
@@ -136,7 +136,7 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 		emulator.Pause();
 		
 		// read memory dump into CPC RAM
-		n = fread(Memory.GetRAM(), dwSnapSize*1024, 1, pSNAfileObject);
+		n = fread(Memory->GetRAM(), dwSnapSize*1024, 1, pSNAfileObject);
 		fclose(pSNAfileObject);
 		if (!n) 
 		{
@@ -183,7 +183,7 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 		// loop for all colours + border
 		for (n = 0; n < 17; n++) 
 		{
-			GateArray.SelectPen( n );
+			GateArray->SelectPen( n );
 			
 			// GA palette entry
 			val = sh.ga_ink_values[n];
@@ -209,7 +209,7 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 		for (n = 0; n < 18; n++) 
 		{
 			val = sh.crtc_registers[n];
-			CRTC.RegisterSelect(n);
+			CRTC->RegisterSelect(n);
 			z80.z80_OUT_handler(port, val);
 		}
 		port.b.h = 0xbc;
@@ -239,13 +239,13 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 		z80.z80_OUT_handler(port, sh.ppi_control);
 		
 		// PSG
-		PSG.SetControl(PPI.portC);
-		PSG.SetRegSelect(sh.psg_reg_select);
+		PSG->SetControl(PPI->portC);
+		PSG->SetRegSelect(sh.psg_reg_select);
 		
 		// loop for all PSG registers
 		for (n = 0; n < 16; n++) 
 		{
-			PSG.SetAYRegister(n, sh.psg_registers[n]);
+			PSG->SetAYRegister(n, sh.psg_registers[n]);
 		}
 		
 		/*
@@ -260,7 +260,7 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 			dwModel = sh.cpc_model;
 			
 			// different from what we're currently running?
-			if (dwModel != CPC.model) 
+			if (dwModel != CPC->model) 
 			{
 				// not one of the known models?
 				if (dwModel > 2) 
@@ -268,21 +268,21 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 					emulator.emulator_reset(false);
 					return ERR_SNA_CPC_TYPE;
 				}
-				strncpy(chPath, CPC.rom_path, sizeof(chPath)-2);
+				strncpy(chPath, CPC->rom_path, sizeof(chPath)-2);
 				strcat(chPath, "/");
 
 				// path to the required ROM image
-				strncat(chPath, Memory.GetROMFile(dwModel), sizeof(chPath)-1 - strlen(chPath));
+				strncat(chPath, Memory->GetROMFile(dwModel), sizeof(chPath)-1 - strlen(chPath));
 				if ((pSNAfileObject = fopen(chPath, "rb")) != NULL) 
 				{
-					n = fread(Memory.GetROMLow(), 2*16384, 1, pSNAfileObject);
+					n = fread(Memory->GetROMLow(), 2*16384, 1, pSNAfileObject);
 					fclose(pSNAfileObject);
 					if (!n) 
 					{
 						emulator.emulator_reset(false);
 						return ERR_CPC_ROM_MISSING;
 					}
-					CPC.model = dwModel;
+					CPC->model = dwModel;
 				} 
 				else 
 				{
@@ -296,43 +296,43 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 		// does the snapshot have version 3 data?
 		if (sh.version > 2) 
 		{
-			FDC.SetMotor(sh.fdc_motor);
-			FDC.GetDriveA().current_track = sh.drvA_current_track;
-			FDC.GetDriveB().current_track = sh.drvB_current_track;
+			FDC->SetMotor(sh.fdc_motor);
+			FDC->GetDriveA().current_track = sh.drvA_current_track;
+			FDC->GetDriveB().current_track = sh.drvB_current_track;
 
 			// invert bit 7 again
-			CPC.printer_port = sh.printer_data ^ 0x80;
+			CPC->printer_port = sh.printer_data ^ 0x80;
 			// multiply by 2 to bring it into the 0 - 30 range
 
-			PSG.SetAmplitudeEnv(sh.psg_env_step << 1);
-			PSG.SetEnvDirection(sh.psg_env_direction);
+			PSG->SetAmplitudeEnv(sh.psg_env_step << 1);
+			PSG->SetEnvDirection(sh.psg_env_direction);
 
-			CRTC.SetAddr( sh.crtc_addr[0] + (sh.crtc_addr[1] * 256) );
-			VDU.SetScanline( sh.crtc_scanline[0] + (sh.crtc_scanline[1] * 256) );
-			CRTC.SetCharCount( sh.crtc_char_count[0] );
-			CRTC.SetLineCount( sh.crtc_line_count & 127 );
-			CRTC.SetRasterCount( sh.crtc_raster_count & 31 );
-			CRTC.SetHswCount( sh.crtc_hsw_count & 15 );
-			CRTC.SetVswCount( sh.crtc_vsw_count & 15 );
+			CRTC->SetAddr( sh.crtc_addr[0] + (sh.crtc_addr[1] * 256) );
+			VDU->SetScanline( sh.crtc_scanline[0] + (sh.crtc_scanline[1] * 256) );
+			CRTC->SetCharCount( sh.crtc_char_count[0] );
+			CRTC->SetLineCount( sh.crtc_line_count & 127 );
+			CRTC->SetRasterCount( sh.crtc_raster_count & 31 );
+			CRTC->SetHswCount( sh.crtc_hsw_count & 15 );
+			CRTC->SetVswCount( sh.crtc_vsw_count & 15 );
 			dwFlags = sh.crtc_flags[0] + (sh.crtc_flags[1] * 256);
 			// vsync active?
-			CRTC.SetFlagInVSync( dwFlags & 1 ? 1 : 0 );
+			CRTC->SetFlagInVSync( dwFlags & 1 ? 1 : 0 );
 			
 			// hsync active?
 			if (dwFlags & 2)
 			{
-				CRTC.SetFlag1InHSync(0xff);
-				CRTC.SetFlagHadHSync( 1 );
-				if ((CRTC.GetHswCount() >= 3) && (CRTC.GetHswCount() < 7)) 
+				CRTC->SetFlag1InHSync(0xff);
+				CRTC->SetFlagHadHSync( 1 );
+				if ((CRTC->GetHswCount() >= 3) && (CRTC->GetHswCount() < 7)) 
 				{
-					CRTC.SetFlagInMonHSync( 1 );
+					CRTC->SetFlagInMonHSync( 1 );
 				}
 			}
 
 			// in vertical total adjust?
-			CRTC.SetFlagInVta( dwFlags & 0x80 ? 1 : 0 );
-			GateArray.SetHSCount( sh.ga_int_delay & 3 );
-			GateArray.SetSLCount( sh.ga_sl_count );
+			CRTC->SetFlagInVta( dwFlags & 0x80 ? 1 : 0 );
+			GateArray->SetHSCount( sh.ga_int_delay & 3 );
+			GateArray->SetSLCount( sh.ga_sl_count );
 			z80.int_pending = sh.z80_int_pending;
 		}
 
@@ -350,15 +350,15 @@ int snapshot_load (Emulator &emulator, const char *pchFileName)
 
 int snapshot_save (Emulator &emulator, const char *pchFileName)
 {
-	t_GateArray& GateArray = emulator.GetGateArray();
-	t_CRTC& CRTC = emulator.GetCRTC();
-	t_VDU& VDU = emulator.GetVDU();
+	auto GateArray = emulator.GetGateArray();
+	auto CRTC = emulator.GetCRTC();
+	auto VDU = emulator.GetVDU();
 	t_z80regs& z80 = emulator.GetZ80();
-	t_Memory& Memory = emulator.GetMemory();
-	t_CPC& CPC = emulator.GetConfig();
-	t_FDC& FDC = emulator.GetFDC();
-	t_PSG& PSG = emulator.GetPSG();
-	t_PPI& PPI = emulator.GetPPI();
+	auto Memory = emulator.GetMemory();
+	auto CPC = emulator.GetConfig();
+	auto FDC = emulator.GetFDC();
+	auto PSG = emulator.GetPSG();
+	auto PPI = emulator.GetPPI();
 
 	t_SNA_header sh;
 	int n;
@@ -400,79 +400,79 @@ int snapshot_save (Emulator &emulator, const char *pchFileName)
 	sh.HLx[1] = z80.HLx.b.h;
 	sh.HLx[0] = z80.HLx.b.l;
 	// Gate Array
-	sh.ga_pen = GateArray.GetPen();
+	sh.ga_pen = GateArray->GetPen();
 	// loop for all colours + border
 	for (n = 0; n < 17; n++) 
 	{
-		sh.ga_ink_values[n] = GateArray.GetInk( n );
+		sh.ga_ink_values[n] = GateArray->GetInk( n );
 	}
-	sh.ga_ROM_config = Memory.GetROMConfig();
-	sh.ga_RAM_config = Memory.GetRAMConfig();
+	sh.ga_ROM_config = Memory->GetROMConfig();
+	sh.ga_RAM_config = Memory->GetRAMConfig();
 	// CRTC
-	sh.crtc_reg_select = CRTC.GetRegisterSelect();
+	sh.crtc_reg_select = CRTC->GetRegisterSelect();
 	// loop for all CRTC registers
 	for (n = 0; n < 18; n++) 
 	{
-		sh.crtc_registers[n] = CRTC.GetRegisterValue(n);
+		sh.crtc_registers[n] = CRTC->GetRegisterValue(n);
 	}
 	// ROM select
-	sh.upper_ROM = Memory.GetUpperROM();
+	sh.upper_ROM = Memory->GetUpperROM();
 	// PPI
-	sh.ppi_A = PPI.portA;
-	sh.ppi_B = PPI.portB;
-	sh.ppi_C = PPI.portC;
-	sh.ppi_control = PPI.control;
+	sh.ppi_A = PPI->portA;
+	sh.ppi_B = PPI->portB;
+	sh.ppi_C = PPI->portC;
+	sh.ppi_control = PPI->control;
 	// PSG
-	sh.psg_reg_select = PSG.GetRegSelect();
+	sh.psg_reg_select = PSG->GetRegSelect();
 	// loop for all PSG registers
 	for (n = 0; n < 16; n++) 
 	{
-		sh.psg_registers[n] = PSG.GetAYRegister(n);
+		sh.psg_registers[n] = PSG->GetAYRegister(n);
 	}
 	
-	sh.ram_size[0] = CPC.ram_size & 0xff;
-	sh.ram_size[1] = (CPC.ram_size >> 8) & 0xff;
+	sh.ram_size[0] = CPC->ram_size & 0xff;
+	sh.ram_size[1] = (CPC->ram_size >> 8) & 0xff;
 	// version 2 info
-	sh.cpc_model = CPC.model;
+	sh.cpc_model = CPC->model;
 	// version 3 info
-	sh.fdc_motor = FDC.GetMotor();
-	sh.drvA_current_track = FDC.GetDriveA().current_track;
-	sh.drvB_current_track = FDC.GetDriveB().current_track;
+	sh.fdc_motor = FDC->GetMotor();
+	sh.drvA_current_track = FDC->GetDriveA().current_track;
+	sh.drvB_current_track = FDC->GetDriveB().current_track;
 	// invert bit 7 again
-	sh.printer_data = CPC.printer_port ^ 0x80;
+	sh.printer_data = CPC->printer_port ^ 0x80;
 	// divide by 2 to bring it into the 0 - 15 range
-	sh.psg_env_step = PSG.GetAmplitudeEnv() >> 1;
-	sh.psg_env_direction = PSG.GetEnvDirection();
+	sh.psg_env_step = PSG->GetAmplitudeEnv() >> 1;
+	sh.psg_env_direction = PSG->GetEnvDirection();
 
-	sh.crtc_addr[0] = CRTC.GetAddr() & 0xff;
-	sh.crtc_addr[1] = (CRTC.GetAddr() >> 8) & 0xff;
-	sh.crtc_scanline[0] = VDU.GetScanline() & 0xff;
-	sh.crtc_scanline[1] = (VDU.GetScanline() >> 8) & 0xff;
-	sh.crtc_char_count[0] = CRTC.GetCharCount();
-	sh.crtc_line_count = CRTC.GetLineCount();
-	sh.crtc_raster_count = CRTC.GetRasterCount();
-	sh.crtc_hsw_count = CRTC.GetHswCount();
-	sh.crtc_vsw_count = CRTC.GetVswCount();
+	sh.crtc_addr[0] = CRTC->GetAddr() & 0xff;
+	sh.crtc_addr[1] = (CRTC->GetAddr() >> 8) & 0xff;
+	sh.crtc_scanline[0] = VDU->GetScanline() & 0xff;
+	sh.crtc_scanline[1] = (VDU->GetScanline() >> 8) & 0xff;
+	sh.crtc_char_count[0] = CRTC->GetCharCount();
+	sh.crtc_line_count = CRTC->GetLineCount();
+	sh.crtc_raster_count = CRTC->GetRasterCount();
+	sh.crtc_hsw_count = CRTC->GetHswCount();
+	sh.crtc_vsw_count = CRTC->GetVswCount();
 	dwFlags = 0;
 	// vsync active?
-	if (CRTC.GetFlagInVSync()) 
+	if (CRTC->GetFlagInVSync()) 
 	{
 		dwFlags |= 1;
 	}
 	// hsync active?
-	if (CRTC.GetFlag1InHSync()) 
+	if (CRTC->GetFlag1InHSync()) 
 	{
 		dwFlags |= 2;
 	}
 	// in vertical total adjust?
-	if (CRTC.GetFlagInVta()) 
+	if (CRTC->GetFlagInVta()) 
 	{
 		dwFlags |= 0x80;
 	}
 	sh.crtc_flags[0] = dwFlags & 0xff;
 	sh.crtc_flags[1] = (dwFlags >> 8) & 0xff;
-	sh.ga_int_delay = GateArray.GetHSCount();
-	sh.ga_sl_count = GateArray.GetSLCount();
+	sh.ga_int_delay = GateArray->GetHSCount();
+	sh.ga_sl_count = GateArray->GetSLCount();
 	sh.z80_int_pending = z80.int_pending;
 	
 	if ((pSNAfileObject = fopen(pchFileName, "wb")) != NULL) 
@@ -484,7 +484,7 @@ int snapshot_save (Emulator &emulator, const char *pchFileName)
 			return ERR_SNA_WRITE;
 		}
 		// write memory contents to snapshot file
-		if (fwrite(Memory.GetRAM(), CPC.ram_size*1024, 1, pSNAfileObject) != 1) 
+		if (fwrite(Memory->GetRAM(), CPC->ram_size*1024, 1, pSNAfileObject) != 1) 
 		{
 			fclose(pSNAfileObject);
 			return ERR_SNA_WRITE;
@@ -497,14 +497,14 @@ int snapshot_save (Emulator &emulator, const char *pchFileName)
                         fprintf(pMemoryfileObject,"%04x    ",i);
                         for(int j = 0; j < 0x10; j++)
                         {
-                            fprintf(pMemoryfileObject,"%02x ",*(Memory.GetRAM() + i + j));
+                            fprintf(pMemoryfileObject,"%02x ",*(Memory->GetRAM() + i + j));
                         }
                         fprintf(pMemoryfileObject,"   ");
                         for(int j = 0; j < 0x10; j++)
                         {
-                            if(*(Memory.GetRAM() + i + j) >= 0x20)
+                            if(*(Memory->GetRAM() + i + j) >= 0x20)
                             {
-                                fprintf(pMemoryfileObject,"%c",*(Memory.GetRAM() + i + j));
+                                fprintf(pMemoryfileObject,"%c",*(Memory->GetRAM() + i + j));
                             }
                             else
                             {
