@@ -91,10 +91,10 @@ command code, number of bytes for command, number of bytes for result, direction
 	{0x5d, 9, 7, CPU_TO_FDC, &t_FDC::fdc_scan},    // scan high or equal
 };
 
-t_FDC::t_FDC(shared_ptr<t_CPC> cpc) :
-CPC(cpc),
-active_drive(&driveA),
-active_track(&active_drive->track[0][0])
+t_FDC::t_FDC(shared_ptr<Emulator> emulator) :
+	_emulator(emulator),
+	active_drive(&driveA),
+	active_track(&active_drive->track[0][0])
 {
 	Reset();
 }
@@ -281,12 +281,12 @@ void t_FDC::cmd_write(void)
 
 void t_FDC::cmd_read(void)
 {
+	auto emulator = _emulator.lock();
 	t_sector *sector;
 	
 loop:
 	sector = find_sector(&command[CMD_C]); // locate the requested sector on the current track
-	Emulator::getInstance()->fdcNotifyRead(driveA.current_side, driveA.current_track,
-		sector);
+	emulator->fdcNotifyRead(driveA.current_side, driveA.current_track, sector);
 	if (sector) { // sector found
 		result[RES_ST1] = sector->flags[0] & 0x25; // copy ST1 to result, ignoring unused bits
 		result[RES_ST2] = sector->flags[1] & 0x61; // copy ST2 to result, ignoring unused bits
@@ -364,6 +364,7 @@ loop:
 
 void t_FDC::cmd_readtrk(void)
 {
+	auto emulator = _emulator.lock();
 	int sector_size;
 	t_sector *sector;
 	
@@ -389,8 +390,7 @@ void t_FDC::cmd_readtrk(void)
 	timeout = INITIAL_TIMEOUT;
 	read_status_delay = 1;
 
-	Emulator::getInstance()->fdcNotifyRead(driveA.current_side, driveA.current_track,
-		sector);
+	emulator->fdcNotifyRead(driveA.current_side, driveA.current_track, sector);
 }
 
 
@@ -467,27 +467,27 @@ void t_FDC::fdc_write_data(byte val)
 	{
 	case CMD_PHASE: // in command phase?
 		if (byte_count) { // receiving command parameters?
-            command[byte_count++] = val; // copy to buffer
-            if (byte_count == cmd_length) { // received all command bytes?
+			command[byte_count++] = val; // copy to buffer
+			if (byte_count == cmd_length) { // received all command bytes?
 				byte_count = 0; // clear byte counter
 				phase = EXEC_PHASE; // switch to execution phase
 				(this->*cmd_handler)();
-            }
+			}
 		}
 		else { // first command byte received
-            if (val & 0x20) { // skip DAM or DDAM?
+			if (val & 0x20) { // skip DAM or DDAM?
 				flags |= SKIP_flag; // DAM/DDAM will be skipped
 				val &= ~0x20; // reset skip bit in command byte
-            }
-            else {
+			}
+			else {
 				flags &= ~SKIP_flag; // make sure skip inidicator is off
-            }
-            for (idx = 0; idx < MAX_CMD_COUNT; idx++) { // loop through all known FDC commands
+			}
+			for (idx = 0; idx < MAX_CMD_COUNT; idx++) { // loop through all known FDC commands
 				if (fdc_cmd_table[idx].cmd == val) { // do we have a match?
 					break;
 				}
-            }
-            if (idx != MAX_CMD_COUNT) { // valid command received
+			}
+			if (idx != MAX_CMD_COUNT) { // valid command received
 				cmd_length = fdc_cmd_table[idx].cmd_length; // command length in bytes
 				res_length = fdc_cmd_table[idx].res_length; // result length in bytes
 				cmd_direction = fdc_cmd_table[idx].cmd_direction; // direction is CPU to FDC, or FDC to CPU
@@ -499,54 +499,54 @@ void t_FDC::fdc_write_data(byte val)
 					phase = EXEC_PHASE; // switch to execution phase
 					(this->*cmd_handler)();
 				}
-            }
-            else { // unknown command received
+			}
+			else { // unknown command received
 				result[0] = 0x80; // indicate invalid command
 				res_length = 1;
 				phase = RESULT_PHASE; // switch to result phase
-            }
+			}
 		}
 		break;
 	case EXEC_PHASE: // in execution phase?
 		if (cmd_direction == CPU_TO_FDC) { // proper direction?
-            timeout = OVERRUN_TIMEOUT;
-            if ((flags & SCAN_flag)) { // processing any of the scan commands?
+			timeout = OVERRUN_TIMEOUT;
+			if ((flags & SCAN_flag)) { // processing any of the scan commands?
 				if (val != 0xff) { // no comparison on CPU byte = 0xff
 					switch((command[CMD_CODE] & 0x1f))
 					{
 					case 0x51: // scan equal
-                        if (val != *buffer_ptr) {
+						if (val != *buffer_ptr) {
 							result[RES_ST2] &= 0xf7; // reset Scan Equal Hit
 							flags |= SCANFAILED_flag;
-                        }
-                        break;
+						}
+						break;
 					case 0x59: // scan low or equal
-                        if (val != *buffer_ptr) {
+						if (val != *buffer_ptr) {
 							result[RES_ST2] &= 0xf7; // reset Scan Equal Hit
-                        }
-                        if (val > *buffer_ptr) {
+						}
+						if (val > *buffer_ptr) {
 							flags |= SCANFAILED_flag;
-                        }
-                        break;
+						}
+						break;
 					case 0x5d: // scan high or equal
-                        if (val != *buffer_ptr) {
+						if (val != *buffer_ptr) {
 							result[RES_ST2] &= 0xf7; // reset Scan Equal Hit
-                        }
-                        if (val < *buffer_ptr) {
+						}
+						if (val < *buffer_ptr) {
 							flags |= SCANFAILED_flag;
-                        }
-                        break;
+						}
+						break;
 					}
 				}
 				buffer_ptr++; // advance sector data pointer
-            }
-            else {
+			}
+			else {
 				*buffer_ptr++ = val; // write byte to sector
-            }
-            if (buffer_ptr > buffer_endptr) {
+			}
+			if (buffer_ptr > buffer_endptr) {
 				buffer_ptr = active_track->data; // wrap around
-            }
-            if (--buffer_count == 0) { // processed all data?
+			}
+			if (--buffer_count == 0) { // processed all data?
 				if ((flags & SCAN_flag)) { // processing any of the scan commands?
 					if ((flags & SCANFAILED_flag) && (command[CMD_R] != command[CMD_EOT])) {
 						command[CMD_R] += command[CMD_STP]; // advance to next sector
@@ -570,7 +570,7 @@ void t_FDC::fdc_write_data(byte val)
 						free(active_track->data); // dealloc memory for old track data
 					}
 					sector_size = 128 << command[CMD_C]; // determine number of bytes from N value
-					if (((sector_size + 62 + command[CMD_R]) * command[CMD_H]) > CPC->max_tracksize) { // track size exceeds maximum?
+					if (((sector_size + 62 + command[CMD_R]) * command[CMD_H]) > _emulator.lock()->GetConfig()->max_tracksize) { // track size exceeds maximum?
 						active_track->sectors = 0; // 'unformat' track
 					}
 					else {
@@ -611,10 +611,10 @@ void t_FDC::fdc_write_data(byte val)
 						
 					phase = RESULT_PHASE; // switch to result phase
 				}
-            }
-         }
-         break;
-   }
+			}
+		}
+		break;
+	}
 }
 
 
@@ -651,15 +651,16 @@ byte t_FDC::fdc_read_status(void)
 
 byte t_FDC::fdc_read_data(void)
 {
+	auto emulator = _emulator.lock();
 	byte val;
-	
+
 	val = 0xff; // default value
 	switch (phase)
 	{
 	case EXEC_PHASE: // in execution phase?
 		if (cmd_direction == FDC_TO_CPU) { // proper direction?
-            timeout = OVERRUN_TIMEOUT;
-            val = *buffer_ptr++; // read byte from current sector
+			timeout = OVERRUN_TIMEOUT;
+			val = *buffer_ptr++; // read byte from current sector
 #ifdef USE_DEBUGGER_FDC
 			if (dwDebugFlag) 
 			{
@@ -668,10 +669,10 @@ byte t_FDC::fdc_read_data(void)
 				}
 			}
 #endif
-            if (buffer_ptr >= buffer_endptr) {
+			if (buffer_ptr >= buffer_endptr) {
 				buffer_ptr = active_track->data; // wrap around
-            }
-            if (!(--buffer_count)) { // completed the data transfer?
+			}
+			if (!(--buffer_count)) { // completed the data transfer?
 				if (flags & RNDDE_flag) { // simulate random Data Errors?
 					// ***! random DE handling
 				}
@@ -725,7 +726,7 @@ byte t_FDC::fdc_read_data(void)
 						}
 					}
 				}
-            }
+			}
 		}
 		break;
 	case RESULT_PHASE: // in result phase?
@@ -743,10 +744,10 @@ byte t_FDC::fdc_read_data(void)
 #endif
 		
 		if (byte_count == res_length) { // sent all result bytes?
-            flags &= ~SCAN_flag; // reset scan command flag
-            byte_count = 0; // clear byte counter
-            phase = CMD_PHASE; // switch to command phase
-			Emulator::getInstance()->fdcLed(false);
+			flags &= ~SCAN_flag; // reset scan command flag
+			byte_count = 0; // clear byte counter
+			phase = CMD_PHASE; // switch to command phase
+			emulator->fdcLed(false);
 		}
 		break;
 	}
@@ -855,7 +856,8 @@ void t_FDC::fdc_seek()
 
 void t_FDC::fdc_readtrk()
 {
-	Emulator::getInstance()->fdcLed(true);
+	auto emulator = _emulator.lock();
+	emulator->fdcLed(true);
 	check_unit(); // switch to target drive
 	if (init_status_regs() == 0) { // drive Ready?
 		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -890,7 +892,8 @@ void t_FDC::fdc_readtrk()
 
 void t_FDC::fdc_write()
 {
-	Emulator::getInstance()->fdcLed(true);
+	auto emulator = _emulator.lock();
+	emulator->fdcLed(true);
 	check_unit(); // switch to target drive
 	if (init_status_regs() == 0) { // drive Ready?
 		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -930,7 +933,8 @@ void t_FDC::fdc_write()
 
 void t_FDC::fdc_read()
 {
-	Emulator::getInstance()->fdcLed(true);
+	auto emulator = _emulator.lock();
+	emulator->fdcLed(true);
 	check_unit(); // switch to target drive
 	if (init_status_regs() == 0) { // drive Ready?
 		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -963,7 +967,8 @@ void t_FDC::fdc_read()
 
 void t_FDC::fdc_readID()
 {
-	Emulator::getInstance()->fdcLed(true);
+	auto emulator = _emulator.lock();
+	emulator->fdcLed(true);
 	check_unit(); // switch to target drive
 	if (init_status_regs() == 0) { // drive Ready?
 		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -996,7 +1001,8 @@ void t_FDC::fdc_readID()
 
 void t_FDC::fdc_writeID()
 {
-	Emulator::getInstance()->fdcLed(true);
+	auto emulator = _emulator.lock();
+	emulator->fdcLed(true);
 	check_unit(); // switch to target drive
 	if (init_status_regs() == 0) { // drive Ready?
 		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -1032,7 +1038,8 @@ void t_FDC::fdc_writeID()
 
 void t_FDC::fdc_scan()
 {
-	Emulator::getInstance()->fdcLed(true);
+	auto emulator = _emulator.lock();
+	emulator->fdcLed(true);
 	check_unit(); // switch to target drive
 	if (init_status_regs() == 0) { // drive Ready?
 		active_drive->current_side = (command[CMD_UNIT] & 4) >> 2; // extract target side
@@ -1067,13 +1074,13 @@ void t_FDC::fdc_scan()
 int t_FDC::insertA(const string filename, const char *type )
 {
 	files[0] = filename;
-    return dsk_load(filename.c_str(), &driveA, 'A');
+	return dsk_load(filename.c_str(), &driveA, 'A');
 }
 
 int t_FDC::insertB(const string filename, const char *type )
 {
 	files[1] = filename;
-    return dsk_load(filename.c_str(), &driveB, 'B');
+	return dsk_load(filename.c_str(), &driveB, 'B');
 }
 
 

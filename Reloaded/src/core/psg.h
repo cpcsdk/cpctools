@@ -16,23 +16,24 @@
 #include "ayemu.h"
 #endif
 
+using std::unique_ptr;
 using std::shared_ptr;
+using std::weak_ptr;
 
-class t_CPC;
+class Emulator;
 
 class t_PSG
 {
 private:
-	shared_ptr<t_CPC>		CPC;
 	unsigned char reg_select;
 	unsigned char control;
 
 #ifdef ST_SOUND
-    CYm2149Ex* m_Ym2149;
+	unique_ptr<CYm2149Ex> m_Ym2149;
 #endif
 #ifdef AYEMU
-    ayemu_ay_t m_ayemu ;
-    ayemu_ay_reg_frame_t m_ayemu_reg_frame ;
+	ayemu_ay_t m_ayemu ;
+	ayemu_ay_reg_frame_t m_ayemu_reg_frame ;
 #endif
 	double cycle_count;
 
@@ -42,7 +43,7 @@ private:
 
 public:
 	double snd_cycle_count;
-	t_PSG(shared_ptr<t_CPC> cpc);
+	t_PSG(shared_ptr<Emulator> emulator);
 	~t_PSG();
 
 	void Emulate(int iCycleCount);
@@ -54,18 +55,18 @@ public:
 	unsigned char GetAYRegister(int Num) const
 	{
 #ifdef ST_SOUND
-	    return m_Ym2149->readRegister(Num);
+		return m_Ym2149->readRegister(Num);
 #endif
 #ifdef AYLET
-    	return sound_ay_read(Num);
+		return sound_ay_read(Num);
 #endif
 #ifdef AYEMU
-    	return m_ayemu_reg_frame[Num];
+		return m_ayemu_reg_frame[Num];
 #endif
 	}
 
 	void SetAYRegister(int Num, unsigned char Value);
-    void fillSample(int nbSample);
+	void fillSample(int nbSample);
 
 	inline void psg_write(unsigned char psg_data)
 	{
@@ -109,6 +110,7 @@ public:
 #endif
 private:
 	void InitAYCounterVars();
+	weak_ptr<Emulator> _emulator;
 };
 
 #endif

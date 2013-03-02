@@ -14,9 +14,10 @@
 #include <string>
 
 using std::shared_ptr;
+using std::weak_ptr;
 using std::string;
 
-class t_CPC;
+class Emulator;
 
 #define FDC_TO_CPU      0
 #define CPU_TO_FDC      1
@@ -110,7 +111,7 @@ private:
 	static fdc_cmd_table_def fdc_cmd_table[MAX_CMD_COUNT];
 
 private:
-	shared_ptr<t_CPC>	CPC;
+	weak_ptr<Emulator> _emulator;
 
 	t_drive driveA;
 	t_drive driveB;
@@ -136,7 +137,7 @@ private:
 	unsigned char result[8];
 
 public:
-	t_FDC(shared_ptr<t_CPC> CPC);
+	t_FDC(shared_ptr<Emulator> emulator);
 
 	void Reset();
 

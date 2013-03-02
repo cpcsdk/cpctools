@@ -42,6 +42,7 @@
    Jun 04, 2003 - 19:37 added support for Digiblaster/Soundplayer on the printer port
 */
 
+#include <memory>
 #include <cmath>
 
 #include "cap32.h"
@@ -64,59 +65,11 @@
 #include "YmProfiles.h"
 #endif
 
-t_PSG::t_PSG(shared_ptr<t_CPC> cpc)
- : CPC(cpc)
-{
-}
+using std::shared_ptr;
+using std::make_shared;
 
-t_PSG::~t_PSG()
-{
-	#ifdef ST_SOUND
-		delete m_Ym2149;
-	#endif
-}
-
-void t_PSG::Emulate(int iCycleCount)
-{
-    if(auto ap = Emulator::getInstance()->GetAudioPlugin())
-    {
-#ifdef ST_SOUND
-        cycle_count += iCycleCount;
-        
-        if (cycle_count >= snd_cycle_count)
-        {
-            uint8_t* bufferPtr = ap->getBuffer();
-            if(bufferPtr == NULL) return;
-            
-            cycle_count -= snd_cycle_count;
-            
-            m_Ym2149->updateStereo((ymsample*)bufferPtr, (ymint)1);
-            for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
-            {
-                // Add Tape Sound
-                // TODO: Overflow verification
-                // TODO: Configurable
-                //*(pbSndBufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
-                *(bufferPtr+k) += Emulator::getInstance()->GetTape()->GetTapeLevel()/32;
-            }
-
-            ap->update();
-        }
-#endif
-    }
-}
-
-
-void t_PSG::fillSample(int nbSample)
-{
-#ifdef AYLET
-    sound_frameExt(nbSample, 1);
-    cycle_count = 0;
-#endif
-}
-
-
-void t_PSG::Init(int enableSound)
+t_PSG::t_PSG(shared_ptr<Emulator> emulator) :
+    _emulator(emulator)
 {
 #ifdef AYLET
     sound_init();
@@ -127,18 +80,81 @@ void t_PSG::Init(int enableSound)
     ayemu_init(&m_ayemu);
     ayemu_set_chip_freq(&m_ayemu, 1000000);
     ayemu_set_chip_type(&m_ayemu, AYEMU_AY_LOG, NULL);
-    if(enableSound)
-	ayemu_set_sound_format (&m_ayemu, audio_spec->freq , audio_spec->channels, audio_spec->format==AUDIO_S16LSB?16:8);
+    if(_emulator.lock()->GetConfig()->enableSound)
+        ayemu_set_sound_format(&m_ayemu, audio_spec->freq , audio_spec->channels, audio_spec->format==AUDIO_S16LSB?16:8);
     else
-	ayemu_set_sound_format(&m_ayemu,44100,2,16); // No audio_spec if sound disabled, so use default
+        ayemu_set_sound_format(&m_ayemu,44100,2,16); // No audio_spec if sound disabled, so use default
     ayemu_set_stereo(&m_ayemu, AYEMU_ABC, NULL);
 #endif
 
 #ifdef ST_SOUND
-    m_Ym2149 = new CYm2149Ex(profileCPC, CPC->snd_playback_rate);
+    m_Ym2149 = unique_ptr<CYm2149Ex>(new CYm2149Ex(profileCPC, _emulator.lock()->GetConfig()->snd_playback_rate));
     m_Ym2149->reset();
 #endif
+
     InitAYCounterVars();
+}
+
+t_PSG::~t_PSG()
+{
+}
+
+void t_PSG::Reset()
+{
+    control = 0;
+
+#ifdef AYLET
+#endif
+
+#ifdef AYEMU
+    ayemu_reset(&m_ayemu);
+#endif
+
+#ifdef ST_SOUND
+    m_Ym2149->reset();
+#endif
+
+    buffer_full = 0;
+}
+
+void t_PSG::Emulate(int iCycleCount)
+{
+    if(auto emu = _emulator.lock())
+    {
+        if(auto ap = emu->GetAudioPlugin())
+        {
+#ifdef ST_SOUND
+            cycle_count += iCycleCount;
+            
+            if (cycle_count >= snd_cycle_count)
+            {
+                uint8_t* bufferPtr = ap->getBuffer();
+                if(bufferPtr == NULL) return;
+                
+                cycle_count -= snd_cycle_count;
+                
+                m_Ym2149->updateStereo((ymsample*)bufferPtr, (ymint)1);
+                for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
+                {
+                    // Add Tape Sound
+                    // TODO: Overflow verification
+                    // TODO: Configurable
+                    *(bufferPtr+k) += emu->GetTape()->GetTapeLevel()/32;
+                }
+
+                ap->update();
+            }
+#endif
+        }
+    }
+}
+
+void t_PSG::fillSample(int nbSample)
+{
+#ifdef AYLET
+    sound_frameExt(nbSample, 1);
+    cycle_count = 0;
+#endif
 }
 
 void t_PSG::SetAYRegister(int Num, byte Value)
@@ -146,9 +162,11 @@ void t_PSG::SetAYRegister(int Num, byte Value)
 #ifdef ST_SOUND
     m_Ym2149->writeRegister(Num, Value);
 #endif
+
 #ifdef AYLET
     sound_ay_write(Num, Value, cycle_count/(2<<16));
 #endif
+
 #ifdef AYEMU
     m_ayemu_reg_frame[Num] = Value ;
     ayemu_set_regs(&m_ayemu, m_ayemu_reg_frame);
@@ -273,22 +291,9 @@ unsigned char t_PSG::GetEnvDirection() const
 	return 0x00;
 }
 
-void t_PSG::Reset()
-{
-	control = 0;
-#ifdef ST_SOUND
-	m_Ym2149->reset();
-#endif
-#ifdef AYLET
-#endif
-#ifdef AYEMU
-    ayemu_reset(&m_ayemu);
-#endif
-	buffer_full = 0;
-}
-
 void t_PSG::InitAYCounterVars()
 {
+    auto CPC = _emulator.lock()->GetConfig();
     cycle_count = 0;
     snd_cycle_count = (4000000.0/(double)(CPC->snd_playback_rate)); // number of Z80 cycles per sample
     // std::cout << "Audio cycle count : " << snd_cycle_count << std::endl;

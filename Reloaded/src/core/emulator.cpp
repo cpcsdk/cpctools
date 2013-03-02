@@ -252,30 +252,30 @@ void Emulator::printer_stop()
 }
 
 Emulator::Emulator(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio):
-    this_(this, null_deleter()),
+	this_(this, null_deleter()),
 	_config(make_shared<t_CPC>(this_)),
 	_renderer(_config->vid_bpp),
-    _input(make_shared<t_Input>()),
+	_input(make_shared<t_Input>()),
 	_vdu(make_shared<t_VDU>(_renderer)),
 	_crtc(NULL),
-	_fdc(make_shared<t_FDC>(_config)),
-    _ppi(make_shared<t_PPI>()),
+	_fdc(make_shared<t_FDC>(this_)),
+	_ppi(make_shared<t_PPI>()),
 	_tape(make_shared<t_Tape>(_config)),
-	_psg(make_shared<t_PSG>(_config)),
+	_psg(make_shared<t_PSG>(this_)),
 	_cpcMemory(make_shared<t_Memory>(_config)),
 	_z80(make_shared<t_z80regs>(this_)),
 	_gateArray(make_shared<t_GateArray>(_renderer, _z80)),
-    _audioPlugin(audio),
+	_audioPlugin(audio),
 	FPSDisplay(false),
 	exitRequested(false),
 	_isInit(false),
 	_videoPlugin(video)
 {
-    emuSync.lock();
+	emuSync.lock();
 
 	setCRTC(make_shared<t_CRTC>(_gateArray, _vdu));
 
-    emuSync.unlock();
+	emuSync.unlock();
 
 	sem_init(&breakpointLock, 0, 0);
 }
@@ -389,12 +389,10 @@ bool Emulator::Init()
         _config->snd_enabled = 0;
     }
 
-	_psg->Init(_config->snd_enabled);
-
 	emulator_reset(false);
 	_config->paused &= ~1;
 
-    if(_audioPlugin)
+    if(_audioPlugin && _config->snd_enabled)
         _audioPlugin->resume();
 
 	dwTicks = 0;
