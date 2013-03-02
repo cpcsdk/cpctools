@@ -5,16 +5,20 @@
 #ifndef __REMU_H__
 #define __REMU_H__
 
-#include "emulator.h"
+#include <memory>
+
+#include "core/emulator.h"
 #include "RVideo.h"
 
-#include "../core/CPCKeyDefs.h"
+#include "core/CPCKeyDefs.h"
 
 #include <InterfaceDefs.h>
 
+using std::shared_ptr;
+
 class REmulator: public Emulator {
 	private:
-		REmulator(VideoPlugin& video, AudioPlugin& audio)
+		REmulator(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio)
 			: Emulator(video, audio)
 		{}
 
@@ -27,7 +31,7 @@ class REmulator: public Emulator {
 			return (REmulator*)instance;
 		}
 
-		static inline void createInstance(VideoPlugin& video, AudioPlugin& audio)
+		static inline void createInstance(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio)
 		{
 			instance = new REmulator(video, audio);
 		}

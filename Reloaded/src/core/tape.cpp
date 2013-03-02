@@ -37,7 +37,8 @@
 #include "tape.h"
 #include "config_manager.h"
 #include "error.h"
-#include "filetools.h"
+
+#include "misc/file/filetools.h"
 
 #include "debug.h"
 

@@ -28,7 +28,7 @@
 #include "render.h"
 #include "video.h"
 
-#include "log.h"
+#include "misc/log.h"
 
 #define FNT_CHAR_WIDTH 8
 #define FNT_CHAR_HEIGHT 8

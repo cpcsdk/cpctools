@@ -23,11 +23,7 @@
 #include <cstdlib>
 #include <memory>
 
-#include "log.h"
-//extern uint8_t *pbSndBuffer;
-//uint8_t *pbSndBuffer;
-//extern uint8_t *pbSndBufferPtr;
-//uint8_t *pbSndBufferPtr;
+#include "misc/log.h"
 
 using std::shared_ptr;
 using std::weak_ptr;

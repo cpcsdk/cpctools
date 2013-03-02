@@ -36,7 +36,7 @@
 #include "core/dsk.h"
 #include "core/snapshot.h"
 #include "core/tape.h"
-#include "core/filetools.h"
+#include "misc/file/filetools.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -153,7 +153,7 @@ bool CapriceApp::OnInit()
 	capAsm = new CapASM(emulator);
 	#endif
 
-#if DEBUG
+#ifndef NDEBUG
 	InfoLogMessage("Compile in Debug mode");
 #endif
 	InfoLogMessage("Initialization done\n");

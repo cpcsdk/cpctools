@@ -1,10 +1,9 @@
 # In this directory we build the Haiku GUI
 
 # TODO we replicate a lot of the src/gui dir in here. Cleanup !
-include_directories(../core)
+include_directories(..)
 include_directories(keymap)
 
-# TODO build a lib for caprice core
 add_executable(reloaded
 	RWin.cpp
 	REmulator.cpp

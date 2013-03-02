@@ -2,12 +2,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(ReloadedCore)
 
+include_directories(..)
+
 set(SOURCE_FILES
 	# core
 	config_manager.cpp
 	crtc.cpp
 	crtc1.cpp
-	Desass.cpp
 	dsk.cpp
 	emulator.cpp
 	fdc_old.cpp
@@ -25,13 +26,13 @@ set(SOURCE_FILES
 	video.cpp
 	z80.cpp
 	# We may further separate these into a toolkit lib...
-	c_inifile.cpp
-	filetools.cpp
-	log.cpp
-	synchro.cpp
+	../misc/file/c_inifile.cpp
+	../misc/file/filetools.cpp
+	../misc/log.cpp
+	../misc/synchro.cpp
 )
 
-add_library(ReloadedCore STATIC ${SOURCE_FILES})
+add_library(ReloadedCore SHARED ${SOURCE_FILES})
 
 if (WIN32)
     target_link_libraries(ReloadedCore stsoundlibrary pthreadVC2)

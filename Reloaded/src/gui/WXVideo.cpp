@@ -32,7 +32,7 @@
 #include <wx/dcbuffer.h>
 #include "CapriceApp.h"
 
-#include "core/log.h"
+#include "misc/log.h"
 
 /* ----------------------------------------------------------------------- *
  * wxWidget Line doubling video plugin ----------------------------------- *

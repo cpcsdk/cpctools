@@ -46,7 +46,7 @@
 #include "CapriceIDE.h"
 #endif
 
-#include "core/Desass.h"
+#include "misc/Desass.h"
 
 using std::dynamic_pointer_cast;
 

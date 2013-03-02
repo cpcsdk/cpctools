@@ -50,7 +50,7 @@
 #include "audioPlugin.h"
 #include "emulator.h"
 
-#include "log.h"
+#include "misc/log.h"
 
 #include <iostream>
 

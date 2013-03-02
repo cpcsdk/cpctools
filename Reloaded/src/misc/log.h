@@ -61,7 +61,7 @@ class Log
         
         static inline void debugLog(const char *formatIn, ...)
         {
-#if DEBUG
+#ifndef NDEBUG
             char* formatOut = new char[(strlen(formatIn)+1) + 8];
 
             if(!instance) init();

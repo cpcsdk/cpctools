@@ -2,11 +2,14 @@
  * Haiku/BeOS GUI by PulkoMandy - 2010-2011
  */
 
+#include <memory>
+
 #include <Application.h>
 
 #include "REmulator.h"
-#include "RVideo.h"
-#include "RAudio.h"
+
+class BeAudioPlugin;
+class RVidPlugin;
 
 class ReloadedApp : public BApplication
 {
@@ -19,6 +22,6 @@ class ReloadedApp : public BApplication
 
 	private:
 		REmulator* mEmu;
-		BeAudioPlugin audio;
-		RVidPlugin video;
+		shared_ptr<BeAudioPlugin> audio;
+		shared_ptr<RVidPlugin> video;
 };

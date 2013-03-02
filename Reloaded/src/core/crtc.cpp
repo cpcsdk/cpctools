@@ -40,11 +40,11 @@ based on the CRTC emulation of WinAPE32 v2.0a5b by Richard Wilson
 #include <memory.h>
 #include <iostream>
 
-#include "synchro.h"
-
 #include "crtc.h"
 #include "gatearray.h"
 #include "vdu.h"
+
+#include "misc/synchro.h"
 
 #include "debug.h"
 

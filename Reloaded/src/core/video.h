@@ -24,7 +24,7 @@
 #include <string>
 #include "cap32type.h"
 
-#include "synchro.h"
+#include "misc/synchro.h"
 
 using std::string;
 

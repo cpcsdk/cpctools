@@ -8,9 +8,9 @@
 #include "core/input.h"
 #include "core/CPCKeyDefs.h"
 #include "core/crtc1.h"
-#include "core/filetools.h"
 
-#include "core/log.h"
+#include "misc/file/filetools.h"
+#include "misc/log.h"
 
 #include <wx/event.h>
 #include <wx/filename.h>

@@ -33,11 +33,9 @@
 #include "fdc.h"
 #include "z80.h"
 
-#include "timer.h"
-
+#include "misc/timer.h"
+#include "misc/synchro.h"
 #include <semaphore.h>
-
-#include "synchro.h"
 
 #ifdef USE_PTHREAD
 #include <pthread.h>

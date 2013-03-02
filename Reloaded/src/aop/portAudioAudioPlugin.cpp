@@ -19,9 +19,9 @@
 #include "portAudioAudioPlugin.h"
 #include <portaudio.h>
 
-#include "../core/emulator.h"
+#include "core/emulator.h"
 
-#include "../core/log.h"
+#include "misc/log.h"
 
 PaStream* audioStream = NULL;
 
@@ -91,7 +91,7 @@ int PortAudioAudioPlugin::init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg)
 //	hostApiOutputParameters.suggestedLatency = Pa_GetDeviceInfo(hostApiOutputParameters.device)->defaultHighOutputLatency;
 	hostApiOutputParametersPtr = &hostApiOutputParameters;
 
-#if DEBUG
+#ifndef NDEBUG
 	if(Pa_GetHostApiCount() > 0)
 	{
 		DebugLogMessage("[PortAudio Plugin] Number of available API: %d", Pa_GetHostApiCount());

@@ -5,8 +5,8 @@
 #include <cstdarg>
 #include <cstdlib>
 
-#include "core/log.h"
 #include "core/emulator.h"
+#include "misc/log.h"
 
 class WXLog: public Log
 {

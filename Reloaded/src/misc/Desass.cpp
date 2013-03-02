@@ -26,10 +26,8 @@
 #include <cstring>
 #include <cstdio>
 
-#include "synchro.h"
-
-#include "memory.h"
 #include "Desass.h"
+#include "core/memory.h"
 
 using std::ios;
 using std::endl;

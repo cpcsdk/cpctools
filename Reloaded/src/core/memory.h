@@ -12,7 +12,7 @@
 
 #include "cap32type.h"
 
-#include "synchro.h"
+#include "misc/synchro.h"
 
 using std::shared_ptr;
 

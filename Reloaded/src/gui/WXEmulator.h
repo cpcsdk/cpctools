@@ -31,8 +31,8 @@
 
 #include "core/emulator.h"
 
-#include "core/synchro.h"
-#include "core/log.h"
+#include "misc/synchro.h"
+#include "misc/log.h"
 
 using std::shared_ptr;
 

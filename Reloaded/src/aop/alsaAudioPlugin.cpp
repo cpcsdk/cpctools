@@ -1,9 +1,9 @@
 #include "alsaAudioPlugin.h"
 #include <alsa/asoundlib.h>
 
-#include "emulator.h"
+#include "core/emulator.h"
 
-#include "log.h"
+#include "misc/log.h"
 
 #include <pthread.h>
 

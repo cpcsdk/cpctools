@@ -19,6 +19,7 @@ add_executable(reloaded WIN32
 	MemoryImpl.cpp
 	../aop/portAudioAudioPlugin.cpp
 	WXEmulator.cpp
+	../misc/Desass.cpp
 )
 
 add_dependencies(reloaded ReloadedCore)
@@ -26,7 +27,7 @@ target_link_libraries(reloaded ReloadedCore)
 
 target_link_libraries(reloaded ${wxWidgets_LIBRARIES})
 if (WIN32)
-    target_link_libraries(reloaded portaudio_x86 pthreadVC2)
+	target_link_libraries(reloaded portaudio_x86 pthreadVC2)
 else (WIN32)
-    target_link_libraries(reloaded portaudio pthread)
+	target_link_libraries(reloaded portaudio pthread)
 endif (WIN32)

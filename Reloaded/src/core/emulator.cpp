@@ -45,7 +45,7 @@
 
 #include "error.h"
 
-#include "log.h"
+#include "misc/log.h"
 
 //#include "filetools.h"
 

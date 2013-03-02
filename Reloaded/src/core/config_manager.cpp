@@ -34,7 +34,7 @@
 #include "dsk.h"
 #include "render.h"
 #include "emulator.h"
-#include "c_inifile.h"
+#include "misc/file/c_inifile.h"
 
 #ifdef WIN32
 #include <direct.h>

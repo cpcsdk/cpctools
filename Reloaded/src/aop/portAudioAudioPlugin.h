@@ -19,7 +19,7 @@
 #ifndef _PORTAUDIOAUDIOPLUGIN_H_
 #define _PORTAUDIOAUDIOPLUGIN_H_
 
-#include "../core/audioPlugin.h"
+#include "core/audioPlugin.h"
 
 class PortAudioAudioPlugin : public AudioPlugin
 {
