@@ -49,7 +49,9 @@ class REmulator: public Emulator {
 			message.what='fled';
 			message.AddBool("status", on);
 
-			static_cast<RVidPlugin*>(GetRenderer().GetVideoPlugin())->fWindow->PostMessage(&message);
+			shared_ptr<RVidPlugin> video = std::static_pointer_cast<RVidPlugin>(
+				GetRenderer().GetVideoPlugin());
+			video->fWindow->PostMessage(&message);
 		}
 };
 

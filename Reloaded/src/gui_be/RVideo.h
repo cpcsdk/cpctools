@@ -10,7 +10,7 @@
 #include <Window.h>
 
 #include "RWin.h"
-#include "emulator.h"
+#include "../core/emulator.h"
 
 class RVidPlugin : public VideoPlugin
 {

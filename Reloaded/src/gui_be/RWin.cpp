@@ -7,7 +7,7 @@
 #include <MenuBar.h>
 #include <MenuItem.h>
 
-#include "video.h"
+#include "../core/video.h"
 
 #include "KeymapWindow.h"
 #include "REmulator.h"

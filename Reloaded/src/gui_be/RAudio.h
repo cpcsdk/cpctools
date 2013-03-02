@@ -19,7 +19,7 @@
 #ifndef __RAUDIO_H__
 #define __RAUDIO_H__
 
-#include "audioPlugin.h"
+#include "../core/audioPlugin.h"
 
 #include <PushGameSound.h>
 #include <GameSoundDefs.h>
@@ -29,7 +29,7 @@ class BeAudioPlugin : public AudioPlugin
 {
     public:
         BeAudioPlugin() {}
-        int init(t_CPC& cpc, t_PSG& psg)
+        int init(std::shared_ptr<t_CPC> cpc, std::shared_ptr<t_PSG> psg)
 		{
 			curWPos = 1024;
 			outSize = 1024;
@@ -37,8 +37,8 @@ class BeAudioPlugin : public AudioPlugin
 
 			gs_audio_format format;
 			memset(&format, 0, sizeof(format));
-			format.frame_rate = cpc.snd_playback_rate;
-			format.channel_count = cpc.snd_stereo ? 2 : 1;
+			format.frame_rate = cpc->snd_playback_rate;
+			format.channel_count = cpc->snd_stereo ? 2 : 1;
 			// Curently we don't support anything else anyway
 			format.format = gs_audio_format::B_GS_S16;
 			/*

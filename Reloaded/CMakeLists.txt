@@ -7,14 +7,16 @@ include(ActivateCXX11)
 #TODO check for StSound
 add_definitions(-DST_SOUND)
 
-add_subdirectory(src/core)
+find_package(Threads REQUIRED)
 
-IF (BEOS)
+IF (HAIKU)
 	add_definitions(-DUSE_PTHREAD)
 	add_subdirectory(src/gui_be)
-ELSE (BEOS)
+ELSE (HAIKU)
     #	add_definitions(-DUSE_PTHREAD)
 	add_subdirectory(src/gui)
-	add_subdirectory(src/snamp)
-ENDIF (BEOS)
+ENDIF (HAIKU)
+
+add_subdirectory(src/core)
+add_subdirectory(src/snamp)
 

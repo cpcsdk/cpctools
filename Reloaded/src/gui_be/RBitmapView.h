@@ -11,6 +11,8 @@
 #include <iostream>
 
 #include <Bitmap.h>
+
+#include "../core/video.h"
  
 class RBitmapView: public BView
 {

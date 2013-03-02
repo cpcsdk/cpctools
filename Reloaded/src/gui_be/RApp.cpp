@@ -10,6 +10,8 @@
 #include "core/snapshot.h"
 #include "misc/log.h"
 
+#include <memory.h>
+
 #include <FindDirectory.h>
 #include <Path.h>
 #include <Entry.h>
@@ -26,8 +28,8 @@ int main(void)
 
 ReloadedApp::ReloadedApp() : BApplication("application/x-vnd-shinra-reloaded")
 {
-    auto video = make_shared<RVidPlugin>();
-    auto audio = make_shared<BeAudioPlugin>();
+    auto video = std::make_shared<RVidPlugin>();
+    auto audio = std::make_shared<BeAudioPlugin>();
 	REmulator::createInstance(video, audio);
 	mEmu = REmulator::getInstance();
 

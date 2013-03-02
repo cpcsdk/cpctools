@@ -35,7 +35,7 @@ set(SOURCE_FILES
 add_library(ReloadedCore SHARED ${SOURCE_FILES})
 
 if (WIN32)
-    target_link_libraries(ReloadedCore stsoundlibrary pthreadVC2)
+	target_link_libraries(ReloadedCore stsoundlibrary ${CMAKE_THREAD_LIB_INIT})
 else (WIN32)
-    target_link_libraries(ReloadedCore stsound pthread)
+	target_link_libraries(ReloadedCore stsound ${CMAKE_THREAD_LIB_INIT})
 endif (WIN32)
