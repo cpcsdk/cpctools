@@ -7,23 +7,23 @@ include_directories(..)
 if(HAIKU)
 	set (AudioPlugin ../gui_be/RAudio.h)
 else(HAIKU)
-	set (AudioPlugin ../aop/portAudioPlugin.cpp)
+	set (AudioPlugin ../aop/portAudioAudioPlugin.cpp)
 endif(HAIKU)
 
 add_executable(snamp WIN32 
-    main.cpp
+	main.cpp
 	${AudioPlugin}
 )
 
 add_dependencies(snamp ReloadedCore)
 target_link_libraries(snamp ReloadedCore)
 
+target_link_libraries(snamp ${CMAKE_THREAD_LIB_INIT})
+
 if (WIN32)
-	target_link_libraries(snamp portaudio_x86 ${CMAKE_THREAD_LIB_INIT})
+	target_link_libraries(snamp portaudio_x86)
 else (WIN32)
-	if (HAIKU)
-		target_link_libraries(snamp ${CMAKE_THREAD_LIB_INIT})
-	else (HAIKU)
-		target_link_libraries(snamp portaudio ${CMAKE_THREAD_LIB_INIT})
-	endif (HAIKU)
+	if (NOT HAIKU)
+		target_link_libraries(snamp portaudio)
+	endif (NOT HAIKU)
 endif (WIN32)

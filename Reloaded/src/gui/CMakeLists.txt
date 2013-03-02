@@ -26,8 +26,11 @@ add_dependencies(reloaded ReloadedCore)
 target_link_libraries(reloaded ReloadedCore)
 
 target_link_libraries(reloaded ${wxWidgets_LIBRARIES})
+
+target_link_libraries(reloaded ${CMAKE_THREAD_LIB_INIT})
+
 if (WIN32)
-	target_link_libraries(reloaded portaudio_x86 pthreadVC2)
+	target_link_libraries(reloaded portaudio_x86)
 else (WIN32)
-	target_link_libraries(reloaded portaudio pthread)
+	target_link_libraries(reloaded portaudio)
 endif (WIN32)
