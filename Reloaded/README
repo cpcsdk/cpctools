@@ -55,13 +55,13 @@ COMPILING
 Compilation for Linux and probably other Unixoide
 	mkdir build
 	cd build
-	cmake ..
+	cmake .. -DCMAKE_BUILD_TYPE=Release
 	make ; make install
 
 CrossCompilation for Windows: (TODO)
 	mkdir build
 	cd build
-	cmake .. -DCMAKE_TOOLCHAIN_FILE=../crossWin.cmake
+	cmake .. -DCMAKE_TOOLCHAIN_FILE=../crossWin.cmake -DCMAKE_BUILD_TYPE=Release
 	make ; make install
 
 ..........................................................................

@@ -32,7 +32,7 @@ set(SOURCE_FILES
 	../misc/synchro.cpp
 )
 
-add_library(ReloadedCore SHARED ${SOURCE_FILES})
+add_library(ReloadedCore STATIC ${SOURCE_FILES})
 
 target_link_libraries(ReloadedCore ${CMAKE_THREAD_LIB_INIT})
 
