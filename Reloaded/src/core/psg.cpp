@@ -125,14 +125,14 @@ void t_PSG::Emulate(int iCycleCount)
         {
 #ifdef ST_SOUND
             cycle_count += iCycleCount;
-            
+
             if (cycle_count >= snd_cycle_count)
             {
                 uint8_t* bufferPtr = ap->getBuffer();
                 if(bufferPtr == NULL) return;
-                
+
                 cycle_count -= snd_cycle_count;
-                
+
                 m_Ym2149->updateStereo((ymsample*)bufferPtr, (ymint)1);
                 for(unsigned int k = 0; k<sizeof(ymsample)*2; k++)
                 {
@@ -142,7 +142,7 @@ void t_PSG::Emulate(int iCycleCount)
                     *(bufferPtr+k) += emu->GetTape()->GetTapeLevel()/32;
                 }
 
-                ap->update();
+                buffer_full = ap->update();
             }
 #endif
         }

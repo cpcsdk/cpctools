@@ -460,6 +460,7 @@ void Emulator::Emulate()
         {
             if (dwTicks < dwTicksTarget)
             {
+#if 0
                 // delay emulation
                 if((dwTicksTarget - dwTicks) > 5) // if next frame in more than 5ms use passive wait
                 {
@@ -469,6 +470,7 @@ void Emulator::Emulate()
                     		usleep((dwTicksTarget - dwTicks)*900);
 			#endif
                 }
+#endif
                 do
                 {
                 } while(timer.getTime() < dwTicksTarget);

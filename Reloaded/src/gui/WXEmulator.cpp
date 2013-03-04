@@ -70,7 +70,7 @@ void WXEmulator::logMessage(const char* message) {
     if(win)
     {
         win->setStatus(message);
-#ifndef NDEBUG
+#if !defined(NDEBUG) || STDERR_LOG
 		cerr << message << endl;
 #endif
     }

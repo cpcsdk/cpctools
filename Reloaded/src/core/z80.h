@@ -83,6 +83,7 @@ using std::weak_ptr;
 
 class t_GateArray;
 class t_VDU;
+class t_PSG;
 class t_CPC;
 class Emulator;
 
@@ -101,6 +102,7 @@ private:
 	weak_ptr<Emulator> emulator;
 	IOPort			_ioPort;
 	shared_ptr<t_VDU>			VDU;
+	shared_ptr<t_PSG>			PSG;
 	shared_ptr<t_Memory>		Memory;
 	shared_ptr<t_CPC>			CPC;
 

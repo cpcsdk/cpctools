@@ -19,7 +19,13 @@
 #ifndef _PORTAUDIOAUDIOPLUGIN_H_
 #define _PORTAUDIOAUDIOPLUGIN_H_
 
+#include <portaudio.h>
 #include "core/audioPlugin.h"
+#include "misc/synchro.h"
+
+// TODO A better buffer
+#include <queue>
+using std::queue;
 
 class PortAudioAudioPlugin : public AudioPlugin
 {
@@ -30,10 +36,16 @@ class PortAudioAudioPlugin : public AudioPlugin
         inline int update();
         void pause();
         void resume();
-        inline uint8_t* getBuffer() {return pbSndBufferPtr;}
+        inline uint8_t* getBuffer() {return sndBufferPtr;}
+        int pa_callback(const void *input, void *output, unsigned long frameCount, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags);
     private:
-        uint8_t *pbSndBuffer;
-        uint8_t *pbSndBufferPtr;
+        PaStream* audioStream = NULL;
+        uint8_t *sndBuffer;
+        uint8_t *sndBufferPtr;
+        int sample_size;
+        int sample_count;
+        queue<uint32_t> buffer; // TODO A better buffer
+        SysSync buffer_lock;
 };
 
 #endif /* #ifndef _PORTAUDIOAUDIOPLUGIN_H_ */

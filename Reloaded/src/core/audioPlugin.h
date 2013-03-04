@@ -35,15 +35,15 @@ class AudioPlugin
 {
     public:
         AudioPlugin() {}
-		virtual ~AudioPlugin() {}
+        virtual ~AudioPlugin() {InfoLogMessage("[AudioPlugin] Destroyed.");}
         virtual int init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg) = 0;
         virtual void shutdown() = 0;
         virtual int update() = 0;
         virtual void pause() = 0;
         virtual void resume() = 0;
         virtual uint8_t* getBuffer() = 0;
-		virtual void lock() {}
-		virtual void unlock() {}
+        virtual void lock() {}
+        virtual void unlock() {}
     protected:
         weak_ptr<t_CPC> cpc;
         weak_ptr<t_PSG> psg;
@@ -54,9 +54,9 @@ class NullAudioPlugin : public AudioPlugin
     public:
         NullAudioPlugin() {}
         int init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg) {
-				InfoLogMessage("[NullAudio Plugin] Open.");
-				return 0;
-		}
+            InfoLogMessage("[NullAudio Plugin] Open.");
+            return 0;
+        }
         void shutdown() {}
         int update() {return 0;}
         void pause() {}

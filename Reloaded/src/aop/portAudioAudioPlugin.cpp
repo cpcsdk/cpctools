@@ -21,28 +21,99 @@
 
 #include "core/emulator.h"
 
+#include "core/psg.h"
 #include "misc/log.h"
 
-PaStream* audioStream = NULL;
+//#define BLOCK_IO 1
 
-//uint8_t *pbSndBuffer = NULL;
-//*pbSndBuffer = NULL;
-// byte *pbSndBufferEnd = NULL;
-// byte *pbSndBufferCurrent = NULL;    // current position in the reading sample
-//uint8_t *pbSndBufferPtr = NULL;    // current position in the writing sample
-//*pbSndBufferPtr = NULL;    // current position in the writing sample
-// dword dwSndBufferCopied;
+static int CallbackWrapper(const void *input, void *output, unsigned long frameCount, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData)
+{
+	PortAudioAudioPlugin * obj = reinterpret_cast<PortAudioAudioPlugin*>(userData);
+	return obj->pa_callback(input, output, frameCount, timeInfo, statusFlags);
+}
+
+int PortAudioAudioPlugin::pa_callback(const void *input, void *output, unsigned long frameCount, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags)
+{
+	uint32_t * out = (uint32_t*)output;
+
+	buffer_lock.lock();
+
+	if(frameCount > buffer.size())
+	{
+		InfoLogMessage("[PortAudio Plugin] Buffer underrun");
+#if 0
+		// TODO: A more correct buffer underrun fallback
+		int size = buffer.size();
+		for(int i = 0; i < size; i++)
+		{
+			*out++ = buffer.front();
+			buffer.pop();
+		}
+		for(int j = 0; j < (frameCount - size); j++)
+		{
+			*out++ = *(((uint32_t*)output) + j);
+		}
+#endif
+	}
+	else
+	{
+		for(int i = 0; i < frameCount; i++)
+		{
+			*out++ = buffer.front();
+			buffer.pop();
+		}
+	}
+
+	buffer_lock.unlock();
+
+	return paContinue;
+}
 
 PortAudioAudioPlugin::PortAudioAudioPlugin() :
-    pbSndBuffer(NULL),
-    pbSndBufferPtr(NULL)
+	audioStream(NULL),
+	sndBuffer(NULL),
+	sndBufferPtr(NULL)
 {
 }
 
+#if BLOCK_IO
 inline int PortAudioAudioPlugin::update()
 {
-    return Pa_WriteStream(audioStream,pbSndBuffer,1) == paNoError ? 0 : -1;
+#if 0
+	return Pa_WriteStream(audioStream, sndBuffer, 1) == paNoError ? 0 : -1;
+#else
+	sndBufferPtr += sample_size;
+	
+	if((sndBufferPtr - sndBuffer) > sample_count*sample_size)
+	{
+		sndBufferPtr = sndBuffer;
+		return Pa_WriteStream(audioStream, sndBuffer, sample_count) == paNoError ? 0 : -1;
+	}
+
+	return 0;
+#endif
 }
+#else
+inline int PortAudioAudioPlugin::update()
+{
+	sndBufferPtr += sample_size;
+	if((sndBufferPtr - sndBuffer) > sample_count*sample_size)
+	{
+		sndBufferPtr = sndBuffer;
+	
+		buffer_lock.lock();
+		for(int i = 0; i < sample_count; i++)
+		{
+			buffer.push(*((uint32_t*)sndBuffer + i));
+		}
+		int size = buffer.size();
+		buffer_lock.unlock();
+		return size > 2*sample_count ? 1 : 0;
+	}
+
+	return buffer.size() > 2*sample_count ? 1 : 0;
+}
+#endif
 
 int PortAudioAudioPlugin::init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg)
 {
@@ -60,10 +131,12 @@ int PortAudioAudioPlugin::init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg)
 
 	PaStreamParameters hostApiOutputParameters;
 	PaStreamParameters *hostApiOutputParametersPtr;
-    this->cpc = cpc;
-    this->psg = psg;
+	this->cpc = cpc;
+	this->psg = psg;
 
-    unsigned int rate = cpc->snd_playback_rate;
+	sample_count = cpc->snd_playback_rate / 50;
+
+	unsigned int rate = cpc->snd_playback_rate;
 	int channels = cpc->snd_stereo ? 2 : 1;
 
 	PaSampleFormat format = paInt16;
@@ -83,7 +156,10 @@ int PortAudioAudioPlugin::init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg)
 			break;
 		default:
 			WarningLogMessage("[PortAudio Plugin] Warning, %d bits format unknown, fallback to %s.", cpc->snd_bits, format);
+			cpc->snd_bits = 16;
 	}
+
+	sample_size = (cpc->snd_bits * channels) / 8;
 
 	hostApiOutputParameters.device = Pa_GetDefaultOutputDevice();
 	hostApiOutputParameters.channelCount = channels;
@@ -115,29 +191,37 @@ int PortAudioAudioPlugin::init(shared_ptr<t_CPC> cpc, shared_ptr<t_PSG> psg)
 //	DebugLogMessage("[PortAudio Plugin] Default Device Name: %s.", info->name);
 #endif
 
-#define SAMPLECOUNT 1 /*CPC.snd_playback_rate * 2*/
-    if((err = Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, cpc->snd_playback_rate, 1, NULL, NULL)) != paNoError)
+#if BLOCK_IO
+	if((err = Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, rate, 1, NULL, NULL)) != paNoError)
+#else
+	if((err = Pa_OpenDefaultStream(&audioStream, 0/*input*/, 2/*channels*/, paInt16, rate, sample_count, &CallbackWrapper, this)) != paNoError)
+#endif
 //    if((err = Pa_OpenStream(&audioStream, NULL, hostApiOutputParametersPtr, rate, 1, paNoFlag, NULL, NULL)) != paNoError)
 	{
 		ErrorLogMessage("[PortAudio Plugin] Could not open audio. (PortAudio Message: %s)", Pa_GetErrorText(err));
 		return 1;
 	}
 
-	pbSndBuffer = new byte[SAMPLECOUNT]; // allocate the sound data buffer
-	if(!pbSndBuffer)
+	sndBuffer = new byte[sample_size*sample_count]; // allocate the sound data buffer
+	if(!sndBuffer)
 	{
 		ErrorLogMessage("[PortAudio Plugin] pbSndBuffer allocation error.");
 		return 1;
 	}
 //	pbSndBufferEnd = pbSndBuffer + SAMPLECOUNT;
 //	memset(pbSndBuffer, 0, SAMPLECOUNT);
-	pbSndBufferPtr = pbSndBuffer; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
+	sndBufferPtr = sndBuffer; // init write cursor (1VBL latency, will evolve if there are overflows when reading)
 //	pbSndBufferCurrent = pbSndBuffer + SAMPLECOUNT/2;   // init read cursor
 
-        if((err = Pa_StartStream(audioStream)) != paNoError) {
-			ErrorLogMessage("[PortAudio Plugin] Could not start stream. (PortAudio Message: %s)", Pa_GetErrorText(err));
+	if((err = Pa_StartStream(audioStream)) != paNoError)
+	{
+		ErrorLogMessage("[PortAudio Plugin] Could not start stream. (PortAudio Message: %s)", Pa_GetErrorText(err));
 		return 1;
 	}
+
+	PaStreamInfo const * info = Pa_GetStreamInfo(audioStream);
+	InfoLogMessage("[PortAudio Plugin] Reported Output Latency: %f", info->outputLatency);
+	InfoLogMessage("[PortAudio Plugin] Reported real SampleRate: %f", info->sampleRate);
 
 	InfoLogMessage("[PortAudio Plugin] Device open.");
 
@@ -150,8 +234,8 @@ void PortAudioAudioPlugin::shutdown()
     Pa_StopStream(audioStream);
     Pa_Terminate();
 
-	delete [] pbSndBuffer;
-	pbSndBuffer = NULL;
+	delete [] sndBuffer;
+	sndBuffer = NULL;
 }
 
 void PortAudioAudioPlugin::pause()
