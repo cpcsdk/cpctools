@@ -85,9 +85,9 @@ dword dwDebugFlag = 0;
 FILE *pfoDebug;
 #endif
 
-Emulator* Emulator::instance = NULL;
-bool Emulator::sInitOnce = false;
+#define USE_PASSIVE_WAIT 0
 
+Emulator* Emulator::instance = NULL;
 
 void InitDebug()
 {
@@ -253,17 +253,16 @@ void Emulator::printer_stop()
 
 Emulator::Emulator(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio):
 	this_(this, null_deleter()),
-	_config(make_shared<t_CPC>(this_)),
+	_config(make_shared<t_CPC>(shared_from_this())),
 	_renderer(_config->vid_bpp),
-	_input(make_shared<t_Input>()),
 	_vdu(make_shared<t_VDU>(_renderer)),
 	_crtc(NULL),
-	_fdc(make_shared<t_FDC>(this_)),
+	_fdc(make_shared<t_FDC>(shared_from_this())),
 	_ppi(make_shared<t_PPI>()),
 	_tape(make_shared<t_Tape>(_config)),
-	_psg(make_shared<t_PSG>(this_)),
+	_psg(make_shared<t_PSG>(shared_from_this())),
 	_cpcMemory(make_shared<t_Memory>(_config)),
-	_z80(make_shared<t_z80regs>(this_)),
+	_z80(make_shared<t_z80regs>(shared_from_this())),
 	_gateArray(make_shared<t_GateArray>(_renderer, _z80)),
 	_audioPlugin(audio),
 	FPSDisplay(false),
@@ -344,7 +343,7 @@ bool Emulator::Init()
 		}
 	}
 
-	if (_input->input_init(*_config))
+	if(!(_input = make_shared<t_Input>(_config)))
 	{
 		CriticalLogMessage("input_init() failed. Aborting.");
 		return false;
@@ -460,14 +459,14 @@ void Emulator::Emulate()
         {
             if (dwTicks < dwTicksTarget)
             {
-#if 0
+#if USE_PASSIVE_WAIT
                 // delay emulation
                 if((dwTicksTarget - dwTicks) > 5) // if next frame in more than 5ms use passive wait
                 {
 			#ifdef _WIN32
 				Sleep(dwTicksTarget - dwTicks);
 			#else
-                    		usleep((dwTicksTarget - dwTicks)*900);
+				usleep((dwTicksTarget - dwTicks)*900);
 			#endif
                 }
 #endif

@@ -5,9 +5,13 @@
 #ifndef _INPUT_H_
 #define _INPUT_H_
 
+#include <memory>
 #include <map>
 
 #include "cap32type.h"
+
+using std::shared_ptr;
+
 class t_CPC;
 
 #define MOD_CPC_SHIFT   (0x01 << 8)
@@ -22,23 +26,21 @@ class t_CPC;
 
 class t_Input
 {
-private:
-	//! CPC keyboard layout (English, French, Spanish)
-	static dword		cpc_kbd[86];
-	static int			joy_layout[12][2];
+public:
+	t_Input(shared_ptr<t_CPC> config);
+	void input_swap_joy (shared_ptr<t_CPC> config);
+	void setupKey(int,int,int=-1,int=-1,int=-1);
+	void Reset();
 public:
 	byte				keyboard_matrix[16];
 	std::map<unsigned int,dword> keyboard_normal;
 	std::map<unsigned int,dword> keyboard_shift;
 	std::map<unsigned int,dword> keyboard_ctrl;
 	std::map<unsigned int,dword> keyboard_mode;
-public:
-	
-	void Reset();
-
-	void input_swap_joy (t_CPC &CPC);
-	int input_init (t_CPC &CPC);	
-        void setupKey(int,int,int=-1,int=-1,int=-1);
+private:
+	//! CPC keyboard layout (English, French, Spanish)
+	static dword		cpc_kbd[86];
+	static int			joy_layout[12][2];
 };
 
 #endif

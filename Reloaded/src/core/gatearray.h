@@ -20,7 +20,7 @@ private:
 	weak_ptr<t_z80regs> _z80;
 	Renderer	& _renderer;
 	
-	//! Requested mode (will be active on next HSync
+	//! Requested mode (will be active on next HSync)
 	unsigned int requested_scr_mode;
 	//! Current mode
 	unsigned int scr_mode;

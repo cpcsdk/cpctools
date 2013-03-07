@@ -19,6 +19,11 @@ class Emulator;
 class t_CPC
 {
 public:
+   void loadConfiguration();
+   void saveConfiguration();
+    t_CPC(shared_ptr<Emulator> emu);
+    ~t_CPC();
+public:
     // System
    unsigned int model;
    unsigned int jumpers;
@@ -82,16 +87,9 @@ public:
     bool oglfilter;
     int vid_w,vid_h,vid_bpp;
     Renderer::MonitorMode scr_tube;
-	unsigned int crtc;
-
-public:
-   void loadConfiguration ();
-   void saveConfiguration();
-    t_CPC(shared_ptr<Emulator> emu);
-	~t_CPC();
-
+    unsigned int crtc;
 private:
-	weak_ptr<Emulator> _emulator;
+    weak_ptr<Emulator> _emulator;
 };
 
 #endif

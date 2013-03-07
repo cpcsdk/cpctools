@@ -143,7 +143,7 @@ void t_Input::Reset()
 	memset(keyboard_matrix, 0xff, sizeof(keyboard_matrix));
 }
 
-void t_Input::input_swap_joy (t_CPC &CPC)
+void t_Input::input_swap_joy(shared_ptr<t_CPC> config)
 {
 	dword n, pc_idx, val;
 
@@ -173,7 +173,7 @@ void t_Input::setupKey(int cpc_code, int pc_stdcode, int pc_shiftcode  , int pc_
 }
 
 
-int t_Input::input_init (t_CPC &CPC)
+t_Input::t_Input(shared_ptr<t_CPC> config)
 {
 	keyboard_normal.clear();
 	keyboard_shift.clear();
@@ -181,10 +181,8 @@ int t_Input::input_init (t_CPC &CPC)
 	keyboard_mode.clear();
 
 	// enable keyboard joystick emulation?
-	if (CPC.joysticks)
+	if (config->joysticks)
 	{
-		input_swap_joy(CPC);
+		input_swap_joy(config);
 	}
-
-	return 0;
 }
