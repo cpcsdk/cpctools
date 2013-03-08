@@ -80,20 +80,20 @@ CapriceWindowImpl::~CapriceWindowImpl()
 void CapriceWindowImpl::onExit1( wxCloseEvent& event )
 {
 	// Check if the DSKs are modified.
-	if (emulator->GetDriveA().altered &&
+	if (emulator->GetFDC()->GetDriveA().altered &&
 		wxMessageBox(wxT("DSK in drive A was modified ! Do you want to save before quitting ?"),
 			wxT("Save DSK?"), wxICON_QUESTION | wxYES_NO, this) == wxYES)
 	{
-		dsk_save(emulator->GetFDC()->files[0].c_str(), &emulator->GetDriveA());
-		emulator->GetDriveA().altered = false;
+		dsk_save(emulator->GetFDC()->files[0].c_str(), &emulator->GetFDC()->GetDriveA());
+		emulator->GetFDC()->GetDriveA().altered = false;
 	}
 
-	if (emulator->GetDriveB().altered &&
+	if (emulator->GetFDC()->GetDriveB().altered &&
 		wxMessageBox(wxT("DSK in drive A was modified ! Do you want to save before quitting ?"),
 			wxT("Save DSK?"), wxICON_QUESTION | wxYES_NO, this) == wxYES)
 	{
-		emulator->GetDriveB().altered = false;
-		dsk_save(emulator->GetFDC()->files[1].c_str(), &emulator->GetDriveB());
+		emulator->GetFDC()->GetDriveB().altered = false;
+		dsk_save(emulator->GetFDC()->files[1].c_str(), &emulator->GetFDC()->GetDriveB());
 	}
 
 	#ifdef __WXMSW__
@@ -429,7 +429,8 @@ void CapriceWindowImpl::OnStep( wxCommandEvent& event)
 }
 
 void CapriceWindowImpl::OnFullScreen( wxCommandEvent& event){
-    emulator->GetRenderer().ToggleFullScreen() ;
+    // TODO: Change to fullscreen (probably thru a change of VideoPlugin
+    //emulator->GetRenderer().ToggleFullScreen() ;
 }
 
 void CapriceWindowImpl::OnReset( wxCommandEvent& event)

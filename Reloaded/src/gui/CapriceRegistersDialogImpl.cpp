@@ -432,10 +432,10 @@ void CapriceRegistersDialogImpl::OnIdleR( wxIdleEvent& event )
 	// FDC
     if(fdc_tab->IsShownOnScreen())
 	{
-		a_track->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveA().current_track));
-		a_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveA().current_sector));
-		b_track->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_track));
-		b_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetDriveB().current_sector));
+		a_track->SetValue(wxString::Format(wxT("%d"),emulator->GetFDC()->GetDriveA().current_track));
+		a_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetFDC()->GetDriveA().current_sector));
+		b_track->SetValue(wxString::Format(wxT("%d"),emulator->GetFDC()->GetDriveB().current_track));
+		b_sector->SetValue(wxString::Format(wxT("%d"),emulator->GetFDC()->GetDriveB().current_sector));
 
 		t_st0->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC()->getST(0)));
 		t_st1->SetValue(wxString::Format(wxT("%x"),emulator->GetFDC()->getST(1)));
