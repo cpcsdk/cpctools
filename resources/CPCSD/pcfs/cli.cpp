@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <libgen.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,20 +85,22 @@ int main(int argc, const char* argv[])
 
 		switch(c)
 		{
-			/*
 			case 'd':
-				puts("not yet!");
-				break;
-			*/
-			case 'e':
 				char d[1024];
+				scanf(" %s",d);
+				if(d[0] == '/') d[0] = 0;
+				changedir(d);
+				break;
+			case 'e':
 				scanf(" %s",d);
 				printf("About to erase file %s. Are you sure ?\n",d);
 				if (yesno())
 					erasefile(d);
 				break;
 			case 'f':
-				format_device();
+				printf("About to format whole drive. Are you sure ?\n",d);
+				if (yesno())
+					format_device();
 				break;
 			case 'h':
 				// Show help
@@ -108,12 +111,12 @@ int main(int argc, const char* argv[])
 					"  d - destination file\n"
 					"Available commands:\n"
 					// C      - check disk structures
-					//"  D d    - change dir to d\n"
+					"  D d    - change directory\n"
 					"  E d    - erase file\n"
 					"  F      - format drive\n"
 					"  H      - show this helptext\n"
 					"  L      - list files\n"
-					// M n    - mkdir n
+					"  M n    - create directory\n"
 					"  Q      - quit fs-shell\n"
 					"  R s d  - read s (MLI) to d (host file)\n"
 					"  T s    - hexdump file s\n"
@@ -124,6 +127,10 @@ int main(int argc, const char* argv[])
 				break;
 			case 'l':
 				list_wd();
+				break;
+			case 'm':
+				scanf(" %s",d);
+				makedir(d);
 				break;
 			case 'q':
 				close(fd);

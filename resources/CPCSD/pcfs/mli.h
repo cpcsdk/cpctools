@@ -17,3 +17,6 @@ void erasefile(const char* file);
 	// Erase file from disk (free block map and fentries)
 void hexdump(uint16_t sid);
 	// Dump sector
+void makedir(const char* name);
+	// Create a directory in current directory
+void changedir(const char* where);

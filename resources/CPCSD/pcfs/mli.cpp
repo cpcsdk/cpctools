@@ -28,6 +28,7 @@
 uint8_t* diskbuffer;
 	// Work-buffer used when accessing files. Blockmap and filemap sectors are
 	// usually stored here.
+uint16_t cwd = 0;
 
 // Constants
 const uint16_t offset_filemap = 16;
@@ -77,7 +78,8 @@ const char* normalize_name(const char* original);
 // instead of sec = 3.
 //
 // Allocated entry : Nxt != 0
-// Exception is the root dir where Nxt = 0 is valid (but it is always allocated)
+// Exception is the root dir where Nxt = 0 is valid (but it is always
+//	allocated, we can easily skip it while looking for free blocks)
 
 // For files : a sector on disk where data for the extent starts, and sector
 // count at this place (0=256)
@@ -303,7 +305,7 @@ bool listwd_handle(uint16_t fentry, void* cookie)
 	memcpy(fname, entry->name, 11);
 
 	// TODO print size ? check isdir and attrs
-	printf("%s\t", fname);
+	printf("%c%s%c\t", fname[0] & 0x7F, fname + 1, fname[0] & 0x80 ? '/':' ');
 
 	cooked->nfiles++;
 
@@ -313,9 +315,6 @@ bool listwd_handle(uint16_t fentry, void* cookie)
 // list files in current dir
 void list_wd()
 {
-	uint16_t cwd = 0;
-	// TODO for now this lists files in the root dir
-
 	struct listwd_cookie cookie = {
 		/*.nfiles =*/ 0,
 		/*.cursec =*/ 0
@@ -324,6 +323,12 @@ void list_wd()
 			// needed sector. It would be better to know the last sector read
 			// by stack_extents here (TODO)
 	};
+
+	uint16_t sector = fentry_to_sector(cwd);
+	uint16_t offset = fentry_to_offset(cwd);
+	readsector(sector);
+	const uint8_t* n = diskbuffer + offset + 3;
+	printf("Current directory is %c%.10s\n\n", n[0] & 0x7F, n + 1);
 
 	for_each_file_in_dir(cwd, listwd_handle, &cookie);
 
@@ -495,8 +500,7 @@ void readfile(const char* s, const char* d)
 		d, s
 	};
 
-	// TODO 0 = root dir for now, need to extract the dir from filepath
-	if(!for_each_file_in_dir(0, readfile_handle, &cookie))
+	if(!for_each_file_in_dir(cwd, readfile_handle, &cookie))
 	{
 		fprintf(stderr, "Source file %s not found.\n", s);
 	}
@@ -518,29 +522,10 @@ bool try_allocate_sector(uint16_t secid)
 }
 
 
-void writefile(const char* s, const char* d)
+// Find a free entry in the file list and allocate it. Shared between write and
+// mkdir. Possible reuse when growing a file/dir entry as well...
+static uint16_t allocate_direntry()
 {
-	d = normalize_name(d);
-	// TODO parse d to find directory we are adding to
-	// for now it's always the root
-	uint16_t dirent = 0;
-
-	// Get some info about the source file
-	struct stat info;
-	stat(s, &info);
-	int filesize = ceil_512(info.st_size); // filesize is in sectors
-
-	printf("Writing file %s (%d sectors)\n",s, filesize);
-
-	// Allocate sectors to store the file
-	std::vector<uint16_t> sectors;
-	if (!allocateFromEnd(filesize, sectors))
-	{
-		puts(RED "ERROR" BLACK " Not enough space on disk to write this file.");
-		// TODO free the blocks again - share code with ERA function
-		return;
-	}
-
 	// Find a free dir entry and register it
 	uint16_t dirsec = offset_filemap;
 	uint16_t off =16;
@@ -574,7 +559,7 @@ void writefile(const char* s, const char* d)
 				fprintf(stderr, "Directory full.\n");
 				// TODO handle directory full error. Need to free the allocated
 				// blocks again !
-				return;
+				return 0;
 			}
 
 			// Note : Allocating next sector will free this last entry, so we
@@ -594,6 +579,97 @@ void writefile(const char* s, const char* d)
 			dirsec++;
 		}
 	}
+
+	return (dirsec - offset_filemap) * 32 + off / 16;
+}
+
+
+static uint16_t register_direntry(uint16_t ent)
+{
+	// Register this new direntry to the parent dir
+	uint16_t olddirsec = 0;
+	uint16_t dirent = cwd;
+	uint16_t dirsec = fentry_to_sector(dirent);
+	char entx = 0;
+
+
+	for(;;)
+	{
+		if (dirsec != olddirsec) {
+			readsector(dirsec);
+			olddirsec = dirsec;
+		}
+
+		struct xentry* dir =
+			(struct xentry*)(diskbuffer + fentry_to_offset(dirent));
+
+		if (dir->x[entx].sector == 0)
+		{
+			// Easy case, this is the first file !
+			dir->x[entx].sector = ent;
+			dir->x[entx].length = 1;
+			break;
+		} else if (dir->x[entx].sector + dir->x[entx].length == ent) {
+			// Append to the END of entryblock
+			if(++ dir->x[entx].length == 0)
+			{
+				// TODO check for overflow ! If it happens we need to allocate
+				// another entryblock
+				fprintf(stderr, "Directory full! Scattered dirs not handled yet\n");
+			}
+			break;
+		} else if (dir->x[entx].sector - 1 == ent) {
+			// Append to the BEGINNING of entryblock
+			if(++ dir->x[entx].length == 0)
+			{
+				// TODO check for overflow ! If it happens we need to allocate
+				// another entryblock
+				fprintf(stderr, "Directory full! Scattered dirs not handled yet\n");
+			}
+			-- dir->x[entx].sector;
+			break;
+		} else if (--entx < 0) {
+			// move on to next entry
+			dirent = dir->next;
+			dirsec = fentry_to_sector(dirent);
+			entx = 3;
+		} // else continue with next entx
+	}
+
+	writesector(dirsec);
+}
+
+
+void writefile(const char* s, const char* d)
+{
+	d = normalize_name(d);
+
+	// Get some info about the source file
+	struct stat info;
+	stat(s, &info);
+	int filesize = ceil_512(info.st_size); // filesize is in sectors
+
+	printf("Writing file %s (%d sectors)\n",s, filesize);
+
+	// Allocate sectors to store the file
+	std::vector<uint16_t> sectors;
+	if (!allocateFromEnd(filesize, sectors))
+	{
+		puts(RED "ERROR" BLACK " Not enough space on disk to write this file.");
+		// TODO free the blocks again - share code with ERA function
+		return;
+	}
+
+	uint16_t ent = allocate_direntry();
+	if(ent == 0)
+	{
+		// TODO something to cleanup here ?
+		// Could this actually happen once allocate_direntry handles all cases?
+		return;
+	}
+	uint16_t dirsec = fentry_to_sector(ent);
+		// we know it is already read by allocate_direntry
+	uint16_t off = fentry_to_offset(ent);
 
 	// Store file name
 	struct fentry* entry = (struct fentry*)(diskbuffer + off);
@@ -627,8 +703,6 @@ void writefile(const char* s, const char* d)
 		}
 	}
 
-	printf("About to write sector 16 with following data:\n");
-	hexdump(diskbuffer);
 	writesector(offset_filemap);
 
 	// Store the file data (finally ! :) )
@@ -651,49 +725,38 @@ void writefile(const char* s, const char* d)
 	munmap(buf, filesize * 512);
 	close(infd);
 
-	uint16_t olddirsec = 0;
-	dirent = 0;
-		// TODO update the parent dir (root dir for now)
-	char entx = 0;
-	for(dirsec = offset_filemap;;)
+	register_direntry(ent);
+}
+
+
+void makedir(const char* name)
+{
+	name = normalize_name(name);
+
+	uint16_t ent = allocate_direntry();
+	if(ent == 0)
 	{
-		if (dirsec != olddirsec) {
-			readsector(dirsec);
-			olddirsec = dirsec;
-		}
-
-		off /= 16; // This is the file entry offset
-
-		struct xentry* dir = (struct xentry*)diskbuffer + fentry_to_offset(dirent);
-		if (dir->x[entx].sector == 0)
-		{
-			// Easy case, this is the first file !
-			dir->x[entx].sector = off;
-			dir->x[entx].length = 1;
-			break;
-		} else if (dir->x[entx].sector + dir->x[entx].length == off) {
-			// Append to the END of entryblock
-			++ dir->x[entx].length;
-			// TODO check for overflow ! If it happens we need to allocate
-			// another entryblock
-			break;
-		} else if (dir->x[entx].sector - 1 == off) {
-			// Append to the BEGINNING of entryblock
-			++ dir->x[entx].length;
-			// TODO check for overflow ! If it happens we need to allocate
-			// another entryblock
-			-- dir->x[entx].sector;
-			break;
-		} else if (--entx < 0) {
-			// move on to next entry
-			dirent = dir->next;
-			dirsec = fentry_to_sector(dirent);
-			entx = 3;
-		} // else continue with next entx
+		return;
 	}
+	uint16_t dirsec = fentry_to_sector(ent); 
+		// we know it is already read by allocate_direntry
+	uint16_t off = fentry_to_offset(ent);
+
+	// Store file name
+	struct fentry* entry = (struct fentry*)(diskbuffer + off);
+	memcpy(entry->name, name, 11);
+	entry->name[0] |= 0x80; // mark it as a directory
+	entry->next = off / 16 + (dirsec - offset_filemap) * 32;
+
+	// dir is created empty
+	entry->x.sector = 0;
+	entry->x.length = 0;
 
 	writesector(dirsec);
+
+	register_direntry(ent);
 }
+
 
 // Rather primitive way of doing it, but should be ok most of the time.
 const char* normalize_name(const char* original)
@@ -731,6 +794,9 @@ bool erase_handle(uint16_t entry, void* cookie)
 	readsector(entrysec);
 
 	// Does name match ?
+	// TODO directories have the first bit set, so this wont match.
+	// This is on purpose, because erasing a directory is a bt different,
+	// but we should handle it here and do only what's needed for them.
 	if(memcmp(diskbuffer + off + 3, d, 11) != 0)
 	{
 		return false;
@@ -829,7 +895,6 @@ bool erase_handle(uint16_t entry, void* cookie)
 	bzero(diskbuffer + off, 16);
 	writesector(entrysec);
 	
-	// TODO
 	// And finally, the most tricky part, we need to erase the pointer to this
 	// file in the parent dir. We may need to split an extent if the file is
 	// in the middle of it. This means the direntry can grow and require an
@@ -839,7 +904,7 @@ bool erase_handle(uint16_t entry, void* cookie)
 	// We cannot use stack_extents this time, because we need to edit the FAT,
 	// so we need to know what the extents points to, but also where it is
 	// in the FAT !
-	curentry = 0; // TODO assumes the file is in the root dir.
+	curentry = cwd;
 	uint16_t nxt = curentry;
 	int8_t xtc = 1;
 
@@ -954,6 +1019,8 @@ erase_loop_done:
 				}
 			}
 
+			// Check if we can allocate the split part of an extent (see above)
+			// inside the remaining part of the (extended) direntry.
 			if (x->sector == 0) {
 				// Allocation may end in the middle of an extent (or a dir may
 				// be empty). Since count = 0 means 256 entries, we have to
@@ -971,7 +1038,7 @@ erase_loop_done:
 	} while(curentry != nxt);
 
 	// If we get there, it means we didn't manage to reallocate the splitted
-	// extent. We need to extend the directory further and allocate it in the
+	// extent. We need to extend the directory further, and allocate it in the
 	// entry that removing the file just freed.
 	struct xentry* ext = (struct xentry*)(diskbuffer + offset);
 	ext->next = entry;
@@ -998,6 +1065,41 @@ void erasefile(const char* name)
 		fprintf(stderr, "File %s not found.\n", cookie);
 	}
 }
+
+
+bool chdir_handle(uint16_t entry, void* cookie)
+{
+	const char* n = (const char*)cookie;
+
+	readsector(fentry_to_sector(entry));
+	uint16_t off = fentry_to_offset(entry);
+	if(memcmp(diskbuffer + off + 3, n, 11) == 0)
+	{
+		cwd = entry;
+		return true;
+	}
+
+	return false;
+}
+
+void changedir(const char* dir)
+{
+	if(dir[0] == 0) {
+		// empty dir means go to root
+		cwd = 0;
+		return;
+	}
+
+	// else, we look for the dir in the current one
+	char* d2 = (char*)normalize_name(dir);
+	d2[0] |= 0x80;
+
+	if(!for_each_file_in_dir(cwd, chdir_handle, d2))
+	{
+		fprintf(stderr, "Directory %c%.10s not found.\n", d2[0] & 0x7F, d2+1);
+	}
+}
+// rmdir ?
 
 // More TODO
 // CheckDisk features :
