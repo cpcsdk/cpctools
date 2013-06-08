@@ -24,7 +24,7 @@
 #define RED "\x1B[31m"
 #define BLACK "\x1B[0m"
 
-// Global vars neede on CPC as well.
+// Global vars needed on CPC as well.
 uint8_t* diskbuffer;
 	// Work-buffer used when accessing files. Blockmap and filemap sectors are
 	// usually stored here.
@@ -222,7 +222,7 @@ uint16_t fentry_to_offset(uint16_t fentry)
 // later handling.
 void stack_extents(uint16_t fentry, std::vector<struct extent>& extents)
 {
-	uint16_t sector, offset, nxt;
+	uint16_t sector, offset, nxt = fentry;
 	int8_t xtc = 1;
 	do {
 		fentry = nxt;
@@ -440,7 +440,7 @@ bool readfile_handle(uint16_t entry, void* cookie)
 	{
 		int outfd;
 		bool toscreen = (cooked->d == NULL);
-		if (toscreen) {
+		if (!toscreen) {
 			printf("Extracting %s to %s\n", cooked->s, cooked->d);
 			outfd = open(cooked->d, O_WRONLY | O_TRUNC | O_CREAT, 0444);
 			if (outfd < 0)
@@ -732,7 +732,9 @@ bool erase_handle(uint16_t entry, void* cookie)
 
 	// Does name match ?
 	if(memcmp(diskbuffer + off + 3, d, 11) != 0)
+	{
 		return false;
+	}
 
 	// Ok, name found, now handle the file
 	
@@ -756,35 +758,27 @@ bool erase_handle(uint16_t entry, void* cookie)
 		// extent at once than bit by bit)
 		
 		// Convert extent start sector to byte + bit in sector map
-		uint8_t sbit = 1 << (x.sector & 7);
+		uint8_t sbit = 0xFF << (x.sector & 7);
 		uint16_t sbyte = (x.sector >> 3) & 0x1FF;
-		uint8_t ssector = x.sector >> 9;
+		uint8_t ssector = x.sector >> 12;
 
-		if (x.length == 0)
-			x.sector += 256;
-		else
-			x.sector += x.length;
+		x.sector += (x.length - 1);
 		// Compute end position
-		uint8_t bite = 1 << (x.sector & 7);
+		uint8_t bite = (1 << ((x.sector & 7) + 1)) - 1;
 		uint16_t bytee = (x.sector >> 3) & 0x1FF;
-		uint8_t sectore = x.sector >> 9;
+		uint8_t sectore = x.sector >> 12;
 
 		uint8_t sector = ssector;
 		int16_t byte = sbyte;
+
 		while (sector <= sectore)
 		{
-			uint8_t bits = 0;
 			readsector(sector);
 
 			if (sector == ssector)
 			{
 				// process first byte
-				while(bits < sbit)
-				{
-					bits = (bits<<1) | 1;
-				}
-
-				diskbuffer[byte] &= ~bits;
+				diskbuffer[byte] &= ~sbit;
 			} else 
 				byte = -1;
 
@@ -804,13 +798,7 @@ bool erase_handle(uint16_t entry, void* cookie)
 			if (sector == sectore)
 			{
 				// process last byte
-				bits = 255;
-				while(bits > bite)
-				{
-					bits >>= 1;
-				}
-
-				diskbuffer[byte] &= ~bits;
+				diskbuffer[byte] &= ~bite;
 			}
 
 			writesector(sector);
@@ -1003,11 +991,11 @@ erase_loop_done:
 // TODO handle file patterns (* and ?) for multi-file erase
 void erasefile(const char* name)
 {
-	void* cookie;
+	char* cookie = (char*)normalize_name(name);
 	// Locate the file in the entry table.
-	if (!for_each_file_in_dir(0, erase_handle, &cookie))
+	if (!for_each_file_in_dir(0, erase_handle, cookie))
 	{
-		fprintf(stderr, "File %s not found.\n", name);
+		fprintf(stderr, "File %s not found.\n", cookie);
 	}
 }
 
