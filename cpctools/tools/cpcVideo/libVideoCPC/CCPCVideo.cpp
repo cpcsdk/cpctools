@@ -138,7 +138,7 @@ _frameCount(0)
 	_renderer.SetMonitor(Renderer::ColoursHiFiMode, 15, true);
 
 	_plugin.Init(768, 540, 32, false);
-	if (_renderer.Init(_plugin) != 0) {
+	if (_renderer.Init(make_shared<VideoPlugin>(_plugin)) != 0) {
 		fprintf(stderr, "video_init() failed. Aborting.\n");
 		exit(-1);
 	}
@@ -148,7 +148,8 @@ _frameCount(0)
 
 	_gateArray = new t_GateArray(_renderer);
 	_vdu = new t_VDU(_renderer);
-	_crtc = new t_CRTC(*_gateArray, *_vdu);
+	_crtc = new t_CRTC(make_shared<t_GateArray>(*_gateArray),
+		make_shared<t_VDU>(*_vdu));
 
 	_gateArray->Reset(mode);
 	_crtc->Reset();
@@ -480,7 +481,7 @@ void CCPCVideo::PlotPixel(const unsigned int i_ink, const int i_posX, const int 
 			unsigned char colorDec = (i_posX & 1);
 			unsigned char mask = 0xff - (0xAA >> (i_posX & 1));
 			
-			_cpcMemory[adr] = _cpcMemory[adr] & mask | (color >> colorDec);
+			_cpcMemory[adr] = (_cpcMemory[adr] & mask) | (color >> colorDec);
 			break;
 		}
 	case 1:
@@ -492,7 +493,7 @@ void CCPCVideo::PlotPixel(const unsigned int i_ink, const int i_posX, const int 
 			unsigned char colorDec = (i_posX & 3);
 			unsigned char mask = 0xff - (0x88 >> (i_posX & 3));
 			
-			_cpcMemory[adr] = _cpcMemory[adr] & mask | (color >> colorDec);
+			_cpcMemory[adr] = (_cpcMemory[adr] & mask) | (color >> colorDec);
 			break;
 		}
 	case 2:
@@ -500,7 +501,7 @@ void CCPCVideo::PlotPixel(const unsigned int i_ink, const int i_posX, const int 
 			int i=i_posX % 8;
 			unsigned char mask = 0xff-(1 << (7-i));
 			unsigned char color = ((i_ink & 1) << (7-i));
-			_cpcMemory[adr] = _cpcMemory[adr] & mask | color;
+			_cpcMemory[adr] = (_cpcMemory[adr] & mask) | color;
 			break;
 		}
 	default:{TOOLS_ERRORMSG("Unknown video mode");break;}
@@ -865,7 +866,7 @@ void CCPCVideo::ConvertGFX(const vector<unsigned char> &inGfx, vector<unsigned c
 				unsigned char colorDec = ((p+pixDecal) & 1);
 				unsigned char mask = 0xff - (0xAA >> colorDec);
 				
-				outGfx[outGfxAdr] = outGfx[outGfxAdr] & mask | (color >> colorDec);
+				outGfx[outGfxAdr] = (outGfx[outGfxAdr] & mask) | (color >> colorDec);
 				break;
 			}
 		case 1:
@@ -877,7 +878,7 @@ void CCPCVideo::ConvertGFX(const vector<unsigned char> &inGfx, vector<unsigned c
 				unsigned char colorDec = ((p+pixDecal) & 3);
 				unsigned char mask = 0xff - (0x88 >> colorDec);
 				
-				outGfx[outGfxAdr] = outGfx[outGfxAdr] & mask | (color >> colorDec);
+				outGfx[outGfxAdr] = (outGfx[outGfxAdr] & mask) | (color >> colorDec);
 				break;
 			}
 		case 2:
@@ -885,13 +886,13 @@ void CCPCVideo::ConvertGFX(const vector<unsigned char> &inGfx, vector<unsigned c
 				int i=(p+pixDecal) % 8;
 				unsigned char mask = 0xff-(1 << (7-i));
 				unsigned char color = ((ink & 1) << (7-i));
-				outGfx[outGfxAdr] = outGfx[outGfxAdr] & mask | color;
+				outGfx[outGfxAdr] = (outGfx[outGfxAdr] & mask) | color;
 				break;
 			}
 		default:{TOOLS_ERRORMSG("Unknown video mode");break;}
 		}
 
-		outGfxAdr += ((p+pixDecal & (ppb-1)) == (ppb-1)) ? 1 : 0;
+		outGfxAdr += (((p+pixDecal) & (ppb-1)) == (ppb-1)) ? 1 : 0;
 	}
 }
 

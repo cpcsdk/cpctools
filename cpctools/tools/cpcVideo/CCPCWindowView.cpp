@@ -3,6 +3,8 @@
  */
 
 #include "CCPCWindowView.h"
+
+#include <assert.h>
 #include <iostream>
 
 CCPCWindowView::CCPCWindowView(unsigned char* data, unsigned int size, unsigned int w, unsigned int h)
@@ -81,6 +83,7 @@ bool CCPCWindowView::keyPressed(CCPCVideo &scr, const SDLKey &key, const SDLMod 
 				case 0:{wpix = _width*2;break;}
 				case 1:{wpix = _width*4;break;}
 				case 2:{wpix = _width*8;break;}
+				default: assert(false);
 				}
 				std::cout << "Windows size " << wpix << " (" << _width << "bytes) * " << _height << " in mode " << scr.GetMode() << std::endl;
 			}

@@ -207,7 +207,7 @@ void CCPCSnapshot::loadSnapshotIni(const string &filename)
 				string strVal;
 				size_t start = 0;
 				size_t pos = value.find(',', start);
-				int idx = 0;
+				unsigned int idx = 0;
 				while (pos != string::npos && idx < token.Size)
 				{
 					strVal = value.substr(start, pos - start);
@@ -273,7 +273,7 @@ void CCPCSnapshot::saveSnapshotIni(const string &filename) const
 				}
 				else
 				{
-					for (int v=0 ; v<token.Size ; v++)
+					for (unsigned int v=0 ; v<token.Size ; v++)
 					{
 						iniFile << "0x";
 						iniFile.setf(std::ios::hex, std::ios::basefield);
@@ -296,7 +296,7 @@ void CCPCSnapshot::saveSnapshotIni(const string &filename) const
 CCPCSnapshot::TTokenID CCPCSnapshot::GetToken(const char *i_dataID, int &o_index)
 {
 	std::string token(i_dataID);
-	int p;
+	unsigned int p;
 	o_index = -1;
 	if ((p=token.find(':')) != std::string::npos)
 	{
@@ -322,7 +322,8 @@ CCPCSnapshot::TTokenID CCPCSnapshot::GetToken(const char *i_dataID, int &o_index
 	int tidx = GetTokenIndex(token);
 
 	TOOLS_ASSERTMSG((tidx != -1), "Unknown token " << token);
-	TOOLS_ASSERTMSG((o_index < CCPCSnapshot::TokenID[tidx].Size && o_index >= 0) || (o_index == -1), "Wrong token array index " << o_index << " [0.." << CCPCSnapshot::TokenID[tidx].Size << "] for token " << token);
+	TOOLS_ASSERTMSG((o_index < (int)CCPCSnapshot::TokenID[tidx].Size && o_index >= 0) || (o_index == -1),
+		"Wrong token array index " << o_index << " [0.." << CCPCSnapshot::TokenID[tidx].Size << "] for token " << token);
 
 	return CCPCSnapshot::TokenID[tidx];
 }

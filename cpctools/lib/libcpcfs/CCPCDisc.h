@@ -4,10 +4,8 @@
 * @author Thierry JOUIN
 */
 
-#pragma once
+#ifndef _CCPCDISC_HH_
 #define _CCPCDISC_HH_
-
-#pragma warning( disable : 4786 )
 
 #include <string>
 #include <iostream>
@@ -91,7 +89,7 @@ public:
 		CDiscFileEntryKey(const string &i_name);
 
 		//! Comparaison operator (used for map)
-		bool operator()(const CDiscFileEntryKey &i_key1,const CDiscFileEntryKey &i_key2) const;
+		bool operator<(const CDiscFileEntryKey &other) const;
 
 		//! Return formatted filename for file entry
 		string getFilename() const;
@@ -183,7 +181,7 @@ public:
 	};
 	
 	//! Define directory map format
-	typedef map<CDiscFileEntryKey,CDiscFileEntry,CDiscFileEntryKey> CCPCDirectoryMap;
+	typedef map<CDiscFileEntryKey,CDiscFileEntry> CCPCDirectoryMap;
 
 protected:
 	//! Disc filename
@@ -349,3 +347,5 @@ public:
 	//! Create and format a DSK file
 	static CCPCDisc* CreateDisc(const string &i_filename, const TDisc &i_type, int i_inside = 0);
 };
+
+#endif

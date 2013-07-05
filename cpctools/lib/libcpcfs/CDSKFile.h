@@ -3,13 +3,11 @@
 * Used for analyze DSK file
 */
 
-#pragma warning( disable : 4786 )
+#pragma once
+#define _CDSKFILE_H_
 
 #include <string>
 #include <fstream>
-
-#pragma once
-#define _CDSKFILE_H_
 
 //! DSK DiscHeader
 class CDSKDiscHeader

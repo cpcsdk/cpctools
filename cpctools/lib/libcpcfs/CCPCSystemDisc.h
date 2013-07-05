@@ -6,7 +6,8 @@
 * @date 31/10/2001
 */
 
-#pragma warning( disable : 4786 )
+#ifndef _CCPCSYSTEMDISC_HH_
+#define _CCPCSYSTEMDISC_HH_
 
 #include <iostream>
 
@@ -19,9 +20,6 @@
 #include <vector>
 
 #include "CCPCDisc.h"
-
-#ifndef _CCPCSYSTEMDISC_HH_
-#define _CCPCSYSTEMDISC_HH_
 
 class CCPCSystemDisc:public CCPCDisc
 {

@@ -32,8 +32,6 @@ unsigned int CCPCAsciiFile::getSize() const
 
 void CCPCAsciiFile::createFile(const void* i_buffer, const unsigned int i_size, bool i_createHeader)
 {
-	unsigned char *buffer = (unsigned char*)i_buffer;
-	
 	if (_content != NULL)
 		delete[] _content;
 	
@@ -55,7 +53,7 @@ void CCPCAsciiFile::openFile(const std::string &i_filename,bool i_createHeader)
 	
 	TOOLS_ASSERTMSG( size < 1024*1024 , "Unable to open file " << i_filename << " file to long (>1Mo)");
 
-	unsigned char *buffer = new unsigned char[size];
+	unsigned char* buffer = new unsigned char[size];
 	
 	file.read((char*)buffer,size);
 	

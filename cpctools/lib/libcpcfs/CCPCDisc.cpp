@@ -11,11 +11,11 @@
 #include "CCPCDataDisc.h"
 #include "CCPCRomdosD1Disc.h"
 #include "CCPCSystemDisc.h"
-
 #include "CDSKFile.h"
-
 #include "CError.h"
+
 #include <algorithm>
+#include <assert.h>
 #include <set>
 #include <memory>
 
@@ -129,7 +129,6 @@ string CCPCDisc::CDiscFileEntryKey::getFilename() const
 void CCPCDisc::CDiscFileEntryKey::convertStringToFilename(const string &i_name)
 {
 	unsigned int i;
-	unsigned int p = i_name.find_last_of('.');
 
 	string n = i_name;
 	string e;
@@ -159,10 +158,11 @@ void CCPCDisc::CDiscFileEntryKey::convertStringToFilename(const string &i_name)
 	}
 }
 
-bool CCPCDisc::CDiscFileEntryKey::operator()(const CDiscFileEntryKey &i_file1,const CDiscFileEntryKey &i_file2) const
+// Sort entries by user, then by name.
+bool CCPCDisc::CDiscFileEntryKey::operator<(const CDiscFileEntryKey &other) const
 {
-	return ( (i_file1.User < i_file2.User) || ((i_file1.User == i_file2.User)
-		&& (strncmp(i_file1.Name,i_file2.Name,11) < 0)) );
+	return ( (this->User < other.User) || ((this->User == other.User)
+		&& (strncmp(this->Name, other.Name, 11) < 0)) );
 }
 
 ////////////////////////////////////////////////////
@@ -317,7 +317,6 @@ void CCPCDisc::CTrack::Interlace()
 	if (!linear)
 		return;
 
-	unsigned int secBase = SectorIDArray[0].fmt_sector;
 	unsigned int secSize = SectorIDArray[0].fmt_secsize;
 	unsigned int nbSector = Geometry.dg_sectors;
 
@@ -803,7 +802,7 @@ void CCPCDisc::WriteSector(const unsigned char i_cylinder, const unsigned char i
 		e = dsk_ptrackids(_driver, &_geometry, i_cylinder, i_head, &nbSector, &fmt_track);
 		TOOLS_ASSERTMSG( (e == DSK_ERR_OK) , "Error reading track IDs :" << string(dsk_strerror(e)));
 
-		int s;
+		unsigned int s;
 		for (s = 0 ; s < nbSector ; s++)
 		{
 			if (fmt_track[s].fmt_sector == i_sectorID)
@@ -1166,7 +1165,6 @@ bool CCPCDisc::RepairTrack(const unsigned char i_cylinder, const unsigned char i
 
 				if (repairSector || trackFormat)
 				{
-					DSK_FORMAT &sectWrong = i_trackValid.SectorIDArray[s];
 					int deleted = ((i_trackValid.FDCStatus1Array[s] & 0x40) != 0) ? 1 : 0;
 
 					dsk_set_option(_driver, "ST1", i_trackValid.FDCStatus1Array[s]);
@@ -1304,7 +1302,6 @@ void CCPCDisc::PutFile(const CCPCFile &i_file, const string &i_filename, int use
 	unsigned int neededBlock = (unsigned int)ceil((double)i_file.getDatasSize() / (double)(_discFormat.BlockSize));
 	unsigned int neededRecord = (unsigned int)ceil((double)i_file.getDatasSize() / (double)(_discFormat.GetRecordSize()));
 
-	int emptyBlockSize = emptyBlock.size();
 	TOOLS_ASSERTMSG( (neededBlock <= emptyBlock.size()) , "Unable to add file to disc - Disc Full");
 
 	unsigned char *fileBuffer = i_file.getDatas();
@@ -1689,89 +1686,111 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
     TDisc format = Unknown;
 
     // Init geometry
-    geometry.dg_cylinders = 80;
-    geometry.dg_heads = 1;
-    geometry.dg_sidedness = SIDES_ALT;
+	
+	// Since there is no header on raw files, try to guess from the size...
+	std::ifstream file(i_filename.c_str());
+	file.seekg(0, std::ios::end);
+	std::streampos size = file.tellg();
+
+	std::cout << "sz " << size << std::endl;
+
     geometry.dg_sectors = 9;
+    geometry.dg_secsize = 512;
+
+	int tracks = size / (geometry.dg_sectors * geometry.dg_secsize);
+
+	// We'r enot able to detect the difference between a single sided, 82 tracks
+	// floppy, and a dual sided 41 tracks one. Prefer the latter, as it's more
+	// common to see 81 or 83 tracks floppies.
+	if (tracks > 80 && !(tracks & 1))
+	{
+    	geometry.dg_cylinders = tracks / 2;
+    	geometry.dg_heads = 2;
+	} else {
+    	geometry.dg_cylinders = tracks;
+    	geometry.dg_heads = 1;
+	}
+
+    geometry.dg_sidedness = SIDES_OUTOUT;
     geometry.dg_datarate = RATE_SD;
     geometry.dg_fmtgap = 0x52;
     geometry.dg_rwgap = geometry.dg_fmtgap;
     geometry.dg_fm = 0;
     geometry.dg_nomulti = 0;
     geometry.dg_noskip = 0;
-    geometry.dg_secsize = 512;
     geometry.dg_secbase = 1;
 
     // Now check in standard format if we found something similar
     DSK_GEOMETRY closestGeom;
     for (int f=0 ; f < maxTDisc ; f++)
-    {
-	dsk_format_t dsk_format = getLibDskFormat(TDiscDesc[f]);
-	if (dsk_format == -1)
 	{
-	    continue;
+		dsk_format_t dsk_format = getLibDskFormat(TDiscDesc[f]);
+		if (dsk_format == -1)
+		{
+			std::cout << "UNHANDLED FORMAT" << f << std::endl;
+			continue;
+		}
+
+		DSK_GEOMETRY candidateGeom;
+		dsk_err_t e;
+
+		e = dg_stdformat(&candidateGeom, dsk_format, NULL, NULL);
+
+		if (e != DSK_ERR_OK)
+		{
+			continue;
+		}
+
+		// Check geometry value
+		// We allow that DSK can have more sectors than 'official' one
+		// In this case, additionnal sectors won't be take into account
+		if (candidateGeom.dg_secbase != geometry.dg_secbase ||
+				candidateGeom.dg_sectors > geometry.dg_sectors ||
+				candidateGeom.dg_secsize != geometry.dg_secsize)
+		{
+			continue;
+		}
+
+		// We found a right sector, if no candidate already found,
+		// we use this format as a start (even if number of track is not good !)
+		if (format == Unknown)
+		{
+			closestGeom = candidateGeom;
+			format = (TDisc)f;
+		}
+		else
+		{
+			if (abs((int)(candidateGeom.dg_cylinders - geometry.dg_cylinders)) < abs((int)(closestGeom.dg_cylinders - geometry.dg_cylinders)))
+			{
+				closestGeom = candidateGeom;
+				format = (TDisc)f;
+			}
+		}
 	}
 
-	DSK_GEOMETRY candidateGeom;
-	dsk_err_t e;
-
-	e = dg_stdformat(&candidateGeom, dsk_format, NULL, NULL);
-
-	if (e != DSK_ERR_OK)
-	{
-	    continue;
-	}
-
-	// Check geometry value
-	// We allow that DSK can have more sectors than 'official' one
-	// In this case, additionnal sectors won't be take into account
-	if (candidateGeom.dg_secbase != geometry.dg_secbase ||
-		candidateGeom.dg_sectors > geometry.dg_sectors ||
-		candidateGeom.dg_secsize != geometry.dg_secsize)
-	{
-	    continue;
-	}
-
-	// We found a right sector, if no candidate already found,
-	// we use this format as a start (even if number of track is not good !)
-	if (format == Unknown)
-	{
-	    closestGeom = candidateGeom;
-	    format = (TDisc)f;
-	}
-	else
-	{
-	    if (abs((int)(candidateGeom.dg_cylinders - geometry.dg_cylinders)) < abs((int)(closestGeom.dg_cylinders - geometry.dg_cylinders)))
-	    {
-		closestGeom = candidateGeom;
-		format = (TDisc)f;
-	    }
-	}
-    }
-
-    return format;
+	return format;
 }
 
 int CCPCDisc::isFloppy(const string &filename)
 {
-	#ifdef __HAIKU__
-		// It seems that Haiku string.compare doesn't work as expected ?
+#ifdef __HAIKU__
+	// It seems that Haiku string.compare doesn't work as expected ?
 	if (strncmp(filename.c_str(), "/dev/disk/ufi/", 14) == 0)
-	#else
-	if (filename.compare(0,7,"/dev/sd") == 0)
-	#endif
-    {
-		return 2; // RAW-access device (USB floppy drive on Linux or Haiku)
-    }
-    else if (strcasecmp(filename.c_str(), "a:")==0 ||
-	    strcasecmp(filename.c_str(), "b:")==0 ||
-	    strcasecmp(filename.c_str(), "/dev/fd0")==0 ||
-	    strcasecmp(filename.c_str(), "/dev/fd1")==0)
-	{
-		return 1; // Floppy with sectors/side handling
-    } else {
-		return 0; // DSK file
-	}
+#else
+		if (filename.compare(0,7,"/dev/sd") == 0)
+#endif
+		{
+			return 2; // RAW-access device (USB floppy drive on Linux or Haiku)
+		}
+		else if (strcasecmp(filename.c_str(), "a:")==0 ||
+				strcasecmp(filename.c_str(), "b:")==0 ||
+				strcasecmp(filename.c_str(), "/dev/fd0")==0 ||
+				strcasecmp(filename.c_str(), "/dev/fd1")==0)
+		{
+			return 1; // Floppy with sectors/side handling
+		} else {
+			return 0; // DSK file
+		}
 }
 
 bool CCPCDisc::IsDSK(const string &i_filename, int i_inside)
@@ -1900,6 +1919,7 @@ CCPCDisc* CCPCDisc::CreateDisc(const string &i_filename, const TDisc &i_type, in
 		d->Create(i_type, i_filename, i_inside);
 		break;
 	    }
+	default: assert(false);
     }
     return d;
 }
@@ -1915,7 +1935,6 @@ void CCPCDisc::Open(const string &i_filename, DSK_PDRIVER driver, const DSK_GEOM
 
     _discFormat = TDiscFormat[format];
 
-    int directorySize = _discFormat.NbMaxEntry * CCPCDisc::EntrySize;
     _directoryBuffer = new unsigned char[_discFormat.GetDirectorySize()];
 }
 

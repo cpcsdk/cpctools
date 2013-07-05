@@ -163,7 +163,7 @@ bool COCPFileManager::ReadWindow(unsigned char *i_data, unsigned int i_size, uns
 	int piData, poData;
 	unsigned int iSize,oSize,rSize;
 
-	int outSize;
+	unsigned int outSize;
 
 	piData = i_size-4;
 	o_width = (int)i_data[piData++];
@@ -238,7 +238,7 @@ bool COCPFileManager::ReadCompressedBlock(unsigned char *i_data, unsigned int i_
 		o_size = i_data[p++];
 		o_size += i_data[p++]*256;
 
-		int i = 0;
+		unsigned int i = 0;
 		while (i<o_size)
 		{
 			unsigned char m,c,b;

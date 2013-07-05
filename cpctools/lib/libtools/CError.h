@@ -22,9 +22,9 @@ namespace tools
 	class CException : public exception
 	{
 	private :
+		string	_message;
 		string 	_file;
 		int 	_line;
-		string	_message;
 
 	public:
 		CException(const string &file, int line, const string &error="Unknown") throw ();

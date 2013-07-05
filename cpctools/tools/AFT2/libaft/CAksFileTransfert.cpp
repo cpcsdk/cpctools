@@ -8,6 +8,7 @@
 
 #include "CAksFileTransfert.h"
 
+#include <assert.h>
 #include <cstring>
 #include <iostream>
 
@@ -60,10 +61,10 @@ CCPCBooster(comNumber),
 _transfertMode(NoTransfert),
 _nbTransfert(0),
 _transferingData(false),
+_filepath("."),
 _EDSKFile(NULL),
 _inStream(NULL),
-_outStream(NULL),
-_filepath(".")
+_outStream(NULL)
 {
 	memset(_amsFilename, 0, 13);
 }
@@ -135,6 +136,7 @@ CAksCommand CAksFileTransfert::Run(bool wait)
 	case AksWaitTrack:			{ WaitTrack(cmd);			break; }
 	case AksNoMoreTrack:		{ NoMoreTrack(cmd);			break; }
 	case AksOpenFile:			{ OpenFile(cmd);			break; }
+	default: assert(false);
 	}
 
 	return cmd;

@@ -9,8 +9,6 @@
 #pragma once
 #define _CCPCUNKNOWNDISC_HH_
 
-#pragma warning( disable : 4786 )
-
 #include <iostream>
 
 #include <string>

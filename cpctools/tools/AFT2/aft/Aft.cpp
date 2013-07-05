@@ -16,11 +16,11 @@
 
 struct SOption appliOption[]=
 {
-	{'p',(char *)"comPort",0,1,1,(char *)"Set <$1> as COM port (/dev/ttyS* or COM*)"},
-	{'f',(char *)"file",0,1,1,(char *)"Force <$1> to be transfered file"},
-	{'d',(char *)"directory",0,1,1,(char *)"Force <$1> to be transfered directory"},
-	{'n',(char *)"noLoop",0,1,0,(char *)"Do not loop AFT transfert"},
-	{0,NULL,0,0,0,NULL}
+	{'p', "comPort",   0,1,1,"Set <$1> as COM port (/dev/ttyS* or COM*)"},
+	{'f', "file",      0,1,1,"Force <$1> to be transfered file"},
+	{'d', "directory", 0,1,1,"Force <$1> to be transfered directory"},
+	{'n', "noLoop",    0,1,0,"Do not loop AFT transfert"},
+	{0,   NULL,        0,0,0,NULL}
 };
 
 static const std::string authorName = "Targhan/Ramlaid/Krusty/PulkoMandy";
@@ -28,6 +28,19 @@ static const std::string authorMail = "cpcsdk@googlegroups.com";
 static const std::string appliName = "aft";
 static const std::string appliUsageShort = "";
 static const std::string appliUsageLong = "\nArkos File Transfert tool";
+
+static inline char const *const defaultComPort()
+{
+	#ifdef __HAIKU__
+		return "/dev/ports/usb0";
+	#endif
+
+	#ifdef __linux__
+		return "/dev/ttyUSB0";
+	#endif
+
+	return "COM1";
+}
 
 int main(int argc, char *argv[])
 {
@@ -45,7 +58,7 @@ int main(int argc, char *argv[])
 		}
 
 		bool noLoop = false;
-		std::string COMport = "COM1";
+		std::string COMport = defaultComPort();
 		std::string filename = "";
 		std::string dir = "";
 

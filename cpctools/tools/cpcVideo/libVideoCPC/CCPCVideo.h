@@ -27,6 +27,8 @@ public:
 	class ChipChange
 	{
 	public:
+		virtual ~ChipChange() {};
+
 		virtual void Execute() = 0;
 		virtual ChipChange* Clone() const = 0;
 	};
