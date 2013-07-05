@@ -1,4 +1,0 @@
-Cleanup all these folders
-Verify if it always works on Windows
-Correct a lot of segfault under linux
-Change a lot au string<->char* convertion
