@@ -203,7 +203,7 @@ void Commands::PutFile(void)
 
 		GetAmsdosParamFromName(fileNames[i], filename, user, sys, pro, start, exec);
 
-		CCPCFile* const fileIn = binary ? new CCPCBinaryFile():new CCPCAsciiFile();
+		CCPCFile* const fileIn = binary ? static_cast<CCPCFile*>(new CCPCBinaryFile()) : static_cast<CCPCFile*>(new CCPCAsciiFile());
 		const char* const kind = binary ? "binary":"ascii";
 
 		try
