@@ -2,7 +2,10 @@
 
 # Init
 AC_INIT([StSound], [2.0], [krusty@cpcscene.com])
-AM_INIT_AUTOMAKE([ -Wall -Werror])
+AM_INIT_AUTOMAKE([ -Wall -Werror subdir-objects])
+
+m4_pattern_allow([AM_PROG_AR])
+AM_PROG_AR
 
 # Check programs
 AC_PROG_CXX
