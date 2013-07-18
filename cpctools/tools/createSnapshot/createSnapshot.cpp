@@ -16,21 +16,23 @@ using namespace std;
 
 struct SOption appliOption[]=
 {
-	{'i',(char *)"inSnapshot",0,1,1,(char *)"Load <$1> snapshot file"},
-	{'l',(char *)"loadFileData",0,0,2,(char *)"Load <$1> file data at <$2> address in snapshot memory"},
-	{'p',(char *)"putData",0,0,2,(char *)"Put <$2> byte at <$1> address in snapshot memory"},
-	{'s',(char *)"setToken",0,0,2,(char *)"Set snapshot token <$1> to value <$2>\n\t\tUse <$1>:<val> to set array value\n\t\tex '-s CRTC_REG:6 20' : Set CRTC register 6 to 20"},
-	{'x',(char *)"clearMemory",0,1,0,(char *)"Clear snapshot memory"},
-	{'r',(char *)"romDeconnect",0,1,0,(char *)"Deconnect lower and upper rom"},
-	{'e',(char *)"enableInterrupt",0,1,0,(char *)"Enable interrupt"},
-	{'d',(char *)"disableInterrupt",0,1,0,(char *)"Disable interrupt"},
-	{'c',(char *)"configFile",0,1,1,(char *)"Load a config file with createSnapshot option"},
-	{'t',(char *)"tokenList",0,1,0,(char *)"Display setable snapshot token ID"},
-	{'o',(char *)"output",0,0,3,(char *)"Output data to <$1> from <$2> with <$3> bytes"},
-	{'f',(char *)"fillData",0,0,3,(char *)"Fill snapshot from <$1> over <$2> bytes, with <$3> datas"},
-	{'g',(char *)"fillText",0,0,3,(char *)"Fill snapshot from <$1> over <$2> bytes, with <$3> text"},
-	{'j',(char *)"loadIniFile",0,1,1,(char *)"Load <$1> init file"},
-	{'k',(char *)"saveIniFile",0,1,1,(char *)"Save <$1> init file"},
+	{'i',"inSnapshot",0,1,1,"Load <$1> snapshot file"},
+	{'l',"loadFileData",0,0,2,"Load <$1> file data at <$2> address in snapshot memory (or use AMSDOS header load address if <$2> is negative)"},
+	{'p',"putData",0,0,2,"Put <$2> byte at <$1> address in snapshot memory"},
+	{'s',"setToken",0,0,2,"Set snapshot token <$1> to value <$2>\n\t\t"
+		"Use <$1>:<val> to set array value\n\t\t"
+		"ex '-s CRTC_REG:6 20' : Set CRTC register 6 to 20"},
+	{'x',"clearMemory",0,1,0,"Clear snapshot memory"},
+	{'r',"romDeconnect",0,1,0,"Disconnect lower and upper rom"},
+	{'e',"enableInterrupt",0,1,0,"Enable interrupt"},
+	{'d',"disableInterrupt",0,1,0,"Disable interrupt"},
+	{'c',"configFile",0,1,1,"Load a config file with createSnapshot option"},
+	{'t',"tokenList",0,1,0,"Display setable snapshot token ID"},
+	{'o',"output",0,0,3,"Output data to <$1> from <$2> with <$3> bytes"},
+	{'f',"fillData",0,0,3,"Fill snapshot from <$1> over <$2> bytes, with <$3> datas"},
+	{'g',"fillText",0,0,3,"Fill snapshot from <$1> over <$2> bytes, with <$3> text"},
+	{'j',"loadIniFile",0,1,1,"Load <$1> init file"},
+	{'k',"saveIniFile",0,1,1,"Save <$1> init file"},
 	{0,NULL,0,0,0,NULL}
 };
 
@@ -38,8 +40,10 @@ static const string authorName = "Ramlaid";
 static const string authorMail = "cpcTools@ramlaid.com";
 static const string appliName = "createSnapshot";
 static const string appliUsageShort = "<filename.sna>";
-static const string appliUsageLong = "<filename.sna>\n\
-Create a Amstrad CPC snapshot <filename.sna>\nDefault snapshot : 6128, CRTC 0, rom deconnected, no interrupt, IM 1, SP = 0xc000, CRTC standard value";
+static const string appliUsageLong = "<filename.sna>\n"
+	"Create a Amstrad CPC snapshot <filename.sna>\n"
+	"Default snapshot : 6128, CRTC 0, rom deconnected, no interrupt, IM 1, "
+    "SP = 0xc000, CRTC standard value";
 
 unsigned char getValue(const string &strVal)
 {
@@ -118,7 +122,11 @@ int main(int argc, char** argv)
 					string filename = optParser.GetStringOptionI(i, 0);
 					int adr = optParser.GetIntOptionI(i, 1);
 
-					cout << "Load data " << filename << " at address #" << hex << adr << dec << endl;
+					cout << "Load data " << filename;
+					if(adr > 0)   
+						cout << " at address #" << hex << adr << dec << endl;
+					else
+						cout << " using AMSDOS header information" << endl;
 					snapshot.loadDataFromFile(filename,adr);
 					break;
 				}

@@ -535,7 +535,7 @@ void CCPCSnapshot::saveToFile(const std::string &i_filename) const
 }
 
 /// Ajoute des donnees dans le snapshot a partir d'un fichier, et d'une adresse
-void CCPCSnapshot::loadDataFromFile(const std::string &i_filename,const int i_adress)
+void CCPCSnapshot::loadDataFromFile(const std::string &i_filename,int i_adress)
 {
 	std::ifstream file;
 	int size;
@@ -545,11 +545,30 @@ void CCPCSnapshot::loadDataFromFile(const std::string &i_filename,const int i_ad
 
 	std::streampos start = file.tellg();
 	file.seekg(0,std::ios::end);
-	std::streampos end = file.tellg();  
-	file.seekg(0,std::ios::beg);
+	std::streampos end = file.tellg();
+
+	if(i_adress < 0)
+	{
+		static const int kLoadAddressOffset = 21;
+		static const int kExecAddressOffset = 26;
+		static const int kAMSDOSHeaderSize = 128;
+		file.seekg(kLoadAddressOffset, std::ios::beg);
+		i_adress = 0;
+		file.read((char*)&i_adress, 2); // warning: not endian-safe...
+
+		file.seekg(kExecAddressOffset, std::ios::beg);
+		uint16_t entry;
+		file.read((char*)&entry, 2); // warning: not endian-safe...
+		setTokenValue("Z80_PC", entry);
+
+		start = kAMSDOSHeaderSize; // Skip AMSDOS header
+	}
+
+	file.seekg(start,std::ios::beg);
 	size = end - start;
 	
 	TOOLS_ASSERTMSG(((i_adress+size) < ((int)_header[MEM_SIZE_ID] * 1024)), "Data too long, over snapshot size");
+	
 	
 	file.read((char*)(_memoryDump+i_adress) , size);
 	
