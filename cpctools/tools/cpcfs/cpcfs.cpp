@@ -466,10 +466,10 @@ int main(int argc, char* argv[])
 		COptionParser optParser(appliOption, appliName, appliUsageShort,
 			appliUsageLong, authorName, authorMail);
 
-		optParser.PrintHeader(std::cout);
-
 		if (!optParser.ParseCommandLine(&argc, &argv, 2, true))
 		{
+			optParser.PrintHeader(std::cout);
+
 			optParser.PrintError(std::cout);
 			optParser.PrintUsage(std::cout);
 			return -1;
