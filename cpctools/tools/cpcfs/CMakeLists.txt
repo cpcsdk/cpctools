@@ -1,6 +1,5 @@
 add_executable (cpcfs cpcfs.cpp
 )
 
-Find_Package(BZip2 REQUIRED)
-
-target_link_libraries (cpcfs dsk z ${BZIP2_LIBRARIES} libcpcfs tools )
+target_link_libraries (cpcfs dsk cpc tools )
+install(TARGETS cpcfs RUNTIME DESTINATION bin)

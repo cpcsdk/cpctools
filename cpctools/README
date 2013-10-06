@@ -1,19 +1,19 @@
-CPCTools 0.2.0
+CPCTools 0.3.0
+(c) cpcsdk team 2008-2013
 (c) Ramlaid 2005
 
 1) About CPCTools
 -----------------
 
-This package contains some few tools that I create during my CPC development under a Win32 environement.
-It's include general tools like file manager or image viewer and purely developement tools like Dams converter,
+This package contains a few tools that we created during my CPC development.
+Most of them work at least in Haiku, Linux and Windows.
+
+There are general tools like file manager or image viewer and purely developement oriented tools like Dams converter,
 data linker or snapshot creator.
 
-This is a Windows version but it might compile under Linux, DOS & maybe other platform. Unfortunatly, I have'nt
-time to do these port. Any help would be appreciate !
+All the sources are in C++ (and a bit commented but mainly in french, sorry for english guys !).
 
-All the sources a in C++ (and a bit commented but mainly in french, sorry for english guys !).
-
-WARNING : all these tools are under developpement ! bug report & remark will be appreciate ! (This is also the
+WARNING : all these tools are under developpement ! bug report & remark will be appreciated ! (This is also the
 case for this small doc)
 
 2) CPCFS
@@ -378,15 +378,31 @@ myConfigFile.cfg :
 
 -o dataAddress.z80
 ;*********************************************
+
+9) AFT
+--------
+
+the Arkos File Transfer server.
+
+This program listens on a COM port for commands coming from a CPC with the CPC Booster expansion and the Arkos ROM. It allows the CPC to exchange (download and upload) files with your PC (or other computer).
+
+Visit the Arkos webpage for more information on the ROM: http://arkos.cpcscene.com
+
+10) ZMac
+-----------
+
+The z80 macro assembler.
+
+This is an usual macro assembler. Not much more to say about it.
                 
-9) Other tools
+10) Other tools
 --------------
 
 In the 'tools' directory you can find 'optionParser.h' and 'optionParser.c'. Theses function are used to manage
 command line option parsing (using a simple option structure description).
 You can also reuse this piece of code ! ;)
 
-10) Future developpement
+11) Future developpement
 ------------------------
 
 Continue to make these tools better and better (error management, additionals options, ...)
@@ -403,11 +419,15 @@ I think we have a good base of tools to do this SDK, but we need to package all 
 11) License
 -----------
 
-No license at all ! You can use these tools freely. 
+You can use these tools freely. 
 You can also modify all source code or include them into your own production (small credit will be enough ! ;).
 
 12) Contact
 -----------
+
+The CPCSDK team
+cpcsdk@googlecode.com
+
 
 Thierry JOUIN
 aka Ramlaid

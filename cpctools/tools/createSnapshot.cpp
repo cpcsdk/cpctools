@@ -28,7 +28,7 @@ struct SOption appliOption[]=
 	{'d',"disableInterrupt",0,1,0,"Disable interrupt"},
 	{'c',"configFile",0,1,1,"Load a config file with createSnapshot option"},
 	{'t',"tokenList",0,1,0,"Display setable snapshot token ID"},
-	{'o',"output",0,0,3,"Output data to <$1> from <$2> with <$3> bytes"},
+	{'o',"output",0,0,3,"Output <$3> bytes of data from address <$2> to file <$1>"},
 	{'f',"fillData",0,0,3,"Fill snapshot from <$1> over <$2> bytes, with <$3> datas"},
 	{'g',"fillText",0,0,3,"Fill snapshot from <$1> over <$2> bytes, with <$3> text"},
 	{'j',"loadIniFile",0,1,1,"Load <$1> init file"},
@@ -36,8 +36,8 @@ struct SOption appliOption[]=
 	{0,NULL,0,0,0,NULL}
 };
 
-static const string authorName = "Ramlaid";
-static const string authorMail = "cpcTools@ramlaid.com";
+static const string authorName = "Ramlaid & cpcsdk team";
+static const string authorMail = "cpcsdk@googlegroups.com";
 static const string appliName = "createSnapshot";
 static const string appliUsageShort = "<filename.sna>";
 static const string appliUsageLong = "<filename.sna>\n"
@@ -173,7 +173,7 @@ int main(int argc, char** argv)
 					int size = optParser.GetIntOptionI(i, 2);
 
 					snapshot.saveDataToFile(filename,adr,size);
-					cout << "Save data " << filename << " from address #" << hex << adr << " of size #" << size << dec << endl;
+					cout << "Save #" << hex << size << "bytes of data from address #" << adr << " to file " << filename << dec << endl;
 					break;
 				}
 			case 'f':

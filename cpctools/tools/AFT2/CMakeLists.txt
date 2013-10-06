@@ -20,4 +20,5 @@ add_executable(aft2
 	${libaft_sources}
 )
 
-target_link_libraries(aft2 libcpcfs tools)
+target_link_libraries(aft2 cpc tools)
+install(TARGETS aft2 RUNTIME DESTINATION bin)

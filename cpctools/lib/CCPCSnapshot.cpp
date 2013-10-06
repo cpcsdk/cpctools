@@ -7,14 +7,18 @@
 */
 
 #include "CCPCSnapshot.h"
-#include <stdint.h>
-#include <stdio.h>
+
 #include <algorithm>
 #include <cstring>
 
-#define SNAPSHOT_ID 0x00
-#define SNAPVERS_ID 0x10
-#define MEM_SIZE_ID 0x6b
+#include <stdint.h>
+#include <stdio.h>
+
+#include <CCPCBinaryFile.h>
+
+static const int SNAPSHOT_ID = 0x00;
+static const int SNAPVERS_ID = 0x10;
+static const int MEM_SIZE_ID = 0x6b;
 
 const struct CCPCSnapshot::TTokenID CCPCSnapshot::TokenID[NB_SNAPSHOT_TOKEN] = 
 {
@@ -538,6 +542,8 @@ void CCPCSnapshot::saveToFile(const std::string &i_filename) const
 /// Ajoute des donnees dans le snapshot a partir d'un fichier, et d'une adresse
 void CCPCSnapshot::loadDataFromFile(const std::string &i_filename,int i_adress)
 {
+	static const int kAMSDOSHeaderSize = 128;
+
 	std::ifstream file;
 	int size;
 	file.open(i_filename.c_str(),std::ios::in | std::ios::binary);
@@ -552,7 +558,6 @@ void CCPCSnapshot::loadDataFromFile(const std::string &i_filename,int i_adress)
 	{
 		static const int kLoadAddressOffset = 21;
 		static const int kExecAddressOffset = 26;
-		static const int kAMSDOSHeaderSize = 128;
 		file.seekg(kLoadAddressOffset, std::ios::beg);
 		i_adress = 0;
 		file.read((char*)&i_adress, 2); // warning: not endian-safe...
@@ -563,6 +568,15 @@ void CCPCSnapshot::loadDataFromFile(const std::string &i_filename,int i_adress)
 		setTokenValue("Z80_PC", entry);
 
 		start = kAMSDOSHeaderSize; // Skip AMSDOS header
+	} else {
+		// Check if the file has a valid AMSDOS header, and if that's the case,
+		// skip it!
+		file.seekg(0, std::ios::beg);
+		unsigned char buffer[69];
+		file.read((char*)buffer, 69);
+		if(CCPCBinaryFile::isBinary(buffer, -1)) {
+			start = kAMSDOSHeaderSize; // Skip AMSDOS header
+		}
 	}
 
 	file.seekg(start,std::ios::beg);
@@ -582,7 +596,7 @@ void CCPCSnapshot::saveDataToFile(const std::string &i_filename,const int i_adre
 {
 	std::ofstream file;
 	
-	TOOLS_ASSERTMSG( ((i_adress+i_length) < ((int)_header[MEM_SIZE_ID] * 1024)) , "Data too long, over snapshot size");
+	TOOLS_ASSERTMSG( ((i_adress+i_length) <= ((int)_header[MEM_SIZE_ID] * 1024)) , "Data too long, over snapshot size");
 	
 	file.open(i_filename.c_str(),std::ios::out | std::ios::binary);
 	TOOLS_ASSERTMSG(file.good(),"Couldn't save \"" << i_filename << "\" data file");
