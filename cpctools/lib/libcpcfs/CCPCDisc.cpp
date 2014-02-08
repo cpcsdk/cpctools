@@ -1427,15 +1427,13 @@ CCPCDisc::TDisc CCPCDisc::guessGeometry(const string &i_filename,
 					interlaced, extendedGuess);
 			break;
 		    case 0:
+		    default:
 				format = guessDSKGeometry(i_filename, geometry,
 					needAdvancedMode, interlaced, extendedGuess);
 			break;
 		    case 2:
 				format = guessRAWGeometry(i_filename, geometry,
 					needAdvancedMode, interlaced, extendedGuess);
-			break;
-		    default:
-	//		format = -1;
 			break;
 		}
 
@@ -1635,6 +1633,7 @@ CCPCDisc::TDisc CCPCDisc::guessDSKGeometry(const string &i_filename, DSK_GEOMETR
 
 	// Now check in standard format if we found something similar
 	DSK_GEOMETRY closestGeom;
+	closestGeom.dg_cylinders = INT_MAX;
 	for (int f=0 ; f < maxTDisc ; f++)
 	{
 		dsk_format_t dsk_format = getLibDskFormat(TDiscDesc[f]);
@@ -1722,6 +1721,7 @@ CCPCDisc::TDisc CCPCDisc::guessRAWGeometry(const string &i_filename, DSK_GEOMETR
 
     // Now check in standard format if we found something similar
     DSK_GEOMETRY closestGeom;
+	closestGeom.dg_cylinders = INT_MAX;
     for (int f=0 ; f < maxTDisc ; f++)
 	{
 		dsk_format_t dsk_format = getLibDskFormat(TDiscDesc[f]);
@@ -1956,6 +1956,7 @@ void CCPCDisc::Create(TDisc i_type, const string &i_filename, int i_inside)
 #endif
 	    break;
 	case 0:
+	default:
 	    e = dsk_creat(&_driver,i_filename.c_str(), "edsk", NULL);
 	    break;
 	case 2:
