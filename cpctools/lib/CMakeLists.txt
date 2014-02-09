@@ -14,4 +14,4 @@ add_library(cpc SHARED
 	)
 
 install(TARGETS cpc LIBRARY DESTINATION lib)
-target_link_libraries (cpc dsk)
+target_link_libraries (cpc dsk tools)
