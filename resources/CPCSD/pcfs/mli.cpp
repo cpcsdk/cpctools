@@ -39,9 +39,6 @@ int fd;
 void readsector(uint16_t sector);
 void writesector(uint16_t sector);
 
-const char* normalize_name(const char* original);
-	// DOES NOT HANDLE SUBDIRS
-
 // Filemap entries :
 // 0 1 2 3 4 5 6 7 8 9 A B C D E F
 // Sec L|F I L E N A M E.E X T|Nxt		Nxt = offset of next filemap entry
@@ -252,8 +249,6 @@ void stack_extents(uint16_t fentry, std::vector<struct extent>& extents)
 }
 
 
-// Ever heard of JP (HL) ? Well it's time to use it !
-typedef bool(*handle_file)(uint16_t fentry, void* cookie);
 
 // For each file in the given directory, call the given handler function giving
 // it the fentry.
@@ -339,7 +334,7 @@ void list_wd()
 void readsector(uint16_t which)
 {
 	// TODO this is the right place to store and test the "last accessed sector"
-	// anddecide if we need to read again or not. Remove that from listdir and
+	// and decide if we need to read again or not. Remove that from listdir and
 	// put it here
 	if (lseek(fd, which * 512, SEEK_SET) == -1)
 		perror("Read sector can't seek");
@@ -613,22 +608,47 @@ static uint16_t register_direntry(uint16_t ent)
 			// Append to the END of entryblock
 			if(++ dir->x[entx].length == 0)
 			{
-				// TODO check for overflow ! If it happens we need to allocate
-				// another entryblock
-				fprintf(stderr, "Directory full! Scattered dirs not handled yet\n");
+				// Cancel allocation
+				dir->x[entx].length = 255;
+
+				// We need to allocate another entryblock, look for a free spot
+				// in the directory entry list
+				continue;
 			}
 			break;
 		} else if (dir->x[entx].sector - 1 == ent) {
 			// Append to the BEGINNING of entryblock
 			if(++ dir->x[entx].length == 0)
 			{
-				// TODO check for overflow ! If it happens we need to allocate
-				// another entryblock
-				fprintf(stderr, "Directory full! Scattered dirs not handled yet\n");
+				// Cancel allocation
+				dir->x[entx].length = 255;
+
+				// We need to allocate another entryblock, look for a free spot
+				// in the directory entry list
+				continue;
 			}
 			-- dir->x[entx].sector;
 			break;
 		} else if (--entx < 0) {
+			if (dirent == dir->next)
+			{
+				// allocate_directory needs the sector buffer...
+				writesector(dirsec);
+				// We have reached the end of the direntry list, and found no
+				// space for storing our new entry. Let's try growing the
+				// directory...
+				uint16_t next = allocate_direntry();
+				if (next == 0) {
+					puts(RED "directory full! Can't allocate space!");
+					return 0;
+				}
+
+				// We need to update the last entry in the dir to point to the
+				// newly allocated one...
+				readsector(dirsec);
+				dir->next = next;
+				writesector(dirsec);
+			}
 			// move on to next entry
 			dirent = dir->next;
 			dirsec = fentry_to_sector(dirent);
@@ -655,7 +675,8 @@ void writefile(const char* s, const char* d)
 	std::vector<uint16_t> sectors;
 	if (!allocateFromEnd(filesize, sectors))
 	{
-		puts(RED "ERROR" BLACK " Not enough space on disk to write this file.");
+		puts(RED "ERROR" BLACK " Not enough space on volume to write this file.\n"
+			"Delete some files and/or defragment the volume");
 		// TODO free the blocks again - share code with ERA function
 		return;
 	}
@@ -692,6 +713,7 @@ void writefile(const char* s, const char* d)
 
 		if (--entrypos < 0)
 		{
+			// FIXME
 			// TODO allocate next catalog entry to continue entrylist
 			// (maybe we need to allocate all the cat-entries before filling
 			// them, because they can be scattered accross sectors...)
@@ -703,7 +725,7 @@ void writefile(const char* s, const char* d)
 		}
 	}
 
-	writesector(offset_filemap);
+	writesector(dirsec);
 
 	// Store the file data (finally ! :) )
 	int infd = open(s, O_RDONLY);
@@ -726,6 +748,11 @@ void writefile(const char* s, const char* d)
 	close(infd);
 
 	register_direntry(ent);
+		// This can fail if the directory is full. We could clean the allocated
+		// space, but it seems a bit pointless, as the only way out is copying
+		// all the files and dirs to another volume and hoping that it will
+		// free some space by reducing fragmentation. Once this is done, the
+		// only use for this volume is to clear it and start filling it again.
 }
 
 
@@ -795,7 +822,7 @@ bool erase_handle(uint16_t entry, void* cookie)
 
 	// Does name match ?
 	// TODO directories have the first bit set, so this wont match.
-	// This is on purpose, because erasing a directory is a bt different,
+	// This is on purpose, because erasing a directory is a bit different,
 	// but we should handle it here and do only what's needed for them.
 	if(memcmp(diskbuffer + off + 3, d, 11) != 0)
 	{
