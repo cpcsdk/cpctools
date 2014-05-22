@@ -1,7 +1,7 @@
 project (CPCTools)
 cmake_minimum_required(VERSION 2.8)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-multichar -O3")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-multichar -O3 -fPIC")
 
 set(libtools_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libtools)
 set(libcpcfs_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libcpcfs)

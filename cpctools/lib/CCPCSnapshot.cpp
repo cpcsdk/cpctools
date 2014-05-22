@@ -136,7 +136,7 @@ _chunkData(NULL)
 {
 	memcpy(_header,CCPCSnapshot::DefaultHeader,0x100);
 	_memoryDump = new unsigned char[_header[MEM_SIZE_ID]*1024];
-	memset(_memoryDump, _header[MEM_SIZE_ID]*1024, 0);
+	memset(_memoryDump, 0, _header[MEM_SIZE_ID]*1024);
 }
 
 CCPCSnapshot::~CCPCSnapshot()
