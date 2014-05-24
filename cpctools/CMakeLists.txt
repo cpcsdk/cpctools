@@ -1,7 +1,45 @@
 project (CPCTools)
 cmake_minimum_required(VERSION 2.8)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-multichar -O3 -fPIC")
+include(CheckIncludeFileCXX)
+include(CheckLibraryExists)
+include(CheckCCompilerFlag)
+
+
+check_c_compiler_flag(-Wno-multichar COMPILER_HAS_WNO_MULTICHAR)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3 -fPIC")
+if(COMPILER_HAS_WNO_MULTICHAR)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar")
+endif()
+
+
+#LibDSK checks
+set(LIBDSK_HEADERS_DIR "" CACHE PATH "Path to libdsk.h")
+set(LIBDSK_LIB_DIR "" CACHE PATH "Path to libdsk.dll")
+
+set(CMAKE_REQUIRED_INCLUDES "${LIBDSK_HEADERS_DIR}")
+
+CHECK_INCLUDE_FILE_CXX("libdsk.h" HAVE_LIBDSK_H)
+if(NOT HAVE_LIBDSK_H)
+	message(FATAL_ERROR "libdsk.h not found. Set LIBDSK_HEADERS_DIR if it is installed to a nonstandard location.")
+endif()
+
+include_directories(${LIBDSK_HEADERS_DIR})
+
+
+# On linux you link with -ldsk, but on windoows the lib is "libdsk.dll" instead of "dsk.dll"...
+CHECK_LIBRARY_EXISTS(dsk dsk_strerror "${LIBDSK_LIB_DIR}" HAVE_LIBDSK)
+if(HAVE_LIBDSK)
+	set(LIBDSK_NAME dsk)
+else()
+	CHECK_LIBRARY_EXISTS(libdsk dsk_strerror "${LIBDSK_LIB_DIR}" HAVE_LIBDSK_2)
+	if(HAVE_LIBDSK_2)
+		SET(LIBDSK_NAME libdsk)
+	else()
+		message(FATAL_ERROR "libdsk not found. Set LIBDSK_LIB_DIR if it is installed to a nonstandard location.")
+	endif()
+endif()
+
 
 set(libtools_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libtools)
 set(libcpcfs_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libcpcfs)

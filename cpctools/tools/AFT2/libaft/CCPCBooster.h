@@ -20,10 +20,10 @@
 #include <signal.h>
 #include <sys/types.h>
 
-#include <string>
-
 #include "rs232.h"
 #endif
+
+#include <string>
 
 
 #ifndef DWORD

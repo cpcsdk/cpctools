@@ -93,7 +93,7 @@ std::string CAksFileTransfert::GetFilename() const
 	if (_filename.size() != 0)
 		return _filename;
 	#ifdef _WINDOWS
-		const char* pathsseparator = "\\";
+		const char* pathseparator = "\\";
 	#else
 		const char* pathseparator = "/";
 	#endif

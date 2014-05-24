@@ -1,4 +1,14 @@
+include(CheckFunctionExists)
+
 add_subdirectory(libtools)
+
+
+# Portability checks
+CHECK_FUNCTION_EXISTS(strcasecmp HAVE_STRCASECMP)
+if(NOT HAVE_STRCMP)
+	add_definitions(-Dstrcasecmp=_stricmp)
+endif()
+
 
 add_library(cpc SHARED
 	CCPCSnapshot.cpp
@@ -13,5 +23,5 @@ add_library(cpc SHARED
 	libcpcfs/CDSKFile.cpp
 	)
 
-install(TARGETS cpc LIBRARY DESTINATION lib)
-target_link_libraries (cpc dsk tools)
+install(TARGETS cpc DESTINATION lib)
+target_link_libraries (cpc ${LIBDSK_NAME} tools)

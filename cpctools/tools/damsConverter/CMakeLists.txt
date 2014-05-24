@@ -7,5 +7,4 @@ target_link_libraries (damsConverter cpc tools)
 set(CXXFLAGS -Wall -O3)
 
 set_target_properties(damsConverter PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(damsConverter PROPERTIES COMPILE_FLAGS "-Wall -Wno-multichar -O3 -march=k6")
-
+set_target_properties(damsConverter PROPERTIES COMPILE_FLAGS "-Wall -O3 -march=k6")
