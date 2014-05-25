@@ -51,8 +51,3 @@ CCPCFile* CCPCFile::openFile(const void *i_buffer, const unsigned int i_size)
     }
 	return file;
 }
-
-std::ostream& operator<<(std::ostream &io_os,const CCPCFile &i_file)
-{
-	return i_file.printInfo(io_os);
-}

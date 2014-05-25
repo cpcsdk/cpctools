@@ -7,27 +7,25 @@
 #ifndef _CCPCDISC_HH_
 #define _CCPCDISC_HH_
 
-#include <string>
 #include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
+#include <math.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 
-#include "libdsk.h"
-
-#include <map>
-#include <vector>
-
-#include <math.h>
-
 #include "CCPCFile.h"
+#include "dllexport.h"
+#include "libdsk.h"
 
 using namespace std;
 
 //! General CPC disc class manager
-class CCPCDisc
+class DLL_PUBLIC CCPCDisc
 {
 public:
 	class CDiscFormat;

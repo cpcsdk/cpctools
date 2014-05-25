@@ -23,5 +23,7 @@ add_library(cpc SHARED
 	libcpcfs/CDSKFile.cpp
 	)
 
+SET_TARGET_PROPERTIES(cpc PROPERTIES COMPILE_FLAGS -DBUILDING_DLL)
+
 install(TARGETS cpc DESTINATION lib)
-target_link_libraries (cpc ${LIBDSK_NAME} tools)
+target_link_libraries (cpc ${LIBDSK_LIBRARY} tools)

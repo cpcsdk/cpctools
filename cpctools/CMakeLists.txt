@@ -2,8 +2,8 @@ project (CPCTools)
 cmake_minimum_required(VERSION 2.8)
 
 include(CheckIncludeFileCXX)
-include(CheckLibraryExists)
 include(CheckCCompilerFlag)
+include(cmake/CheckSharedLibraryExists.cmake)
 
 
 check_c_compiler_flag(-Wno-multichar COMPILER_HAS_WNO_MULTICHAR)
@@ -21,6 +21,7 @@ set(CMAKE_REQUIRED_INCLUDES "${LIBDSK_HEADERS_DIR}")
 
 CHECK_INCLUDE_FILE_CXX("libdsk.h" HAVE_LIBDSK_H)
 if(NOT HAVE_LIBDSK_H)
+	unset(HAVE_LIBDSK_H)
 	message(FATAL_ERROR "libdsk.h not found. Set LIBDSK_HEADERS_DIR if it is installed to a nonstandard location.")
 endif()
 
@@ -28,17 +29,21 @@ include_directories(${LIBDSK_HEADERS_DIR})
 
 
 # On linux you link with -ldsk, but on windoows the lib is "libdsk.dll" instead of "dsk.dll"...
-CHECK_LIBRARY_EXISTS(dsk dsk_strerror "${LIBDSK_LIB_DIR}" HAVE_LIBDSK)
+CHECK_SHARED_LIBRARY_EXISTS(dsk dsk_strerror 1 "${LIBDSK_LIB_DIR}" HAVE_LIBDSK)
 if(HAVE_LIBDSK)
 	set(LIBDSK_NAME dsk)
 else()
-	CHECK_LIBRARY_EXISTS(libdsk dsk_strerror "${LIBDSK_LIB_DIR}" HAVE_LIBDSK_2)
+	CHECK_SHARED_LIBRARY_EXISTS(libdsk dsk_strerror 1 "${LIBDSK_LIB_DIR}" HAVE_LIBDSK_2)
 	if(HAVE_LIBDSK_2)
 		SET(LIBDSK_NAME libdsk)
 	else()
+		unset(HAVE_LIBDSK_2 CACHE)
+		unset(HAVE_LIBDSK CACHE)
 		message(FATAL_ERROR "libdsk not found. Set LIBDSK_LIB_DIR if it is installed to a nonstandard location.")
 	endif()
 endif()
+
+FIND_LIBRARY(LIBDSK_LIBRARY ${LIBDSK_NAME} ${LIBDSK_LIB_DIR})
 
 
 set(libtools_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libtools)
@@ -67,4 +72,6 @@ SET(CPACK_PACKAGE_EXECUTABLES "AFT" "Arkos File Transfer server")
 SET(CPACK_PACKAGE_EXECUTABLES "cpcVideo" "CPC Video mode graphics viewer")
 SET(CPACK_PACKAGE_EXECUTABLES "damsConverter" "Convert DAMS source files to ASCII")
 SET(CPACK_PACKAGE_EXECUTABLES "ZMac" "z80 macro assembler")
+
+SET(CPACK_GENERATOR "ZIP")
 INCLUDE(CPack)

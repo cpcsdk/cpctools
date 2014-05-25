@@ -9,6 +9,8 @@
 #include <string>
 #include <fstream>
 
+#include "dllexport.h"
+
 //! DSK DiscHeader
 class CDSKDiscHeader
 {
@@ -81,7 +83,7 @@ public:
 	//! Default constructor
 	CEDSKDiscHeader();
 
-	//! Get format description
+	//! Get fSET_TARGET_PROPERTIES(mytarget PROPERTIES COMPILE_FLAGS -DMY_TARGET_DEF)ormat description
 	virtual std::string GetDSKType() const;
 	//! Get Creator
 	virtual std::string GetCreator() const;
@@ -102,7 +104,7 @@ public:
 };
 
 //! DSK sector data
-class CDSKSector
+class DLL_PUBLIC CDSKSector
 {
 public:
 	unsigned char	Track;
@@ -148,7 +150,7 @@ public:
 };
 
 //! DSK track data
-class CDSKTrack
+class DLL_PUBLIC CDSKTrack
 {
 public:
 	unsigned char	Header[14];
@@ -193,7 +195,7 @@ public:
 };
 
 //! Generic DSK file
-class CDSKFile
+class DLL_PUBLIC CDSKFile
 {
 protected:
 	//! Tracks data
@@ -258,7 +260,7 @@ protected:
 };
 
 //! Extended DSK File
-class CExtendedDSKFile : public CDSKFile
+class DLL_PUBLIC CExtendedDSKFile : public CDSKFile
 {
 	friend class CDSKFile;
 

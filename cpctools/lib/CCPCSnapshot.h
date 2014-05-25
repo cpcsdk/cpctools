@@ -11,8 +11,10 @@
 
 #include <iostream>
 #include <fstream>
-#include "CError.h"
 #include <vector>
+
+#include "CError.h"
+#include "dllexport.h"
 
 #if ! _WINDOWS
 #include <errno.h>
@@ -23,7 +25,7 @@ using namespace std;
 #define NB_SNAPSHOT_TOKEN 67
 #define NB_SNAPSHOT_TOKEN_SECTION 10
 
-class CCPCSnapshot
+class DLL_PUBLIC CCPCSnapshot
 {
 private:
 	struct TTokenID

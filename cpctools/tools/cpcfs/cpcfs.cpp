@@ -392,7 +392,8 @@ void Commands::FileInfo(void)
 		CCPCFile *file = disc->GetFile(filename, user);
 		std::cout << "File header <" << user << ":" << filename << ">" << std::endl;
 
-		std::cout << *file << std::endl;
+		file->printInfo(std::cout);
+		std::cout << std::endl;
 		file->printHeader(std::cout);
 
 		delete file;

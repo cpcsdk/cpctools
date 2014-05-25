@@ -12,18 +12,18 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include "libdsk.h"
 #include <errno.h>
 #include <string.h>
 
 #include "CError.h"
-
 #include "CCPCFile.h"
+#include "dllexport.h"
+#include "libdsk.h"
 
 #ifndef _CCPCBINARYFILE_HH_
 #define _CCPCBINARYFILE_HH_
 
-class CCPCBinaryFile:public CCPCFile
+class DLL_PUBLIC CCPCBinaryFile:public CCPCFile
 {
 private:
   /// Fichier complet (header + contenu)

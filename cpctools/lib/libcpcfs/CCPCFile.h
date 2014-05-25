@@ -12,8 +12,10 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include "libdsk.h"
 #include <errno.h>
+
+#include "dllexport.h"
+#include "libdsk.h"
 
 #ifndef _CCPCFILE_HH_
 #define _CCPCFILE_HH_
@@ -24,13 +26,8 @@ enum TFileType
 	Binary
 };
 
-class CCPCFile
+class DLL_PUBLIC CCPCFile
 {
-private:
-protected:
-	/// Affiche les infos sur le ficher
-	virtual std::ostream& printInfo(std::ostream &io_os) const = 0;
-	
 public:
 	/// Constructeur
 	CCPCFile();
@@ -65,10 +62,8 @@ public:
 	virtual std::ostream& printHeader(std::ostream& io_os) const = 0;
 	/// Affichage de contenu du fichier
 	virtual std::ostream& printContent(std::ostream& io_os) const = 0;
-	
-	/// Affiche les infos sur le fichier
-	friend std::ostream& operator<<(std::ostream &io_os,const CCPCFile &i_file);
-	
+	/// Affiche les infos sur le ficher
+	virtual std::ostream& printInfo(std::ostream &io_os) const = 0;
 };
 
 #endif

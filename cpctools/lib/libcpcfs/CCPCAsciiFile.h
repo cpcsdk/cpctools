@@ -12,19 +12,19 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include "libdsk.h"
 #include <errno.h>
 #include <string.h>
 
 #include "CError.h"
-
 #include "CCPCFile.h"
+#include "dllexport.h"
+#include "libdsk.h"
 
 #ifndef _CCPCASCIIFILE_HH_
 #define _CCPCASCIIFILE_HH_
 
 //! Class used to manage ASCII files
-class CCPCAsciiFile:public CCPCFile
+class DLL_PUBLIC CCPCAsciiFile:public CCPCFile
 {
 private:
   //! File content
