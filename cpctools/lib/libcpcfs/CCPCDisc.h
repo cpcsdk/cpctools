@@ -143,7 +143,7 @@ public:
 	};
 
 	//! Define data of a whole track
-	class CTrack
+	class DLL_PUBLIC CTrack
 	{
 	public:
 		//! Track data
