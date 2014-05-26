@@ -21,7 +21,7 @@ set(CMAKE_REQUIRED_INCLUDES "${LIBDSK_HEADERS_DIR}")
 
 CHECK_INCLUDE_FILE_CXX("libdsk.h" HAVE_LIBDSK_H)
 if(NOT HAVE_LIBDSK_H)
-	unset(HAVE_LIBDSK_H)
+	unset(HAVE_LIBDSK_H CACHE)
 	message(FATAL_ERROR "libdsk.h not found. Set LIBDSK_HEADERS_DIR if it is installed to a nonstandard location.")
 endif()
 
