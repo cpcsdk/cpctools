@@ -2,29 +2,38 @@ CPCTools 0.3.0
 (c) cpcsdk team 2008-2013
 (c) Ramlaid 2005
 
-1) About CPCTools
+0) About CPCTools
 -----------------
 
 This package contains a few tools that we created during my CPC development.
 Most of them work at least in Haiku, Linux and Windows.
 
-There are general tools like file manager or image viewer and purely developement oriented tools like Dams converter,
-data linker or snapshot creator.
+There are general tools like file manager or image viewer and purely
+developement oriented tools like Dams converter, data linker or snapshot
+creator.
 
-All the sources are in C++ (and a bit commented but mainly in french, sorry for english guys !).
+All the sources are in C++ (and a bit commented but mainly in french, sorry for
+english guys !).
 
-WARNING : all these tools are under developpement ! bug report & remark will be appreciated ! (This is also the
-case for this small doc)
+WARNING : all these tools are under developpement ! bug report & remark will be
+appreciated ! (This is also the case for this small doc)
+
+1) LibCPC
+---------
+
+The LibCPC includes tools for DSK and SNA file management. It uses LibDSK from
+John Eliott which we are also distributing in this package (any version should
+work).
+
+A libdskrc file is also included to add support for some common custom formats
+used on CPC.
 
 2) CPCFS
 --------
 
-Include a lib and a executable. The libcpcfs use libDSK from John Eliott (version 1.1.6 but it might work with
-more recent version). What the libcpcfs is doing is just managing CPC file system over libDSK physical DSK management.
-(I also include a libdskrc file in order to manage more file format)
-
-CPCFS : This tool take a .dsk and manage file on this .dsk. Getting/putting with binary mode & on the fly header
-creation. There few option and only 2 file system managed (DATA and SYSTEM). 
+This tool takes a .dsk and manage file on this .dsk. Getting/putting with
+binary mode & on the fly header creation. There are few options and only 3 file
+systems managed (DATA, SYSTEM and ROMDOS D1). 
 
 cpcfs <disc> <command> [option] [file *] [-s]
 Commands :
@@ -42,21 +51,29 @@ Commands :
         i  : print disc info
         h  : print file header
 Options
-		-s : select side B
-When putting or getting file, you can use [<user>:]name.ext[,S][,P][,start][,exec]
+        -s : select side B
 
-Ex :
+When putting or getting files, you can use [<user>:]name.ext[,S][,P][,start][,exec]
+
+Examples :
 Putting a file on the DSK
 	cpcfs myDisk.dsk p myFile
 
-Putting a binary file and create header (start 0x1000 and exe 0x1050) on the fly:
+Putting a binary file and create header (start 0x1000 and exe 0x1050) on the
+fly:
 	cpcfs myDisk.dsk p myFile.bin,0x1000,0x1050
 
-I originaly create this tools under Linux and use it with a real 3'5 disk !
-cpcfs /dev/fd0 c
+I originally created this tool under Linux and there you can use it with a real
+3'5 disk !
+	cpcfs /dev/fd0 c
 
-Might work also under windows using libdsk extension fdrawcmd.sys (WARNING ! Use at your own risk !)
-cpcfs a: c
+There is also limited support for usb floppy drives (only the ROMDOS D1 format
+will work as it is the most similar to the PC 720K format)
+	cpcfs /dev/sdb c
+
+It might work also under windows using the libdsk extension fdrawcmd.sys
+(WARNING ! Use at your own risk !)
+	cpcfs a: c
 
 
 John Eliott site :
@@ -67,22 +84,27 @@ http://simonowen.com/fdrawcmd/
 3) CPCFSExt
 -----------
 
-This is a shell extension for Windows Explorer. It had a new "CPCFS tools" context menu on right clicking of file, .dsk or directory.
-What does CPCFSExt on right clicking :
+This is a shell extension for Windows Explorer. It adds a new "CPCFS tools"
+context menu on right clicking of file, .dsk or directory.
+What CPCFSExt does on right clicking :
 	
 	a. Background
 		- Create...
-			Create a new DSK in the current directory, default format is Data 40 tracks
+			Create a new DSK in the current directory, default
+			format is Data 40 tracks
 		- Create ??.dsk
-			Create a new DSK using current directory name, default format is Data 40 tracks
+			Create a new DSK using current directory name, default
+			format is Data 40 tracks
 	
-	b. DSK file (single selection) (if the file is not a .dsk, you can't get this context menu !)
+	b. DSK file (single selection) (if the file is not a .dsk, you can't get
+	this context menu !)
 		- Extract all to...
 			Extract all files (keeping header) to a given directory
 		- Extract all here
 			Extract all files (keeping header) to current directory
 		- Extract to ??\
-			Extract all files (keeping header) to directory named like ??.dsk
+			Extract all files (keeping header) to directory named
+			like ??.dsk
 		- Catalogue
 			Display a catalogue interface of the current .dsk
 		- Disc Info
@@ -92,19 +114,24 @@ What does CPCFSExt on right clicking :
 		- Send to CPCBooster
 			... NOT IMPLEMENTED ...
 		- Format
-			Format current .dsk using dsk format specification (all file deleted !)
+			Format current .dsk using dsk format specification (all
+			file deleted !)
 	
-	c. DSK file (mutiple selection) (if one file is not a dsk, you can't get this context menu !)
+	c. DSK file (mutiple selection) (if one file is not a dsk, you can't get
+	this context menu !)
 		- Extract all to directories
-			Extract all file of each .dsk to directory named like ??.dsk
+			Extract all file of each .dsk to directory named like
+			??.dsk
 		- Extract all here
 			Extract all file of each .dsk to current directory
 			
 	d. File (single selection and multiple selection)
 		- Add to...
-			Add current file(s) to a given .dsk (no header created on the fly)
+			Add current file(s) to a given .dsk (no header created
+			on the fly)
 		- Add to ??.dsk
-			Add current file(s) to a dsk name like current directory (no header created on the fly)
+			Add current file(s) to a dsk name like current directory
+			(no header created on the fly)
 		- Send to A:
 			... NOT IMPLEMENTED ...
 		- Send to CPCBooster
@@ -112,27 +139,35 @@ What does CPCFSExt on right clicking :
 		
 		If the file is a binary file (single selection only) :
 		- Edit header
-			Display a interface to edit AMSDOS file header (start address & execution address)
+			Display a interface to edit AMSDOS file header (start
+			address & execution address)
 		- Remove header
 			Remove AMSDOS file header
 		
 		If the file is not a binary file (single selection only) :
 		- Add header
-			Display a interface to add AMSDOS file header (start address & execution address)
+			Display a interface to add AMSDOS file header (start
+			address & execution address)
 	
 	e. Directory (single selection)
 		- Add all file to...
-			Add all file in directory to a given .dsk (no header created on the fly)
+			Add all file in directory to a given .dsk (no header
+			created on the fly)
 		- Add all file to ??.dsk
-			Add all file in directory to a .dsk named like selected directory (no header created on the fly)
+			Add all file in directory to a .dsk named like selected
+			directory (no header created on the fly)
 	
 	f. Directory (multiple selection)
 		- Add all file to *.dsk
-			For each directory, add all file in directory to a .dsk named like current directory (no header created on the fly)
+			For each directory, add all file in directory to a .dsk
+			named like current directory (no header created on the
+			fly)
 
-This is a first release. If you think there is some missing functionnality, please contact me. 
-I'm also looking on explorer namespace extension in order to use .dsk like directories (drag & drop, rename, etc... inside explorer).
-It seems to be possible, but I haven't already start the development, if you are interested, please contact me.
+This is a first release. If you think there is some missing functionnality,
+please contact me. I'm also looking on explorer namespace extension in order to
+use .dsk like directories (drag & drop, rename, etc... inside explorer). It
+seems to be possible, but I haven't already start the development, if you are
+interested, please contact me.
 
 4) CPCFileViewer
 ----------------
@@ -140,53 +175,58 @@ It seems to be possible, but I haven't already start the development, if you are
 Include a lib and a executable. The lib use SDL for displaying.
 
 * cpcFileViewer :
-This tools load the file and display it using a standard CPC video mode. It can load screen, windows and font
-file data. It manage also OCP file format .SCR and .WIN (including compressed one) as well as .PAL (when loading
-myScreen.SCR, it try to find a myScreen.PAL).
-If the tools detect a standard CPC header, it's automatically remove it in order to display only binary data of 
-the loaded file.
+This tools load the file and display it using a standard CPC video mode. It can
+load screen, windows and font file data. It manage also OCP file format .SCR and
+.WIN (including compressed one) as well as .PAL (when loading myScreen.SCR, it
+try to find a myScreen.PAL). If the tools detect a standard CPC header, it's
+automatically remove it in order to display only binary data of the loaded file.
 
 In all mode :
-	CTRL + left / right 		: change CRTC R1 value
-	CTRL + up / down 		: change CRTC R6 value
-	F1 				: switch to screen display mode
-	F2 				: switch to window display mode
-	F3 				: switch to font display mode
-	0,1,2 				: change video mode
+	CTRL + left / right 	: change CRTC R1 value
+	CTRL + up / down 	: change CRTC R6 value
+	F1 			: switch to screen display mode
+	F2 			: switch to window display mode
+	F3 			: switch to font display mode
+	0,1,2 			: change video mode
 
 In Window display mode :
-	left / right 			: change width of window
-	up / down 			: change height of window
+	left / right 		: change width of window
+	up / down 		: change height of window
 	
 In Font display mode :
-	left / right 			: change width of a single character
-	up / down 			: change height of a single character
-	SHFT + left / right 		: change the number of character displayed
-	v / h 				: switch between vertical and horizontal display of each character
+	left / right 		: change width of a single character
+	up / down 		: change height of a single character
+	SHFT + left / right 	: change the number of character displayed
+	v / h 			: switch between vertical and horizontal display
+				of each character
 	
 usage : cpcFileViewer myScreen.scr
 
-Remark : under windows, assign .SCR and .WIN to be opened using cpcFileViewer and you can run it directly under
-Explorer by double clicking on .SCR or .WIN files.
+Remark : under windows, assign .SCR and .WIN to be opened using cpcFileViewer
+and you can run it directly under Explorer by double clicking on .SCR or .WIN
+files.
 
 * libVideoCPC :
-You can use this lib to display your data in CPC video mode. It's include a CPCVideo object creation and many 
-method on this object (putting / getting byte, window, pixel, etc...). It also include a small SDL management
-over CPCVideo screen (see source code for example ! ;).
+You can use this lib to display your data in CPC video mode. It's include a
+CPCVideo object creation and many method on this object (putting / getting
+byte, window, pixel, etc...). It also include a small SDL management over
+CPCVideo screen (see source code for example ! ;).
 
-Remark : this lib can easily be use to create a drawing tool, but it need to be include in a real GUI, 
-and I don't plan to make these development yet.
+Remark : this lib can easily be use to create a drawing tool, but it need to be
+include in a real GUI, and I don't plan to make these development yet.
 
 5) createSnapshot
 -----------------
 
 This tools can create and modify a emulator .SNA file. 
-During developement I use this tool to create .SNA file containing datas, graphics and code.
-Using a config file (or command line option) you can easily create an auto executable .SNA file i.e
-when you load it under an emulator, it's automatically start.
+During developement I use this tool to create .SNA file containing datas,
+graphics and code. Using a config file (or command line option) you can easily
+create an auto executable .SNA file i.e when you load it under an emulator,
+it's automatically start.
 
 Usage : createSnapshot <filename.sna> [-i $1] [-l $1 $2]* [-p $1 $2]* [-s $1 $2]
 * [-x] [-r] [-e] [-d] [-c $1] [-t] [-h]
+
 Create a Amstrad CPC snapshot <filename.sna>
 Default snapshot : 6128, CRTC 0, rom deconnected, no interrupt, CRTC standard value
 
@@ -334,15 +374,17 @@ damsConverter <myFile.s> <myFile.txt>
 7) dataDBGenerator
 ------------------
 
-Small tool to generate a text file with db ??,??,?? where value a taken from a binary file
+Small tool to generate a text file with db ??,??,?? where value a taken from a
+binary file
+
 dataDBGenerator <myFile.bin> <myFile.txt>
 
 8) dataLinker
 -------------
 
-This tool pack many input data file in one or more output data file. It's also generate a source file with right
-data definition.
-It automatically organize data in order to minimize memory usage (according to data address masking)
+This tool pack many input data file in one or more output data file. It's also
+enerate a source file with right data definition. It automatically organize data
+in order to minimize memory usage (according to data address masking)
 
 Usage : dataLinker <-z $1 $2 $3 $4>+ <-d $1 $2 $3>+ [-o $1] [-c $1] [-h]
 Link data and create a .z80 file
@@ -384,9 +426,12 @@ myConfigFile.cfg :
 
 the Arkos File Transfer server.
 
-This program listens on a COM port for commands coming from a CPC with the CPC Booster expansion and the Arkos ROM. It allows the CPC to exchange (download and upload) files with your PC (or other computer).
+This program listens on a COM port for commands coming from a CPC with the CPC
+Booster expansion and the Arkos ROM. It allows the CPC to exchange (download and
+upload) files with your PC (or other computer).
 
-Visit the Arkos webpage for more information on the ROM: http://arkos.cpcscene.com
+Visit the Arkos webpage for more information on the ROM:
+			http://arkos.cpcscene.com
 
 10) ZMac
 -----------
@@ -398,38 +443,39 @@ This is an usual macro assembler. Not much more to say about it.
 10) Other tools
 --------------
 
-In the 'tools' directory you can find 'optionParser.h' and 'optionParser.c'. Theses function are used to manage
-command line option parsing (using a simple option structure description).
-You can also reuse this piece of code ! ;)
+In the 'tools' directory you can find 'optionParser.h' and 'optionParser.c'.
+Theses function are used to manage command line option parsing (using a simple
+option structure description). You can also reuse this piece of code ! ;)
 
 11) Future developpement
 ------------------------
 
-Continue to make these tools better and better (error management, additionals options, ...)
+Continue to make these tools better and better (error management, additionals
+options, ...)
 
 Make a global SDK for CPC . For example :
 	- text editing under Notepad / UltraEdit / Crimson editor / VC++
-	- source code compiling using ZMac (and maybe linking ?), with symbol table & break point exporting
+	- source code compiling using ZMac (and maybe linking ?), with symbol
+		table & break point exporting
 	- snapshot generation from datas using config file
-	- automatic running of .SNA under emulator (WinApe or Arnold or ?) and using symbol table and breaking in a debugging phase
+	- automatic running of .SNA under emulator (WinApe or Arnold or ?) and
+		using symbol table and breaking in a debugging phase
 	- automatic running of .SNA on real CPC using CPCBooster + Arkos tools :)
 
-I think we have a good base of tools to do this SDK, but we need to package all this in a single SDK...
+I think we have a good base of tools to do this SDK, but we need to package all
+this in a single SDK...
 	
 11) License
 -----------
 
 You can use these tools freely. 
-You can also modify all source code or include them into your own production (small credit will be enough ! ;).
+You can also modify all source code or include them into your own production
+(small credit will be enough ! ;).
 
 12) Contact
 -----------
 
 The CPCSDK team
-cpcsdk@googlecode.com
+http://github.com/cpcsdk/
 
-
-Thierry JOUIN
-aka Ramlaid
-
-ramlaid at ramlaid.com
+Original development by Thierry JOUIN aka Ramlaid (ramlaid at ramlaid.com)

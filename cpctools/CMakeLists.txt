@@ -45,6 +45,12 @@ endif()
 
 FIND_LIBRARY(LIBDSK_LIBRARY ${LIBDSK_NAME} ${LIBDSK_LIB_DIR})
 
+if(WIN32)
+	INSTALL(FILES ${LIBDSK_LIB_DIR}/libdsk.dll DESTINATION lib)
+endif()
+
+INSTALL(FILES README DESTINATION docs)
+
 
 set(libtools_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libtools)
 set(libcpcfs_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libcpcfs)
