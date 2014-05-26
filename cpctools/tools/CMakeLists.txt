@@ -5,4 +5,7 @@ add_subdirectory(damsConverter)
 
 add_executable (createSnapshot createSnapshot.cpp)
 target_link_libraries (createSnapshot cpc tools)
-install(TARGETS createSnapshot RUNTIME DESTINATION bin)
+
+add_executable (dataDBGenerator dataDBGenerator.cpp)
+target_link_libraries (dataDBGenerator tools)
+install(TARGETS createSnapshot dataDBGenerator RUNTIME DESTINATION bin)
