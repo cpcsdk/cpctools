@@ -19,6 +19,11 @@ set(LIBDSK_LIB_DIR "" CACHE PATH "Path to libdsk.dll")
 
 set(CMAKE_REQUIRED_INCLUDES "${LIBDSK_HEADERS_DIR}")
 
+if(HAIKU)
+  # libdsk.h uses size_t without proper includes...
+  set(CMAKE_REQUIRED_FLAGS "-Dsize_t=int")
+endif()
+
 CHECK_INCLUDE_FILE_CXX("libdsk.h" HAVE_LIBDSK_H)
 if(NOT HAVE_LIBDSK_H)
 	unset(HAVE_LIBDSK_H CACHE)

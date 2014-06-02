@@ -29,17 +29,29 @@ static const std::string appliName = "aft";
 static const std::string appliUsageShort = "";
 static const std::string appliUsageLong = "\nArkos File Transfert tool";
 
-static inline char const *const defaultComPort()
+static const std::string devicePrefixes[] =
 {
-	#ifdef __HAIKU__
-		return "/dev/ports/usb0";
-	#endif
+#if defined(__HAIKU__)
+	"/dev/ports/usb0",
+	"/dev/ports/usb",
+	"/dev/ports/",
+#elif defined(__linux__)
+	"/dev/ttyUSB0",
+	"/dev/ttyUSB",
+	"/dev/tty",
+	"/dev/",
+#else
+	"\\\\.\\COM1",
+	"\\\\.\\COM",
+	"\\\\.\\",
+#endif
 
-	#ifdef __linux__
-		return "/dev/ttyUSB0";
-	#endif
+	""
+};
 
-	return "COM1";
+static inline const std::string defaultComPort()
+{
+	return devicePrefixes[0];
 }
 
 int main(int argc, char *argv[])
@@ -98,36 +110,35 @@ int main(int argc, char *argv[])
 			i++;
 		}
 
-		CAksFileTransfert transfert(COMport);
+		for(unsigned int i = 0; i < sizeof(devicePrefixes) / sizeof(devicePrefixes[0]); i++)
+		{
+			std::string device = devicePrefixes[i] + COMport;
+			CAksFileTransfert transfert(device);
 
-		if (!transfert.IsOpen())
-		{
-			std::cout << "Unable to open port COM " << COMport << std::endl;
-			return -1;
-		} else {
-			std::cout << "AFT now listening on " << COMport << std::endl;
+			if (!transfert.IsOpen())
+				continue;
+			else
+				std::cout << "AFT now listening on " << device << std::endl;
+
+			if (filename.size() != 0)
+				transfert.SetForceFilename(filename);
+
+			if (dir.size() != 0)
+				transfert.SetFilepath(dir);
+
+			while (!noLoop || (noLoop && (transfert.GetNbTransfertDone() != 1)))
+				transfert.Run();
+
+			return 0;
 		}
 
-		if (filename.size() != 0)
-		{
-			transfert.SetForceFilename(filename);
-		}
-		if (dir.size() != 0)
-		{
-			transfert.SetFilepath(dir);
-		}
-
-		while (!noLoop || (noLoop && (transfert.GetNbTransfertDone() != 1)))
-		{
-			transfert.Run();
-		}
+		std::cout << "Unable to open COM port " << COMport << std::endl;
+		return -1;
 	}
 	catch(tools::CException &e)
 	{
 		std::cerr << e << std::endl;
 		return -1;
 	}
-
-	return 0;
 }
 

@@ -5,7 +5,7 @@ add_subdirectory(libtools)
 
 # Portability checks
 CHECK_FUNCTION_EXISTS(strcasecmp HAVE_STRCASECMP)
-if(NOT HAVE_STRCMP)
+if(NOT HAVE_STRCASECMP)
 	add_definitions(-Dstrcasecmp=_stricmp)
 endif()
 

@@ -37,6 +37,8 @@
 
 #if defined(__linux__)||defined(__HAIKU__)   /* Linux */
 
+#include <errno.h>
+
 
 int Cport[1],
     error;
@@ -107,17 +109,14 @@ int OpenComport(const char* comport_number, int baudrate)
   Cport[0] = open(comport_number, O_RDWR | O_NOCTTY);
   if(Cport[0]==-1)
   {
-  	printf(comport_number);
-    perror("unable to open comport ");
-    return(1);
+    return errno;
   }
 
   error = tcgetattr(Cport[0], old_port_settings + 0);
   if(error==-1)
   {
     close(Cport[0]);
-    perror("unable to read portsettings ");
-    return(1);
+    return errno;
   }
   memcpy(&new_port_settings, old_port_settings + 0, sizeof(new_port_settings));  /* clear the new struct */
 
@@ -135,11 +134,10 @@ int OpenComport(const char* comport_number, int baudrate)
   if(error==-1)
   {
     close(Cport[0]);
-    perror("unable to adjust portsettings ");
-    return(1);
+    return errno;
   }
 
-  return(0);
+  return 0;
 }
 
 
