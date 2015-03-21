@@ -3,7 +3,7 @@
 	ST-Sound ( YM files player library )
 
 	Copyright (C) 1995-1999 Arnaud Carre ( http://leonard.oxg.free.fr )
-	Copyright (C) 2010 CPC SDK crew ( http://code.google.com/p/cpcsdk/ )
+	Copyright (C) 2010 CPC SDK crew ( http://github.com/cpcsdk/ )
 
 	Define YM Profiles for multiple possible configuration (VolTable, Mixer...)
 	Change that file depending of your platform. Please respect the right size

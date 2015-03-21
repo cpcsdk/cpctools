@@ -443,7 +443,7 @@ static struct SOption appliOption[]=
 };
 
 static const std::string authorName = "Ramlaid & PulkoMandy";
-static const std::string authorMail = "cpcsdk@googlecode.com";
+static const std::string authorMail = "cpcsdk@googlegroups.com";
 static const std::string appliName = "cpcfs";
 static const std::string appliUsageShort = "<dskfile> <command>";
 static const std::string appliUsageLong = "<dskfile> <command>\n"

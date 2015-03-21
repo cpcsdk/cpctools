@@ -30,7 +30,7 @@ int nb_colors = 0 ;
 // Displays some help
 void display_help()
 {
-    cout << "Font Catcher 0.2 - http://code.google.com/p/cpcsdk/ - Code by Krusty" << endl
+    cout << "Font Catcher 0.2 - http://github.com/cpcsdk/ - Code by Krusty" << endl
 	<<  "fontcatcher image destination charwidth fillspace" << endl
 	<<  "cuts image into smaller images and encodes them for displaying as sprites/font characters on the Amstrad CPC computer" << endl
 	<<  "Each caracter is charwidth pixels large. fillspace bytes are inserted between each char for memory alignment." << endl

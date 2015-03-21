@@ -5,7 +5,7 @@
 
 /*
  * libstsound is an AY-3-8192, YM2149 and clone PSG emulator
- * Copyright (C) 2008-2011 CPCSDK crew ( http://code.google.com/p/cpcsdk/ )
+ * Copyright (C) 2008-2011 CPCSDK crew ( http://github.com/cpcsdk/ )
  * Based on ST-Sound
  * Copyright (C) 1995-1999 Arnaud Carre ( http://leonard.oxg.free.fr )
  */

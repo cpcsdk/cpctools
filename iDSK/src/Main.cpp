@@ -256,7 +256,7 @@ void help(void)
   cout <<endl;
   cout << "--------------------------------------------------------------------------------" << endl;
   cout << "################################################################################"<< endl;
-  cout <<  VERSION <<" (by Demoniak, Sid, PulkoMandy), www.code.google.com/p/cpcsdk " << endl;
+  cout <<  VERSION <<" (by Demoniak, Sid, PulkoMandy), http://github.com/cpcsdk " << endl;
   cout << "################################################################################"<< endl;
   cout << endl;
   cout << "Usage : " << endl;
