@@ -38,6 +38,12 @@
 #include "YmMusic.h"
 #include "LZH/LZH.H"
 
+// Silence some lame errors from msvc
+#if _MSC_VER
+#define strdup _strdup /* don't bug me about strdup being deprecated */
+#pragma warning(disable : 4996) /* don't bug me about fopen */
+#endif
+
 static	ymu16 ymVolumeTable[16] =
 {	62,161,265,377,580,774,1155,1575,2260,3088,4570,6233,9330,13187,21220,32767};
 
@@ -53,13 +59,6 @@ static	void	signeSample(ymu8 *ptr,yms32 size)
 			}
 			while (--size);
 		}
-}
-
-char	*mstrdup(char *in)
-{
-		char *out = (char*)malloc(strlen(in)+1);
-		if (out) strcpy(out,in);
-		return out;
 }
 
 ymu32      readMotorolaDword(ymu8 **ptr)
@@ -88,7 +87,7 @@ ymchar    *readNtString(ymchar **ptr)
 {
 ymchar *p;
 
-		p = mstrdup(*ptr);
+		p = strdup(*ptr);
 		(*ptr) += strlen(*ptr)+1;
         return p;
 }
@@ -285,11 +284,11 @@ ymbool	CYmMusic::ymDecode(void)
 				streamInc = 14;
 				nbDrum = 0;
 				setAttrib(A_STREAMINTERLEAVED|A_TIMECONTROL);
-				pSongName = mstrdup("Unknown");
-				pSongAuthor = mstrdup("Unknown");
-				pSongComment = mstrdup("Converted by Leonard.");
-				pSongType = mstrdup("YM 2");
-				pSongPlayer = mstrdup("YM-Chip driver.");
+				pSongName = strdup("Unknown");
+				pSongAuthor = strdup("Unknown");
+				pSongComment = strdup("Converted by Leonard.");
+				pSongType = strdup("YM 2");
+				pSongPlayer = strdup("YM-Chip driver.");
 				break;
 
 			case 0x594D3321: // 'YM3!':		// Standart YM-Atari format.
@@ -302,11 +301,11 @@ ymbool	CYmMusic::ymDecode(void)
 				streamInc = 14;
 				nbDrum = 0;
 				setAttrib(A_STREAMINTERLEAVED|A_TIMECONTROL);
-				pSongName = mstrdup("Unknown");
-				pSongAuthor = mstrdup("Unknown");
-				pSongComment = mstrdup("");
-				pSongType = mstrdup("YM 3");
-				pSongPlayer = mstrdup("YM-Chip driver.");
+				pSongName = strdup("Unknown");
+				pSongAuthor = strdup("Unknown");
+				pSongComment = strdup("");
+				pSongType = strdup("YM 3");
+				pSongPlayer = strdup("YM-Chip driver.");
 				break;
 
 			case 0x594D3262: // 'YM3b':		// Standart YM-Atari format + Loop info.
@@ -320,11 +319,11 @@ ymbool	CYmMusic::ymDecode(void)
 				streamInc = 14;
 				nbDrum = 0;
 				setAttrib(A_STREAMINTERLEAVED|A_TIMECONTROL);
-				pSongName = mstrdup("Unknown");
-				pSongAuthor = mstrdup("Unknown");
-				pSongComment = mstrdup("");
-				pSongType = mstrdup("YM 3b (loop)");
-				pSongPlayer = mstrdup("YM-Chip driver.");
+				pSongName = strdup("Unknown");
+				pSongAuthor = strdup("Unknown");
+				pSongComment = strdup("");
+				pSongType = strdup("YM 3b (loop)");
+				pSongPlayer = strdup("YM-Chip driver.");
 				break;
 
 			case 0x594D3421: // 'YM4!':		// Extended ATARI format.
@@ -383,16 +382,16 @@ ymbool	CYmMusic::ymDecode(void)
 				if (id==0x594D3621) // 'YM6!'
 				{
 					songType = YM_V6;
-					pSongType = mstrdup("YM 6");
+					pSongType = strdup("YM 6");
 				}
 				else
 				{
-					pSongType = mstrdup("YM 5");
+					pSongType = strdup("YM 5");
 				}
 				pDataStream = ptr;
 				streamInc = 16;
 				setAttrib(A_STREAMINTERLEAVED|A_TIMECONTROL);
-				pSongPlayer = mstrdup("YM-Chip driver.");
+				pSongPlayer = strdup("YM-Chip driver.");
 				break;
 
 			case 0x4D495831: // 'MIX1':		// ATARI Remix digit format.
@@ -431,8 +430,8 @@ ymbool	CYmMusic::ymDecode(void)
 				}
 
 				mixPos = -1;		// numero du block info.
-				pSongType = mstrdup("MIX1");
-				pSongPlayer = mstrdup("Digi-Mix driver.");
+				pSongType = strdup("MIX1");
+				pSongPlayer = strdup("Digi-Mix driver.");
 
 				break;
 
@@ -505,11 +504,11 @@ ymbool	CYmMusic::ymDecode(void)
 				{
 					ymTrackerFreqShift = (attrib>>28)&15;
 					attrib &= 0x0fffffff;
-					pSongType = mstrdup("YM-T2");
+					pSongType = strdup("YM-T2");
 				}
 				else
 				{
-					pSongType = mstrdup("YM-T1");
+					pSongType = strdup("YM-T1");
 				}
 
 
@@ -519,7 +518,7 @@ ymbool	CYmMusic::ymDecode(void)
 				ymTrackerInit(100);		// 80% de volume maxi.
 				streamInc = 16;
 				setTimeControl(YMTRUE);
-				pSongPlayer = mstrdup("Universal Tracker");
+				pSongPlayer = strdup("Universal Tracker");
 				break;
 
 			default:

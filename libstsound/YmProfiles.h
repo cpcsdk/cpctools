@@ -64,49 +64,47 @@ typedef struct _ymProfile
 static ymProfile profileAtari =
 {
     YM_VOL_TABLE,
-    { 0.333, 0.333, 0.333 },
-    { 0.333, 0.333, 0.333 },
-    { 0.333, 0.333, 0.333 },
-    /** \TODO: Found good mixer value */
+    { 0.333f, 0.333f, 0.333f },
+    { 0.333f, 0.333f, 0.333f },
+    { 0.333f, 0.333f, 0.333f },
+    /** \TODO: Find real mixer values (for STe, STf is mono anyway?) */
     2000000,
 };
 
 /**
  * \brief Profile for Amstrad CPC emulation
- * Mixing value calculate from component value
- * Thank to Grimmy/Arkos
+ * Volume Table computed from R values in CPC schematics by Grimmy/Arkos
  */
 static ymProfile profileCPC =
 {
     AY_VOL_TABLE,
-    { 0.333, 0.333, 0.333 },
-    { 0.687, 0.312, 0.000 },
-    { 0.000, 0.312, 0.687 },
-    /** Volume Table Calc with component by Grimmy*/
+    { 0.333f, 0.333f, 0.333f },
+    { 0.687f, 0.312f, 0.000f },
+    { 0.000f, 0.312f, 0.687f },
     1000000,
 };
 
 /**
  * \brief Profile for Spectrum emulation
- * \todo Found good mixing and see for difference between all Spectrum clone
+ * \todo Find real mixer values, and handle difference between all Spectrum clones
  */
 static ymProfile profileSpectrum =
 {
     AY_VOL_TABLE,
-    { 0.333, 0.333, 0.333 },
-    { 0.333, 0.333, 0.333 },
-    { 0.333, 0.333, 0.333 },
-    /** \TODO: Found good mixer value */
+    { 0.333f, 0.333f, 0.333f },
+    { 0.333f, 0.333f, 0.333f },
+    { 0.333f, 0.333f, 0.333f },
+    /** \TODO: Find real mixer values */
     1773400,
 };
 
 static ymProfile profileMFP =
 {
     AY_VOL_TABLE,
-    { 0.333, 0.333, 0.333 },
-    { 0.333, 0.333, 0.333 },
-    { 0.333, 0.333, 0.333 },
-    /** \TODO: Found good mixer value */
+    { 0.333f, 0.333f, 0.333f },
+    { 0.333f, 0.333f, 0.333f },
+    { 0.333f, 0.333f, 0.333f },
+    /** \TODO: Find real mixer values */
     2457600,
 };
 

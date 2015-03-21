@@ -116,7 +116,7 @@ static ymu8 *ym2149EnvInit(ymu8 *pEnv,ymint a,ymint b)
 
 CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
 {
-    ymint i,env;
+    ymint env;
 
     frameCycle = 0;
     //--------------------------------------------------------
@@ -156,7 +156,7 @@ CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
 
 CYm2149Ex::CYm2149Ex(ymProfile profile, ymu32 playRate)
 {
-    ymint i,env;
+    ymint env;
 
     frameCycle = 0;
     //--------------------------------------------------------
@@ -217,9 +217,8 @@ ymu32 CYm2149Ex::toneStepCompute(ymu8 rHigh,ymu8 rLow)
 	step <<= (15+16-3);
 	step /= (per * replayFrequency);
 #else
-	ymfloat step = internalClock;
-	step /= ((ymfloat)per*8.0*(ymfloat)replayFrequency);
-	step *= 32768.0*65536.0;
+	ymfloat step = internalClock / (per * 8.0f * replayFrequency);
+	step *= 32768.0f*65536.0f;
 #endif
 	ymu32 istep = (ymu32)step;
 	return istep;
@@ -236,8 +235,8 @@ ymu32 CYm2149Ex::noiseStepCompute(ymu8 rNoise)
 	step <<= (16-1-3);
 	step /= (per * replayFrequency);
 #else
-	ymfloat step = internalClock;
-	step = (step * 4096.0) / ((ymfloat)per * (ymfloat)replayFrequency);
+	ymfloat step = internalClock * 4096.0f;
+	step /= (ymfloat)per * (ymfloat)replayFrequency;
 	/*
 	step /= ((ymfloat)per*8.0*(ymfloat)replayFrequency);
 	step *= 65536.0/2.0;
@@ -275,9 +274,8 @@ ymu32 CYm2149Ex::envStepCompute(ymu8 rHigh,ymu8 rLow)
 	step <<= (16+16-9);
 	step /= (per * replayFrequency);
 #else
-	ymfloat step = internalClock;
-	step /= ((ymfloat)per*512.0*(ymfloat)replayFrequency);
-	step *= 65536.0*65536.0;
+	ymfloat step = internalClock / (per*512.0f*replayFrequency);
+	step *= 65536.0f*65536.0f;
 #endif
 
 	return (ymu32)step;
@@ -402,10 +400,10 @@ ymsample CYm2149Ex::nextSample(void)
 	//---------------------------------------------------
 	// Tone+noise+env+DAC for three voices !
 	//---------------------------------------------------
-    // bn = 0xFFFF ou 0
-    // mixerNx = 0xFFFF ou 0
-    // mixerTx = 0xFFFF ou 0
-    // bt = 0xFFFF ou 0
+    // bn = 0xFFFF or 0
+    // mixerNx = 0xFFFF or 0
+    // mixerTx = 0xFFFF or 0
+    // bt = 0xFFFF or 0
 #ifdef YM_INTEGER_ONLY
     bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
     vol  = (*pVolA)&bt * vOut[0]; // 16*8 = 24 bits
@@ -416,11 +414,11 @@ ymsample CYm2149Ex::nextSample(void)
     vol >>= 7;
 #else
     bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
-    vol  = ((*pVolA)&bt) * vOut[0];
+    vol  = (ymint)(((*pVolA)&bt) * vOut[0]);
     bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
-    vol += ((*pVolB)&bt) * vOut[1];
+    vol += (ymint)(((*pVolB)&bt) * vOut[1]);
     bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
-    vol += ((*pVolC)&bt) * vOut[2];
+    vol += (ymint)(((*pVolC)&bt) * vOut[2]);
 #endif
 
 	//---------------------------------------------------
@@ -515,17 +513,17 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 
     bt = ((((yms32)posA)>>31) | mixerTA) & (bn | mixerNA);
 //    volLeft = ((*pVolA)&bt)*.687*0.66;
-    volLeft = ((*pVolA)&bt)*vLeftOut[0]*0.66; // TODO: Why *0.66 ?!? Don't remeber :/
-    volRight = ((*pVolA)&bt)*vRightOut[0]*0.66;
+    volLeft = ((*pVolA)&bt)*vLeftOut[0]*0.66f; // TODO: Why *0.66 ?!? Don't remeber :/
+    volRight = ((*pVolA)&bt)*vRightOut[0]*0.66f;
     bt = ((((yms32)posB)>>31) | mixerTB) & (bn | mixerNB);
 //    volRight = ((*pVolB)&bt)*.687*0.66;
-    volLeft += ((*pVolB)&bt)*vLeftOut[1]*0.66;
-    volRight += ((*pVolB)&bt)*vRightOut[1]*0.66;
+    volLeft += ((*pVolB)&bt)*vLeftOut[1]*0.66f;
+    volRight += ((*pVolB)&bt)*vRightOut[1]*0.66f;
     bt = ((((yms32)posC)>>31) | mixerTC) & (bn | mixerNC);
 //    volLeft += ((*pVolC)&bt)*.312*0.67;
 //    volRight += ((*pVolC)&bt)*.312*0.67;
-    volLeft += ((*pVolC)&bt)*vLeftOut[2]*0.66;
-    volRight += ((*pVolC)&bt)*vRightOut[2]*0.66;
+    volLeft += ((*pVolC)&bt)*vLeftOut[2]*0.66f;
+    volRight += ((*pVolC)&bt)*vRightOut[2]*0.66f;
 #endif
 
 	//---------------------------------------------------
@@ -559,7 +557,7 @@ void CYm2149Ex::nextSampleStereo(ymsample& left, ymsample& right)
 	// Apply all filter from filters list.
     std::list<Filter*>::iterator f_it;
 
-    ymint in[2] = {volLeft, volRight};
+    ymint in[2] = {(ymint)volLeft, (ymint)volRight};
     for(ymint i = F_LEFT; i < F_RIGHT; i++)
     {
         for(f_it = filters[i].begin(); f_it != filters[i].end(); f_it++)

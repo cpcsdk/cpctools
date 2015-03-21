@@ -116,36 +116,36 @@ struct	YmSpecialEffect
 
 };
 
-class EXPORT CYm2149Ex
+class CYm2149Ex
 {
     public:
 //        CYm2149Ex(ymu32 masterClock=ATARI_CLOCK,ymint prediv=1,ymu32 playRate=44100);
-        CYm2149Ex(ymu32 masterClock=profileAtari.masterClock,ymint prediv=1,ymu32 playRate=44100);
-        CYm2149Ex(ymProfile profile, ymu32 playRate = 44100);
-        ~CYm2149Ex();
+        EXPORT CYm2149Ex(ymu32 masterClock=profileAtari.masterClock,ymint prediv=1,ymu32 playRate=44100);
+        EXPORT CYm2149Ex(ymProfile profile, ymu32 playRate = 44100);
+        EXPORT ~CYm2149Ex();
 
-        void	reset(void);
+        void EXPORT	reset(void);
 //      void	update(ymsample *pSampleBuffer,ymint nbSample); // TODO: Don't need for Mono mode and compatibility ?
-        void	updateStereo(ymsample *pSampleBuffer,ymint nbSample);
+        void EXPORT	updateStereo(ymsample *pSampleBuffer,ymint nbSample);
 
-        void    setProfile(ymProfile profile);
-        void    outputMixerMono(ymfloat out[3]);
-        void    outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3]);
+        void EXPORT    setProfile(ymProfile profile);
+        void EXPORT    outputMixerMono(ymfloat out[3]);
+        void EXPORT    outputMixerStereo(ymfloat leftOut[3], ymfloat rightOut[3]);
 
-		void	setClock(ymu32 _clock);
-		void	writeRegister(ymint reg,ymint value);
-		ymint	readRegister(ymint reg);
+	void EXPORT	setClock(ymu32 _clock);
+	void EXPORT	writeRegister(ymint reg,ymint value);
+	ymint EXPORT	readRegister(ymint reg);
 /*
-		void	drumStart(ymint voice,ymu8 *drumBuffer,ymu32 drumSize,ymint drumFreq);
-		void	drumStop(ymint voice);
-		void	sidStart(ymint voice,ymint freq,ymint vol);
-		void	sidSinStart(ymint voice,ymint timerFreq,ymint sinPattern);
-		void	sidStop(ymint voice);
-		void	syncBuzzerStart(ymint freq,ymint envShape);
-		void	syncBuzzerStop(void);
+	void	drumStart(ymint voice,ymu8 *drumBuffer,ymu32 drumSize,ymint drumFreq);
+	void	drumStop(ymint voice);
+	void	sidStart(ymint voice,ymint freq,ymint vol);
+	void	sidSinStart(ymint voice,ymint timerFreq,ymint sinPattern);
+	void	sidStop(ymint voice);
+	void	syncBuzzerStart(ymint freq,ymint envShape);
+	void	syncBuzzerStop(void);
 */
 
-        bool    isIntegerVersion()
+        bool EXPORT    isIntegerVersion()
         {
 #if YM_INTEGER_ONLY
             return true;
