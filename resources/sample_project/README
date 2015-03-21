@@ -1,0 +1,15 @@
+This is a sample project showing how to use link.ld and cpc.mk
+
+cpc.mk is a generic makefile for CPC projects. It defines a set of implicit
+rules so make knows how to handle the usual CPC files.
+
+This makes it very easy to build a project without the need for much information
+in the makefile.
+
+cpc.mk assumes the use of vasm, and supports:
+* Multiple source z80 files
+* Support for screen pictures (converts PNG to SCR files) with different video modes (you can set the SCREENMODE variable globally or on each .scr file target)
+* Support for exomizer and automatically crunching files when they are updated
+* Highlight of actions so it is easy to see what the Makefile is doing. The BECHO macro is modifiable if you don't like the colors.
+
+An important thing to remember is the use of double-colon rules in combination with immplicit rules. You don't need to know all the details, just make sure you use "target:: dependencies" when specifying something.
