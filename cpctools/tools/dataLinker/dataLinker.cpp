@@ -135,7 +135,7 @@ struct SOption appliOption[]=
 };
 
 static const std::string authorName = "Ramlaid";
-static const std::string authorMail = "cpcTools@ramlaid.com";
+static const std::string authorMail = "cpcsdk@googlegroups.com";
 static const std::string appliName = "dataLinker";
 static const std::string appliUsageShort = "";
 static const std::string appliUsageLong = "\n\

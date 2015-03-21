@@ -17,7 +17,7 @@ struct SOption appliOption[]=
 	{0,NULL,0,0,0,NULL}
 };
 static const std::string authorName = "Ramlaid";
-static const std::string authorMail = "cpcTools@ramlaid.com";
+static const std::string authorMail = "cpcsdk@googlegroups.com";
 static const std::string appliName = "damsConverter";
 static const std::string appliUsageShort = "<file.s> <file.z80>";
 static const std::string appliUsageLong = "<file.s> <file.z80>\n\

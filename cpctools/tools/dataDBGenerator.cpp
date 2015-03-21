@@ -17,7 +17,7 @@ struct SOption appliOption[]=
 	{0,NULL,0,0,0,NULL}
 };
 static const std::string authorName = "Ramlaid";
-static const std::string authorMail = "cpcTools@ramlaid.com";
+static const std::string authorMail = "cpcsdk@googlegroups.com";
 static const std::string appliName = "dataDBGenerator";
 static const std::string appliUsageShort = "<file.bin> <file.z80>";
 static const std::string appliUsageLong = "<file.bin> <file.z80>\n\

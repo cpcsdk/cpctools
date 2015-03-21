@@ -47,7 +47,7 @@ static struct SOption appliOption[]=
 };
 
 static const string authorName = "Ramlaid";
-static const string authorMail = "cpcTools@ramlaid.com";
+static const string authorMail = "cpcsdk@googlegroups.com";
 static const string appliName = "cpcDSKManager";
 static const string appliUsageShort = "<DSK> <command>";
 static const string appliUsageLong = "<DSK> <command>\n\
