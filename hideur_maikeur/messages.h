@@ -11,9 +11,8 @@
 "Conversion : hideur fichierDos -o fichierAms [-u user] [-t type]\n"\
 "                               [-x adrexe] [-l adrload] [-v]\n"\
 "Info       : hideur -info fichier\n"\
-"Aide       : hideur -h\n\nEnvoyez-moi les bugs relev‚s "\
-"… downwater@free.fr\nSite : http://downwater.free.fr - http://"\
-"www.cpcscene.com/downwater\n"
+"Aide       : hideur -h\n\nEnvoyez-nous les bugs relev‚s "\
+"… cpcsdk@googlegroups.com\nSite : http:/github.com/cpcsdk/\n"
 #define HELP  "\nSyntaxe :\n\n"\
 "* fichierDos    : le fichier … convertir\n"\
 "* -o fichierAms : le fichier amsdos … obtenir\n"\
@@ -61,8 +60,8 @@
 "Conversion : hideur fichierDos -o fichierAms [-u user] [-t type]\n"\
 "                               [-x adrexe] [-l adrload] [-v]\n"\
 "Info :       hideur -info fichier\n"\
-"Aide :       hideur -h\n\nEnvoyez-moi les bugs relevés à downwater@free.fr\n"\
-"Site : http://downwater.free.fr - http://www.cpcscene.com/downwater\n"
+"Aide :       hideur -h\n\nEnvoyez-nous les bugs relevés à cpcsdk.googlegroups.com\n"\
+"Site : http://github.com/cpcsdk\n"
 #define HELP  "\nSyntaxe :\n\n"\
 "* fichierDos    : le fichier à convertir\n"\
 "* -o fichierAms : le fichier amsdos à obtenir\n"\
@@ -112,8 +111,8 @@
 "                    [-x adrexe] [-l adrload] [-v]\n"\
 "Info       :       hideur -info fichierDos\n"\
 "Help       :       hideur -h\n\n"\
-"Send bugs reports at downwater@free.fr\n"\
-"Website : http://downwater.free.fr - http://www.cpcscene.com/downwater\n"
+"Send bugs reports at cpcsdk@googlegroups.com\n"\
+"Website : http://github.com/cpcsdk\n"
 #define HELP  "\nSyntaxe :\n\n"\
 "* DosFile    : file to convert\n"\
 "* -o AmsFile : output file\n"\
@@ -124,7 +123,7 @@
 "                         3 : Protected Binary\n"\
 "* -x adrexe  : address of execution\n"\
 "* -l adrload : address of loading\n"\
-"* -v         : verbose mode, affiche le r‚sultat\n"
+"* -v         : verbose mode, shows result\n"
 #define ERR1  "ERROR : only one amsdos output file is needed. Please.\n"
 #define ERR2  "ERROR : amsdos filename missing.\n"
 #define ERR3  "ERROR : only one user number is needed. Please.\n"
