@@ -8,7 +8,7 @@ int HexToDec( char * Valeur );
 
 void SetBuffViewHexa( unsigned char * src, char * Hex, char * Ascii,unsigned short Offset, int AddOffset);
 
-char * GetNomAmsdos( char * AmsName );
+char * GetNomAmsdos( const char * AmsName );
 
 char * GetUser( int u );
 

@@ -74,8 +74,13 @@ typedef struct
     CPCEMUSect          Sect[29];
 } CPCEMUTrack;
 
+#ifdef __GNUC__
+#define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
+#else
+#define PACK( __Declaration__ ) __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop) )
+#endif
 
-typedef struct __attribute__ ((__packed__))
+PACK(typedef struct
 {
     unsigned char       User;
     char                Nom[8];
@@ -84,7 +89,7 @@ typedef struct __attribute__ ((__packed__))
     unsigned char       Unused[2];
     unsigned char       NbPages;
     unsigned char       Blocks[16];
-} StDirEntry;
+}) StDirEntry;
 
 #pragma pack()
 

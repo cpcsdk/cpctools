@@ -2,8 +2,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <algorithm> // pour contourner un bug de std::vector ...
-#include <libgen.h>
-#include <streambuf.h>
 
 #include "getopt_pp.h" /* Command line handling */
 
@@ -44,10 +42,11 @@ int main(int argc, char** argv) {
 {using namespace GetOpt;
   GetOpt_pp opts(argc,argv);
 
-  opts 	>> OptionPresent(GetOpt_pp::EMPTY_OPTION,IsDskSet)
-  	>> Option(GetOpt_pp::EMPTY_OPTION,DskFile)
+  opts >> GlobalOption(DskFile);
+  if (DskFile != "")
+	IsDskSet = true;
 
-  	>> OptionPresent('l',"list",ModeListDsk)
+  opts	>> OptionPresent('l',"list",ModeListDsk)
 
 	>> OptionPresent('i',"import",ModeImportFile)
 	>> Option('i',"import",AmsdosFileList)
@@ -110,7 +109,7 @@ int main(int argc, char** argv) {
     	int Indice;
 	for(vector<string>::iterator iter=AmsdosFileList.begin(); iter!=AmsdosFileList.end(); iter++)
 	{
-		char* amsdosF = GetNomAmsdos(basename((char *)(*iter).c_str()));			 
+		char* amsdosF = GetNomAmsdos(iter->c_str());			 
 		cerr << "Amsdos file : " << amsdosF << endl;
 		if ( (Indice= MyDsk.FileIsIn( amsdosF ))<0) {
 			cerr << "Error: File "<< amsdosF << " not found."<< endl;
@@ -166,7 +165,7 @@ int main(int argc, char** argv) {
 
 	for(vector<string>::iterator iter=AmsdosFileList.begin(); iter!=AmsdosFileList.end(); iter++)
 	{
-    		string amsdosfile = GetNomAmsdos( basename( (char*)(*iter).c_str()) );
+    		string amsdosfile = GetNomAmsdos(iter->c_str());
     		int Indice;
     		if ( ( Indice = MyDsk.FileIsIn( amsdosfile ) ) != -1 && !Force_Overwrite) {
     			cerr << "(" << amsdosfile <<") File exists, replace ? (Y/N) (try -f switch for autoreplace...):";
@@ -204,7 +203,7 @@ int main(int argc, char** argv) {
     		int Indice;
 		for(vector<string>::iterator iter=AmsdosFileList.begin(); iter!=AmsdosFileList.end(); iter++)
 		{
-			char* amsdosF = GetNomAmsdos(basename( (char*)(*iter).c_str()));			 
+			char* amsdosF = GetNomAmsdos(iter->c_str());			 
 			cerr << "Amsdos file : " << amsdosF << endl;
 			if ( (Indice= MyDsk.FileIsIn( amsdosF ))<0) {
 				cerr << "Error : file "<< amsdosF << " not found."<< endl;
@@ -230,7 +229,7 @@ int main(int argc, char** argv) {
 
 	for(vector<string>::iterator iter=AmsdosFileList.begin(); iter!=AmsdosFileList.end(); iter++)
 	{
-    		char* amsdosF = GetNomAmsdos(basename( (char*)(*iter).c_str()));			 
+    		char* amsdosF = GetNomAmsdos(iter->c_str());			 
 		cerr << "Fichier Amsdos : " << amsdosF << endl;
 		if ( (Indice= MyDsk.FileIsIn( amsdosF ))<0) {
 			cerr << "Error : file "<< amsdosF << " not found."<< endl;

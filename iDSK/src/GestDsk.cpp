@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstring>
+#include <string.h>
 #include <cstdlib>
 #include <cstdio>
 #include <algorithm>
@@ -10,8 +10,10 @@
 #include "endianPPC.h"
 #include "Outils.h"
 #include <cerrno>
-#include <libgen.h>
 
+#ifdef _MSC_VER
+#define snprintf _snprintf 
+#endif
 
 using namespace std;
 

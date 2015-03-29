@@ -1,5 +1,4 @@
 #include <iostream>
-#include <libgen.h>
 #include <cstring>
 #include <cstdio>
 using namespace std;
@@ -125,9 +124,16 @@ char * GetTaille( int t )
 //
 // Retourne le nom du fichier formatt� amsdos (8+3)
 //
-char * GetNomAmsdos(char * AmsName )
+char * GetNomAmsdos(const char * AmsName )
 {
-    AmsName = basename(AmsName);
+	// Extract the name (without directory components)
+	const char* lastSlash = strrchr(AmsName, '/');
+	const char* lastBackslash = strrchr(AmsName, '\\');
+	if (lastSlash > lastBackslash)
+		AmsName = lastSlash + 1;
+	else if (lastSlash < lastBackslash)
+		AmsName = lastBackslash + 1;
+
     static char NomAmsdos[ 16 ];
 		int i;
 
