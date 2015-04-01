@@ -59,7 +59,7 @@ void	ymMusicDestroy(YMMUSIC *pMus)
 	delete pMusic;
 }
 
-ymbool	ymMusicCompute(YMMUSIC *_pMus,ymsample *pBuffer,int nbSample)
+ymbool	ymMusicCompute(YMMUSIC *_pMus,ymsample *pBuffer,ymint nbSample)
 {
 	CYmMusic *pMusic = (CYmMusic*)_pMus;
 	return pMusic->update(pBuffer,nbSample);
