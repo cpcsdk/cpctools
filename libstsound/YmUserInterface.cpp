@@ -29,6 +29,7 @@
 -----------------------------------------------------------------------------*/
 
 
+#include <new>
 #include "YmMusic.h"
 #include "StSoundLibrary.h"
 
@@ -37,7 +38,7 @@ extern "C" {
 
 YMMUSIC	*	ymMusicCreate()
 {
-	return (YMMUSIC*)(new CYmMusic);
+	return (YMMUSIC*)new (std::nothrow) CYmMusic;
 }
 
 
