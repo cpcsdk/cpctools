@@ -33,7 +33,7 @@
 #include "StSoundLibrary.h"
 
 
-// Static assert to check various type len
+extern "C" {
 
 YMMUSIC	*	ymMusicCreate()
 {
@@ -129,4 +129,6 @@ void		ymMusicSeek(YMMUSIC *_pMus,ymu32 timeInMs)
 	{
 		pMusic->setMusicTime(timeInMs);
 	}
+}
+
 }

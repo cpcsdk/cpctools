@@ -34,6 +34,10 @@
 
 #include "YmTypes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef	void			YMMUSIC;
 
 typedef struct
@@ -70,5 +74,9 @@ extern	void			ymMusicStop(YMMUSIC *pMusic);
 extern	ymbool			ymMusicIsSeekable(YMMUSIC *pMusic);
 extern	ymu32			ymMusicGetPos(YMMUSIC *pMusic);
 extern	void			ymMusicSeek(YMMUSIC *pMusic,ymu32 timeInMs);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
