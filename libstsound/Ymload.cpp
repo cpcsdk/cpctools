@@ -2,30 +2,36 @@
 
 	ST-Sound ( YM files player library )
 
-	Copyright (C) 1995-1999 Arnaud Carre ( http://leonard.oxg.free.fr )
-
 	Manage YM file depacking and parsing
 
 -----------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
-
-	This file is part of ST-Sound
-
-	ST-Sound is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 2 of the License, or
-	(at your option) any later version.
-
-	ST-Sound is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with ST-Sound; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
+* ST-Sound, ATARI-ST Music Emulator
+* Copyright (c) 1995-1999 Arnaud Carre ( http://leonard.oxg.free.fr )
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions
+* are met:
+* 1. Redistributions of source code must retain the above copyright
+*    notice, this list of conditions and the following disclaimer.
+* 2. Redistributions in binary form must reproduce the above copyright
+*    notice, this list of conditions and the following disclaimer in the
+*    documentation and/or other materials provided with the distribution.
+*
+* THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+* OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+* HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+* LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+* OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+* SUCH DAMAGE.
+*
 -----------------------------------------------------------------------------*/
 
 #include <cstdio>
@@ -102,16 +108,6 @@ yms32	ReadLittleEndian32(ymu8 *pLittle)
 	return v;
 }
 
-ymu32	ReadLittleEndian32U(ymu8 *pLittle)
-{
-	ymu32 v = ( (pLittle[0]<<0) |
-				(pLittle[1]<<8) |
-				(pLittle[2]<<16) |
-				(pLittle[3]<<24));
-
-	return v;
-}
-
 yms32	ReadBigEndian32(ymu8 *pBig)
 {
 	yms32 v = ( (pBig[0]<<24) |
@@ -122,7 +118,7 @@ yms32	ReadBigEndian32(ymu8 *pBig)
 	return v;
 }
 
-unsigned char	*CYmMusic::depackFile(void)
+unsigned char	*CYmMusic::depackFile(ymu32 checkOriginalSize)
  {
  lzhHeader_t header;
  ymu8	*pNew;
@@ -135,8 +131,8 @@ unsigned char	*CYmMusic::depackFile(void)
         header.id[2] = (ymu8)pBigMalloc[4];
         header.id[3] = (ymu8)pBigMalloc[5];
         header.id[4] = (ymu8)pBigMalloc[6];
-        header.packed = ReadLittleEndian32U(pBigMalloc+7); // pBigMalloc[7]<<0 | pBigMalloc[8]<<8 | pBigMalloc[9]<<16 | pBigMalloc[10]<<24; // litle endian
-        header.original = ReadLittleEndian32U(pBigMalloc+11); // pBigMalloc[11]<<0 | pBigMalloc[12]<<8 | pBigMalloc[13]<<16 | pBigMalloc[14]<<24; // litle endian
+        header.packed = pBigMalloc[7]<<0 | pBigMalloc[8]<<8 | pBigMalloc[9]<<16 | pBigMalloc[10]<<24; // litle endian
+        header.original = pBigMalloc[11]<<0 | pBigMalloc[12]<<8 | pBigMalloc[13]<<16 | pBigMalloc[14]<<24; // litle endian
         header.reserved[0] = (ymu8)pBigMalloc[15];
         header.reserved[1] = (ymu8)pBigMalloc[16];
         header.reserved[2] = (ymu8)pBigMalloc[17];
@@ -182,22 +178,37 @@ unsigned char	*CYmMusic::depackFile(void)
 		pSrc += 2;		// skip CRC16
 
 //		const int		packedSize = ReadLittleEndian32((ymu8*)&pHeader->packed);
-		const int		packedSize = header.packed;
+		int		packedSize = header.packed;
 
-		// alloc space for depacker and depack data
-		CLzhDepacker *pDepacker = new CLzhDepacker;
-		const bool bRet = pDepacker->LzUnpack(pSrc,packedSize,pNew,fileSize);
-		delete pDepacker;
+		checkOriginalSize -= ymu32(pSrc - pBigMalloc);
 
-		// Free up source buffer, whatever depacking fail or success
-		free(pBigMalloc);
+		if (packedSize > checkOriginalSize)
+			packedSize = checkOriginalSize;
 
-		if (!bRet)
-		{	// depacking error
+		// Check for corrupted archive
+		if (packedSize <= checkOriginalSize)
+		{
+			// alloc space for depacker and depack data
+			CLzhDepacker *pDepacker = new CLzhDepacker;	
+			const bool bRet = pDepacker->LzUnpack(pSrc,packedSize,pNew,fileSize);
+			delete pDepacker;
+
+			if (!bRet)
+			{	// depacking error
+				setLastError("LH5 Depacking Error !");
+				free(pNew);
+				pNew = NULL;
+			}
+		}
+		else
+		{
 			setLastError("LH5 Depacking Error !");
 			free(pNew);
 			pNew = NULL;
 		}
+
+		// Free up source buffer, whatever depacking fail or success
+		free(pBigMalloc);
 
 		return pNew;
  }
@@ -259,6 +270,18 @@ ymbool	CYmMusic::deInterleave(void)
  }
 
 
+enum
+{
+	e_YM2a = ('Y' << 24) | ('M' << 16) | ('2' << 8) | ('!'),	//'YM2!'
+	e_YM3a = ('Y' << 24) | ('M' << 16) | ('3' << 8) | ('!'),	//'YM3!'
+	e_YM3b = ('Y' << 24) | ('M' << 16) | ('3' << 8) | ('b'),	//'YM3b'
+	e_YM4a = ('Y' << 24) | ('M' << 16) | ('4' << 8) | ('!'),	//'YM4!'
+	e_YM5a = ('Y' << 24) | ('M' << 16) | ('5' << 8) | ('!'),	//'YM5!'
+	e_YM6a = ('Y' << 24) | ('M' << 16) | ('6' << 8) | ('!'),	//'YM6!'
+	e_MIX1 = ('M' << 24) | ('I' << 16) | ('X' << 8) | ('1'),	//'MIX1'
+	e_YMT1 = ('Y' << 24) | ('M' << 16) | ('T' << 8) | ('1'),	//'YMT1'
+	e_YMT2 = ('Y' << 24) | ('M' << 16) | ('T' << 8) | ('2'),	//'YMT2'
+};
 
 ymbool	CYmMusic::ymDecode(void)
  {
@@ -269,12 +292,12 @@ ymbool	CYmMusic::ymDecode(void)
  ymu32 sampleSize;
  yms32 tmp;
  ymu32 id;
-
+ 
 
 		id = ReadBigEndian32((unsigned char*)pBigMalloc);
 		switch (id)
 		{
-			case 0x594D3221:  // 'YM2!':		// MADMAX specific.
+			case e_YM2a://'YM2!':		// MADMAX specific.
 				songType = YM_V2;
 				nbFrame = (fileSize-4)/14;
 				loopFrame = 0;
@@ -288,10 +311,10 @@ ymbool	CYmMusic::ymDecode(void)
 				pSongAuthor = strdup("Unknown");
 				pSongComment = strdup("Converted by Leonard.");
 				pSongType = strdup("YM 2");
-				pSongPlayer = strdup("YM-Chip driver.");
+				pSongPlayer = strdup("YM-Chip driver");
 				break;
 
-			case 0x594D3321: // 'YM3!':		// Standart YM-Atari format.
+			case e_YM3a://'YM3!':		// Standart YM-Atari format.
 				songType = YM_V3;
 				nbFrame = (fileSize-4)/14;
 				loopFrame = 0;
@@ -305,10 +328,10 @@ ymbool	CYmMusic::ymDecode(void)
 				pSongAuthor = strdup("Unknown");
 				pSongComment = strdup("");
 				pSongType = strdup("YM 3");
-				pSongPlayer = strdup("YM-Chip driver.");
+				pSongPlayer = strdup("YM-Chip driver");
 				break;
 
-			case 0x594D3362: // 'YM3b':		// Standart YM-Atari format + Loop info.
+			case e_YM3b://'YM3b':		// Standart YM-Atari format + Loop info.
 				pUD = (ymu8*)(pBigMalloc+fileSize-4);
 				songType = YM_V3;
 				nbFrame = (fileSize-4)/14;
@@ -323,16 +346,16 @@ ymbool	CYmMusic::ymDecode(void)
 				pSongAuthor = strdup("Unknown");
 				pSongComment = strdup("");
 				pSongType = strdup("YM 3b (loop)");
-				pSongPlayer = strdup("YM-Chip driver.");
+				pSongPlayer = strdup("YM-Chip driver");
 				break;
 
-			case 0x594D3421: // 'YM4!':		// Extended ATARI format.
+			case e_YM4a://'YM4!':		// Extended ATARI format.
 				setLastError("No more YM4! support. Use YM5! format.");
 				return YMFALSE;
 				break;
 
-			case 0x594D3521: // 'YM5!':		// Extended YM2149 format, all machines.
-			case 0x594D3621: // 'YM6!':		// Extended YM2149 format, all machines.
+			case e_YM5a://'YM5!':		// Extended YM2149 format, all machines.
+			case e_YM6a://'YM6!':		// Extended YM2149 format, all machines.
 				if (strncmp((const char*)(pBigMalloc+4),"LeOnArD!",8))
 				{
 					setLastError("Not a valid YM format !");
@@ -363,7 +386,8 @@ ymbool	CYmMusic::ymDecode(void)
 								ymu8 *pw = pDrumTab[i].pData;
 								for (j=0;j<pDrumTab[i].size;j++)
 								{
-									*pw++ = ymVolumeTable[(*pw)&15]>>7;
+									*pw = ymVolumeTable[(*pw)&15]>>7;
+									pw++;
 								}
 							}
 							ptr += pDrumTab[i].size;
@@ -379,7 +403,7 @@ ymbool	CYmMusic::ymDecode(void)
 				pSongAuthor = readNtString((char**)&ptr);
 				pSongComment = readNtString((char**)&ptr);
 				songType = YM_V5;
-				if (id==0x594D3621) // 'YM6!'
+				if (id==e_YM6a)//'YM6!')
 				{
 					songType = YM_V6;
 					pSongType = strdup("YM 6");
@@ -390,11 +414,10 @@ ymbool	CYmMusic::ymDecode(void)
 				}
 				pDataStream = ptr;
 				streamInc = 16;
-				setAttrib(A_STREAMINTERLEAVED|A_TIMECONTROL);
-				pSongPlayer = strdup("YM-Chip driver.");
+				pSongPlayer = strdup("YM-Chip driver");
 				break;
 
-			case 0x4D495831: // 'MIX1':		// ATARI Remix digit format.
+			case e_MIX1://'MIX1':		// ATARI Remix digit format.
 
 				if (strncmp((const char*)(pBigMalloc+4),"LeOnArD!",8))
 				{
@@ -429,14 +452,19 @@ ymbool	CYmMusic::ymDecode(void)
 					setAttrib(A_DRUMSIGNED);
 				}
 
+				setAttrib(getAttrib() | A_TIMECONTROL);
+				computeTimeInfo();
+
 				mixPos = -1;		// numero du block info.
+				currentPente = 0;
+				currentPos = 0;
 				pSongType = strdup("MIX1");
-				pSongPlayer = strdup("Digi-Mix driver.");
+				pSongPlayer = strdup("Digi-Mix driver");
 
 				break;
 
-			case 0x594D5431: // 'YMT1':		// YM-Tracker
-			case 0x594D5432: // 'YMT2':		// YM-Tracker
+			case e_YMT1://'YMT1':		// YM-Tracker
+			case e_YMT2://'YMT2':		// YM-Tracker
 /*;
 ; Format du YM-Tracker-1
 ;
@@ -476,7 +504,7 @@ ymbool	CYmMusic::ymDecode(void)
 					{
 						pDrumTab[i].size = readMotorolaWord(&ptr);
 						pDrumTab[i].repLen = pDrumTab[i].size;
-						if (id == 0x594D5432) // 'YMT2'
+						if (e_YMT2 == id)//('YMT2' == id)
 						{
 							pDrumTab[i].repLen = readMotorolaWord(&ptr);	// repLen
 							readMotorolaWord(&ptr);		// flag
@@ -500,7 +528,7 @@ ymbool	CYmMusic::ymDecode(void)
 				}
 
 				ymTrackerFreqShift = 0;
-				if (id == 0x594D5432) // 'YMT2'
+				if (e_YMT2 == id)//('YMT2' == id)
 				{
 					ymTrackerFreqShift = (attrib>>28)&15;
 					attrib &= 0x0fffffff;
@@ -535,7 +563,7 @@ ymbool	CYmMusic::ymDecode(void)
 		return YMTRUE;
  }
 
-
+ 
 ymbool	CYmMusic::checkCompilerTypes()
 {
 	setLastError("Basic types size are not correct (check ymTypes.h)");
@@ -607,7 +635,7 @@ FILE	*in;
 		//---------------------------------------------------
 		// Transforme les données en données valides.
 		//---------------------------------------------------
-		pBigMalloc = depackFile();
+		pBigMalloc = depackFile(fileSize);
 		if (!pBigMalloc)
 		{
 			return YMFALSE;
@@ -658,7 +686,7 @@ ymbool	CYmMusic::loadMemory(void *pBlock,ymu32 size)
 		//---------------------------------------------------
 		// Transforme les données en données valides.
 		//---------------------------------------------------
-		pBigMalloc = depackFile();
+		pBigMalloc = depackFile(size);
 		if (!pBigMalloc)
 		{
 			return YMFALSE;
@@ -710,12 +738,16 @@ void	CYmMusic::unLoad(void)
 		myFree((void**)&pBigSampleBuffer);
 		myFree((void**)&pMixBlock);
 
+		myFree((void**)&m_pTimeInfo);
+
 }
 
 void	CYmMusic::stop(void)
 {
 	bPause = YMTRUE;
 	currentFrame = 0;
+	m_iMusicPosInMs = 0;
+	m_iMusicPosAccurateSample = 0;
 	mixPos = -1;
 }
 

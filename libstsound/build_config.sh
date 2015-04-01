@@ -1,7 +1,7 @@
 echo "Configure the scripts"
 
-aclocal
 libtoolize
+aclocal
 autoconf
 autoheader
 automake -c -a

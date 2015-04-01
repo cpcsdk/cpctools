@@ -96,6 +96,8 @@ static	ymint ymVolumeTable[5][16] =
  * 0 = 0
  */
 
+
+
 static ymu8 *ym2149EnvInit(ymu8 *pEnv,ymint a,ymint b)
 {
     ymint i;
@@ -117,6 +119,7 @@ static ymu8 *ym2149EnvInit(ymu8 *pEnv,ymint a,ymint b)
 CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
 {
     ymint env;
+
 
     frameCycle = 0;
     //--------------------------------------------------------
@@ -153,6 +156,7 @@ CYm2149Ex::CYm2149Ex(ymu32 masterClock,ymint prediv,ymu32 playRate)
     // Reset YM2149
     reset();
 }
+
 
 CYm2149Ex::CYm2149Ex(ymProfile profile, ymu32 playRate)
 {
