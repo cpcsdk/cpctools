@@ -162,6 +162,12 @@ ymint		CYmMusic::getAttrib(void)
 		return attrib;
 }
 
+ymbool		CYmMusic::isMono(void)
+{
+		return ((songType >= YM_TRACKER1) && (songType < YM_TRACKERMAX)) ||
+			((songType >= YM_MIX1) && (songType < YM_MIXMAX));
+}
+
 ymbool	CYmMusic::isSeekable(void)
 {
 		return getAttrib()&A_TIMECONTROL;
@@ -226,8 +232,8 @@ ymint	vblNbSample;
 				}
 				if (sampleToCompute>0)
 				{
-//					ymChip.update(pOut,sampleToCompute);	// YM Emulation.
-					pOut += sampleToCompute;
+					ymChip.updateStereo(pOut,sampleToCompute);	// YM Emulation.
+					pOut += sampleToCompute * 2;
 				}
 				nbs -= sampleToCompute;
 			}

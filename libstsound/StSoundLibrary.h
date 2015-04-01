@@ -57,7 +57,8 @@ extern	void		ymMusicDestroy(YMMUSIC *pMusic);
 extern	ymbool			ymMusicLoad(YMMUSIC *pMusic,const char *fName);						// Method 1 : Load file using stdio library (fopen/fread, etc..)
 extern	ymbool			ymMusicLoadMemory(YMMUSIC *pMusic,void *pBlock,ymu32 size);			// Method 2 : Load file from a memory block
 
-extern	ymbool			ymMusicCompute(YMMUSIC *pMusic,ymsample *pBuffer,ymint nbSample);	// Render nbSample samples of current YM tune into pBuffer PCM 16bits mono sample buffer.
+extern	ymbool			ymMusicIsMono(YMMUSIC *pMusic);
+extern	ymbool			ymMusicCompute(YMMUSIC *pMusic,ymsample *pBuffer,ymint nbSample);	// Render nbSample samples of current YM tune into pBuffer PCM 16bits sample buffer.
 
 extern	void			ymMusicSetLoopMode(YMMUSIC *pMusic,ymbool bLoop);
 extern	const char	*	ymMusicGetLastError(YMMUSIC *pMusic);
