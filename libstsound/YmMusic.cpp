@@ -226,8 +226,8 @@ ymint	vblNbSample;
 				}
 				if (sampleToCompute>0)
 				{
-//					ymChip.update(pOut,sampleToCompute);	// YM Emulation.
-					pOut += sampleToCompute;
+					ymChip.updateStereo(pOut,sampleToCompute);	// YM Emulation.
+					pOut += sampleToCompute * 2;
 				}
 				nbs -= sampleToCompute;
 			}
