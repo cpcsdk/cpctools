@@ -107,6 +107,12 @@ void	ymMusicStop(YMMUSIC *_pMus)
 	pMusic->stop();
 }
 
+ymbool	ymMusicIsMono(YMMUSIC *pMus)
+{
+	CYmMusic *pMusic = (CYmMusic*)pMus;
+	return pMusic->isMono() ? YMTRUE : YMFALSE;
+}
+
 ymbool		ymMusicIsSeekable(YMMUSIC *_pMus)
 {
 	CYmMusic *pMusic = (CYmMusic*)_pMus;

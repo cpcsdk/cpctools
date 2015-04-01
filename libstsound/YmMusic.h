@@ -131,6 +131,7 @@ public:
 	ymbool	loadMemory(void *pBlock,ymu32 size);
 
 	void	unLoad(void);
+	ymbool	isMono(void);
 	ymbool	isSeekable(void);
 	ymbool	update(ymsample *pBuffer,ymint nbSample);
 	ymu32	getPos(void);

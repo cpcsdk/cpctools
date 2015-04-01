@@ -162,6 +162,12 @@ ymint		CYmMusic::getAttrib(void)
 		return attrib;
 }
 
+ymbool		CYmMusic::isMono(void)
+{
+		return ((songType >= YM_TRACKER1) && (songType < YM_TRACKERMAX)) ||
+			((songType >= YM_MIX1) && (songType < YM_MIXMAX));
+}
+
 ymbool	CYmMusic::isSeekable(void)
 {
 		return getAttrib()&A_TIMECONTROL;
