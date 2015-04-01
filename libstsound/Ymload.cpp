@@ -308,7 +308,7 @@ ymbool	CYmMusic::ymDecode(void)
 				pSongPlayer = strdup("YM-Chip driver.");
 				break;
 
-			case 0x594D3262: // 'YM3b':		// Standart YM-Atari format + Loop info.
+			case 0x594D3362: // 'YM3b':		// Standart YM-Atari format + Loop info.
 				pUD = (ymu8*)(pBigMalloc+fileSize-4);
 				songType = YM_V3;
 				nbFrame = (fileSize-4)/14;
