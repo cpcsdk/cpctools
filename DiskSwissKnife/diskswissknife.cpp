@@ -67,7 +67,7 @@ void DiskSwissKnife::on_actionOpen_triggered()
         float x = 18.0;
         for (unsigned int sector = 0; sector<currentDisk.track[track]->sectors; sector++)
         {
-            float w = (min(currentDisk.track[track][0].sector[sector].declared_size,
+            float w = (std::min(currentDisk.track[track][0].sector[sector].declared_size,
                         currentDisk.track[track][0].sector[sector].size)+trackHead)/ pixelFactor;
             // Draw the sector
             // Brush color :
@@ -149,7 +149,7 @@ void DiskSwissKnife::on_actionOpen_triggered()
 void DiskSwissKnife::on_changeSector()
 {
     int sectornum = ui->sectorList->currentRow();
-    sectornum = max(0, sectornum);
+    sectornum = std::max(0, sectornum);
     // Update sector view
     int size = currentDisk.track[currentTrack][0].sector[sectornum].declared_size;
     unsigned char* data = currentDisk.track[currentTrack][0].sector[sectornum].data;

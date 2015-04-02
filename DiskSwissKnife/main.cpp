@@ -1,4 +1,4 @@
-#include <QtGui/QApplication>
+#include <QApplication>
 #include "diskswissknife.h"
 
 int main(int argc, char *argv[])

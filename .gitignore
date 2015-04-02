@@ -1,3 +1,6 @@
 *.exe
 *.obj
 *~
+build-DiskSwissKnife-*/*
+DiskSwissKnife/DiskSwissKnife.pro.user
+*.zip

@@ -1,0 +1,4 @@
+[submodule "DiskSwissKnife/qhexedit"]
+	path = DiskSwissKnife/qhexedit
+	url = https://github.com/qingfengxia/qhexedit.git
+	branch = master

@@ -48,8 +48,8 @@ void dsk_eject (t_drive *drive)
 {
 	dword track, side;
 
-	for (track = 0; track < DSK_TRACKMAX; track++) { // loop for all tracks
-		for (side = 0; side < DSK_SIDEMAX; side++) { // loop for all sides
+    for (track = 0; track < drive->tracks; track++) { // loop for all tracks
+        for (side = 0; side < drive->sides; side++) { // loop for all sides
 			if (drive->track[track][side].data) { // track is formatted?
 				free(drive->track[track][side].data); // release memory allocated for this track
 			}
@@ -75,6 +75,9 @@ int dsk_load (const char *pchFileName, t_drive *drive, char /*chID*/)
 	if ((pDSKfileObject = fopen(pchFileName, "rb")) != NULL) {
         fread(tmpBuffer, 0x100, 1, pDSKfileObject); // read DSK header
         pbPtr = tmpBuffer;
+
+        // Make sure unused tracks are cleared
+        memset(drive, 0, sizeof(t_drive));
 
 		if (memcmp(pbPtr, "MV - CPC", 8) == 0) { // normal DSK image?
 			drive->tracks = *(pbPtr + 0x30); // grab number of tracks
