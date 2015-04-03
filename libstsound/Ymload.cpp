@@ -178,7 +178,7 @@ unsigned char	*CYmMusic::depackFile(ymu32 checkOriginalSize)
 		pSrc += 2;		// skip CRC16
 
 //		const int		packedSize = ReadLittleEndian32((ymu8*)&pHeader->packed);
-		int		packedSize = header.packed;
+		ymu32		packedSize = header.packed;
 
 		checkOriginalSize -= ymu32(pSrc - pBigMalloc);
 

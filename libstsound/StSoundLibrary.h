@@ -57,11 +57,6 @@ typedef struct
 	yms32		musicTimeInMs;
 } ymMusicInfo_t;
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 // Create object
 extern	YMMUSIC *		ymMusicCreate();
 

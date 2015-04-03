@@ -4,3 +4,6 @@
 build-DiskSwissKnife-*/*
 DiskSwissKnife/DiskSwissKnife.pro.user
 *.zip
+libstsound/Debug/*
+libstsound/Release/*
+*.suo

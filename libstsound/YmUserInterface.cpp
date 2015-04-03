@@ -121,7 +121,6 @@ ymbool	ymMusicIsMono(YMMUSIC *pMus)
 }
 
 ymbool ymMusicIsOver(YMMUSIC *_pMus)
->>>>>>> Sync with latest release from Leonard.
 {
 	CYmMusic *pMusic = (CYmMusic*)_pMus;
 	return (pMusic->getMusicOver());

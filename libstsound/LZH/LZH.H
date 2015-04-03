@@ -41,6 +41,8 @@
 #ifndef LZH_H
 #define LZH_H
 
+#include <stdint.h>
+
 
 #define BUFSIZE (1024 * 4)
 
