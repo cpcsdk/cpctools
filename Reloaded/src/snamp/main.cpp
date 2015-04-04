@@ -64,7 +64,12 @@ int main(int argc, char* argv[])
 	SNAMPEmulator::createInstance(video, audio);
 	SNAMPEmulator* m = SNAMPEmulator::getInstance();
 
+#ifdef _MSC_VER
+	// No dirname here. TODO: something smarter...
+	m->setCfgPath(".");
+#else
 	m->setCfgPath(dirname(argv[0]));
+#endif
 	m->Init();
 
 	if (snapshot_load(*m, argv[1]) != 0) {

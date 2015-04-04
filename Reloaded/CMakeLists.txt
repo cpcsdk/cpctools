@@ -32,6 +32,7 @@ endif (STDERR_LOG)
 add_definitions(-DST_SOUND)
 if (WIN32)
 	include_directories("${CMAKE_SOURCE_DIR}/../libstsound/")
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 IF(USE_THREAD)
