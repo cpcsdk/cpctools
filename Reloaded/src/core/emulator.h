@@ -36,7 +36,7 @@
 
 #include "misc/timer.h"
 #include "misc/synchro.h"
-#include <semaphore.h>
+#include "misc/Semaphore.h"
 
 #ifdef USE_PTHREAD
 #include <pthread.h>
@@ -246,7 +246,7 @@ protected:
 public:
     SysSync emuSync; // Global sync on Emulator object
 private:
-	sem_t breakpointLock;
+	Semaphore breakpointLock;
 };
 
 inline void Emulator::Pause()
@@ -258,7 +258,7 @@ inline void Emulator::Pause()
 inline void Emulator::Breakpoint()
 {
     Pause();
-    sem_wait(&breakpointLock);
+    breakpointLock.Wait();
 }
 
 inline void Emulator::Run()
@@ -266,7 +266,7 @@ inline void Emulator::Run()
     GetConfig()->paused = 0;
     GetConfig()->breakpoint = 0;
     timer.start();
-    sem_post(&breakpointLock);
+    breakpointLock.Post();
 }
 
 inline void Emulator::Step()
@@ -274,7 +274,7 @@ inline void Emulator::Step()
     GetConfig()->paused = 0 ;
     GetConfig()->breakpoint = 1 ;
     timer.start();
-    sem_post(&breakpointLock);
+    breakpointLock.Post();
 }
 
 inline void Emulator::GoTo(int memory)

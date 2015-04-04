@@ -275,8 +275,6 @@ Emulator::Emulator(shared_ptr<VideoPlugin> video, shared_ptr<AudioPlugin> audio)
 	setCRTC(make_shared<t_CRTC>(_gateArray, _vdu));
 
 	emuSync.unlock();
-
-	sem_init(&breakpointLock, 0, 0);
 }
 
 Emulator::~Emulator()
