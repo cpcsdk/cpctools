@@ -112,22 +112,22 @@ DECLARE_APP(CapriceApp);
 static const wxCmdLineEntryDesc g_cmdLineDesc [] =
 {
 
-    { wxCMD_LINE_SWITCH, wxT("h"), wxT("help"), wxT("displays help on the command line parameters"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+    { wxCMD_LINE_SWITCH, wxT_2("h"), wxT_2("help"), wxT_2("displays help on the command line parameters"), wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
 
 #if CLI
-    { wxCMD_LINE_SWITCH, wxT("c"), wxT("cli"), wxT("cli interface") },
+    { wxCMD_LINE_SWITCH, wxT_2("c"), wxT_2("cli"), wxT_2("cli interface") },
 #endif
 
-    { wxCMD_LINE_SWITCH, wxT("f"), wxT("fullscreen"), wxT("display Reloaded in full screen") },
-    { wxCMD_LINE_SWITCH, wxT("g"), wxT("greenscreen"), wxT("display Reloaded with a green screen") },
-    { wxCMD_LINE_SWITCH, wxT("r"), wxT("remanancy"), wxT("use remanancy") },
-    { wxCMD_LINE_OPTION, wxT("i"), wxT("intensity"), wxT("set intensity screen"), wxCMD_LINE_VAL_NUMBER, wxCMD_LINE_PARAM_OPTIONAL  },
+    { wxCMD_LINE_SWITCH, wxT_2("f"), wxT_2("fullscreen"), wxT_2("display Reloaded in full screen") },
+    { wxCMD_LINE_SWITCH, wxT_2("g"), wxT_2("greenscreen"), wxT_2("display Reloaded with a green screen") },
+    { wxCMD_LINE_SWITCH, wxT_2("r"), wxT_2("remanancy"), wxT_2("use remanancy") },
+    { wxCMD_LINE_OPTION, wxT_2("i"), wxT_2("intensity"), wxT_2("set intensity screen"), wxCMD_LINE_VAL_NUMBER, wxCMD_LINE_PARAM_OPTIONAL  },
     
-    { wxCMD_LINE_OPTION, wxT("a"), wxT("drivea"), wxT("specify disk image to insert into drive A"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
-    { wxCMD_LINE_OPTION, wxT("b"), wxT("driveb"), wxT("specify disk image to insert into drive B"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
+    { wxCMD_LINE_OPTION, wxT_2("a"), wxT_2("drivea"), wxT_2("specify disk image to insert into drive A"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
+    { wxCMD_LINE_OPTION, wxT_2("b"), wxT_2("driveb"), wxT_2("specify disk image to insert into drive B"), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
      
-    { wxCMD_LINE_OPTION, wxT("t"), wxT("tape"), wxT("specify tape image "), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
-    { wxCMD_LINE_OPTION, wxT("s"), wxT("snapshot"), wxT("specify snapshot image "), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
+    { wxCMD_LINE_OPTION, wxT_2("t"), wxT_2("tape"), wxT_2("specify tape image "), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
+    { wxCMD_LINE_OPTION, wxT_2("s"), wxT_2("snapshot"), wxT_2("specify snapshot image "), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL  },
 
     { wxCMD_LINE_NONE }
 };

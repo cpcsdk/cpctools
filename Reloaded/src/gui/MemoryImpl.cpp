@@ -20,6 +20,7 @@
 
 #include "MemoryImpl.h"
 
+#include <algorithm>
 #include <sstream>
 #include <string>
 
@@ -360,7 +361,7 @@ void MemoryImpl::RefreshMem(int startAddress)
 		a.Add(wxString::From8BitData(line));
 	}
 
-	m_checkList1 -> Set(a, 0);
+	m_checkList1 -> Set(a, (void**)nullptr);
 	// Work around a bug in wx...
 	m_checkList1->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), 76, 90, 90, false, wxT("Courier") ) );
 }

@@ -24,16 +24,10 @@
 #include <cstdlib>
 #include <cstring>
 
-#include <pthread.h>
-
 #define ErrorLogMessage Log::log
-
 #define CriticalLogMessage Log::log
-
 #define WarningLogMessage Log::log
-
 #define InfoLogMessage Log::infoLog
-
 #define DebugLogMessage Log::debugLog
 
 class Log

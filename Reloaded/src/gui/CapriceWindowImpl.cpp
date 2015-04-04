@@ -240,7 +240,7 @@ void CapriceWindowImpl::onInsertDiscA( wxCommandEvent& event )
 	wxFileDialog* OpenDialog = new wxFileDialog(
 			this, wxString(wxT("Choose a file to open")), wxEmptyString, wxEmptyString,
 			wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
-			wxOPEN, wxDefaultPosition);
+			wxFD_OPEN, wxDefaultPosition);
 
     // Creates a "open file" dialog with 4 file types
 	if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
@@ -284,7 +284,7 @@ void CapriceWindowImpl::onInsertDiscB( wxCommandEvent& event )
     wxFileDialog* OpenDialog = new wxFileDialog(
         this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
         wxT("*DSK files (*.dsk)|*.dsk|All files|*.*"),
-        wxOPEN, wxDefaultPosition);
+        wxFD_OPEN, wxDefaultPosition);
  
     // Creates a "open file" dialog with 4 file types
     if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
@@ -328,7 +328,7 @@ void CapriceWindowImpl::onLoadSNA( wxCommandEvent& event )
   wxFileDialog* OpenDialog = new wxFileDialog(
     this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString,
     wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
-    wxOPEN, wxDefaultPosition);
+    wxFD_OPEN, wxDefaultPosition);
 
   if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
   {
@@ -371,7 +371,7 @@ void CapriceWindowImpl::onSaveSNA( wxCommandEvent& event )
   wxFileDialog* SaveDialog = new wxFileDialog(
     this, wxT("Choose a file to save"), wxEmptyString, wxEmptyString,
     wxT("*SNA files (*.sna)|*.sna|All files|*.*"),
-    wxSAVE, wxDefaultPosition);
+    wxFD_SAVE, wxDefaultPosition);
 
   if (SaveDialog->ShowModal() == wxID_OK) // if the user click "Save" instead of "Cancel"
   {
@@ -515,7 +515,7 @@ void CapriceWindowImpl::insertTape( wxCommandEvent& event ) {
     wxFileDialog* OpenDialog = new wxFileDialog(
         this, wxT("Choose a file to open"), wxEmptyString, wxEmptyString, 
         wxT("*CDT files (*.cdt)|*.cdt|All files|*.*"),
-        wxOPEN, wxDefaultPosition);
+        wxFD_OPEN, wxDefaultPosition);
  
     // Creates a "open file" dialog with 4 file types
     if (OpenDialog->ShowModal() == wxID_OK) // if the user click "Open" instead of "Cancel"
