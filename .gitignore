@@ -7,3 +7,5 @@ DiskSwissKnife/DiskSwissKnife.pro.user
 libstsound/Debug/*
 libstsound/Release/*
 *.suo
+*.swp
+Reloaded/build/*

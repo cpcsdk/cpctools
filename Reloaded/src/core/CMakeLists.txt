@@ -37,7 +37,7 @@ add_library(ReloadedCore STATIC ${SOURCE_FILES})
 target_link_libraries(ReloadedCore ${CMAKE_THREAD_LIB_INIT})
 
 if (WIN32)
-	target_link_libraries(ReloadedCore stsoundlibrary)
+	target_link_libraries(ReloadedCore ${CMAKE_SOURCE_DIR}/../libstsound/Release/stsoundlibrary.lib)
 else (WIN32)
 	target_link_libraries(ReloadedCore stsound)
 endif (WIN32)

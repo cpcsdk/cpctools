@@ -4,7 +4,6 @@
  */
 
 #include <iostream>
-#include <libgen.h>
 #include <memory>
 
 #include "core/emulator.h"
