@@ -146,11 +146,11 @@ public:
 	void	pause(void);
 	void	stop(void);
 	void	setVolume(ymint volume);
-	int		getAttrib(void);
+	ymint		getAttrib(void);
 	void	getMusicInfo(ymMusicInfo_t *pInfo);
 	void	setLoopMode(ymbool bLoop);
 	char	*getLastError(void);
-	int		readYmRegister(ymint reg)			{ return ymChip.readRegister(reg); }
+	ymint		readYmRegister(ymint reg)			{ return ymChip.readRegister(reg); }
 
 	ymbool		getMusicOver(void)	const	{ return (bMusicOver); }
 	ymint		GetNbFrame()		const	{ return nbFrame; }
@@ -169,12 +169,12 @@ private:
 
 	ymbool	checkCompilerTypes();
 
-	void	setPlayerRate(int rate);
-	void	setAttrib(int _attrib);
+	void	setPlayerRate(ymint rate);
+	void	setAttrib(ymint _attrib);
 	void	setLastError(char *pError);
 	ymu8 *depackFile(ymu32 size);
 	ymbool	deInterleave(void);
-	void	readYm6Effect(ymu8 *pReg,int code,int prediv,int count);
+	void	readYm6Effect(ymu8 *pReg,ymint code,ymint prediv,ymint count);
 	void	player(void);
 	void	setTimeControl(ymbool bFlag);
 
@@ -211,7 +211,7 @@ private:
 // ATARI Digi Mix Music.
 //-------------------------------------------------------------
 	void	readNextBlockInfo(void);
-	void	stDigitMix(ymsample *pWrite16,int nbs);
+	void	stDigitMix(ymsample *pWrite16,ymint nbs);
 	void	computeTimeInfo(void);
 	void	setMixTime(ymu32 time);
 
@@ -242,11 +242,11 @@ private:
 //-------------------------------------------------------------
 // YM-Universal-Tracker
 //-------------------------------------------------------------
-	void	ymTrackerInit(int volMaxPercent);
-	void	ymTrackerUpdate(ymsample *pBuffer,int nbSample);
+	void	ymTrackerInit(ymint volMaxPercent);
+	void	ymTrackerUpdate(ymsample *pBuffer,ymint nbSample);
 	void	ymTrackerDesInterleave(void);
 	void	ymTrackerPlayer(ymTrackerVoice_t *pVoice);
-	void	ymTrackerVoiceAdd(ymTrackerVoice_t *pVoice,ymsample *pBuffer,int nbs);
+	void	ymTrackerVoiceAdd(ymTrackerVoice_t *pVoice,ymsample *pBuffer,ymint nbs);
 
 	int			nbVoice;
 	ymTrackerVoice_t	ymTrackerVoice[MAX_VOICE];
