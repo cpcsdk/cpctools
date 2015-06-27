@@ -175,8 +175,8 @@ def main(linea_de_comandos=None):
     # E insertamos los ficheros en los sectores
     if lista_ficheros != []:
         # Leemos todos los ficheros y los partimos en trozos de 512 bytes
-        num_pista = optiones.disk_sector / (SECTOR_PER_TRACK - 1)
-        num_sector = opciones.disk_sector % (SECTOR_PER_TRACK - 1)  # Sector inicial
+        num_pista = opciones.disk_sector / (SECTORS_PER_TRACK - 1)
+        num_sector = opciones.disk_sector % (SECTORS_PER_TRACK - 1)  # Sector inicial
         for nombre_fichero in lista_ficheros:
             # Comprobamos si existen
             if not(os.path.exists(nombre_fichero)):
