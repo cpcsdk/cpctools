@@ -22,9 +22,7 @@ set(CMAKE_REQUIRED_INCLUDES "${LIBDSK_HEADERS_DIR}")
 if(HAIKU)
   # libdsk.h uses size_t without proper includes...
   set(CMAKE_REQUIRED_FLAGS "-Dsize_t=int")
-endif()
-
-if(UNIX)
+elseif(UNIX)
   # libdsk.h uses size_t without proper includes...
   # (this doesn't work on haiku because gcc2, see haiku fix above)
   set(CMAKE_REQUIRED_FLAGS "-include stdint.h")
