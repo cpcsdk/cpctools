@@ -165,9 +165,11 @@ int main(int argc, char** argv) {
 
 	for(vector<string>::iterator iter=AmsdosFileList.begin(); iter!=AmsdosFileList.end(); iter++)
 	{
-    		string amsdosfile = GetNomAmsdos(iter->c_str());
-    		int Indice;
-    		if ( ( Indice = MyDsk.FileIsIn( amsdosfile ) ) != -1 && !Force_Overwrite) {
+ 		string amsdosfile = GetNomAmsdos(iter->c_str());
+ 		int Indice;
+      // Ensure Indice is valid (the file is in the disk already) before atempting to remove it
+ 		if ( ( Indice = MyDsk.FileIsIn( amsdosfile ) ) != -1 ) {
+         if ( !Force_Overwrite ) {
     			cerr << "(" << amsdosfile <<") File exists, replace ? (Y/N) (try -f switch for autoreplace...):";
     			string answer ;
     			cin >> answer;
@@ -178,14 +180,13 @@ int main(int argc, char** argv) {
     				cout << MyDsk.ReadDskDir();
     				exit(EXIT_SUCCESS);
     			}
-		}
-		else if(Force_Overwrite)
-			MyDsk.RemoveFile(Indice);
-	
-    		cerr << "Amsdos file : "<< *iter << endl;
+        	} else 
+		      MyDsk.RemoveFile(Indice);
+      }
+ 		cerr << "Amsdos file : "<< *iter << endl;
 	
 		MyDsk.PutFileInDsk(*iter,AmsdosType,loadAdress,exeAdress,UserNumber,System_file,Read_only);
-    	}
+  	}
 	if ( MyDsk.WriteDsk (DskFile) )
 		cout << MyDsk.ReadDskDir(); 
 	else cerr<< "Error writing file : " << DskFile << endl;
