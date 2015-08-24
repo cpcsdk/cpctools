@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
   IsDsk = IsDskValid = false;
   IsDskSaved = true;
 
-  // Récupération des arguments avec getopt_pp
+  // RÃ©cupÃ©ration des arguments avec getopt_pp
 {using namespace GetOpt;
   GetOpt_pp opts(argc,argv);
 
@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
     		exit(EXIT_FAILURE);
     	}
     	if ( ! MyDsk.CheckDsk() ) {
-    		cerr <<"Fichier image non supporté ("<< DskFile << ")."<<endl;
+    		cerr <<"Fichier image non supportÃ© ("<< DskFile << ")."<<endl;
     		exit(EXIT_FAILURE);
     	}
     	int Indice;
@@ -165,25 +165,25 @@ int main(int argc, char** argv) {
 
 	for(vector<string>::iterator iter=AmsdosFileList.begin(); iter!=AmsdosFileList.end(); iter++)
 	{
- 		string amsdosfile = GetNomAmsdos(iter->c_str());
- 		int Indice;
-      // Ensure Indice is valid (the file is in the disk already) before atempting to remove it
- 		if ( ( Indice = MyDsk.FileIsIn( amsdosfile ) ) != -1 ) {
-         if ( !Force_Overwrite ) {
-    			cerr << "(" << amsdosfile <<") File exists, replace ? (Y/N) (try -f switch for autoreplace...):";
-    			string answer ;
-    			cin >> answer;
-    			if ( toupper(answer[0]) == 'Y')
-    				MyDsk.RemoveFile(Indice);
-    			else {
-    				cerr<<"Import cancelled, dsk unchanged."<<endl;
-    				cout << MyDsk.ReadDskDir();
-    				exit(EXIT_SUCCESS);
-    			}
-        	} else 
-		      MyDsk.RemoveFile(Indice);
-      }
- 		cerr << "Amsdos file : "<< *iter << endl;
+		string amsdosfile = GetNomAmsdos(iter->c_str());
+		int Indice;
+		// Ensure Indice is valid (the file is in the disk already) before atempting to remove it
+		if ( ( Indice = MyDsk.FileIsIn( amsdosfile ) ) != -1 ) {
+			if ( !Force_Overwrite ) {
+				cerr << "(" << amsdosfile <<") File exists, replace ? (Y/N) (try -f switch for autoreplace...):";
+				string answer;
+				cin >> answer;
+				if ( toupper(answer[0]) == 'Y')
+					MyDsk.RemoveFile(Indice);
+				else {
+					cerr<<"Import cancelled, dsk unchanged."<<endl;
+					cout << MyDsk.ReadDskDir();
+					exit(EXIT_SUCCESS);
+				}
+			} else 
+				MyDsk.RemoveFile(Indice);
+		}
+		cerr << "Amsdos file : "<< *iter << endl;
 	
 		MyDsk.PutFileInDsk(*iter,AmsdosType,loadAdress,exeAdress,UserNumber,System_file,Read_only);
   	}
