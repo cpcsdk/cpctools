@@ -11,7 +11,7 @@
 ; 19   AMSDOS BIOS Facilities
 ; 20   AMSDOS External Commands
 
-; Electrostar need to be in the rom number just before Amsdos/Parados.
+; Electrostar need to be in the rom number just below Amsdos/Parados (most likely 6).
 
 ; TODO: 
 ; .- Initialize hardware, after reset the CPC.
@@ -33,6 +33,7 @@ ERROR_STREAM_WAS_CLOSED     EQU $0E
 ERROR_EOF_REACHED           EQU $0F
 
     include 'firmware.i'
+    include 'ch376.i'
 
     ORG  $C000
 
@@ -807,10 +808,80 @@ electrostar_cas_out_direct
 ;     All others registers preserved.
 ; ---------------------------------------------------------------------------
 electrostar_cas_catalog
+    LD A,'u'
+    CALL 0xBB5A
+
     ; Check for the active drive and prepare return address for firmware
     CALL check_drive_in_and_prepare_return_for_cas
 
     ; Amélie CAS CATALOG code *** goes here ***
+    ; It should CALL |DIR with "*" as pattern instead of doing mostly the same?
+    LD BC,CMD
+    LD A,SET_FILE_NAME
+    OUT (C),A
+
+    DEC C
+    LD A,'*'
+    OUT (C),A
+    XOR A
+    OUT (C),A
+
+    INC C
+    LD A,FILE_OPEN
+    OUT (C),A
+
+    ; Wait for interrupt
+.wfi
+    IN A,(C)
+    JP M,.wfi
+
+    ; Interrupt occured, acknowledge it and get status
+    LD A,GET_STATUS
+    OUT (C),A
+    DEC C
+    IN A,(C)
+
+    CP 0x14
+    JP Z,.end
+
+    ; TODO check A=0x1D (data pending), otherwise we have an error!
+    INC C
+    LD A,RD_USB_DATA0
+    OUT (C),A
+
+    DEC C
+    IN E,(C)
+
+    ; TODO format the entry properly...
+    ; For now we get the 12 bytes name only and skip the rest
+    LD E,12
+.get
+    IN A,(C)
+    CALL 0xBB5A
+    DEC E
+    JR NZ,.get
+
+    LD E,20
+.get2
+    IN A,(C)
+    DEC E
+    JR NZ,.get
+
+    ; TODO we need a more compact format (4 or 8 columns?)
+    ; Next file, Next line!
+    LD A,10
+    CALL 0xBB5A
+    LD A,13
+    CALL 0xBB5A
+
+    ; Move on to the next file
+    INC C
+    LD A,FILE_ENUM_GO
+    OUT (C),A
+
+    JR .wfi
+
+.end
     CALL save_return_address_for_errors
 
     ; Return to firmware
@@ -902,8 +973,7 @@ rsx_dir
 
     ; |DIR Amélie code *** goes here ***
 .do_dir_ameli
-    ; It should CALL CAS_CATALOG
-    
+
     ; Return to firmware
     POP  IX
     POP  AF
@@ -1659,7 +1729,21 @@ initialize_electrostar
 
     CALL test_hardware            ; Test & Initialize SD
     JR   NZ,.hardware_test_failed
+    PUSH AF
+    LD HL,revision_text
+    CALL print_text
+    POP AF
     CALL 0xBB5A
+    LD HL,eol_text
+    CALL print_text
+
+    ; Enter USB host mode
+    LD BC,CMD
+    LD A,SET_USB_MODE
+    OUT (C),A
+    DEC C
+    LD A,6 ; Host mode, generate SOF
+    OUT (C),A
 
     CALL init_workspace
     JR   NC,.init_workspace_failed
@@ -1689,8 +1773,12 @@ initialize_electrostar
 ;checksum_failed_text
 ;    DEFB 'Ameli rom checksum failed.',10,13,$FF
 
+revision_text
+    DEFB 'CH376 rev',$FF
 hardware_test_failed_text
-    DEFB 'USB controller not found!',10,13,$FF
+    DEFB 'CH376 not found!',10,13,$FF
+eol_text
+    DEFB 10,13,$FF
 
 init_workspace_failed_text
     DEFB ' Amsdos or compatible was not found.',10,13,$FF
@@ -1704,12 +1792,10 @@ init_workspace_failed_text
 ; Output: Z flag set if initialization is succesful.
 ;         If Z, A = hardware version
 test_hardware
-CMD	EQU 0xFE81
-DATA	EQU 0xFE80
 
 	; Reset the device
 	LD BC,CMD
-	LD A,5
+	LD A,RESET_ALL
 	OUT (C),A
 
 	; Wait for at least 35ms
@@ -1720,7 +1806,7 @@ wait
 
 	; Check device is present
 	LD BC,CMD
-	LD A,6
+	LD A,CHECK_EXIST
 	OUT (C),A
 	DEC C
 	OUT (C),A
@@ -1732,12 +1818,12 @@ wait
 
 	; Get hardware version
 	INC C
-	LD A,1
+	LD A,GET_IC_VER
 	OUT (C),A
 	DEC C
 	IN A,(C)
 	ADD 8 ; Convert to ASCII
-	OR A ; Set Z flag
+	OR A ; Set Z flag to notify device is found
 	RET
 
 ; ---------------------------------------------------------------------------
@@ -1957,7 +2043,7 @@ print_text
 
 ; ---------------------------------------------------------------------------
 initialize_text
-    DEFB $0F,2,' ELECTRO* v0.1 ',$A4,'2015 PulkoMandy&SyX',$0F,1,10,13,$FF
+    DEFB $0F,2,32,1,4,238,' v0.1 ',$A4,'2015 Shinra',$0F,1,32,$FF
 
 ; ---------------------------------------------------------------------------
 ; Put after the Amsdos memory zone in $BE40 - $BE7D (Variables for ELECTROSTAR)
