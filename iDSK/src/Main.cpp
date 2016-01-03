@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
        ModeDisaFile, ModeListBasic, 
        ModeListDams,ModeListHex, 
        ModeGetFile, ModeNewDsk, Force_Overwrite,
-	Read_only, System_file;
+       Read_only, System_file, Split_lines;
        
   ModeListDsk =  ModeImportFile =
   ModeRemoveFile  = ModeDisaFile = 
@@ -78,6 +78,7 @@ int main(int argc, char** argv) {
 	>> OptionPresent('f',"force",Force_Overwrite)
 	>> OptionPresent('o',"write-protect",Read_only)
 	>> OptionPresent('s',"system",System_file)
+  >> OptionPresent('p',"split-lines",Split_lines)
 	>> Option('u',"user",UserNumber)
 	;
 
@@ -118,7 +119,7 @@ int main(int argc, char** argv) {
 		MyDsk.OnViewFic(Indice);
 	
 		if ( ModeListBasic ) 
-			cout << ViewBasic( ) << endl;
+			cout << ViewBasic( Split_lines ) << endl;
 		else if ( ModeListDams )
 			cout << "Not yet coded ! Please try a newer version of iDSK ! Sorry !"<<endl;
 		else if ( ModeListHex ) {
@@ -267,7 +268,8 @@ void help(void)
   cout << "-r : Remove file                       iDSK floppy.dsk -r myprog.bas" << endl;
   cout << "-n : create New dsk file               iDSK floppy2.dsk -n" << endl;
   cout << "-z : disassemble a binary file         iDSK floppy.dsk -z myprog.bin" << endl;
-  cout << "-b : list a Basic file                 iDSK floppy.dsk -b myprog.bas" << endl;
+  cout << "-b : list a Basic file                 iDSK floppy.dsk -b myprog.bas" << endl
+       << " -p : split lines after 80 char             ... -p" << endl;
   cout << "-d : list a Dams file                  iDSK floppy.dsk -d myprog.dms" << endl;
   cout << "-h : list a binary file as Hexadecimal iDSK floppy.dsk -h myprog.bin" << endl;
   cout << "-i : Import file                       iDSK floppy.dsk -i myprog.bas" << endl
