@@ -220,6 +220,15 @@ void Basic( BYTE * BufFile, char * Listing, bool IsBasic, bool CrLf )
                                     strcat( Listing, "$" );
                                     break;
 
+                                case 0x04 : // Variable float (type !)
+                                    Pos = AddWord( BufFile
+                                                 , 2 + Pos
+                                                 , Listing
+                                                 , Deprotect
+                                                 );
+                                    strcat( Listing, "!" );
+                                    break;
+
                                 case 0x0B :
                                 case 0x0C :
                                 case 0x0D : // Variable "standard"
