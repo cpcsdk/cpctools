@@ -16,7 +16,6 @@ string ViewDams(  )
 	//cout << Listing << endl;
 }
 
-
 string ViewDesass( )
 {
 	cerr << "Taille du fichier : " << TailleFic << endl;
@@ -24,13 +23,13 @@ string ViewDesass( )
     return Listing;
 	//cout << Listing << endl;
 }
-string ViewBasic( )
+
+string ViewBasic( bool AddCrLf )
 {
 	bool IsBasic=true;
 	//cout << "Entre Ici\n";
 	cerr << "Taille du fichier : " << TailleFic << endl;
-	Basic( BufFile, Listing, IsBasic, true );
+	Basic( BufFile, Listing, IsBasic, AddCrLf );
 	//cout << Listing << endl;
 	return Listing;
-	
 }
