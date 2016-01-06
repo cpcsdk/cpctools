@@ -26,7 +26,7 @@ class Semaphore {
 #ifdef _MSC_VER
 			CloseHandle(fNativeSem);
 #else
-			sem_delete(&fNativeSem, 0, 0);
+			sem_destroy(&fNativeSem);
 #endif
 		}
 
