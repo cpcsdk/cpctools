@@ -1,14 +1,8 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2011-02-09T21:06:26
-#
-#-------------------------------------------------
-
 QT       += widgets
 
 TARGET = DiskSwissKnife
 TEMPLATE = app
-
+QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += main.cpp\
         diskswissknife.cpp \

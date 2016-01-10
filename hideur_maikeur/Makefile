@@ -22,7 +22,7 @@ CLEANCMD=rm -f# the clean command (MS-DOS)
 hideur : header.o main.o
 	$(CC) -o $(EXE) header.o main.o $(FLAGS) $(LG) $(OS) $(DEBUG)
 	@echo Ok...
-	@hideur
+	@./hideur
 
 header.o : header.c header.h messages.h debug.h aff.h
 	$(CC) -c header.c  $(LG) $(DEBUG) $(OS)
