@@ -1,4 +1,5 @@
 language: cpp
+sudo: true
 addons:
     apt:
         packages:
@@ -6,12 +7,16 @@ addons:
             - cmake
             - qmake
               # libdsk-dev      # not available
+before_install:
+    - yes | sudo add-apt-repository ppa:george-edison55/precise-backports
+    - sudo apt-get update -qq
+install: sudo apt-get update -qq
 script:
     - pushd hideur_maikeur && make && popd
     - pushd gfx2crtc && make && popd
     - pushd iDSK && cmake . && make && popd
     - pushd libstsound && ./build_config.sh && ./configure && make && popd
-      # pushd Reloaded && cmake . && make && popd     # needs CMake 3.1.0
+    - pushd Reloaded && cmake . && make && popd     # needs CMake 3.1.0
       # pushd DiskSwissKnife && qmake && make && popd # needs qhexedit
       # pushd font_catcher && make && popd            # needs libmagickpp
       # pushd cpctools && cmake . && make && popd     # needs libdsk
