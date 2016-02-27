@@ -51,6 +51,11 @@ int RS232_OpenComport(const char* comport, int baudrate, const char *mode, HANDL
 
   struct termios new_port_settings;
 
+  int cbits=CS8,
+      cpar=0,
+      ipar=IGNPAR,
+      bstop=0;
+
   switch(baudrate)
   {
     case      50 : baudr = B50;
@@ -89,6 +94,10 @@ int RS232_OpenComport(const char* comport, int baudrate, const char *mode, HANDL
                    break;
     case  230400 : baudr = B230400;
                    break;
+#ifdef __HAIKU__
+    default:       baudr = baudrate;
+                   break;
+#else
     case  460800 : baudr = B460800;
                    break;
     case  500000 : baudr = B500000;
@@ -116,12 +125,8 @@ int RS232_OpenComport(const char* comport, int baudrate, const char *mode, HANDL
     default      : printf("invalid baudrate\n");
                    return -1;
                    break;
+#endif
   }
-
-  int cbits=CS8,
-      cpar=0,
-      ipar=IGNPAR,
-      bstop=0;
 
   if(strlen(mode) != 3)
   {

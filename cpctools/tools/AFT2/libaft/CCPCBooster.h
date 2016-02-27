@@ -78,7 +78,7 @@ public:
 	//! Read a byte from COM port, waiting
 	void ReadWaitByte(unsigned char &val);
 	//! Read a byte from COM port, not waiting
-	void ReadByte(unsigned char &val);
+	int ReadByte(unsigned char &val);
 	//! Write a byte to COM port
 	bool WriteByte(const unsigned char val);
 	//! Read a word from COM port, waiting
