@@ -10,9 +10,12 @@
 
 #define _CCPCBOOSTER_H_
 
-#if _WINDOWS
+#ifdef _WIN32
+
 #include <windows.h>
+
 #else
+
 #include <termios.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -20,11 +23,11 @@
 #include <signal.h>
 #include <sys/types.h>
 
-#include "rs232.h"
 #endif
 
 #include <string>
 
+#include "rs232.h"
 
 #ifndef DWORD
 #define DWORD long int
@@ -48,12 +51,8 @@ enum CCPCBoosterError
 class CCPCBooster
 {
 protected:
-#if _WINDOWS
     //! COM port handle
 	HANDLE				_COMPortHandle;
-#else
-	int					_COMPortHandle;
-#endif
 	//! Current COM port number
 	std::string			_COMPortNumber;
 
@@ -77,23 +76,21 @@ public:
 	CCPCBoosterState GetState() const;
 
 	//! Read a byte from COM port, waiting
-	bool ReadWaitByte(unsigned char &val);
+	void ReadWaitByte(unsigned char &val);
 	//! Read a byte from COM port, not waiting
-	bool ReadByte(unsigned char &val);
+	void ReadByte(unsigned char &val);
 	//! Write a byte to COM port
 	bool WriteByte(const unsigned char val);
 	//! Read a word from COM port, waiting
-	bool ReadWaitWord(unsigned short &val);
-	//! Read a word from COM port, not waiting
-	bool ReadWord(unsigned short &val);
+	void ReadWaitWord(unsigned short &val);
 	//! Write a word to COM port
-	bool WriteWord(const unsigned short val);
+	void WriteWord(const unsigned short val);
 	//! Read N bytes from COM port, waiting
-	bool ReadWaitBuffer(unsigned char *buffer, const DWORD nbBytes);
+	bool ReadWaitBuffer(unsigned char *buffer, const long nbBytes);
 	//! Read N bytes from COM port, not waiting
-	bool ReadBuffer(unsigned char *buffer, const DWORD nbBytes);
+	long ReadBuffer(unsigned char *buffer, const long nbBytes);
 	//! Write N bytes to COM port
-	bool WriteBuffer(unsigned char *buffer, const DWORD nbBytes);
+	bool WriteBuffer(unsigned char *buffer, const long nbBytes);
 
 protected:
 	//! Open COM port

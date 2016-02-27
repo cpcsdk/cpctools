@@ -3,9 +3,9 @@
 *
 * Author: Teunis van Beelen
 *
-* Copyright (C) 2005, 2006, 2007, 2008, 2009 Teunis van Beelen
+* Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015 Teunis van Beelen
 *
-* teuniz@gmail.com
+* Email: teuniz@gmail.com
 *
 ***************************************************************************
 *
@@ -29,6 +29,9 @@
 ***************************************************************************
 */
 
+/* Last revision: January 10, 2015 */
+
+/* For more info and how to use this libray, visit: http://www.teuniz.net/RS-232/ */
 
 
 #ifndef rs232_INCLUDED
@@ -43,7 +46,7 @@ extern "C" {
 
 
 
-#if defined(__linux__)||defined(__HAIKU__)
+#ifndef _WIN32
 
 #include <termios.h>
 #include <sys/ioctl.h>
@@ -53,19 +56,27 @@ extern "C" {
 #include <sys/stat.h>
 #include <limits.h>
 
+typedef int HANDLE;
+
 #else
 
 #include <windows.h>
 
 #endif
 
-int OpenComport(const char*, int);
-int PollComport(int, unsigned char *, int);
-int SendByte(int, unsigned char);
-int SendBuf(int, unsigned char *, int);
-void CloseComport(int);
-void cprintf(int, const char *);
-int IsCTSEnabled(int);
+int RS232_OpenComport(const char *comport, int, const char *, HANDLE *handle);
+int RS232_PollComport(HANDLE, unsigned char *, int);
+int RS232_SendByte(HANDLE, unsigned char);
+int RS232_SendBuf(HANDLE, unsigned char *, int);
+void RS232_CloseComport(HANDLE);
+void RS232_cputs(HANDLE, const char *);
+int RS232_IsDCDEnabled(HANDLE);
+int RS232_IsCTSEnabled(HANDLE);
+int RS232_IsDSREnabled(HANDLE);
+void RS232_enableDTR(HANDLE);
+void RS232_disableDTR(HANDLE);
+void RS232_enableRTS(HANDLE);
+void RS232_disableRTS(HANDLE);
 
 
 #ifdef __cplusplus

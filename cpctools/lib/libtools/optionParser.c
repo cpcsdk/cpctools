@@ -37,7 +37,7 @@ void addArgv(int *argc, char ***argv, char *newArg)
 		sizeS += strlen((*argv)[i])+1;
 	sizeH = ((*argc)+2)*sizeof(char*);
 
-	newArgv = malloc(sizeH+sizeS+strlen(newArg)+1);
+	newArgv = (char*)malloc(sizeH+sizeS+strlen(newArg)+1);
 
 	if (*argv != NULL && (*argc != 0))
 		memcpy(newArgv+sizeH, (*argv)[0], sizeS);
@@ -78,7 +78,7 @@ void removeArgv(int *argc, char ***argv, int idx)
 	}
 	sizeH = ((*argc))*sizeof(char*);
 
-	newArgv = malloc(sizeH+sizeS);
+	newArgv = (char*)malloc(sizeH+sizeS);
 	if (!newArgv)
 	{
 		printf( "MALLOC IMPOSSIBLE ! %s : %d \n", __FILE__, __LINE__); ;
@@ -179,7 +179,7 @@ void addOption(struct SOptionOut **cmdOption, char **argv, struct SOption *optio
 			nbCmdOption++;
 	}
 
-	newCmdOption = malloc((nbCmdOption+2)*sizeof(struct SOptionOut));
+	newCmdOption = (struct SOptionOut*)malloc((nbCmdOption+2)*sizeof(struct SOptionOut));
 	if (!newCmdOption)
 	{
 		printf( "MALLOC ERROR !  %s : %d \n", __FILE__, __LINE__) ;
@@ -251,7 +251,7 @@ int parseCommandLineOption(int *argc, char*** argv, struct SOption *option, stru
 		nbOption++;
 
 	//reserve memoire pour compter le nombre de valeur des options
-	nbValOption = malloc(nbOption*sizeof(int));
+	nbValOption = (int*)malloc(nbOption*sizeof(int));
 	for (o=0;o<nbOption;o++)
 	{
 		nbValOption[o]=0;
@@ -260,7 +260,7 @@ int parseCommandLineOption(int *argc, char*** argv, struct SOption *option, stru
 	//Securisation
 	if ((*cmdOptionLine) == NULL)
 	{
-		*cmdOptionLine = malloc(sizeof(struct SOptionOut));
+		*cmdOptionLine = (struct SOptionOut*)malloc(sizeof(struct SOptionOut));
 		(*cmdOptionLine)[0].shortName=0;
 		(*cmdOptionLine)[0].argc=0;
 		(*cmdOptionLine)[0].argv=NULL;

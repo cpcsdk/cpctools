@@ -16,18 +16,18 @@
 
 struct SOption appliOption[]=
 {
-	{'p', "comPort",   0,1,1,"Set <$1> as COM port (/dev/ttyS* or COM*)"},
+	{'p', "comPort",   0,1,1,"Set <$1> as COM port (eg /dev/ttyS* or COM*)"},
 	{'f', "file",      0,1,1,"Force <$1> to be transfered file"},
 	{'d', "directory", 0,1,1,"Force <$1> to be transfered directory"},
 	{'n', "noLoop",    0,1,0,"Do not loop AFT transfert"},
 	{0,   NULL,        0,0,0,NULL}
 };
 
-static const std::string authorName = "Targhan/Ramlaid/Krusty/PulkoMandy";
+static const std::string authorName = "Targhan/Ramlaid/Krusty/PulkoMandy/pelrun";
 static const std::string authorMail = "cpcsdk@googlegroups.com";
 static const std::string appliName = "aft";
 static const std::string appliUsageShort = "";
-static const std::string appliUsageLong = "\nArkos File Transfert tool";
+static const std::string appliUsageLong = "\nArkos File Transfer tool";
 
 static const std::string devicePrefixes[] =
 {
@@ -41,9 +41,8 @@ static const std::string devicePrefixes[] =
 	"/dev/tty",
 	"/dev/",
 #else
-	"\\\\.\\COM1",
-	"\\\\.\\COM",
-	"\\\\.\\",
+	"COM1",
+	"COM",
 #endif
 
 	""

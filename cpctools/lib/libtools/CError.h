@@ -37,7 +37,7 @@ namespace tools
 	io_os << " [" << exp._file << ":" << exp._line << "]";
 #endif
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 	io_os << exp._message ;
 #endif
 	return io_os;
@@ -45,7 +45,7 @@ namespace tools
 	};
 }
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 
 #define ERROR_STR cerr
 #define VERBOSE_STR cout

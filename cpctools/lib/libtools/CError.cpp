@@ -10,7 +10,7 @@
 using namespace tools;
 
 CException::CException(const string &file, int line, const string &error)  throw () :
-#if _WINDOWS
+#ifdef _WIN32
 exception(error.c_str()),
 #else
 _message(error.c_str()),
@@ -32,7 +32,7 @@ ostream& tools::operator<<(ostream &io_os, const CException &exp)
 	io_os << " [" << exp._file << ":" << exp._line << "]";
 #endif
 
-#ifndef _WINDOWS
+#ifndef _WIN32
 	io_os << exp._message ;
 #endif
 	return io_os;
