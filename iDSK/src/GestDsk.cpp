@@ -560,7 +560,7 @@ bool DSK::CheckDsk( void ) {
             int MinSect = 0xFF, MaxSect = 0;
             if ( tr->NbSect != 9 )
 			{
-				cout << "Warning : track " << track <<" has "<<tr->NbSect<<" sectors ! (wanted 9)" << endl;
+				cout << "Warning : track " << track <<" has "<<(int)tr->NbSect<<" sectors ! (wanted 9)" << endl;
                 // return( false );
 			}
             for ( int s = 0; s < (int)tr->NbSect; s++ ) {
@@ -572,7 +572,7 @@ bool DSK::CheckDsk( void ) {
 			}
             if ( MaxSect - MinSect != 8 )
 			{
-				cout << "Warning : trange sector numbering in track "<<track<<"!" << endl;
+				cout << "Warning : strange sector numbering in track "<<track<<"!" << endl;
                 // return( false );
 			}
             if ( MinSect != MinSectFirst )
