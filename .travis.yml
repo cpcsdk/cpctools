@@ -11,14 +11,14 @@ before_install:
 
 install:
     - wget http://www.seasip.info/Unix/LibDsk/libdsk-1.4.0.tar.gz -O- | tar -xzf - 
-    - pushd libdsk-* && ./configure --prefix=/usr && 	make && sudo make install  && popd
+    - pushd libdsk-* && ./configure --prefix=/usr && 	make && sudo make install  && sudo cp ./include/libdsk.h /usr/include && popd
 
 script:
     - pushd hideur_maikeur && make && popd
     - pushd gfx2crtc && make && popd
     - pushd iDSK && cmake . && make && popd
     - pushd libstsound && ./build_config.sh && ./configure && make && popd
-    - pushd cpctools && cmake -DLIBDSK_HEADERS_DIR=/home/travis/build/cpcsdk/cpctools/libdsk-1.4.0/include . && make && popd     # needs libdsk
+    - pushd cpctools && cmake . && make && popd     # needs libdsk
     - pushd Reloaded && cmake . && make && popd     # needs CMake 3.1.0
       # pushd DiskSwissKnife && qmake && make && popd # needs qhexedit
       # pushd font_catcher && make && popd            # needs libmagickpp
