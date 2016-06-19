@@ -11,7 +11,7 @@ before_install:
 
 install:
     - wget http://www.seasip.info/Unix/LibDsk/libdsk-1.4.0.tar.gz -O- | tar -xzf - 
-    - pushd libdsk-* && ./configure && 	make && make install  && popd
+    - pushd libdsk-* && ./configure --prefix=/usr && 	make && make install  && popd
 
 script:
     - pushd hideur_maikeur && make && popd
