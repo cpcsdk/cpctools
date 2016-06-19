@@ -18,7 +18,7 @@ script:
     - pushd gfx2crtc && make && popd
     - pushd iDSK && cmake . && make && popd
     - pushd libstsound && ./build_config.sh && ./configure && make && popd
-    - pushd cpctools && cmake . && make && popd     # needs libdsk
+    - pushd cpctools && cmake -DLIBDSK_HEADERS_DIR=/home/travis/build/cpcsdk/cpctools/libdsk-1.4.0/include . && make && popd     # needs libdsk
     - pushd Reloaded && cmake . && make && popd     # needs CMake 3.1.0
       # pushd DiskSwissKnife && qmake && make && popd # needs qhexedit
       # pushd font_catcher && make && popd            # needs libmagickpp
