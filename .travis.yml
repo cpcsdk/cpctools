@@ -6,12 +6,13 @@ addons:
         packages:
             - libpng-dev
             - cmake
-            - qmake
-              # libdsk-dev      # not available
 before_install:
-    - yes | sudo add-apt-repository ppa:george-edison55/precise-backports
     - sudo apt-get update -qq
-install: sudo apt-get update -qq
+
+install:
+    - wget http://www.seasip.info/Unix/LibDsk/libdsk-1.4.0.tar.gz -O- | tar -xzf - 
+    - pushd libdsk-* && ./configure && 	make && make install  && popd
+
 script:
     - pushd hideur_maikeur && make && popd
     - pushd gfx2crtc && make && popd
