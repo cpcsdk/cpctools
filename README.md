@@ -16,7 +16,6 @@ What's in there
 * AMSDOScope: hexdumps the first 128 bytes of a file and highlight the relevant fields of the AMSDOS header.
 * DiskSwissKnife: discology-like DSK sector explorer in Qt (unfinished)
 * font_catcher: extract a font from a PNG file and convert it to a format suitable for use in a writer/scroller
-* gfx2crtc: convert PNG or raw bitmaps to CPC SCR format.
 * hideur_maikeur: add and edit AMSDOS header on files.
 * iDSK: Add and extract files from DSK images.
 * libstsound: modified version of the STSound library for accurate AY3-8912 emulation
