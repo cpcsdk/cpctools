@@ -20,7 +20,6 @@ What's in there
 * reloaded: Amstrad CPC emulator, fork of Caprice 32
 * snamp: SNApshot Music Player
 * starkos: a relocator for starkos songs
-* ufitoolbox: experiments to access CPC floppies using an USB floppy drive (unfinished)
 * cpctools: Ramlaid cpctools
 	* AFT2: cpcbooster file transfer system
 	* cpcfs: manage dsk files, and real disks. Supports USB floppy drives with some Parados formats
