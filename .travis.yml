@@ -12,7 +12,6 @@ before_install:
     - sudo apt-get update -qq
 install: sudo apt-get update -qq
 script:
-    - pushd libstsound && ./build_config.sh && ./configure && make && popd
     - pushd Reloaded && cmake . && make && popd     # needs CMake 3.1.0
       # pushd DiskSwissKnife && qmake && make && popd # needs qhexedit
       # pushd font_catcher && make && popd            # needs libmagickpp
