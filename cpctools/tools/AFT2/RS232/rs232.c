@@ -188,7 +188,6 @@ http://man7.org/linux/man-pages/man3/termios.3.html
   *handle = open(comport, O_RDWR | O_NOCTTY | O_NDELAY);
   if(*handle==-1)
   {
-    perror("unable to open comport ");
     return -1;
   }
 
