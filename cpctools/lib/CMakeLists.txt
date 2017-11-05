@@ -27,7 +27,7 @@ SET_TARGET_PROPERTIES(cpc PROPERTIES COMPILE_FLAGS -DBUILDING_DLL)
 
 if (WIN32)
 	install(TARGETS cpc DESTINATION bin)
-else
+else()
 	install(TARGETS cpc DESTINATION lib)
 endif()
 target_link_libraries (cpc ${LIBDSK_LIBRARY} tools)

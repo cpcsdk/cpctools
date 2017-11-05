@@ -16,8 +16,9 @@
 // Create a communication with the CPC Booster on the given port.
 // The port number can be a full name (COM17, /dev/ttyUSB0, ...), or just a
 // number, or a substring of the port name (USB0, ACM0, ...).
-CCPCBooster::CCPCBooster(std::string comNumber):
+CCPCBooster::CCPCBooster(std::string comNumber, int baudrate):
 _COMPortNumber(comNumber),
+_baudrate(baudrate),
 _currentState(PortFailed),
 _currentError(ErrOK)
 {
@@ -56,7 +57,7 @@ void CCPCBooster::OpenPort()
 
 	_currentState = PortFailed;
 
-	if (RS232_OpenComport(_COMPortNumber.c_str(),115200,"8N1",&_COMPortHandle) == 0)
+	if (RS232_OpenComport(_COMPortNumber.c_str(),_baudrate,"8N1",&_COMPortHandle) == 0)
 	{
 	    _currentState = PortOpened ;
 	}

@@ -99,7 +99,7 @@ protected:
 	std::ofstream		*_outStream;
 public:
 	//! Constructor, opening a COM port
-	CAksFileTransfert(std::string COMport);
+	CAksFileTransfert(std::string COMport, int baudrate);
 	//! Destructor
 	~CAksFileTransfert();
 

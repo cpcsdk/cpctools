@@ -55,6 +55,7 @@ protected:
 	HANDLE				_COMPortHandle;
 	//! Current COM port number
 	std::string			_COMPortNumber;
+	int                             _baudrate;
 
 
 	//! Current port state
@@ -64,7 +65,7 @@ protected:
 
 public:
 	//! Constructor, opening a COM port
-	CCPCBooster(std::string comport);
+	CCPCBooster(std::string comport, int baudrate);
 	
 	//! Destructor, closing opended COM port
 	virtual ~CCPCBooster();
