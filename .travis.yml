@@ -1,3 +1,4 @@
+dist: trusty
 language: cpp
 sudo: true
 addons:
@@ -5,14 +6,20 @@ addons:
         packages:
             - libpng-dev
             - cmake
-            - qmake
-              # libdsk-dev      # not available
 before_install:
-    - yes | sudo add-apt-repository ppa:george-edison55/precise-backports
     - sudo apt-get update -qq
-install: sudo apt-get update -qq
+
+install:
+    - wget http://www.seasip.info/Unix/LibDsk/libdsk-1.4.0.tar.gz -O- | tar -xzf - 
+    - pushd libdsk-* && ./configure  && 	make && sudo make install  && popd
+
 script:
+    - pushd hideur_maikeur && make && popd
+    - pushd gfx2crtc && make && popd
+    - pushd iDSK && cmake . && make && popd
+    - pushd libstsound && ./build_config.sh && ./configure && make && popd
+    - pushd cpctools && cmake -DLIBDSK_HEADERS_DIR=/usr/local/include/ . && make && popd     # needs libdsk
     - pushd Reloaded && cmake . && make && popd     # needs CMake 3.1.0
       # pushd DiskSwissKnife && qmake && make && popd # needs qhexedit
       # pushd font_catcher && make && popd            # needs libmagickpp
-      # pushd cpctools && cmake . && make && popd     # needs libdsk
+      # 
