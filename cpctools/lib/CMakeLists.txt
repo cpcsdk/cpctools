@@ -25,5 +25,9 @@ add_library(cpc SHARED
 
 SET_TARGET_PROPERTIES(cpc PROPERTIES COMPILE_FLAGS -DBUILDING_DLL)
 
-install(TARGETS cpc DESTINATION lib)
+if (WIN32)
+	install(TARGETS cpc DESTINATION bin)
+else()
+	install(TARGETS cpc DESTINATION lib)
+endif()
 target_link_libraries (cpc ${LIBDSK_LIBRARY} tools)

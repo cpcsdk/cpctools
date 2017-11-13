@@ -18,40 +18,39 @@
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef _WXVIDEO_H_
-#define _WXVIDEO_H_
+#pragma once
 
-#include <wx/image.h>
 
-class WXDoubleLinePlugin : public VideoPlugin
+#include "glfuncs.h"
+
+class OpenGLPlugin : public VideoPlugin
 {
+protected:
+	int		_texWidth;
+	int		_texHeight;
+	GLuint	_screenTexnum;
+	GLuint	_modulateTexnum;
+	int		_GLScanlines;
+
+	bool	_openGLFilter;
+	bool	_remanency;
 public:
-	WXDoubleLinePlugin() 
-		: VideoPlugin("Double size", ALL) 
-		, img(NULL)
-		, bmp(NULL)
-	{}
+/*	OpenGLPlugin(const string &name, const Uint32 &format, const Uint8 &halfPixels) :
+	  VideoPlugin(name, format, halfPixels) {}*/
 
-	virtual void* Init(int w,int h,int bpp,bool fs);
-	//virtual void SetPalette(SDL_Color* c);
+	OpenGLPlugin() : VideoPlugin("OpenGL scaling", ALL, 1) {}
+
 	virtual void SetPalette(ColorARGB8888* c);
-
-	virtual bool TryLock();
+	virtual bool Lock();
 	virtual void Unlock();
 	virtual void Flip();
 	virtual void Close();
 
-    virtual bool LockOutput();
-    virtual bool TryLockOutput();
-    virtual void UnlockOutput();
-
-    // Detect if output have been updated since last IsUpdate call
-    virtual bool IsUpdate();
-
-	void Screenshot(string filename);
-
-	wxImage* img;
-	wxBitmap* bmp;
+	virtual void SetOption(const string &optionName, bool val);
+protected:
+	SDL_Surface* OpenGLInit(int w,int h, int bpp, bool fs, int glScanline);
+	inline void* Init(int w,int h, int bpp, bool fs)
+	{
+		return OpenGLInit(w,h,bpp,fs,0);
+	}
 };
-
-#endif

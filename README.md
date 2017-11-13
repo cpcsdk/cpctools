@@ -16,15 +16,10 @@ What's in there
 * AMSDOScope: hexdumps the first 128 bytes of a file and highlight the relevant fields of the AMSDOS header.
 * DiskSwissKnife: discology-like DSK sector explorer in Qt (unfinished)
 * font_catcher: extract a font from a PNG file and convert it to a format suitable for use in a writer/scroller
-* gfx2crtc: convert PNG or raw bitmaps to CPC SCR format.
-* hideur_maikeur: add and edit AMSDOS header on files.
-* iDSK: Add and extract files from DSK images.
-* libstsound: modified version of the STSound library for accurate AY3-8912 emulation
 * pydsk: tool to put data in sectors of a DSK file (no filesystem support)
 * reloaded: Amstrad CPC emulator, fork of Caprice 32
 * snamp: SNApshot Music Player
 * starkos: a relocator for starkos songs
-* ufitoolbox: experiments to access CPC floppies using an USB floppy drive (unfinished)
 * cpctools: Ramlaid cpctools
 	* AFT2: cpcbooster file transfer system
 	* cpcfs: manage dsk files, and real disks. Supports USB floppy drives with some Parados formats

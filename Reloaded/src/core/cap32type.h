@@ -5,7 +5,7 @@
 #ifndef _CAP32TYPES_H_
 #define _CAP32TYPES_H_
 
-#include <cstdint>
+#include <stdint.h>
 
 //typedef unsigned char byte;
 //typedef unsigned short word;

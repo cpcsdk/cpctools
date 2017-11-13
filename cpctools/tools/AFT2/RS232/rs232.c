@@ -188,7 +188,6 @@ http://man7.org/linux/man-pages/man3/termios.3.html
   *handle = open(comport, O_RDWR | O_NOCTTY | O_NDELAY);
   if(*handle==-1)
   {
-    perror("unable to open comport ");
     return -1;
   }
 
@@ -408,42 +407,8 @@ int RS232_OpenComport(const char *comport, int baudrate, const char *mode, HANDL
       
   strcat(compath, comport); /* allows com ports above COM4 to work */
 
-  switch(baudrate)
-  {
-    case     110 : strcpy(mode_str, "baud=110");
-                   break;
-    case     300 : strcpy(mode_str, "baud=300");
-                   break;
-    case     600 : strcpy(mode_str, "baud=600");
-                   break;
-    case    1200 : strcpy(mode_str, "baud=1200");
-                   break;
-    case    2400 : strcpy(mode_str, "baud=2400");
-                   break;
-    case    4800 : strcpy(mode_str, "baud=4800");
-                   break;
-    case    9600 : strcpy(mode_str, "baud=9600");
-                   break;
-    case   19200 : strcpy(mode_str, "baud=19200");
-                   break;
-    case   38400 : strcpy(mode_str, "baud=38400");
-                   break;
-    case   57600 : strcpy(mode_str, "baud=57600");
-                   break;
-    case  115200 : strcpy(mode_str, "baud=115200");
-                   break;
-    case  128000 : strcpy(mode_str, "baud=128000");
-                   break;
-    case  256000 : strcpy(mode_str, "baud=256000");
-                   break;
-    case  500000 : strcpy(mode_str, "baud=500000");
-                   break;
-    case 1000000 : strcpy(mode_str, "baud=1000000");
-                   break;
-    default      : printf("invalid baudrate\n");
-                   return -1;
-                   break;
-  }
+  /* sprintf(mode_str, "baud=%d octs=on rts=on", baudrate); */
+  sprintf(mode_str, "baud=%d", baudrate);
 
   if(strlen(mode) != 3)
   {
@@ -511,7 +476,6 @@ http://technet.microsoft.com/en-us/library/cc732236.aspx
 
   if(*handle==INVALID_HANDLE_VALUE)
   {
-    printf("unable to open comport\n");
     return -1;
   }
 

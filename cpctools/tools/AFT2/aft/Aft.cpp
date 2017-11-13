@@ -17,6 +17,7 @@
 struct SOption appliOption[]=
 {
 	{'p', "comPort",   0,1,1,"Set <$1> as COM port (eg /dev/ttyS* or COM*)"},
+	{'b', "badrate",   0,1,1,"Set <$1> as baudrate (default 115200 baud)"},
 	{'f', "file",      0,1,1,"Force <$1> to be transfered file"},
 	{'d', "directory", 0,1,1,"Force <$1> to be transfered directory"},
 	{'n', "noLoop",    0,1,0,"Do not loop AFT transfert"},
@@ -72,6 +73,7 @@ int main(int argc, char *argv[])
 		std::string COMport = defaultComPort();
 		std::string filename = "";
 		std::string dir = "";
+		int baudrate = 115200;
 
 		
 		int i=0;
@@ -82,6 +84,11 @@ int main(int argc, char *argv[])
 			case 'p':
 				{
 					COMport = optParser.GetStringOptionI(i);
+					break;
+				}
+			case 'b':
+				{
+					baudrate = optParser.GetIntOptionI(i);
 					break;
 				}
 			case 'f':
@@ -112,7 +119,7 @@ int main(int argc, char *argv[])
 		for(unsigned int i = 0; i < sizeof(devicePrefixes) / sizeof(devicePrefixes[0]); i++)
 		{
 			std::string device = devicePrefixes[i] + COMport;
-			CAksFileTransfert transfert(device);
+			CAksFileTransfert transfert(device, baudrate);
 
 			if (!transfert.IsOpen())
 				continue;

@@ -56,8 +56,8 @@ const char* CAksFileTransfert::DisplayMessageHeader[] =
 	"Debug: "
 };
 
-CAksFileTransfert::CAksFileTransfert(std::string comNumber) :
-CCPCBooster(comNumber),
+CAksFileTransfert::CAksFileTransfert(std::string comNumber, int baudrate) :
+CCPCBooster(comNumber, baudrate),
 _transfertMode(NoTransfert),
 _nbTransfert(0),
 _transferingData(false),
