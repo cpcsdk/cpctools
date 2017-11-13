@@ -5,7 +5,7 @@ addons:
         packages:
             - libpng-dev
             - cmake
-            - qt4-make
+            - qt4-qmake
               # libdsk-dev      # not available
 before_install:
     - yes | sudo add-apt-repository ppa:george-edison55/precise-backports
