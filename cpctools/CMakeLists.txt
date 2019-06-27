@@ -25,7 +25,7 @@ if(HAIKU)
 elseif(UNIX)
   # libdsk.h uses size_t without proper includes...
   # (this doesn't work on haiku because gcc2, see haiku fix above)
-  set(CMAKE_REQUIRED_FLAGS "-include stdint.h")
+  set(CMAKE_REQUIRED_FLAGS "-include stddef.h")
 endif()
 
 CHECK_INCLUDE_FILE_CXX("libdsk.h" HAVE_LIBDSK_H)
