@@ -1,4 +1,9 @@
 cpcsdk - tools for Amstrad CPC development.
+===========================================
+
+Linux: [![Linux build](https://travis-ci.org/cpcsdk/cpctools.svg?branch=master)](https://travis-ci.org/cpcsdk/cpctools)
+
+(Our CI is a work in progress. Help is welcome to build everything)
 
 What is it?
 ===========
