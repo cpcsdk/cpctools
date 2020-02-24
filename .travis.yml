@@ -6,13 +6,12 @@ addons:
             - libpng-dev
             - cmake
             - qt4-qmake
+            - libmagick++-dev
+            - libwxgtk3.0-dev
+            - portaudio19-dev
               # libdsk-dev      # not available
-before_install:
-    - yes | sudo add-apt-repository ppa:george-edison55/precise-backports
-    - sudo apt-get update -qq
-install: sudo apt-get update -qq
 script:
-    - pushd Reloaded && cmake . && make && popd     # needs CMake 3.1.0
+      # pushd Reloaded && cmake . && make && popd     # needs stsoundlibrary
+    - pushd font_catcher && make && popd
       # pushd DiskSwissKnife && qmake && make && popd # needs qhexedit
-      # pushd font_catcher && make && popd            # needs libmagickpp
       # pushd cpctools && cmake . && make && popd     # needs libdsk
