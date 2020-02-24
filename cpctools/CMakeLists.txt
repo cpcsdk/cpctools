@@ -6,12 +6,16 @@ include(CheckCCompilerFlag)
 include(cmake/CheckSharedLibraryExists.cmake)
 
 
+if (MSVC)
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+else()
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3 -fPIC")
+endif()
+
 check_c_compiler_flag(-Wno-multichar COMPILER_HAS_WNO_MULTICHAR)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3 -fPIC")
 if(COMPILER_HAS_WNO_MULTICHAR)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-multichar")
 endif()
-
 
 #LibDSK checks
 set(LIBDSK_HEADERS_DIR "" CACHE PATH "Path to libdsk.h")
@@ -36,26 +40,16 @@ endif()
 
 include_directories(${LIBDSK_HEADERS_DIR})
 
-
-# On linux you link with -ldsk, but on windoows the lib is "libdsk.dll" instead of "dsk.dll"...
-CHECK_SHARED_LIBRARY_EXISTS(dsk dsk_strerror 1 "${LIBDSK_LIB_DIR}" HAVE_LIBDSK)
-if(HAVE_LIBDSK)
-	set(LIBDSK_NAME dsk)
-else()
-	CHECK_SHARED_LIBRARY_EXISTS(libdsk dsk_strerror 1 "${LIBDSK_LIB_DIR}" HAVE_LIBDSK_2)
-	if(HAVE_LIBDSK_2)
-		SET(LIBDSK_NAME libdsk)
-	else()
-		unset(HAVE_LIBDSK_2 CACHE)
-		unset(HAVE_LIBDSK CACHE)
-		message(FATAL_ERROR "libdsk not found. Set LIBDSK_LIB_DIR if it is installed to a nonstandard location.")
-	endif()
+# On linux you link with -ldsk, but on windows the lib is "libdsk.dll" instead of "dsk.dll"...
+FIND_LIBRARY(LIBDSK_LIBRARY NAMES dsk libdsk HINTS ${LIBDSK_LIB_DIR})
+if (${LIBDSK_LIBRARY} EQUAL LIBDSK_LIBRARY_NOTFOUND)
+	unset(LIBDSK_LIBRARY CACHE)
+	message(FATAL_ERROR "libdsk library not found. Set LIBDSK_LIB_DIR if it is installed to a nonstandard location.")
 endif()
 
-FIND_LIBRARY(LIBDSK_LIBRARY ${LIBDSK_NAME} ${LIBDSK_LIB_DIR})
-
+# Repackage libdsk on windows for simplicity
 if(WIN32)
-	INSTALL(FILES ${LIBDSK_LIB_DIR}/libdsk.dll DESTINATION bin)
+	INSTALL(FILES ${LIBDSK_LIBRARY} DESTINATION bin)
 endif()
 
 INSTALL(FILES README DESTINATION docs)
