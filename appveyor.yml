@@ -1,4 +1,4 @@
-os: Visual Studio 2015
+os: Visual Studio 2019
 clone_folder: c:\projects\cpctools
 platform: x86
 configuration: Release
@@ -8,18 +8,8 @@ environment:
 
 install:
     - ps: |
-        Start-FileDownload "http://www.seasip.info/Unix/LibDSK/libdsk1512.zip"
-        7z x libdsk1512.zip -o"$($env:libdskdir)"
-        7z x "$($env:libdskdir)\libdsk-1.5.12.tar.gz" -o"$($env:libdskdir)"
-        7z x "$($env:libdskdir)\libdsk-1.5.12.tar" -o"C:\projects\cpctools\libdsk" # Archiveception!
-    # Regenerate a dsk.lib because libdsk binary package does not provide it
-    - cmd: |
-        cd %libdskdir%
-        "%VS140COMNTOOLS%\..\..\VC\bin\dumpbin.exe" /exports libdsk.dll > exports.txt
-        echo LIBRARY DSK > libdsk.def
-        echo EXPORTS >> libdsk.def
-        for /f "skip=19 tokens=4" %%A in (exports.txt) do echo %%A >> libdsk.def
-        "%VS140COMNTOOLS%\..\..\VC\bin\lib.exe" /def:libdsk.def /out:libdsk.lib /machine:x86
+        Start-FileDownload "https://github.com/cpcsdk/libdsk/releases/download/v1.5.12/libdsk-win32-1.5.12.zip"
+        7z x libdsk-win32-1.5.12.zip -o"$($env:libdskdir)"
 
 build:
     project: build/INSTALL.vcxproj
@@ -28,8 +18,11 @@ before_build:
     - cd c:\projects\cpctools
     - mkdir -p build
     - cd build
-    - cmake -G "Visual Studio 14 2015" ../cpctools -D LIBDSK_HEADERS_DIR="%libdskdir%/libdsk-1.5.12/include" -D LIBDSK_LIB_DIR="%libdskdir%" || cat "c:/projects/cpctools/build/CMakeFiles/CMakeOutput.log" && cat "c:/projects/cpctools/build/CMakeFiles/CMakeError.log"
+    - cmake -G "Visual Studio 14 2015" ../cpctools -D LIBDSK_HEADERS_DIR="%libdskdir%/include" -D LIBDSK_LIB_DIR="%libdskdir%/win32vc6/Release"
+
+after_build:
+    - 7z a cpctools.zip tools/AFT2/Release/aft2.exe lib/Release/cpc.dll tools/cpcfs/Release/cpcfs.exe tools/damsConverter/Release/damsConverter.exe tools/dataLinker/Release/dataLinker.exe tools/Release/*.exe %libdskdir%/win32vc6/Release/libdsk.dll
 
 artifacts:
-    - path: "build/AFT2.exe"
-      name: "AFT2.exe"
+    - path: "build/cpctools.zip"
+      name: "CPCTools win32"
