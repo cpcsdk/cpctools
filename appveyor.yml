@@ -21,7 +21,7 @@ before_build:
     - cmake -G "Visual Studio 14 2015" ../cpctools -D LIBDSK_HEADERS_DIR="%libdskdir%/include" -D LIBDSK_LIB_DIR="%libdskdir%/win32vc6/Release"
 
 after_build:
-    - 7z a cpctools.zip tools/AFT2/Release/aft2.exe lib/Release/cpc.dll tools/cpcfs/Release/cpcfs.exe tools/damsConverter/Release/damsConverter.exe tools/dataLinker/Release/dataLinker.exe tools/Release/*.exe %libdskdir%/win32vc6/Release/libdsk.dll
+    - 7z a cpctools.zip ./tools/AFT2/Release/aft2.exe ./lib/Release/cpc.dll ./tools/cpcfs/Release/cpcfs.exe ./tools/damsConverter/Release/damsConverter.exe ./tools/dataLinker/Release/dataLinker.exe ./tools/Release/*.exe %libdskdir%/win32vc6/Release/libdsk.dll
 
 artifacts:
     - path: "build/cpctools.zip"
