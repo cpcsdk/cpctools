@@ -5,6 +5,7 @@
 
 #include "optionParser.h"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -182,7 +183,7 @@ void addOption(struct SOptionOut **cmdOption, char **argv, struct SOption *optio
 	if (!newCmdOption)
 	{
 		printf( "MALLOC ERROR !  %s : %d \n", __FILE__, __LINE__) ;
-		printf(" nb : %d \n size : %d\ntot : %d \n", nbCmdOption+2, sizeof(struct SOptionOut), (nbCmdOption+2)*sizeof(struct SOptionOut));
+		printf(" nb : %d \n size : %zu\ntot : %zu \n", nbCmdOption+2, sizeof(struct SOptionOut), (nbCmdOption+2)*sizeof(struct SOptionOut));
 		exit (-1);
 	}
 

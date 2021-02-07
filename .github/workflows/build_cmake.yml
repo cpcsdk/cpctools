@@ -31,7 +31,18 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -yq libmagick++-dev
+      shell: cmake -P {0}
+      run: |
+        if ("${{ runner.os }}" STREQUAL "Linux")
+          execute_process(COMMAND sudo apt-get update COMMAND_ERROR_IS_FATAL ANY)
+          execute_process(COMMAND sudo apt-get install -yq libmagick++-dev COMMAND_ERROR_IS_FATAL ANY)
+        endif()
+        if ("${{ runner.os }}" STREQUAL "macOS")
+          execute_process(COMMAND brew install imagemagick COMMAND_ERROR_IS_FATAL ANY)
+        endif()
+        if ("${{ runner.os }}" STREQUAL "Windows")
+          execute_process(COMMAND choco install imagemagick COMMAND_ERROR_IS_FATAL ANY)
+        endif()
 
     - name: Prepare libdsk
       id: libdsk

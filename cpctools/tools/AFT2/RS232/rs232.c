@@ -94,7 +94,7 @@ int RS232_OpenComport(const char* comport, int baudrate, const char *mode, HANDL
                    break;
     case  230400 : baudr = B230400;
                    break;
-#ifdef __HAIKU__
+#if defined(__HAIKU__) || defined(__APPLE__)
     default:       baudr = baudrate;
                    break;
 #else
