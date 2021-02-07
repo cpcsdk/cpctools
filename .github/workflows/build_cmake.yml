@@ -14,17 +14,26 @@ jobs:
             name: "Windows Latest MSVC", artifact: "Windows-MSVC.tar.xz",
             os: windows-latest,
             build_type: "Release", cc: "cl", cxx: "cl",
-            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
+            libdsk_outdir: "D:\\a\\cpctools\\cpctools\\libdsk-1.5.15\\win32vc6\\Release\\",
+            libdir: "instdir/bin",
+            cp: "xcopy"
           }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
             os: ubuntu-latest,
-            build_type: "Release", cc: "gcc", cxx: "g++"
+            build_type: "Release", cc: "gcc", cxx: "g++",
+            libdsk_outdir: "/tmp/deps/libdsk/lib/",
+            libdir: "instdir/lib",
+            cp: "cp"
           }
         - {
             name: "macOS Latest Clang", artifact: "macOS.tar.xz",
             os: macos-latest,
-            build_type: "Release", cc: "clang", cxx: "clang++"
+            build_type: "Release", cc: "clang", cxx: "clang++",
+            libdsk_outdir: "/tmp/deps/libdsk/lib/",
+            libdir: "instdir/lib",
+            cp: "cp"
           }
 
     steps:
@@ -37,12 +46,12 @@ jobs:
           execute_process(COMMAND sudo apt-get update COMMAND_ERROR_IS_FATAL ANY)
           execute_process(COMMAND sudo apt-get install -yq libmagick++-dev COMMAND_ERROR_IS_FATAL ANY)
         endif()
-        if ("${{ runner.os }}" STREQUAL "macOS")
-          execute_process(COMMAND brew install imagemagick --with-magick-plus-plus COMMAND_ERROR_IS_FATAL ANY)
-        endif()
-        if ("${{ runner.os }}" STREQUAL "Windows")
-          execute_process(COMMAND choco install imagemagick COMMAND_ERROR_IS_FATAL ANY)
-        endif()
+        #if ("${{ runner.os }}" STREQUAL "macOS")
+        #  execute_process(COMMAND brew install graphicsmagick COMMAND_ERROR_IS_FATAL ANY)
+        #endif()
+        #if ("${{ runner.os }}" STREQUAL "Windows")
+        #  execute_process(COMMAND choco install imagemagick COMMAND_ERROR_IS_FATAL ANY)
+        #endif()
 
     - name: Prepare libdsk
       id: libdsk
@@ -52,7 +61,10 @@ jobs:
         file(MAKE_DIRECTORY /tmp/deps/libdsk)
         execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./libdsk.tar.gz)
         if ("${{ runner.os }}" STREQUAL "Windows")
-          message(FATAL_ERROR "Don't know how to build libdsk for windows yet (need to run VC++ project)")
+          execute_process(COMMAND "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\IDE\\devenv.exe" win32vc6/libdsk.dsp /upgrade
+            WORKING_DIRECTORY libdsk-1.5.15 COMMAND_ERROR_IS_FATAL ANY)
+          execute_process(COMMAND "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\IDE\\devenv.exe" win32vc6/libdsk.vcxproj /Build Release
+            WORKING_DIRECTORY libdsk-1.5.15 COMMAND_ERROR_IS_FATAL ANY)
         else()
           execute_process(COMMAND ./configure --prefix /tmp/deps/libdsk
             WORKING_DIRECTORY libdsk-1.5.15 COMMAND_ERROR_IS_FATAL ANY)
@@ -68,9 +80,9 @@ jobs:
         set(ENV{CC} ${{ matrix.config.cc }})
         set(ENV{CXX} ${{ matrix.config.cxx }})
 
-        if ("${{ runner.os }}" STREQUAL "Windows" AND NOT "x${{ matrix.config.environment_script }}" STREQUAL "x")
+        if ("${{ runner.os }}" STREQUAL "Windows")
           execute_process(
-            COMMAND "${{ matrix.config.environment_script }}" && set
+            COMMAND "${{ matrix.config.environment_script }}" x86 && set
             OUTPUT_FILE environment_script_output.txt
           )
           file(STRINGS environment_script_output.txt output_lines)
@@ -79,21 +91,25 @@ jobs:
               set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
             endif()
           endforeach()
+
+          set(LIBDSK_LIB "D:\\a\\cpctools\\cpctools\\libdsk-1.5.15\\win32vc6\\Release")
+          set(LIBDSK_INC "D:\\a\\cpctools\\cpctools\\libdsk-1.5.15\\include")
+          set(CMAKE_ARGS -G "Visual Studio 16 2019" -A Win32)
+        else()
+          set(LIBDSK_LIB "/tmp/deps/libdsk/lib")
+          set(LIBDSK_INC "/tmp/deps/libdsk/include")
         endif()
 
         execute_process(
           COMMAND cmake
             -S cpctools
             -B build
-            -D LIBDSK_HEADERS_DIR=/tmp/deps/libdsk/include/
-            -D LIBDSK_LIB_DIR=/tmp/deps/libdsk/lib/
+            -D LIBDSK_HEADERS_DIR=${LIBDSK_INC}
+            -D LIBDSK_LIB_DIR=${LIBDSK_LIB}
             -D CMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
-          RESULT_VARIABLE result
+            ${CMAKE_ARGS}
+          COMMAND_ERROR_IS_FATAL ANY
         )
-        if (NOT result EQUAL 0)
-          message(FATAL_ERROR "Bad exit status")
-        endif()
-
 
     - name: Build CPCTools
       shell: cmake -P {0}
@@ -110,7 +126,7 @@ jobs:
         endif()
 
         execute_process(
-          COMMAND cmake --build build
+          COMMAND cmake --build build --config ${{matrix.config.build_type}}
           RESULT_VARIABLE result
         )
         if (NOT result EQUAL 0)
@@ -121,11 +137,18 @@ jobs:
       run: cmake --install build --prefix instdir --strip
 
     - name: Install libdsk
-      run: cp /tmp/deps/libdsk/lib/* instdir/lib/
+      run: |
+        ${{ matrix.config.cp }} ${{ matrix.config.libdsk_outdir}}libdsk.* ${{ matrix.config.libdir }}
 
     - name: Build fontcatcher
       working-directory: font_catcher
-      run: make && cp fontcatcher ../instdir/
+      shell: cmake -P {0}
+      run: |
+        # Disabled on macOS because imagemagick is built without C++ API by homebrew
+        if ("${{ runner.os }}" STREQUAL "Linux")
+          execute_process(COMMAND make COMMAND_ERROR_IS_FATAL ANY)
+          execute_process(COMMAND cp fontcatcher ../instdir/ COMMAND_ERROR_IS_FATAL ANY)
+        endif()
 
     - name: Pack
       working-directory: instdir
