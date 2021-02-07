@@ -15,6 +15,27 @@ with the UNIX way of doing things.
 Some graphical tools are also provided, with a focus on debugging, analyzing,
 reverse engineering and experimentations.
 
+How to build
+============
+
+cpctools
+--------
+
+To build cpctools you need a version of libdsk. Get the latest version from
+https://www.seasip.info/Unix/LibDsk/ , compile and install it. Note that you
+need the "experimental" 1.5.x version, because the 1.4.x release is very old
+and impossible to build on modern Linux systems.
+
+Then the build is done with cmake:
+
+```
+mkdir build
+cd build
+cmake ../cpctools
+make
+sudo make install
+```
+
 What's in there
 ===============
 
