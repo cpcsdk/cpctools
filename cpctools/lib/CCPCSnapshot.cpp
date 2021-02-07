@@ -568,7 +568,7 @@ void CCPCSnapshot::loadDataFromFile(const std::string &i_filename,int i_adress)
 		setTokenValue("Z80_PC", entry);
 
 		start = kAMSDOSHeaderSize; // Skip AMSDOS header
-	} else {
+	} else if (end >= 69) {
 		// Check if the file has a valid AMSDOS header, and if that's the case,
 		// skip it!
 		file.seekg(0, std::ios::beg);
