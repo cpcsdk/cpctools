@@ -38,7 +38,7 @@ jobs:
           execute_process(COMMAND sudo apt-get install -yq libmagick++-dev COMMAND_ERROR_IS_FATAL ANY)
         endif()
         if ("${{ runner.os }}" STREQUAL "macOS")
-          execute_process(COMMAND brew install imagemagick COMMAND_ERROR_IS_FATAL ANY)
+          execute_process(COMMAND brew install imagemagick --with-magick-plus-plus COMMAND_ERROR_IS_FATAL ANY)
         endif()
         if ("${{ runner.os }}" STREQUAL "Windows")
           execute_process(COMMAND choco install imagemagick COMMAND_ERROR_IS_FATAL ANY)
