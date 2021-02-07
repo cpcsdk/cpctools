@@ -123,7 +123,7 @@ int main(int argc, char** argv)
 					int adr = optParser.GetIntOptionI(i, 1);
 
 					cout << "Load data " << filename;
-					if(adr > 0)   
+					if(adr >= 0)
 						cout << " at address #" << hex << adr << dec << endl;
 					else
 						cout << " using AMSDOS header information" << endl;
