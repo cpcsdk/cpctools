@@ -207,13 +207,16 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: ${{ matrix.config.artifact }}
-        path: instdir
+        path: ${{ matrix.config.artifact }}
+    - name: Repack artifact
+      run: |
+        zip -r ${{ matrix.config.artifact }}.zip ${{ matrix.config.artifact }}
 
     - name: Download URL
       uses: actions/download-artifact@v1
       with:
         name: upload_url
-        path: instdir
+        path: .
     - id: set_upload_url
       run: |
         upload_url=`cat ./upload_url`
@@ -226,6 +229,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-        asset_path: instdir
-        asset_name: ${{ matrix.config.artifact }}
-        asset_content_type: application/x-gtar
+        asset_path: ${{ matrix.config.artifact }}.zip
+        asset_name: ${{ matrix.config.artifact }}.zip
+        asset_content_type: application/zip
