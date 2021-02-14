@@ -11,29 +11,26 @@ jobs:
       matrix:
         config:
         - {
-            name: "Windows Latest MSVC", artifact: "Windows-MSVC.tar.xz",
+            name: "Windows Latest MSVC", artifact: "cpctools-Windows",
             os: windows-latest,
             build_type: "Release", cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
-            libdsk_outdir: "D:\\a\\cpctools\\cpctools\\libdsk-1.5.15\\win32vc6\\Release\\",
+            libdsk_outfiles: "libdsk-1.5.15/win32vc6/Release/libdsk.lib libdsk-1.5.15/win32vc6/Release/libdsk.dll",
             libdir: "instdir/bin",
-            cp: "xcopy"
           }
         - {
-            name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
+            name: "Ubuntu Latest GCC", artifact: "cpctools-Linux",
             os: ubuntu-latest,
             build_type: "Release", cc: "gcc", cxx: "g++",
-            libdsk_outdir: "/tmp/deps/libdsk/lib/",
+            libdsk_outfiles: "/tmp/deps/libdsk/lib/*.so",
             libdir: "instdir/lib",
-            cp: "cp"
           }
         - {
-            name: "macOS Latest Clang", artifact: "macOS.tar.xz",
+            name: "macOS Latest Clang", artifact: "cpctools-macOS",
             os: macos-latest,
             build_type: "Release", cc: "clang", cxx: "clang++",
-            libdsk_outdir: "/tmp/deps/libdsk/lib/",
+            libdsk_outfiles: "/tmp/deps/libdsk/lib/*.dylib",
             libdir: "instdir/lib",
-            cp: "cp"
           }
 
     steps:
@@ -137,8 +134,9 @@ jobs:
       run: cmake --install build --prefix instdir --strip
 
     - name: Install libdsk
+      shell: bash
       run: |
-        ${{ matrix.config.cp }} ${{ matrix.config.libdsk_outdir}}libdsk.* ${{ matrix.config.libdir }}
+        cp ${{ matrix.config.libdsk_outfiles}} ${{ matrix.config.libdir }}
 
     - name: Build fontcatcher
       working-directory: font_catcher
@@ -150,15 +148,10 @@ jobs:
           execute_process(COMMAND cp fontcatcher ../instdir/ COMMAND_ERROR_IS_FATAL ANY)
         endif()
 
-    - name: Pack
-      working-directory: instdir
-      run: cmake -E tar cJfv ../${{ matrix.config.artifact }} .
-
-
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
-        path: ./${{ matrix.config.artifact }}
+        path: ./instdir
         name: ${{ matrix.config.artifact }}
 
   release:
@@ -196,15 +189,15 @@ jobs:
       matrix:
         config:
         - {
-            name: "Windows Latest MSVC", artifact: "Windows-MSVC.tar.xz",
+            name: "Windows Latest MSVC", artifact: "cpctools-Windows",
             os: ubuntu-latest
           }
         - {
-            name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
+            name: "Ubuntu Latest GCC", artifact: "cpctools-Linux",
             os: ubuntu-latest
           }
         - {
-            name: "macOS Latest Clang", artifact: "macOS.tar.xz",
+            name: "macOS Latest Clang", artifact: "cpctools-macOS",
             os: ubuntu-latest
           }
     needs: release
@@ -214,13 +207,13 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: ${{ matrix.config.artifact }}
-        path: ./
+        path: instdir
 
     - name: Download URL
       uses: actions/download-artifact@v1
       with:
         name: upload_url
-        path: ./
+        path: instdir
     - id: set_upload_url
       run: |
         upload_url=`cat ./upload_url`
@@ -233,6 +226,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-        asset_path: ./${{ matrix.config.artifact }}
+        asset_path: instdir
         asset_name: ${{ matrix.config.artifact }}
         asset_content_type: application/x-gtar

@@ -47,13 +47,7 @@ if (${LIBDSK_LIBRARY} EQUAL LIBDSK_LIBRARY_NOTFOUND)
 	message(FATAL_ERROR "libdsk library not found. Set LIBDSK_LIB_DIR if it is installed to a nonstandard location.")
 endif()
 
-# Repackage libdsk on windows for simplicity
-if(WIN32)
-	INSTALL(FILES ${LIBDSK_LIBRARY} DESTINATION bin)
-endif()
-
 INSTALL(FILES README DESTINATION docs)
-
 
 set(libtools_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libtools)
 set(libcpcfs_dir ${CMAKE_CURRENT_SOURCE_DIR}/lib/libcpcfs)
