@@ -301,7 +301,7 @@ void CCPCSnapshot::saveSnapshotIni(const string &filename) const
 CCPCSnapshot::TTokenID CCPCSnapshot::GetToken(const char *i_dataID, int &o_index)
 {
 	std::string token(i_dataID);
-	unsigned int p;
+	size_t p;
 	o_index = -1;
 	if ((p=token.find(':')) != std::string::npos)
 	{
