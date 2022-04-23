@@ -12,7 +12,7 @@ jobs:
         config:
         - {
             name: "Windows Latest MSVC", artifact: "cpctools-Windows",
-            os: windows-latest,
+            os: windows-2019,
             build_type: "Release", cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
             libdsk_outfiles: "libdsk-1.5.19/win32vc6/Release/libdsk.lib libdsk-1.5.19/win32vc6/Release/libdsk.dll",
