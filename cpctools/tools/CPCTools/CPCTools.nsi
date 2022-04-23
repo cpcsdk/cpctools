@@ -12,7 +12,7 @@ OutFile "CPCTools.exe"
 
 XPStyle on
 
-VIProductVersion "0.3.0"
+VIProductVersion "0.3.3"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\Arkos\CPCTools
