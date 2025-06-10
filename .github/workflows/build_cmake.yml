@@ -15,7 +15,7 @@ jobs:
             os: windows-2019,
             build_type: "Release", cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvarsall.bat",
-            libdsk_outfiles: "libdsk-1.5.19/win32vc6/Release/libdsk.lib libdsk-1.5.19/win32vc6/Release/libdsk.dll",
+            libdsk_outfiles: "libdsk-1.5.21/win32vc6/Release/libdsk.lib libdsk-1.5.21/win32vc6/Release/libdsk.dll",
             libdir: "instdir/bin",
           }
         - {
@@ -54,21 +54,21 @@ jobs:
       id: libdsk
       shell: cmake -P {0}
       run: |
-        file(DOWNLOAD "https://www.seasip.info/Unix/LibDsk/libdsk-1.5.19.tar.gz" ./libdsk.tar.gz SHOW_PROGRESS)
+        file(DOWNLOAD "https://www.seasip.info/Unix/LibDsk/libdsk-1.5.21.tar.gz" ./libdsk.tar.gz SHOW_PROGRESS)
         file(MAKE_DIRECTORY /tmp/deps/libdsk)
         execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./libdsk.tar.gz)
         if ("${{ runner.os }}" STREQUAL "Windows")
           execute_process(COMMAND "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\IDE\\devenv.exe" win32vc6/libdsk.dsp /upgrade
-            WORKING_DIRECTORY libdsk-1.5.19 COMMAND_ERROR_IS_FATAL ANY)
+            WORKING_DIRECTORY libdsk-1.5.21 COMMAND_ERROR_IS_FATAL ANY)
           execute_process(COMMAND "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Enterprise\\Common7\\IDE\\devenv.exe" win32vc6/libdsk.vcxproj /Build Release
-            WORKING_DIRECTORY libdsk-1.5.19 COMMAND_ERROR_IS_FATAL ANY)
+            WORKING_DIRECTORY libdsk-1.5.21 COMMAND_ERROR_IS_FATAL ANY)
         else()
           execute_process(COMMAND ./configure --prefix /tmp/deps/libdsk
-            WORKING_DIRECTORY libdsk-1.5.19 COMMAND_ERROR_IS_FATAL ANY)
+            WORKING_DIRECTORY libdsk-1.5.21 COMMAND_ERROR_IS_FATAL ANY)
           execute_process(COMMAND make
-            WORKING_DIRECTORY libdsk-1.5.19 COMMAND_ERROR_IS_FATAL ANY)
+            WORKING_DIRECTORY libdsk-1.5.21 COMMAND_ERROR_IS_FATAL ANY)
           execute_process(COMMAND make install
-            WORKING_DIRECTORY libdsk-1.5.19 COMMAND_ERROR_IS_FATAL ANY)
+            WORKING_DIRECTORY libdsk-1.5.21 COMMAND_ERROR_IS_FATAL ANY)
         endif()
 
     - name: Configure CPCTools
@@ -89,8 +89,8 @@ jobs:
             endif()
           endforeach()
 
-          set(LIBDSK_LIB "D:\\a\\cpctools\\cpctools\\libdsk-1.5.19\\win32vc6\\Release")
-          set(LIBDSK_INC "D:\\a\\cpctools\\cpctools\\libdsk-1.5.19\\include")
+          set(LIBDSK_LIB "D:\\a\\cpctools\\cpctools\\libdsk-1.5.21\\win32vc6\\Release")
+          set(LIBDSK_INC "D:\\a\\cpctools\\cpctools\\libdsk-1.5.21\\include")
           set(CMAKE_ARGS -G "Visual Studio 16 2019" -A Win32)
         else()
           set(LIBDSK_LIB "/tmp/deps/libdsk/lib")
