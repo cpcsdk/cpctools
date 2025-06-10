@@ -1,5 +1,5 @@
+cmake_minimum_required(VERSION 3.10)
 project (CPCTools)
-cmake_minimum_required(VERSION 3.0)
 
 include(CheckIncludeFileCXX)
 include(CheckCCompilerFlag)
