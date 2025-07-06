@@ -31,41 +31,41 @@ foreach(@data) {
 # add the colors
 # Note we have to start from the END of each line as we insert chars in them.
 # Do not offset what we are going to touch just after...
-substr($data[0],62,0,$z);
-substr($data[0],59,0,$C);  # Ext
-substr($data[0],51,0,$B);  # Name
-substr($data[0],50,0,$A);  # User
+substr($data[0],63,0,$z);
+substr($data[0],60,0,$C);  # Ext
+substr($data[0],52,0,$B);  # Name
+substr($data[0],51,0,$A);  # User
 
-substr($data[0],38,0,$z);
-substr($data[0],31,0,$C); # File ext
-substr($data[0],11,0,$B); # Filename
-substr($data[0],9,0,$A);  # User
+substr($data[0],39,0,$z);
+substr($data[0],32,0,$C); # File ext
+substr($data[0],12,0,$B); # Filename
+substr($data[0],10,0,$A);  # User
 
 
-substr($data[1],62,0,$z);
-substr($data[1],60,0,$A);
-substr($data[1],58,0,$E);
-substr($data[1],57,0,$z);
-substr($data[1],55,0,$F);
-substr($data[1],53,0,$E);
-substr($data[1],52,0,$D);
+substr($data[1],63,0,$z);
+substr($data[1],61,0,$A);
+substr($data[1],59,0,$E);
+substr($data[1],58,0,$z);
+substr($data[1],56,0,$F);
+substr($data[1],54,0,$E);
+substr($data[1],53,0,$D);
 
-substr($data[1],38,0,$z);
-substr($data[1],34,0,$A);  # Entry
-substr($data[1],33,0,$z);
-substr($data[1],29,0,$E);  # Size
-substr($data[1],26,0,$z);
-substr($data[1],21,0,$F);  # Load
-substr($data[1],16,0,$E);  # Size
-substr($data[1],14,0,$D);  # Filetype
+substr($data[1],39,0,$z);
+substr($data[1],35,0,$A);  # Entry
+substr($data[1],34,0,$z);
+substr($data[1],30,0,$E);  # Size
+substr($data[1],27,0,$z);
+substr($data[1],22,0,$F);  # Load
+substr($data[1],17,0,$E);  # Size
+substr($data[1],15,0,$D);  # Filetype
 
-substr($data[4],55,0,$z);
-substr($data[4],53,0,$C);
-substr($data[4],50,0,$E);
+substr($data[4],56,0,$z);
+substr($data[4],54,0,$C);
+substr($data[4],51,0,$E);
 
-substr($data[4],21,0,$z);
-substr($data[4],16,0,$C); # CkSum
-substr($data[4],9,0,$E);  # Size
+substr($data[4],22,0,$z);
+substr($data[4],17,0,$C); # CkSum
+substr($data[4],10,0,$E);  # Size
 
 
 # Now print ur colorized header and a legend
